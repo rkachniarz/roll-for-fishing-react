@@ -1,24 +1,29 @@
-import logo from './logo.svg';
+//Styles
 import './App.css';
+//Components
+import { Container } from './Components/Container';
+import { Footer } from './Components/Footer';
+import { Header } from './Components/Header';
+import { MainContent } from './Components/MainContent';
+//Functions
+import { Player } from './Functions/player.js';
+import { getRandomNumber, roll20 } from './Functions/helpers.js';
+import "./Data/locations.js";
+import { lake } from "./Data/locations.js";
+//Variables
+let player = new Player("Guy", getRandomNumber(0,2));
+const currentLocation = lake;
+const currentPlayer = player;
+//
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Header player={currentPlayer}></Header>
+      <MainContent location={currentLocation} player={currentPlayer} logs={[]}></MainContent>
+      <Footer></Footer>
+    </Container>
   );
 }
 

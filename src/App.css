@@ -1,21 +1,43 @@
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 .App {
   text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 100%;
+  border: solid 22px #f15a29;
+  background: black;
+  font-size: 60px;
+  min-height: 160px;
   pointer-events: none;
+}
+
+.App-logo-small {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 100%;
+  border: solid 2px #f15a29;
+  background: black;
+  font-size: 12px;
+  max-height: 32px;
+  pointer-events: none;
+  margin: 5px 15px 3px 5px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 5s linear;
   }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #15233f;
+  min-height: 40vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,8 +46,79 @@
   color: white;
 }
 
+.App-header-small {
+  background-color: #15233f;
+  max-height: 10vh;
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  font-size: 12px;
+  color: white;
+}
+/* 
 .App-link {
   color: #61dafb;
+} */
+
+.App-main {
+  display: block;
+  text-align: center;
+  padding-top: 6px;
+  min-height: 55vh;
+  background-color: #81c4ed;
+}
+
+.App-main-ingame {
+  display: block;
+  text-align: center;
+  padding-top: 60px;
+  min-height: 84.4vh;
+  background-color: #81c4ed;
+}
+
+.App-footer {
+  background-color: #15233f;
+  color: white;
+  padding: 2px 0px 1px 0px;
+  display: block;
+  text-align: center;
+}
+
+.Button-big {
+  background: white;
+  color: black;
+  font-size: 20px;
+  border: 0px;
+  border-radius: 4%;
+  margin: 5px 10px;
+  padding: 5px 10px;
+  min-height: 100px;
+  min-width: 300px;
+}
+
+.Button-MainButton {
+  background-image: url("/public/Default.jpg");
+  background-position: 30% 20%;
+  color: #f0e3a1;
+  text-shadow: 2px 2px black;
+  font-weight: bolder;
+}
+.Button-small {
+  background: white;
+  color: black;
+  font-size: 12px;
+  border: 0px;
+  border-radius: 4%;
+  margin: 5px 4px;
+  padding: 5px 10px;
+  min-height: 33px;
+  min-width: 145px;
+}
+.PlayerInfo {
+  Margin: 0px 30% 25px 30%;
+  Padding: 10px 10% 12px 10%;
+  text-align: left;
+  border: solid 2px #15233f;
 }
 
 @keyframes App-logo-spin {
