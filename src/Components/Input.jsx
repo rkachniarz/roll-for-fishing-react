@@ -1,6 +1,3 @@
-
 export function Input({ inputType }) {
-    return (
-        <input type={inputType} />
-    );
+  return <input type={inputType} />;
 }

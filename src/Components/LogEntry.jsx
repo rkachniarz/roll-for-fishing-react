@@ -1,6 +1,3 @@
-
 export function LogEntry({ cname, children }) {
-    return (
-        <span className={`log-${cname}`}>{children}</span>
-    );
+  return <span className={`log-${cname}`}>{children}</span>;
 }
