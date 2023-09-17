@@ -2,11 +2,12 @@ export function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export function roll20(advantage = false) {
+export function roll20(advantage = false, disadvantage = false) {
   const firstroll = getRandomNumber(1, 20);
   const secondroll = getRandomNumber(1, 20);
-
-  return advantage ? Math.max(firstroll, secondroll) : firstroll;
+  if (disadvantage) return Math.min(firstroll, secondroll);
+  else if (advantage) return Math.max(firstroll, secondroll);
+  else return firstroll;
 }
 
 export function pickRandom(objectArray) {

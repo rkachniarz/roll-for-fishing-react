@@ -2,13 +2,20 @@ import { Fish } from './fish.js';
 import { roll20 } from './helpers.js';
 //import { increasePlayerFishingSkill, giveRandomSpecialTreasure } from './levelup.js';
 
-function rollForFishing(player) {
-  const dieRoll = roll20();
-  const rollTotal = dieRoll + player.skill;
+function rollForFishing(
+  player,
+  [playerAdvantage, playerDisadvantage, playerSkillMod, playerFishFindMod, playerTreasureFindMod],
+) {
+  const skillTotal = player.skill + playerSkillMod;
+  const fishFindTotal = player.fishFind + playerFishFindMod;
+  const treasureFindTotal = player.treasureFind + playerTreasureFindMod;
+  const dieRoll = roll20(playerAdvantage, playerDisadvantage);
+  const rollTotal = dieRoll + skillTotal;
+
   const text =
     dieRoll === 20
       ? `It's a natural 20! With a total of ${rollTotal}`
-      : `${dieRoll} + ${player.skill} for a total of ${rollTotal}`;
+      : `${dieRoll} + ${skillTotal} for a total of ${rollTotal}`;
 
   return {
     text: text,
@@ -17,9 +24,28 @@ function rollForFishing(player) {
   };
 }
 
-export function playGame(location, player) {
-  const fish = new Fish(location);
-  const { text, rollTotal, isNat20 } = rollForFishing(player);
+export function playGame(location, player, modState) {
+  const {
+    playerAdvantage,
+    playerDisadvantage,
+    playerSkillMod,
+    playerFishFindMod,
+    playerTreasureFindMod,
+    fishAdvantage,
+    fishDisadvantage,
+    fishDifficultyMod,
+    fishSizeModArray,
+    extraMainButtonCallbacks,
+  } = modState;
+
+  const fish = new Fish(location, [fishAdvantage, fishDisadvantage, fishDifficultyMod, fishSizeModArray]);
+  const { text, rollTotal, isNat20 } = rollForFishing(player, [
+    playerAdvantage,
+    playerDisadvantage,
+    playerSkillMod,
+    playerFishFindMod,
+    playerTreasureFindMod,
+  ]);
   let catchMessage, playerRollMessage, rollMessage;
 
   if (rollTotal >= fish.requiredRoll || isNat20) {
