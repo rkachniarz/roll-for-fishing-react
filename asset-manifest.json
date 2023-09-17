@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/roll-for-fishing-react/static/css/main.adfedbd3.css",
+    "main.js": "/roll-for-fishing-react/static/js/main.b173c65b.js",
+    "static/js/787.98edf166.chunk.js": "/roll-for-fishing-react/static/js/787.98edf166.chunk.js",
+    "static/media/Default.jpg": "/roll-for-fishing-react/static/media/Default.4f077660a1df9dc76d43.jpg",
+    "index.html": "/roll-for-fishing-react/index.html",
+    "main.adfedbd3.css.map": "/roll-for-fishing-react/static/css/main.adfedbd3.css.map",
+    "main.b173c65b.js.map": "/roll-for-fishing-react/static/js/main.b173c65b.js.map",
+    "787.98edf166.chunk.js.map": "/roll-for-fishing-react/static/js/787.98edf166.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.adfedbd3.css",
+    "static/js/main.b173c65b.js"
+  ]
+}
