@@ -2,9 +2,9 @@ function f() {
   console.error('Button was clicked, but it has no callback');
 }
 
-export function Button({ cname, callback = f, children }) {
+export function Button({ cname, callback = f, disabled, children }) {
   return (
-    <button className={cname} onClick={callback}>
+    <button disabled={disabled} className={cname} onClick={callback}>
       {children}
     </button>
   );
