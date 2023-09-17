@@ -1,3 +1,3 @@
-export function LogEntry({ cname, children }) {
-  return <span className={`log-${cname}`}>{children}</span>;
+export function LogEntry({ cname, key, children }) {
+  return <div key={key} className={`log-${cname}`}>{children}</div>;
 }
