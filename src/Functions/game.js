@@ -34,7 +34,7 @@ export function playGame(location, player) {
   playerRollMessage = `Your roll:  ${text}`;
 
   console.log([rollMessage, playerRollMessage, catchMessage]);
-  return [rollMessage, playerRollMessage, catchMessage];
+  return [player, [rollMessage, playerRollMessage, catchMessage]];
 }
 
 export function showHistory(player) {

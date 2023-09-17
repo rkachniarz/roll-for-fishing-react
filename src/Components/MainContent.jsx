@@ -6,9 +6,10 @@ import { PlayerInfo } from './PlayerInfo';
 
 export function MainContent({ location, player, logs = [] }) {
   let classIngame = player ? '-ingame' : '';
-  function buttonFunction() {
-    playGame(location, player);
-  }
+
+  const buttonFunction = () => {
+    [player, logs] = playGame(location, player);
+  };
 
   if (player) {
     return (
