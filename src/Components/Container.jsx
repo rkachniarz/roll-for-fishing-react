@@ -1,3 +1,6 @@
+import clsx from 'clsx';
+
 export function Container({ cname, children }) {
-  return <div className={cname}>{children}</div>;
+  let classes = clsx(cname, { "empty": !children || children.length < 1 });
+  return <div className={classes}>{children}</div>;
 }

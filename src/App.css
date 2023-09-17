@@ -122,6 +122,20 @@ body {
   border: solid 2px #15233f;
 }
 
+.EventLog {
+  margin: 0px 30% 25px 30%;
+  padding: 10px 2% 12px 2%;
+  text-align: left;
+  max-height: 378px;
+  border: solid 2px #15233f;
+  overflow-y: auto;
+}
+
+.EventLog.empty {
+  border: none;
+  overflow: hidden;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
