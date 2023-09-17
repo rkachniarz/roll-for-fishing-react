@@ -10,24 +10,37 @@ export function MainContent({ location, player, logs = [] }) {
   let [playerState, setPlayerState] = useState(player);
   let [logsState, setLogsState] = useState(logs);
   let [historyButtonState, setHistoryButtonState] = useState(true)
-  let historyButtonText = historyButtonState? 'Show History' : 'Hide History';
+  let historyButtonText = historyButtonState ? 'Show History' : 'Hide History';
+
+  let [modState, setModState] = useState({
+    playerAdvantage: false,
+    playerDisadvantage: false,
+    playerSkillMod: 0,
+    playerFishFindMod: 0,
+    playerTreasureFindMod: 0,
+    fishAdvantage: false,
+    fishDisadvantage: false,
+    fishDifficultyMod: 0,
+    fishSizeModArray: [],
+    extraMainButtonCallbacks: []
+  })
 
   function mainButtonFunction() {
-    let [p, l] = playGame(location, player);
+    let [p, l] = playGame(location, player, modState);
     setPlayerState(p);
     setLogsState(l);
     if (!historyButtonState) setHistoryButtonState(!historyButtonState);
   }
 
   function historyButtonFunction() {
-    let historyOutput=[];
-    if (historyButtonState){
-    historyOutput = playerState.fishHistory.map(
-      ({ fish, rollTotal }) =>
-        `${fish.provideDescription()}, roll required: ${fish.requiredRoll}, your roll: ${rollTotal}, xp gained: ${
-          fish.xp
-        }`,
-    );};
+    let historyOutput = [];
+    if (historyButtonState) {
+      historyOutput = playerState.fishHistory.map(
+        ({ fish, rollTotal }) =>
+          `${fish.provideDescription()}, roll required: ${fish.requiredRoll}, your roll: ${rollTotal}, xp gained: ${fish.xp
+          }`,
+      );
+    };
     setLogsState(historyOutput);
     setHistoryButtonState(!historyButtonState);
   }
