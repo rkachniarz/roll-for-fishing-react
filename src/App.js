@@ -12,7 +12,7 @@ import { getRandomNumber, roll20 } from './Functions/helpers.js';
 import './Data/locations.js';
 import { lake } from './Data/locations.js';
 //Variables
-let [player, setPlayer] = useState(new Player('Guy', getRandomNumber(0, 2)));
+let player = new Player('Guy', getRandomNumber(0, 2));
 
 
 const currentLocation = lake;

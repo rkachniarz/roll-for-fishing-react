@@ -1,6 +1,6 @@
 import { Fish } from './fish.js';
-import { getRandomNumber, roll20 } from './helpers.js';
-import { increasePlayerFishingSkill, giveRandomSpecialTreasure } from './levelup.js';
+import { roll20 } from './helpers.js';
+//import { increasePlayerFishingSkill, giveRandomSpecialTreasure } from './levelup.js';
 
 function rollForFishing(player) {
   const dieRoll = roll20();
@@ -32,8 +32,6 @@ export function playGame(location, player) {
     fish.requiredRoll
   } to catch.`;
   playerRollMessage = `Your roll:  ${text}`;
-
-  console.log([rollMessage, playerRollMessage, catchMessage]);
   return [player, [rollMessage, playerRollMessage, catchMessage]];
 }
 

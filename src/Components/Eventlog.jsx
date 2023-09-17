@@ -1,5 +1,7 @@
 import { Container } from './Container';
 
 export function EventLog({ children }) {
-  return <Container cname="EventLog">{children}</Container>;
+  let output = children.map(child => <div>{child}</div>);
+  return <Container cname="EventLog">{output}</Container>;
 }
+
