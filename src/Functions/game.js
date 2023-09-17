@@ -34,14 +34,3 @@ export function playGame(location, player) {
   playerRollMessage = `Your roll:  ${text}`;
   return [player, [rollMessage, playerRollMessage, catchMessage]];
 }
-
-export function showHistory(player) {
-  return player.fishHistory
-    .map(
-      ({ fish, rollTotal }) =>
-        `<li>${fish.provideDescription()}, roll required: ${fish.requiredRoll}, your roll: ${rollTotal}, xp gained: ${
-          fish.difficulty
-        }</li>`,
-    )
-    .join('');
-}
