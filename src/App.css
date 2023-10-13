@@ -136,6 +136,17 @@ body {
   overflow: hidden;
 }
 
+.Modal {
+  background: #81c4ed;
+  position: absolute;
+  z-index: 100;
+  top: 6vh;
+  left: 0;
+  width: 100%;
+  height: 94vh;
+  overflow-y: auto;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
