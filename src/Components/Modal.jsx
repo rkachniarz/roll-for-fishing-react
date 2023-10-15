@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-export function Modal ({cname, children, active=false}) {
+export default function Modal ({cname, children, active=false}) {
 
     
     if (!active) return;

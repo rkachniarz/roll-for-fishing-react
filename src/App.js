@@ -1,9 +1,9 @@
 //Styles
 import './App.css';
 //Components
-import { Container } from './Components/Container';
-import { Footer } from './Components/Footer';
-import { Header } from './Components/Header';
+import Container from './Components/Container';
+import Footer from './Components/Footer';
+import Header from './Components/Header';
 import { MainContent } from './Components/MainContent';
 //Functions
 import { Player } from './Functions/player.js';
@@ -18,7 +18,7 @@ const currentPlayer = player;
 
 function App() {
   return (
-    <Container>
+    <Container cname="App-main-container">
       <Header player={currentPlayer}></Header>
       <MainContent location={currentLocation} player={currentPlayer} logs={[]}></MainContent>
       <Footer></Footer>

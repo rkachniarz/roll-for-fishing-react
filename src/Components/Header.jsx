@@ -1,7 +1,7 @@
-import { Container } from './Container';
-import { Image } from './Image';
+import Container from './Container';
+import Image from './Image';
 
-export function Header({ player }) {
+export default function Header({ player }) {
   let classSmall = player ? '-small' : '';
 
   return (

@@ -2,4 +2,5 @@
 
 //name
 //class (radio)
-//roll stats?
+//roll stats
+//cheat input

@@ -54,7 +54,7 @@ export class Player {
     } else return false;
   }
 
-  restore(name, playerClass, skill, treasureFind, fishFind, totalxp, level, inventory) {
+  restore({name, playerClass, skill, treasureFind, fishFind, totalxp, level, inventory}) {
     this.name = name;
     this.class = playerClass;
     this.skill = skill;

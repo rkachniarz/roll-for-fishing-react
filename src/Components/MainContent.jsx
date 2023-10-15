@@ -1,20 +1,18 @@
 import { playGame } from '../Functions/game';
-import { Button } from './Button';
-import { Container } from './Container';
-import { EventLog } from './Eventlog';
-import { PlayerInfo } from './PlayerInfo';
+import Button from './Button';
+import Container from './Container';
+import DevTools from './DevTools';
+import EventLog from './Eventlog';
+import PlayerInfo from './PlayerInfo';
 import { useState } from 'react';
-import { Modal } from './Modal';
 
 export function MainContent({ location, player, logs = [] }) {
   let classIngame = player ? '-ingame' : '';
   let [playerState, setPlayerState] = useState(player);
   let [logsState, setLogsState] = useState(logs);
   let [historyButtonState, setHistoryButtonState] = useState(true)
-  let [modalActiveState, setModalActiveState] = useState(true)
   let historyButtonText = historyButtonState? 'Show History' : 'Hide History';
 
-  function closeModal(){setModalActiveState(false)}
 
   function mainButtonFunction() {
     let [p, l] = playGame(location, player);
@@ -44,12 +42,12 @@ export function MainContent({ location, player, logs = [] }) {
           Roll!
         </Button>
         <br />
-        <Button cname="Button-small" callback={historyButtonFunction}>
+        <Button disabled={!player.fishHistory.length} cname="Button-small" callback={historyButtonFunction}>
           {historyButtonText}
         </Button>
-        <Button cname="Button-small">Inventory</Button>
+        <Button disabled={!player.inventory.length} cname="Button-small">Inventory</Button>
         <EventLog>{logsState}</EventLog>
-        <Modal active={modalActiveState}><p>Siema</p><Button cname="Button-small" callback={closeModal}>Nara</Button></Modal>
+        <DevTools player={playerState}/>
       </Container>
     );
   } else
