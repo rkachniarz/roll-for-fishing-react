@@ -2,8 +2,16 @@ import { getRandomNumber } from './helpers.js';
 
 const xpToLevel = [0, 10, 25, 50, 100, 250, 500, 1000, 2000, 5000];
 
-const classes = [
+export function generateName() {
+  const prefixes = ['Woj', 'Bio', 'Gaz', 'Dur', 'Mat', 'Kek', 'Far', 'Arb', 'Yarr', 'Kli', 'Tur', 'Hel', 'Fir', 'Chrum'];
+  const suffixes = ['ek', 'ak', 'son', 'dig', 'ent', 'gun', 'bip', 'blop', 'pip', 'murgl', 'ma', 'uss', 'huk', 'gle', 'wald', 'ena', 'ata', 'iza', 'dottir', 'ola', 'ula'];
+
+  return (prefixes[getRandomNumber(0,prefixes.length-1)] + suffixes[getRandomNumber(0,suffixes.length-1)])
+}
+
+export const classes = [
   {
+    id: 0,
     name: 'Fish Fighter',
     skillmin: 2,
     skillmax: 7,
@@ -13,6 +21,7 @@ const classes = [
     fishFindMax: 5,
   },
   {
+    id: 1,
     name: 'Fishing Wizard',
     skillmin: 1,
     skillmax: 5,
@@ -22,6 +31,7 @@ const classes = [
     fishFindMax: 10,
   },
   {
+    id: 2,
     name: 'Rogue Fisherman',
     skillmin: 0,
     skillmax: 5,

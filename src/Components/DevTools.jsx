@@ -5,6 +5,7 @@ import { useState } from "react";
 import Container from "./Container";
 import { Displayable, Item } from "../Functions/displayable";
 import defaultImage from "../Data/Assets/Item-default.png"
+import PlayerCreator from "./PlayerCreator";
 
 const displayTest = new Displayable();
 const itemTest = new Item({
@@ -43,9 +44,14 @@ const modalContent =
           {displayItem}{displayItem}{displayItem}{displayItem}
          </Container>
     </Container>
+    <Container>
+      <p>Player creator below</p>
+      <PlayerCreator />
+    </Container>
 </Container>;
 
 function toggleModal(){
+    console.log("modal was toggled");
     setModalOpen(!modalOpen);
 }
 
