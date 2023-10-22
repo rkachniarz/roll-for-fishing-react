@@ -13,8 +13,8 @@ export const classes = [
   {
     id: 0,
     name: 'Fish Fighter',
-    skillmin: 2,
-    skillmax: 7,
+    skillMin: 2,
+    skillMax: 7,
     treasureFindMin: 0,
     treasureFindMax: 5,
     fishFindMin: 1,
@@ -23,8 +23,8 @@ export const classes = [
   {
     id: 1,
     name: 'Fishing Wizard',
-    skillmin: 1,
-    skillmax: 5,
+    skillMin: 1,
+    skillMax: 5,
     treasureFindMin: 1,
     treasureFindMax: 5,
     fishFindMin: 5,
@@ -33,8 +33,8 @@ export const classes = [
   {
     id: 2,
     name: 'Rogue Fisherman',
-    skillmin: 0,
-    skillmax: 5,
+    skillMin: 0,
+    skillMax: 5,
     treasureFindMin: 5,
     treasureFindMax: 10,
     fishFindMin: 0,
@@ -46,7 +46,7 @@ export class Player {
   constructor(name = 'Player', classId = 0) {
     this.name = name;
     this.class = classes[classId];
-    this.skill = getRandomNumber(this.class.skillmin, this.class.skillmax);
+    this.skill = getRandomNumber(this.class.skillMin, this.class.skillMax);
     this.treasureFind = getRandomNumber(this.class.treasureFindMin, this.class.treasureFindMax);
     this.fishFind = getRandomNumber(this.class.fishFindMin, this.class.fishFindMax);
     this.totalxp = 0;

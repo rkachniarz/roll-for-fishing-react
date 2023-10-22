@@ -3,19 +3,19 @@ import { generateName } from "../Functions/player";
 import { classes } from "../Functions/player";
 import Container from "./Container";
 import Button from "./Button";
-
+import StatRoller from "./StatRoller";
 
 export default function PlayerCreator(){
 
 
   const [playerName, setPlayerName] = useState(generateName());
-  const [playerClass, setPlayerClass] = useState();
+  const [playerClass, setPlayerClass] = useState(0);
   const [cheat, setCheat] = useState('');
   const [futurePlayer, setFuturePlayer] = useState([]);
 
-function ClassesRadio(classList){
+function ClassesRadio(){
   return classes.map((pClass, index)=>
-    <div key={pClass.id}>
+    <div key={`classRadio-${pClass.id}`}>
       <input
         type="radio"
         id={`playerClass-${index}`}
@@ -30,7 +30,7 @@ function ClassesRadio(classList){
 
 function handleSubmit(e){
   e.preventDefault();
-  console.log(setFuturePlayer([playerName, playerClass, cheat]));
+  setFuturePlayer([playerName, playerClass, cheat]);
   console.log(playerName, playerClass);
   console.log(futurePlayer);
 }
@@ -53,9 +53,10 @@ function generateNewName(e){
           <label htmlFor="playerClass">Class:</label>
         </div>
         <div>
-          <ClassesRadio classList={classes}/>
+          <ClassesRadio/>
         </div>
       </div>
+      <StatRoller classId={playerClass}/>
       <div>
         <label htmlFor="cheat">Cheats? </label>
         <input type="password" id="cheat" name="cheat" value={cheat} onChange={e=>setCheat(e.target.value)}/>
@@ -68,7 +69,3 @@ function generateNewName(e){
   )
 }
 
-//name
-//class (radio)
-//roll stats
-//cheat input
