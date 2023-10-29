@@ -5,7 +5,6 @@ import { useState } from "react";
 import Container from "./Container";
 import { Displayable, Item } from "../Functions/displayable";
 import defaultImage from "../Data/Assets/Item-default.png"
-import PlayerCreator from "./PlayerCreator";
 
 const displayTest = new Displayable();
 const itemTest = new Item({
@@ -15,53 +14,48 @@ const itemTest = new Item({
   description: 'An Item',
   flavor: 'Nice and flavorful',
   active: true,
-  itemMechanics: {awesome: true}
+  itemMechanics: { awesome: true }
 })
 
 
-export default function DevTools(player){
-let [modalOpen, setModalOpen] = useState(false)
+export default function DevTools(player) {
+  let [modalOpen, setModalOpen] = useState(false)
 
-const displayThing =
+  const displayThing =
     <Container cname="DisplayableItem">
-        <img className='Icon' src={displayTest.icon} alt={displayTest.description} onClick={displayTest.onClickFunction}></img>
+      <img className='Icon' src={displayTest.icon} alt={displayTest.description} onClick={displayTest.onClickFunction}></img>
     </Container>;
 
-const displayItem =
+  const displayItem =
     <Container cname="DisplayableItem">
-        <img className='Icon' src={itemTest.icon} alt={itemTest.description} onClick={() => itemTest.onClickFunction({})}></img>
+      <img className='Icon' src={itemTest.icon} alt={itemTest.description} onClick={() => itemTest.onClickFunction({})}></img>
     </Container>;
 
-const modalContent =
-<Container cname="App-main">
-    <Container>
+  const modalContent =
+    <Container cname="App-main">
+      <Container>
         <p>Siema</p>
         <Button cname="Button-small" callback={toggleModal}>Nara</Button>
-    </Container>
-    <Container cname="Inventory-outer CenterFlex">
+      </Container>
+      <Container cname="Inventory-outer CenterFlex">
         <Container cname="Inventory-inner">
           {displayThing}{displayThing}{displayThing}{displayThing}
           {displayItem}{displayItem}{displayItem}{displayItem}
-         </Container>
-    </Container>
-    <Container>
-      <p>Player creator below</p>
-      <PlayerCreator />
-    </Container>
-</Container>;
+        </Container>
+      </Container>
+    </Container>;
 
-function toggleModal(){
-    console.log("modal was toggled");
+  function toggleModal() {
     setModalOpen(!modalOpen);
-}
+  }
 
 
-return(
+  return (
     <div>
-        <button onClick={toggleModal}>Open Debug Modal</button>
-        <Modal cname="Debug" active={modalOpen}>
-            {modalContent}
-        </Modal>
+      <button onClick={toggleModal}>Open Debug Modal</button>
+      <Modal cname="Debug" active={modalOpen}>
+        {modalContent}
+      </Modal>
     </div>
-)
+  )
 }

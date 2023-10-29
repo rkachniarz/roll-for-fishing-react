@@ -3,10 +3,47 @@ import { getRandomNumber } from './helpers.js';
 const xpToLevel = [0, 10, 25, 50, 100, 250, 500, 1000, 2000, 5000];
 
 export function generateName() {
-  const prefixes = ['Woj', 'Bio', 'Gaz', 'Dur', 'Mat', 'Kek', 'Far', 'Arb', 'Yarr', 'Kli', 'Tur', 'Hel', 'Fir', 'Chrum'];
-  const suffixes = ['ek', 'ak', 'son', 'dig', 'ent', 'gun', 'bip', 'blop', 'pip', 'murgl', 'ma', 'uss', 'huk', 'gle', 'wald', 'ena', 'ata', 'iza', 'dottir', 'ola', 'ula'];
+  const prefixes = [
+    'Woj',
+    'Bio',
+    'Gaz',
+    'Dur',
+    'Mat',
+    'Kek',
+    'Far',
+    'Arb',
+    'Yarr',
+    'Kli',
+    'Tur',
+    'Hel',
+    'Fir',
+    'Chrum',
+  ];
+  const suffixes = [
+    'ek',
+    'ak',
+    'son',
+    'dig',
+    'ent',
+    'gun',
+    'bip',
+    'blop',
+    'pip',
+    'murgl',
+    'ma',
+    'uss',
+    'huk',
+    'gle',
+    'wald',
+    'ena',
+    'ata',
+    'iza',
+    'dottir',
+    'ola',
+    'ula',
+  ];
 
-  return (prefixes[getRandomNumber(0,prefixes.length-1)] + suffixes[getRandomNumber(0,suffixes.length-1)])
+  return prefixes[getRandomNumber(0, prefixes.length - 1)] + suffixes[getRandomNumber(0, suffixes.length - 1)];
 }
 
 export const classes = [
@@ -55,6 +92,14 @@ export class Player {
     this.inventory = [];
   }
 
+  create({ name, playerClass, skill, treasureFind, fishFind }) {
+    this.name = name;
+    this.class = classes[playerClass];
+    this.skill = skill;
+    this.treasureFind = treasureFind;
+    this.fishFind = fishFind;
+  }
+
   gainXP(gain) {
     this.totalxp += gain;
     if (this.level === xpToLevel.length) return false;
@@ -64,7 +109,7 @@ export class Player {
     } else return false;
   }
 
-  restore({name, playerClass, skill, treasureFind, fishFind, totalxp, level, inventory}) {
+  restore({ name, playerClass, skill, treasureFind, fishFind, totalxp, level, inventory }) {
     this.name = name;
     this.class = playerClass;
     this.skill = skill;
