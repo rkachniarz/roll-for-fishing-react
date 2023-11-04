@@ -49,6 +49,12 @@ export default function GameButton(props) {
   let [buttonText, setButtonText] = useState('Roll!')
   let [eventChance, setEventChance] = useState(0)
 
+  function launchCallbacks(callbackArray){
+    if (callbackArray.length === 0) return;
+    callbackArray.forEach(callback => callback());
+  }
+
+
   function playGame(location, modState) {
     findFish(location, modState.playerFishFindMod)
       ? rollForFishing(location, modState)
@@ -57,8 +63,6 @@ export default function GameButton(props) {
       ? randomEvent()
       : noEvent();
     launchCallbacks(modState.extraCallbacks)
-
-
   }
 
 
