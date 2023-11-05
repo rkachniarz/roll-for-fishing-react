@@ -32,7 +32,13 @@ export class Item extends Displayable {
     this.active = !this.active;
   }
 
-  activate(modState){console.log("Item activated")}
+  activate(modState){
+      let {...oldState} = modState;
+      //return {...oldState, this.itemMechanics}
+      console.log("Item activated")}
+
+
+
   deactivate(modState){console.log("Item deactivated")}
 
 }
