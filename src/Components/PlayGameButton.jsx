@@ -45,23 +45,24 @@ play game:
 import { useState } from "react"
 
 export default function GameButton(props) {
-  let { location, player, modState } = props;
+  let { location, player, modState, setModState, setLogs } = props;
+
   let [buttonText, setButtonText] = useState('Roll!')
   let [eventChance, setEventChance] = useState(0)
 
-  function launchCallbacks(callbackArray){
+  function launchCallbacks(callbackArray) {
     if (callbackArray.length === 0) return;
     callbackArray.forEach(callback => callback());
   }
 
 
-  function playGame(location, modState) {
+  function playGame() {
     findFish(location, modState.playerFishFindMod)
-      ? rollForFishing(location, modState)
-      : rollForTreasure(location, playerTreasureFindMod);
+      ? rollForFishing(location, modState, setLogs)
+      : rollForTreasure(location, playerTreasureFindMod, setLogs);
     checkEvents(eventChance)
       ? randomEvent()
-      : noEvent();
+      : noEvent(setEventChance);
     launchCallbacks(modState.extraCallbacks)
   }
 

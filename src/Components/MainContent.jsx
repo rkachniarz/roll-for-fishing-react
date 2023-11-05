@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 export default function MainContent({ currentLocation, setCurrentLocation, currentPlayer, setCurrentPlayer, logs = [] }) {
   let classIngame = currentPlayer ? '-ingame' : '';
-  let [logsState, setLogsState] = useState(logs);
+  let [logsState, setLogs] = useState(logs);
   let [historyButtonState, setHistoryButtonState] = useState(true)
   let historyButtonText = historyButtonState ? 'Show History' : 'Hide History';
 
@@ -17,7 +17,7 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
   function mainButtonFunction() {
     let [p, l] = playGame(currentLocation, currentPlayer);
     setCurrentPlayer(p);
-    setLogsState(l);
+    setLogs(l);
     if (!historyButtonState) setHistoryButtonState(!historyButtonState);
   }
 
@@ -30,7 +30,7 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
           }`,
       );
     };
-    setLogsState(historyOutput);
+    setLogs(historyOutput);
     setHistoryButtonState(!historyButtonState);
   }
 

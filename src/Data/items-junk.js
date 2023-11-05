@@ -23,7 +23,7 @@ export const itempool = [
   },
   {
     uid: 2,
-    name: 'Iron dagger',
+    name: 'Ruested iron dagger',
     flavor: 'Someone clearly made a lot of them.',
     value: 1,
     chance: 2,
