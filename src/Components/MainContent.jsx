@@ -14,8 +14,20 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
   let historyButtonText = historyButtonState ? 'Show History' : 'Hide History';
 
 
+  let [modState, setModState] = useState({
+    playerAdvantage: false,
+    playerDisadvantage: false,
+    playerSkillMod: 0,
+    playerFishFindMod: 0,
+    playerTreasureFindMod: 0,
+    fishAdvantage: false,
+    fishDisadvantage: false,
+    fishDifficultyMod: 0,
+    fishSizeModArray: [],
+    extraMainButtonCallbacks: []
+  })
   function mainButtonFunction() {
-    let [p, l] = playGame(currentLocation, currentPlayer);
+    let [p, l] = playGame(currentLocation, currentPlayer, modState);
     setCurrentPlayer(p);
     setLogs(l);
     if (!historyButtonState) setHistoryButtonState(!historyButtonState);
