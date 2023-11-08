@@ -1,6 +1,5 @@
 import { Fish } from './fish.js';
 import { roll20 } from './helpers.js';
-//import { increasePlayerFishingSkill, giveRandomSpecialTreasure } from './levelup.js';
 
 function rollForFishing(
   player,

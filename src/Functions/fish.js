@@ -10,8 +10,10 @@ const sizes = [
 ];
 
 export class Fish {
+
   constructor(location, [fishAdvantage, fishDisadvantage, fishDifficultyMod, fishSizeModArray]) {
-    const { name, difficultyMod, subnames } = pickRandom(location);
+  constructor(location) {
+    const { name, difficultyMod, subnames } = pickRandom(location.fish);
     const pickedSubname = subnames[getRandomNumber(0, subnames.length - 1)];
     this.name = `${pickedSubname} ${name}`;
     const pickedSize = pickRandom(sizes.concat(fishSizeModArray));

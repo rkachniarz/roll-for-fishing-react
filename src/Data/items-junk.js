@@ -1,91 +1,14 @@
-export const lake =
-{
-  name: 'Lake',
-  baseFishFind: 50,
-  baseTreasureFind: 5,
-  fish : [
-  {
-    name: 'Carp',
-    chance: 20,
-    difficultyMod: 0,
-    subnames: ['Black', 'Predatory', 'Common'],
-  },
-  {
-    name: 'Bass',
-    chance: 10,
-    difficultyMod: 1,
-    subnames: ['Largemouth', 'Smallmouth', 'Rock', 'Striped', 'Spotted', 'White', 'Yellow'],
-  },
-  {
-    name: 'Trout',
-    chance: 10,
-    difficultyMod: 2,
-    subnames: ['Brook', 'Brown', 'Bull', 'Cutthroat', 'Rainbow'],
-  },
-  {
-    name: 'Pike',
-    chance: 10,
-    difficultyMod: 2,
-    subnames: ['Northern', 'Amur', 'Killer'],
-  },
-  {
-    name: 'Roach',
-    chance: 0,
-    difficultyMod: -1,
-    subnames: ['Common', 'White', 'Pigo'],
-  },
-  {
-    name: 'Cod',
-    chance: 10,
-    difficultyMod: 2,
-    subnames: ['Murray', 'Sleepy', 'Trout', 'Black'],
-  },
-  {
-    name: 'Sturgeon',
-    chance: 5,
-    difficultyMod: 3,
-    subnames: ['Beluga', 'Starry', 'Dwarf', 'Shovelnose', 'Shortnose'],
-  }
-],
-treasure:   [{
-  uid: 1,
-  name: 'Mega Mass Fish Chum',
-  icon: "🗃",
-  description: 'Fish can grow more beefy',
-  flavor: 'Dad, should trout have biceps this huge?',
-  mechanics: {fishSizeModArray: [{ name: 'Mega Massive', chance: 5, difficultyMod: 8 }, { name: 'Swole AF', chance: 2, difficultyMod: 10 }]},
-  active: true
-},
+// {
+//     uid: ,
+//     name: '',
+//     flavor: '',
+//     value: 0,
+//     chance:
+// }
+//default option must have chance: 0
+//total chances can't exceed 100
 
-{
-  uid: 2,
-  name: 'Fishing pole laser sight',
-  icon: "🔴",
-  description: '+2 fishing skill. -2 treasure find.',
-  flavor: 'Now if only you could shoot at them...',
-  mechanics: {playerSkillMod: 2},
-  active: true
-},
-{
-  uid: 3,
-  name: 'Heavy bait',
-  icon: "🎱",
-  description: '+5 fishing skill. Disadvantage on fishing rolls.',
-  flavor: "If you manage to hit 'em, they ain't got no chance ",
-  mechanics: {playerDisadvantage: true, playerSkillMod: 5},
-  active: true
-},
-{
-  uid: 4,
-  name: "Industrial-strength gelatin",
-  icon: "🧊",
-  description: "Fish get disadvantage. They are also harder to find.",
-  flavor: "In waterproof packaging.",
-  mechanics: {fishDisadvantage: true, playerFishFindMod: -5},
-  active: true
-}
-],
-junk: [
+export const itempool = [
   {
     uid: 0,
     name: '',
@@ -100,7 +23,7 @@ junk: [
   },
   {
     uid: 2,
-    name: 'Iron dagger',
+    name: 'Rusted iron dagger',
     flavor: 'Someone clearly made a lot of them.',
     value: 1,
     chance: 2,
@@ -178,14 +101,14 @@ junk: [
   {
     uid: 14,
     name: 'Bit of oily leather',
-    flavor: "There's a dagger blade sized hole in the middle",
+    flavor: "There's a dagger blade sized hole in the middle.",
     value: 2,
     chance: 1,
   },
   {
     uid: 15,
     name: "A crow's feather",
-    flavor: 'Ink-stained',
+    flavor: 'Ink-stained.',
     value: 1,
     chance: 2,
   },
@@ -206,14 +129,14 @@ junk: [
   {
     uid: 18,
     name: 'Snail shell',
-    flavor: 'Pretty',
+    flavor: 'Pretty.',
     value: 5,
     chance: 1,
   },
   {
     uid: 19,
     name: 'Decomposed boot',
-    flavor: "A frog's palace",
+    flavor: "A frog's palace.",
     value: 0,
     chance: 2,
   },
@@ -246,4 +169,4 @@ junk: [
     chance: 2,
   },
 
-]}
+];

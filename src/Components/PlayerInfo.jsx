@@ -1,6 +1,6 @@
-import { Container } from './Container';
+import Container from './Container';
 
-export function PlayerInfo({ player }) {
+export default function PlayerInfo({ player }) {
   return (
     <Container cname="PlayerInfo">
       <Container cname="PlayerStat">{`${player.name}, level ${player.level} ${player.class.name}`}</Container>
