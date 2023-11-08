@@ -61,7 +61,7 @@ export default function GameButton(props) {
   let logsContent = '';
 
   function findFish(location, mods) {
-    return (roll100()+mods.playerFishFindMod >= location.baseFishFind)
+    return (roll100() + mods.playerFishFindMod >= location.baseFishFind)
   }
 
   function rollForFishing(location, mods, setLogs) {
@@ -82,19 +82,22 @@ export default function GameButton(props) {
   }
 
   function rollForTreasure(location, mods, setLogs) {
-    //roll 100
-    //check agianst location.basetresurefind + player.treasurefindmod
-    //return true (treasure) or false(no treasure - chance for junk)
+    if (roll100() + mods.playerTreasureFindMod >= location.baseTreasureFind)
+      pickTreasure();
+    else
+      pickJunk();
   }
 
   function pickTreasure(location, player, mods, setLogs) {
     //pick random from location.treasure table
     //add to player.inventory, activate
+    //modify message
   }
 
   function pickJunk(location, player) {
     //pick random from location.junk table
-    //add to player.junkpile
+    //if uid = 0, message about getting totally nothing
+    //else add to player.junkpile, modify message
   }
 
   function checkEvents(eventTrigger) {

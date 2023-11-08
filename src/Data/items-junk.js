@@ -23,7 +23,7 @@ export const itempool = [
   },
   {
     uid: 2,
-    name: 'Ruested iron dagger',
+    name: 'Rusted iron dagger',
     flavor: 'Someone clearly made a lot of them.',
     value: 1,
     chance: 2,
@@ -101,14 +101,14 @@ export const itempool = [
   {
     uid: 14,
     name: 'Bit of oily leather',
-    flavor: "There's a dagger blade sized hole in the middle",
+    flavor: "There's a dagger blade sized hole in the middle.",
     value: 2,
     chance: 1,
   },
   {
     uid: 15,
     name: "A crow's feather",
-    flavor: 'Ink-stained',
+    flavor: 'Ink-stained.',
     value: 1,
     chance: 2,
   },
@@ -129,14 +129,14 @@ export const itempool = [
   {
     uid: 18,
     name: 'Snail shell',
-    flavor: 'Pretty',
+    flavor: 'Pretty.',
     value: 5,
     chance: 1,
   },
   {
     uid: 19,
     name: 'Decomposed boot',
-    flavor: "A frog's palace",
+    flavor: "A frog's palace.",
     value: 0,
     chance: 2,
   },
@@ -157,7 +157,7 @@ export const itempool = [
   {
     uid: 22,
     name: 'Bit of scroll parchment',
-    flavor: 'You could probably fit a really tiny spell on it',
+    flavor: 'You could probably fit a really tiny spell on it.',
     value: 2,
     chance: 1,
   },
@@ -168,4 +168,5 @@ export const itempool = [
     value: 0,
     chance: 2,
   },
+
 ];
