@@ -1,4 +1,9 @@
-export const lake = [
+export const lake =
+{
+  name: 'Lake',
+  baseFishFind: 50,
+  baseTreasureFind: 5,
+  fish : [
   {
     name: 'Carp',
     chance: 20,
@@ -40,11 +45,205 @@ export const lake = [
     chance: 5,
     difficultyMod: 3,
     subnames: ['Beluga', 'Starry', 'Dwarf', 'Shovelnose', 'Shortnose'],
+  }
+],
+treasure:   [{
+  uid: 1,
+  name: 'Mega Mass Fish Chum',
+  icon: "🗃",
+  description: 'Fish can grow more beefy',
+  flavor: 'Dad, should trout have biceps this huge?',
+  mechanics: {fishSizeModArray: [{ name: 'Mega Massive', chance: 5, difficultyMod: 8 }, { name: 'Swole AF', chance: 2, difficultyMod: 10 }]},
+  active: true
+},
+
+{
+  uid: 2,
+  name: 'Fishing pole laser sight',
+  icon: "🔴",
+  description: '+2 fishing skill. -2 treasure find.',
+  flavor: 'Now if only you could shoot at them...',
+  mechanics: {playerSkillMod: 2},
+  active: true
+},
+{
+  uid: 3,
+  name: 'Heavy bait',
+  icon: "🎱",
+  description: '+5 fishing skill. Disadvantage on fishing rolls.',
+  flavor: "If you manage to hit 'em, they ain't got no chance ",
+  mechanics: {playerDisadvantage: true, playerSkillMod: 5},
+  active: true
+},
+{
+  uid: 4,
+  name: "Industrial-strength gelatin",
+  icon: "🧊",
+  description: "Fish get disadvantage. They are also harder to find.",
+  flavor: "In waterproof packaging.",
+  mechanics: {fishDisadvantage: true, playerFishFindMod: -5},
+  active: true
+}
+],
+junk: [
+  {
+    uid: 0,
+    name: '',
+    chance: 0,
   },
   {
-    name: 'Treasure',
+    uid: 1,
+    name: 'Vendor trash',
+    flavor: 'Literally trash that the vendor tossed out.',
+    value: 1,
     chance: 2,
-    difficultyMod: 3,
-    subnames: ['Glinting', 'Heavy', 'Ominous', 'Ancient'],
   },
-];
+  {
+    uid: 2,
+    name: 'Iron dagger',
+    flavor: 'Someone clearly made a lot of them.',
+    value: 1,
+    chance: 2,
+  },
+  {
+    uid: 3,
+    name: 'Soggy treasure map',
+    flavor: 'If you look really closely, you can make out a fading X.',
+    value: 1,
+    chance: 2,
+  },
+  {
+    uid: 4,
+    name: 'Bent fork',
+    flavor: 'A bif of animal bone is stuck in it.',
+    value: 1,
+    chance: 2,
+  },
+  {
+    uid: 5,
+    name: 'Leaky waterskin',
+    flavor: 'Still holds some water!',
+    value: 1,
+    chance: 2,
+  },
+  {
+    uid: 6,
+    name: 'Hempen tangles',
+    flavor: 'Bits of old rope.',
+    value: 0,
+    chance: 2,
+  },
+  {
+    uid: 7,
+    name: 'Freshwater seaweed',
+    flavor: "Wait, there's no regular word for it?",
+    value: 0,
+    chance: 2,
+  },
+  {
+    uid: 9,
+    name: 'A single ball bearing',
+    flavor: 'How did you even get it on a hook?',
+    value: 2,
+    chance: 2,
+  },
+  {
+    uid: 10,
+    name: 'A candle stump',
+    flavor: 'Waxy.',
+    value: 0,
+    chance: 2,
+  },
+  {
+    uid: 11,
+    name: 'An empty glass flask',
+    flavor: 'Something tiny is living inside.',
+    value: 1,
+    chance: 2,
+  },
+  {
+    uid: 12,
+    name: 'Very wet jerky',
+    flavor: 'Chewy.',
+    value: 1,
+    chance: 2,
+  },
+  {
+    uid: 13,
+    name: 'Ruined playing card',
+    flavor: "You're pretty sure it was clubs.",
+    value: 0,
+    chance: 2,
+  },
+  {
+    uid: 14,
+    name: 'Bit of oily leather',
+    flavor: "There's a dagger blade sized hole in the middle",
+    value: 2,
+    chance: 1,
+  },
+  {
+    uid: 15,
+    name: "A crow's feather",
+    flavor: 'Ink-stained',
+    value: 1,
+    chance: 2,
+  },
+  {
+    uid: 16,
+    name: 'A clump of hair',
+    flavor: 'You hope this was a wig.',
+    value: 1,
+    chance: 2,
+  },
+  {
+    uid: 17,
+    name: 'Back cover of a spellbook',
+    flavor: 'Looks like the thing exploded.',
+    value: 5,
+    chance: 1,
+  },
+  {
+    uid: 18,
+    name: 'Snail shell',
+    flavor: 'Pretty',
+    value: 5,
+    chance: 1,
+  },
+  {
+    uid: 19,
+    name: 'Decomposed boot',
+    flavor: "A frog's palace",
+    value: 0,
+    chance: 2,
+  },
+  {
+    uid: 20,
+    name: 'Rusted saucepan',
+    flavor: 'Contains mud sauce.',
+    value: 2,
+    chance: 2,
+  },
+  {
+    uid: 21,
+    name: 'An inch-sized piece of a ten foot pole',
+    flavor: 'You can still come up with many uses.',
+    value: 2,
+    chance: 1,
+  },
+  {
+    uid: 22,
+    name: 'Bit of scroll parchment',
+    flavor: 'You could probably fit a really tiny spell on it.',
+    value: 2,
+    chance: 1,
+  },
+  {
+    uid: 23,
+    name: 'Waterlogged stick',
+    flavor: 'Sticky.',
+    value: 0,
+    chance: 2,
+  },
+
+]}
