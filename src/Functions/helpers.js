@@ -12,7 +12,7 @@ export function roll20(advantage = false) {
 export function pickRandom(objectArray) {
   var filler = 100 - objectArray.map((r) => r.chance).reduce((sum, current) => sum + current);
   if (filler <= 0) {
-    console.log('chances sum is higher than 100!');
+    console.error('Sum of chances is higher than 100!');
     return;
   }
   var probability = objectArray

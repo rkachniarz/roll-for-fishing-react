@@ -64,10 +64,50 @@ export default function GameButton(props) {
       ? randomEvent()
       : noEvent(setEventChance);
     launchCallbacks(modState.extraCallbacks)
+    //possibly put the logs together and return them in one batch
   }
 
 
 
 
   return <Button callback={playGame}>{buttonText}</Button>
+}
+
+function findFish(location, mods) {
+  //roll 100
+  //check against location.basefishfind + player.fishfindmod
+  //return true (fish found) false (fish not found)
+}
+
+function rollForFishing(location, mods, setLogs) {
+  //generate a fish(location, mods) - return fish with required roll after mods
+  //roll 20(advantage, disadvantage) - return roll(s)
+  //add player fishing skill
+  //compare rolls, catch/nocatch(generated fish)
+  //set appropriate logs
+}
+
+function isCatch(fish, player) {
+  //add fish to history
+  //add xp to player
+}
+function isNoCatch(fish) {
+  //add fish to fishpool
+  //set appropriate logs
+}
+
+function rollForTreasure(location, mods, setLogs) {
+  //roll 100
+  //check agianst location.basetresurefind + player.treasurefindmod
+  //return true (treasure) or false(no treasure - chance for junk)
+}
+
+function pickTreasure(location, player, mods, setLogs) {
+  //pick random from location.treasure table
+  //add to player.inventory, activate
+}
+
+function pickJunk(location, player) {
+  //pick random from location.junk table
+  //add to player.junkpile
 }
