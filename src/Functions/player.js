@@ -104,7 +104,7 @@ export class Player {
   gainXP(gain) {
     this.totalxp += gain;
     if (this.level === xpToLevel.length) return false;
-    if (this.totalxp >= xpToLevel[this.level + 1]) {
+    if (this.totalxp > xpToLevel[this.level + 1]) {
       this.level += 1;
       return true;
     } else return false;
