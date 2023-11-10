@@ -90,6 +90,7 @@ export class Player {
     this.level = 0;
     this.fishHistory = [];
     this.inventory = [];
+    this.junkPile = [];
   }
 
   create({ name, playerClass, skill, treasureFind, fishFind }) {

@@ -28,7 +28,7 @@ play game:
 
 */
 
- const mods = {
+const mods = {
   playerAdvantage: false,
   playerDisadvantage: false,
   playerSkillMod: 0,
@@ -39,7 +39,7 @@ play game:
   fishDifficultyMod: 0,
   fishSizeModArray: [],
   extraCallbacks: []
- }
+}
 
 const location = {
   name: '',
@@ -51,34 +51,62 @@ const location = {
 }
 
 import { useState } from "react";
-import { roll20, roll100, pickRandom } from "../Functions/helpers";
+import { roll20, roll100, pickRandom, pickFromArray, removeElement } from "../Functions/helpers";
+import { Fish } from "../Functions/fish";
 
 export default function GameButton(props) {
-  let { location, player, modState, setModState, setLogs } = props;
+  let { location, player, setPlayer, mods, setMods, setLogs } = props;
 
-  let [buttonText, setButtonText] = useState('Roll!')
-  let [eventTrigger, setEventTrigger] = useState(0)
+  let [buttonText, setButtonText] = useState('Roll!');
+  let [eventTrigger, setEventTrigger] = useState(0);
+  let [fishPool, setFishPool] = useState([]);
+  let [treasurePool, setTreasurePool] = useState(location.treasurePool);
+
+
+
   let logsContent = '';
+
+  function addLogs(message) {
+    logsContent += `<p>{message}</p>`
+  }
 
   function findFish(location, mods) {
     return (roll100() + mods.playerFishFindMod >= location.baseFishFind)
   }
 
-  function rollForFishing(location, mods, setLogs) {
-    //generate a fish(location, mods) - return fish with required roll after mods
-    //roll 20(advantage, disadvantage) - return roll(s)
-    //add player fishing skill
-    //compare rolls, catch/nocatch(generated fish)
-    //set appropriate logs
+  function pickFish(location, mods) {
+    if (roll100() < fishPool.length) {
+      const pick = pickFromArray(fishPool);
+      setFishPool(removeElement(fishPool, pick));
+      return pick;
+    }
+    else return new Fish(location, mods);
   }
 
-  function isCatch(fish, player) {
-    //add fish to history
-    //add xp to player
+  function rollForFishing() {
+    let fish = pickFish(location, mods);
+
+    addLogs(`You've enountered a ${fish.provideDescription}!`);
+
+    let playerRoll = roll20(mods.playerAdvantage, mods.playerDisadvantage)
+    let playerTotal = playerRoll + player.skill + mods.playerSkillMod;
+
+    addLogs(`You rolled ${playerRoll}, for a total of ${playerTotal}. ${(playerRoll === 20) && "It's a natural 20!"}`);
+
+    addLogs(`The fish required a roll of ${fish.requiredRoll} to catch.`);
+
+    ((playerTotal >= fish.requiredRoll) || (playerRoll === 20)) ? isCatch(fish) : isNoCatch(fish);
+  }
+
+  function isCatch(fish) {
+    player.gainXP(fish.xp);
+    player.fishHistory.push({ fish, rollTotal });
+    addLogs(`You've caught it!`)
   }
   function isNoCatch(fish) {
-    //add fish to fishpool
-    //set appropriate logs
+    //todo: modify fish based on player rolls. add counter to fish.
+    setFishPool([...fishPool, fish])
+    logsContent += `<p>The ${fish.provideDescription} got away. </p>`
   }
 
   function rollForTreasure(location, mods, setLogs) {
@@ -95,22 +123,25 @@ export default function GameButton(props) {
   }
 
   function pickJunk(location, player) {
-    //pick random from location.junk table
-    //if uid = 0, message about getting totally nothing
-    //else add to player.junkpile, modify message
+    let junk = pickRandom(location.junk);
+    if (!(junk.uid === 0)) addLogs("You've found completely nothing. Well done!");
+    else {
+      player.junkPile.push(junk)
+      addLogs(`You've found ${junk.name}. ${junk.flavor}`)
+    }
   }
 
-  function checkEvents(eventTrigger) {
-    if (eventTrigger>100) return true;
+  function checkEvents() {
+    if (eventTrigger > 100) return true;
     else return false;
   }
 
   function noEvent() {
-    setEventTrigger(eventTrigger+roll20())
+    setEventTrigger(eventTrigger + roll20())
   }
 
   function randomEvent() {
-
+    addLogs("Something random happens.");
   }
 
   function launchCallbacks(callbackArray) {
@@ -125,8 +156,8 @@ export default function GameButton(props) {
     checkEvents(eventTrigger)
       ? randomEvent()
       : noEvent();
-    launchCallbacks(modState.extraCallbacks)
-    //possibly put the logs together and return them in one batch
+    launchCallbacks(modState.extraCallbacks);
+    setLogs(logsContent);
   }
 
   return <Button callback={playGame}>{buttonText}</Button>

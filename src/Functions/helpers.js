@@ -16,7 +16,7 @@ export function roll20(advantage = false, disadvantage = false) {
 }
 
 export function roll100() {
-  return getRandomNumber(1,100)
+  return getRandomNumber(1, 100);
 }
 
 export function pickRandom(objectArray) {
@@ -31,4 +31,13 @@ export function pickRandom(objectArray) {
   var pIndex = Math.floor(Math.random() * 100);
   var pickedObject = objectArray[probability[pIndex]];
   return pickedObject;
+}
+
+export function pickFromArray(array) {
+  return array[getRandomNumber(0, array.length - 1)];
+}
+
+export function removeElement(array, elementToRemove) {
+  const newArray = array.filter((element) => !(element === elementToRemove));
+  return newArray;
 }
