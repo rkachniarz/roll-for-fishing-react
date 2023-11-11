@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getRandomNumber } from '../Functions/helpers';
 import Button from './Button';
 import { classes } from "../Functions/player";

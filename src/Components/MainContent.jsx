@@ -1,4 +1,3 @@
-import { playGame } from '../Functions/game';
 import StartScreen from './StartScreen';
 import Button from './Button';
 import Container from './Container';
