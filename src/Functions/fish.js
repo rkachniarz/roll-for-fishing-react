@@ -11,7 +11,7 @@ const sizes = [
 
 export class Fish {
   constructor(location, mods) {
-    const { fishAdvantage, fishDisadvantage, fishDifficultyMod, fishSizeModArray } = mods;
+    const { fishAdvantage, fishDisadvantage, fishDifficultyMod, fishXPmod, fishSizeModArray } = mods;
 
     const { name, difficultyMod, subnames } = pickRandom(location.fish);
     const pickedSubname = subnames[getRandomNumber(0, subnames.length - 1)];
@@ -19,8 +19,9 @@ export class Fish {
     const pickedSize = pickRandom(sizes.concat(fishSizeModArray));
     this.size = pickedSize.name;
     this.difficulty = difficultyMod + fishDifficultyMod + pickedSize.difficultyMod;
-    this.xp = Math.max(this.difficulty, 0);
+    this.xp = Math.max((this.difficulty + fishXPmod), 0);
     this.requiredRoll = this.difficulty + roll20(fishAdvantage, fishDisadvantage);
+    this.timesEncountered = 0;
   }
 
   provideDescription() {

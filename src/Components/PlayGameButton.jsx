@@ -67,7 +67,7 @@ export default function GameButton(props) {
   let logsContent = '';
 
   function addLogs(message) {
-    logsContent += `<p>{message}</p>`
+    logsContent += `<p>${message}</p>`
   }
 
   function findFish(location, mods) {
@@ -86,7 +86,7 @@ export default function GameButton(props) {
   function rollForFishing() {
     let fish = pickFish(location, mods);
 
-    addLogs(`You've enountered a ${fish.provideDescription}!`);
+    addLogs(`You've enountered a ${fish.provideDescription}! ${(fish.timesEncountered > 0) && "You've seen this one before."}`);
 
     let playerRoll = roll20(mods.playerAdvantage, mods.playerDisadvantage)
     let playerTotal = playerRoll + player.skill + mods.playerSkillMod;
@@ -104,12 +104,13 @@ export default function GameButton(props) {
     addLogs(`You've caught it!`)
   }
   function isNoCatch(fish) {
-    //todo: modify fish based on player rolls. add counter to fish.
+    //todo: modify fish based on player rolls.
+    fish.timesEncountered++;
     setFishPool([...fishPool, fish])
     logsContent += `<p>The ${fish.provideDescription} got away. </p>`
   }
 
-  function rollForTreasure(location, mods, setLogs) {
+  function rollForTreasure() {
     if (roll100() + mods.playerTreasureFindMod >= location.baseTreasureFind)
       pickTreasure();
     else
@@ -118,13 +119,14 @@ export default function GameButton(props) {
 
   function pickTreasure(location, player, mods, setLogs) {
     //pick random from location.treasure table
+    //remove it from the treasure pool
     //add to player.inventory, activate
     //modify message
   }
 
   function pickJunk(location, player) {
     let junk = pickRandom(location.junk);
-    if (!(junk.uid === 0)) addLogs("You've found completely nothing. Well done!");
+    if (junk.uid === 0) addLogs("You've found completely nothing. Well done!");
     else {
       player.junkPile.push(junk)
       addLogs(`You've found ${junk.name}. ${junk.flavor}`)
@@ -137,7 +139,7 @@ export default function GameButton(props) {
   }
 
   function noEvent() {
-    setEventTrigger(eventTrigger + roll20())
+    setEventTrigger(eventTrigger + roll20());
   }
 
   function randomEvent() {

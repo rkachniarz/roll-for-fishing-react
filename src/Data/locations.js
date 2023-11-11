@@ -81,7 +81,25 @@ treasure:   [{
   icon: "🧊",
   description: "Fish get disadvantage. They are also harder to find.",
   flavor: "In waterproof packaging.",
-  mechanics: {fishDisadvantage: true, playerFishFindMod: -5},
+  mechanics: {fishDisadvantage: true, playerFishFindMod: -10},
+  active: true
+},
+{
+  uid: 5,
+  name: 'Four-leaf underwater clover',
+  icon: "🍀",
+  description: 'Advantage on fishing rolls. +3 fish difficulty.',
+  flavor: 'You are so lucky, you only find the GOOD fish.',
+  mechanics: {playerAdvantage: true, fishDifficultyMod: 3},
+  active: true
+},
+{
+  uid: 6,
+  name: 'Fish and where to find them - waterproof compendium',
+  icon: '📘',
+  description: '+30 fish finding. Fish give 1 less XP.',
+  flavor: "You now know so much about fish, there's much less to learn.",
+  mechanics: {fishXPmod: -1, playerFishFindMod: 30},
   active: true
 }
 ],
