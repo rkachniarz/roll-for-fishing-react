@@ -5,6 +5,7 @@ import Container from './Container';
 import DevTools from './DevTools';
 import EventLog from './Eventlog';
 import PlayerInfo from './PlayerInfo';
+import PlayGameButton from './PlayGameButton';
 import { useState } from 'react';
 
 export default function MainContent({ currentLocation, setCurrentLocation, currentPlayer, setCurrentPlayer, logs = [] }) {
@@ -23,23 +24,15 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
     fishDifficultyMod: 0,
     fishSizeModArray: [],
     fishXPmod: 0,
-    extraMainButtonCallbacks: []
+    extraCallbacks: []
   })
-
-  function mainButtonFunction() {
-    let [p, l] = playGame(currentLocation, currentPlayer, modState);
-    setCurrentPlayer(p);
-    setLogs(l);
-    if (!historyButtonState) setHistoryButtonState(!historyButtonState);
-  }
 
   function historyButtonFunction() {
     let historyOutput = [];
     if (historyButtonState) {
       historyOutput = currentPlayer.fishHistory.map(
-        ({ fish, rollTotal }) =>
-          `${fish.provideDescription()}, roll required: ${fish.requiredRoll}, your roll: ${rollTotal}, xp gained: ${fish.xp
-          }`,
+        ({ fish, playerTotal}) =>
+          `${fish.provideDescription()}, roll required: ${fish.requiredRoll}, your roll: ${playerTotal}, xp gained: ${fish.xp}`,
       );
     };
     setLogs(historyOutput);
@@ -50,9 +43,7 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
     return (
       <Container cname={`App-main${classIngame}`}>
         <PlayerInfo player={currentPlayer} />
-        <Button cname="Button-big Button-MainButton" callback={mainButtonFunction}>
-          Roll!
-        </Button>
+        <PlayGameButton location={currentLocation} player={currentPlayer} mods={modState} setLogs={setLogs}/>
         <br />
         <Button disabled={!currentPlayer.fishHistory.length} cname="Button-small" callback={historyButtonFunction}>
           {historyButtonText}

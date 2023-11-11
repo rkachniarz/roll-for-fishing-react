@@ -34,7 +34,8 @@ export function pickRandom(objectArray) {
 }
 
 export function pickFromArray(array) {
-  return array[getRandomNumber(0, array.length - 1)];
+  if (array.length === 0) return [];
+  else return array[getRandomNumber(0, array.length - 1)];
 }
 
 export function removeElement(array, elementToRemove) {

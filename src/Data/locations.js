@@ -98,7 +98,7 @@ treasure:   [{
   name: 'Fish and where to find them - waterproof compendium',
   icon: '📘',
   description: '+30 fish finding. Fish give 1 less XP.',
-  flavor: "You now know so much about fish, there's much less to learn.",
+  flavor: "You now know so much about fish, there's not much else to learn.",
   mechanics: {fishXPmod: -1, playerFishFindMod: 30},
   active: true
 }
