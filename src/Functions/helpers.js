@@ -42,3 +42,11 @@ export function removeElement(array, elementToRemove) {
   const newArray = array.filter((element) => !(element === elementToRemove));
   return newArray;
 }
+
+export function NEWroll20(vantage = 0) {
+  const firstroll = getRandomNumber(1, 20);
+  if (vantage === 0) return firstroll;
+  const secondroll = getRandomNumber(1, 20);
+  if (vantage < 0) return Math.min(firstroll, secondroll);
+  else return Math.max(firstroll, secondroll);
+}
