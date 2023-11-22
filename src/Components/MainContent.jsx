@@ -13,13 +13,11 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
   let [historyButtonState, setHistoryButtonState] = useState(true)
   let historyButtonText = historyButtonState ? 'Show History' : 'Hide History';
   let [modState, setModState] = useState({
-    playerAdvantage: false,
-    playerDisadvantage: false,
+    playerVantage: 0,
     playerSkillMod: 0,
     playerFishFindMod: 0,
     playerTreasureFindMod: 0,
-    fishAdvantage: false,
-    fishDisadvantage: false,
+    fishVantage: 0,
     fishDifficultyMod: 0,
     fishSizeModArray: [],
     fishXPmod: 0,

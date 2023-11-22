@@ -6,13 +6,12 @@ export function xor(a, b) {
   return a ? !b : b;
 }
 
-export function roll20(advantage = false, disadvantage = false) {
+export function roll20(vantage = 0) {
   const firstroll = getRandomNumber(1, 20);
-
-  if (xor(advantage, disadvantage)) {
-    const secondroll = getRandomNumber(1, 20);
-    return advantage ? Math.max(firstroll, secondroll) : Math.min(firstroll, secondroll);
-  } else return firstroll;
+  if (vantage === 0) return firstroll;
+  const secondroll = getRandomNumber(1, 20);
+  if (vantage < 0) return Math.min(firstroll, secondroll);
+  else return Math.max(firstroll, secondroll);
 }
 
 export function roll100() {
@@ -43,10 +42,4 @@ export function removeElement(array, elementToRemove) {
   return newArray;
 }
 
-export function NEWroll20(vantage = 0) {
-  const firstroll = getRandomNumber(1, 20);
-  if (vantage === 0) return firstroll;
-  const secondroll = getRandomNumber(1, 20);
-  if (vantage < 0) return Math.min(firstroll, secondroll);
-  else return Math.max(firstroll, secondroll);
-}
+

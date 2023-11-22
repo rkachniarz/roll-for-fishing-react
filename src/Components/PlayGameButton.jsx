@@ -36,7 +36,7 @@ export default function PlayGameButton({ location, player, mods, setLogs }) {
 
     addLogs(`You've enountered a ${fish.provideDescription()}! ${(fish.timesEncountered > 0) ? "You've seen this one before." : ''}`);
 
-    let playerRoll = roll20(mods.playerAdvantage, mods.playerDisadvantage)
+    let playerRoll = roll20(mods.playerVantage)
     let playerTotal = playerRoll + player.skill + mods.playerSkillMod;
 
     addLogs(`You rolled ${playerRoll}, for a total of ${playerTotal}. ${(playerRoll === 20) ? "It's a natural 20!" : ''}`);
