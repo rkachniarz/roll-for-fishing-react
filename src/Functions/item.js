@@ -1,3 +1,5 @@
+import { joinArrays, unmergeArray } from './helpers';
+
 class Item {
   constructor(uid, name, icon, description, flavor, mechanics, active) {
     this.uid = uid;
@@ -9,16 +11,23 @@ class Item {
     this.itemMechanics = mechanics;
   }
 
-  activate(modState) {
-    this.itemMechanics.keys.forEach((element, index) => {
-      // if (typeof(element) === "number")
-      {
-        modState.element += itemMechanics.element;
-      }
-      //else if (typeof(element) === "string"){modState[element]}
+  activate(item, mods) {
+    let newMods = mods;
+    Object.keys(item.mechanics).forEach((key) => {
+      if (typeof newMods[key] === 'object') newMods[key] = joinArrays(mods[key], item.mechanics[key]);
+      else newMods[key] = mods[key] + item.mechanics[key];
     });
+    return newMods;
   }
-  deactivate(modState) {}
+
+  deactivate(item, mods) {
+    let newMods = mods;
+    Object.keys(item.mechanics).forEach((key) => {
+      if (typeof newMods[key] === 'object') newMods[key] = unmereArray(mods[key], item.mechanics[key]);
+      else newMods[key] = mods[key] + item.mechanics[key];
+    });
+    return newMods;
+  }
 }
 //
 //array.forEach((element,index)=>{carray[index]=element+barray[index]})

@@ -8,15 +8,46 @@
 
 import Container from "./Container";
 
-export default function Item ({item, modState}) {
+export default function Item({ item, mods, setMods }) {
 
-  function toggleItem(){
-    //if item is not active, add its mods to modstate and activate it
-    //else remove its mods from modstate
+  const [displayTooltip, setDisplayTooltip] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  function handleHovered(hovered) {
+    setDisplayTooltip(hovered)
   }
+
+  function activate() {
+    let newMods = mods;
+    Object.keys(item.mechanics).forEach((key) => {
+      if (typeof newMods[key] === 'object') newMods[key] = joinArrays(mods[key], item.mechanics[key]);
+      else newMods[key] = mods[key] + item.mechanics[key];
+    });
+    setMods(newMods);
+  }
+
+  function deactivate() {
+    let newMods = mods;
+    Object.keys(item.mechanics).forEach((key) => {
+      if (typeof newMods[key] === 'object') newMods[key] = unmereArray(mods[key], item.mechanics[key]);
+      else newMods[key] = mods[key] + item.mechanics[key];
+    });
+    setMods(newMods);
+  }
+
+  function toggleItem() {
+    if (item.active) deactivate();
+    else activate();
+  }
+
   return (
-  <Container cname="DisplayableItem">
-    <img className='Icon' src={item.icon} alt={item.description} onClick={toggleItem}></img>
-  </Container>
+    <Container
+      cname="DisplayableItem"
+      onClick={toggleItem}
+      onMouseEnter={() => handleHovered(true)}
+      onMouseLeave={() => handleHovered(false)}
+    >
+      {item.icon}
+    </Container>
   )
 }

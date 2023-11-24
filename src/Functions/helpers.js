@@ -42,4 +42,10 @@ export function removeElement(array, elementToRemove) {
   return newArray;
 }
 
+export function mergeArrays(array1, array2) {
+  return array1.concat(array2);
+}
 
+export function unmergeArray(parent, child) {
+  return parent.filter((x) => !child.includes(x));
+}
