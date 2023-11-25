@@ -157,20 +157,24 @@ body {
   width: 100%;
   height: 94vh;
   overflow-y: auto;
-  div-align:center;
-
+  div-align: center;
 }
 
 .DisplayableItem {
   border: solid 1px #15233f;
   width: 32px;
   height: 32px;
+  font-size: 23px;
   margin: 1px 1px 1px 1px;
 }
 
+.DisplayableItem :hover {
+  border: solid 1px #fff;
+}
+
 .Icon {
-    max-width: 100%;
-    max-height: 100%;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .CenterFlex {
@@ -197,7 +201,6 @@ body {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -206,4 +209,3 @@ body {
     transform: rotate(360deg);
   }
 }
-

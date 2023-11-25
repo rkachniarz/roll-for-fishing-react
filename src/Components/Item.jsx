@@ -7,6 +7,8 @@
 // this.itemMechanics = mechanics
 
 import Container from "./Container";
+import { mergeArrays, unmergeArray } from "./../Functions/helpers.js";
+import { useState } from "react";
 
 export default function Item({ item, mods, setMods }) {
 
@@ -20,19 +22,21 @@ export default function Item({ item, mods, setMods }) {
   function activate() {
     let newMods = mods;
     Object.keys(item.mechanics).forEach((key) => {
-      if (typeof newMods[key] === 'object') newMods[key] = joinArrays(mods[key], item.mechanics[key]);
+      if (typeof newMods[key] === 'object') newMods[key] = mergeArrays(mods[key], item.mechanics[key]);
       else newMods[key] = mods[key] + item.mechanics[key];
     });
     setMods(newMods);
+    item.active = true;
   }
 
   function deactivate() {
     let newMods = mods;
     Object.keys(item.mechanics).forEach((key) => {
-      if (typeof newMods[key] === 'object') newMods[key] = unmereArray(mods[key], item.mechanics[key]);
-      else newMods[key] = mods[key] + item.mechanics[key];
+      if (typeof newMods[key] === 'object') newMods[key] = unmergeArray(mods[key], item.mechanics[key]);
+      else newMods[key] = mods[key] - item.mechanics[key];
     });
     setMods(newMods);
+    item.active = false;
   }
 
   function toggleItem() {
@@ -43,11 +47,11 @@ export default function Item({ item, mods, setMods }) {
   return (
     <Container
       cname="DisplayableItem"
-      onClick={toggleItem}
+
       onMouseEnter={() => handleHovered(true)}
       onMouseLeave={() => handleHovered(false)}
     >
-      {item.icon}
+      <p style={{ display: "inline" }} onClick={toggleItem}>{item.icon}</p>
     </Container>
   )
 }

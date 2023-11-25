@@ -28,7 +28,7 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
     let historyOutput = [];
     if (historyButtonState) {
       historyOutput = currentPlayer.fishHistory.map(
-        ({ fish, playerTotal}) =>
+        ({ fish, playerTotal }) =>
           `${fish.provideDescription()}, roll required: ${fish.requiredRoll}, your roll: ${playerTotal}, xp gained: ${fish.xp}`,
       );
     };
@@ -40,14 +40,14 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
     return (
       <Container cname={`App-main${classIngame}`}>
         <PlayerInfo player={currentPlayer} />
-        <PlayGameButton location={currentLocation} player={currentPlayer} mods={modState} setLogs={setLogs}/>
+        <PlayGameButton location={currentLocation} player={currentPlayer} mods={modState} setLogs={setLogs} />
         <br />
         <Button disabled={!currentPlayer.fishHistory.length} cname="Button-small" callback={historyButtonFunction}>
           {historyButtonText}
         </Button>
         <Button disabled={!currentPlayer.inventory.length} cname="Button-small">Inventory</Button>
         <EventLog>{logsState}</EventLog>
-        <DevTools player={currentPlayer} />
+        <DevTools location={currentLocation} mods={modState} setMods={setModState} />
       </Container>
     );
   } else

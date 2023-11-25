@@ -3,33 +3,23 @@ import Modal from "./Modal";
 import Button from "./Button";
 import { useState } from "react";
 import Container from "./Container";
-import { Displayable, Item } from "../Functions/displayable";
-import defaultImage from "../Data/Assets/Item-default.png"
+import Item from "./Item";
 
-const displayTest = new Displayable();
-const itemTest = new Item({
-  icon: defaultImage,
-  uid: 0,
-  name: 'Test Item',
-  description: 'An Item',
-  flavor: 'Nice and flavorful',
-  active: true,
-  itemMechanics: { awesome: true }
-})
+let testItem = {
+  uid: 5,
+  name: 'Four-leaf underwater clover',
+  icon: '🍀',
+  description: 'Advantage on fishing rolls. +3 fish difficulty.',
+  flavor: 'You are so lucky, you only find the GOOD fish.',
+  mechanics: { playerSkillMod: 10 },
+  active: false
+}
 
 
-export default function DevTools(player) {
+
+export default function DevTools({ location, mods, setMods }) {
   let [modalOpen, setModalOpen] = useState(false)
-
-  const displayThing =
-    <Container cname="DisplayableItem">
-      <img className='Icon' src={displayTest.icon} alt={displayTest.description} onClick={displayTest.onClickFunction}></img>
-    </Container>;
-
-  const displayItem =
-    <Container cname="DisplayableItem">
-      <img className='Icon' src={itemTest.icon} alt={itemTest.description} onClick={() => itemTest.onClickFunction({})}></img>
-    </Container>;
+  console.log('mods', mods)
 
   const modalContent =
     <Container cname="App-main">
@@ -39,8 +29,7 @@ export default function DevTools(player) {
       </Container>
       <Container cname="Inventory-outer CenterFlex">
         <Container cname="Inventory-inner">
-          {displayThing}{displayThing}{displayThing}{displayThing}
-          {displayItem}{displayItem}{displayItem}{displayItem}
+          <Item item={testItem} mods={mods} setMods={setMods}></Item>
         </Container>
       </Container>
     </Container>;
