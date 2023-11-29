@@ -11,7 +11,7 @@ let testItem = {
   icon: '🍀',
   description: 'Advantage on fishing rolls. +3 fish difficulty.',
   flavor: 'You are so lucky, you only find the GOOD fish.',
-  mechanics: { playerSkillMod: 10 },
+  mechanics: { playerSkillMod: 10, playerVantage: -1 },
   active: false
 }
 

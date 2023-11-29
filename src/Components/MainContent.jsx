@@ -39,7 +39,7 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
   if (currentPlayer) {
     return (
       <Container cname={`App-main${classIngame}`}>
-        <PlayerInfo player={currentPlayer} />
+        <PlayerInfo player={currentPlayer} mods={modState} />
         <PlayGameButton location={currentLocation} player={currentPlayer} mods={modState} setLogs={setLogs} />
         <br />
         <Button disabled={!currentPlayer.fishHistory.length} cname="Button-small" callback={historyButtonFunction}>

@@ -6,7 +6,7 @@
 // this.active = active;
 // this.itemMechanics = mechanics
 
-import Container from "./Container";
+import clsx from "clsx";
 import { mergeArrays, unmergeArray } from "./../Functions/helpers.js";
 import { useState } from "react";
 
@@ -14,6 +14,8 @@ export default function Item({ item, mods, setMods }) {
 
   const [displayTooltip, setDisplayTooltip] = useState(false);
   const [hovered, setHovered] = useState(false);
+
+  let classes = clsx("DisplayableItem", { "Item-active": item.active, "Item-inactive": !item.active })
 
   function handleHovered(hovered) {
     setDisplayTooltip(hovered)
@@ -45,13 +47,12 @@ export default function Item({ item, mods, setMods }) {
   }
 
   return (
-    <Container
-      cname="DisplayableItem"
-
+    <div
+      className={classes}
       onMouseEnter={() => handleHovered(true)}
       onMouseLeave={() => handleHovered(false)}
     >
       <p style={{ display: "inline" }} onClick={toggleItem}>{item.icon}</p>
-    </Container>
+    </div>
   )
 }

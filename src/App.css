@@ -172,6 +172,10 @@ body {
   border: solid 1px #fff;
 }
 
+.Item-active {
+  border: solid 1px green;
+}
+
 .Icon {
   max-width: 100%;
   max-height: 100%;
@@ -199,6 +203,10 @@ body {
   display: grid;
   gap: 3px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ModStat {
+  color: rgb(30, 128, 0);
 }
 
 @keyframes App-logo-spin {
