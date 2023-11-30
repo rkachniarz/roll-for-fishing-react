@@ -1,17 +1,9 @@
 import Container from './Container';
+import ModStat from './ModStat';
 
 export default function PlayerInfo({ player, mods }) {
 
   let junkTotalWorth = player.junkPile.reduce((total, junk) => total + junk.value, 0);
-
-  function displayModStat(mod) {
-    return `${Math.abs(mod)}`
-  }
-
-
-  function displayModSign(mod) {
-    return `${mod > 0 ? ' + ' : ' - '}`
-  }
 
   function displayPlayerVantage() {
     if (mods.playerVantage < 0) return "Disadvantage";
@@ -24,42 +16,23 @@ export default function PlayerInfo({ player, mods }) {
       <Container cname="PlayerStat">{`${player.totalxp} XP`}</Container>
       <Container cname="PlayerStat">
         {`Fishing bonus: ${player.skill}`}
-        {
-          (mods.playerSkillMod != 0) &&
-          <span>
-            {displayModSign(mods.playerSkillMod)}
-            <span className="ModStat">
-              {displayModStat(mods.playerSkillMod)}
-            </span>
-          </span>
-        }
+        <ModStat stat={playerSkillMod} mods={mods} />
       </Container>
+
       {(mods.playerVantage != 0) && <Container cname="PlayerStat">{`${displayPlayerVantage()} on fishing rolls`}</Container>}
+
       <Container cname="PlayerStat">
         {`Fish Find: ${player.fishFind}`}
-        {
-          (mods.playerFishFindMod != 0) &&
-          <span>
-            {displayModSign(mods.playerFishFindMod)}
-            <span className="ModStat">
-              {displayModStat(mods.playerFishFindMod)}
-            </span>
-          </span>
-        }
+        <ModStat stat={playerFishFindMod} />
       </Container>
+
       <Container cname="PlayerStat">
         {`Treasure find: ${player.treasureFind}`}
-        {
-          (mods.playerTreasureFindMod != 0) &&
-          <span>
-            {displayModSign(mods.playerTreasureFindMod)}
-            <span className="ModStat">
-              {displayModStat(mods.playerTreasureFindMod)}
-            </span>
-          </span>
-        }
+        <ModStat stat={playerTreasureFindMod} mods={mods} />
       </Container>
+
       <br />
+
       {(junkTotalWorth > 0) && <Container cname="PlayerStat">{`Junk value: ${junkTotalWorth} copper`}</Container>}
 
     </Container>

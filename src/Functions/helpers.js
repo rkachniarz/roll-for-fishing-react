@@ -1,9 +1,6 @@
+//randomness
 export function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-export function xor(a, b) {
-  return a ? !b : b;
 }
 
 export function roll20(vantage = 0) {
@@ -37,6 +34,8 @@ export function pickFromArray(array) {
   else return array[getRandomNumber(0, array.length - 1)];
 }
 
+//type-specific operations
+
 export function removeElement(array, elementToRemove) {
   const newArray = array.filter((element) => !(element === elementToRemove));
   return newArray;
@@ -48,4 +47,14 @@ export function mergeArrays(array1, array2) {
 
 export function unmergeArray(parent, child) {
   return parent.filter((x) => !child.includes(x));
+}
+
+//written but unused
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function xor(a, b) {
+  return a ? !b : b;
 }
