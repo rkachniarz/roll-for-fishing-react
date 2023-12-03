@@ -1,3 +1,3 @@
-export default function Image({ cname, source = '%PUBLIC_URL%/default.jpg' }) {
+export default function Image({ cname, source = 'default.jpg' }) {
   return <img className={cname} src={source} />;
 }

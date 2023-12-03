@@ -98,8 +98,8 @@ body {
 }
 
 .Button-MainButton {
-  background-image: url("/public/Default.jpg");
-  background-position: 30% 20%;
+  background-image: url("Default.jpg");
+  background-position: 50% 40%;
   color: #f0e3a1;
   text-shadow: 2px 2px black;
   font-weight: bolder;
