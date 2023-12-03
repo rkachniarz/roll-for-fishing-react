@@ -1,10 +1,11 @@
+import React from 'react';
 //Styles
 import './App.css';
 //Components
-import Container from './Components/Container';
-import Footer from './Components/Footer';
-import Header from './Components/Header';
-import MainContent from './Components/MainContent';
+import Container from './Components/Container.jsx';
+import Footer from './Components/Footer.jsx';
+import Header from './Components/Header.jsx';
+import MainContent from './Components/MainContent.jsx';
 import './Data/locations.js';
 import { lake } from './Data/locations.js';
 import { useState } from 'react';
