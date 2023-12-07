@@ -47,11 +47,21 @@ export default function PlayGameButton({ location, player, mods, setLogs }) {
   }
 
   function isCatch(fish, playerTotal) {
-    player.gainXP(fish.xp);
+    player.gainXP(fish.xp)
+      ? levelUp()
+      : noLevelUp();
     player.fishHistory.push({ fish, playerTotal });
-    addLogs(`You've caught it! ${(fish.xp>0) ? `You gain ${fish.xp}xp` : 'That was easy!'}`)
+
   }
 
+  function levelUp(){
+    displayLevelUpPopup(player.chooseLevelUpBonus())
+   }
+
+  function noLevelUp() {
+    addLogs(`You've caught it! ${(fish.xp>0) ? `You gain ${fish.xp}xp` : 'That was easy!'}`)
+  }
+  level
   function isNoCatch(fish) {
     //todo: modify fish based on player rolls.
     fish.timesEncountered++;
