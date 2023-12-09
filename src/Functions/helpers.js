@@ -49,6 +49,10 @@ export function unmergeArray(parent, child) {
   return parent.filter((x) => !child.includes(x));
 }
 
+export function isEmpty(objOrArray) {
+  return Object.keys(objOrArray).length === 0;
+}
+
 //written but unused
 
 function capitalizeFirstLetter(string) {
