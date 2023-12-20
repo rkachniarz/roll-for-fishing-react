@@ -54,14 +54,14 @@ export default function PlayGameButton({ location, player, mods, setLogs }) {
 
   }
 
-  function levelUp(){
-    displayLevelUpPopup(player.chooseLevelUpPerk())
-   }
+  function levelUp() {
+    addLogs(`Level up! You are now level ${player.level}`)
+  }
 
   function noLevelUp(fish) {
-    addLogs(`You've caught it! ${(fish.xp>0) ? `You gain ${fish.xp}xp` : 'That was easy!'}`)
+    addLogs(`You've caught it! ${(fish.xp > 0) ? `You gain ${fish.xp}xp` : 'That was easy!'}`)
   }
-  level
+
   function isNoCatch(fish) {
     //todo: modify fish based on player rolls.
     fish.timesEncountered++;
@@ -91,7 +91,7 @@ export default function PlayGameButton({ location, player, mods, setLogs }) {
     let junk = pickRandom(location.junk);
     if (junk.uid === 0) {
       addLogs("You've found completely nothing. Well done!");
-      setEventTrigger(eventTrigger+5);
+      setEventTrigger(eventTrigger + 5);
     }
     else {
       player.junkPile.push(junk)

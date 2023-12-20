@@ -26,7 +26,7 @@ function App() {
         setCurrentLocation={setCurrentLocation}
         currentPlayer={currentPlayer}
         setCurrentPlayer={setCurrentPlayer}
-      ></MainContent>
+      />
       <Footer></Footer>
     </Container>
   );

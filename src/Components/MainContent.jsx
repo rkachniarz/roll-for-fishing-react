@@ -6,12 +6,12 @@ import EventLog from './Eventlog';
 import PlayerInfo from './PlayerInfo';
 import PlayGameButton from './PlayGameButton';
 import { useState } from 'react';
+import PlayerFishHistoryButton from './PlayerFishHistoryButton';
+import PlayerInventory from './PlayerInventory';
 
 export default function MainContent({ currentLocation, setCurrentLocation, currentPlayer, setCurrentPlayer, logs = [] }) {
   let classIngame = currentPlayer ? '-ingame' : '';
   let [logsState, setLogs] = useState(logs);
-  let [historyButtonState, setHistoryButtonState] = useState(true)
-  let historyButtonText = historyButtonState ? 'Show History' : 'Hide History';
   let [modState, setModState] = useState({
     playerVantage: 0,
     playerSkillMod: 0,
@@ -24,17 +24,7 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
     extraCallbacks: []
   })
 
-  function historyButtonFunction() {
-    let historyOutput = [];
-    if (historyButtonState) {
-      historyOutput = currentPlayer.fishHistory.map(
-        ({ fish, playerTotal }) =>
-          `${fish.provideDescription()}, roll required: ${fish.requiredRoll}, your roll: ${playerTotal}, xp gained: ${fish.xp}`,
-      );
-    };
-    setLogs(historyOutput);
-    setHistoryButtonState(!historyButtonState);
-  }
+
 
   if (currentPlayer) {
     return (
@@ -42,11 +32,10 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
         <PlayerInfo player={currentPlayer} mods={modState} />
         <PlayGameButton location={currentLocation} player={currentPlayer} mods={modState} setLogs={setLogs} />
         <br />
-        <Button disabled={!currentPlayer.fishHistory.length} cname="Button-small" callback={historyButtonFunction}>
-          {historyButtonText}
-        </Button>
+        <PlayerFishHistoryButton playerHistory={currentPlayer.fishHistory} />
         <Button disabled={!currentPlayer.inventory.length} cname="Button-small">Inventory</Button>
         <EventLog>{logsState}</EventLog>
+        <PlayerInventory inventory={currentPlayer.inventory} mods={modState} setMods={setModState} />
         <DevTools location={currentLocation} mods={modState} setMods={setModState} />
       </Container>
     );

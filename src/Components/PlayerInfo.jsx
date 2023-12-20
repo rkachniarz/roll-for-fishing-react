@@ -23,7 +23,7 @@ export default function PlayerInfo({ player, mods }) {
 
       <Container cname="PlayerStat">
         {`Fish Find: ${player.fishFind}`}
-        <ModStat stat={mods.playerFishFindMod} />
+        <ModStat stat={mods.playerFishFindMod} mods={mods} />
       </Container>
 
       <Container cname="PlayerStat">

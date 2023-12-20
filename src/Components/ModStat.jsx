@@ -1,22 +1,24 @@
-export default function ModStat(stat, mods) {
+export default function ModStat({ stat }) {
 
-  function displayModStat(mod) {
-    console.log('displayModStat was called')
-    return `${Math.abs(mod)}`;
+  function displayModStat(value) {
+    return `${Math.abs(value)}`;
   }
 
-  function displayModSign(mod) {
-    console.log('displayModSign was called')
-    return `${mod > 0 ? ' + ' : ' - '}`;
+  function displayModSign(value) {
+    if (value === 0) return;
+    else return `${value > 0 ? ' + ' : ' - '}`;
   }
+
+  let className = stat > 0 ? 'ModStat' : 'ModStat-negative';
 
   return (
+
     <>
-      {(mods[stat] != 0 && (Number(mods[stat]) === true)) &&
+      {(stat != 0) &&
         <>
-          {displayModSign(mods[stat])}
-          <span className="ModStat">
-            {displayModStat(mods[stat])}
+          {displayModSign(stat)}
+          <span className={className}>
+            {displayModStat(stat)}
           </span>
         </>}
     </>

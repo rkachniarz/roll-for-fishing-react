@@ -209,6 +209,10 @@ body {
   color: rgb(30, 128, 0);
 }
 
+.ModStat-negative {
+  color: red;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

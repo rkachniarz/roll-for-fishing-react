@@ -59,7 +59,7 @@ export const lake = {
           { name: 'Swole AF', chance: 2, difficultyMod: 10 },
         ],
       },
-      active: true,
+      startActive: true,
     },
 
     {
@@ -69,7 +69,7 @@ export const lake = {
       description: '+2 fishing skill. -2 treasure find.',
       flavor: 'Now if only you could shoot at them...',
       mechanics: { playerSkillMod: 2 },
-      active: true,
+      startActive: true,
     },
     {
       uid: 3,
@@ -78,7 +78,7 @@ export const lake = {
       description: '+5 fishing skill. Disadvantage on fishing rolls.',
       flavor: "If you manage to hit 'em, they ain't got no chance ",
       mechanics: { playerVantage: -1, playerSkillMod: 5 },
-      active: true,
+      startActive: true,
     },
     {
       uid: 4,
@@ -86,8 +86,8 @@ export const lake = {
       icon: '🧊',
       description: 'Fish get disadvantage. They are also harder to find.',
       flavor: 'In waterproof packaging.',
-      mechanics: { fishVantage: 1, playerFishFindMod: -10 },
-      active: true,
+      mechanics: { fishVantage: -1, playerFishFindMod: -10 },
+      startActive: true,
     },
     {
       uid: 5,
@@ -96,7 +96,7 @@ export const lake = {
       description: 'Advantage on fishing rolls. +3 fish difficulty.',
       flavor: 'You are so lucky, you only find the GOOD fish.',
       mechanics: { playerVantage: 1, fishDifficultyMod: 3 },
-      active: true,
+      startActive: true,
     },
     {
       uid: 6,
@@ -105,7 +105,7 @@ export const lake = {
       description: '+30 fish finding. Fish give 1 less XP.',
       flavor: "You now know so much about fish, there's not much else to learn.",
       mechanics: { fishXPmod: -1, playerFishFindMod: 30 },
-      active: true,
+      startActive: true,
     },
     {
       uid: 7,
@@ -114,6 +114,7 @@ export const lake = {
       description: 'Strong advantage on fishing rolls. +5 fish difficulty.',
       flavor: 'Sometimes luck only makes things complicated.',
       mechanics: { playerVantage: 2, fishDifficultyMod: 5 },
+      startActive: true,
     },
   ],
   junk: [
@@ -368,7 +369,7 @@ export const lake = {
       chance: 1,
     },
     {
-      uid:37,
+      uid: 37,
       name: 'Tangled fishing line',
       flavor: 'Impressively knotted.',
       value: 0,
@@ -388,6 +389,5 @@ export const lake = {
       value: 2,
       chance: 1,
     },
-
   ],
 };
