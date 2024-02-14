@@ -16,19 +16,19 @@ export default function PlayerInfo({ player, mods }) {
       <Container cname="PlayerStat">{`${player.totalxp} XP`}</Container>
       <Container cname="PlayerStat">
         {`Fishing bonus: ${player.skill}`}
-        <ModStat stat={mods.playerSkillMod} mods={mods} />
+        <ModStat stat={mods.playerSkillMod} />
       </Container>
 
       {(mods.playerVantage != 0) && <Container cname="PlayerStat">{`${displayPlayerVantage()} on fishing rolls`}</Container>}
 
       <Container cname="PlayerStat">
         {`Fish Find: ${player.fishFind}`}
-        <ModStat stat={mods.playerFishFindMod} mods={mods} />
+        <ModStat stat={mods.playerFishFindMod} />
       </Container>
 
       <Container cname="PlayerStat">
         {`Treasure find: ${player.treasureFind}`}
-        <ModStat stat={mods.playerTreasureFindMod} mods={mods} />
+        <ModStat stat={mods.playerTreasureFindMod} />
       </Container>
 
       <br />
