@@ -8,10 +8,12 @@ import PlayGameButton from './PlayGameButton';
 import { useState } from 'react';
 import PlayerFishHistoryButton from './PlayerFishHistoryButton';
 import PlayerInventory from './PlayerInventory';
+import ItemTooltip from './ItemTooltip';
 
 export default function MainContent({ currentLocation, setCurrentLocation, currentPlayer, setCurrentPlayer, logs = [] }) {
   let classIngame = currentPlayer ? '-ingame' : '';
   let [logsState, setLogs] = useState(logs);
+  let [itemToDisplay, setItemToDisplay] = useState({})
   let [modState, setModState] = useState({
     playerVantage: 0,
     playerSkillMod: 0,
@@ -35,8 +37,9 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
         <PlayerFishHistoryButton playerHistory={currentPlayer.fishHistory} />
         <Button disabled={!currentPlayer.inventory.length} cname="Button-small">Inventory</Button>
         <EventLog>{logsState}</EventLog>
-        <PlayerInventory inventory={currentPlayer.inventory} mods={modState} setMods={setModState} />
+        <PlayerInventory inventory={currentPlayer.inventory} mods={modState} setMods={setModState} setItemTooltip={setItemToDisplay}/>
         <DevTools location={currentLocation} mods={modState} setMods={setModState} />
+        <ItemTooltip item={itemToDisplay} />
       </Container>
     );
   } else
