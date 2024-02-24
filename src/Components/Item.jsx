@@ -10,7 +10,7 @@ import clsx from "clsx";
 import { mergeArrays, unmergeArray } from "./../Functions/helpers.js";
 import { useState } from "react";
 
-export default function Item({ item, mods, setMods }) {
+export default function Item({ item, mods, setMods, setItemTooltip }) {
 
   const [displayTooltip, setDisplayTooltip] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -18,7 +18,7 @@ export default function Item({ item, mods, setMods }) {
   let classes = clsx("DisplayableItem", { "Item-active": item.active, "Item-inactive": !item.active })
 
   function handleHovered(hovered) {
-    setDisplayTooltip(hovered)
+    setItemTooltip(hovered ? item : {});
   }
 
   function activate() {
