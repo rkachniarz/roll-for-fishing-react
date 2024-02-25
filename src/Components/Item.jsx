@@ -12,9 +12,6 @@ import { useState } from "react";
 
 export default function Item({ item, mods, setMods, setItemTooltip }) {
 
-  const [displayTooltip, setDisplayTooltip] = useState(false);
-  const [hovered, setHovered] = useState(false);
-
   let classes = clsx("DisplayableItem", { "Item-active": item.active, "Item-inactive": !item.active })
 
   function handleHovered(hovered) {
@@ -42,8 +39,14 @@ export default function Item({ item, mods, setMods, setItemTooltip }) {
   }
 
   function toggleItem() {
-    if (item.active) deactivate();
-    else activate();
+    if (item.active)
+      {
+        deactivate();
+      }
+    else
+    {
+      activate();
+    }
   }
 
   return (
