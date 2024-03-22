@@ -24,54 +24,44 @@ export default function Event({ event, player, modState }) {
 //event data structure for events with multiple options and slides
 
 let event = {
-  title: "The Cave",
-  description: "You enter a dark cave. It is very dark and you can barely see anything. You hear a noise in the distance.",
+  title: "A froggy encounter",
+  description: "You see a frog in the shallow water, just outside your reach.",
   options: [
     {
-      title: "Investigate",
-      description: "You walk towards the noise. It is getting louder and louder. You can see a light in the distance.",
+      title: "Observe it closely",
+      action: 'nextSlide',
       nextSlide: 1
     },
     {
-      title: "Leave",
-      description: "You decide to leave the cave. You are too scared to continue.",
-      nextSlide: 2
+      title: "Ignore it",
+      action: 'end',
+    },
+    {
+      title: "Attempt to catch the frog",
+      action: 'nextSlide',
+      nextSlide: 4,
+      requirements: {playerClass: 'rogue'}
+
     }
   ],
   slides: [
     {
-      title: "The Light",
-      description: "You walk towards the light. It is getting brighter and brighter. You can see a treasure chest.",
+      id: 1,
+      description: "You observe the frog. After a moment, a wave of calm washes over you. Everything is going to be alright.",
       options: [
         {
-          title: "Open the chest",
-          description: "You open the chest and find a sword",
-          changeStats: {
-            xp: 10,
-            health: 10
-          }
+          title: "Thank you, frog",
+          action: 'end',
         },
-        {
-          title: "Leave",
-          description: "You decide to leave the chest alone.",
-          changeStats: {
-            xp: -10,
-            health: -10
-          }
-        }
       ]
     },
     {
-      title: "The Exit",
-      description: "You walk towards the exit. It is getting closer and closer. You can see the light.",
+      id: 4,
+      description: "You lunge forward and try to catch the amphibian. You get wet, and it's like it was never there.",
       options: [
         {
-          title: "Leave",
-          description: "You leave the cave.",
-          changeStats: {
-            xp: 0,
-            health: 0
-          }
+          title: "Well, shit.",
+          action: 'end',
         }
       ]
     }
