@@ -1,12 +1,32 @@
 
 
 
+const allRequirements = []
+const allEffectCallbacks = []
+
+//requirements: {playerClass: 'rogue'}
+function requirementMet({requirementName, requirementValue}){
+  return (requirementName === requirementValue)
+    //check if player or other object meets requirement
+}
+
+function runCallback([functionName, firstParamValue, secondParamValue]){
+  functionName(firstParamValue, secondParamValue);
+}
+
+function changePlayerStats([statName, statValue]){
+  player[statName] += statValue;
+}
+
+
 export default function Event({ event, player, modState }) {
   return (
     <Container>
       <p>{event.title}</p>
       <p>{event.description}</p>
       {event.options.map((option, index) => {
+
+
 
         //each event option is a button
         //some of the options will have a requirement that the player must meet
@@ -40,7 +60,7 @@ let event = {
       title: "Attempt to catch the frog",
       action: 'nextSlide',
       nextSlide: 4,
-      requirements: {playerClass: 'rogue'}
+      requirements: [{  'rogue'}]
 
     }
   ],
@@ -52,6 +72,7 @@ let event = {
         {
           title: "Thank you, frog",
           action: 'end',
+          callbacks: [['changePlayerStats', 'luck', 2]]
         },
       ]
     },
@@ -62,6 +83,7 @@ let event = {
         {
           title: "Well, shit.",
           action: 'end',
+          callbacks: [['changePlayerStats', 'luck', -1]]
         }
       ]
     }
