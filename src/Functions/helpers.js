@@ -15,6 +15,10 @@ export function roll100() {
   return getRandomNumber(1, 100);
 }
 
+export function roll2d6() {
+  return getRandomNumber(1, 6) + getRandomNumber(1, 6);
+}
+
 export function pickRandom(objectArray) {
   var filler = 100 - objectArray.map((r) => r.chance).reduce((sum, current) => sum + current);
   if (filler <= 0) {

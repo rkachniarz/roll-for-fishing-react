@@ -60,7 +60,7 @@ let event = {
       title: "Attempt to catch the frog",
       action: 'nextSlide',
       nextSlide: 4,
-      requirements: [{  'rogue'}]
+      requirements: [{'player.class': 'rogue'}]
 
     }
   ],

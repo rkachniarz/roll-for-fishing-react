@@ -18,12 +18,16 @@ export function generateName() {
     'Hel',
     'Fir',
     'Chrum',
+    'Pika',
+    'Roz',
+    'Xtan',
   ];
   const suffixes = [
     'ek',
     'ak',
     'son',
     'dig',
+    'dib',
     'ent',
     'gun',
     'bip',
@@ -41,6 +45,7 @@ export function generateName() {
     'dottir',
     'ola',
     'ula',
+    'dong',
   ];
 
   return prefixes[getRandomNumber(0, prefixes.length - 1)] + suffixes[getRandomNumber(0, suffixes.length - 1)];
