@@ -15,6 +15,10 @@ export function roll100() {
   return getRandomNumber(1, 100);
 }
 
+export function roll6() {
+  return getRandomNumber(1,6);
+}
+
 export function roll2d6() {
   return getRandomNumber(1, 6) + getRandomNumber(1, 6);
 }
