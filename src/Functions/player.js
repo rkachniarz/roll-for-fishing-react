@@ -94,7 +94,12 @@ export class Player {
     this.totalxp = 0;
     this.level = 0;
     this.fishHistory = [];
-    this.inventory = [];
+    this.inventory = {
+      fishBucket: [],
+      junk: [],
+      common: [],
+      uncommon: [],
+    };
     this.junkPile = [];
   }
 

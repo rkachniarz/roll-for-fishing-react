@@ -209,7 +209,7 @@ const summer = {
     {
       shortDescription: 'Pleasantly warm',
       longDescription: 'It is pleasantly warm.',
-      temperature: 3,
+      temperature: 13,
       wind: 0,
       precipitation: 0,
       clouds: 1,
@@ -227,7 +227,7 @@ const summer = {
     {
       shortDescription: 'Cloudy and windy',
       longDescription: 'Strong winds move plentiful clouds across the sky.',
-      temperature: 2,
+      temperature: 12,
       wind: 3,
       precipitation: 0,
       clouds: 3,
@@ -236,7 +236,7 @@ const summer = {
     {
       shortDescription: 'Warm breeze',
       longDescription: 'The wind blows warm air in your face.',
-      temperature: 4,
+      temperature: 14,
       wind: 2,
       precipitation: 0,
       clouds: 1,
@@ -245,7 +245,7 @@ const summer = {
     {
       shortDescription: 'Hot and dry',
       longDescription: 'The air is hot and unmoving.',
-      temperature: 5,
+      temperature: 15,
       wind: 0,
       precipitation: 0,
       clouds: 0,
@@ -254,7 +254,7 @@ const summer = {
     {
       shortDescription: 'Warm and cloudy',
       longDescription: 'Numerous clouds provide much-needed shade.',
-      temperature: 4,
+      temperature: 14,
       wind: 1,
       precipitation: 0,
       clouds: 2,
@@ -263,7 +263,7 @@ const summer = {
     {
       shortDescription: 'Short, warm showers',
       longDescription: 'Occasional rain makes the warm air feel like soup.',
-      temperature: 3,
+      temperature: 13,
       wind: 2,
       precipitation: 2,
       clouds: 3,
@@ -272,7 +272,7 @@ const summer = {
     {
       shortDescription: 'Downpour',
       longDescription: 'A wall of rain makes it hard to see far.',
-      temperature: 2,
+      temperature: 12,
       wind: 1,
       precipitation: 4,
       clouds: 4,
@@ -281,7 +281,7 @@ const summer = {
     {
       shortDescription: 'Torrential rain',
       longDescription: `Strong winds make it seem like it's raining sideways.`,
-      temperature: 0,
+      temperature: 10,
       wind: 4,
       precipitation: 4,
       clouds: 4,
@@ -290,7 +290,7 @@ const summer = {
     {
       shortDescription: 'Warm storm',
       longDescription: 'Thunder and lightning. The warm, wet air smells like summer.',
-      temperature: 2,
+      temperature: 12,
       wind: 3,
       precipitation: 4,
       clouds: 4,
@@ -299,7 +299,7 @@ const summer = {
     {
       shortDescription: 'Fierce wind',
       longDescription: 'This wind means business.',
-      temperature: 2,
+      temperature: 12,
       wind: 4,
       precipitation: 0,
       clouds: 2,
@@ -308,7 +308,7 @@ const summer = {
     {
       shortDescription: 'Nippy, partly cloudy',
       longDescription: 'It gets cold when the sun hides behind the clouds.',
-      temperature: 2,
+      temperature: 12,
       wind: 0,
       precipitation: 0,
       clouds: 2,
@@ -317,7 +317,7 @@ const summer = {
     {
       shortDescription: 'Clear and nippy',
       longDescription: 'Light wind carries cold air.',
-      temperature: 2,
+      temperature: 12,
       wind: 2,
       precipitation: 0,
       clouds: 0,
@@ -326,7 +326,7 @@ const summer = {
     {
       shortDescription: 'Sunny and clear',
       longDescription: 'Clear skies and no wind.',
-      temperature: 4,
+      temperature: 14,
       wind: 0,
       precipitation: 0,
       clouds: 0,
@@ -335,7 +335,7 @@ const summer = {
     {
       shortDescription: 'Dry heat surges',
       longDescription: 'Hot, dry air makes you feel like a fry.',
-      temperature: 5,
+      temperature: 15,
       wind: 0,
       precipitation: 0,
       clouds: 0,
@@ -344,7 +344,7 @@ const summer = {
     {
       shortDescription: 'Hot and windy',
       longDescription: 'The wind blows hot air in your face.',
-      temperature: 5,
+      temperature: 15,
       wind: 2,
       precipitation: 0,
       clouds: 0,
@@ -353,7 +353,7 @@ const summer = {
     {
       shortDescription: 'Hot and muggy',
       longDescription: 'Hot, wet air makes everything sticky.',
-      temperature: 5,
+      temperature: 15,
       wind: 0,
       precipitation: 1,
       clouds: 1,
@@ -362,7 +362,7 @@ const summer = {
     {
       shortDescription: 'Warm drizzle',
       longDescription: 'A bit of rain makes the heat bearable.',
-      temperature: 4,
+      temperature: 14,
       wind: 1,
       precipitation: 2,
       clouds: 2,
@@ -371,7 +371,7 @@ const summer = {
     {
       shortDescription: 'Warm rain',
       longDescription: 'It feels like nature giving you a shower.',
-      temperature: 3,
+      temperature: 13,
       wind: 1,
       precipitation: 3,
       clouds: 3,
