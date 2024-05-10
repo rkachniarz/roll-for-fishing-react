@@ -1,16 +1,13 @@
-import { useState } from "react";
-import { roll20, roll100, pickRandom, pickFromArray, removeElement } from "../Functions/helpers";
-import { Fish } from "../Functions/fish";
-import Button from "./Button";
+import { useState } from 'react';
+import { roll20, roll100, pickRandom, pickFromArray, removeElement } from '../Functions/helpers';
+import { Fish } from '../Functions/fish';
+import Button from './Button';
 
-export default function PlayGameButton({ location, player, mods, setLogs }) {
-
+export default function PlayGameButton({ location, player, mods, setLogs, historyButtonState, setHistoryButtonState }) {
   let [buttonText, setButtonText] = useState('Roll!');
   let [eventTrigger, setEventTrigger] = useState(0);
   let [fishPool, setFishPool] = useState([]);
   let [treasurePool, setTreasurePool] = useState(location.treasure);
-
-
 
   let logsContent = [];
 
@@ -19,7 +16,7 @@ export default function PlayGameButton({ location, player, mods, setLogs }) {
   }
 
   function findFish() {
-    return ((roll100() + mods.playerFishFindMod >= location.baseFishFind))
+    return roll100() + mods.playerFishFindMod >= location.baseFishFind;
   }
 
   function pickFish() {
@@ -27,59 +24,59 @@ export default function PlayGameButton({ location, player, mods, setLogs }) {
       const pick = pickFromArray(fishPool);
       setFishPool(removeElement(fishPool, pick));
       return pick;
-    }
-    else return new Fish(location, mods);
+    } else return new Fish(location, mods);
   }
 
   function rollForFishing() {
     let fish = pickFish(location, mods);
 
-    addLogs(`You've enountered a ${fish.provideDescription()}! ${(fish.timesEncountered > 0) ? "You've seen this one before." : ''}`);
+    addLogs(
+      `You've enountered a ${fish.provideDescription()}! ${
+        fish.timesEncountered > 0 ? "You've seen this one before." : ''
+      }`,
+    );
 
-    let playerRoll = roll20(mods.playerVantage)
+    let playerRoll = roll20(mods.playerVantage);
     let playerTotal = playerRoll + player.skill + mods.playerSkillMod;
 
-    addLogs(`You rolled ${playerRoll}, for a total of ${playerTotal}. ${(playerRoll === 20) ? "It's a natural 20!" : ''}`);
+    addLogs(
+      `You rolled ${playerRoll}, for a total of ${playerTotal}. ${playerRoll === 20 ? "It's a natural 20!" : ''}`,
+    );
 
     addLogs(`The fish required a roll of ${fish.requiredRoll} to catch.`);
 
-    ((playerTotal >= fish.requiredRoll) || (playerRoll === 20)) ? isCatch(fish, playerTotal) : isNoCatch(fish);
+    playerTotal >= fish.requiredRoll || playerRoll === 20 ? isCatch(fish, playerTotal) : isNoCatch(fish);
   }
 
   function isCatch(fish, playerTotal) {
-    player.gainXP(fish.xp)
-      ? levelUp()
-      : noLevelUp(fish);
+    player.gainXP(fish.xp) ? levelUp() : noLevelUp(fish);
     player.fishHistory.push({ fish, playerTotal });
-
   }
 
   function levelUp() {
-    addLogs(`Level up! You are now level ${player.level}`)
+    addLogs(`Level up! You are now level ${player.level}.`);
   }
 
   function noLevelUp(fish) {
-    addLogs(`You've caught it! ${(fish.xp > 0) ? `You gain ${fish.xp}xp` : 'That was easy!'}`)
+    addLogs(`You've caught it! ${fish.xp > 0 ? `You gain ${fish.xp}xp` : 'That was easy!'}`);
   }
 
   function isNoCatch(fish) {
     //todo: modify fish based on player rolls.
     fish.timesEncountered++;
-    setFishPool([...fishPool, fish])
-    addLogs(`The ${fish.provideDescription()} got away.`)
+    setFishPool([...fishPool, fish]);
+    addLogs(`The ${fish.provideDescription()} got away.`);
   }
 
   function rollForTreasure() {
-    if (roll100() - mods.playerTreasureFindMod <= location.baseTreasureFind)
-      pickTreasure();
-    else
-      pickJunk();
+    if (roll100() - mods.playerTreasureFindMod <= location.baseTreasureFind) pickTreasure();
+    else pickJunk();
   }
 
   function pickTreasure() {
     if (treasurePool.length === 0) {
       addLogs(`Looks like you've cleaned out this ${location.name} of all the good stuff.`);
-      return
+      return;
     }
     let treasure = pickFromArray(treasurePool);
     setTreasurePool(removeElement(treasurePool, treasure));
@@ -92,10 +89,9 @@ export default function PlayGameButton({ location, player, mods, setLogs }) {
     if (junk.uid === 0) {
       addLogs("You've found completely nothing. Well done!");
       setEventTrigger(eventTrigger + 5);
-    }
-    else {
-      player.junkPile.push(junk)
-      addLogs(`You've found: ${junk.name}. ${junk.flavor}`)
+    } else {
+      player.junkPile.push(junk);
+      addLogs(`You've found: ${junk.name}. ${junk.flavor}`);
     }
   }
 
@@ -109,26 +105,26 @@ export default function PlayGameButton({ location, player, mods, setLogs }) {
   }
 
   function randomEvent() {
-    addLogs("Something random happens.");
+    addLogs('Something random happens.');
     setEventTrigger(0);
   }
 
   function launchCallbacks(callbackArray) {
     if (callbackArray.length === 0) return;
-    callbackArray.forEach(callback => callback());
+    callbackArray.forEach((callback) => callback());
   }
 
   function playGame() {
-    findFish()
-      ? rollForFishing()
-      : rollForTreasure();
-    checkEvents()
-      ? randomEvent()
-      : noEvent();
+    if (!historyButtonState) setHistoryButtonState(true);
+    findFish() ? rollForFishing() : rollForTreasure();
+    checkEvents() ? randomEvent() : noEvent();
     launchCallbacks(mods.extraCallbacks);
     setLogs(logsContent);
   }
 
-  return <Button cname="Button-big Button-MainButton" callback={playGame}>{buttonText}</Button>
+  return (
+    <Button cname="Button-big Button-MainButton" callback={playGame}>
+      {buttonText}
+    </Button>
+  );
 }
-

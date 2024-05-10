@@ -1,7 +1,7 @@
 import Button from './Button';
 import Container from './Container';
 import { useState } from 'react';
-import { roll6, roll2d6, pickFromArray } from '../Functions/helpers';
+import { roll6, roll2d6, pickFromArray, getRandomNumber } from '../Functions/helpers';
 
 //[n, ne, se, s, sw, nw]
 // let basic_moveset = [
@@ -31,8 +31,8 @@ const spring = {
   weathers: [
     {
       shortDescription: 'Clear and nippy',
-      longDescription: '',
-      temperature: 0,
+      longDescription: 'The skies are clear, and the air is fresh',
+      temperature: 7,
       wind: 0,
       precipitation: 0,
       clouds: 0,
@@ -40,98 +40,107 @@ const spring = {
     },
     {
       shortDescription: 'Sleet',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
-      clouds: 0,
+      longDescription: `Ice-cold rain falls steadily all around you`,
+      temperature: 3,
+      wind: 2,
+      precipitation: 3,
+      clouds: 4,
       changeSet: [8, 9, 2, 0, 6, 7],
     },
     {
       shortDescription: 'Hail',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
-      clouds: 0,
+      longDescription:
+        pickFromArray[
+          ('Large hailstones cause large splashes as they fall in the water',
+          'Small hailstones fall along with strong rain',
+          'Hailstones the size of chicken eggs fall from the sky')
+        ],
+      temperature: 4,
+      wind: 3,
+      precipitation: 4,
+      clouds: 4,
       changeSet: [9, 10, 11, 3, 0, 1],
     },
     {
       shortDescription: 'Cold wafts of mist',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
+      longDescription: 'Gentle wind blows cold mist in your face',
+      temperature: 3,
+      wind: 1,
+      precipitation: 2,
       clouds: 0,
       changeSet: [2, 11, 12, 13, 4, 0],
     },
     {
       shortDescription: 'Sunny and clear',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
+      longDescription: 'Clear sky allows plenty of sun',
+      temperature: 6,
+      wind: 1,
       precipitation: 0,
       clouds: 0,
       changeSet: [0, 3, 13, 14, 15, 5],
     },
     {
       shortDescription: 'Cloudy and warm',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
+      longDescription:
+        pickFromArray[
+          ('Scattered clouds rush through the sky', 'Big, still clouds seem to enjoy the warmth of the sun')
+        ],
+      temperature: 8,
+      wind: getRandomNumber(0, 2),
       precipitation: 0,
-      clouds: 0,
+      clouds: 2,
       changeSet: [6, 0, 4, 15, 16, 17],
     },
     {
       shortDescription: 'Nippy and humid',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
-      clouds: 0,
+      longDescription: 'Cold air is made unpleasant by high humidity',
+      temperature: 7,
+      wind: 2,
+      precipitation: 1,
+      clouds: 2,
       changeSet: [7, 1, 0, 5, 17, 18],
     },
     {
       shortDescription: 'Short showers',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
-      clouds: 0,
+      longDescription: 'Rain sometimes falls from gathering clouds',
+      temperature: 7,
+      wind: 2,
+      precipitation: 2,
+      clouds: 2,
       changeSet: [7, 8, 1, 6, 18, 11],
     },
     {
       shortDescription: 'Heavy rainfall',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
-      clouds: 0,
+      longDescription:
+        pickFromArray[('A wall of rain is coming down from the sky', 'Dense, heavy rain makes it hard to see far')],
+      temperature: 6,
+      wind: getRandomNumber(0, 2),
+      precipitation: 4,
+      clouds: 4,
       changeSet: [8, 18, 9, 1, 7, 10],
     },
     {
       shortDescription: 'Snowy rain',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
-      clouds: 0,
+      longDescription: 'Rain mixed with snow makes everything wet and cold',
+      temperature: 4,
+      wind: getRandomNumber(0, 2),
+      precipitation: 3,
+      clouds: 4,
       changeSet: [13, 17, 10, 2, 1, 8],
     },
     {
       shortDescription: 'Windy and snowy',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
-      clouds: 0,
+      longDescription: 'Strong winds bring snow and memories of winter',
+      temperature: 2,
+      wind: 3,
+      precipitation: 3,
+      clouds: 4,
       changeSet: [12, 10, 8, 11, 2, 9],
     },
     {
       shortDescription: 'Heavy snowfall',
-      longDescription: '',
-      temperature: 0,
+      longDescription: 'Large snowflakes are falling everywhere around you',
+      temperature: 2,
       wind: 0,
       precipitation: 0,
       clouds: 0,
@@ -139,44 +148,44 @@ const spring = {
     },
     {
       shortDescription: 'Light snowfall',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
-      clouds: 0,
+      longDescription: 'Occasional snow has little chance of staying for good',
+      temperature: 3,
+      wind: 1,
+      precipitation: 2,
+      clouds: getRandomNumber(2, 4),
       changeSet: [11, 14, 18, 10, 13, 3],
     },
     {
       shortDescription: 'Cold and dry',
-      longDescription: '',
-      temperature: 0,
+      longDescription: 'Dry, freezing cold makes your breath steam',
+      temperature: 3,
       wind: 0,
       precipitation: 0,
-      clouds: 0,
+      clouds: getRandomNumber(2, 4),
       changeSet: [3, 12, 13, 9, 14, 4],
     },
     {
       shortDescription: 'Pleasantly warm',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
+      longDescription: 'Pleasant warmth gives hope for early summer',
+      temperature: 10,
+      wind: getRandomNumber(0, 1),
       precipitation: 0,
-      clouds: 0,
+      clouds: getRandomNumber(0, 1),
       changeSet: [4, 13, 16, 14, 12, 15],
     },
     {
       shortDescription: 'Strong pollen drift',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
+      longDescription: 'Strong, warm wind carries spring pollen everywhere',
+      temperature: 9,
+      wind: 3,
       precipitation: 0,
-      clouds: 0,
+      clouds: getRandomNumber(0, 2),
       changeSet: [5, 4, 14, 15, 15, 16],
     },
     {
       shortDescription: 'Hot and dry',
-      longDescription: '',
-      temperature: 0,
+      longDescription: 'The air is hot and unmoving.',
+      temperature: 13,
       wind: 0,
       precipitation: 0,
       clouds: 0,
@@ -184,20 +193,20 @@ const spring = {
     },
     {
       shortDescription: 'Warm and humid',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
-      clouds: 0,
+      longDescription: 'Humid, warm air makes everything sticky',
+      temperature: 12,
+      wind: 1,
+      precipitation: 1,
+      clouds: 2,
       changeSet: [18, 6, 5, 16, 9, 17],
     },
     {
       shortDescription: 'Warm drizzle',
-      longDescription: '',
-      temperature: 0,
-      wind: 0,
-      precipitation: 0,
-      clouds: 0,
+      longDescription: 'Light rain does not get in the way of spring warmth',
+      temperature: 9,
+      wind: 2,
+      precipitation: 2,
+      clouds: 3,
       changeSet: [16, 7, 6, 17, 8, 12],
     },
   ],
@@ -218,7 +227,7 @@ const summer = {
     {
       shortDescription: 'Cloudy and humid',
       longDescription: `It's cloudy and humid.`,
-      temperature: 1,
+      temperature: 11,
       wind: 0,
       precipitation: 1,
       clouds: 3,
@@ -734,10 +743,9 @@ const winter = {
   ],
 };
 
-const year = [spring, summer, autumn, winter]
+const year = [spring, summer, autumn, winter];
 
 export default function Weather() {
-
   let [currentSeason, setSeason] = useState(pickFromArray(year));
   let [currentWeather, setWeather] = useState(pickFromArray(currentSeason.weathers));
   let [seasonDay, setSeasonDay] = useState(1);
@@ -768,23 +776,28 @@ export default function Weather() {
   }
 
   function changeSeason() {
-    let nextSeason = (year.indexOf(currentSeason) + 1) % year.length
+    let nextSeason = (year.indexOf(currentSeason) + 1) % year.length;
     setSeason(year[nextSeason]);
     setSeasonDay(1);
-    setWeather(pickFromArray(currentSeason.weathers))
+    setWeather(pickFromArray(currentSeason.weathers));
   }
 
-  return <Container>
-    <p>Current season is: {currentSeason.name}</p>
-    <p>Current weather is: {currentWeather.shortDescription}</p>
-    <p>Weather stats:</p>
-    <p>Temperature: {currentWeather.temperature}</p>
-    <p>Wind: {currentWeather.wind}</p>
-    <p>Clouds: {currentWeather.clouds}</p>
-    <p>Precipitation: {currentWeather.precipitation}</p>
-    <Button cname="Button-small" callback={changeWeather}>
-      Change Weather
-    </Button>
-    <Button cname="Button-small" callback={changeSeason}>Next Season</Button>
-  </Container>
+  return (
+    <Container>
+      <p>Current season is: {currentSeason.name}</p>
+      <p>Current weather is: {currentWeather.shortDescription}</p>
+      <p>{currentWeather.longDescription}</p>
+      <p>Weather stats:</p>
+      <p>Temperature: {currentWeather.temperature}</p>
+      <p>Wind: {currentWeather.wind}</p>
+      <p>Clouds: {currentWeather.clouds}</p>
+      <p>Precipitation: {currentWeather.precipitation}</p>
+      <Button cname="Button-small" callback={changeWeather}>
+        Change Weather
+      </Button>
+      <Button cname="Button-small" callback={changeSeason}>
+        Next Season
+      </Button>
+    </Container>
+  );
 }

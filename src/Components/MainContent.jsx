@@ -10,10 +10,17 @@ import PlayerFishHistoryButton from './PlayerFishHistoryButton';
 import PlayerInventory from './PlayerInventory';
 import ItemTooltip from './ItemTooltip';
 
-export default function MainContent({ currentLocation, setCurrentLocation, currentPlayer, setCurrentPlayer, logs = [] }) {
+export default function MainContent({
+  currentLocation,
+  setCurrentLocation,
+  currentPlayer,
+  setCurrentPlayer,
+  logs = [],
+}) {
   let classIngame = currentPlayer ? '-ingame' : '';
   let [logsState, setLogs] = useState(logs);
-  let [itemToDisplay, setItemToDisplay] = useState({})
+  let [historyButtonState, setHistoryButtonState] = useState(true);
+  let [itemToDisplay, setItemToDisplay] = useState({});
   let [modState, setModState] = useState({
     playerVantage: 0,
     playerSkillMod: 0,
@@ -23,25 +30,41 @@ export default function MainContent({ currentLocation, setCurrentLocation, curre
     fishDifficultyMod: 0,
     fishSizeModArray: [],
     fishXPmod: 0,
-    extraCallbacks: []
-  })
-
-
+    extraCallbacks: [],
+  });
 
   if (currentPlayer) {
     return (
       <Container cname={`App-main${classIngame}`}>
         <PlayerInfo player={currentPlayer} mods={modState} />
-        <PlayGameButton location={currentLocation} player={currentPlayer} mods={modState} setLogs={setLogs} />
+        <PlayGameButton
+          location={currentLocation}
+          player={currentPlayer}
+          mods={modState}
+          setLogs={setLogs}
+          historyButtonState={historyButtonState}
+          setHistoryButtonState={setHistoryButtonState}
+        />
         <br />
-        <PlayerFishHistoryButton playerHistory={currentPlayer.fishHistory} />
-        <Button disabled={!currentPlayer.inventory.length} cname="Button-small">Inventory</Button>
+        <PlayerFishHistoryButton
+          playerHistory={currentPlayer.fishHistory}
+          setLogs={setLogs}
+          historyButtonState={historyButtonState}
+          setHistoryButtonState={setHistoryButtonState}
+        />
+        <Button disabled={!currentPlayer.inventory.length} cname="Button-small">
+          Inventory
+        </Button>
         <EventLog>{logsState}</EventLog>
-        <PlayerInventory inventory={currentPlayer.inventory} mods={modState} setMods={setModState} setItemTooltip={setItemToDisplay}/>
+        <PlayerInventory
+          inventory={currentPlayer.inventory}
+          mods={modState}
+          setMods={setModState}
+          setItemTooltip={setItemToDisplay}
+        />
         <DevTools location={currentLocation} mods={modState} setMods={setModState} />
         <ItemTooltip item={itemToDisplay} />
       </Container>
     );
-  } else
-    return <StartScreen player={currentPlayer} setCurrentPlayer={setCurrentPlayer} />;
+  } else return <StartScreen player={currentPlayer} setCurrentPlayer={setCurrentPlayer} />;
 }
