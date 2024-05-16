@@ -390,4 +390,49 @@ export const lake = {
       chance: 1,
     },
   ],
+  events: [],
+  spots: [
+    {
+      name: 'by the crossroads',
+      description: '',
+      fish: [],
+      treasure: [],
+      junk: [],
+      events: [],
+    },
+    {
+      name: 'by the back of the inn',
+      description: '',
+      fish: [],
+      treasure: [],
+      junk: [],
+      events: [],
+    },
+    {
+      name: `Old Man's Cove`,
+      description: '',
+      fish: [],
+      treasure: [],
+      junk: [],
+      events: [],
+    },
+    {
+      name: `forest's edge`,
+      description: '',
+      fish: [],
+      treasure: [],
+      junk: [],
+      events: [],
+    },
+    {
+      name: 'in deep reeds',
+      description: '',
+      fish: [],
+      treasure: [],
+      junk: [],
+      events: [],
+    },
+  ]
+
 };
+

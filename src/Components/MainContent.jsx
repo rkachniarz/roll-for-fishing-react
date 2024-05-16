@@ -9,6 +9,7 @@ import { useState } from 'react';
 import PlayerFishHistoryButton from './PlayerFishHistoryButton';
 import PlayerInventory from './PlayerInventory';
 import ItemTooltip from './ItemTooltip';
+import { pickFromArray } from '../Functions/helpers';
 
 export default function MainContent({
   currentLocation,
@@ -18,6 +19,7 @@ export default function MainContent({
   logs = [],
 }) {
   let classIngame = currentPlayer ? '-ingame' : '';
+  let [currentSpot, setCurrentSpot] = useState(pickFromArray(currentLocation.spots));
   let [logsState, setLogs] = useState(logs);
   let [historyButtonState, setHistoryButtonState] = useState(true);
   let [itemToDisplay, setItemToDisplay] = useState({});
@@ -39,6 +41,7 @@ export default function MainContent({
         <PlayerInfo player={currentPlayer} mods={modState} />
         <PlayGameButton
           location={currentLocation}
+          spot={currentSpot}
           player={currentPlayer}
           mods={modState}
           setLogs={setLogs}

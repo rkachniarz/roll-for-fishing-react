@@ -1,4 +1,4 @@
-import { getRandomNumber, roll20, pickRandom } from './helpers.js';
+import { getRandomNumber, roll20, pickRandom, mergeArrays } from './helpers.js';
 
 const sizes = [
   { name: 'Tiny', chance: 5, difficultyMod: 0 },
@@ -10,10 +10,10 @@ const sizes = [
 ];
 
 export class Fish {
-  constructor(location, mods) {
+  constructor(location, spot, mods) {
     const { fishVantage, fishDifficultyMod, fishXPmod, fishSizeModArray } = mods;
 
-    const { name, difficultyMod, subnames } = pickRandom(location.fish);
+    const { name, difficultyMod, subnames } = pickRandom(mergeArrays(location.fish, spot.fish));
     const pickedSubname = subnames[getRandomNumber(0, subnames.length - 1)];
     this.name = `${pickedSubname} ${name}`;
     const pickedSize = pickRandom(sizes.concat(fishSizeModArray));

@@ -3,7 +3,15 @@ import { roll20, roll100, pickRandom, pickFromArray, removeElement } from '../Fu
 import { Fish } from '../Functions/fish';
 import Button from './Button';
 
-export default function PlayGameButton({ location, player, mods, setLogs, historyButtonState, setHistoryButtonState }) {
+export default function PlayGameButton({
+  location,
+  spot,
+  player,
+  mods,
+  setLogs,
+  historyButtonState,
+  setHistoryButtonState,
+}) {
   let [buttonText, setButtonText] = useState('Roll!');
   let [eventTrigger, setEventTrigger] = useState(0);
   let [fishPool, setFishPool] = useState([]);
@@ -24,7 +32,7 @@ export default function PlayGameButton({ location, player, mods, setLogs, histor
       const pick = pickFromArray(fishPool);
       setFishPool(removeElement(fishPool, pick));
       return pick;
-    } else return new Fish(location, mods);
+    } else return new Fish(location, spot, mods);
   }
 
   function rollForFishing() {
