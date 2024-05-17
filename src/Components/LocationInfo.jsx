@@ -1,6 +1,6 @@
 import Container from './Container';
 
-function LocationInfo({ location, currentSeason, currentWeather, seasonDay }) {
+export default function LocationInfo({ location, spot, currentSeason, currentWeather, seasonDay }) {
   function getTemperatureDescription() {
     switch (currentWeather.temperature) {
       case 0:
@@ -45,18 +45,24 @@ function LocationInfo({ location, currentSeason, currentWeather, seasonDay }) {
   }
 
   return (
-    <Container>
-      <p>
-        {location.name}, {location.spot.name}
-      </p>
-      <p>
+    <Container cname="InfoPanel">
+      <span>
+        {location.name}, {spot.name}
+      </span>
+      <br />
+      <span>
         {currentSeason.name}, day {seasonDay}
-      </p>
-      <p>{currentWeather.shortDescription}</p>
-      <p>Temperature: {getTemperatureDescription()}</p>
-      <p>Wind: {getWindDescription()}</p>
-      <p>Clouds: {getCloudsDescription()}</p>
-      <p>Precipitation: {getPrecipitationDescription()}</p>
+      </span>
+      <br />
+      <span>{currentWeather.shortDescription}</span>
+      <br />
+      <span>Temperature: {getTemperatureDescription()}</span>
+      <br />
+      <span>Wind: {getWindDescription()}</span>
+      <br />
+      <span>Clouds: {getCloudsDescription()}</span>
+      <br />
+      <span>Precipitation: {getPrecipitationDescription()}</span>
     </Container>
   );
 }

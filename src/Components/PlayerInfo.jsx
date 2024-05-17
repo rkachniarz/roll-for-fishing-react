@@ -2,16 +2,15 @@ import Container from './Container';
 import ModStat from './ModStat';
 
 export default function PlayerInfo({ player, mods }) {
-
   let junkTotalWorth = player.junkPile.reduce((total, junk) => total + junk.value, 0);
 
   function displayPlayerVantage() {
-    if (mods.playerVantage < 0) return "Disadvantage";
-    else return "Advantage";
+    if (mods.playerVantage < 0) return 'Disadvantage';
+    else return 'Advantage';
   }
 
   return (
-    <Container cname="PlayerInfo">
+    <Container cname="InfoPanel">
       <Container cname="PlayerStat">{`${player.name}, level ${player.level} ${player.class.name}`}</Container>
       <Container cname="PlayerStat">{`${player.totalxp} XP`}</Container>
       <Container cname="PlayerStat">
@@ -19,7 +18,9 @@ export default function PlayerInfo({ player, mods }) {
         <ModStat stat={mods.playerSkillMod} />
       </Container>
 
-      {(mods.playerVantage != 0) && <Container cname="PlayerStat">{`${displayPlayerVantage()} on fishing rolls`}</Container>}
+      {mods.playerVantage != 0 && (
+        <Container cname="PlayerStat">{`${displayPlayerVantage()} on fishing rolls`}</Container>
+      )}
 
       <Container cname="PlayerStat">
         {`Fish Find: ${player.fishFind}`}
@@ -33,12 +34,10 @@ export default function PlayerInfo({ player, mods }) {
 
       <br />
 
-      {(junkTotalWorth > 0) && <Container cname="PlayerStat">{`Junk value: ${junkTotalWorth} copper`}</Container>}
-
+      {junkTotalWorth > 0 && <Container cname="PlayerStat">{`Junk value: ${junkTotalWorth} copper`}</Container>}
     </Container>
   );
 }
-
 
 // playerVantage: 0,
 // playerSkillMod: 0,

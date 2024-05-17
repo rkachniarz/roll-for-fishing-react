@@ -10,6 +10,9 @@ import PlayerFishHistoryButton from './PlayerFishHistoryButton';
 import PlayerInventory from './PlayerInventory';
 import ItemTooltip from './ItemTooltip';
 import { pickFromArray } from '../Functions/helpers';
+import Weather from './Weather';
+import { year } from '../Data/weather';
+import LocationInfo from './LocationInfo';
 
 export default function MainContent({
   currentLocation,
@@ -20,6 +23,9 @@ export default function MainContent({
 }) {
   let classIngame = currentPlayer ? '-ingame' : '';
   let [currentSpot, setCurrentSpot] = useState(pickFromArray(currentLocation.spots));
+  let [currentSeason, setSeason] = useState(pickFromArray(year));
+  let [currentWeather, setWeather] = useState(pickFromArray(currentSeason.weathers));
+  let [seasonDay, setSeasonDay] = useState(1);
   let [logsState, setLogs] = useState(logs);
   let [historyButtonState, setHistoryButtonState] = useState(true);
   let [itemToDisplay, setItemToDisplay] = useState({});
@@ -38,7 +44,23 @@ export default function MainContent({
   if (currentPlayer) {
     return (
       <Container cname={`App-main${classIngame}`}>
+        <Weather
+          currentSeason={currentSeason}
+          setSeason={setSeason}
+          currentWeather={currentWeather}
+          setWeather={setWeather}
+          seasonDay={seasonDay}
+          setSeasonDay={setSeasonDay}
+          setLogs={setLogs}
+        />
         <PlayerInfo player={currentPlayer} mods={modState} />
+        <LocationInfo
+          location={currentLocation}
+          spot={currentSpot}
+          currentSeason={currentSeason}
+          currentWeather={currentWeather}
+          seasonDay={seasonDay}
+        />
         <PlayGameButton
           location={currentLocation}
           spot={currentSpot}
