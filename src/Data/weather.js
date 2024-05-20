@@ -741,3 +741,42 @@ const winter = {
 };
 
 export const year = [spring, summer, autumn, winter];
+
+export function changeWeather(currentSeason, currentWeather, seasonDay) {
+  const direction = getChangeDirection();
+  let logs = '';
+
+  if (direction != -1) {
+    const newWeatherIndex = currentWeather.changeSet[direction];
+    if (newWeatherIndex != currentSeason.weathers.indexOf(currentWeather)) {
+      [currentSeason, seasonDay, seasonChange] = progressSeason(currentSeason, seasonDay);
+      const seasonlog = seasonChange ? ` It is now ${currentSeason.name}.` : '';
+      const newWeather = currentSeason.weathers[newWeatherIndex];
+      logs = 'The weather changes. ' + newWeather.longDescription + seasonlog;
+    }
+  }
+  return [newWeather, logs, currentSeason, seasonDay];
+}
+
+function getChangeDirection() {
+  const possibleValues = [null, null, 5, 4, 4, 3, 3, 2, 1, -1, -1, 0, 5];
+  return possibleValues[roll2d6()];
+}
+
+function progressSeason(currentSeason, seasonDay) {
+  if (roll6() < 5) {
+    seasonDay = seasonDay + 1;
+    let seasonChange = false;
+    if (seasonDay > 90) {
+      currentSeason = changeSeason(currentSeason);
+      seasonDay = 1;
+      seasonChange = true;
+    }
+  }
+  return [currentSeason, seasonDay, seasonChange];
+}
+
+function changeSeason(currentSeason) {
+  let nextSeason = (year.indexOf(currentSeason) + 1) % year.length;
+  return nextSeason;
+}
