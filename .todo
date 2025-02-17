@@ -1,0 +1,358 @@
+
+#event popup
+
+#events
+
+#luck stat
+
+#moving player to state
+
+
+let weatherInstance =
+{
+    shortDescription: '',
+    longDescription: '',
+    temperature: 0,
+    wind: 0,
+    precipitation: 0,
+    clouds: 0,
+    changeSet: []
+}
+
+let seasonInstance = [
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 2,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    },
+    {
+        shortDescription: '',
+        longDescription: '',
+        temperature: 0,
+        wind: 0,
+        precipitation: 0,
+        clouds: 0,
+        changeSet: []
+    }
+]
+
+
+const weatherDescriptions = [
+  {
+    shortDescription: "Frigid with strong winds and snow",
+    longDescription: "A frigid day with biting winds and moderate snowfall, completely overcast skies.",
+    temperature: 1,
+    wind: 3,
+    precipitation: 2,
+    cloudCover: 4
+  },
+  {
+    shortDescription: "Mild with light breeze and partly cloudy",
+    longDescription: "A mild day with a gentle breeze, partly cloudy skies, and no precipitation.",
+    temperature: 5,
+    wind: 1,
+    precipitation: 0,
+    cloudCover: 2
+  },
+  {
+    shortDescription: "Hot with moderate winds and light rain",
+    longDescription: "A hot day with moderate winds, occasional light rain, and mostly clear skies.",
+    temperature: 8,
+    wind: 2,
+    precipitation: 1,
+    cloudCover: 1
+  },
+  {
+    shortDescription: "Cold with heavy snow and no wind",
+    longDescription: "A cold day with heavy snowfall, no wind, and mostly cloudy skies.",
+    temperature: 3,
+    wind: 0,
+    precipitation: 3,
+    cloudCover: 3
+  },
+  {
+    shortDescription: "Scorching hot with strong winds and clear skies",
+    longDescription: "A scorching hot day with very strong winds and clear skies.",
+    temperature: 10,
+    wind: 4,
+    precipitation: 0,
+    cloudCover: 0
+  },
+  {
+    shortDescription: "Warm with light breeze and torrential rain",
+    longDescription: "A warm day with a light breeze, torrential rain, and completely overcast skies.",
+    temperature: 6,
+    wind: 1,
+    precipitation: 4,
+    cloudCover: 4
+  },
+  {
+    shortDescription: "Cool with moderate winds and rain showers",
+    longDescription: "A cool day with moderate winds, occasional rain showers, and partly cloudy skies.",
+    temperature: 4,
+    wind: 2,
+    precipitation: 2,
+    cloudCover: 2
+  },
+  {
+    shortDescription: "Hot with strong winds and light rain",
+    longDescription: "A hot day with strong winds, light rain, and mostly cloudy skies.",
+    temperature: 7,
+    wind: 3,
+    precipitation: 1,
+    cloudCover: 3
+  },
+  {
+    shortDescription: "Very cold with clear skies",
+    longDescription: "A very cold day with no wind, clear skies, and no precipitation.",
+    temperature: 2,
+    wind: 0,
+    precipitation: 0,
+    cloudCover: 1
+  },
+  {
+    shortDescription: "Very hot with moderate winds and heavy rain",
+    longDescription: "A very hot day with moderate winds, heavy rain, and completely overcast skies.",
+    temperature: 9,
+    wind: 2,
+    precipitation: 3,
+    cloudCover: 4
+  },
+  {
+    shortDescription: "Mild with moderate rain and mostly cloudy",
+    longDescription: "A mild day with no wind, moderate rain showers, and mostly cloudy skies.",
+    temperature: 5,
+    wind: 0,
+    precipitation: 2,
+    cloudCover: 3
+  },
+  {
+    shortDescription: "Warm with moderate winds and clear skies",
+    longDescription: "A warm day with moderate winds, clear skies, and no precipitation.",
+    temperature: 6,
+    wind: 2,
+    precipitation: 0,
+    cloudCover: 1
+  },
+  {
+    shortDescription: "Cool with strong winds and light rain",
+    longDescription: "A cool day with very strong winds, light rain, and partly cloudy skies.",
+    temperature: 3,
+    wind: 4,
+    precipitation: 1,
+    cloudCover: 2
+  },
+  {
+    shortDescription: "Hot with light breeze and heavy rain",
+    longDescription: "A hot day with a light breeze, heavy rain, and completely overcast skies.",
+    temperature: 8,
+    wind: 1,
+    precipitation: 3,
+    cloudCover: 4
+  },
+  {
+    shortDescription: "Very cold with strong winds and clear skies",
+    longDescription: "A very cold day with strong winds, clear skies, and no precipitation.",
+    temperature: 2,
+    wind: 3,
+    precipitation: 0,
+    cloudCover: 0
+  },
+  {
+    shortDescription: "Hot with torrential rain and mostly cloudy",
+    longDescription: "A hot day with no wind, torrential rain, and mostly cloudy skies.",
+    temperature: 7,
+    wind: 0,
+    precipitation: 4,
+    cloudCover: 3
+  },
+  {
+    shortDescription: "Cool with light breeze and rain showers",
+    longDescription: "A cool day with a light breeze, moderate rain showers, and mostly clear skies.",
+    temperature: 4,
+    wind: 1,
+    precipitation: 2,
+    cloudCover: 1
+  },
+  {
+    shortDescription: "Very hot with strong winds and light rain",
+    longDescription: "A very hot day with strong winds, occasional light rain, and partly cloudy skies.",
+    temperature: 9,
+    wind: 3,
+    precipitation: 1,
+    cloudCover: 2
+  },
+  {
+    shortDescription: "Very cold with heavy snow and overcast skies",
+    longDescription: "A very cold day with moderate winds, heavy snowfall, and completely overcast skies.",
+    temperature: 1,
+    wind: 2,
+    precipitation: 3,
+    cloudCover: 4
+  },
+  {
+    shortDescription: "Mild with strong winds and clear skies",
+    longDescription: "A mild day with very strong winds, clear skies, and no precipitation.",
+    temperature: 5,
+    wind: 4,
+    precipitation: 0,
+    cloudCover: 0
+  }
+];
