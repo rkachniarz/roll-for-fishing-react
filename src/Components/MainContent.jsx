@@ -36,7 +36,7 @@ export default function MainContent({
     playerTreasureFindMod: 0,
     fishVantage: 0,
     fishDifficultyMod: 0,
-    fishSizeModArray: [],
+    fishSizeIndexMod: 0,
     fishXPmod: 0,
     extraCallbacks: [],
   });
@@ -69,6 +69,10 @@ export default function MainContent({
           setLogs={setLogs}
           historyButtonState={historyButtonState}
           setHistoryButtonState={setHistoryButtonState}
+          currentSeason={currentSeason}
+          setCurrentSeason={setSeason}
+          seasonDay={seasonDay}
+          setSeasonDay={setSeasonDay}
         />
         <br />
         <PlayerFishHistoryButton

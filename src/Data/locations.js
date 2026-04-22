@@ -7,42 +7,49 @@ export const lake = {
       name: 'Carp',
       chance: 20,
       difficultyMod: 0,
+      size: [20, 120],
       subnames: ['Black', 'Predatory', 'Common'],
     },
     {
       name: 'Bass',
       chance: 10,
       difficultyMod: 1,
+      size: [15, 60],
       subnames: ['Largemouth', 'Smallmouth', 'Rock', 'Striped', 'Spotted', 'White', 'Yellow'],
     },
     {
       name: 'Trout',
       chance: 10,
       difficultyMod: 2,
+      size: [15, 80],
       subnames: ['Brook', 'Brown', 'Bull', 'Cutthroat', 'Rainbow'],
     },
     {
       name: 'Pike',
       chance: 10,
       difficultyMod: 2,
+      size: [30, 150],
       subnames: ['Northern', 'Amur', 'Killer'],
     },
     {
       name: 'Roach',
       chance: 0,
       difficultyMod: -1,
+      size: [10, 35],
       subnames: ['Common', 'White', 'Pigo'],
     },
     {
       name: 'Cod',
       chance: 10,
       difficultyMod: 2,
+      size: [20, 100],
       subnames: ['Murray', 'Sleepy', 'Trout', 'Black'],
     },
     {
       name: 'Sturgeon',
       chance: 5,
       difficultyMod: 3,
+      size: [50, 300],
       subnames: ['Beluga', 'Starry', 'Dwarf', 'Shovelnose', 'Shortnose'],
     },
   ],
@@ -54,10 +61,7 @@ export const lake = {
       description: 'Fish can grow more beefy',
       flavor: 'Dad, should trout have biceps this huge?',
       mechanics: {
-        fishSizeModArray: [
-          { name: 'Mega Massive', chance: 5, difficultyMod: 8 },
-          { name: 'Swole AF', chance: 2, difficultyMod: 10 },
-        ],
+        fishSizeIndexMod: 2,
       },
       startActive: true,
     },
@@ -432,7 +436,5 @@ export const lake = {
       junk: [],
       events: [],
     },
-  ]
-
+  ],
 };
-

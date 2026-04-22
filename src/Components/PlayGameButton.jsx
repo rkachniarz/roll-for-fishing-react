@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { roll20, roll100, pickRandom, pickFromArray, removeElement } from '../Functions/helpers';
 import { Fish } from '../Functions/fish';
+import { progressSeason } from '../Data/weather';
 import Button from './Button';
 
 export default function PlayGameButton({
@@ -11,11 +12,16 @@ export default function PlayGameButton({
   setLogs,
   historyButtonState,
   setHistoryButtonState,
+  currentSeason,
+  setCurrentSeason,
+  seasonDay,
+  setSeasonDay,
 }) {
   let [buttonText, setButtonText] = useState('Roll!');
   let [eventTrigger, setEventTrigger] = useState(0);
   let [fishPool, setFishPool] = useState([]);
   let [treasurePool, setTreasurePool] = useState(location.treasure);
+  let [currentDay, setCurrentDay] = useState(1);
 
   let logsContent = [];
 
@@ -122,11 +128,21 @@ export default function PlayGameButton({
     callbackArray.forEach((callback) => callback());
   }
 
+  function passTime() {
+    const [newSeason, newSeasonDay] = progressSeason(currentSeason, seasonDay);
+    if (newSeasonDay !== seasonDay) {
+      setCurrentDay((d) => d + 1);
+      setCurrentSeason(newSeason);
+      setSeasonDay(newSeasonDay);
+    }
+  }
+
   function playGame() {
     if (!historyButtonState) setHistoryButtonState(true);
     findFish() ? rollForFishing() : rollForTreasure();
     checkEvents() ? randomEvent() : noEvent();
     launchCallbacks(mods.extraCallbacks);
+    passTime();
     setLogs(logsContent);
   }
 

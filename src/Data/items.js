@@ -7,7 +7,7 @@ playerTreasureFindMod: 0,
 fishAdvantage: false,
 fishDisadvantage: false,
 fishDifficultyMod: 0,
-fishSizeModArray: [],
+fishSizeIndexMod: 0,
 fishXPmod: 0,
 extraMainButtonCallbacks: []
 }

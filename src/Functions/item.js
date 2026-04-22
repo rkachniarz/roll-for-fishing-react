@@ -41,5 +41,5 @@ class Item {
 // fishAdvantage: false,
 // fishDisadvantage: false,
 // fishDifficultyMod: 0,
-// fishSizeModArray: [],
+// fishSizeIndexMod: 0,
 // extraMainButtonCallbacks: []

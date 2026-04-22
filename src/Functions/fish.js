@@ -1,4 +1,4 @@
-import { getRandomNumber, roll20, pickRandom, mergeArrays } from './helpers.js';
+import { getRandomNumber, pickFromArray, roll20, pickRandom, mergeArrays } from './helpers.js';
 
 const sizes = [
   { name: 'Tiny', chance: 5, difficultyMod: 0 },
@@ -11,13 +11,18 @@ const sizes = [
 
 export class Fish {
   constructor(location, spot, mods) {
-    const { fishVantage, fishDifficultyMod, fishXPmod, fishSizeModArray } = mods;
+    const { fishVantage, fishDifficultyMod, fishXPmod, fishSizeIndexMod } = mods;
 
-    const { name, difficultyMod, subnames } = pickRandom(mergeArrays(location.fish, spot.fish));
-    const pickedSubname = subnames[getRandomNumber(0, subnames.length - 1)];
+    const { name, difficultyMod, size, subnames } = pickRandom(mergeArrays(location.fish, spot.fish));
+    const pickedSubname = pickFromArray(subnames);
     this.name = `${pickedSubname} ${name}`;
-    const pickedSize = pickRandom(sizes.concat(fishSizeModArray));
-    this.size = pickedSize.name;
+    const pickedSize = pickRandom(sizes);
+    const sizeIndex = Math.min(Math.max(sizes.indexOf(pickedSize) + fishSizeIndexMod, 0), sizes.length - 1);
+    const segmentWidth = (size[1] - size[0]) / sizes.length;
+    const bandMin = size[0] + sizeIndex * segmentWidth;
+    const bandMax = size[0] + (sizeIndex + 1) * segmentWidth;
+    this.numericSize = getRandomNumber(Math.round(bandMin * 10), Math.round(bandMax * 10)) / 10;
+    this.size = sizes[sizeIndex].name;
     this.difficulty = difficultyMod + fishDifficultyMod + pickedSize.difficultyMod;
     this.xp = Math.max(this.difficulty + fishXPmod, 0);
     this.requiredRoll = this.difficulty + roll20(fishVantage);
