@@ -1,4 +1,4 @@
-import { joinArrays, unmergeArray } from './helpers';
+import { mergeArrays, unmergeArray } from './helpers';
 
 class Item {
   constructor(uid, name, icon, description, flavor, mechanics, active) {
@@ -14,7 +14,7 @@ class Item {
   activate(item, mods) {
     let newMods = mods;
     Object.keys(item.mechanics).forEach((key) => {
-      if (typeof newMods[key] === 'object') newMods[key] = joinArrays(mods[key], item.mechanics[key]);
+      if (typeof newMods[key] === 'object') newMods[key] = mergeArrays(mods[key], item.mechanics[key]);
       else newMods[key] = mods[key] + item.mechanics[key];
     });
     return newMods;
@@ -23,7 +23,7 @@ class Item {
   deactivate(item, mods) {
     let newMods = mods;
     Object.keys(item.mechanics).forEach((key) => {
-      if (typeof newMods[key] === 'object') newMods[key] = unmereArray(mods[key], item.mechanics[key]);
+      if (typeof newMods[key] === 'object') newMods[key] = unmergeArray(mods[key], item.mechanics[key]);
       else newMods[key] = mods[key] + item.mechanics[key];
     });
     return newMods;

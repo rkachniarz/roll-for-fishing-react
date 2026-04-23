@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { roll20, roll100, pickRandom, pickFromArray, removeElement } from '../Functions/helpers';
 import { Fish } from '../Functions/fish';
-import { progressSeason } from '../Data/weather';
+import { changeWeather } from '../Data/weather';
 import Button from './Button';
 
 export default function PlayGameButton({
@@ -16,6 +16,9 @@ export default function PlayGameButton({
   setCurrentSeason,
   seasonDay,
   setSeasonDay,
+  currentWeather,
+  setCurrentWeather,
+  saveGame,
 }) {
   let [buttonText, setButtonText] = useState('Roll!');
   let [eventTrigger, setEventTrigger] = useState(0);
@@ -38,7 +41,7 @@ export default function PlayGameButton({
       const pick = pickFromArray(fishPool);
       setFishPool(removeElement(fishPool, pick));
       return pick;
-    } else return new Fish(location, spot, mods);
+    } else return new Fish(location, spot, mods, currentWeather);
   }
 
   function rollForFishing() {
@@ -64,7 +67,17 @@ export default function PlayGameButton({
 
   function isCatch(fish, playerTotal) {
     player.gainXP(fish.xp) ? levelUp() : noLevelUp(fish);
-    player.fishHistory.push({ fish, playerTotal });
+    const record = {
+      name: fish.name,
+      size: fish.size,
+      numericSize: fish.numericSize,
+      requiredRoll: fish.requiredRoll,
+      xp: fish.xp,
+      timesEncountered: fish.timesEncountered,
+      playerTotal,
+    };
+    player.fishHistory.push(record);
+    player.inventory.fishBucket.push(record);
   }
 
   function levelUp() {
@@ -94,7 +107,7 @@ export default function PlayGameButton({
     }
     let treasure = pickFromArray(treasurePool);
     setTreasurePool(removeElement(treasurePool, treasure));
-    player.inventory.push(treasure);
+    player.inventory.items.push(treasure);
     addLogs(`You've found: ${treasure.name}. ${treasure.flavor}`);
   }
 
@@ -104,7 +117,7 @@ export default function PlayGameButton({
       addLogs("You've found completely nothing. Well done!");
       setEventTrigger(eventTrigger + 5);
     } else {
-      player.junkPile.push(junk);
+      player.inventory.junk.push(junk);
       addLogs(`You've found: ${junk.name}. ${junk.flavor}`);
     }
   }
@@ -129,20 +142,24 @@ export default function PlayGameButton({
   }
 
   function passTime() {
-    const [newSeason, newSeasonDay] = progressSeason(currentSeason, seasonDay);
+    const [newWeather, weatherLog, newSeason, newSeasonDay] = changeWeather(currentSeason, currentWeather, seasonDay);
     if (newSeasonDay !== seasonDay) {
       setCurrentDay((d) => d + 1);
       setCurrentSeason(newSeason);
       setSeasonDay(newSeasonDay);
     }
+    if (weatherLog) addLogs(weatherLog);
+    setCurrentWeather(newWeather);
   }
 
   function playGame() {
     if (!historyButtonState) setHistoryButtonState(true);
+    player.totalCasts++;
     findFish() ? rollForFishing() : rollForTreasure();
     checkEvents() ? randomEvent() : noEvent();
     launchCallbacks(mods.extraCallbacks);
     passTime();
+    saveGame();
     setLogs(logsContent);
   }
 

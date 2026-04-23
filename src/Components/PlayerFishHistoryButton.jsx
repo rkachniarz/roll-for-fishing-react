@@ -8,10 +8,10 @@ export default function PlayerFishHistoryButton({ playerHistory, setLogs, histor
     let historyOutput = [];
     if (historyButtonState) {
       historyOutput = playerHistory.map(
-        ({ fish, playerTotal }) =>
-          `${fish.provideDescription()}, roll required: ${fish.requiredRoll}, your roll: ${playerTotal}, xp gained: ${
-            fish.xp
-          }. ${fish.timesEncountered != 0 ? `Caught after ${fish.timesEncountered + 1} tries.` : ''}`,
+        (record) =>
+          `${record.size} ${record.name} (${record.numericSize}cm), roll required: ${record.requiredRoll}, your roll: ${record.playerTotal}, xp gained: ${
+            record.xp
+          }. ${record.timesEncountered !== 0 ? `Caught after ${record.timesEncountered + 1} tries.` : ''}`,
       );
     }
     setLogs(historyOutput);

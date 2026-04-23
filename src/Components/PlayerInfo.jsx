@@ -2,7 +2,7 @@ import Container from './Container';
 import ModStat from './ModStat';
 
 export default function PlayerInfo({ player, mods }) {
-  let junkTotalWorth = player.junkPile.reduce((total, junk) => total + junk.value, 0);
+  let junkTotalWorth = player.inventory.junk.reduce((total, junk) => total + junk.value, 0);
 
   function displayPlayerVantage() {
     if (mods.playerVantage < 0) return 'Disadvantage';

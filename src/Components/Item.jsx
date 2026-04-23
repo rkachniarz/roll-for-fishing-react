@@ -6,16 +6,18 @@
 // this.active = active;
 // this.itemMechanics = mechanics
 
-import clsx from "clsx";
-import { mergeArrays, unmergeArray } from "./../Functions/helpers.js";
-import { useState } from "react";
+import clsx from 'clsx';
+import { mergeArrays, unmergeArray } from './../Functions/helpers.js';
 
 export default function Item({ item, mods, setMods, setItemTooltip }) {
+  let classes = clsx('DisplayableItem', { 'Item-active': item.active, 'Item-inactive': !item.active });
 
-  let classes = clsx("DisplayableItem", { "Item-active": item.active, "Item-inactive": !item.active })
+  function handleMouseMove(e) {
+    setItemTooltip({ item, x: e.clientX + 14, y: e.clientY + 14 });
+  }
 
-  function handleHovered(hovered) {
-    setItemTooltip(hovered ? item : {});
+  function handleMouseLeave() {
+    setItemTooltip({});
   }
 
   function activate() {
@@ -39,23 +41,18 @@ export default function Item({ item, mods, setMods, setItemTooltip }) {
   }
 
   function toggleItem() {
-    if (item.active)
-      {
-        deactivate();
-      }
-    else
-    {
+    if (item.active) {
+      deactivate();
+    } else {
       activate();
     }
   }
 
   return (
-    <div
-      className={classes}
-      onMouseEnter={() => handleHovered(true)}
-      onMouseLeave={() => handleHovered(false)}
-    >
-      <p style={{ display: "inline" }} onClick={toggleItem}>{item.icon}</p>
+    <div className={classes} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+      <p style={{ display: 'inline' }} onClick={toggleItem}>
+        {item.icon}
+      </p>
     </div>
-  )
+  );
 }

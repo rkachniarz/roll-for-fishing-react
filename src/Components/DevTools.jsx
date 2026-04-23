@@ -1,41 +1,16 @@
-import clsx from 'clsx';
 import Modal from './Modal';
 import Button from './Button';
 import { useState } from 'react';
 import Container from './Container';
-import Item from './Item';
-import Weather from './Weather';
 
-
-let testItem = {
-  uid: 5,
-  name: 'Four-leaf underwater clover',
-  icon: '🍀',
-  description: 'Advantage on fishing rolls. +3 fish difficulty.',
-  flavor: 'You are so lucky, you only find the GOOD fish.',
-  mechanics: { playerSkillMod: 10, playerVantage: -1 },
-  active: false,
-};
-
-export default function DevTools({ location, mods, setMods }) {
+export default function DevTools({ location, player }) {
   let [modalOpen, setModalOpen] = useState(false);
+  let [addedUids, setAddedUids] = useState(() => new Set(player.inventory.items.map((i) => i.uid)));
 
-  const modalContent = (
-    <Container cname="App-main">
-      <Container>
-        <p>Siema</p>
-        <Button cname="Button-small" callback={toggleModal}>
-          Nara
-        </Button>
-      </Container>
-      <Weather />
-      <Container cname="Inventory-outer CenterFlex">
-        <Container cname="Inventory-inner">
-          <Item item={testItem} mods={mods} setMods={setMods}></Item>
-        </Container>
-      </Container>
-    </Container>
-  );
+  function addToInventory(item) {
+    player.inventory.items.push({ ...item, active: false });
+    setAddedUids((prev) => new Set(prev).add(item.uid));
+  }
 
   function toggleModal() {
     setModalOpen(!modalOpen);
@@ -45,7 +20,29 @@ export default function DevTools({ location, mods, setMods }) {
     <div>
       <button onClick={toggleModal}>Open Debug Modal</button>
       <Modal cname="Debug" active={modalOpen}>
-        {modalContent}
+        <Container cname="App-main">
+          <Container>
+            <p>Debug Tools</p>
+            <Button cname="Button-small" callback={toggleModal}>
+              Close
+            </Button>
+          </Container>
+          <Container>
+            <p>
+              <strong>Location treasure</strong>
+            </p>
+            {location.treasure.map((item) => (
+              <div key={item.uid} style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '4px 0' }}>
+                <span>
+                  {item.icon} {item.name}
+                </span>
+                <Button cname="Button-small" disabled={addedUids.has(item.uid)} callback={() => addToInventory(item)}>
+                  Add to inventory
+                </Button>
+              </div>
+            ))}
+          </Container>
+        </Container>
       </Modal>
     </div>
   );

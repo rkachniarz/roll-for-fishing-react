@@ -8,6 +8,7 @@ export const lake = {
       chance: 20,
       difficultyMod: 0,
       size: [20, 120],
+      weatherChanceMod: [{ param: 'temperature', min: 9, bonus: 10 }],
       subnames: ['Black', 'Predatory', 'Common'],
     },
     {
@@ -15,6 +16,10 @@ export const lake = {
       chance: 10,
       difficultyMod: 1,
       size: [15, 60],
+      weatherChanceMod: [
+        { param: 'temperature', min: 9, bonus: 8 },
+        { param: 'wind', max: 1, bonus: 5 },
+      ],
       subnames: ['Largemouth', 'Smallmouth', 'Rock', 'Striped', 'Spotted', 'White', 'Yellow'],
     },
     {
@@ -22,6 +27,10 @@ export const lake = {
       chance: 10,
       difficultyMod: 2,
       size: [15, 80],
+      weatherChanceMod: [
+        { param: 'temperature', max: 9, bonus: 8 },
+        { param: 'precipitation', max: 1, bonus: 5 },
+      ],
       subnames: ['Brook', 'Brown', 'Bull', 'Cutthroat', 'Rainbow'],
     },
     {
@@ -29,6 +38,10 @@ export const lake = {
       chance: 10,
       difficultyMod: 2,
       size: [30, 150],
+      weatherChanceMod: [
+        { param: 'temperature', max: 7, bonus: 8 },
+        { param: 'clouds', min: 2, bonus: 5 },
+      ],
       subnames: ['Northern', 'Amur', 'Killer'],
     },
     {
@@ -50,6 +63,10 @@ export const lake = {
       chance: 5,
       difficultyMod: 3,
       size: [50, 300],
+      weatherChanceMod: [
+        { param: 'temperature', max: 6, bonus: 8 },
+        { param: 'precipitation', min: 2, bonus: 5 },
+      ],
       subnames: ['Beluga', 'Starry', 'Dwarf', 'Shovelnose', 'Shortnose'],
     },
   ],

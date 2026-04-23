@@ -9,11 +9,45 @@ const sizes = [
   { name: 'Humongous', chance: 5, difficultyMod: 5 },
 ];
 
+// Adjusts the chance of each fish appearing based on current weather conditions.
+// Fish can define a weatherChanceMod array with conditions that add a bonus to their base chance.
+// Example: { param: 'temperature', min: 9, bonus: 10 } adds +10 chance when temp >= 9.
+function applyWeatherMods(fishPool, weather) {
+  // If weather data isn't available yet, return the pool unchanged
+  if (!weather || weather.temperature === undefined) return fishPool;
+
+  const modded = fishPool.map((fish) => {
+    // Fish with no weather preferences or sentinel fish (chance: 0) are unaffected
+    if (!fish.weatherChanceMod || fish.chance === 0) return fish;
+
+    // Sum up all bonuses from conditions that are currently met
+    const bonus = fish.weatherChanceMod.reduce((sum, cond) => {
+      const val = weather[cond.param];
+      const meetsMin = cond.min === undefined || val >= cond.min;
+      const meetsMax = cond.max === undefined || val <= cond.max;
+      return meetsMin && meetsMax ? sum + cond.bonus : sum;
+    }, 0);
+
+    return bonus !== 0 ? { ...fish, chance: Math.max(1, fish.chance + bonus) } : fish;
+  });
+
+  // Sentinel fish (chance: 0) fills the remainder to 100 in pickRandom.
+  // If non-sentinel chances sum to >= 100 after bonuses, scale them down to fit within 99.
+  const total = modded.reduce((sum, f) => sum + f.chance, 0);
+  if (total < 100) return modded;
+
+  const scale = 99 / total;
+  return modded.map((fish) =>
+    fish.chance === 0 ? fish : { ...fish, chance: Math.max(1, Math.floor(fish.chance * scale)) },
+  );
+}
+
 export class Fish {
-  constructor(location, spot, mods) {
+  constructor(location, spot, mods, weather) {
     const { fishVantage, fishDifficultyMod, fishXPmod, fishSizeIndexMod } = mods;
 
-    const { name, difficultyMod, size, subnames } = pickRandom(mergeArrays(location.fish, spot.fish));
+    const fishPool = applyWeatherMods(mergeArrays(location.fish, spot.fish), weather);
+    const { name, difficultyMod, size, subnames } = pickRandom(fishPool);
     const pickedSubname = pickFromArray(subnames);
     this.name = `${pickedSubname} ${name}`;
     const pickedSize = pickRandom(sizes);

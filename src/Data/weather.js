@@ -1,4 +1,4 @@
-import { pickFromArray, getRandomNumber } from '../Functions/helpers';
+import { pickFromArray, getRandomNumber, roll6, roll2d6 } from '../Functions/helpers';
 
 //[n, ne, se, s, sw, nw]
 // let basic_moveset = [
@@ -46,12 +46,11 @@ const spring = {
     },
     {
       shortDescription: 'Hail',
-      longDescription:
-        pickFromArray[
-          ('Large hailstones cause large splashes as they fall in the water',
-          'Small hailstones fall along with strong rain',
-          'Hailstones the size of chicken eggs fall from the sky')
-        ],
+      longDescription: pickFromArray([
+        'Large hailstones cause large splashes as they fall in the water',
+        'Small hailstones fall along with strong rain',
+        'Hailstones the size of chicken eggs fall from the sky',
+      ]),
       temperature: 4,
       wind: 3,
       precipitation: 4,
@@ -78,10 +77,10 @@ const spring = {
     },
     {
       shortDescription: 'Cloudy and warm',
-      longDescription:
-        pickFromArray[
-          ('Scattered clouds rush through the sky', 'Big, still clouds seem to enjoy the warmth of the sun')
-        ],
+      longDescription: pickFromArray([
+        'Scattered clouds rush through the sky',
+        'Big, still clouds seem to enjoy the warmth of the sun',
+      ]),
       temperature: 8,
       wind: getRandomNumber(0, 2),
       precipitation: 0,
@@ -108,8 +107,10 @@ const spring = {
     },
     {
       shortDescription: 'Heavy rainfall',
-      longDescription:
-        pickFromArray[('A wall of rain is coming down from the sky', 'Dense, heavy rain makes it hard to see far')],
+      longDescription: pickFromArray([
+        'A wall of rain is coming down from the sky',
+        'Dense, heavy rain makes it hard to see far',
+      ]),
       temperature: 6,
       wind: getRandomNumber(0, 2),
       precipitation: 4,
@@ -743,15 +744,19 @@ const winter = {
 export const year = [spring, summer, autumn, winter];
 
 export function changeWeather(currentSeason, currentWeather, seasonDay) {
+  if (roll6() > 3) return [currentWeather, '', currentSeason, seasonDay];
   const direction = getChangeDirection();
+  let newWeather = currentWeather;
   let logs = '';
 
-  if (direction != -1) {
+  if (direction !== -1) {
     const newWeatherIndex = currentWeather.changeSet[direction];
-    if (newWeatherIndex != currentSeason.weathers.indexOf(currentWeather)) {
-      [currentSeason, seasonDay, seasonChange] = progressSeason(currentSeason, seasonDay);
+    if (newWeatherIndex !== currentSeason.weathers.indexOf(currentWeather)) {
+      const [newSeason, newSeasonDay, seasonChange] = progressSeason(currentSeason, seasonDay);
+      currentSeason = newSeason;
+      seasonDay = newSeasonDay;
       const seasonlog = seasonChange ? ` It is now ${currentSeason.name}.` : '';
-      const newWeather = currentSeason.weathers[newWeatherIndex];
+      newWeather = currentSeason.weathers[newWeatherIndex];
       logs = 'The weather changes. ' + newWeather.longDescription + seasonlog;
     }
   }
@@ -764,9 +769,9 @@ function getChangeDirection() {
 }
 
 export function progressSeason(currentSeason, seasonDay, timeSpeed = 4) {
+  let seasonChange = false;
   if (roll6() < timeSpeed) {
     seasonDay = seasonDay + 1;
-    let seasonChange = false;
     if (seasonDay > 90) {
       currentSeason = changeSeason(currentSeason);
       seasonDay = 1;

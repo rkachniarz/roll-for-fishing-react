@@ -13,6 +13,8 @@ import { pickFromArray } from '../Functions/helpers';
 import Weather from './Weather';
 import { year } from '../Data/weather';
 import LocationInfo from './LocationInfo';
+import { saveGame as persistGame, loadGame } from '../Functions/storage';
+import RecordBook from './RecordBook';
 
 export default function MainContent({
   currentLocation,
@@ -22,13 +24,21 @@ export default function MainContent({
   logs = [],
 }) {
   let classIngame = currentPlayer ? '-ingame' : '';
+  const save = loadGame();
+  const savedWorld = save?.world;
+  const initialSeason = (savedWorld && year[savedWorld.seasonIndex]) ?? pickFromArray(year);
+  const initialWeather =
+    (savedWorld && initialSeason.weathers[savedWorld.weatherIndex]) ?? pickFromArray(initialSeason.weathers);
+  const initialSeasonDay = savedWorld?.seasonDay ?? 1;
   let [currentSpot, setCurrentSpot] = useState(pickFromArray(currentLocation.spots));
-  let [currentSeason, setSeason] = useState(pickFromArray(year));
-  let [currentWeather, setWeather] = useState(pickFromArray(currentSeason.weathers));
-  let [seasonDay, setSeasonDay] = useState(1);
+  let [currentSeason, setSeason] = useState(initialSeason);
+  let [currentWeather, setWeather] = useState(initialWeather);
+  let [seasonDay, setSeasonDay] = useState(initialSeasonDay);
   let [logsState, setLogs] = useState(logs);
   let [historyButtonState, setHistoryButtonState] = useState(true);
   let [itemToDisplay, setItemToDisplay] = useState({});
+  let [recordBookOpen, setRecordBookOpen] = useState(false);
+  let [inventoryOpen, setInventoryOpen] = useState(false);
   let [modState, setModState] = useState({
     playerVantage: 0,
     playerSkillMod: 0,
@@ -73,6 +83,9 @@ export default function MainContent({
           setCurrentSeason={setSeason}
           seasonDay={seasonDay}
           setSeasonDay={setSeasonDay}
+          currentWeather={currentWeather}
+          setCurrentWeather={setWeather}
+          saveGame={() => persistGame(currentPlayer, currentSeason, currentWeather, seasonDay)}
         />
         <br />
         <PlayerFishHistoryButton
@@ -81,18 +94,32 @@ export default function MainContent({
           historyButtonState={historyButtonState}
           setHistoryButtonState={setHistoryButtonState}
         />
-        <Button disabled={!currentPlayer.inventory.length} cname="Button-small">
+        <Button
+          disabled={!currentPlayer.fishHistory.length}
+          cname="Button-small"
+          callback={() => setRecordBookOpen(true)}
+        >
+          Record Book
+        </Button>
+        <RecordBook player={currentPlayer} active={recordBookOpen} onClose={() => setRecordBookOpen(false)} />
+        <Button
+          disabled={!currentPlayer.inventory.items.length}
+          cname="Button-small"
+          callback={() => setInventoryOpen(true)}
+        >
           Inventory
         </Button>
         <EventLog>{logsState}</EventLog>
         <PlayerInventory
           inventory={currentPlayer.inventory}
+          active={inventoryOpen}
+          onClose={() => setInventoryOpen(false)}
           mods={modState}
           setMods={setModState}
           setItemTooltip={setItemToDisplay}
         />
-        <DevTools location={currentLocation} mods={modState} setMods={setModState} />
-        <ItemTooltip item={itemToDisplay} />
+        <DevTools location={currentLocation} player={currentPlayer} />
+        <ItemTooltip tooltip={itemToDisplay} />
       </Container>
     );
   } else return <StartScreen player={currentPlayer} setCurrentPlayer={setCurrentPlayer} />;

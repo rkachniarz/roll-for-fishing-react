@@ -93,15 +93,13 @@ export class Player {
     this.fishFind = getRandomNumber(this.class.fishFindMin, this.class.fishFindMax);
     this.totalxp = 0;
     this.level = 0;
+    this.totalCasts = 0;
     this.fishHistory = [];
-    this.inventory = [];
-    // {
-    //   fishBucket: [],
-    //   junk: [],
-    //   common: [],
-    //   uncommon: [],
-    // }
-    this.junkPile = [];
+    this.inventory = {
+      fishBucket: [],
+      junk: [],
+      items: [],
+    };
   }
 
   create({ name, playerClass, skill, treasureFind, fishFind }) {
@@ -121,7 +119,7 @@ export class Player {
     } else return false;
   }
 
-  restore({ name, playerClass, skill, treasureFind, fishFind, totalxp, level, inventory }) {
+  restore({ name, playerClass, skill, treasureFind, fishFind, totalxp, level, totalCasts, inventory, fishHistory }) {
     this.name = name;
     this.class = playerClass;
     this.skill = skill;
@@ -129,6 +127,12 @@ export class Player {
     this.fishFind = fishFind;
     this.totalxp = totalxp;
     this.level = level;
-    this.inventory = inventory;
+    this.totalCasts = totalCasts ?? 0;
+    this.inventory = {
+      fishBucket: inventory?.fishBucket ?? [],
+      junk: inventory?.junk ?? [],
+      items: inventory?.items ?? [],
+    };
+    this.fishHistory = fishHistory ?? [];
   }
 }
