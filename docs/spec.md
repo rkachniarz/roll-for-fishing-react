@@ -56,13 +56,14 @@ decides. *(D29)*
 - **R2.4** No strike within **3 seconds** of the splash: whatever was on the line is gone, and no roll is made. The cast
   ends as resolved; then nothing happens to the bobber for 5 seconds, after which the line counts as freshly cast, a
   new cast with new dice. A tap during those 5 seconds pulls the line out (R2.5). A second miss in a row reels the line
-  in. *(D64, the limit provisional)*
+  in. *(D64)*
 - **R2.5** A strike before any bite pulls the line out: the cast ends with nothing. *(D15, provisional)*
 - **R2.6** A successful strike leads to the fishing roll: d20 + skill + modifiers against the fish's difficulty. A natural
   20 always lands the fish. This roll is always shown to the player (R5).
 - **R2.7** Reaction windows, bite delays and the 3-second limit are game values that items, perks and abilities can change.
 - **R2.8** Every cast ends in a splash, whatever is on the line: junk and treasure bite too. Only a fish fights back
-  (the d20, R2.6); anything else is landed by any strike in time. A "nothing" result is an empty hook. *(D64)*
+  (the d20, R2.6); anything else is landed by any strike in time. A "nothing" result is reported as an empty hook. No animation shows a fish or item being reeled in.
+  *(D64, D69)*
 
 ### R3: What is on the line
 

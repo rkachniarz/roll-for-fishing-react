@@ -9,7 +9,7 @@ Phase 1, the feel trial, is playable: the lake scene from the sketch in placehol
 for the splash, strike, a graded reaction and a d20 roll. What's left of Phase 1 is the frame-rate check on a phone and
 the write-up. The design has grown since (buffs, the stew, rods, bait, surface features, content as data: R12–R15,
 D28–D47); the game is still in its vision phase, so there's no rush to build on it. Phase 2 starts with the content
-pipeline (2.14); its calls are made (D63–D66). Phase 3 waits for the owner's layout sketch (Q-38).
+pipeline (2.14); its calls are made (D63–D66). Phase 3 waits for the owner's layout sketch (Q-38). Q-39 is open.
 
 ## Where things are
 
@@ -30,6 +30,9 @@ Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, 
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
 Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66).
 
+- **Q-39** How is a catch presented, with no reeling-in animation (D69)? Proposal, after WoW: a small loot window, or
+  WoW's auto-loot line, with the icon in a rarity-coloured border and the name in its rarity colour, alongside the log
+  line. Escapes and empty hooks get the log line only.
 - **Q-38** The screen layout (R16.1, D67): the WoW mapping is agreed; the owner's sketch is to come before Phase 3.
 
 ---
@@ -107,7 +110,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
   when hand-drawn art arrives (D9).
 - [ ] **4.2** Backdrops per spot in the sketch's layout.
 - [ ] **4.3** Day/night and seasonal palettes; weather overlays: rain, snow, wind on the water, cloud shadows (R7.5).
-- [ ] **4.4** Catch and escape feedback: the fish lifted out, its silhouette and size.
+- [ ] **4.4** Catch and escape feedback, with no reeling-in animation (D69; Q-39).
 - [ ] **4.5** Surface features: schools, curious spots and disturbances on the water, with their own stream, and their
   effect on the odds when the bobber lands in one (R14, D33, D40, D62).
 
