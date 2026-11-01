@@ -74,7 +74,7 @@ The rolls behind a cast, in order. All are seeded (R9.1) and, at first, hidden (
 - **R3.5** **The fish's resistance:** the fish's own d20 (with its own advantage or disadvantage) is added to its
   difficulty.
 - **R3.6** A fish that gets away can be met again later, marked as "seen before", and the catch record remembers how many
-  tries it took.
+  tries it took. A released fish (R8.3) joins the same pool; caught again, it counts as a new catch. *(D59, D60)*
 
 ### R4: Fish and records
 
@@ -244,8 +244,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R13.3** **Bait** is an optional consumable attached to the rod. Fishing without bait always works. Bait raises the
   chance of a fish rather than junk or treasure (R3.1), and some baits favour particular fish (bread pulp, meat, live
   bait). It is used up when a fish is caught, with a chance that it is saved, and the message says which ("[bait] was
-  recovered", "[fish] has eaten [bait]"). Items can raise the recovery chance. *(D36, D39; open: Q-22, lost on an
-  escape?)*
+  recovered", "[fish] has eaten [bait]"). Items can raise the recovery chance. A fish that gets away takes the bait
+  with a small chance, 5% for now ("[fish] got away with [bait]"). *(D36, D39, D61)*
 - **R13.4** Any fish landed in the Tiny size band (R3.3) can be used as bait, to catch predators. It is caught like any
   other fish first (accomplishments book, bucket). *(D36, D41)*
 - **R13.5** Rods follow R8.5: each better rod has a downside, which lets its upsides be stronger. For example, a more
@@ -258,7 +258,9 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   aim rather than on it (R2.1), hitting one takes aim and an accurate rod. *(D33, D34)*
 - **R14.3** Features drift around the scene and thin out as they are fished. A school favours a species or raises the
   bite rate; sometimes a single, specific big fish shows just under the surface. A curious spot does the same for
-  treasure or specific junk. *(D40; open: Q-23, always visible?)*
+  treasure or specific junk. *(D40)*
+- **R14.5** Features appear at random or are triggered (by an event, an item, the weather). They are never hidden: a
+  feature is either on the water, visible and aimable, or not there at all. *(D62)*
 - **R14.4** A disturbance starts a magical event (R10): a fish that can talk, a lady of the lake, a merman fishing for
   people, or a portal to hell that pulls the player in and changes the location (R11). *(D40)*
 

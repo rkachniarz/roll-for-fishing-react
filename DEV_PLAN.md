@@ -9,7 +9,7 @@ Phase 1, the feel trial, is playable: the lake scene from the sketch in placehol
 for the splash, strike, a graded reaction and a d20 roll. What's left of Phase 1 is the frame-rate check on a phone and
 the write-up. The design has grown since (buffs, the stew, rods, bait, surface features, content as data: R12–R15,
 D28–D47); the game is still in its vision phase, so there's no rush to build on it. Phase 2 starts with the content
-pipeline (2.14). Q-22 and Q-23 are open.
+pipeline (2.14). No questions are open.
 
 ## Where things are
 
@@ -28,12 +28,9 @@ pipeline (2.14). Q-22 and Q-23 are open.
 Answered ones move into decisions.md (Q-1 → D9, Q-2 → D10, Q-3 → D19, Q-4 → D20/D21, Q-5 → D11, Q-6 → D22,
 Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, Q-13 → D2/D3/D8, Q-14 → "Ideas for later",
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
-Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59).
+Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62).
 
-- **Q-22** Is bait lost when a fish bites and then gets away (R13.3, D39)? D39 only says it is used up when a fish is
-  caught.
-- **Q-23** Are surface features (R14) always visible, or are some revealed like hidden rolls (R5), by levels, perks or
-  items?
+None open right now.
 
 ---
 
@@ -107,7 +104,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 - [ ] **4.3** Day/night and seasonal palettes; weather overlays: rain, snow, wind on the water, cloud shadows (R7.5).
 - [ ] **4.4** Catch and escape feedback: the fish lifted out, its silhouette and size.
 - [ ] **4.5** Surface features: schools, curious spots and disturbances on the water, with their own stream, and their
-  effect on the odds when the bobber lands in one (R14, D33, D40; Q-23).
+  effect on the odds when the bobber lands in one (R14, D33, D40, D62).
 
 ## Phase 5: Items and inventory
 
@@ -123,7 +120,7 @@ Requirements R8.
   and the released fish joins the spot's escaped-fish pool (R8.3, R3.6, D24, D50, D57, D59).
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI.
 - [ ] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38).
-- [ ] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41; Q-22).
+- [ ] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41, D61).
 
 ## Phase 6: Classes, levels, abilities, knowledge
 
@@ -180,3 +177,5 @@ Not scheduled.
 
 - **Consumables as a hand of cards** along the bottom of the screen, to make using them more tempting. A loose idea from
   the owner, not a decision.
+- **Catching the same fish again and again**: a hidden event or achievement for catching one released fish several
+  times (D60).
