@@ -147,8 +147,9 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   and a tooltip with name (coloured by rarity), effects, downsides (in red) and flavour text.
 - **R8.2** Equipment slots (e.g. rod, line, bait, hat, two trinkets): only equipped items apply their effects.
 - **R8.3** Caught fish go into a bucket container, which holds only fish; the bags hold everything else. Fish keep their
-  species and size, and stack only with an identical twin. No capacity for now. Uses for fish (selling, eating for
-  buffs, quests) unlock gradually as the player fishes more. *(D24, D50; open: Q-31, a bucket capacity)*
+  species and size, and stack only with an identical twin. The starting bucket holds 16 fish, so a full one sends the
+  player to town; the bags stay generous. Uses for fish (selling, eating for buffs, quests) unlock gradually as the
+  player fishes more. *(D24, D50, D57; open: Q-34, catching with a full bucket)*
 - **R8.4** Item kinds: trash (low value), quest items (start a storyline), collectibles (e.g. map fragments that unlock a
   location when complete), gear, consumables, and alchemical ingredients (junk the Alchemist buys, R11.7).
 - **R8.5** **Every beneficial item has at least one downside.** The data is checked for this.
@@ -195,6 +196,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 
 - **R11.1** Locations each have their own fish, non-fish and event tables, and spots within them that add to those
   tables. The player starts at the Lake behind the inn and can switch freely between unlocked locations.
+- **R11.8** Each location has a map of its spots. While at a location, the player can switch spots at any time. Spots
+  start unknown and are learned about like other entries (R4.5). *(D58)*
 - **R11.2** New locations are unlocked through collectibles and quests (River, Mage Tower pools); quest locations may
   disappear once done.
 - **R11.3** **Weather and seasons:** the prototype's weather engine, ported (PORTING-NOTES §1.1): four seasons, each with

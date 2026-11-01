@@ -9,7 +9,7 @@ Phase 1, the feel trial, is playable: the lake scene from the sketch in placehol
 for the splash, strike, a graded reaction and a d20 roll. What's left of Phase 1 is the frame-rate check on a phone and
 the write-up. The design has grown since (buffs, the stew, rods, bait, surface features, content as data: R12–R15,
 D28–D47); the game is still in its vision phase, so there's no rush to build on it. Phase 2 starts with the content
-pipeline (2.14). Q-22, Q-23, Q-31 and Q-33 are open.
+pipeline (2.14). Q-22, Q-23 and Q-34 are open.
 
 ## Where things are
 
@@ -28,16 +28,15 @@ pipeline (2.14). Q-22, Q-23, Q-31 and Q-33 are open.
 Answered ones move into decisions.md (Q-1 → D9, Q-2 → D10, Q-3 → D19, Q-4 → D20/D21, Q-5 → D11, Q-6 → D22,
 Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, Q-13 → D2/D3/D8, Q-14 → "Ideas for later",
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
-Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-32 → D55).
+Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58).
 
 - **Q-22** Is bait lost when a fish bites and then gets away (R13.3, D39)? D39 only says it is used up when a fish is
   caught.
 - **Q-23** Are surface features (R14) always visible, or are some revealed like hidden rolls (R5), by levels, perks or
   items?
-- **Q-31** Does the bucket get a capacity (R8.3, D50)? A full bucket would send the player to town; the bags should never
-  make the player feel buried in junk. Not decided yet.
-- **Q-33** What are spots for (R11.1)? They add to a location's tables, but nothing says how the player picks one.
-  Surface features and aiming (R14, D34) may now do the job spots were meant for.
+- **Q-34** What happens to a fish caught when the bucket is full (R8.3, D57)? In WoW, loot that doesn't fit stays in the
+  loot window and is lost when it closes. Options: the same (the fish is lost, with a message), a prompt to release a
+  fish from the bucket to make room, or no cast allowed while the bucket is full.
 
 ---
 
@@ -123,7 +122,7 @@ Requirements R8.
 - [ ] **5.3** Port the seven items with real downsides (§C.3), plus about 15 more; the "every upside has a downside" data
   test (R8.5).
 - [ ] **5.4** Tooltips generated from effects (R8.6).
-- [ ] **5.5** Fish bucket: fish only, identical twins stack, no capacity for now (R8.3, D24, D50; Q-31).
+- [ ] **5.5** Fish bucket: fish only, identical twins stack, 16 fish to start (R8.3, D24, D50, D57; Q-34).
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI.
 - [ ] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38).
 - [ ] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41; Q-22).
@@ -156,7 +155,8 @@ Requirements R10.
 
 Requirements R5.3, R11.
 
-- [ ] **8.1** Location switcher; spot tables filled in.
+- [ ] **8.1** Location switcher; each location's spot map, switching spots at any time, spots learned about before
+  they show; spot tables filled in (R11.8, D58).
 - [ ] **8.2** Unlocks through map fragments and quests; the discovery meter.
 - [ ] **8.3** The town: inn and scrap dealer, copper; fish put into the inn's perpetual stew for a buff, stronger for
   rarer fish and longer for more fish (R11.5, R12.6, D24, D28, D37).
