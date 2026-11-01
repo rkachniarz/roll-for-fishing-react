@@ -160,8 +160,6 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R8.4** Four item categories: **fish**, **treasure** (gear and other items with effects), **consumables** (bait,
   potions…) and **junk**, the catch-all for everything else. Much junk has a use: an event requirement, barter
   currency, an alchemical ingredient (R11.7), a quest item, a collectible such as a map fragment. *(D65)*
-- **R8.10** An item marked unique can be found once per save. Most treasure is unique, as are some junk items (quest
-  items). A location whose unique items are all found stops offering them. *(D65)*
 - **R8.5** **Every beneficial item has at least one downside.** The data is checked for this.
 - **R8.6** Tooltips are generated from an item's effects, so text and behaviour can't disagree.
 - **R8.7** Everything works by touch: long-press to drag, tap to inspect, slots at least 44 CSS px. Nothing depends on
@@ -170,6 +168,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   (orange). *(D49)*
 - **R8.9** Items are hand-made: each is defined once and is always the same. An effect may roll when it applies (+1d4
   to a roll), with a named die (D5). *(D48)*
+- **R8.10** An item marked unique can be found once per save. Most treasure is unique, as are some junk items (quest
+  items). A location whose unique items are all found stops offering them. *(D65)*
 
 ### R9: Non-functional
 
