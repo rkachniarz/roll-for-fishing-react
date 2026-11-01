@@ -9,7 +9,7 @@ Phase 1, the feel trial, is playable: the lake scene from the sketch in placehol
 for the splash, strike, a graded reaction and a d20 roll. What's left of Phase 1 is the frame-rate check on a phone and
 the write-up. The design has grown since (buffs, the stew, rods, bait, surface features, content as data: R12–R15,
 D28–D47); the game is still in its vision phase, so there's no rush to build on it. Phase 2 starts with the content
-pipeline (2.14). No questions are open.
+pipeline (2.14); its calls are made (D63–D66). Phase 3 waits for the owner's layout sketch (Q-38).
 
 ## Where things are
 
@@ -28,9 +28,9 @@ pipeline (2.14). No questions are open.
 Answered ones move into decisions.md (Q-1 → D9, Q-2 → D10, Q-3 → D19, Q-4 → D20/D21, Q-5 → D11, Q-6 → D22,
 Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, Q-13 → D2/D3/D8, Q-14 → "Ideas for later",
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
-Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62).
+Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66).
 
-None open right now.
+- **Q-38** The screen layout (R16.1, D67): the WoW mapping is agreed; the owner's sketch is to come before Phase 3.
 
 ---
 
@@ -68,16 +68,19 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 - [ ] **2.4** Port the weather engine faithfully, fixing PORTING-NOTES §1.1 (Torrential rain's missed edge line,
   random-at-load values); write the 38 missing Autumn and Winter descriptions (R11.3). A data test for the edge rule
   (D26): every marked edge repeats, every other edge wraps.
-- [ ] **2.5** Time as its own clock, advanced per resolved cast (R11.4).
+- [ ] **2.5** Time as its own clock: 30 game minutes per resolved cast, 48-cast days, 28-day seasons, the weather
+  stepping once per cast (R11.4, D66).
 - [ ] **2.6** The cast pipeline with hooks: bite → which fish → size → strike → player roll → fish roll → outcome → loot
   → XP. Base stats plus derived modifiers on every game value (D13, R6.6), including the base Fish Find and Treasure
-  Find the prototype ignored (D20). Roll records with visibility (R5.1).
+  Find the prototype ignored (D20). Roll records with visibility (R5.1). Everything on the line is rolled when the line
+  goes out (D63). Every cast splashes; only fish get the d20; a missed splash resolves the cast, then 5 seconds of
+  nothing and a fresh cast, and a second miss in a row reels in (R2.4, R2.8, D64).
 - [ ] **2.9** "Next n casts" buff charges, spent when the line goes out, voided casts included (R1.5, D22).
 - [ ] **2.11** Timed buffs and debuffs alongside cast-counted ones (R12.1, R12.2): timers count down only while
   the game is open (D32).
 - [ ] **2.10** Luck as a hidden stat in the state, for events to check later (R6.7).
 - [ ] **2.7** Junk and treasure ported into `content/` (R3.4), using the effect vocabulary (2.15); §C.3 then points at
-  `content/`. The escaped-fish pool (R3.6).
+  `content/`. Unique items, found once per save (R8.10, D65). The escaped-fish pool (R3.6).
 - [ ] **2.12** The rod in the game state: the starting stick, whose stats feed the cast as game values: accuracy, reaction
   windows, bite delay (R13.1, R13.2, D35). An empty bait slot by default (R13.3).
 - [ ] **2.13** Cast scatter: the bobber lands within the rod's accuracy of the aimed point, drawn from its own stream
@@ -87,11 +90,13 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 ## Phase 3: Core loop, playable
 
 - [ ] **3.1** The scene driven by the Phase 2 engine: whatever bit, how big, what came up; the visible roll (R2.6, R5).
-- [ ] **3.2** Log, accomplishments book (R4.2), weather and time display, class and stats, XP and levels.
+- [ ] **3.2** The screen laid out as WoW's (R16.1, D67; Q-38): log, accomplishments book (R4.2), weather and time
+  display, class and stats, XP bar and levels.
 - [ ] **3.3** Character creation: name generator, gender, class (gendered names, D19), stat rolls (R6.1).
-- [ ] **3.4** `?dev` bench: location, spot, weather, time, items, level, and as many game values as practical (R9.5,
-  D27).
-- [ ] **3.5** Deployed to GitHub Pages; playable end to end on a phone.
+- [ ] **3.4** `?dev` bench: location, spot, weather, time, items, level, and as many game values as practical; an
+  "empty bucket" button (R9.5, D27, D68).
+- [ ] **3.5** Deployed to GitHub Pages, so the owner can play anywhere without a server; playable end to end on a phone
+  (D68).
 - [ ] **3.6** Buff and debuff bar at the top right of the game area, WoW style: green and red rows, the duration in the
   corner (nearest minute, then seconds), a description on hover or tap, cancel a buff by right-click or long-press
   (R12.3–R12.7, D29, D31).

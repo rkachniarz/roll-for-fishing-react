@@ -1,6 +1,6 @@
 # Roll for Fishing: design and requirements
 
-What the game is meant to be: the vision, the requirements (`R1`–`R15`) and the catalogues. Code cites these by number
+What the game is meant to be: the vision, the requirements (`R1`–`R16`) and the catalogues. Code cites these by number
 (`R2.3`, `§C.2`). The reasons behind them are in [decisions.md](decisions.md); work still to do is in
 [DEV_PLAN.md](../DEV_PLAN.md). A requirement changes by recording a decision first, then editing it here.
 
@@ -53,15 +53,21 @@ decides. *(D29)*
   with spray and ripples.
 - **R2.3** The player strikes by tapping anywhere on the scene, clicking, or pressing the key. Reaction time, from the
   splash appearing on screen to the strike, modifies the fishing roll: **fast +1, ok +0, bad −1**. *(D11)*
-- **R2.4** No strike within **3 seconds** of the splash: the fish is gone, and no roll is made.
+- **R2.4** No strike within **3 seconds** of the splash: whatever was on the line is gone, and no roll is made. The cast
+  ends as resolved; then nothing happens to the bobber for 5 seconds, after which the line counts as freshly cast, a
+  new cast with new dice. A tap during those 5 seconds pulls the line out (R2.5). A second miss in a row reels the line
+  in. *(D64, the limit provisional)*
 - **R2.5** A strike before any bite pulls the line out: the cast ends with nothing. *(D15, provisional)*
 - **R2.6** A successful strike leads to the fishing roll: d20 + skill + modifiers against the fish's difficulty. A natural
   20 always lands the fish. This roll is always shown to the player (R5).
 - **R2.7** Reaction windows, bite delays and the 3-second limit are game values that items, perks and abilities can change.
+- **R2.8** Every cast ends in a splash, whatever is on the line: junk and treasure bite too. Only a fish fights back
+  (the d20, R2.6); anything else is landed by any strike in time. A "nothing" result is an empty hook. *(D64)*
 
 ### R3: What is on the line
 
-The rolls behind a cast, in order. All are seeded (R9.1) and, at first, hidden (R5).
+The rolls behind a cast, in order. All are seeded (R9.1) and, at first, hidden (R5). They are made when the line goes
+out; the splash only reveals the result. *(D63)*
 
 - **R3.1** **Bite or not:** whether a fish takes the bait at all. Fish Find (base plus modifiers) raises the chance. With no
   bite, the cast still resolves, via the non-fish table (R3.4). *(D20)*
@@ -94,8 +100,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   found at a location (R5).
 - **R4.6** A location's completion can drop when content is added. Retired content stays in the book for whoever found
   it but doesn't count towards completion. *(D52)*
-- **R4.7** Every fish has a rarity (R8.8): its species' rarity, raised by its size band. Legendary fish are named and
-  unique. *(D49)*
+- **R4.7** Every fish has a rarity (R8.8): its species' rarity, shifted by its size band (Tiny −1 tier, never below
+  Poor; Gigantic +1; Humongous +2; capped at Epic). Legendary fish are named and unique. *(D49, D63)*
 
 ### R5: Hidden rolls and knowledge
 
@@ -109,7 +115,7 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 
 - **R6.1** The player has a name (with a generator), a gender (M/F), a class, and three stats: Fishing Skill (added to
   the d20), Fish Find (R3.1) and Treasure Find (R3.4). Stats are rolled within the class's ranges at creation, with
-  rerolls (§C.1). Class names follow the gender where they need to (Rogue Fisherman / Fisherwoman). *(D19, D20)*
+  unlimited rerolls (§C.1, D63). Class names follow the gender where they need to (Rogue Fisherman / Fisherwoman). *(D19, D20)*
 - **R6.2** Fish and treasure give XP; levels follow the XP curve (§C.1).
 - **R6.3** Each level-up offers a choice between two perks (§C.2): passive bonuses, and active abilities with cooldowns
   counted in casts.
@@ -151,8 +157,11 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   player to town; the bags stay generous. Uses for fish (selling, eating for buffs, quests) unlock gradually as the
   player fishes more. Landing a fish with a full bucket asks the player to release one, the new one included; a
   released fish joins the spot's pool of fish that got away (R3.6). *(D24, D50, D57, D59)*
-- **R8.4** Item kinds: trash (low value), quest items (start a storyline), collectibles (e.g. map fragments that unlock a
-  location when complete), gear, consumables, and alchemical ingredients (junk the Alchemist buys, R11.7).
+- **R8.4** Four item categories: **fish**, **treasure** (gear and other items with effects), **consumables** (bait,
+  potions…) and **junk**, the catch-all for everything else. Much junk has a use: an event requirement, barter
+  currency, an alchemical ingredient (R11.7), a quest item, a collectible such as a map fragment. *(D65)*
+- **R8.10** An item marked unique can be found once per save. Most treasure is unique, as are some junk items (quest
+  items). A location whose unique items are all found stops offering them. *(D65)*
 - **R8.5** **Every beneficial item has at least one downside.** The data is checked for this.
 - **R8.6** Tooltips are generated from an item's effects, so text and behaviour can't disagree.
 - **R8.7** Everything works by touch: long-press to drag, tap to inspect, slots at least 44 CSS px. Nothing depends on
@@ -205,7 +214,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   19 weathers on a hex map, drifting one step at a time; fish preferences respond to temperature, wind, clouds and
   precipitation. The directions carry no meaning; the 2d6 bias towards some of them is intended. A move off the map
   wraps around, except across a marked edge, where the weather stays the same. *(D26)*
-- **R11.4** **Time** is its own clock: each resolved cast advances it by a set amount; it does not depend on the weather.
+- **R11.4** **Time** is its own clock: each resolved cast advances it by 30 game minutes; a day is 48 casts and a season
+  28 days. The weather steps once per cast. All of these are game values. *(D66)*
 - **R11.5** The town: the inn (buys fish; upgrades raise demand), a scrap dealer (buys junk), later more vendors. Copper
   is the currency. The first use of fish: putting them into the inn's perpetual stew for a buff (R12.6). *(D24, D28)*
 - **R11.6** The game has no ending; it ends when the player stops. Collecting (R4) is the long-term goal. *(D23)*
@@ -279,6 +289,13 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R15.6** Events are written as text, with a fixed vocabulary of requirements and effects. *(D45)*
 - **R15.7** All player-facing text is read through a string table, so the game could be translated. *(D46)*
 
+
+### R16: The screen
+
+- **R16.1** The layout follows WoW's: the log under the scene (the chat frame), the XP bar along the bottom, weather,
+  time and season top right (the minimap and clock) beside the buff bar (R12.3), and a row of buttons (the micro menu)
+  opening the character, accomplishments, bucket and bags, and spot map panels over the scene. On a wide screen the log
+  and panels sit beside the scene. *(D67; the owner's sketch to come)*
 ---
 
 ## 3. Catalogues
