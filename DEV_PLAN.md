@@ -9,7 +9,7 @@ Phase 1, the feel trial, is playable: the lake scene from the sketch in placehol
 for the splash, strike, a graded reaction and a d20 roll. What's left of Phase 1 is the frame-rate check on a phone and
 the write-up. The design has grown since (buffs, the stew, rods, bait, surface features, content as data: R12–R15,
 D28–D47); the game is still in its vision phase, so there's no rush to build on it. Phase 2 starts with the content
-pipeline (2.14). Q-22, Q-23 and Q-34 are open.
+pipeline (2.14). Q-22 and Q-23 are open.
 
 ## Where things are
 
@@ -28,15 +28,12 @@ pipeline (2.14). Q-22, Q-23 and Q-34 are open.
 Answered ones move into decisions.md (Q-1 → D9, Q-2 → D10, Q-3 → D19, Q-4 → D20/D21, Q-5 → D11, Q-6 → D22,
 Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, Q-13 → D2/D3/D8, Q-14 → "Ideas for later",
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
-Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58).
+Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59).
 
 - **Q-22** Is bait lost when a fish bites and then gets away (R13.3, D39)? D39 only says it is used up when a fish is
   caught.
 - **Q-23** Are surface features (R14) always visible, or are some revealed like hidden rolls (R5), by levels, perks or
   items?
-- **Q-34** What happens to a fish caught when the bucket is full (R8.3, D57)? In WoW, loot that doesn't fit stays in the
-  loot window and is lost when it closes. Options: the same (the fish is lost, with a message), a prompt to release a
-  fish from the bucket to make room, or no cast allowed while the bucket is full.
 
 ---
 
@@ -122,7 +119,8 @@ Requirements R8.
 - [ ] **5.3** Port the seven items with real downsides (§C.3), plus about 15 more; the "every upside has a downside" data
   test (R8.5).
 - [ ] **5.4** Tooltips generated from effects (R8.6).
-- [ ] **5.5** Fish bucket: fish only, identical twins stack, 16 fish to start (R8.3, D24, D50, D57; Q-34).
+- [ ] **5.5** Fish bucket: fish only, identical twins stack, 16 fish to start; a full bucket asks which fish to release,
+  and the released fish joins the spot's escaped-fish pool (R8.3, R3.6, D24, D50, D57, D59).
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI.
 - [ ] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38).
 - [ ] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41; Q-22).

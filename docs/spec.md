@@ -149,7 +149,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R8.3** Caught fish go into a bucket container, which holds only fish; the bags hold everything else. Fish keep their
   species and size, and stack only with an identical twin. The starting bucket holds 16 fish, so a full one sends the
   player to town; the bags stay generous. Uses for fish (selling, eating for buffs, quests) unlock gradually as the
-  player fishes more. *(D24, D50, D57; open: Q-34, catching with a full bucket)*
+  player fishes more. Landing a fish with a full bucket asks the player to release one, the new one included; a
+  released fish joins the spot's pool of fish that got away (R3.6). *(D24, D50, D57, D59)*
 - **R8.4** Item kinds: trash (low value), quest items (start a storyline), collectibles (e.g. map fragments that unlock a
   location when complete), gear, consumables, and alchemical ingredients (junk the Alchemist buys, R11.7).
 - **R8.5** **Every beneficial item has at least one downside.** The data is checked for this.
