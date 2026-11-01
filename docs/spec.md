@@ -297,6 +297,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   time and season top right (the minimap and clock) beside the buff bar (R12.3), and a row of buttons (the micro menu)
   opening the character, accomplishments, bucket and bags, and spot map panels over the scene. On a wide screen the log
   and panels sit beside the scene. *(D67; the owner's sketch to come)*
+- **R16.2** Every cast's result is written to the log. Anything landed also appears as its icon at the bobber, flies to
+  the bucket and bags button and disappears; escapes and empty hooks get only the log line. *(D70)*
 ---
 
 ## 3. Catalogues
