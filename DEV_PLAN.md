@@ -3,15 +3,18 @@
 What's left to do. Tick boxes as work lands; record decisions in [docs/decisions.md](docs/decisions.md) rather than
 silently changing requirements.
 
-**Where things stand (2026-10-28):** fresh start (D1). Phase 0 is done: the new skeleton, the seeded dice, the docs.
+**Where things stand (2026-11-01):** fresh start (D1). Phase 0 is done: the new skeleton, the seeded dice, the docs.
 Phase 1, the feel trial, is playable: the lake scene from the sketch in placeholder pixel art, cast where you tap, wait
 for the splash, strike, a graded reaction and a d20 roll. The Normal timings are kept for now (D27); what's left of
 Phase 1 is the frame-rate check on a phone and the write-up. Q-1 to Q-15 are answered (D19–D27). The 2026-11-01 notes
 added buffs and debuffs (R12), the stew loop (D28), WoW as the UI reference (D29) and the Alchemist (D30), with the buff
 bar's details (D31) and how timed buffs count down (D32). A second batch the same day added rods with their own stats
 (R13, D35), bait (D36), a bobber that lands near the aim rather than on it (D34), and surface features such as fish
-schools (R14, D33). Q-16 and Q-18 to Q-21 are open. The game is still in its vision phase, so there's no rush to build
-on them.
+schools (R14, D33). Q-16 and Q-18 to Q-21 were answered the same day (D37–D41): a timed stew buff, rods with
+downsides, how bait works and is used up, how surface features behave, and Tiny fish as bait. Q-22 and Q-23 are open.
+Game content becomes data in `content/`, built by `npm run content`, with saves that survive content changes (R15,
+D42–D47); Phase 2 now starts with that pipeline (2.14). The game is still in its vision phase, so there's no rush to
+build on the rest.
 
 ## Where things are
 
@@ -29,21 +32,12 @@ on them.
 
 Answered ones move into decisions.md (Q-1 → D9, Q-2 → D10, Q-3 → D19, Q-4 → D20/D21, Q-5 → D11, Q-6 → D22,
 Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, Q-13 → D2/D3/D8, Q-14 → "Ideas for later",
-Q-15 → D27, Q-17 → D32).
+Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41).
 
-- **Q-16** Does the stew buff (R12.6) run on time or on casts? *Leaning: time.* Cast-counted buffs are kept for
-  stronger effects (D28).
-- **Q-18** Do rods follow "every beneficial item has a downside" (R8.5)? For example, a more accurate rod with a
-  shorter reaction window. WoW's poles are simply better as you go (D29), which would make rods an exception to R8.5.
-- **Q-19** How is bait used up, and what does it do? Options: one per cast, one per bite, or lost only when a fish takes
-  it; or, as WoW's lures do, a timed buff on the rod (R12). Does it change which fish bite, the bite chance, the bite
-  delay, or a mix?
-- **Q-20** How do surface features behave (R14)? The earlier idea: ripple patches that drift around the scene and thin
-  out as they are fished, with a school favouring a species or raising the bite rate. What do curious spots and
-  disturbances do differently from a school (treasure, an event)? Are they always visible, or revealed like hidden
-  rolls (R5)?
-- **Q-21** Bait fish (R13.4): is one caught like any other fish (accomplishments book, bucket) and then put on the hook
-  from the bucket? Which species count as bait fish: a set list, or anything in the Tiny size band?
+- **Q-22** Is bait lost when a fish bites and then gets away (R13.3, D39)? D39 only says it is used up when a fish is
+  caught.
+- **Q-23** Are surface features (R14) always visible, or are some revealed like hidden rolls (R5), by levels, perks or
+  items?
 
 ---
 
@@ -63,11 +57,17 @@ The riskiest part first: the reflex loop and the scene tech, before anything is 
 
 ## Phase 2: Engine core and the port
 
-Requirements R1, R3, R4, R5, R9, R11.3–R11.4. Port from `legacy-prototype` (PORTING-NOTES).
+Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype` (PORTING-NOTES). Ported data lands in
+`content/` (D42), not in code.
 
-- [ ] **2.1** `GameState` and save v1 in localStorage: versioned, saved after every resolved cast, New game (R1).
-- [ ] **2.2** Weighted tables with validation (`src/engine/tables.js`); data tests for weights, ids and references.
-- [ ] **2.3** Port the fish data and fish generation, fixing the defects in PORTING-NOTES §1.3 (R3.2, R3.3, R4.1).
+- [ ] **2.14** The content pipeline: `content/` laid out one file per entity, a JSON Schema per kind, `npm run content`
+  (checks, bundle, string table, missing-art report, overview page), the same checks in `npm test`, and a test that the
+  committed bundle is up to date (R15.1–R15.3, R15.5, R15.7, D42, D43, D46).
+- [ ] **2.1** `GameState` and save v1 in localStorage: versioned, saved after every resolved cast, New game (R1). The
+  save holds ids only; retired content still resolves; a test loads an old save against new content (R15.4, D44).
+- [ ] **2.2** Weighted tables (`src/engine/tables.js`), built from the location files and shared tables in `content/`
+  (R15.2).
+- [ ] **2.3** Port the fish data into `content/fish/` and fish generation, fixing the defects in PORTING-NOTES §1.3 (R3.2, R3.3, R4.1).
 - [ ] **2.4** Port the weather engine faithfully, fixing PORTING-NOTES §1.1 (Torrential rain's missed edge line,
   random-at-load values); write the 38 missing Autumn and Winter descriptions (R11.3). A data test for the edge rule
   (D26): every marked edge repeats, every other edge wraps.
@@ -79,7 +79,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4. Port from `legacy-prototype` (PO
 - [ ] **2.11** Timed buffs and debuffs alongside cast-counted ones (R12.1, R12.2): timers count down only while
   the game is open (D32).
 - [ ] **2.10** Luck as a hidden stat in the state, for events to check later (R6.7).
-- [ ] **2.7** Junk and treasure tables ported (R3.4); the escaped-fish pool (R3.6).
+- [ ] **2.7** Junk and treasure ported into `content/` (R3.4); the escaped-fish pool (R3.6).
 - [ ] **2.12** The rod in the game state: the starting stick, whose stats feed the cast as game values: accuracy, reaction
   windows, bite delay (R13.1, R13.2, D35). An empty bait slot by default (R13.3).
 - [ ] **2.13** Cast scatter: the bobber lands within the rod's accuracy of the aimed point, drawn from its own stream
@@ -106,7 +106,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4. Port from `legacy-prototype` (PO
 - [ ] **4.3** Day/night and seasonal palettes; weather overlays: rain, snow, wind on the water, cloud shadows (R7.5).
 - [ ] **4.4** Catch and escape feedback: the fish lifted out, its silhouette and size.
 - [ ] **4.5** Surface features: schools, curious spots and disturbances on the water, with their own stream, and their
-  effect on the odds when the bobber lands in one (R14, D33; Q-20).
+  effect on the odds when the bobber lands in one (R14, D33, D40; Q-23).
 
 ## Phase 5: Items and inventory
 
@@ -119,8 +119,8 @@ Requirements R8.
 - [ ] **5.4** Tooltips generated from effects (R8.6).
 - [ ] **5.5** Fish bucket, no capacity (R8.3, D24).
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI.
-- [ ] **5.7** Better rods, found as treasure and through events (R13.1, D35; Q-18).
-- [ ] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36; Q-19, Q-21).
+- [ ] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38).
+- [ ] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41; Q-22).
 
 ## Phase 6: Classes, levels, abilities, knowledge
 
@@ -136,10 +136,12 @@ Requirements R5.2, R6.
 
 Requirements R10.
 
-- [ ] **7.1** The event engine: slides, options, requirements, effects, as data.
+- [ ] **7.1** The event engine: slides, options, requirements, effects, as data. The event text format and its
+  vocabulary written down alongside the frog encounter, and parsed by `npm run content` (R15.6, D45).
 - [ ] **7.2** Triggers: event meter, world conditions, fished-up items.
 - [ ] **7.3** The event dialog (with room for an illustration).
 - [ ] **7.4** The frog encounter (§C.6), about ten more, and one short quest chain started by a quest item.
+- [ ] **7.5** The content editor app: forms generated from the schemas, saving into `content/` (D47).
 
 ## Phase 8: World and town
 
@@ -148,7 +150,7 @@ Requirements R5.3, R11.
 - [ ] **8.1** Location switcher; spot tables filled in.
 - [ ] **8.2** Unlocks through map fragments and quests; the discovery meter.
 - [ ] **8.3** The town: inn and scrap dealer, copper; fish put into the inn's perpetual stew for a buff, stronger for
-  rarer fish and longer for more fish (R11.5, R12.6, D24, D28; Q-16).
+  rarer fish and longer for more fish (R11.5, R12.6, D24, D28, D37).
 - [ ] **8.6** The Alchemist's recurring visit: buffing potions for sale, alchemical ingredients bought; the ingredients
   added to the junk tables (R10.6, R11.7, D30).
 - [ ] **8.5** Location lists and completion percentages; knowledge (found, bought) that reveals missing entries (R4.4,

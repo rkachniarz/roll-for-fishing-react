@@ -37,7 +37,8 @@ decides. *(D29)*
   progress.
 - **R1.2** Progress is saved after every resolved cast, and on any other change of state (equipping an item, an event
   choice).
-- **R1.3** A save holds the whole game state and a version number. Loading an older save migrates it. *(D13)*
+- **R1.3** A save holds the whole game state and a version number. Loading an older save migrates it. Saves keep
+  working as content is added and changed (R15.4). *(D13, D44)*
 - **R1.4** There is always a way to start a new game, with a confirmation step.
 - **R1.5** Leaving or reloading during a cast voids that cast: no time passes and no roll is made. Buffs that last "the
   next n casts" spend a charge when the line goes out, so a voided cast still uses one up. *(D22)*
@@ -154,7 +155,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R9.1** All randomness that can affect an outcome comes from a seed, split into one stream per consumer, so a seed
   replays a session exactly. *(D4)*
 - **R9.2** Phone and desktop are both first-class targets. *(D10)*
-- **R9.3** No build step to run the game: static files served as-is. *(D2)*
+- **R9.3** No build step to run the game: static files served as-is. Content is the exception: one command builds it
+  after an edit (R15.3). *(D2, D43)*
 - **R9.4** Unit tests for the engine and data; browser checks for the page, in Chromium. *(D6)*
 - **R9.5** A development-only bench behind `?dev`: timings, and later location, weather, items, level and events, plus
   `?seed=N` replay. It exposes as many game values (R6.6) as practical, for tuning by hand. *(D27)*
@@ -207,7 +209,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   *(D31)*
 - **R12.6** **The perpetual stew** (R11.5) gives a buff that is substantial in the early game. That creates the loop:
   fish while the buff lasts, then put the catch in the stew for the next one. The buff is stronger the rarer the fish
-  added, measured against their location's table, and longer the more fish are added. *(D28; open: Q-16, time or casts)*
+  added, measured against their location's table, and longer the more fish are added. It runs on time (R12.2); each fish added is worth some extra buff time, with the
+  amounts left for balancing. *(D28, D37)*
 
 ### R13: Rods and bait
 
@@ -216,18 +219,42 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R13.2** All stats are the player's, each a total of what feeds it: character, items, buffs (R6.6). The rod and the
   character feed different stats. The character feeds the stats behind the rolls (R6.1); the rod feeds the stats behind
   the cast: **accuracy** (how far from the aim the bobber may land, R2.1), the **reaction window** for the strike bonus
-  (R2.3), and the **bite delay** (R2.2). *(D35,
-  provisional; open: Q-18, downsides)*
-- **R13.3** **Bait** is an optional consumable attached to the rod. Fishing without bait always works. *(D36; open:
-  Q-19, how it is used up and what it does)*
-- **R13.4** The smallest fish can be used as bait, to catch predators. *(D36; open: Q-21)*
+  (R2.3), and the **bite delay** (R2.2). *(D35, provisional)*
+- **R13.5** Rods follow R8.5: each better rod has a downside, which lets its upsides be stronger. For example, a more
+  accurate rod with a longer bite delay, or a wider reaction window with a bobber that drifts. *(D38)*
+- **R13.3** **Bait** is an optional consumable attached to the rod. Fishing without bait always works. Bait raises the
+  chance of a fish rather than junk or treasure (R3.1), and some baits favour particular fish (bread pulp, meat, live
+  bait). It is used up when a fish is caught, with a chance that it is saved, and the message says which ("[bait] was
+  recovered", "[fish] has eaten [bait]"). Items can raise the recovery chance. *(D36, D39; open: Q-22, lost on an
+  escape?)*
+- **R13.4** Any fish landed in the Tiny size band (R3.3) can be used as bait, to catch predators. It is caught like any
+  other fish first (accomplishments book, bucket). *(D36, D41)*
 
 ### R14: The water's surface
 
 - **R14.1** Schools of fish, curious spots and disturbances show up on the water's surface. *(D33)*
 - **R14.2** If the bobber lands directly in one, the odds of what comes up change (R3). Since the bobber lands near the
-  aim rather than on it (R2.1), hitting one takes aim and an accurate rod. *(D33, D34; open: Q-20, how they behave)*
+  aim rather than on it (R2.1), hitting one takes aim and an accurate rod. *(D33, D34)*
+- **R14.3** Features drift around the scene and thin out as they are fished. A school favours a species or raises the
+  bite rate; sometimes a single, specific big fish shows just under the surface. A curious spot does the same for
+  treasure or specific junk. *(D40; open: Q-23, always visible?)*
+- **R14.4** A disturbance starts a magical event (R10): a fish that can talk, a lady of the lake, a merman fishing for
+  people, or a portal to hell that pulls the player in and changes the location (R11). *(D40)*
 
+
+### R15: Content
+
+- **R15.1** Locations, fish, items of every kind and events can be added without changing code, one file per entity,
+  as long as existing fields and effect words can express them. *(D42)*
+- **R15.2** A location lists what can be found there, with weights, and may include shared lists; whatever only one
+  location lists is exclusive to it. *(D42)*
+- **R15.3** One command checks all content, reports mistakes and missing art, and builds what the game loads, plus a
+  read-only overview of all content. The tests run the same checks. *(D43)*
+- **R15.4** Existing saves pick up new and changed content. Ids are permanent; removed content is retired, not deleted.
+  *(D44)*
+- **R15.5** Every kind of entity has a default icon, used until its own art exists. *(D42)*
+- **R15.6** Events are written as text, with a fixed vocabulary of requirements and effects. *(D45)*
+- **R15.7** All player-facing text is read through a string table, so the game could be translated. *(D46)*
 ---
 
 ## 3. Catalogues
