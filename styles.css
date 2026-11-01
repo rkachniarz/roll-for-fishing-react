@@ -1,0 +1,176 @@
+:root {
+  --bg: #14232b;
+  --panel: #1d3540;
+  --panel-edge: #2c4f5e;
+  --text: #e8f4f0;
+  --muted: #9cbcc4;
+  --good: #7bdc7f;
+  --bad: #ff8f8f;
+  --accent: #ffd36b;
+  --gutter: 16px;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Pixelify Sans', ui-monospace, monospace;
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+/* Phone first: the scene on top, the panel below (docs/spec.md, R7.2). */
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gutter);
+  padding: var(--gutter);
+  padding-top: max(var(--gutter), env(safe-area-inset-top));
+  min-height: 100dvh;
+}
+
+/* Desktop: the panel beside the scene. */
+@media (min-width: 900px) {
+  .layout {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+  }
+}
+
+.scene-wrap {
+  flex: none;
+  line-height: 0;
+  border: 2px solid var(--panel-edge);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#scene {
+  display: block;
+  /* Hard pixel edges when the browser scales the canvas up (R7.3). */
+  image-rendering: pixelated;
+  /* Taps are strikes: no double-tap zoom, no scroll starting on the water. */
+  touch-action: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.panel {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.status {
+  margin: 0;
+  min-height: 1.35em;
+  font-size: 20px;
+}
+
+body[data-phase='bite'] .status {
+  color: var(--accent);
+}
+
+.result {
+  background: var(--panel);
+  border: 2px solid var(--panel-edge);
+  border-radius: 4px;
+  padding: 10px 12px;
+}
+
+.result .headline {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.result.caught .headline {
+  color: var(--good);
+}
+
+.result.lost .headline {
+  color: var(--bad);
+}
+
+.result .detail {
+  margin: 0;
+  color: var(--muted);
+}
+
+.stats {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.log {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.log li + li {
+  margin-top: 2px;
+}
+
+.dev {
+  border-top: 1px dashed var(--panel-edge);
+  padding-top: 8px;
+  font-size: 15px;
+}
+
+.dev summary {
+  cursor: pointer;
+  color: var(--accent);
+}
+
+.dev-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.dev-fields {
+  display: grid;
+  grid-template-columns: 1fr 90px;
+  gap: 4px 8px;
+  align-items: center;
+}
+
+.dev input,
+.dev button {
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  padding: 4px 8px;
+  min-height: 32px;
+}
+
+.dev button {
+  cursor: pointer;
+}
+
+.dev-seed {
+  color: var(--muted);
+  word-break: break-all;
+}

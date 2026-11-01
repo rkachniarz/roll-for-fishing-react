@@ -1,39 +1,18 @@
 {
-  "name": "roll-for-fishing-react",
-  "version": "0.1.0",
-  "homepage": "https://rkachniarz.github.io/roll-for-fishing-react",
+  "name": "roll-for-fishing",
+  "version": "0.2.0",
   "private": true,
+  "description": "A pixel-art fishing game where you react to the bobber's splash and roll a d20 to land the catch.",
   "type": "module",
-  "dependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.1",
-    "clsx": "^2.1.1",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5"
-  },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "serve . --listen 8001",
+    "build": "node tools/build-artifact.mjs",
+    "test": "node --test \"test/**/*.test.js\"",
+    "verify": "node tools/verify.mjs"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.7.0",
-    "gh-pages": "^6.3.0",
-    "vite": "^6.4.2",
-    "vite-plugin-svgr": "^5.2.0",
-    "vite-tsconfig-paths": "^6.1.1"
+    "esbuild": "^0.25.0",
+    "playwright": "1.64.1",
+    "serve": "^14.2.4"
   }
 }

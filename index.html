@@ -1,21 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="🎲🐟 Roll for fishing: a dice rolling fishing game."
-    />
-    <link rel="apple-touch-icon" href="logo192.png" />
-    <link rel="manifest" href="manifest.json" />
-    <title>Roll for Fishing!🎲🐟 </title>
-  </head>
-  <body>
-    <noscript>JS Disabled</noscript>
-    <div id="root"></div>
-    <script type="module" src="/src/index.jsx"></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14232b">
+  <meta name="description" content="A pixel-art fishing game: watch the bobber, strike when it splashes, and roll a d20 to land the catch.">
+  <title>Roll for Fishing</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎣</text></svg>">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap">
+  <link rel="stylesheet" href="./styles.css">
+
+  <!-- Pinned here rather than in each module, so there's one place to change a
+       version (docs/decisions.md, D2). -->
+  <script type="importmap">
+  {
+    "imports": {
+      "pixi.js": "https://cdn.jsdelivr.net/npm/pixi.js@8.22.0/dist/pixi.min.mjs"
+    }
+  }
+  </script>
+</head>
+<body data-phase="loading">
+
+<main class="layout">
+  <div class="scene-wrap" id="sceneWrap">
+    <canvas id="scene" aria-label="The lake, seen from the shore"></canvas>
+  </div>
+
+  <section class="panel">
+    <h1>Roll for Fishing</h1>
+    <p class="status" id="status" aria-live="polite">Loading the lake…</p>
+    <div class="result" id="result" hidden></div>
+    <p class="stats" id="stats"></p>
+    <ol class="log" id="log"></ol>
+
+    <details class="dev" id="devPanel" hidden>
+      <summary>Dev: reaction timing</summary>
+      <div class="dev-presets" id="devPresets"></div>
+      <div class="dev-fields" id="devFields"></div>
+      <p class="dev-seed" id="devSeed"></p>
+    </details>
+  </section>
+</main>
+
+<script type="module" src="./src/main.js"></script>
+</body>
 </html>
