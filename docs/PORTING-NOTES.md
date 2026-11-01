@@ -78,7 +78,7 @@ Keep the algorithm:
 |---|---|---|
 | Record book | `Components/RecordBook.jsx` | Per-species count, smallest, largest, average; casts and catch rate. Port the logic; rebuild the UI. |
 | Inventory stacking | `Components/PlayerInventory.jsx` | Stack by item id; show the count in the slot corner. |
-| Tooltip layout | `Components/ItemTooltip.jsx`, `App.css` | Name, description, flavour, follows the cursor. |
+| Tooltip layout | `Components/ItemTooltip.jsx`, `App.css` | Name, description, flavour, follows the cursor. On touch, a tap opens it instead (R8.7). |
 | Name generator | `Functions/player.js` | `generateName()` with its prefix and suffix lists, plus the reroll button idea. |
 | Advantage/disadvantage display | `Components/PlayerInfo.jsx`, `ModStat.jsx` | Modifier shown as base + green/red delta. |
 

@@ -1,20 +1,15 @@
 # Roll for Fishing: development plan
 
 What's left to do. Tick boxes as work lands; record decisions in [docs/decisions.md](docs/decisions.md) rather than
-silently changing requirements.
+silently changing requirements. Within a phase, tasks are listed in the order they should be done; their numbers are
+only ids, so a task added later keeps its number wherever it lands.
 
 **Where things stand (2026-11-01):** fresh start (D1). Phase 0 is done: the new skeleton, the seeded dice, the docs.
 Phase 1, the feel trial, is playable: the lake scene from the sketch in placeholder pixel art, cast where you tap, wait
-for the splash, strike, a graded reaction and a d20 roll. The Normal timings are kept for now (D27); what's left of
-Phase 1 is the frame-rate check on a phone and the write-up. Q-1 to Q-15 are answered (D19–D27). The 2026-11-01 notes
-added buffs and debuffs (R12), the stew loop (D28), WoW as the UI reference (D29) and the Alchemist (D30), with the buff
-bar's details (D31) and how timed buffs count down (D32). A second batch the same day added rods with their own stats
-(R13, D35), bait (D36), a bobber that lands near the aim rather than on it (D34), and surface features such as fish
-schools (R14, D33). Q-16 and Q-18 to Q-21 were answered the same day (D37–D41): a timed stew buff, rods with
-downsides, how bait works and is used up, how surface features behave, and Tiny fish as bait. Q-22 and Q-23 are open.
-Game content becomes data in `content/`, built by `npm run content`, with saves that survive content changes (R15,
-D42–D47); Phase 2 now starts with that pipeline (2.14). The game is still in its vision phase, so there's no rush to
-build on the rest.
+for the splash, strike, a graded reaction and a d20 roll. What's left of Phase 1 is the frame-rate check on a phone and
+the write-up. The design has grown since (buffs, the stew, rods, bait, surface features, content as data: R12–R15,
+D28–D47); the game is still in its vision phase, so there's no rush to build on it. Phase 2 starts with the content
+pipeline (2.14). Q-22, Q-23, Q-31 and Q-33 are open.
 
 ## Where things are
 
@@ -32,12 +27,17 @@ build on the rest.
 
 Answered ones move into decisions.md (Q-1 → D9, Q-2 → D10, Q-3 → D19, Q-4 → D20/D21, Q-5 → D11, Q-6 → D22,
 Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, Q-13 → D2/D3/D8, Q-14 → "Ideas for later",
-Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41).
+Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
+Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-32 → D55).
 
 - **Q-22** Is bait lost when a fish bites and then gets away (R13.3, D39)? D39 only says it is used up when a fish is
   caught.
 - **Q-23** Are surface features (R14) always visible, or are some revealed like hidden rolls (R5), by levels, perks or
   items?
+- **Q-31** Does the bucket get a capacity (R8.3, D50)? A full bucket would send the player to town; the bags should never
+  make the player feel buried in junk. Not decided yet.
+- **Q-33** What are spots for (R11.1)? They add to a location's tables, but nothing says how the player picks one.
+  Surface features and aiming (R14, D34) may now do the job spots were meant for.
 
 ---
 
@@ -64,10 +64,14 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
   (checks, bundle, string table, missing-art report, overview page), the same checks in `npm test`, and a test that the
   committed bundle is up to date (R15.1–R15.3, R15.5, R15.7, D42, D43, D46).
 - [ ] **2.1** `GameState` and save v1 in localStorage: versioned, saved after every resolved cast, New game (R1). The
-  save holds ids only; retired content still resolves; a test loads an old save against new content (R15.4, D44).
+  save holds ids only; retired content still resolves; a test loads an old save against new content (R15.4, D44). The
+  save holds every random stream's position (R1.6, D53).
+- [ ] **2.15** Game values and the effect vocabulary: every number a modifier can change, by name (R6.6), and the
+  effects items, rods, bait, buffs and events use, including dice rolled when an effect applies (R8.9, D48, D56).
 - [ ] **2.2** Weighted tables (`src/engine/tables.js`), built from the location files and shared tables in `content/`
   (R15.2).
-- [ ] **2.3** Port the fish data into `content/fish/` and fish generation, fixing the defects in PORTING-NOTES §1.3 (R3.2, R3.3, R4.1).
+- [ ] **2.3** Port the fish data into `content/fish/` and fish generation, fixing the defects in PORTING-NOTES §1.3
+  (R3.2, R3.3, R4.1). Rarity from species and size band (R4.7, D49). §C.4 then points at `content/` (D56).
 - [ ] **2.4** Port the weather engine faithfully, fixing PORTING-NOTES §1.1 (Torrential rain's missed edge line,
   random-at-load values); write the 38 missing Autumn and Winter descriptions (R11.3). A data test for the edge rule
   (D26): every marked edge repeats, every other edge wraps.
@@ -79,7 +83,8 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 - [ ] **2.11** Timed buffs and debuffs alongside cast-counted ones (R12.1, R12.2): timers count down only while
   the game is open (D32).
 - [ ] **2.10** Luck as a hidden stat in the state, for events to check later (R6.7).
-- [ ] **2.7** Junk and treasure ported into `content/` (R3.4); the escaped-fish pool (R3.6).
+- [ ] **2.7** Junk and treasure ported into `content/` (R3.4), using the effect vocabulary (2.15); §C.3 then points at
+  `content/`. The escaped-fish pool (R3.6).
 - [ ] **2.12** The rod in the game state: the starting stick, whose stats feed the cast as game values: accuracy, reaction
   windows, bite delay (R13.1, R13.2, D35). An empty bait slot by default (R13.3).
 - [ ] **2.13** Cast scatter: the bobber lands within the rod's accuracy of the aimed point, drawn from its own stream
@@ -112,12 +117,13 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 
 Requirements R8.
 
-- [ ] **5.1** Bag grid, stacking, drag and drop by touch and mouse, tap-to-inspect tooltips (R8.1, R8.7).
+- [ ] **5.1** Bag grid, stacking, drag and drop by touch and mouse, tap-to-inspect tooltips, names in rarity colours
+  (R8.1, R8.7, R8.8).
 - [ ] **5.2** Equipment slots; effects on the engine's hooks (R8.2).
 - [ ] **5.3** Port the seven items with real downsides (§C.3), plus about 15 more; the "every upside has a downside" data
   test (R8.5).
 - [ ] **5.4** Tooltips generated from effects (R8.6).
-- [ ] **5.5** Fish bucket, no capacity (R8.3, D24).
+- [ ] **5.5** Fish bucket: fish only, identical twins stack, no capacity for now (R8.3, D24, D50; Q-31).
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI.
 - [ ] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38).
 - [ ] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41; Q-22).
@@ -137,10 +143,13 @@ Requirements R5.2, R6.
 Requirements R10.
 
 - [ ] **7.1** The event engine: slides, options, requirements, effects, as data. The event text format and its
-  vocabulary written down alongside the frog encounter, and parsed by `npm run content` (R15.6, D45).
-- [ ] **7.2** Triggers: event meter, world conditions, fished-up items.
+  vocabulary written down alongside the frog encounter, and parsed by `npm run content`; effects come from 2.15
+  (R15.6, D45, D56).
+- [ ] **7.2** Triggers: event meter, world conditions, fished-up items, and hidden objectives on counters and flags
+  (R10.7, D51).
 - [ ] **7.3** The event dialog (with room for an illustration).
 - [ ] **7.4** The frog encounter (§C.6), about ten more, and one short quest chain started by a quest item.
+- [ ] **7.6** Locations an event can lock the player into until an objective is met (R10.8, D51).
 - [ ] **7.5** The content editor app: forms generated from the schemas, saving into `content/` (D47).
 
 ## Phase 8: World and town
@@ -163,6 +172,7 @@ Requirements R5.3, R11.
 - [ ] **9.2** Audio: water, splash, catch.
 - [ ] **9.3** Settings, save export/import.
 - [ ] **9.4** Collection view, fish and treasure (R4.3).
+- [ ] **9.5** Installable and offline: web app manifest and service worker (R9.8, D55).
 
 ---
 

@@ -1,6 +1,6 @@
 # Roll for Fishing: design and requirements
 
-What the game is meant to be: the vision, the requirements (`R1`–`R14`) and the catalogues. Code cites these by number
+What the game is meant to be: the vision, the requirements (`R1`–`R15`) and the catalogues. Code cites these by number
 (`R2.3`, `§C.2`). The reasons behind them are in [decisions.md](decisions.md); work still to do is in
 [DEV_PLAN.md](../DEV_PLAN.md). A requirement changes by recording a decision first, then editing it here.
 
@@ -42,6 +42,7 @@ decides. *(D29)*
 - **R1.4** There is always a way to start a new game, with a confirmation step.
 - **R1.5** Leaving or reloading during a cast voids that cast: no time passes and no roll is made. Buffs that last "the
   next n casts" spend a charge when the line goes out, so a voided cast still uses one up. *(D22)*
+- **R1.6** A save holds the position of every random stream, so a reload continues the same dice. *(D53)*
 
 ### R2: The cast
 
@@ -91,6 +92,10 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R4.5** Entries not yet found start unknown: the player can't see what is missing from a location's list. They learn
   of them by fishing more, or by obtaining or buying knowledge (a book, a tip at the inn) that a species or an item can be
   found at a location (R5).
+- **R4.6** A location's completion can drop when content is added. Retired content stays in the book for whoever found
+  it but doesn't count towards completion. *(D52)*
+- **R4.7** Every fish has a rarity (R8.8): its species' rarity, raised by its size band. Legendary fish are named and
+  unique. *(D49)*
 
 ### R5: Hidden rolls and knowledge
 
@@ -141,14 +146,19 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R8.1** Inventory works like WoW's: a grid of bag slots, one item per slot, identical items stacking, drag and drop,
   and a tooltip with name (coloured by rarity), effects, downsides (in red) and flavour text.
 - **R8.2** Equipment slots (e.g. rod, line, bait, hat, two trinkets): only equipped items apply their effects.
-- **R8.3** Caught fish go into a bucket container, with no capacity for now. Uses for fish (selling, eating for buffs,
-  quests) unlock gradually as the player fishes more. *(D24)*
+- **R8.3** Caught fish go into a bucket container, which holds only fish; the bags hold everything else. Fish keep their
+  species and size, and stack only with an identical twin. No capacity for now. Uses for fish (selling, eating for
+  buffs, quests) unlock gradually as the player fishes more. *(D24, D50; open: Q-31, a bucket capacity)*
 - **R8.4** Item kinds: trash (low value), quest items (start a storyline), collectibles (e.g. map fragments that unlock a
   location when complete), gear, consumables, and alchemical ingredients (junk the Alchemist buys, R11.7).
 - **R8.5** **Every beneficial item has at least one downside.** The data is checked for this.
 - **R8.6** Tooltips are generated from an item's effects, so text and behaviour can't disagree.
 - **R8.7** Everything works by touch: long-press to drag, tap to inspect, slots at least 44 CSS px. Nothing depends on
   hover.
+- **R8.8** Rarity tiers, as in WoW: Poor (grey), Common (white), Uncommon (green), Rare (blue), Epic (purple), Legendary
+  (orange). *(D49)*
+- **R8.9** Items are hand-made: each is defined once and is always the same. An effect may roll when it applies (+1d4
+  to a roll), with a named die (D5). *(D48)*
 
 ### R9: Non-functional
 
@@ -162,6 +172,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   `?seed=N` replay. It exposes as many game values (R6.6) as practical, for tuning by hand. *(D27)*
 - **R9.6** The latest changes can be tried on desktop and phone without deploying: `npm run dev` on the local network.
   *(D25)*
+- **R9.7** No tutorial: the player learns from dialogue and events. *(D54)*
+- **R9.8** Late in development, the game can be installed to the home screen and played offline. *(D55)*
 
 ### R10: Events
 
@@ -173,6 +185,11 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R10.4** Events drive meta progression: upgrading the inn, unlocking vendors.
 - **R10.5** The first event is the frog encounter (§C.6).
 - **R10.6** Events can recur. The first recurring one is the Alchemist's visit to town (R11.7). *(D30)*
+- **R10.7** Quests are events linked by flags. Their objectives are mostly hidden conditions on what the game counts
+  (catches per species, records), which can trigger events: catch enough of one species and the minor deity who loves
+  it turns up, angry. *(D51)*
+- **R10.8** An event can move the player to a location they can't leave until they meet an objective (the portal to
+  hell); the event explains this. *(D51)*
 
 ### R11: World
 
@@ -205,12 +222,12 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   left, or the time left, rounded to the nearest minute (`4m`) until less than a minute remains, then in seconds
   (`45s`). Rounding to the nearest minute is deliberate; WoW rounds up. *(D31)*
 - **R12.5** Hovering a square shows its description; on touch screens, tapping does (R8.7, D10).
-- **R12.7** The player can cancel a buff early: right-click on desktop, long-press on touch. Debuffs can't be cancelled.
-  *(D31)*
 - **R12.6** **The perpetual stew** (R11.5) gives a buff that is substantial in the early game. That creates the loop:
   fish while the buff lasts, then put the catch in the stew for the next one. The buff is stronger the rarer the fish
-  added, measured against their location's table, and longer the more fish are added. It runs on time (R12.2); each fish added is worth some extra buff time, with the
-  amounts left for balancing. *(D28, D37)*
+  added, measured against their location's table, and longer the more fish are added. It runs on time (R12.2); each
+  fish added is worth some extra buff time, with the amounts left for balancing. *(D28, D37)*
+- **R12.7** The player can cancel a buff early: right-click on desktop, long-press on touch. Debuffs can't be cancelled.
+  *(D31)*
 
 ### R13: Rods and bait
 
@@ -220,8 +237,6 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   character feed different stats. The character feeds the stats behind the rolls (R6.1); the rod feeds the stats behind
   the cast: **accuracy** (how far from the aim the bobber may land, R2.1), the **reaction window** for the strike bonus
   (R2.3), and the **bite delay** (R2.2). *(D35, provisional)*
-- **R13.5** Rods follow R8.5: each better rod has a downside, which lets its upsides be stronger. For example, a more
-  accurate rod with a longer bite delay, or a wider reaction window with a bobber that drifts. *(D38)*
 - **R13.3** **Bait** is an optional consumable attached to the rod. Fishing without bait always works. Bait raises the
   chance of a fish rather than junk or treasure (R3.1), and some baits favour particular fish (bread pulp, meat, live
   bait). It is used up when a fish is caught, with a chance that it is saved, and the message says which ("[bait] was
@@ -229,6 +244,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   escape?)*
 - **R13.4** Any fish landed in the Tiny size band (R3.3) can be used as bait, to catch predators. It is caught like any
   other fish first (accomplishments book, bucket). *(D36, D41)*
+- **R13.5** Rods follow R8.5: each better rod has a downside, which lets its upsides be stronger. For example, a more
+  accurate rod with a longer bite delay, or a wider reaction window with a bobber that drifts. *(D38)*
 
 ### R14: The water's surface
 
@@ -241,11 +258,11 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R14.4** A disturbance starts a magical event (R10): a fish that can talk, a lady of the lake, a merman fishing for
   people, or a portal to hell that pulls the player in and changes the location (R11). *(D40)*
 
-
 ### R15: Content
 
-- **R15.1** Locations, fish, items of every kind and events can be added without changing code, one file per entity,
-  as long as existing fields and effect words can express them. *(D42)*
+- **R15.1** Locations, fish, items of every kind, events, buffs, surface features, spots, weather, classes and class
+  texts can be added without changing code, one file per entity, as long as existing fields and effect words can
+  express them. Items, buffs and events share one vocabulary of effects. *(D42, D56)*
 - **R15.2** A location lists what can be found there, with weights, and may include shared lists; whatever only one
   location lists is exclusive to it. *(D42)*
 - **R15.3** One command checks all content, reports mistakes and missing art, and builds what the game loads, plus a
@@ -255,11 +272,13 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R15.5** Every kind of entity has a default icon, used until its own art exists. *(D42)*
 - **R15.6** Events are written as text, with a fixed vocabulary of requirements and effects. *(D45)*
 - **R15.7** All player-facing text is read through a string table, so the game could be translated. *(D46)*
+
 ---
 
 ## 3. Catalogues
 
 The prototype's full data (fish, 38 junk items, weathers) is ported in Phase 2; the lists below are the design view.
+Once a catalogue's data is in `content/`, its section here points there instead of copying it (D56).
 
 ### §C.1 Classes and levels
 
