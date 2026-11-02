@@ -35,7 +35,7 @@ npm test        # unit tests (node:test): rng, dice, content, weather, time, fis
 npm run verify  # browser checks in headless Chromium; starts its own server on :8123
 node tools/verify.mjs strike   # only the checks whose label contains "strike"
 npm run build   # -> dist/artifact.html, the single-file copy for claude.ai
-# http://localhost:8001/?dev       timing panel; ?seed=N replays; ?wait=MS fixes the bite delay
+# http://localhost:8001/?dev       dev bench; ?seed=N seeds a new game (a save wins); ?wait=MS fixes the bite delay
 ```
 
 Screenshots from `verify` land in `dist/verify/` (untracked).
@@ -69,5 +69,9 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   Positions are rounded every frame.
 - **`src/scene/sprites.js` (`paintBackdrop`): the dithered rows between water bands** stop the band edges reading as
   horizon lines.
+- **`src/main.js` saves the `checkpoint` while a cast is in progress, the full state otherwise.** The dev bench
+  only changes the state between casts for the same reason. Its game value overrides and `?wait` are `extra`
+  sources passed to the engine, never saved.
+- **`styles.css`: `font-variant-ligatures: none`.** Pixelify Sans draws its "fi" ligature as an "A".
 - **`src/main.js`: a tap within 500 ms of the last action is ignored after a cast ends,** so a double tap on the splash
   strikes once instead of striking and instantly recasting.

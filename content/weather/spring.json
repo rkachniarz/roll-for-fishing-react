@@ -7,7 +7,7 @@
     {
       "name": "Clear and nippy",
       "descriptions": [
-        "The skies are clear, and the air is fresh"
+        "The skies are clear, and the air is fresh."
       ],
       "temperature": 7,
       "wind": 0,
@@ -25,7 +25,7 @@
     {
       "name": "Sleet",
       "descriptions": [
-        "Ice-cold rain falls steadily all around you"
+        "Ice-cold rain falls steadily all around you."
       ],
       "temperature": 3,
       "wind": 2,
@@ -43,9 +43,9 @@
     {
       "name": "Hail",
       "descriptions": [
-        "Large hailstones cause large splashes as they fall in the water",
-        "Small hailstones fall along with strong rain",
-        "Hailstones the size of chicken eggs fall from the sky"
+        "Large hailstones cause large splashes as they fall in the water.",
+        "Small hailstones fall along with strong rain.",
+        "Hailstones the size of chicken eggs fall from the sky."
       ],
       "temperature": 4,
       "wind": 3,
@@ -63,7 +63,7 @@
     {
       "name": "Cold wafts of mist",
       "descriptions": [
-        "Gentle wind blows cold mist in your face"
+        "Gentle wind blows cold mist in your face."
       ],
       "temperature": 3,
       "wind": 1,
@@ -81,7 +81,7 @@
     {
       "name": "Sunny and clear",
       "descriptions": [
-        "Clear sky allows plenty of sun"
+        "Clear sky allows plenty of sun."
       ],
       "temperature": 6,
       "wind": 1,
@@ -99,8 +99,8 @@
     {
       "name": "Cloudy and warm",
       "descriptions": [
-        "Scattered clouds rush through the sky",
-        "Big, still clouds seem to enjoy the warmth of the sun"
+        "Scattered clouds rush through the sky.",
+        "Big, still clouds seem to enjoy the warmth of the sun."
       ],
       "temperature": 8,
       "wind": {
@@ -121,7 +121,7 @@
     {
       "name": "Nippy and humid",
       "descriptions": [
-        "Cold air is made unpleasant by high humidity"
+        "Cold air is made unpleasant by high humidity."
       ],
       "temperature": 7,
       "wind": 2,
@@ -139,7 +139,7 @@
     {
       "name": "Short showers",
       "descriptions": [
-        "Rain sometimes falls from gathering clouds"
+        "Rain sometimes falls from gathering clouds."
       ],
       "temperature": 7,
       "wind": 2,
@@ -157,8 +157,8 @@
     {
       "name": "Heavy rainfall",
       "descriptions": [
-        "A wall of rain is coming down from the sky",
-        "Dense, heavy rain makes it hard to see far"
+        "A wall of rain is coming down from the sky.",
+        "Dense, heavy rain makes it hard to see far."
       ],
       "temperature": 6,
       "wind": {
@@ -179,7 +179,7 @@
     {
       "name": "Snowy rain",
       "descriptions": [
-        "Rain mixed with snow makes everything wet and cold"
+        "Rain mixed with snow makes everything wet and cold."
       ],
       "temperature": 4,
       "wind": {
@@ -200,7 +200,7 @@
     {
       "name": "Windy and snowy",
       "descriptions": [
-        "Strong winds bring snow and memories of winter"
+        "Strong winds bring snow and memories of winter."
       ],
       "temperature": 2,
       "wind": 3,
@@ -218,7 +218,7 @@
     {
       "name": "Heavy snowfall",
       "descriptions": [
-        "Large snowflakes are falling everywhere around you"
+        "Large snowflakes are falling everywhere around you."
       ],
       "temperature": 2,
       "wind": 0,
@@ -236,7 +236,7 @@
     {
       "name": "Light snowfall",
       "descriptions": [
-        "Occasional snow has little chance of staying for good"
+        "Occasional snow has little chance of staying for good."
       ],
       "temperature": 3,
       "wind": 1,
@@ -257,7 +257,7 @@
     {
       "name": "Cold and dry",
       "descriptions": [
-        "Dry, freezing cold makes your breath steam"
+        "Dry, freezing cold makes your breath steam."
       ],
       "temperature": 3,
       "wind": 0,
@@ -278,7 +278,7 @@
     {
       "name": "Pleasantly warm",
       "descriptions": [
-        "Pleasant warmth gives hope for early summer"
+        "Pleasant warmth gives hope for early summer."
       ],
       "temperature": 10,
       "wind": {
@@ -302,7 +302,7 @@
     {
       "name": "Strong pollen drift",
       "descriptions": [
-        "Strong, warm wind carries spring pollen everywhere"
+        "Strong, warm wind carries spring pollen everywhere."
       ],
       "temperature": 9,
       "wind": 3,
@@ -341,7 +341,7 @@
     {
       "name": "Warm and humid",
       "descriptions": [
-        "Humid, warm air makes everything sticky"
+        "Humid, warm air makes everything sticky."
       ],
       "temperature": 12,
       "wind": 1,
@@ -359,7 +359,7 @@
     {
       "name": "Warm drizzle",
       "descriptions": [
-        "Light rain does not get in the way of spring warmth"
+        "Light rain does not get in the way of spring warmth."
       ],
       "temperature": 9,
       "wind": 2,

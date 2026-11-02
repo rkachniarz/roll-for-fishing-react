@@ -4,13 +4,12 @@ What's left to do. Tick boxes as work lands; record decisions in [docs/decisions
 silently changing requirements. Within a phase, tasks are listed in the order they should be done; their numbers are
 only ids, so a task added later keeps its number wherever it lands.
 
-**Where things stand (2026-11-02):** Phase 0 is done, Phase 1 (the feel trial) is playable, with the frame-rate check
-on a phone and the write-up still to do. **Phase 2's engine is done:** content as data in `content/` (the prototype's
-Lake, fish, junk, treasure and weather, ported by script), `npm run content` checking it, and a pure, seeded engine for
-the whole cast: what is on the line, the strike, catches, the escaped pool, bait, buffs, time and weather, saves with
-their random streams. A 1,000-cast session runs headless and replays exactly from its seed. The page is still the
-Phase 1 trial; Phase 3 puts the engine behind it, and waits for the owner's layout sketch (Q-38). The calls made while
-building are listed in [docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
+**Where things stand (2026-11-02):** Phases 0 and 2 are done; Phase 1 (the feel trial) only lacks the frame-rate check
+on a phone and the write-up. **Phase 3 is under way: the game is playable on the real engine.** Character creation,
+casting with scatter, the full cast (fish, junk, treasure, the hidden rolls, the missed-splash pause and recast), the
+log, saving after every cast and the checkpoint mid-cast, New game, and the `?dev` bench. The panel is plain: the
+layout (3.2) waits for the owner's sketch (Q-38). Claude's guesses and calls are listed in
+[docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
 
 ## Where things are
 
@@ -91,11 +90,11 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 
 ## Phase 3: Core loop, playable
 
-- [ ] **3.1** The scene driven by the Phase 2 engine: whatever bit, how big, what came up; the visible roll (R2.6, R5).
+- [x] **3.1** The scene driven by the Phase 2 engine: whatever bit, how big, what came up; the visible roll (R2.6, R5).
 - [ ] **3.2** The screen laid out as WoW's (R16.1, D67; Q-38): log, accomplishments book (R4.2), weather and time
   display, class and stats, XP bar and levels.
-- [ ] **3.3** Character creation: name generator, gender, class (gendered names, D19), stat rolls (R6.1).
-- [ ] **3.4** `?dev` bench: location, spot, weather, time, items, level, and as many game values as practical; an
+- [x] **3.3** Character creation: name generator, gender, class (gendered names, D19), stat rolls (R6.1).
+- [x] **3.4** `?dev` bench: location, spot, weather, time, items, level, and as many game values as practical; an
   "empty bucket" button (R9.5, D27, D68).
 - [ ] **3.5** Deployed to GitHub Pages, so the owner can play anywhere without a server; playable end to end on a phone
   (D68).

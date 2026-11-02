@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/class.schema.json",
+  "id": "rogue-fisher",
+  "role": "rogue",
+  "order": 2,
+  "name": {
+    "m": "Rogue Fisherman",
+    "f": "Rogue Fisherwoman"
+  },
+  "stats": {
+    "fishingSkill": {
+      "min": 0,
+      "max": 5
+    },
+    "fishFind": {
+      "min": 0,
+      "max": 5
+    },
+    "treasureFind": {
+      "min": 5,
+      "max": 10
+    }
+  }
+}

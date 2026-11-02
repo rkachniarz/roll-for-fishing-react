@@ -46,6 +46,8 @@ async function check(label, device, query, fn) {
   try {
     await page.goto(BASE + query);
     await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+    // A fresh browser has no save: take character creation's defaults.
+    if (await page.isVisible('#create')) await page.click('#createStart');
     const tap = async () => {
       const box = await page.locator('#scene').boundingBox();
       const x = box.x + box.width / 2;
@@ -96,7 +98,19 @@ await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, t
   const detail = await page.textContent('#result .detail');
   report('strike after the splash: an outcome with a roll', /Caught it!|It got away\./.test(headline ?? ''), headline);
   report('strike after the splash: the d20 roll is shown', /d20: \d+/.test(detail ?? ''), detail);
-  report('strike after the splash: a quick strike is graded fast', /fast strike/.test(detail ?? ''), detail);
+  report('strike after the splash: a quick strike is graded fast', /Fast strike/.test(detail ?? ''), detail);
+  report("strike after the splash: the fish's roll stays hidden", /needed \?/.test(detail ?? ''), detail);
+});
+
+await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (page, tap) => {
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  report('junk: landed', (await page.textContent('#result .headline')) === 'Got something!');
+  report('junk: no d20', !/d20/.test((await page.textContent('#result')) ?? ''));
+  const log = (await page.textContent('#log')) ?? '';
+  report('junk: in the log', /You found: Bit of scroll parchment\./.test(log), log);
 });
 
 await check('strike too early', DESKTOP, '?seed=1&wait=6000', async (page, tap) => {
@@ -113,6 +127,51 @@ await check('no strike: the fish is gone after 3 s', DESKTOP, '?seed=1&wait=500'
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await page.waitForSelector('body[data-phase="done"]', { timeout: 4000 });
   report('no strike: too slow', (await page.textContent('#result .headline')) === 'Too slow.');
+  report('no strike: the pause', (await page.textContent('#status')) === 'The bobber bobs back up…');
+});
+
+await check('a missed splash: pause, cast again, then reel in', DESKTOP, '?seed=1&wait=500', async (page, tap) => {
+  await tap();
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 5000 });
+  await page.waitForSelector('body[data-phase="waiting"]', { timeout: 7000 });
+  report('missed splash: the line counts as cast again after the pause', true);
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 5000 });
+  await page.waitForTimeout(5500);
+  report('missed splash: a second miss reels in', (await page.getAttribute('body', 'data-phase')) === 'done');
+  report('missed splash: ready to cast', (await page.textContent('#status')) === 'Tap to cast again.');
+});
+
+await check('saving', PHONE, '?seed=1&wait=600', async (page, tap) => {
+  const who = await page.textContent('#who');
+  report('saving: the character is shown', /level 0/.test(who ?? ''), who);
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  report('saving: a cast takes 30 minutes', /08:30/.test((await page.textContent('#where')) ?? ''));
+  await page.reload();
+  await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+  report('saving: no character creation after a reload', !(await page.isVisible('#create')));
+  report('saving: the game is back', /08:30/.test((await page.textContent('#where')) ?? ''));
+
+  await tap();
+  await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });
+  await page.reload();
+  await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+  report('saving: leaving mid-cast voids the cast, no time passes', /08:30/.test((await page.textContent('#where')) ?? ''));
+});
+
+await check('new game', DESKTOP, '?seed=5', async (page) => {
+  page.on('dialog', (d) => d.accept());
+  await page.click('#newGame');
+  await page.waitForSelector('#create[open]', { timeout: 2000 });
+  await page.click('#createGender label:nth-child(2)');
+  await page.click('#createClass label:nth-child(3)');
+  const name = await page.inputValue('#createName');
+  await page.screenshot({ path: 'dist/verify/character-creation.png' });
+  await page.click('#createStart');
+  const who = (await page.textContent('#who')) ?? '';
+  report('new game: back to character creation, and the choices stick', who.includes('Rogue Fisherwoman') && who.includes(name), who);
 });
 
 await check('keyboard: space casts and strikes', DESKTOP, '?seed=2&wait=600', async (page) => {
@@ -123,9 +182,17 @@ await check('keyboard: space casts and strikes', DESKTOP, '?seed=2&wait=600', as
   report('keyboard: a full cast with the space bar', true);
 });
 
-await check('?dev shows the timing panel', DESKTOP, '?dev&seed=3', async (page) => {
+await check('?dev shows the bench', DESKTOP, '?dev&seed=3', async (page) => {
   report('?dev: panel visible', await page.isVisible('#devPanel'));
-  report('?dev: seed shown for replay', /seed=3/.test((await page.textContent('#devSeed')) ?? ''));
+  await page.click('#devPanel summary');
+  report('?dev: seed shown for replay', /seed=3/.test((await page.textContent('#devBench')) ?? ''));
+  report('?dev: game values shown', (await page.inputValue('#dev-strikeLimit')) === '3000');
+  await page.fill('#dev-strikeLimit', '4000');
+  await page.press('#dev-strikeLimit', 'Enter');
+  await page.click('body', { position: { x: 5, y: 5 } });
+  report('?dev: a value can be changed', (await page.inputValue('#dev-strikeLimit')) === '4000');
+  report('?dev: an empty bucket button', await page.isVisible('text=Empty bucket'));
+  await page.screenshot({ path: 'dist/verify/dev-bench.png', fullPage: true });
 });
 
 await browser.close();

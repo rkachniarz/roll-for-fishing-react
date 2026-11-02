@@ -5,6 +5,17 @@ an item is settled, delete it from this list (and record a decision if the answe
 
 Newest first.
 
+## The page (Phase 3)
+
+- **All the game's own wording** (the status line, results, log lines, character creation) was written by Claude. It
+  is all in one place, `UI_STRINGS` in `src/strings.js`.
+- **Character creation** preselects a random gender and the Fish Fighter; the classes are listed Fighter, Wizard,
+  Rogue. Each class shows its stat ranges.
+- **The result shows "needed ?"** for a fish: its own d20 is a hidden roll until something reveals it (R5.2). The
+  prototype printed the number.
+- **The log isn't saved:** it starts empty after a reload. The accomplishments book (3.2) is what keeps records.
+- **`?seed=N` only seeds a new game;** with a save in the browser, the save wins. Use New game first to replay a seed.
+
 ## Guesses at numbers and content
 
 - **Base rarities of the Lake's fish** (D72): Carp and Roach Common; Bass, Trout and Cod Uncommon; Pike and Sturgeon

@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/class.schema.json",
+  "id": "fishing-wizard",
+  "role": "mage",
+  "order": 1,
+  "name": {
+    "m": "Fishing Wizard",
+    "f": "Fishing Wizard"
+  },
+  "stats": {
+    "fishingSkill": {
+      "min": 1,
+      "max": 5
+    },
+    "fishFind": {
+      "min": 5,
+      "max": 10
+    },
+    "treasureFind": {
+      "min": 1,
+      "max": 5
+    }
+  }
+}

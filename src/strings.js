@@ -3,13 +3,14 @@
 // D46). Content text is written in English in content/ and collected into a
 // table by `npm run content`; a translation would be one more table.
 //
-//   t(fish.name)              -> 'Pike'   (content holds the key, 'fish.pike.name')
-//   t('ui.cast')              -> text from UI_STRINGS below
+//   t(fish.name)                          -> 'Pike'  (content holds the key, 'fish.pike.name')
+//   t('log.found', { item: 'Bent fork' }) -> 'You found: Bent fork.'
 
 import { strings } from './generated/content.js';
 
-/** The game's own text, outside content. Keys start with `ui.` or `value.`. */
+/** The game's own text, outside content. */
 const UI_STRINGS = {
+  // ---- Game values (R6.6) ----
   'value.fishingSkill': 'Fishing Skill',
   'value.fishFind': 'Fish Find',
   'value.treasureFind': 'Treasure Find',
@@ -27,15 +28,78 @@ const UI_STRINGS = {
   'value.missPause': 'pause after a missed splash',
   'value.baitRecovery': 'chance to save bait',
   'value.baitEscapeLoss': 'chance to lose bait to an escaping fish',
+
+  // ---- The status line ----
+  'status.idle': 'Tap the water to cast.',
+  'status.waiting': 'Watch the bobber…',
+  'status.bite': 'Splash! Strike now!',
+  'status.done': 'Tap to cast again.',
+  'status.pause': 'The bobber bobs back up…',
+
+  // ---- The result of a cast ----
+  'result.caught': 'Caught it!',
+  'result.escaped': 'It got away.',
+  'result.landed': 'Got something!',
+  'result.empty': 'Nothing on the hook.',
+  'result.missed': 'Too slow.',
+  'result.too-early': 'Too early!',
+  'result.strike': '{grade} strike ({time}).',
+  'result.roll': 'd20: {roll}{mods} = {total}, needed {needed}.',
+  'result.natural20': ' Natural 20!',
+  'grade.fast': 'Fast',
+  'grade.ok': 'OK',
+  'grade.bad': 'Slow',
+
+  // ---- The log ----
+  'log.caught': 'You caught a {fish} ({size} cm)! +{xp} XP.',
+  'log.seenBefore': "You've seen this one before.",
+  'log.escaped': 'The {fish} got away.',
+  'log.missed': 'Too slow: the {fish} got away.',
+  'log.missedSomething': 'Too slow: whatever it was is gone.',
+  'log.too-early': 'Too early! You pulled the line out.',
+  'log.found': 'You found: {item}. {flavor}',
+  'log.empty': 'Your hook comes up empty.',
+  'log.bait-saved': 'Your {bait} was recovered.',
+  'log.bait-eaten': 'The {fish} has eaten your {bait}.',
+  'log.bait-lost': 'The {fish} got away with your {bait}.',
+  'log.reeled-in': 'You reel the line in.',
+  'log.recast': 'The bobber settles. The line is out again.',
+  'log.level-up': 'Level up! You are now level {level}.',
+  'log.weather': 'The weather changes. {description}',
+  'log.season': 'It is now {season}. {description}',
+  'log.buff-ended': '{buff} has worn off.',
+
+  // ---- The panel ----
+  'panel.character': '{name}, {className} · level {level} ({xp} XP)',
+  'panel.world': '{location} · {season}, day {day}, {clock} · {weather}',
+  'panel.newGame': 'New game',
+  'panel.confirmNewGame': 'Start a new game? This one will be lost for good.',
+  'panel.badSave': "Your saved game couldn't be loaded: {error}. It is still stored; starting a new game will replace it.",
+
+  // ---- Character creation ----
+  'create.title': 'A new fisher',
+  'create.name': 'Name',
+  'create.rerollName': 'Another name',
+  'create.gender': 'Gender',
+  'create.gender.m': 'Male',
+  'create.gender.f': 'Female',
+  'create.class': 'Class',
+  'create.stats': 'Stats',
+  'create.rerollStats': 'Roll again',
+  'create.range': '{min}–{max}',
+  'create.start': 'Go fishing',
 };
 
 const table = { ...strings.en, ...UI_STRINGS };
 
 /**
- * The text for a key. A missing key comes back as itself, so a gap shows on
- * screen instead of breaking anything.
+ * The text for a key, with `{name}` placeholders filled in. A missing key
+ * comes back as itself, so a gap shows on screen instead of breaking anything.
  * @param {string} key
+ * @param {Record<string, string | number>} [params]
  */
-export function t(key) {
-  return table[key] ?? key;
+export function t(key, params) {
+  const text = table[key] ?? key;
+  if (!params) return text;
+  return text.replace(/\{(\w+)\}/g, (whole, name) => (name in params ? String(params[name]) : whole));
 }

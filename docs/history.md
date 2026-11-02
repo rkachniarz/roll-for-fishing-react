@@ -88,3 +88,21 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   instead (D75).
 - Phase end: 75 unit tests and all browser checks pass; the artifact builds (26 kB). The page is still the Phase 1
   trial, unaffected.
+
+## Phase 3: Core loop, playable (in progress)
+
+- **3.1** The page runs on the Phase 2 engine. A tap aims; the engine scatters the landing and the scene throws the
+  bobber there (the keyboard casts to a seeded random spot, since landings will matter for surface features). The
+  result box shows the visible d20 with "needed ?", as the fish's own roll is hidden (R5). Every event goes to the log
+  through `t()`. The page saves the checkpoint as the line goes out and the whole state once a cast resolves; a reload
+  mid-cast leaves the clock where it was, which a browser check confirms. After a missed splash the bobber stays put
+  for the pause and the line counts as cast again; a second miss reels it in. Spring's and the new descriptions got
+  the full stop Summer's already had, so the log shows them as written.
+- **3.3** Character creation in a dialog: a generated name with rerolls, gender, the three classes with their stat
+  ranges (now content in `content/classes/`), stats rolled from the new game's seed with unlimited rerolls. The
+  screenshot showed "A new Asher": Pixelify Sans draws "fi" as an "A". Ligatures are now off everywhere.
+- **3.4** The `?dev` bench (`src/dev.js`): every game value as an override (not saved), timing presets, location, spot,
+  weather and time, XP and Luck, adding and equipping items, the inventory and escaped pools at a glance, Empty bucket,
+  test buffs of both kinds.
+- Browser checks grew from 23 to 41: junk landed without a roll, the pause, recast and reel-in, saving and reloading,
+  New game with the choices sticking, the bench.

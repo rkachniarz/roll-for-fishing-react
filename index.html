@@ -28,21 +28,40 @@
     <canvas id="scene" aria-label="The lake, seen from the shore"></canvas>
   </div>
 
+  <!-- Until the owner's layout sketch (DEV_PLAN Q-38): a plain panel. -->
   <section class="panel">
     <h1>Roll for Fishing</h1>
+    <p class="who" id="who"></p>
+    <p class="where" id="where"></p>
     <p class="status" id="status" aria-live="polite">Loading the lake…</p>
     <div class="result" id="result" hidden></div>
-    <p class="stats" id="stats"></p>
     <ol class="log" id="log"></ol>
+    <p class="notice" id="notice" hidden></p>
+    <button type="button" class="quiet" id="newGame"></button>
 
     <details class="dev" id="devPanel" hidden>
-      <summary>Dev: reaction timing</summary>
-      <div class="dev-presets" id="devPresets"></div>
-      <div class="dev-fields" id="devFields"></div>
-      <p class="dev-seed" id="devSeed"></p>
+      <summary>Dev bench</summary>
+      <div id="devBench"></div>
     </details>
   </section>
 </main>
+
+<dialog class="create" id="create">
+  <form method="dialog" id="createForm">
+    <h2 id="createTitle"></h2>
+    <label class="field"><span id="createNameLabel"></span>
+      <span class="row"><input id="createName" maxlength="24" required autocomplete="off">
+      <button type="button" id="createRerollName"></button></span>
+    </label>
+    <fieldset class="field"><legend id="createGenderLabel"></legend><div class="choices" id="createGender"></div></fieldset>
+    <fieldset class="field"><legend id="createClassLabel"></legend><div class="choices classes" id="createClass"></div></fieldset>
+    <fieldset class="field"><legend id="createStatsLabel"></legend>
+      <div class="stats-grid" id="createStats"></div>
+      <button type="button" id="createRerollStats"></button>
+    </fieldset>
+    <button type="submit" class="primary" id="createStart"></button>
+  </form>
+</dialog>
 
 <script type="module" src="./src/main.js"></script>
 </body>

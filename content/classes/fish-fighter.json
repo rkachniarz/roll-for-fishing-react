@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/class.schema.json",
+  "id": "fish-fighter",
+  "role": "warrior",
+  "order": 0,
+  "name": {
+    "m": "Fish Fighter",
+    "f": "Fish Fighter"
+  },
+  "stats": {
+    "fishingSkill": {
+      "min": 2,
+      "max": 7
+    },
+    "fishFind": {
+      "min": 1,
+      "max": 5
+    },
+    "treasureFind": {
+      "min": 0,
+      "max": 5
+    }
+  }
+}

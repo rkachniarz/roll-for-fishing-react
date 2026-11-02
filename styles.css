@@ -21,6 +21,8 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Pixelify Sans', ui-monospace, monospace;
+  /* Pixelify Sans draws its "fi" ligature as an "A": "fisher" read "Asher". */
+  font-variant-ligatures: none;
   font-size: 17px;
   line-height: 1.35;
 }
@@ -113,12 +115,6 @@ body[data-phase='bite'] .status {
   color: var(--muted);
 }
 
-.stats {
-  margin: 0;
-  color: var(--muted);
-  font-size: 15px;
-}
-
 .log {
   margin: 0;
   padding-left: 1.4em;
@@ -173,4 +169,167 @@ body[data-phase='bite'] .status {
 .dev-seed {
   color: var(--muted);
   word-break: break-all;
+}
+
+/* ---------- The panel (plain until the layout sketch, Q-38) ---------- */
+
+.who,
+.where {
+  margin: 0;
+  font-size: 15px;
+}
+
+.where {
+  color: var(--muted);
+}
+
+.notice {
+  margin: 0;
+  color: var(--bad);
+}
+
+button.quiet,
+.create button,
+.dev select {
+  font: inherit;
+  font-variant-ligatures: none;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  padding: 4px 10px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+button.quiet {
+  align-self: flex-start;
+  color: var(--muted);
+}
+
+/* ---------- Character creation ---------- */
+
+.create {
+  width: min(420px, calc(100vw - 2 * var(--gutter)));
+  max-height: calc(100dvh - 2 * var(--gutter));
+  padding: 16px;
+  color: var(--text);
+  background: var(--bg);
+  border: 2px solid var(--panel-edge);
+  border-radius: 4px;
+}
+
+.create::backdrop {
+  background: rgb(0 0 0 / 0.6);
+}
+
+.create form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.create h2 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 22px;
+}
+
+.create .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.create legend,
+.create .field > span:first-child {
+  color: var(--muted);
+}
+
+.create .row {
+  display: flex;
+  gap: 8px;
+}
+
+.create input:not([type='radio']) {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  padding: 4px 8px;
+  min-height: 44px;
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+
+.choices label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.choices.classes {
+  flex-direction: column;
+}
+
+.choices.classes label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 8px;
+}
+
+.choices.classes small {
+  grid-column: 2;
+  color: var(--muted);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+  margin-bottom: 6px;
+}
+
+.create button.primary {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+/* ---------- The ?dev bench ---------- */
+
+.bench-section h3 {
+  margin: 12px 0 6px;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.dev-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.dev p {
+  margin: 4px 0;
+  color: var(--muted);
+}
+
+.dev input.overridden {
+  border-color: var(--accent);
 }

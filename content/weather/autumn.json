@@ -7,7 +7,7 @@
     {
       "name": "Humid and cloudy",
       "descriptions": [
-        "Low clouds hang heavy, and the air feels damp on your skin"
+        "Low clouds hang heavy, and the air feels damp on your skin."
       ],
       "temperature": 9,
       "wind": {
@@ -28,7 +28,7 @@
     {
       "name": "Sunny and clear",
       "descriptions": [
-        "The sun shines on golden trees around the water"
+        "The sun shines on golden trees around the water."
       ],
       "temperature": 11,
       "wind": {
@@ -49,7 +49,7 @@
     {
       "name": "Cold wafts of mist",
       "descriptions": [
-        "Gentle wind blows cold mist across the water"
+        "Gentle wind blows cold mist across the water."
       ],
       "temperature": 6,
       "wind": 1,
@@ -67,7 +67,7 @@
     {
       "name": "Thick fog soup",
       "descriptions": [
-        "A thick fog swallows the far shore whole"
+        "A thick fog swallows the far shore whole."
       ],
       "temperature": 7,
       "wind": 0,
@@ -85,7 +85,7 @@
     {
       "name": "Rain and fog",
       "descriptions": [
-        "Rain patters through a grey, drifting fog"
+        "Rain patters through a grey, drifting fog."
       ],
       "temperature": 6,
       "wind": {
@@ -106,7 +106,7 @@
     {
       "name": "Rain and gusts",
       "descriptions": [
-        "Rain lashes sideways as gusts whip across the water"
+        "Rain lashes sideways as gusts whip across the water."
       ],
       "temperature": 7,
       "wind": 3,
@@ -124,7 +124,7 @@
     {
       "name": "Sunny and cloudy",
       "descriptions": [
-        "Sunlight breaks through in patches between the clouds"
+        "Sunlight breaks through in patches between the clouds."
       ],
       "temperature": 11,
       "wind": 1,
@@ -142,7 +142,7 @@
     {
       "name": "Pleasantly warm",
       "descriptions": [
-        "A mild, pleasant day, with the scent of fallen leaves in the air"
+        "A mild, pleasant day, with the scent of fallen leaves in the air."
       ],
       "temperature": 12,
       "wind": {
@@ -163,7 +163,7 @@
     {
       "name": "Goose summer",
       "descriptions": [
-        "Summer has come back for one last visit"
+        "Summer has come back for one last visit."
       ],
       "temperature": 13,
       "wind": {
@@ -187,7 +187,7 @@
     {
       "name": "Sporadic gusts",
       "descriptions": [
-        "Sudden gusts send leaves skittering across the water"
+        "Sudden gusts send leaves skittering across the water."
       ],
       "temperature": 9,
       "wind": 3,
@@ -205,7 +205,7 @@
     {
       "name": "Cold winds",
       "descriptions": [
-        "A cold wind cuts through your coat"
+        "A cold wind cuts through your coat."
       ],
       "temperature": 5,
       "wind": 3,
@@ -223,7 +223,7 @@
     {
       "name": "Frosty and cloudy",
       "descriptions": [
-        "Frost sparkles on the reeds under a grey sky"
+        "Frost sparkles on the reeds under a grey sky."
       ],
       "temperature": 3,
       "wind": {
@@ -244,7 +244,7 @@
     {
       "name": "Cloudy and nippy",
       "descriptions": [
-        "The clouds are thick, and the air has a bite to it"
+        "The clouds are thick, and the air has a bite to it."
       ],
       "temperature": 8,
       "wind": {
@@ -265,7 +265,7 @@
     {
       "name": "Windy and clear",
       "descriptions": [
-        "The sky is clear, but the wind is strong"
+        "The sky is clear, but the wind is strong."
       ],
       "temperature": 8,
       "wind": 3,
@@ -283,7 +283,7 @@
     {
       "name": "Short, light showers",
       "descriptions": [
-        "Brief, light showers come and go"
+        "Brief, light showers come and go."
       ],
       "temperature": 9,
       "wind": 2,
@@ -301,7 +301,7 @@
     {
       "name": "Heavy downpour",
       "descriptions": [
-        "Rain pours down in heavy sheets"
+        "Rain pours down in heavy sheets."
       ],
       "temperature": 7,
       "wind": 2,
@@ -319,7 +319,7 @@
     {
       "name": "Rainy windstorm",
       "descriptions": [
-        "Howling wind drives the rain across the water"
+        "Howling wind drives the rain across the water."
       ],
       "temperature": 6,
       "wind": 4,
@@ -337,7 +337,7 @@
     {
       "name": "Drizzle",
       "descriptions": [
-        "A fine drizzle settles on everything"
+        "A fine drizzle settles on everything."
       ],
       "temperature": 9,
       "wind": 1,
@@ -355,7 +355,7 @@
     {
       "name": "Sunny and nippy",
       "descriptions": [
-        "The sun is bright, but the air is cool"
+        "The sun is bright, but the air is cool."
       ],
       "temperature": 10,
       "wind": 1,

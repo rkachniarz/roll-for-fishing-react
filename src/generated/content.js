@@ -2350,6 +2350,77 @@ export const content = {
       ]
     }
   },
+  "classes": {
+    "fish-fighter": {
+      "id": "fish-fighter",
+      "role": "warrior",
+      "order": 0,
+      "name": {
+        "m": "class.fish-fighter.name.m",
+        "f": "class.fish-fighter.name.f"
+      },
+      "stats": {
+        "fishingSkill": {
+          "min": 2,
+          "max": 7
+        },
+        "fishFind": {
+          "min": 1,
+          "max": 5
+        },
+        "treasureFind": {
+          "min": 0,
+          "max": 5
+        }
+      }
+    },
+    "fishing-wizard": {
+      "id": "fishing-wizard",
+      "role": "mage",
+      "order": 1,
+      "name": {
+        "m": "class.fishing-wizard.name.m",
+        "f": "class.fishing-wizard.name.f"
+      },
+      "stats": {
+        "fishingSkill": {
+          "min": 1,
+          "max": 5
+        },
+        "fishFind": {
+          "min": 5,
+          "max": 10
+        },
+        "treasureFind": {
+          "min": 1,
+          "max": 5
+        }
+      }
+    },
+    "rogue-fisher": {
+      "id": "rogue-fisher",
+      "role": "rogue",
+      "order": 2,
+      "name": {
+        "m": "class.rogue-fisher.name.m",
+        "f": "class.rogue-fisher.name.f"
+      },
+      "stats": {
+        "fishingSkill": {
+          "min": 0,
+          "max": 5
+        },
+        "fishFind": {
+          "min": 0,
+          "max": 5
+        },
+        "treasureFind": {
+          "min": 5,
+          "max": 10
+        }
+      }
+    }
+  },
   "rules": {
     "levels": {
       "id": "levels",
@@ -2364,6 +2435,53 @@ export const content = {
         1000,
         2000,
         5000
+      ]
+    },
+    "names": {
+      "id": "names",
+      "prefixes": [
+        "Woj",
+        "Bio",
+        "Gaz",
+        "Dur",
+        "Mat",
+        "Kek",
+        "Far",
+        "Arb",
+        "Yarr",
+        "Kli",
+        "Tur",
+        "Hel",
+        "Fir",
+        "Chrum",
+        "Pika",
+        "Roz",
+        "Xtan"
+      ],
+      "suffixes": [
+        "ek",
+        "ak",
+        "son",
+        "dig",
+        "dib",
+        "ent",
+        "gun",
+        "bip",
+        "blop",
+        "pip",
+        "murgl",
+        "ma",
+        "uss",
+        "huk",
+        "gle",
+        "wald",
+        "ena",
+        "ata",
+        "iza",
+        "dottir",
+        "ola",
+        "ula",
+        "dong"
       ]
     },
     "new-game": {
@@ -2642,25 +2760,25 @@ export const strings = {
     "weather.autumn.weathers.16.name": "Rainy windstorm",
     "weather.autumn.weathers.17.name": "Drizzle",
     "weather.autumn.weathers.18.name": "Sunny and nippy",
-    "weather.autumn.weathers.0.descriptions.0": "Low clouds hang heavy, and the air feels damp on your skin",
-    "weather.autumn.weathers.1.descriptions.0": "The sun shines on golden trees around the water",
-    "weather.autumn.weathers.2.descriptions.0": "Gentle wind blows cold mist across the water",
-    "weather.autumn.weathers.3.descriptions.0": "A thick fog swallows the far shore whole",
-    "weather.autumn.weathers.4.descriptions.0": "Rain patters through a grey, drifting fog",
-    "weather.autumn.weathers.5.descriptions.0": "Rain lashes sideways as gusts whip across the water",
-    "weather.autumn.weathers.6.descriptions.0": "Sunlight breaks through in patches between the clouds",
-    "weather.autumn.weathers.7.descriptions.0": "A mild, pleasant day, with the scent of fallen leaves in the air",
-    "weather.autumn.weathers.8.descriptions.0": "Summer has come back for one last visit",
-    "weather.autumn.weathers.9.descriptions.0": "Sudden gusts send leaves skittering across the water",
-    "weather.autumn.weathers.10.descriptions.0": "A cold wind cuts through your coat",
-    "weather.autumn.weathers.11.descriptions.0": "Frost sparkles on the reeds under a grey sky",
-    "weather.autumn.weathers.12.descriptions.0": "The clouds are thick, and the air has a bite to it",
-    "weather.autumn.weathers.13.descriptions.0": "The sky is clear, but the wind is strong",
-    "weather.autumn.weathers.14.descriptions.0": "Brief, light showers come and go",
-    "weather.autumn.weathers.15.descriptions.0": "Rain pours down in heavy sheets",
-    "weather.autumn.weathers.16.descriptions.0": "Howling wind drives the rain across the water",
-    "weather.autumn.weathers.17.descriptions.0": "A fine drizzle settles on everything",
-    "weather.autumn.weathers.18.descriptions.0": "The sun is bright, but the air is cool",
+    "weather.autumn.weathers.0.descriptions.0": "Low clouds hang heavy, and the air feels damp on your skin.",
+    "weather.autumn.weathers.1.descriptions.0": "The sun shines on golden trees around the water.",
+    "weather.autumn.weathers.2.descriptions.0": "Gentle wind blows cold mist across the water.",
+    "weather.autumn.weathers.3.descriptions.0": "A thick fog swallows the far shore whole.",
+    "weather.autumn.weathers.4.descriptions.0": "Rain patters through a grey, drifting fog.",
+    "weather.autumn.weathers.5.descriptions.0": "Rain lashes sideways as gusts whip across the water.",
+    "weather.autumn.weathers.6.descriptions.0": "Sunlight breaks through in patches between the clouds.",
+    "weather.autumn.weathers.7.descriptions.0": "A mild, pleasant day, with the scent of fallen leaves in the air.",
+    "weather.autumn.weathers.8.descriptions.0": "Summer has come back for one last visit.",
+    "weather.autumn.weathers.9.descriptions.0": "Sudden gusts send leaves skittering across the water.",
+    "weather.autumn.weathers.10.descriptions.0": "A cold wind cuts through your coat.",
+    "weather.autumn.weathers.11.descriptions.0": "Frost sparkles on the reeds under a grey sky.",
+    "weather.autumn.weathers.12.descriptions.0": "The clouds are thick, and the air has a bite to it.",
+    "weather.autumn.weathers.13.descriptions.0": "The sky is clear, but the wind is strong.",
+    "weather.autumn.weathers.14.descriptions.0": "Brief, light showers come and go.",
+    "weather.autumn.weathers.15.descriptions.0": "Rain pours down in heavy sheets.",
+    "weather.autumn.weathers.16.descriptions.0": "Howling wind drives the rain across the water.",
+    "weather.autumn.weathers.17.descriptions.0": "A fine drizzle settles on everything.",
+    "weather.autumn.weathers.18.descriptions.0": "The sun is bright, but the air is cool.",
     "weather.spring.name": "Spring",
     "weather.spring.weathers.0.name": "Clear and nippy",
     "weather.spring.weathers.1.name": "Sleet",
@@ -2681,29 +2799,29 @@ export const strings = {
     "weather.spring.weathers.16.name": "Hot and dry",
     "weather.spring.weathers.17.name": "Warm and humid",
     "weather.spring.weathers.18.name": "Warm drizzle",
-    "weather.spring.weathers.0.descriptions.0": "The skies are clear, and the air is fresh",
-    "weather.spring.weathers.1.descriptions.0": "Ice-cold rain falls steadily all around you",
-    "weather.spring.weathers.2.descriptions.0": "Large hailstones cause large splashes as they fall in the water",
-    "weather.spring.weathers.2.descriptions.1": "Small hailstones fall along with strong rain",
-    "weather.spring.weathers.2.descriptions.2": "Hailstones the size of chicken eggs fall from the sky",
-    "weather.spring.weathers.3.descriptions.0": "Gentle wind blows cold mist in your face",
-    "weather.spring.weathers.4.descriptions.0": "Clear sky allows plenty of sun",
-    "weather.spring.weathers.5.descriptions.0": "Scattered clouds rush through the sky",
-    "weather.spring.weathers.5.descriptions.1": "Big, still clouds seem to enjoy the warmth of the sun",
-    "weather.spring.weathers.6.descriptions.0": "Cold air is made unpleasant by high humidity",
-    "weather.spring.weathers.7.descriptions.0": "Rain sometimes falls from gathering clouds",
-    "weather.spring.weathers.8.descriptions.0": "A wall of rain is coming down from the sky",
-    "weather.spring.weathers.8.descriptions.1": "Dense, heavy rain makes it hard to see far",
-    "weather.spring.weathers.9.descriptions.0": "Rain mixed with snow makes everything wet and cold",
-    "weather.spring.weathers.10.descriptions.0": "Strong winds bring snow and memories of winter",
-    "weather.spring.weathers.11.descriptions.0": "Large snowflakes are falling everywhere around you",
-    "weather.spring.weathers.12.descriptions.0": "Occasional snow has little chance of staying for good",
-    "weather.spring.weathers.13.descriptions.0": "Dry, freezing cold makes your breath steam",
-    "weather.spring.weathers.14.descriptions.0": "Pleasant warmth gives hope for early summer",
-    "weather.spring.weathers.15.descriptions.0": "Strong, warm wind carries spring pollen everywhere",
+    "weather.spring.weathers.0.descriptions.0": "The skies are clear, and the air is fresh.",
+    "weather.spring.weathers.1.descriptions.0": "Ice-cold rain falls steadily all around you.",
+    "weather.spring.weathers.2.descriptions.0": "Large hailstones cause large splashes as they fall in the water.",
+    "weather.spring.weathers.2.descriptions.1": "Small hailstones fall along with strong rain.",
+    "weather.spring.weathers.2.descriptions.2": "Hailstones the size of chicken eggs fall from the sky.",
+    "weather.spring.weathers.3.descriptions.0": "Gentle wind blows cold mist in your face.",
+    "weather.spring.weathers.4.descriptions.0": "Clear sky allows plenty of sun.",
+    "weather.spring.weathers.5.descriptions.0": "Scattered clouds rush through the sky.",
+    "weather.spring.weathers.5.descriptions.1": "Big, still clouds seem to enjoy the warmth of the sun.",
+    "weather.spring.weathers.6.descriptions.0": "Cold air is made unpleasant by high humidity.",
+    "weather.spring.weathers.7.descriptions.0": "Rain sometimes falls from gathering clouds.",
+    "weather.spring.weathers.8.descriptions.0": "A wall of rain is coming down from the sky.",
+    "weather.spring.weathers.8.descriptions.1": "Dense, heavy rain makes it hard to see far.",
+    "weather.spring.weathers.9.descriptions.0": "Rain mixed with snow makes everything wet and cold.",
+    "weather.spring.weathers.10.descriptions.0": "Strong winds bring snow and memories of winter.",
+    "weather.spring.weathers.11.descriptions.0": "Large snowflakes are falling everywhere around you.",
+    "weather.spring.weathers.12.descriptions.0": "Occasional snow has little chance of staying for good.",
+    "weather.spring.weathers.13.descriptions.0": "Dry, freezing cold makes your breath steam.",
+    "weather.spring.weathers.14.descriptions.0": "Pleasant warmth gives hope for early summer.",
+    "weather.spring.weathers.15.descriptions.0": "Strong, warm wind carries spring pollen everywhere.",
     "weather.spring.weathers.16.descriptions.0": "The air is hot and unmoving.",
-    "weather.spring.weathers.17.descriptions.0": "Humid, warm air makes everything sticky",
-    "weather.spring.weathers.18.descriptions.0": "Light rain does not get in the way of spring warmth",
+    "weather.spring.weathers.17.descriptions.0": "Humid, warm air makes everything sticky.",
+    "weather.spring.weathers.18.descriptions.0": "Light rain does not get in the way of spring warmth.",
     "weather.summer.name": "Summer",
     "weather.summer.weathers.0.name": "Pleasantly warm",
     "weather.summer.weathers.1.name": "Cloudy and humid",
@@ -2763,25 +2881,31 @@ export const strings = {
     "weather.winter.weathers.16.name": "Blizzard",
     "weather.winter.weathers.17.name": "Hail",
     "weather.winter.weathers.18.name": "Cold and clear",
-    "weather.winter.weathers.0.descriptions.0": "The air is cold and heavy with moisture",
-    "weather.winter.weathers.1.descriptions.0": "Cold fog drifts in slow wafts over the water",
-    "weather.winter.weathers.2.descriptions.0": "Icy rain falls in short, sharp showers",
-    "weather.winter.weathers.3.descriptions.0": "A grey blanket of cloud hangs over the cold water",
-    "weather.winter.weathers.4.descriptions.0": "Wet, heavy snowflakes melt as they hit the water",
-    "weather.winter.weathers.5.descriptions.0": "Rain and snow fall together, neither quite winning",
-    "weather.winter.weathers.6.descriptions.0": "The sky is clear, and a sharp wind cuts across the water",
-    "weather.winter.weathers.7.descriptions.0": "Clouds cover the sky, and the air is nippy",
-    "weather.winter.weathers.8.descriptions.0": "The winter sun shines, but gives little warmth",
-    "weather.winter.weathers.9.descriptions.0": "A light drizzle falls from a dull sky",
-    "weather.winter.weathers.10.descriptions.0": "Heavy, cold rain hammers the water",
-    "weather.winter.weathers.11.descriptions.0": "Bitter winds sweep across the shore",
-    "weather.winter.weathers.12.descriptions.0": "Ice creeps along the shore under a cloudy sky",
-    "weather.winter.weathers.13.descriptions.0": "Sleet stings your face",
-    "weather.winter.weathers.14.descriptions.0": "Light snow drifts down and settles on the reeds",
-    "weather.winter.weathers.15.descriptions.0": "Wind drives the snow across the water",
-    "weather.winter.weathers.16.descriptions.0": "A blizzard turns the world white",
-    "weather.winter.weathers.17.descriptions.0": "Hailstones bounce off the ice at the water's edge",
-    "weather.winter.weathers.18.descriptions.0": "The sky is clear, and the cold is biting",
+    "weather.winter.weathers.0.descriptions.0": "The air is cold and heavy with moisture.",
+    "weather.winter.weathers.1.descriptions.0": "Cold fog drifts in slow wafts over the water.",
+    "weather.winter.weathers.2.descriptions.0": "Icy rain falls in short, sharp showers.",
+    "weather.winter.weathers.3.descriptions.0": "A grey blanket of cloud hangs over the cold water.",
+    "weather.winter.weathers.4.descriptions.0": "Wet, heavy snowflakes melt as they hit the water.",
+    "weather.winter.weathers.5.descriptions.0": "Rain and snow fall together, neither quite winning.",
+    "weather.winter.weathers.6.descriptions.0": "The sky is clear, and a sharp wind cuts across the water.",
+    "weather.winter.weathers.7.descriptions.0": "Clouds cover the sky, and the air is nippy.",
+    "weather.winter.weathers.8.descriptions.0": "The winter sun shines, but gives little warmth.",
+    "weather.winter.weathers.9.descriptions.0": "A light drizzle falls from a dull sky.",
+    "weather.winter.weathers.10.descriptions.0": "Heavy, cold rain hammers the water.",
+    "weather.winter.weathers.11.descriptions.0": "Bitter winds sweep across the shore.",
+    "weather.winter.weathers.12.descriptions.0": "Ice creeps along the shore under a cloudy sky.",
+    "weather.winter.weathers.13.descriptions.0": "Sleet stings your face.",
+    "weather.winter.weathers.14.descriptions.0": "Light snow drifts down and settles on the reeds.",
+    "weather.winter.weathers.15.descriptions.0": "Wind drives the snow across the water.",
+    "weather.winter.weathers.16.descriptions.0": "A blizzard turns the world white.",
+    "weather.winter.weathers.17.descriptions.0": "Hailstones bounce off the ice at the water's edge.",
+    "weather.winter.weathers.18.descriptions.0": "The sky is clear, and the cold is biting.",
+    "class.fish-fighter.name.m": "Fish Fighter",
+    "class.fish-fighter.name.f": "Fish Fighter",
+    "class.fishing-wizard.name.m": "Fishing Wizard",
+    "class.fishing-wizard.name.f": "Fishing Wizard",
+    "class.rogue-fisher.name.m": "Rogue Fisherman",
+    "class.rogue-fisher.name.f": "Rogue Fisherwoman",
     "rules.size-bands.bands.tiny.name": "Tiny",
     "rules.size-bands.bands.small.name": "Small",
     "rules.size-bands.bands.medium.name": "Medium",

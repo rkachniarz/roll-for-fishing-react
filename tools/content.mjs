@@ -31,6 +31,7 @@ const KINDS = {
   locations: { schema: 'location', prefix: 'location' },
   tables: { schema: 'table', prefix: 'table' },
   weather: { schema: 'season', prefix: 'weather' },
+  classes: { schema: 'class', prefix: 'class' },
   // One file per rule set; each has its own schema, named after its id.
   rules: { schema: null, prefix: 'rules' },
 };
@@ -46,6 +47,7 @@ const TEXT = {
   locations: [['name'], ['spots', '@', 'name']],
   tables: [],
   weather: [['name'], ['weathers', '#', 'name'], ['weathers', '#', 'descriptions', '#']],
+  classes: [['name', 'm'], ['name', 'f']],
   rules: [
     ['bands', '@', 'name'],
     ['temperature', '#', 'word'],

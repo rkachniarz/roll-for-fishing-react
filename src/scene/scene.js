@@ -31,7 +31,16 @@ const FAR_LINE = 95;
 /** Where the line comes from: the rod, just below the bottom edge. */
 const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
 
-/** @typedef {import('../engine/cast.js').Cast} Cast */
+/**
+ * The cast as the scene sees it. `recast`: the line counts as cast again after
+ * a missed splash, with the bobber still where it was (D64). `reeledIn`: a
+ * missed splash after which the line comes in.
+ * @typedef {import('../engine/cast.js').Cast & { recast?: boolean, reeledIn?: boolean }} Cast
+ */
+
+/** The open water a cast may land on, in scene pixels: clear of the edges and the shore. */
+export const WATER = { x0: 40, y0: 30, x1: SIZE - 40, y1: 0 };
+WATER.y1 = Math.min(...Array.from({ length: WATER.x1 - WATER.x0 + 1 }, (_, i) => shoreY(WATER.x0 + i, SIZE))) - 30;
 
 /**
  * @param {HTMLCanvasElement} canvas
@@ -183,16 +192,16 @@ export async function createScene(canvas, rand) {
     let shown = cast.phase !== 'idle';
 
     if (cast.phase === 'waiting' || cast.phase === 'bite' || cast.phase === 'done') {
-      const flight = Math.min((now - cast.castAt) / FLIGHT_MS, 1);
+      const flight = cast.recast ? 1 : Math.min((now - cast.castAt) / FLIGHT_MS, 1);
       if (flight < 1) {
         // A thrown arc from the rod to the target.
         bx = ROD_TIP.x + (target.x - ROD_TIP.x) * flight;
         by = ROD_TIP.y + (target.y - ROD_TIP.y) * flight - Math.sin(flight * Math.PI) * 60;
       } else if (cast.phase === 'waiting') {
         if (landedCastAt !== cast.castAt) {
-          // Just landed: a plop.
+          // Just landed: a plop (not for a recast, which never left the water).
           landedCastAt = cast.castAt;
-          addRipple(target.x, target.y, now, far ? 6 : 9);
+          if (!cast.recast) addRipple(target.x, target.y, now, far ? 6 : 9);
           nextAmbientRipple = now + 1800;
         }
         by += Math.floor(now / 650) % 2; // a slow one-pixel bob
@@ -216,7 +225,7 @@ export async function createScene(canvas, rand) {
       if (phaseChanged) doneAt = now;
       const t = Math.min((now - doneAt) / 350, 1);
       const result = cast.outcome.result;
-      if (result === 'caught' || result === 'too-early') {
+      if (result === 'caught' || result === 'landed' || result === 'too-early' || cast.reeledIn) {
         // Reeled in towards the rod.
         bx = target.x + (ROD_TIP.x - target.x) * t;
         by = target.y + (ROD_TIP.y - target.y) * t;

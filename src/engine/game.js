@@ -52,6 +52,8 @@ export const MISS_LIMIT = 2;
  *   missPause: number,
  *   bait: { recovery: number, escapeLoss: number },
  *   reeledIn?: boolean,
+ *   recast?: boolean,
+ *   extra: import('./values.js').Source[],
  * }} GameCast
  *
  * @typedef {{ type: string, [key: string]: any }} GameEvent
@@ -60,9 +62,11 @@ export const MISS_LIMIT = 2;
 /**
  * Every game value, from the character, the equipped items and the buffs.
  * @param {GameState} state
+ * @param {import('./values.js').Source[]} [extra]  Sources that aren't part of
+ *   the state, such as the ?dev bench's overrides; never saved.
  * @returns {Values}
  */
-export function valuesFor(state) {
+export function valuesFor(state, extra = []) {
   /** @type {import('./values.js').Source[]} */
   const sources = [];
   for (const id of [state.equipped.rod, state.equipped.bait]) {
@@ -70,7 +74,7 @@ export function valuesFor(state) {
     if (effects) sources.push({ label: id, effects });
   }
   for (const buff of state.buffs) sources.push({ label: buff.id, effects: buff.effects });
-  return deriveValues(state.character.stats, sources);
+  return deriveValues(state.character.stats, [...sources, ...extra]);
 }
 
 /**
@@ -121,15 +125,17 @@ export function scatter(aim, bounds, radius, dice) {
  * same dice (D53, D63).
  * @param {GameState} state
  * @param {number} now
- * @param {{ aim?: Point | null, bounds?: Bounds | null, landing?: Point | null }} [where]
- *   Where the player aimed and where the water is; or, for a recast after a
- *   missed splash, where the bobber already is.
+ * @param {{ aim?: Point | null, bounds?: Bounds | null, landing?: Point | null,
+ *   extra?: import('./values.js').Source[], recast?: boolean }} [options]
+ *   Where the player aimed (null: anywhere, as with the keyboard) and where the
+ *   water is; or, for a recast after a missed splash, where the bobber already
+ *   is. `extra`: see valuesFor.
  * @returns {{ state: GameState, cast: GameCast, checkpoint: GameState, events: GameEvent[] }}
  */
-export function castLine(state, now, { aim = null, bounds = null, landing = null } = {}) {
+export function castLine(state, now, { aim = null, bounds = null, landing = null, extra = [], recast = false } = {}) {
   // The values for this cast are taken before its charges are spent, so a
   // "next 3 casts" buff covers this one (R1.5).
-  const values = valuesFor(state);
+  const values = valuesFor(state, extra);
   const checkpoint = structuredClone(state);
   checkpoint.buffs = checkpoint.buffs
     .map((b) => (b.casts !== undefined ? { ...b, casts: b.casts - 1 } : b))
@@ -139,7 +145,15 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   next.book.casts++;
   const { dice, commit } = diceFrom(next);
   const timing = timingFrom(values);
-  if (!landing && aim && bounds) landing = scatter(aim, bounds, values.flat.castScatter, dice.scatter);
+  if (!landing && bounds) {
+    // No aim (the keyboard): somewhere on the water, from the same stream,
+    // since where the bobber lands can change the odds (R14).
+    const target = aim ?? {
+      x: dice.scatter.getRandomNumber(bounds.x0, bounds.x1),
+      y: dice.scatter.getRandomNumber(bounds.y0, bounds.y1),
+    };
+    landing = scatter(target, bounds, values.flat.castScatter, dice.scatter);
+  }
   const { line, rolls } = rollLine(next, values, dice);
 
   /** @type {GameCast} */
@@ -151,6 +165,8 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     landing,
     missPause: values.flat.missPause,
     bait: { recovery: values.flat.baitRecovery, escapeLoss: values.flat.baitEscapeLoss },
+    extra,
+    ...(recast ? { recast: true } : {}),
   };
   next.streams = commit();
   return { state: next, cast, checkpoint, events: [{ type: 'cast', landing }] };
@@ -271,7 +287,7 @@ export function tick(state, cast, now) {
     state.missStreak < MISS_LIMIT &&
     now >= next.endedAt + next.missPause
   ) {
-    const recast = castLine(state, now, { landing: next.landing });
+    const recast = castLine(state, now, { landing: next.landing, extra: next.extra, recast: true });
     return { ...recast, events: [{ type: 'recast' }, ...recast.events] };
   }
   return { state, cast: next, events: [] };
@@ -356,7 +372,10 @@ function resolveCast(state, cast) {
     events.push({ type: result === 'missed' ? 'missed' : 'too-early' });
   }
 
-  if (result === 'missed' && next.missStreak >= MISS_LIMIT) events.push({ type: 'reeled-in' });
+  if (result === 'missed' && next.missStreak >= MISS_LIMIT) {
+    events.push({ type: 'reeled-in' });
+    cast = { ...cast, reeledIn: true };
+  }
 
   const levelAfter = levelFor(next.character.xp);
   if (levelAfter > levelBefore) events.push({ type: 'level-up', level: levelAfter });

@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A character class (R6.1, §C.1)",
+  "definitions": {
+    "range": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "integer"
+        },
+        "max": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "$ref": "common.schema.json#/definitions/id"
+    },
+    "role": {
+      "description": "The spec's shorthand for the class (D19).",
+      "enum": [
+        "warrior",
+        "mage",
+        "rogue"
+      ]
+    },
+    "order": {
+      "description": "Where it comes in the list at character creation.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "name": {
+      "description": "The name for each gender (D19).",
+      "type": "object",
+      "properties": {
+        "m": {
+          "$ref": "common.schema.json#/definitions/text"
+        },
+        "f": {
+          "$ref": "common.schema.json#/definitions/text"
+        }
+      },
+      "required": [
+        "m",
+        "f"
+      ],
+      "additionalProperties": false
+    },
+    "stats": {
+      "description": "Each stat is rolled within its range at creation (R6.1).",
+      "type": "object",
+      "properties": {
+        "fishingSkill": {
+          "$ref": "#/definitions/range"
+        },
+        "fishFind": {
+          "$ref": "#/definitions/range"
+        },
+        "treasureFind": {
+          "$ref": "#/definitions/range"
+        }
+      },
+      "required": [
+        "fishingSkill",
+        "fishFind",
+        "treasureFind"
+      ],
+      "additionalProperties": false
+    },
+    "icon": {
+      "$ref": "common.schema.json#/definitions/icon"
+    },
+    "retired": {
+      "$ref": "common.schema.json#/definitions/retired"
+    }
+  },
+  "required": [
+    "id",
+    "role",
+    "order",
+    "name",
+    "stats"
+  ],
+  "additionalProperties": false
+}
