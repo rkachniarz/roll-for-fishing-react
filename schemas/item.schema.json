@@ -14,6 +14,7 @@
     "rarity": { "$ref": "common.schema.json#/definitions/rarity" },
     "value": { "description": "In copper.", "type": "integer", "minimum": 0 },
     "unique": { "description": "Found once per save (R8.10).", "type": "boolean" },
+    "slot": { "description": "The equipment slot it goes in, if it can be equipped (R8.2).", "enum": ["rod", "bait"] },
     "xp": { "description": "XP for finding it (D63).", "type": "integer", "minimum": 0 },
     "effects": {
       "description": "Every item with an upside needs a downside too (R8.5).",

@@ -568,6 +568,15 @@ export const content = {
       "rarity": "poor",
       "value": 1
     },
+    "stick": {
+      "id": "stick",
+      "category": "treasure",
+      "name": "item.stick.name",
+      "flavor": "item.stick.flavor",
+      "rarity": "poor",
+      "value": 0,
+      "slot": "rod"
+    },
     "tangled-fishing-line": {
       "id": "tangled-fishing-line",
       "category": "junk",
@@ -2342,6 +2351,32 @@ export const content = {
     }
   },
   "rules": {
+    "levels": {
+      "id": "levels",
+      "xp": [
+        0,
+        10,
+        25,
+        50,
+        100,
+        250,
+        500,
+        1000,
+        2000,
+        5000
+      ]
+    },
+    "new-game": {
+      "id": "new-game",
+      "location": "lake",
+      "weather": {
+        "season": "spring",
+        "cell": 0
+      },
+      "equipped": {
+        "rod": "stick"
+      }
+    },
     "size-bands": {
       "id": "size-bands",
       "bands": [
@@ -2569,6 +2604,8 @@ export const strings = {
     "item.snail-shell.flavor": "Pretty.",
     "item.soggy-treasure-map.name": "Soggy treasure map",
     "item.soggy-treasure-map.flavor": "If you look really closely, you can make out a fading X.",
+    "item.stick.name": "A stick with some string tied to it",
+    "item.stick.flavor": "Everyone starts somewhere.",
     "item.tangled-fishing-line.name": "Tangled fishing line",
     "item.tangled-fishing-line.flavor": "Impressively knotted.",
     "item.vendor-trash.name": "Vendor trash",

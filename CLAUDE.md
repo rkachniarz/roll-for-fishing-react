@@ -29,7 +29,7 @@ of guessing.
 npm install
 npm run dev     # http://localhost:8001 - must be served, ES modules don't load over file://
 npm run content # check content/ and regenerate src/generated/content.js (run after editing content)
-npm test        # unit tests (node:test): rng, dice, cast engine, content
+npm test        # unit tests (node:test): rng, dice, content, weather, time, fish, the game engine
 npm run verify  # browser checks in headless Chromium; starts its own server on :8123
 node tools/verify.mjs strike   # only the checks whose label contains "strike"
 npm run build   # -> dist/artifact.html, the single-file copy for claude.ai
@@ -43,6 +43,11 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
 - **`src/generated/content.js` is generated and committed (D43, D72).** Edit `content/`, then `npm run content`; a test
   fails if the two disagree. Text in it is keys (`fish.pike.name`); read it with `t()` from `src/strings.js` (D46).
 - **Content ids are permanent (D44).** Never rename or delete one; set `"retired": true` instead.
+- **`src/engine/game.js` (`castLine`) rolls everything on the line when it goes out (D63),** hidden, and returns a
+  `checkpoint` to save while the cast is in progress: buff charges spent, nothing else (D74). Saving the full state
+  mid-cast would let a reload reroll the line.
+- **The save holds every random stream's position (D53),** not just the seed. Take dice with `diceFrom(state)` and
+  store `commit()` in the next state; never create a stream from the seed mid-game.
 
 - **`src/dice.js`: the dice are separate named functions on purpose (D5).** `roll20`, `roll2d6`, `roll100`… Don't
   merge them into a generic `roll('NdM')`. A new die is a new function in the same style.

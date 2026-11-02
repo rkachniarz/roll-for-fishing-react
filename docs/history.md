@@ -36,7 +36,7 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   didn't then check whether the bite had already run out, so a strike long after the bite was still rolled. Fixed in
   `tickCast`.
 
-## Phase 2: Engine core and the port (in progress)
+## Phase 2: Engine core and the port (2026-11-02)
 
 - **2.14** The content pipeline (D42–D46, D72). The prototype's Lake ported into `content/` by a one-off script, not by
   hand: 7 fish, 38 junk items, 7 treasures, 5 spots, and the size bands. Two flavour typos fixed ("bif", "Severly");
@@ -65,3 +65,25 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   difficulty follows the shifted band, Medium has a name, plain weights. Sizes are whole centimetres in non-overlapping
   slices. Writing the rarity test showed that D63's band shifts didn't match the owner's examples (a Humongous roach came
   out Rare); D73 corrects them.
+- **2.1** The game state (`src/engine/state.js`): ids and the player's own state only, with a version, migrations, and
+  each random stream's position (D53). `src/save.js` holds the save slot; a save that can't be read is reported and
+  left in place, never overwritten. A new game starts from `content/rules/new-game.json`.
+- **2.6** The cast pipeline (`src/engine/game.js`): `castLine` rolls the bite (d100 + Fish Find), the fish or the
+  treasure-or-junk roll, the fish's resistance d20, all hidden; `strikeLine` rolls the visible d20 for a fish only;
+  `tick` handles the bite, a missed splash, the 5-second pause and the recast, and the reel-in after a second miss
+  (D64). Every outcome returns plain events for the log. `cast.js` gained landed catches, end times, advantage and
+  named modifiers.
+- **2.7** Junk and treasure in `content/` (2.14); unique treasure found once; the escaped pool per location or spot,
+  where a fish is met again with its tries counted.
+- **2.9, 2.11** Buffs counted in casts (spent as the line goes out, covering that cast) and in real time (counted down
+  by the page while the game is open); cancelling, but not debuffs.
+- **2.10** Luck in the character, at 0.
+- **2.12** The stick in the rod slot; the rod feeds the cast's values (scatter, bite delay, reaction windows) through
+  the same effects as everything else. Bait used up on a catch unless saved, lost to an escaping fish 5% of the time.
+- **2.13** Cast scatter in whole scene pixels from its own stream, clamped to the water. The scene doesn't use it yet:
+  that is Phase 3's wiring.
+- **2.8** A 1,000-cast session runs headless and replays exactly from its seed. Seed 2026, striking at 300 ms: 56% of
+  casts bite, 55% of fish are landed, all seven treasures are found, and the weather changes on 38% of casts, as in the
+  prototype. Once the treasures are gone, treasure rolls come up as "cleaned out" (D74).
+- Phase end: 75 unit tests and all browser checks pass; the artifact builds (26 kB). The page is still the Phase 1
+  trial, unaffected.

@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "stick",
+  "category": "treasure",
+  "name": "A stick with some string tied to it",
+  "flavor": "Everyone starts somewhere.",
+  "rarity": "poor",
+  "value": 0,
+  "slot": "rod"
+}

@@ -4,12 +4,13 @@ What's left to do. Tick boxes as work lands; record decisions in [docs/decisions
 silently changing requirements. Within a phase, tasks are listed in the order they should be done; their numbers are
 only ids, so a task added later keeps its number wherever it lands.
 
-**Where things stand (2026-11-01):** fresh start (D1). Phase 0 is done: the new skeleton, the seeded dice, the docs.
-Phase 1, the feel trial, is playable: the lake scene from the sketch in placeholder pixel art, cast where you tap, wait
-for the splash, strike, a graded reaction and a d20 roll. What's left of Phase 1 is the frame-rate check on a phone and
-the write-up. The design has grown since (buffs, the stew, rods, bait, surface features, content as data: R12–R15,
-D28–D47); the game is still in its vision phase, so there's no rush to build on it. Phase 2 starts with the content
-pipeline (2.14); its calls are made (D63–D66). Phase 3 waits for the owner's layout sketch (Q-38).
+**Where things stand (2026-11-02):** Phase 0 is done, Phase 1 (the feel trial) is playable, with the frame-rate check
+on a phone and the write-up still to do. **Phase 2's engine is done:** content as data in `content/` (the prototype's
+Lake, fish, junk, treasure and weather, ported by script), `npm run content` checking it, and a pure, seeded engine for
+the whole cast: what is on the line, the strike, catches, the escaped pool, bait, buffs, time and weather, saves with
+their random streams. A 1,000-cast session runs headless and replays exactly from its seed. The page is still the
+Phase 1 trial; Phase 3 puts the engine behind it, and waits for the owner's layout sketch (Q-38). The calls made while
+building are in D72–D74, for the owner to check.
 
 ## Where things are
 
@@ -56,7 +57,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 - [x] **2.14** The content pipeline: `content/` laid out one file per entity, a JSON Schema per kind, `npm run content`
   (checks, bundle, string table, missing-art report, overview page), the same checks in `npm test`, and a test that the
   committed bundle is up to date (R15.1–R15.3, R15.5, R15.7, D42, D43, D46).
-- [ ] **2.1** `GameState` and save v1 in localStorage: versioned, saved after every resolved cast, New game (R1). The
+- [x] **2.1** `GameState` and save v1 in localStorage: versioned, saved after every resolved cast, New game (R1). The
   save holds ids only; retired content still resolves; a test loads an old save against new content (R15.4, D44). The
   save holds every random stream's position (R1.6, D53).
 - [x] **2.15** Game values and the effect vocabulary: every number a modifier can change, by name (R6.6), and the
@@ -70,22 +71,22 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
   (D26): every marked edge repeats, every other edge wraps.
 - [x] **2.5** Time as its own clock: 30 game minutes per resolved cast, 48-cast days, 28-day seasons, the weather
   stepping once per cast (R11.4, D66).
-- [ ] **2.6** The cast pipeline with hooks: bite → which fish → size → strike → player roll → fish roll → outcome → loot
+- [x] **2.6** The cast pipeline with hooks: bite → which fish → size → strike → player roll → fish roll → outcome → loot
   → XP. Base stats plus derived modifiers on every game value (D13, R6.6), including the base Fish Find and Treasure
   Find the prototype ignored (D20). Roll records with visibility (R5.1). Everything on the line is rolled when the line
   goes out (D63). Every cast splashes; only fish get the d20; a missed splash resolves the cast, then 5 seconds of
   nothing and a fresh cast, and a second miss in a row reels in (R2.4, R2.8, D64).
-- [ ] **2.9** "Next n casts" buff charges, spent when the line goes out, voided casts included (R1.5, D22).
-- [ ] **2.11** Timed buffs and debuffs alongside cast-counted ones (R12.1, R12.2): timers count down only while
+- [x] **2.9** "Next n casts" buff charges, spent when the line goes out, voided casts included (R1.5, D22).
+- [x] **2.11** Timed buffs and debuffs alongside cast-counted ones (R12.1, R12.2): timers count down only while
   the game is open (D32).
-- [ ] **2.10** Luck as a hidden stat in the state, for events to check later (R6.7).
-- [ ] **2.7** Junk and treasure ported into `content/` (R3.4), using the effect vocabulary (2.15); §C.3 then points at
+- [x] **2.10** Luck as a hidden stat in the state, for events to check later (R6.7).
+- [x] **2.7** Junk and treasure ported into `content/` (R3.4), using the effect vocabulary (2.15); §C.3 then points at
   `content/`. Unique items, found once per save (R8.10, D65). The escaped-fish pool (R3.6).
-- [ ] **2.12** The rod in the game state: the starting stick, whose stats feed the cast as game values: accuracy, reaction
+- [x] **2.12** The rod in the game state: the starting stick, whose stats feed the cast as game values: accuracy, reaction
   windows, bite delay (R13.1, R13.2, D35). An empty bait slot by default (R13.3).
-- [ ] **2.13** Cast scatter: the bobber lands within the rod's accuracy of the aimed point, drawn from its own stream
+- [x] **2.13** Cast scatter: the bobber lands within the rod's accuracy of the aimed point, drawn from its own stream
   (R2.1, D34).
-- [ ] **2.8** A full session runs headless from a seed in tests, and the same seed gives the same result.
+- [x] **2.8** A full session runs headless from a seed in tests, and the same seed gives the same result.
 
 ## Phase 3: Core loop, playable
 

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "The XP curve (\u00a7C.1)",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "const": "levels"
+    },
+    "xp": {
+      "description": "The XP needed to reach each level, from level 0.",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "id",
+    "xp"
+  ],
+  "additionalProperties": false
+}

@@ -173,6 +173,17 @@ export async function buildContent(root = ROOT) {
     }
   }
 
+  const start = all.rules['new-game'];
+  if (start) {
+    const where = 'content/rules/new-game.json';
+    if (!all.locations[start.location]) errors.push(`${where}: no location "${start.location}"`);
+    if (!all.weather[start.weather.season]) errors.push(`${where}: no season "${start.weather.season}"`);
+    for (const [slot, id] of Object.entries(start.equipped)) {
+      if (all.items[id]?.slot !== slot) errors.push(`${where}: "${id}" isn't an item for the ${slot} slot`);
+      else note(id, 'a new game');
+    }
+  } else errors.push('content/rules/new-game.json: missing');
+
   for (const fish of Object.values(all.fish)) {
     const where = `content/fish/${fish.id}.json`;
     if (fish.size.min >= fish.size.max) errors.push(`${where}: size.min must be below size.max`);

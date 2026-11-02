@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "How a new game starts",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "const": "new-game"
+    },
+    "location": {
+      "description": "Where the player starts (R11.1).",
+      "$ref": "common.schema.json#/definitions/id"
+    },
+    "weather": {
+      "type": "object",
+      "description": "The first weather: a season's id and a cell.",
+      "properties": {
+        "season": {
+          "$ref": "common.schema.json#/definitions/id"
+        },
+        "cell": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18
+        }
+      },
+      "required": [
+        "season",
+        "cell"
+      ],
+      "additionalProperties": false
+    },
+    "equipped": {
+      "type": "object",
+      "description": "Item ids in their slots (R13.1).",
+      "properties": {
+        "rod": {
+          "$ref": "common.schema.json#/definitions/id"
+        },
+        "bait": {
+          "$ref": "common.schema.json#/definitions/id"
+        }
+      },
+      "required": [
+        "rod"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "id",
+    "location",
+    "weather",
+    "equipped"
+  ],
+  "additionalProperties": false
+}

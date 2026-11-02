@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/new-game.schema.json",
+  "id": "new-game",
+  "location": "lake",
+  "weather": {
+    "season": "spring",
+    "cell": 0
+  },
+  "equipped": {
+    "rod": "stick"
+  }
+}
