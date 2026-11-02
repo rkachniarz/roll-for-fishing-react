@@ -26,6 +26,7 @@ const UI_STRINGS = {
   'value.reactionOk': 'time for an ok strike',
   'value.strikeLimit': 'time to strike',
   'value.missPause': 'pause after a missed splash',
+  'value.bucketSize': 'bucket size',
   'value.baitRecovery': 'chance to save bait',
   'value.baitEscapeLoss': 'chance to lose bait to an escaping fish',
 
@@ -71,6 +72,14 @@ const UI_STRINGS = {
   'log.weather': 'The weather changes. {description}',
   'log.season': 'It is now {season}. {description}',
   'log.buff-ended': '{buff} has worn off.',
+  'log.bucket-full': 'Your bucket is full. Choose a fish to let go.',
+  'log.released': 'You let the {fish} go.',
+
+  // ---- A full bucket (D59) ----
+  'release.title': 'Your bucket is full',
+  'release.text': 'Let one fish go to make room. It goes back into the water here, and you may meet it again.',
+  'release.new': 'Just caught',
+  'release.fish': '{fish}, {size} cm',
   'log.feature-appeared': 'On the water: {feature}.',
   'log.feature-hit': 'Your bobber lands in {feature}.',
   'log.feature-gone': '{Feature} is gone.',

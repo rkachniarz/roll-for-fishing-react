@@ -5,6 +5,14 @@ an item is settled, delete it from this list (and record a decision if the answe
 
 Newest first.
 
+## Items (Phase 5)
+
+- **A full bucket's dialog** (5.5): "Your bucket is full. Let one fish go to make room. It goes back into the water
+  here, and you may meet it again." The new fish is listed first, marked "Just caught". A dialog rather than WoW's
+  loot window, since D59 asks the player to choose.
+- **A released fish comes back with its tries reset to 0** (5.5): the catch record's "most tries" (R3.6) counts escapes,
+  not releases.
+
 ## The scene (Phase 4)
 
 - **The light of the day** (4.3, `src/scene/light.js`): full night from 21:00 to 05:00, lightening until 07:00,

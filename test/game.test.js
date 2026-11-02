@@ -5,7 +5,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { SAVE_VERSION, deserialize, levelFor, newGame, serialize } from '../src/engine/state.js';
-import { MISS_LIMIT, cancelBuff, castLine, scatter, strikeLine, tick, tickBuffs, valuesFor } from '../src/engine/game.js';
+import { MISS_LIMIT, cancelBuff, castLine, fishInBucket, releaseFish, scatter, strikeLine, tick, tickBuffs, valuesFor } from '../src/engine/game.js';
 import { createRng } from '../src/rng.js';
 import { diceFor } from '../src/dice.js';
 import { TIME } from '../src/engine/time.js';
@@ -263,6 +263,8 @@ function session(seed) {
       out = strikeAfter(state, cast, 300);
     }
     state = out.state;
+    // A full bucket: let the one just caught go (D59).
+    if (state.pendingCatch) state = releaseFish(state, 'new').state;
     now = (out.cast.phase === 'done' ? out.cast.endedAt : now) + 1000;
     log.push(out.events.map((e) => e.type).join(','));
   }
@@ -279,8 +281,7 @@ test('a whole session runs headless, and the same seed gives the same session', 
   const s = a.state;
   assert.equal(s.book.casts, 1000);
   assert.equal(s.time, TIME.startMinutes + 1000 * TIME.castMinutes);
-  const inBucket = s.bucket.reduce((n, b) => n + b.count, 0);
-  assert.equal(inBucket, s.book.catches);
+  assert.equal(fishInBucket(s), 16, 'the bucket filled up, and never past 16');
   assert.ok(s.book.catches > 100, `caught ${s.book.catches}`);
   assert.ok(Object.keys(s.found).length > 10, 'found plenty of junk');
   const uniques = Object.entries(s.found).filter(([, n]) => n > 1).map(([id]) => id);
@@ -379,4 +380,51 @@ test('a cast that misses a feature is an ordinary cast', () => {
   const out = castLine(state, 0, { aim: { x: 200, y: 170 }, bounds: water });
   assert.ok(!out.events.some((e) => e.type === 'feature-hit'));
   assert.equal(out.state.features[0].uses, 4);
+});
+
+// ---------- A full bucket (5.5, D57, D59) ----------
+
+/**
+ * A game with a full bucket and a fish on the line, struck in time.
+ * @param {number} seed
+ */
+function fullBucketCatch(seed) {
+  const full = Array.from({ length: 16 }, (_, i) => ({ fish: { species: 'roach', subname: 0, band: 2, size: 15 + i, difficulty: 1, xp: 1, rarity: 'common' }, count: 1 }));
+  for (let s = seed; s < seed + 300; s++) {
+    const { state, cast } = castUntil({ ...game(s), bucket: structuredClone(full) }, (c) => c.line.kind === 'fish');
+    const out = strikeAfter(state, cast, 200);
+    if (out.events.some((e) => e.type === 'caught')) return out;
+  }
+  throw new Error('no catch');
+}
+
+test('a catch with a full bucket waits for a fish to be let go, and nothing is cast meanwhile', () => {
+  const out = fullBucketCatch(40);
+  assert.ok(out.events.some((e) => e.type === 'bucket-full'));
+  assert.ok(out.state.pendingCatch);
+  assert.equal(fishInBucket(out.state), 16);
+  assert.equal(out.state.book.catches, 1, 'it still counts as caught');
+  const blocked = castLine(out.state, 0);
+  assert.equal(blocked.cast.phase, 'idle');
+  assert.ok(blocked.events.some((e) => e.type === 'bucket-full'));
+});
+
+test('letting the new fish go puts it back in the water here', () => {
+  const out = fullBucketCatch(40);
+  const fish = out.state.pendingCatch;
+  const { state, events } = releaseFish(out.state, 'new');
+  assert.equal(state.pendingCatch, null);
+  assert.equal(fishInBucket(state), 16);
+  assert.deepEqual(state.escaped.lake.at(-1), { ...fish, tries: 0 });
+  assert.equal(events[0].type, 'released');
+});
+
+test('letting a bucket fish go makes room for the new one', () => {
+  const out = fullBucketCatch(40);
+  const fish = out.state.pendingCatch;
+  const { state } = releaseFish(out.state, 0);
+  assert.equal(fishInBucket(state), 16);
+  assert.ok(state.bucket.some((b) => b.fish.size === fish?.size && b.fish.species === fish?.species));
+  assert.ok(!state.bucket.some((b) => b.fish.size === 15 && b.fish.species === 'roach'), 'the first roach is gone');
+  assert.equal(state.escaped.lake.at(-1).size, 15);
 });

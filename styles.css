@@ -441,3 +441,33 @@ button.quiet {
   image-rendering: pixelated;
   background: rgb(20 35 43 / 0.85);
 }
+
+/* ---------- A full bucket ---------- */
+
+.release p {
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+.release-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 60dvh;
+  overflow-y: auto;
+}
+
+.release-list button {
+  flex-shrink: 0;
+  text-align: left;
+}
+
+/* Long item names mustn't push the bench wider than a phone. */
+.dev select {
+  max-width: 100%;
+}
+
+.dev {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}

@@ -52,6 +52,7 @@ export const MISS_LIMIT = 2;
  *   landing: Point | null,
  *   missPause: number,
  *   bait: { recovery: number, escapeLoss: number },
+ *   bucketSize: number,
  *   reeledIn?: boolean,
  *   recast?: boolean,
  *   extra: import('./values.js').Source[],
@@ -134,6 +135,10 @@ export function scatter(aim, bounds, radius, dice) {
  * @returns {{ state: GameState, cast: GameCast, checkpoint: GameState, events: GameEvent[] }}
  */
 export function castLine(state, now, { aim = null, bounds = null, landing = null, extra = [], recast = false } = {}) {
+  // A full bucket waits for the player's choice before anything else (D59).
+  if (state.pendingCatch) {
+    return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'bucket-full' }] };
+  }
   // The values for this cast are taken before its charges are spent, so a
   // "next 3 casts" buff covers this one (R1.5).
   const values = valuesFor(state, extra);
@@ -178,6 +183,7 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     landing,
     missPause: values.flat.missPause,
     bait: { recovery: values.flat.baitRecovery, escapeLoss: values.flat.baitEscapeLoss },
+    bucketSize: values.flat.bucketSize,
     extra,
     ...(recast ? { recast: true } : {}),
   };
@@ -358,8 +364,9 @@ function resolveCast(state, cast) {
   if (line.kind === 'fish') {
     const fish = line.fish;
     if (result === 'caught') {
-      catchFish(next, fish);
+      catchFish(next, fish, cast.bucketSize);
       events.push({ type: 'caught', fish, roll: cast.outcome.rolls[0], required: line.required, seenBefore: line.seenBefore });
+      if (next.pendingCatch) events.push({ type: 'bucket-full' });
       if (next.equipped.bait) {
         if (dice.bait.roll100() <= cast.bait.recovery) events.push({ type: 'bait-saved', bait: next.equipped.bait });
         else events.push({ type: 'bait-eaten', bait: useBait(next), fish });
@@ -422,15 +429,18 @@ function resolveCast(state, cast) {
 }
 
 /**
- * Into the bucket, stacked with an identical twin (D50); into the book (R4.2).
+ * Into the bucket, stacked with an identical twin (D50), unless it's full
+ * (D57); into the book (R4.2).
  * @param {GameState} state
  * @param {PoolFish} fish
+ * @param {number} bucketSize
  */
-function catchFish(state, fish) {
+function catchFish(state, fish, bucketSize) {
   const { tries, ...instance } = fish;
-  const twin = state.bucket.find((b) => sameFish(b.fish, instance));
-  if (twin) twin.count++;
-  else state.bucket.push({ fish: instance, count: 1 });
+  // Caught either way: the book and the XP count it. A full bucket holds it
+  // back until the player lets one go (D59).
+  if (fishInBucket(state) >= bucketSize) state.pendingCatch = instance;
+  else addToBucket(state, instance);
 
   state.book.catches++;
   const record = { size: fish.size, location: state.location, spot: state.spot, time: state.time, weather: { season: state.weather.season, cell: state.weather.cell } };
@@ -445,6 +455,48 @@ function catchFish(state, fish) {
     entry.mostTries = Math.max(entry.mostTries, tries ?? 0);
   }
   state.character.xp += fish.xp;
+}
+
+/** @param {GameState} state */
+export function fishInBucket(state) {
+  return state.bucket.reduce((n, b) => n + b.count, 0);
+}
+
+/**
+ * @param {GameState} state
+ * @param {import('./fish.js').FishInstance} fish
+ */
+function addToBucket(state, fish) {
+  const twin = state.bucket.find((b) => sameFish(b.fish, fish));
+  if (twin) twin.count++;
+  else state.bucket.push({ fish, count: 1 });
+}
+
+/**
+ * The player lets a fish go to make room (D59): the one just caught, or one
+ * from the bucket, which the new one then replaces. The fish goes back into
+ * the water here, into the pool of fish that can be met again (R3.6).
+ * @param {GameState} state
+ * @param {number | 'new'} choice  An index into the bucket, or 'new'.
+ * @returns {{ state: GameState, events: GameEvent[] }}
+ */
+export function releaseFish(state, choice) {
+  if (!state.pendingCatch) return { state, events: [] };
+  const next = structuredClone(state);
+  const caught = /** @type {import('./fish.js').FishInstance} */ (next.pendingCatch);
+  let released = caught;
+  if (choice !== 'new') {
+    const stack = next.bucket[choice];
+    if (!stack) return { state, events: [] };
+    released = stack.fish;
+    stack.count--;
+    next.bucket = next.bucket.filter((b) => b.count > 0);
+    addToBucket(next, caught);
+  }
+  next.pendingCatch = null;
+  const key = poolKey(next);
+  next.escaped[key] = [...(next.escaped[key] ?? []), { ...released, tries: 0 }];
+  return { state: next, events: [{ type: 'released', fish: released }] };
 }
 
 /**

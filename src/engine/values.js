@@ -57,6 +57,10 @@ export const GAME_VALUES = {
   /** After a missed splash, how long nothing happens before the line counts as cast again (D64). */
   missPause: { better: 'lower', base: 5000 },
 
+  // ---- The bucket (D57) ----
+  /** How many fish the bucket holds; a full one sends the player to town. */
+  bucketSize: { better: 'higher', base: 16 },
+
   // ---- Bait (D39, D61) ----
   /** The chance, in percent, that bait is saved when a fish is caught. */
   baitRecovery: { better: 'higher', base: 10 },

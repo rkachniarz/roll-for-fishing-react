@@ -138,3 +138,12 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   shadows drifting with the wind, rain slanting with it, snow when it's 2 or colder, livelier waves and reeds in the
   wind. Tints rather than palette swaps for now, which works for generated art; hand-drawn art may want real palettes
   (4.1). The first night screenshot lost the blizzard under the night tint, so rain and snow are now drawn above it.
+
+## Phase 5: Items and inventory (in progress)
+
+- **5.5** The bucket holds 16 fish to start (`bucketSize`, a game value, so bigger buckets can come as items). A fish
+  caught with the bucket full still counts in the book and gives its XP, then waits as `pendingCatch`: no cast goes
+  out until the player lets one go, the new one included (D59). The released fish goes into this spot's pool of fish
+  that can be met again. A dialog lists the choices in rarity colours; the bench can fill the bucket. Two fixes from
+  the phone-sized checks: the bench's long item names pushed its layout wider than the screen, so a section covered
+  its buttons; and the dialog's scrolling list squeezed its buttons until their text spilled out.

@@ -188,7 +188,16 @@ export function createBench(root, { getState, setState, overrides, extraSources,
     section('Inventory', [
       el('div', { className: 'dev-row' }, [itemSelect, addItem, equipItem]),
       inventoryLine,
-      button('Empty bucket', () => edit((s) => ({ ...s, bucket: [] }))),
+      el('div', { className: 'dev-row' }, [
+        button('Empty bucket', () => edit((s) => ({ ...s, bucket: [] }))),
+        button('Fill bucket', () =>
+          edit((s) => {
+            const room = valuesFor(s, extraSources()).flat.bucketSize - s.bucket.reduce((n, b) => n + b.count, 0);
+            for (let i = 0; i < room; i++) s.bucket.push({ fish: { species: 'roach', subname: 0, band: 2, size: 15 + (i % 10), difficulty: 1, xp: 1, rarity: 'common' }, count: 1 });
+            return s;
+          }),
+        ),
+      ]),
     ]),
     section('Buffs', [el('div', { className: 'dev-row' }, [button('+ Fish Find buff, 3 casts', () => addBuff('casts')), button('+ Fish Find buff, 2 min', () => addBuff('ms')), button('+ debuff, 90 s', () => addBuff('debuff'))]), buffsLine]),
   );

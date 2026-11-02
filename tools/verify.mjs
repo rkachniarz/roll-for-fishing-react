@@ -263,6 +263,26 @@ await check('the sky', PHONE, '?dev&seed=3', async (page) => {
   report('the sky: the weather and time are set', /Winter.*02:00.*Blizzard/.test(where), where);
 });
 
+await check('a full bucket', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+  await page.click('#devPanel summary');
+  for (const [name, value] of [['fishingSkill', '100'], ['fishFind', '100']]) {
+    await page.fill(`#dev-${name}`, value);
+    await page.press(`#dev-${name}`, 'Enter');
+  }
+  await page.click('text=Fill bucket');
+  await page.locator('#scene').scrollIntoViewIfNeeded();
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('#release[open]', { timeout: 2000 });
+  await page.screenshot({ path: 'dist/verify/full-bucket.png' });
+  const options = await page.locator('#releaseList button').count();
+  report('a full bucket: the new fish and the bucket to choose from', options >= 2, `${options} options`);
+  await page.click('#releaseList button >> nth=1');
+  report('a full bucket: the choice closes it', !(await page.isVisible('#release')));
+  report('a full bucket: the log says so', /You let the .* go\./.test((await page.textContent('#log')) ?? ''));
+});
+
 await browser.close();
 server.kill();
 console.log(failures ? `\n${failures} check(s) failed` : '\nAll checks passed');

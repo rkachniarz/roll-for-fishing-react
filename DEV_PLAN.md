@@ -122,7 +122,7 @@ Requirements R8.
 - [ ] **5.3** Port the seven items with real downsides (§C.3), plus about 15 more; the "every upside has a downside" data
   test (R8.5).
 - [ ] **5.4** Tooltips generated from effects (R8.6).
-- [ ] **5.5** Fish bucket: fish only, identical twins stack, 16 fish to start; a full bucket asks which fish to release,
+- [x] **5.5** Fish bucket: fish only, identical twins stack, 16 fish to start; a full bucket asks which fish to release,
   and the released fish joins the spot's escaped-fish pool (R8.3, R3.6, D24, D50, D57, D59).
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI.
 - [ ] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38).

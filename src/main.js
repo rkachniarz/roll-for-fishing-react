@@ -13,7 +13,7 @@ import { diceFor } from './dice.js';
 import { content } from './generated/content.js';
 import { t } from './strings.js';
 import { newGame, levelFor } from './engine/state.js';
-import { MISS_LIMIT, cancelBuff, castLine, strikeLine, tick, tickBuffs } from './engine/game.js';
+import { MISS_LIMIT, cancelBuff, castLine, releaseFish, strikeLine, tick, tickBuffs } from './engine/game.js';
 import { classes, className, generateName, rollStats } from './engine/character.js';
 import { fishNameKeys } from './engine/fish.js';
 import { clock } from './engine/time.js';
@@ -124,6 +124,44 @@ function apply(out) {
   if (out.checkpoint) saveGame(storage, out.checkpoint);
   else if (changed && cast.phase !== 'waiting' && cast.phase !== 'bite') saveGame(storage, state);
   render();
+  if (state.pendingCatch) openRelease();
+}
+
+// ---------- A full bucket: let one go (D59) ----------
+
+function openRelease() {
+  const dialog = /** @type {HTMLDialogElement} */ ($('release'));
+  if (dialog.open || !state?.pendingCatch) return;
+  const s = state;
+  $('releaseTitle').textContent = t('release.title');
+  $('releaseText').textContent = t('release.text');
+  /**
+   * @param {import('./engine/fish.js').FishInstance} fish
+   * @param {number | 'new'} choice
+   * @param {string} [note]
+   */
+  const option = (fish, choice, note) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = t('release.fish', { fish: fishName(fish), size: fish.size }) + (note ? ` (${note})` : '');
+    b.style.color = RARITY_COLOURS[/** @type {keyof typeof RARITY_COLOURS} */ (fish.rarity)];
+    b.addEventListener('click', () => {
+      const out = releaseFish(s, choice);
+      state = out.state;
+      log(...out.events.map(describeEvent).filter((line) => line !== null));
+      saveGame(storage, state);
+      dialog.close();
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      render();
+    });
+    return b;
+  };
+  $('releaseList').replaceChildren(
+    option(/** @type {import('./engine/fish.js').FishInstance} */ (s.pendingCatch), 'new', t('release.new')),
+    ...s.bucket.map((b, i) => option(b.fish, i, b.count > 1 ? `×${b.count}` : undefined)),
+  );
+  dialog.addEventListener('cancel', (e) => e.preventDefault());
+  dialog.showModal();
 }
 
 /**
@@ -238,6 +276,9 @@ function describeEvent(e) {
       const name = t(content.features[e.feature].name);
       return t(`log.${e.type}`, { feature: name, Feature: name.charAt(0).toUpperCase() + name.slice(1) });
     }
+    case 'released':
+      return t('log.released', { fish: fishName(e.fish) });
+    case 'bucket-full':
     case 'too-early':
     case 'empty':
     case 'reeled-in':
@@ -539,6 +580,7 @@ const loaded = loadGame(storage);
 if (loaded.state) {
   state = loaded.state;
   render();
+  if (state.pendingCatch) openRelease();
 } else {
   render();
   openCreation(loaded.error ? t('panel.badSave', { error: loaded.error }) : null);

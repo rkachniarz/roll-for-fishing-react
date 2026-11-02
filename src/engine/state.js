@@ -56,6 +56,9 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, PoolFish[]>} escaped  Per location or location/spot (R3.6, D59).
  * @property {Buff[]} buffs
  * @property {import('./features.js').Feature[]} features  On the water now (R14).
+ * @property {import('./fish.js').FishInstance | null} [pendingCatch]  A fish landed with
+ *   the bucket full, waiting for the player to choose one to let go (D59). No
+ *   cast goes out until then.
  * @property {{ casts: number, catches: number, fish: Record<string, BookEntry> }} book  The
  *   accomplishments book (R4.2).
  * @property {Record<string, boolean | number | string>} flags  For events (R10).
@@ -104,6 +107,7 @@ export function newGame({ seed, character }) {
     escaped: {},
     buffs: [],
     features: [],
+    pendingCatch: null,
     book: { casts: 0, catches: 0, fish: {} },
     flags: {},
     missStreak: 0,
