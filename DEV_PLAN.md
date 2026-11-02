@@ -4,11 +4,10 @@ What's left to do. Tick boxes as work lands; record decisions in [docs/decisions
 silently changing requirements. Within a phase, tasks are listed in the order they should be done; their numbers are
 only ids, so a task added later keeps its number wherever it lands.
 
-**Where things stand (2026-11-02):** Phases 0 and 2 are done; Phase 1 (the feel trial) only lacks the frame-rate check
-on a phone and the write-up. **Phase 3 is under way: the game is playable on the real engine.** Character creation,
-casting with scatter, the full cast (fish, junk, treasure, the hidden rolls, the missed-splash pause and recast), the
-log, saving after every cast and the checkpoint mid-cast, New game, the buff bar, and the `?dev` bench. Left: 3.5 (GitHub Pages, needs a push) and 3.2. The panel is plain: the
-layout (3.2) waits for the owner's sketch (Q-38). Claude's guesses and calls are listed in
+**Where things stand (2026-11-02):** Phases 0, 1 and 2 are done. **Phase 3: the game is playable on the real engine**:
+character creation, the full cast with its hidden rolls, the log, saving, New game, the buff bar and the `?dev` bench.
+Left in Phase 3: the layout (3.2), which gets a refinement pass later, and GitHub Pages (3.5), deferred (D77). Work
+moves on to the phases that don't depend on the layout. Claude's guesses and calls are listed in
 [docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
 
 ## Where things are
@@ -45,9 +44,9 @@ The riskiest part first: the reflex loop and the scene tech, before anything is 
   and 3 (R7.2, R7.3).
 - [x] **1.3** Sprites as code (D9): `src/scene/sprites.js`.
 - [x] **1.4** Try the timings on a real phone with the `?dev` presets and pick defaults: Normal, for now (D27).
-- [ ] **1.5** Check 60 fps on a mid-range phone, and that the splash-to-tap delay feels fair (no sense of lag).
+- [x] **1.5** Check 60 fps on a mid-range phone, and that the splash-to-tap delay feels fair (no sense of lag).
 - [x] **1.6** Cast engine with reaction grades, pure and tested (`src/engine/cast.js`, R2.2–R2.6).
-- [ ] **1.7** Write the trial up in history.md, with what was measured.
+- [x] **1.7** Write the trial up in history.md, with what was measured.
 
 ## Phase 2: Engine core and the port
 
@@ -96,7 +95,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 - [x] **3.3** Character creation: name generator, gender, class (gendered names, D19), stat rolls (R6.1).
 - [x] **3.4** `?dev` bench: location, spot, weather, time, items, level, and as many game values as practical; an
   "empty bucket" button (R9.5, D27, D68).
-- [ ] **3.5** Deployed to GitHub Pages, so the owner can play anywhere without a server; playable end to end on a phone
+- [ ] **3.5** *(Deferred, D77.)* Deployed to GitHub Pages, so the owner can play anywhere without a server; playable end to end on a phone
   (D68).
 - [x] **3.6** Buff and debuff bar at the top right of the game area, WoW style: green and red rows, the duration in the
   corner (nearest minute, then seconds), a description on hover or tap, cancel a buff by right-click or long-press

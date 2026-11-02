@@ -27,7 +27,7 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   [decisions.md](decisions.md) D1–D18; DEV_PLAN.md; CLAUDE.md; README.md. The first review of the prototype became
   PORTING-NOTES.md.
 
-## Phase 1: Feel trial (in progress)
+## Phase 1: Feel trial (2026-10-28 to 2026-11-02)
 
 - **1.1–1.3** The scene from the sketch in placeholder pixel art, all drawn by code. A first pass had a bobber too small
   to react to comfortably at 2× and hard stripes between the water bands that read as horizon lines; the bobber is now
@@ -35,6 +35,14 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
 - **1.6** The cast engine. Its tests found a bug on the first run: a single tick moved a cast from waiting to bite but
   didn't then check whether the bite had already run out, so a strike long after the bite was still rolled. Fixed in
   `tickCast`.
+
+- **1.4** The owner tried the `?dev` timing presets on a real phone and kept Normal for now (D27): fast under 450 ms,
+  ok under 900 ms, gone at 3 s, a bite 2.5 to 8 s after the cast.
+- **1.5** On the owner's phone, over the local network, the frame rate looked stable. No lag in the splash-to-tap
+  timing was reported; the reaction is timed from the frame that shows the splash (D16).
+- **1.7** What the trial settled: Pixi with whole-device-pixel scaling holds up on a phone at devicePixelRatio 2.625
+  and 3, the reflex loop works with taps and keys, and the cast engine's tests caught a real bug before any player
+  could. The trial's page was replaced by the real engine in Phase 3.
 
 ## Phase 2: Engine core and the port (2026-11-02)
 
