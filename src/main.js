@@ -232,6 +232,12 @@ function describeEvent(e) {
       return t('log.season', { season: t(content.weather[e.season].name), description: t(e.weather.description) });
     case 'buff-ended':
       return t('log.buff-ended', { buff: e.buff });
+    case 'feature-appeared':
+    case 'feature-hit':
+    case 'feature-gone': {
+      const name = t(content.features[e.feature].name);
+      return t(`log.${e.type}`, { feature: name, Feature: name.charAt(0).toUpperCase() + name.slice(1) });
+    }
     case 'too-early':
     case 'empty':
     case 'reeled-in':
@@ -311,6 +317,7 @@ function render() {
 
   if (!state) return;
   buffBar.update(state.buffs);
+  scene.setFeatures(state.features.map((f) => ({ ...f, kind: content.features[f.id].kind })));
   const c = state.character;
   $('who').textContent = t('panel.character', {
     name: c.name,

@@ -26,6 +26,23 @@
       "type": "integer",
       "minimum": 0
     },
+    "featureChance": {
+      "description": "The chance, in percent, that a new surface feature appears after a cast (R14).",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "maxFeatures": { "description": "How many surface features can be on the water at once.", "type": "integer", "minimum": 0 },
+    "features": {
+      "description": "The surface features that can appear here (D40).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "id": { "$ref": "common.schema.json#/definitions/id" }, "weight": { "$ref": "common.schema.json#/definitions/weight" } },
+        "required": ["id", "weight"],
+        "additionalProperties": false
+      }
+    },
     "spots": {
       "description": "Parts of the location, each adding to its lists (R11.8).",
       "type": "array",

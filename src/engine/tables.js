@@ -56,19 +56,32 @@ function expand(list) {
 export function locationTable({ location, spot }, list, { weather, found = {} } = {}) {
   const loc = content.locations[location];
   const spotData = spot ? loc.spots.find((/** @type {{ id: string }} */ s) => s.id === spot) : null;
-  const entries = [...expand(loc[list]), ...expand(spotData?.[list])];
+  const table = listTable([...(loc[list] ?? []), ...(spotData?.[list] ?? [])], list, { weather, found });
+  if (list === 'junk' && loc.emptyHook > 0) table.push({ id: null, weight: loc.emptyHook });
+  return table;
+}
 
+/**
+ * A table from any list of entries: a location's, or a surface feature's that
+ * replaces it (R14). The same skipping and weather bonuses as locationTable.
+ * @param {{ id?: string, table?: string, weight?: number }[]} list
+ * @param {'fish' | 'treasure' | 'junk'} kind
+ * @param {Object} [world]
+ * @param {import('./weather.js').Weather} [world.weather]
+ * @param {Record<string, number>} [world.found]
+ * @returns {Entry[]}
+ */
+export function listTable(list, kind, { weather, found = {} } = {}) {
   /** @type {Entry[]} */
   const table = [];
-  for (const e of entries) {
-    const thing = list === 'fish' ? content.fish[e.id] : content.items[e.id];
+  for (const e of expand(list)) {
+    const thing = kind === 'fish' ? content.fish[e.id] : content.items[e.id];
     if (thing.retired) continue;
     if (thing.unique && found[e.id]) continue;
     let weight = e.weight;
-    if (list === 'fish' && weather) weight = Math.max(1, weight + weatherBonus(thing, weather));
+    if (kind === 'fish' && weather) weight = Math.max(1, weight + weatherBonus(thing, weather));
     table.push({ id: e.id, weight });
   }
-  if (list === 'junk' && loc.emptyHook > 0) table.push({ id: null, weight: loc.emptyHook });
   return table;
 }
 

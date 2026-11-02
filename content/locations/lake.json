@@ -4,6 +4,8 @@
   "name": "The Lake",
   "biteThreshold": 50,
   "treasureThreshold": 5,
+  "featureChance": 12,
+  "maxFeatures": 2,
   "fish": [
     {
       "id": "carp",
@@ -219,6 +221,24 @@
     }
   ],
   "emptyHook": 45,
+  "features": [
+    {
+      "id": "roach-school",
+      "weight": 5
+    },
+    {
+      "id": "carp-school",
+      "weight": 3
+    },
+    {
+      "id": "big-pike",
+      "weight": 1
+    },
+    {
+      "id": "glint",
+      "weight": 2
+    }
+  ],
   "spots": [
     {
       "id": "crossroads",

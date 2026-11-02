@@ -22,6 +22,8 @@ export const PALETTE = {
   reed: '#2fa84a',
   reedLight: '#5cc463',
   line: '#f4f4f4',
+  shadow: '#2c5f80',
+  eerie: '#8a4fd0',
 };
 
 /** @type {Record<string, string>} */

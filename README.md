@@ -26,7 +26,7 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 |---|---|
 | `index.html` | The page, and the import map pinning PixiJS |
 | `styles.css` | Layout: scene above the panel on phones, beside it on wide screens |
-| `content/` | Game content as data, one JSON file per thing: fish, items, locations, tables, rules |
+| `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, weather, surface features, tables, rules |
 | `schemas/` | A JSON Schema per kind of content; VS Code uses them to check and complete content files |
 | `src/generated/content.js` | Built from `content/` by `npm run content`; don't edit |
 | `src/strings.js` | `t()`: all player-facing text goes through it |
@@ -43,6 +43,7 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `src/engine/state.js` | The game state: new game, saves and their migrations, the random streams |
 | `src/engine/game.js` | One cast from the game's side: the line, the strike, what it changes; buffs |
 | `src/engine/character.js` | Character creation: names, classes, stat rolls |
+| `src/engine/features.js` | Surface features: appearing, drifting, thinning out; the open water's bounds |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |

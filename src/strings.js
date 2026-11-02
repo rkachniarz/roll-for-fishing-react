@@ -71,6 +71,9 @@ const UI_STRINGS = {
   'log.weather': 'The weather changes. {description}',
   'log.season': 'It is now {season}. {description}',
   'log.buff-ended': '{buff} has worn off.',
+  'log.feature-appeared': 'On the water: {feature}.',
+  'log.feature-hit': 'Your bobber lands in {feature}.',
+  'log.feature-gone': '{Feature} is gone.',
 
   // ---- The panel ----
   'panel.character': '{name}, {className} · level {level} ({xp} XP)',

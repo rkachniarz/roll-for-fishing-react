@@ -222,6 +222,21 @@ await check('the buff bar', DESKTOP, '?dev&seed=3', async (page) => {
   report('buff bar: a click on it is not a cast', (await page.getAttribute('body', 'data-phase')) === 'idle');
 });
 
+await check('surface features', PHONE, '?dev&seed=3&wait=600', async (page) => {
+  await page.click('#devPanel summary');
+  await page.selectOption('#dev-feature', 'roach-school');
+  await page.click('text=Spawn in the middle');
+  await page.locator('#scene').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: 'dist/verify/surface-feature.png' });
+  // Cast at the middle of the scene (128, 100), where the school is.
+  const box = await page.locator('#scene').boundingBox();
+  await page.touchscreen.tap(box.x + (box.width * 128) / 256, box.y + (box.height * 100) / 256);
+  await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });
+  const log = (await page.textContent('#log')) ?? '';
+  report('surface features: landing in a school says so', log.includes('Your bobber lands in a school of roach.'), log);
+});
+
 await browser.close();
 server.kill();
 console.log(failures ? `\n${failures} check(s) failed` : '\nAll checks passed');

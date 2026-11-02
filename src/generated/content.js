@@ -624,6 +624,8 @@ export const content = {
       "name": "location.lake.name",
       "biteThreshold": 50,
       "treasureThreshold": 5,
+      "featureChance": 12,
+      "maxFeatures": 2,
       "fish": [
         {
           "id": "carp",
@@ -839,6 +841,24 @@ export const content = {
         }
       ],
       "emptyHook": 45,
+      "features": [
+        {
+          "id": "roach-school",
+          "weight": 5
+        },
+        {
+          "id": "carp-school",
+          "weight": 3
+        },
+        {
+          "id": "big-pike",
+          "weight": 1
+        },
+        {
+          "id": "glint",
+          "weight": 2
+        }
+      ],
       "spots": [
         {
           "id": "crossroads",
@@ -2421,6 +2441,91 @@ export const content = {
       }
     }
   },
+  "features": {
+    "big-pike": {
+      "id": "big-pike",
+      "name": "feature.big-pike.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "pike",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "carp-school": {
+      "id": "carp-school",
+      "name": "feature.carp-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 3,
+      "lifetime": 20,
+      "drift": 3,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 30
+        }
+      ],
+      "fish": [
+        {
+          "id": "carp",
+          "weight": 1
+        }
+      ]
+    },
+    "glint": {
+      "id": "glint",
+      "name": "feature.glint.name",
+      "kind": "curious",
+      "radius": 8,
+      "uses": 2,
+      "lifetime": 16,
+      "drift": 0,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": -100
+        },
+        {
+          "value": "treasureFind",
+          "add": 40
+        }
+      ]
+    },
+    "roach-school": {
+      "id": "roach-school",
+      "name": "feature.roach-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "roach",
+          "weight": 1
+        }
+      ]
+    }
+  },
   "rules": {
     "levels": {
       "id": "levels",
@@ -2906,6 +3011,10 @@ export const strings = {
     "class.fishing-wizard.name.f": "Fishing Wizard",
     "class.rogue-fisher.name.m": "Rogue Fisherman",
     "class.rogue-fisher.name.f": "Rogue Fisherwoman",
+    "feature.big-pike.name": "a big pike just under the surface",
+    "feature.carp-school.name": "a school of carp",
+    "feature.glint.name": "something glinting in the water",
+    "feature.roach-school.name": "a school of roach",
     "rules.size-bands.bands.tiny.name": "Tiny",
     "rules.size-bands.bands.small.name": "Small",
     "rules.size-bands.bands.medium.name": "Medium",

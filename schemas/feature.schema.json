@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A surface feature: a school, a big fish, a curious spot or a disturbance (R14)",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "$ref": "common.schema.json#/definitions/id"
+    },
+    "name": {
+      "description": "As it reads in the log: 'a school of roach'.",
+      "$ref": "common.schema.json#/definitions/text"
+    },
+    "kind": {
+      "description": "How it looks on the water.",
+      "enum": [
+        "school",
+        "big-fish",
+        "curious",
+        "disturbance"
+      ]
+    },
+    "radius": {
+      "description": "How close to its centre the bobber must land, in scene pixels.",
+      "type": "integer",
+      "minimum": 2
+    },
+    "uses": {
+      "description": "How many casts into it before it's fished out (R14.3).",
+      "type": "integer",
+      "minimum": 1
+    },
+    "lifetime": {
+      "description": "How many casts it stays, if not fished out first.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "drift": {
+      "description": "How far it may drift with each cast, in scene pixels.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "effects": {
+      "description": "Game value changes for a cast that lands in it.",
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/definitions/effect"
+      }
+    },
+    "fish": {
+      "description": "For a cast that lands in it, the fish table instead of the location's.",
+      "$ref": "common.schema.json#/definitions/entries"
+    },
+    "junk": {
+      "description": "For a cast that lands in it, the junk table instead of the location's.",
+      "$ref": "common.schema.json#/definitions/entries"
+    },
+    "minBand": {
+      "description": "A fish from it is at least this size band (an id from content/rules/size-bands.json).",
+      "$ref": "common.schema.json#/definitions/id"
+    },
+    "event": {
+      "description": "A disturbance's event (Phase 7).",
+      "$ref": "common.schema.json#/definitions/id"
+    },
+    "icon": {
+      "$ref": "common.schema.json#/definitions/icon"
+    },
+    "retired": {
+      "$ref": "common.schema.json#/definitions/retired"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "kind",
+    "radius",
+    "uses",
+    "lifetime",
+    "drift"
+  ],
+  "additionalProperties": false
+}

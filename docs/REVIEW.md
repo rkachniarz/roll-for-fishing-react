@@ -7,6 +7,20 @@ Newest first.
 
 ## The scene (Phase 4)
 
+- **Surface features' numbers** (4.5, D78), all in `content/features/` and `content/locations/lake.json`:
+  - The Lake: a 12% chance of a new one after each cast, at most two at once; roach school weight 5, carp school 3,
+    glint 2, big pike 1.
+  - Roach school: +40 Fish Find, only roach, 4 casts before it's fished out, gone after 24 casts, drifts up to 4 px
+    a cast, 14 px across. Carp school: +30, only carp, 3 uses, 20 casts.
+  - Big pike: +100 Fish Find (it always bites), always a Gigantic or Humongous pike, one cast, gone after 10, drifts
+    6 px, only 8 px across: a hard target.
+  - Glint: no fish at all (−100 Fish Find), +40 Treasure Find, 2 uses, 16 casts, doesn't drift.
+- **How features look**: a school is a few dark fish backs milling about (fewer as it thins out), the big fish a long
+  shadow, the glint a blinking white cross, a disturbance purple rings. Subtle on purpose; the school may be too
+  subtle.
+- **Log lines for features**: "On the water: a school of roach.", "Your bobber lands in a school of roach.", "A
+  school of roach is gone."
+
 - **The four default icons** (4.4): a fish, an old boot for junk, a chest for treasure, a potion bottle for
   consumables. Drawn by Claude in `src/scene/icons.js`.
 - **The flying icon** rises a little at the bobber, then flies to "Bucket & bags" in 0.65 s, fading as it goes, with

@@ -52,7 +52,8 @@ test('a new game: the Lake, the stick, spring at 08:00, every stream seeded', ()
   assert.equal(s.time, TIME.startMinutes);
   assert.equal(s.weather.season, 'spring');
   assert.equal(s.character.luck, 0, 'Luck starts at 0 (R6.7)');
-  assert.equal(Object.keys(s.streams).length, 7);
+  assert.equal(Object.keys(s.streams).length, 8);
+  assert.deepEqual(s.features, []);
 });
 
 test('a save round-trips, and a save from a newer game is refused', () => {
@@ -321,4 +322,61 @@ test('once every unique treasure here is found, a treasure roll brings up junk (
     c.rolls.some((r) => r.kind === 'treasure' && r.total <= content.locations.lake.treasureThreshold),
   );
   assert.ok(cast.line.kind === 'item' ? content.items[cast.line.id].category === 'junk' : cast.line.kind === 'empty');
+});
+
+// ---------- Surface features (4.5) ----------
+
+const water = { x0: 40, y0: 30, x1: 216, y1: 185 };
+
+test('a save from version 1 gains surface features and their stream', () => {
+  const { features, ...v1 } = game(13);
+  const old = { ...v1, version: 1, streams: Object.fromEntries(Object.entries(v1.streams).filter(([k]) => k !== 'features')) };
+  const migrated = deserialize(JSON.stringify(old));
+  assert.equal(migrated.version, SAVE_VERSION);
+  assert.deepEqual(migrated.features, []);
+  assert.equal(migrated.streams.features, game(13).streams.features);
+});
+
+test('features appear on the water, drift, and go', () => {
+  let state = game(21);
+  let seen = 0;
+  let gone = 0;
+  for (let n = 0; n < 400; n++) {
+    const out = castLine(state, 0);
+    const done = strikeLine(out.state, out.cast, 1);
+    state = done.state;
+    seen += done.events.filter((e) => e.type === 'feature-appeared').length;
+    gone += done.events.filter((e) => e.type === 'feature-gone').length;
+    assert.ok(state.features.length <= 2, 'never more than the location allows');
+    for (const f of state.features) assert.ok(f.x >= water.x0 && f.x <= water.x1 && f.y >= water.y0 && f.y <= water.y1);
+  }
+  assert.ok(seen > 10 && gone > 5, `appeared ${seen}, gone ${gone}`);
+});
+
+test('landing in a school brings up its fish, and fishes it out', () => {
+  const state = { ...game(22), features: [{ id: 'roach-school', x: 120, y: 100, uses: 1, castsLeft: 10 }] };
+  const out = castLine(state, 0, { aim: { x: 120, y: 100 }, bounds: water });
+  assert.ok(out.events.some((e) => e.type === 'feature-hit' && e.feature === 'roach-school'));
+  assert.equal(out.cast.line.kind, 'fish', 'the school raises the bite chance');
+  assert.equal(out.cast.line.kind === 'fish' && out.cast.line.fish.species, 'roach');
+  const done = strikeLine(out.state, out.cast, 1);
+  assert.equal(done.state.features.length, 0);
+  assert.ok(done.events.some((e) => e.type === 'feature-gone' && e.fishedOut));
+  assert.equal(out.checkpoint.features[0].uses, 1, 'a voided cast leaves the feature as it was');
+});
+
+test('a big fish under the surface is at least Gigantic', () => {
+  for (let seed = 30; seed < 60; seed++) {
+    const state = { ...game(seed), features: [{ id: 'big-pike', x: 120, y: 100, uses: 1, castsLeft: 10 }] };
+    const { cast } = castLine(state, 0, { aim: { x: 120, y: 100 }, bounds: water });
+    if (cast.landing && Math.hypot(cast.landing.x - 120, cast.landing.y - 100) > 8) continue;
+    assert.ok(cast.line.kind === 'fish' && cast.line.fish.species === 'pike' && cast.line.fish.band >= 4);
+  }
+});
+
+test('a cast that misses a feature is an ordinary cast', () => {
+  const state = { ...game(23), features: [{ id: 'roach-school', x: 60, y: 40, uses: 4, castsLeft: 10 }] };
+  const out = castLine(state, 0, { aim: { x: 200, y: 170 }, bounds: water });
+  assert.ok(!out.events.some((e) => e.type === 'feature-hit'));
+  assert.equal(out.state.features[0].uses, 4);
 });

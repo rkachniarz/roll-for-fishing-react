@@ -16,15 +16,15 @@ import { weatherAt } from './weather.js';
 import { TIME } from './time.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
  * cast-timing: bite delays · fishing: the player's d20 · line: what is on the
  * line · effects: dice on effects · weather · scatter: where the bobber lands ·
- * bait: saving or losing bait.
+ * bait: saving or losing bait · features: surface features appearing and drifting.
  */
-export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait'];
+export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features'];
 
 /**
  * @typedef {import('./fish.js').FishInstance & { tries?: number }} PoolFish  A fish
@@ -55,6 +55,7 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, number>} found  Item id -> how many ever found.
  * @property {Record<string, PoolFish[]>} escaped  Per location or location/spot (R3.6, D59).
  * @property {Buff[]} buffs
+ * @property {import('./features.js').Feature[]} features  On the water now (R14).
  * @property {{ casts: number, catches: number, fish: Record<string, BookEntry> }} book  The
  *   accomplishments book (R4.2).
  * @property {Record<string, boolean | number | string>} flags  For events (R10).
@@ -102,6 +103,7 @@ export function newGame({ seed, character }) {
     found: {},
     escaped: {},
     buffs: [],
+    features: [],
     book: { casts: 0, catches: 0, fish: {} },
     flags: {},
     missStreak: 0,
@@ -146,7 +148,10 @@ export function levelFor(xp) {
  * through MIGRATIONS[n], MIGRATIONS[n + 1]… up to SAVE_VERSION.
  * @type {Record<number, (save: any) => any>}
  */
-const MIGRATIONS = {};
+const MIGRATIONS = {
+  // 1 -> 2: surface features (R14), with their own stream.
+  1: (save) => ({ ...save, features: [], streams: { ...save.streams, features: deriveSeed(save.seed, 'features') } }),
+};
 
 /** @param {GameState} state */
 export function serialize(state) {

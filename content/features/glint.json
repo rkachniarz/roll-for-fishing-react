@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "glint",
+  "name": "something glinting in the water",
+  "kind": "curious",
+  "radius": 8,
+  "uses": 2,
+  "lifetime": 16,
+  "drift": 0,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": -100
+    },
+    {
+      "value": "treasureFind",
+      "add": 40
+    }
+  ]
+}

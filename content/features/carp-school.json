@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "carp-school",
+  "name": "a school of carp",
+  "kind": "school",
+  "radius": 14,
+  "uses": 3,
+  "lifetime": 20,
+  "drift": 3,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 30
+    }
+  ],
+  "fish": [
+    {
+      "id": "carp",
+      "weight": 1
+    }
+  ]
+}

@@ -13,8 +13,9 @@
 
 import { content } from '../generated/content.js';
 import { applyValue, deriveValues } from './values.js';
-import { locationTable, pick } from './tables.js';
-import { rollFish, sameFish } from './fish.js';
+import { listTable, locationTable, pick } from './tables.js';
+import { rollFish, sameFish, sizeBands } from './fish.js';
+import { featureAt, updateFeatures } from './features.js';
 import { startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
 import { advanceTime } from './time.js';
@@ -154,7 +155,19 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     };
     landing = scatter(target, bounds, values.flat.castScatter, dice.scatter);
   }
-  const { line, rolls } = rollLine(next, values, dice);
+  // Landing in a surface feature: its effects and tables for this cast, and
+  // one use of it gone (R14).
+  /** @type {GameEvent[]} */
+  const events = [{ type: 'cast', landing }];
+  const hit = featureAt(next.features, landing);
+  const feature = hit ? content.features[hit.id] : null;
+  let lineValues = values;
+  if (hit && feature) {
+    hit.uses--;
+    lineValues = valuesFor(state, [...extra, { label: feature.id, effects: feature.effects ?? [] }]);
+    events.push({ type: 'feature-hit', feature: feature.id });
+  }
+  const { line, rolls } = rollLine(next, lineValues, dice, feature);
 
   /** @type {GameCast} */
   const cast = {
@@ -169,7 +182,7 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     ...(recast ? { recast: true } : {}),
   };
   next.streams = commit();
-  return { state: next, cast, checkpoint, events: [{ type: 'cast', landing }] };
+  return { state: next, cast, checkpoint, events };
 }
 
 /**
@@ -178,9 +191,10 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
  * @param {GameState} state
  * @param {Values} values
  * @param {Record<string, Dice>} dice
+ * @param {any} [feature]  The surface feature the cast landed in, from content.
  * @returns {{ line: Line, rolls: Roll[] }}
  */
-function rollLine(state, values, dice) {
+function rollLine(state, values, dice, feature = null) {
   const loc = content.locations[state.location];
   const where = { location: state.location, spot: state.spot };
   /** @type {Roll[]} */
@@ -200,13 +214,18 @@ function rollLine(state, values, dice) {
     /** @type {PoolFish | null} */
     let fish = null;
     let fromPool = false;
-    if (pool.length > 0 && dice.line.roll100() <= pool.length) {
+    // A feature with its own fish (a school, a big fish) brings up those, not the pool's.
+    if (!feature?.fish && pool.length > 0 && dice.line.roll100() <= pool.length) {
       const i = dice.line.getRandomNumber(0, pool.length - 1);
       fish = pool[i];
       state.escaped[key] = pool.filter((_, j) => j !== i);
       fromPool = true;
     } else {
-      const species = pick(locationTable(where, 'fish', { weather: state.weather }), dice.line);
+      const table = feature?.fish
+        ? listTable(feature.fish, 'fish', { weather: state.weather })
+        : locationTable(where, 'fish', { weather: state.weather });
+      const species = pick(table, dice.line);
+      const minBand = feature?.minBand ? sizeBands().findIndex((/** @type {{ id: string }} */ b) => b.id === feature.minBand) : 0;
       if (species) {
         fish = rollFish(
           /** @type {string} */ (species.id),
@@ -216,6 +235,7 @@ function rollLine(state, values, dice) {
             fishXp: value('fishXp').total,
           },
           dice.line,
+          { minBand },
         );
       }
     }
@@ -264,7 +284,8 @@ function rollLine(state, values, dice) {
     if (treasure) return { line: { kind: 'item', id: /** @type {string} */ (treasure.id) }, rolls };
     // Every unique treasure here is found: junk instead (D75).
   }
-  const junk = pick(locationTable(where, 'junk', { found: state.found }), dice.line);
+  const junkTable = feature?.junk ? listTable(feature.junk, 'junk', { found: state.found }) : locationTable(where, 'junk', { found: state.found });
+  const junk = pick(junkTable, dice.line);
   return { line: junk?.id ? { kind: 'item', id: junk.id } : { kind: 'empty', reason: 'nothing' }, rolls };
 }
 
@@ -379,6 +400,8 @@ function resolveCast(state, cast) {
 
   const levelAfter = levelFor(next.character.xp);
   if (levelAfter > levelBefore) events.push({ type: 'level-up', level: levelAfter });
+
+  events.push(...updateFeatures(next, dice.features));
 
   // Time and weather move on with every cast that went out and ended.
   const time = advanceTime(next.time);

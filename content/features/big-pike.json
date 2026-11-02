@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "big-pike",
+  "name": "a big pike just under the surface",
+  "kind": "big-fish",
+  "radius": 8,
+  "uses": 1,
+  "lifetime": 10,
+  "drift": 6,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 100
+    }
+  ],
+  "fish": [
+    {
+      "id": "pike",
+      "weight": 1
+    }
+  ],
+  "minBand": "gigantic"
+}

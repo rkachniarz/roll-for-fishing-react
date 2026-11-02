@@ -38,9 +38,14 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
  * @typedef {import('../engine/cast.js').Cast & { recast?: boolean, reeledIn?: boolean }} Cast
  */
 
-/** The open water a cast may land on, in scene pixels: clear of the edges and the shore. */
-export const WATER = { x0: 40, y0: 30, x1: SIZE - 40, y1: 0 };
-WATER.y1 = Math.min(...Array.from({ length: WATER.x1 - WATER.x0 + 1 }, (_, i) => shoreY(WATER.x0 + i, SIZE))) - 30;
+/**
+ * A surface feature as the scene draws it (R14): where it is, what kind, and
+ * how much is left of it.
+ * @typedef {{ id: string, kind: string, x: number, y: number, uses: number, born: number }} SceneFeature
+ */
+
+/** The open water a cast may land on (the engine's, so features and casts agree). */
+export { WATER } from '../engine/features.js';
 
 /**
  * @param {HTMLCanvasElement} canvas
@@ -100,6 +105,15 @@ export async function createScene(canvas, rand) {
     return /** @type {Texture} */ (ringCache.get(key));
   }
 
+  // Surface features (R14), under the line and the bobber.
+  const featureLayer = new Graphics();
+  app.stage.addChild(featureLayer);
+  /** Where each feature is drawn, gliding towards where the engine says it is. */
+  /** @type {Map<string, { x: number, y: number }>} */
+  const shownAt = new Map();
+  /** @type {SceneFeature[]} */
+  let features = [];
+
   const line = new Graphics();
   app.stage.addChild(line);
 
@@ -158,6 +172,66 @@ export async function createScene(canvas, rand) {
     };
   }
 
+  /**
+   * The features on the water now.
+   * @param {SceneFeature[]} list
+   */
+  function setFeatures(list) {
+    features = list;
+  }
+
+  /** @param {number} now */
+  function drawFeatures(now) {
+    featureLayer.clear();
+    const live = new Set();
+    features.forEach((f, i) => {
+      // Known by when it appeared, so it glides between casts instead of jumping.
+      const key = `${f.id}@${f.born}`;
+      live.add(key);
+      const at = shownAt.get(key) ?? { x: f.x, y: f.y };
+      at.x += (f.x - at.x) * 0.04;
+      at.y += (f.y - at.y) * 0.04;
+      shownAt.set(key, at);
+      const cx = Math.round(at.x);
+      const cy = Math.round(at.y);
+      const far = cy < FAR_LINE;
+      const phase = i * 1.7;
+      if (f.kind === 'school') {
+        // Fish backs milling about; fewer as it is fished out.
+        const count = 2 + f.uses * 2;
+        for (let n = 0; n < count; n++) {
+          const a = phase + n * 2.4 + now / (1400 + n * 90);
+          const r = (far ? 4 : 6) + ((n * 3) % (far ? 5 : 8));
+          const x = Math.round(cx + Math.cos(a) * r);
+          const y = Math.round(cy + Math.sin(a) * r * 0.4);
+          featureLayer.rect(x, y, far ? 2 : 3, 1).fill({ color: PALETTE.shadow, alpha: 0.7 });
+        }
+      } else if (f.kind === 'big-fish') {
+        // One long shadow, sliding to and fro just under the surface.
+        const x = Math.round(cx + Math.sin(now / 2200 + phase) * 4);
+        const w = far ? 11 : 16;
+        featureLayer.rect(x - w / 2, cy, w, 2).fill({ color: PALETTE.shadow, alpha: 0.75 });
+        featureLayer.rect(x - w / 2 + 2, cy - 1, w - 5, 1).fill({ color: PALETTE.shadow, alpha: 0.6 });
+        featureLayer.rect(x + w / 2, cy - 1, 2, 4).fill({ color: PALETTE.shadow, alpha: 0.6 });
+      } else if (f.kind === 'curious') {
+        // A glint that comes and goes.
+        const on = Math.floor(now / 300 + phase) % 4;
+        if (on < 2) {
+          featureLayer.rect(cx, cy - 1, 1, 3).fill({ color: PALETTE.foam });
+          featureLayer.rect(cx - 1, cy, 3, 1).fill({ color: PALETTE.foam });
+        } else if (on === 2) featureLayer.rect(cx, cy, 1, 1).fill({ color: PALETTE.foam });
+      } else {
+        // A disturbance: rings that pulse out of step with the water.
+        const r = 3 + (Math.floor(now / 180 + phase) % 6);
+        for (let a = 0; a < 16; a++) {
+          const t = (a / 16) * Math.PI * 2;
+          featureLayer.rect(Math.round(cx + Math.cos(t) * r), Math.round(cy + Math.sin(t) * r * 0.4), 1, 1).fill({ color: PALETTE.eerie, alpha: 0.8 });
+        }
+      }
+    });
+    for (const key of shownAt.keys()) if (!live.has(key)) shownAt.delete(key);
+  }
+
   /** @param {number} x @param {number} y @param {number} now @param {number} maxRx */
   function addRipple(x, y, now, maxRx) {
     rippleList.push({ x, y, born: now, life: 900 + maxRx * 40, maxRx });
@@ -184,6 +258,8 @@ export async function createScene(canvas, rand) {
     const sway = Math.floor(now / 900) % 2;
     reedsLeft.texture = reedFrames.left[sway];
     reedsRight.texture = reedFrames.right[sway];
+
+    drawFeatures(now);
 
     // ---------- The bobber ----------
     let bx = target.x;
@@ -288,6 +364,7 @@ export async function createScene(canvas, rand) {
     app,
     aimAt,
     update,
+    setFeatures,
     /**
      * Turns a pointer position on the page into scene pixels.
      * @param {number} clientX @param {number} clientY

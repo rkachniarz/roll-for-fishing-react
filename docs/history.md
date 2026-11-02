@@ -126,3 +126,10 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   for every kind (R15.5); `iconName` picks an entity's own icon once its art exists. The button opens a plain list of
   what's equipped, in the bucket and in the bags, until Phase 5's inventory. The screenshot showed one cast's log lines
   upside down (the weather before the catch); a cast's lines now keep their order.
+- **4.5** Surface features (`src/engine/features.js`, `content/features/`): a school of roach, a school of carp, a big
+  pike under the surface and a glint, listed by the Lake with weights, a 12% chance per cast and at most two at once.
+  They drift with each cast (not real time, so they replay from the seed), thin out as they are fished, and go when
+  their casts run out. A cast landing inside one gets its effects and its fish or junk table; the big pike is at least
+  Gigantic; a voided cast leaves the feature untouched. The save moved to version 2, its first migration (surface
+  features and their own stream). The scene draws each kind differently and glides them between casts; the bench can
+  spawn them. Disturbances have their kind and an `event` field, waiting for Phase 7.

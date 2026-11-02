@@ -32,6 +32,7 @@ const KINDS = {
   tables: { schema: 'table', prefix: 'table' },
   weather: { schema: 'season', prefix: 'weather' },
   classes: { schema: 'class', prefix: 'class' },
+  features: { schema: 'feature', prefix: 'feature' },
   // One file per rule set; each has its own schema, named after its id.
   rules: { schema: null, prefix: 'rules' },
 };
@@ -48,6 +49,7 @@ const TEXT = {
   tables: [],
   weather: [['name'], ['weathers', '#', 'name'], ['weathers', '#', 'descriptions', '#']],
   classes: [['name', 'm'], ['name', 'f']],
+  features: [['name']],
   rules: [
     ['bands', '@', 'name'],
     ['temperature', '#', 'word'],
@@ -165,6 +167,10 @@ export async function buildContent(root = ROOT) {
   for (const loc of Object.values(all.locations)) {
     const where = `content/locations/${loc.id}.json`;
     for (const list of /** @type {const} */ (['fish', 'treasure', 'junk'])) checkEntries(where, loc[list], list, loc.id);
+    for (const f of loc.features ?? []) {
+      if (!all.features[f.id]) errors.push(`${where}: no surface feature "${f.id}"`);
+      else note(f.id, loc.id);
+    }
     const spotIds = new Set();
     for (const spot of loc.spots ?? []) {
       if (spotIds.has(spot.id)) errors.push(`${where}: two spots called "${spot.id}"`);
@@ -173,6 +179,16 @@ export async function buildContent(root = ROOT) {
         checkEntries(`${where} (${spot.id})`, spot[list], list, `${loc.id}/${spot.id}`);
       }
     }
+  }
+
+  for (const feature of Object.values(all.features)) {
+    const where = `content/features/${feature.id}.json`;
+    checkEntries(where, feature.fish, 'fish', `${feature.id} (feature)`);
+    checkEntries(where, feature.junk, 'junk', `${feature.id} (feature)`);
+    if (feature.minBand && !all.rules['size-bands']?.bands.some((/** @type {{ id: string }} */ b) => b.id === feature.minBand)) {
+      errors.push(`${where}: no size band "${feature.minBand}"`);
+    }
+    if (!foundAt.has(feature.id) && !feature.retired) warnings.push(`${where}: no location lists it`);
   }
 
   const start = all.rules['new-game'];

@@ -40,15 +40,17 @@ export function sizeBands() {
  * @param {{ fishSizeBand: number, fishDifficulty: number, fishXp: number }} values
  *   The game values as they apply to this fish (already totalled).
  * @param {Dice} dice  The `line` stream.
+ * @param {{ minBand?: number }} [options]  A size band it is at least (a big
+ *   fish under the surface, R14).
  * @returns {FishInstance}
  */
-export function rollFish(species, values, dice) {
+export function rollFish(species, values, dice, { minBand = 0 } = {}) {
   const s = content.fish[species];
   const bands = sizeBands();
   const subname = s.subnames?.length ? dice.getRandomNumber(0, s.subnames.length - 1) : -1;
 
   const rolled = bands.indexOf(pick(bands, dice));
-  const band = Math.min(Math.max(rolled + values.fishSizeBand, 0), bands.length - 1);
+  const band = Math.min(Math.max(rolled + values.fishSizeBand, minBand, 0), bands.length - 1);
 
   // The species' range in equal slices, one per band; whole centimetres, and
   // neighbouring slices don't share their edge.

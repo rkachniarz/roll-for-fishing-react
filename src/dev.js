@@ -115,6 +115,17 @@ export function createBench(root, { getState, setState, overrides, extraSources,
     });
   const clockLine = el('p');
 
+  const featureSelect = el('select', { id: 'dev-feature' });
+  for (const f of Object.values(content.features)) featureSelect.append(el('option', { value: f.id, textContent: `${f.kind}: ${t(f.name)}` }));
+  const spawnFeature = button('Spawn in the middle', () =>
+    edit((s) => {
+      const def = content.features[featureSelect.value];
+      s.features.push({ id: def.id, x: 128, y: 100, uses: def.uses, castsLeft: def.lifetime, born: s.book.casts });
+      return s;
+    }),
+  );
+  const featuresLine = el('p');
+
   // ---------- Character ----------
   const xpInput = el('input', { type: 'number', min: '0', id: 'dev-xp' });
   xpInput.addEventListener('change', () => edit((s) => ({ ...s, character: { ...s.character, xp: Math.max(0, Number(xpInput.value)) } })));
@@ -170,6 +181,8 @@ export function createBench(root, { getState, setState, overrides, extraSources,
         button('+1 season', () => later(TIME.seasonDays * 24 * 60)),
       ]),
       clockLine,
+      el('div', { className: 'dev-row' }, ['Surface feature ', featureSelect, spawnFeature, button('Clear', () => edit((s) => ({ ...s, features: [] })))]),
+      featuresLine,
     ]),
     section('Character', [el('div', { className: 'dev-fields' }, [el('label', { htmlFor: 'dev-xp', textContent: 'XP' }), xpInput, el('label', { htmlFor: 'dev-luck', textContent: 'Luck' }), luckInput]), statsLine]),
     section('Inventory', [
@@ -209,6 +222,10 @@ export function createBench(root, { getState, setState, overrides, extraSources,
         `Year ${c.year}, ${c.season} day ${c.day}, ${String(c.hour).padStart(2, '0')}:${String(c.minute).padStart(2, '0')} (${c.partOfDay}). ` +
         `Weather: ${s.weather.season} #${s.weather.cell}, temperature ${s.weather.temperature}, wind ${s.weather.wind}, ` +
         `clouds ${s.weather.clouds}, precipitation ${s.weather.precipitation}.`;
+
+      featuresLine.textContent = s.features.length
+        ? s.features.map((f) => `${f.id} at ${f.x},${f.y}: ${f.uses} uses, ${f.castsLeft} casts left`).join('; ')
+        : 'No surface features.';
 
       if (document.activeElement !== xpInput) xpInput.value = String(s.character.xp);
       if (document.activeElement !== luckInput) luckInput.value = String(s.character.luck);
