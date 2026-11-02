@@ -118,3 +118,11 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   and red rows, casts or time in the corner (nearest minute, then seconds), the effects on hover or tap, cancel by
   right-click or long-press, debuffs not. Taps on it never cast. Its browser check first failed because the bar only
   redrew on the next frame; it now redraws with the rest of the page too.
+
+## Phase 4: Art pipeline and the living scene (in progress)
+
+- **4.4** A catch's icon appears at the bobber, rises, and flies to the new "Bucket & bags" button, outlined in its
+  rarity colour; the game doesn't wait for it. Default 16×16 icons drawn as code (fish, boot, chest, bottle) stand in
+  for every kind (R15.5); `iconName` picks an entity's own icon once its art exists. The button opens a plain list of
+  what's equipped, in the bucket and in the bags, until Phase 5's inventory. The screenshot showed one cast's log lines
+  upside down (the weather before the catch); a cast's lines now keep their order.

@@ -111,6 +111,14 @@ await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (p
   report('junk: no d20', !/d20/.test((await page.textContent('#result')) ?? ''));
   const log = (await page.textContent('#log')) ?? '';
   report('junk: in the log', /You found: Bit of scroll parchment\./.test(log), log);
+  report('junk: its icon flies to the bag', (await page.locator('.flying-icon').count()) === 1);
+  await page.waitForTimeout(150);
+  await page.screenshot({ path: 'dist/verify/catch-flight.png' });
+  await page.waitForTimeout(1200);
+  report('junk: and disappears', (await page.locator('.flying-icon').count()) === 0);
+  await page.click('#bags');
+  const inv = (await page.textContent('#inventory')) ?? '';
+  report('junk: listed in the bags', inv.includes('Bit of scroll parchment') && inv.includes('A stick with some string tied to it'), inv);
 });
 
 await check('strike too early', DESKTOP, '?seed=1&wait=6000', async (page, tap) => {

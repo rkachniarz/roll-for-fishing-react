@@ -5,6 +5,15 @@ an item is settled, delete it from this list (and record a decision if the answe
 
 Newest first.
 
+## The scene (Phase 4)
+
+- **The four default icons** (4.4): a fish, an old boot for junk, a chest for treasure, a potion bottle for
+  consumables. Drawn by Claude in `src/scene/icons.js`.
+- **The flying icon** rises a little at the bobber, then flies to "Bucket & bags" in 0.65 s, fading as it goes, with
+  a border in its rarity colour (WoW's item border).
+- **"Bucket & bags"** opens a plain list for now (equipped, bucket, bags), names in rarity colours. Phase 5 replaces
+  it with WoW's grid.
+
 ## The page (Phase 3)
 
 - **All the game's own wording** (the status line, results, log lines, character creation) was written by Claude. It

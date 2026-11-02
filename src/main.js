@@ -23,6 +23,8 @@ import { deleteSave, loadGame, saveGame } from './save.js';
 import { WATER, createScene, fitCanvas } from './scene/scene.js';
 import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
+import { flyIcon } from './ui/flight.js';
+import { RARITY_COLOURS, iconName } from './scene/icons.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 /** @typedef {import('./engine/game.js').GameCast} GameCast */
@@ -104,9 +106,19 @@ function apply(out) {
   state = out.state;
   cast = out.cast;
   if (cast.landing && out.events.some((e) => e.type === 'cast')) scene.aimAt(cast.landing);
+  // Newest first, but one cast's lines in the order they happened.
+  log(...out.events.map(describeEvent).filter((line) => line !== null));
   for (const e of out.events) {
-    const line = describeEvent(e);
-    if (line) log(line);
+    if ((e.type === 'caught' || e.type === 'found') && cast.landing) {
+      const thing = e.type === 'caught' ? { kind: /** @type {const} */ ('fish'), id: e.fish.species } : { kind: /** @type {const} */ ('item'), id: e.item };
+      flyIcon({
+        icon: iconName(thing),
+        rarity: e.type === 'caught' ? e.fish.rarity : content.items[e.item].rarity,
+        from: scene.toClient(cast.landing),
+        to: $('bags'),
+        scale: scene.pixelScale(),
+      });
+    }
   }
   // While a cast is in progress, only the checkpoint is saved (D74).
   if (out.checkpoint) saveGame(storage, out.checkpoint);
@@ -230,10 +242,9 @@ function describeEvent(e) {
   }
 }
 
-/** @param {string} line */
-function log(line) {
-  if (!line) return;
-  logLines.unshift(line);
+/** @param {...string} lines  In the order they happened. */
+function log(...lines) {
+  logLines.unshift(...lines.filter(Boolean));
   logLines.length = Math.min(logLines.length, 12);
 }
 
@@ -315,6 +326,7 @@ function render() {
     clock: `${String(time.hour).padStart(2, '0')}:${String(time.minute).padStart(2, '0')}`,
     weather: t(weatherWords(state.weather).name),
   });
+  renderInventory();
   bench?.refresh();
 }
 
@@ -426,6 +438,60 @@ function openCreation(notice) {
   };
   dialog.addEventListener('cancel', (e) => e.preventDefault());
   dialog.showModal();
+}
+
+// ---------- Bucket and bags: a plain list until Phase 5's inventory ----------
+
+$('bags').textContent = t('panel.bags');
+$('bags').addEventListener('click', () => {
+  const list = $('inventory');
+  list.hidden = !list.hidden;
+  $('bags').setAttribute('aria-expanded', String(!list.hidden));
+  render();
+});
+
+/**
+ * @param {string} text
+ * @param {string} rarity
+ */
+function rarityItem(text, rarity) {
+  const li = document.createElement('li');
+  li.textContent = text;
+  li.style.color = RARITY_COLOURS[/** @type {keyof typeof RARITY_COLOURS} */ (rarity)];
+  return li;
+}
+
+function renderInventory() {
+  const box = $('inventory');
+  if (box.hidden || !state) return;
+  const s = state;
+  /** @param {string} title @param {HTMLElement[]} items */
+  const group = (title, items) => {
+    const h = document.createElement('h3');
+    h.textContent = title;
+    const ul = document.createElement('ul');
+    if (items.length) ul.append(...items);
+    else ul.append(Object.assign(document.createElement('li'), { textContent: t('panel.empty') }));
+    return [h, ul];
+  };
+  const fishCount = s.bucket.reduce((n, b) => n + b.count, 0);
+  box.replaceChildren(
+    ...group(
+      t('panel.equipped'),
+      /** @type {const} */ (['rod', 'bait']).map((slot) => {
+        const id = s.equipped[slot];
+        return id ? rarityItem(`${t(`slot.${slot}`)}: ${itemName(id)}`, content.items[id].rarity) : rarityItem(`${t(`slot.${slot}`)}: ${t('slot.none')}`, 'poor');
+      }),
+    ),
+    ...group(
+      t('panel.bucket', { count: fishCount }),
+      s.bucket.map((b) => rarityItem(t('panel.fishLine', { fish: fishName(b.fish), size: b.fish.size }) + (b.count > 1 ? ` ×${b.count}` : ''), b.fish.rarity)),
+    ),
+    ...group(
+      t('panel.bagsList'),
+      s.bags.map((b) => rarityItem(itemName(b.id) + (b.count > 1 ? ` ×${b.count}` : ''), content.items[b.id].rarity)),
+    ),
+  );
 }
 
 $('newGame').textContent = t('panel.newGame');

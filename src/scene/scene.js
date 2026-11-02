@@ -299,6 +299,18 @@ export async function createScene(canvas, rand) {
         y: ((clientY - rect.top) / rect.height) * SIZE,
       };
     },
+    /**
+     * Turns scene pixels into a position on the page.
+     * @param {{ x: number, y: number }} point
+     */
+    toClient(point) {
+      const rect = canvas.getBoundingClientRect();
+      return { x: rect.left + (point.x / SIZE) * rect.width, y: rect.top + (point.y / SIZE) * rect.height };
+    },
+    /** CSS pixels per scene pixel, for drawing page elements at the scene's scale (D71). */
+    pixelScale() {
+      return canvas.getBoundingClientRect().width / SIZE;
+    },
   };
 }
 

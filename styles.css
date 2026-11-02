@@ -204,7 +204,6 @@ button.quiet,
 }
 
 button.quiet {
-  align-self: flex-start;
   color: var(--muted);
 }
 
@@ -406,4 +405,39 @@ button.quiet {
   background: var(--panel);
   border: 1px solid var(--panel-edge);
   border-radius: 3px;
+}
+
+/* ---------- Bucket and bags, and the catch's flight (R16.2) ---------- */
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.inventory {
+  background: var(--panel);
+  border: 2px solid var(--panel-edge);
+  border-radius: 4px;
+  padding: 4px 12px 10px;
+  font-size: 15px;
+}
+
+.inventory h3 {
+  margin: 8px 0 2px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.inventory ul {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.flying-icon {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  image-rendering: pixelated;
+  background: rgb(20 35 43 / 0.85);
 }
