@@ -106,3 +106,7 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   test buffs of both kinds.
 - Browser checks grew from 23 to 41: junk landed without a roll, the pause, recast and reel-in, saving and reloading,
   New game with the choices sticking, the bench.
+- **3.6** The buff and debuff bar (`src/ui/buffbar.js`), over the scene's top right in the layer D71 describes: green
+  and red rows, casts or time in the corner (nearest minute, then seconds), the effects on hover or tap, cancel by
+  right-click or long-press, debuffs not. Taps on it never cast. Its browser check first failed because the bar only
+  redrew on the next frame; it now redraws with the rest of the page too.

@@ -147,11 +147,13 @@ export function createBench(root, { getState, setState, overrides, extraSources,
   // ---------- Buffs ----------
   const buffsLine = el('p');
   let buffCount = 0;
-  const addBuff = (/** @type {'casts' | 'ms'} */ kind) =>
+  const addBuff = (/** @type {'casts' | 'ms' | 'debuff'} */ kind) =>
     edit((s) => {
       buffCount++;
       const buff = { id: `test-buff-${buffCount}`, source: 'dev', effects: [{ value: 'fishFind', add: 20 }] };
-      s.buffs.push(kind === 'casts' ? { ...buff, casts: 3 } : { ...buff, ms: 120_000 });
+      if (kind === 'casts') s.buffs.push({ ...buff, casts: 3 });
+      else if (kind === 'ms') s.buffs.push({ ...buff, ms: 120_000 });
+      else s.buffs.push({ ...buff, id: `test-debuff-${buffCount}`, effects: [{ value: 'fishFind', add: -10 }], ms: 90_000, debuff: true });
       return s;
     });
 
@@ -175,7 +177,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       inventoryLine,
       button('Empty bucket', () => edit((s) => ({ ...s, bucket: [] }))),
     ]),
-    section('Buffs', [el('div', { className: 'dev-row' }, [button('+ Fish Find buff, 3 casts', () => addBuff('casts')), button('+ Fish Find buff, 2 min', () => addBuff('ms'))]), buffsLine]),
+    section('Buffs', [el('div', { className: 'dev-row' }, [button('+ Fish Find buff, 3 casts', () => addBuff('casts')), button('+ Fish Find buff, 2 min', () => addBuff('ms')), button('+ debuff, 90 s', () => addBuff('debuff'))]), buffsLine]),
   );
 
   return {

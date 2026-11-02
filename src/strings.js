@@ -29,6 +29,9 @@ const UI_STRINGS = {
   'value.baitRecovery': 'chance to save bait',
   'value.baitEscapeLoss': 'chance to lose bait to an escaping fish',
 
+  // ---- The buff bar ----
+  'buff.cancelHint': 'right-click or long-press to cancel',
+
   // ---- The status line ----
   'status.idle': 'Tap the water to cast.',
   'status.waiting': 'Watch the bobber…',

@@ -13,7 +13,7 @@ import { diceFor } from './dice.js';
 import { content } from './generated/content.js';
 import { t } from './strings.js';
 import { newGame, levelFor } from './engine/state.js';
-import { MISS_LIMIT, castLine, strikeLine, tick, tickBuffs } from './engine/game.js';
+import { MISS_LIMIT, cancelBuff, castLine, strikeLine, tick, tickBuffs } from './engine/game.js';
 import { classes, className, generateName, rollStats } from './engine/character.js';
 import { fishNameKeys } from './engine/fish.js';
 import { clock } from './engine/time.js';
@@ -22,6 +22,7 @@ import { GAME_VALUES } from './engine/values.js';
 import { deleteSave, loadGame, saveGame } from './save.js';
 import { WATER, createScene, fitCanvas } from './scene/scene.js';
 import { createBench } from './dev.js';
+import { createBuffBar } from './ui/buffbar.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 /** @typedef {import('./engine/game.js').GameCast} GameCast */
@@ -144,6 +145,16 @@ window.addEventListener('keydown', (e) => {
   act(e.timeStamp, null);
 });
 
+// ---------- The buff bar (R12.3-R12.7) ----------
+
+const buffBar = createBuffBar($('buffBar'), (id) => {
+  if (!state) return;
+  state = cancelBuff(state, id);
+  // Mid-cast, the resolved cast will save it (D74).
+  if (cast.phase !== 'waiting' && cast.phase !== 'bite') saveGame(storage, state);
+  render();
+});
+
 // ---------- The frame loop ----------
 
 let buffSavedAt = 0;
@@ -169,6 +180,7 @@ scene.app.ticker.add((ticker) => {
       }
     }
   }
+  if (state) buffBar.update(state.buffs);
   scene.update(cast, now);
 });
 
@@ -287,6 +299,7 @@ function render() {
   );
 
   if (!state) return;
+  buffBar.update(state.buffs);
   const c = state.character;
   $('who').textContent = t('panel.character', {
     name: c.name,

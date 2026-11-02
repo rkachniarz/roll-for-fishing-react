@@ -195,6 +195,25 @@ await check('?dev shows the bench', DESKTOP, '?dev&seed=3', async (page) => {
   await page.screenshot({ path: 'dist/verify/dev-bench.png', fullPage: true });
 });
 
+await check('the buff bar', DESKTOP, '?dev&seed=3', async (page) => {
+  await page.click('#devPanel summary');
+  await page.click('text=+ Fish Find buff, 3 casts');
+  await page.click('text=+ Fish Find buff, 2 min');
+  await page.click('text=+ debuff, 90 s');
+  report('buff bar: two buffs, one debuff', (await page.locator('.buffs .buff').count()) === 2 && (await page.locator('.debuffs .buff').count()) === 1);
+  const corners = await page.locator('.buff-left').allTextContents();
+  report('buff bar: casts and time in the corner', corners.join(' ') === '3 2m 2m', corners.join(' '));
+  await page.hover('.buffs .buff >> nth=0');
+  report('buff bar: hovering describes it', /\+20 Fish Find/.test((await page.textContent('.buff-tip')) ?? ''));
+  await page.screenshot({ path: 'dist/verify/buff-bar.png' });
+  await page.click('.debuffs .buff', { button: 'right' });
+  report("buff bar: a debuff can't be cancelled", (await page.locator('.debuffs .buff').count()) === 1);
+  await page.click('.buffs .buff >> nth=0', { button: 'right' });
+  report('buff bar: right-click cancels a buff', (await page.locator('.buffs .buff').count()) === 1);
+  await page.click('.buffs .buff >> nth=0');
+  report('buff bar: a click on it is not a cast', (await page.getAttribute('body', 'data-phase')) === 'idle');
+});
+
 await browser.close();
 server.kill();
 console.log(failures ? `\n${failures} check(s) failed` : '\nAll checks passed');

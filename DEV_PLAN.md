@@ -7,7 +7,7 @@ only ids, so a task added later keeps its number wherever it lands.
 **Where things stand (2026-11-02):** Phases 0 and 2 are done; Phase 1 (the feel trial) only lacks the frame-rate check
 on a phone and the write-up. **Phase 3 is under way: the game is playable on the real engine.** Character creation,
 casting with scatter, the full cast (fish, junk, treasure, the hidden rolls, the missed-splash pause and recast), the
-log, saving after every cast and the checkpoint mid-cast, New game, and the `?dev` bench. The panel is plain: the
+log, saving after every cast and the checkpoint mid-cast, New game, the buff bar, and the `?dev` bench. Left: 3.5 (GitHub Pages, needs a push) and 3.2. The panel is plain: the
 layout (3.2) waits for the owner's sketch (Q-38). Claude's guesses and calls are listed in
 [docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
 
@@ -98,7 +98,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
   "empty bucket" button (R9.5, D27, D68).
 - [ ] **3.5** Deployed to GitHub Pages, so the owner can play anywhere without a server; playable end to end on a phone
   (D68).
-- [ ] **3.6** Buff and debuff bar at the top right of the game area, WoW style: green and red rows, the duration in the
+- [x] **3.6** Buff and debuff bar at the top right of the game area, WoW style: green and red rows, the duration in the
   corner (nearest minute, then seconds), a description on hover or tap, cancel a buff by right-click or long-press
   (R12.3–R12.7, D29, D31).
 

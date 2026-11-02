@@ -31,6 +31,7 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `src/generated/content.js` | Built from `content/` by `npm run content`; don't edit |
 | `src/strings.js` | `t()`: all player-facing text goes through it |
 | `src/save.js` | The save slot in the browser's storage |
+| `src/ui/buffbar.js` | The buff and debuff bar over the scene's top right |
 | `src/dev.js` | The `?dev` bench: game values, world, character, inventory, buffs |
 | `src/main.js` | Wiring: input → engine → scene and page; character creation; saving |
 | `src/rng.js` | Seeded random streams (from SuperRollies) |

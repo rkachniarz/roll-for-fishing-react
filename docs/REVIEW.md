@@ -14,6 +14,9 @@ Newest first.
 - **The result shows "needed ?"** for a fish: its own d20 is a hidden roll until something reveals it (R5.2). The
   prototype printed the number.
 - **The log isn't saved:** it starts empty after a reload. The accomplishments book (3.2) is what keeps records.
+- **The buff bar's look** (3.6): 36 px squares, ▲ and ▼ as stand-in icons until buffs have art, a long-press of
+  0.6 s to cancel on touch, and a tooltip reading "+20 Fish Find · right-click or long-press to cancel". The squares
+  aren't yet drawn at the scene's pixel scale (D71); that comes with the layout.
 - **`?seed=N` only seeds a new game;** with a save in the browser, the save wins. Use New game first to replay a seed.
 
 ## Guesses at numbers and content
