@@ -44,3 +44,10 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   sight finally has the −2 Treasure Find its text promised. `npm run content` checks schemas, ids against file names,
   every reference, and R8.5 (a warning for now: only the Mega Mass Fish Chum fails it), then writes the generated module
   (139 strings) and an overview page. A test feeds it a broken copy of the content to show each check bites.
+- **2.4** The weather engine, ported faithfully into `content/weather/` and `src/engine/weather.js`. The data was ported
+  by script, with the random-at-load calls stubbed so their arguments survived as ranges (`{ "min": 0, "max": 1 }`) and
+  description lists, now rolled from the `weather` stream when the weather turns. Summer #8's north fixed to hold. The 38
+  missing Autumn and Winter descriptions are written; the owner may want to rework them. `npm run content` now checks
+  the maps: every move goes to the hex neighbour or holds, and every move can be made back. Restoring the prototype's
+  Summer #8 makes that check fail, which a test confirms. The display words from `LocationInfo.jsx` are in
+  `content/rules/weather-scales.json`; the cloud emoji became words until there are icons.

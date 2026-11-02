@@ -388,7 +388,8 @@ Levels 1, 3, 6 and 9 per class; even levels draw from the universal list. Cooldo
 
 ### §C.5 Weather
 
-Four seasons × 19 weathers, on a hex map per season; see PORTING-NOTES §1.1 for the engine and its known defects.
+Four seasons × 19 weathers, on a hex map per season: `content/weather/`, with the words for each level in
+`content/rules/weather-scales.json`. The engine is `src/engine/weather.js`; PORTING-NOTES §1.1 has its history.
 
 ### §C.6 Events
 

@@ -1,0 +1,374 @@
+{
+  "$schema": "../../schemas/season.schema.json",
+  "id": "autumn",
+  "name": "Autumn",
+  "order": 2,
+  "weathers": [
+    {
+      "name": "Humid and cloudy",
+      "descriptions": [
+        "Low clouds hang heavy, and the air feels damp on your skin"
+      ],
+      "temperature": 9,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 3,
+      "precipitation": 1,
+      "changeSet": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "name": "Sunny and clear",
+      "descriptions": [
+        "The sun shines on golden trees around the water"
+      ],
+      "temperature": 11,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 0,
+      "precipitation": 0,
+      "changeSet": [
+        8,
+        9,
+        2,
+        0,
+        6,
+        7
+      ]
+    },
+    {
+      "name": "Cold wafts of mist",
+      "descriptions": [
+        "Gentle wind blows cold mist across the water"
+      ],
+      "temperature": 6,
+      "wind": 1,
+      "clouds": 0,
+      "precipitation": 2,
+      "changeSet": [
+        9,
+        10,
+        11,
+        3,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "Thick fog soup",
+      "descriptions": [
+        "A thick fog swallows the far shore whole"
+      ],
+      "temperature": 7,
+      "wind": 0,
+      "clouds": 4,
+      "precipitation": 1,
+      "changeSet": [
+        2,
+        11,
+        12,
+        13,
+        4,
+        0
+      ]
+    },
+    {
+      "name": "Rain and fog",
+      "descriptions": [
+        "Rain patters through a grey, drifting fog"
+      ],
+      "temperature": 6,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 4,
+      "precipitation": 3,
+      "changeSet": [
+        0,
+        3,
+        13,
+        14,
+        15,
+        5
+      ]
+    },
+    {
+      "name": "Rain and gusts",
+      "descriptions": [
+        "Rain lashes sideways as gusts whip across the water"
+      ],
+      "temperature": 7,
+      "wind": 3,
+      "clouds": 4,
+      "precipitation": 3,
+      "changeSet": [
+        6,
+        0,
+        4,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "name": "Sunny and cloudy",
+      "descriptions": [
+        "Sunlight breaks through in patches between the clouds"
+      ],
+      "temperature": 11,
+      "wind": 1,
+      "clouds": 2,
+      "precipitation": 0,
+      "changeSet": [
+        7,
+        1,
+        0,
+        5,
+        17,
+        18
+      ]
+    },
+    {
+      "name": "Pleasantly warm",
+      "descriptions": [
+        "A mild, pleasant day, with the scent of fallen leaves in the air"
+      ],
+      "temperature": 12,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 1,
+      "precipitation": 0,
+      "changeSet": [
+        7,
+        8,
+        1,
+        6,
+        18,
+        7
+      ]
+    },
+    {
+      "name": "Goose summer",
+      "descriptions": [
+        "Summer has come back for one last visit"
+      ],
+      "temperature": 13,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": {
+        "min": 0,
+        "max": 2
+      },
+      "precipitation": 0,
+      "changeSet": [
+        14,
+        18,
+        9,
+        1,
+        7,
+        8
+      ]
+    },
+    {
+      "name": "Sporadic gusts",
+      "descriptions": [
+        "Sudden gusts send leaves skittering across the water"
+      ],
+      "temperature": 9,
+      "wind": 3,
+      "clouds": 2,
+      "precipitation": 0,
+      "changeSet": [
+        13,
+        17,
+        10,
+        2,
+        1,
+        8
+      ]
+    },
+    {
+      "name": "Cold winds",
+      "descriptions": [
+        "A cold wind cuts through your coat"
+      ],
+      "temperature": 5,
+      "wind": 3,
+      "clouds": 2,
+      "precipitation": 0,
+      "changeSet": [
+        12,
+        16,
+        10,
+        11,
+        2,
+        9
+      ]
+    },
+    {
+      "name": "Frosty and cloudy",
+      "descriptions": [
+        "Frost sparkles on the reeds under a grey sky"
+      ],
+      "temperature": 3,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 3,
+      "precipitation": 0,
+      "changeSet": [
+        10,
+        15,
+        11,
+        12,
+        3,
+        2
+      ]
+    },
+    {
+      "name": "Cloudy and nippy",
+      "descriptions": [
+        "The clouds are thick, and the air has a bite to it"
+      ],
+      "temperature": 8,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 3,
+      "precipitation": 0,
+      "changeSet": [
+        11,
+        14,
+        18,
+        10,
+        13,
+        3
+      ]
+    },
+    {
+      "name": "Windy and clear",
+      "descriptions": [
+        "The sky is clear, but the wind is strong"
+      ],
+      "temperature": 8,
+      "wind": 3,
+      "clouds": 0,
+      "precipitation": 0,
+      "changeSet": [
+        3,
+        12,
+        17,
+        9,
+        14,
+        4
+      ]
+    },
+    {
+      "name": "Short, light showers",
+      "descriptions": [
+        "Brief, light showers come and go"
+      ],
+      "temperature": 9,
+      "wind": 2,
+      "clouds": 3,
+      "precipitation": 2,
+      "changeSet": [
+        4,
+        13,
+        16,
+        8,
+        12,
+        15
+      ]
+    },
+    {
+      "name": "Heavy downpour",
+      "descriptions": [
+        "Rain pours down in heavy sheets"
+      ],
+      "temperature": 7,
+      "wind": 2,
+      "clouds": 4,
+      "precipitation": 4,
+      "changeSet": [
+        5,
+        4,
+        14,
+        15,
+        11,
+        16
+      ]
+    },
+    {
+      "name": "Rainy windstorm",
+      "descriptions": [
+        "Howling wind drives the rain across the water"
+      ],
+      "temperature": 6,
+      "wind": 4,
+      "clouds": 4,
+      "precipitation": 4,
+      "changeSet": [
+        17,
+        5,
+        15,
+        16,
+        10,
+        14
+      ]
+    },
+    {
+      "name": "Drizzle",
+      "descriptions": [
+        "A fine drizzle settles on everything"
+      ],
+      "temperature": 9,
+      "wind": 1,
+      "clouds": 3,
+      "precipitation": 2,
+      "changeSet": [
+        18,
+        6,
+        5,
+        16,
+        9,
+        13
+      ]
+    },
+    {
+      "name": "Sunny and nippy",
+      "descriptions": [
+        "The sun is bright, but the air is cool"
+      ],
+      "temperature": 10,
+      "wind": 1,
+      "clouds": 0,
+      "precipitation": 0,
+      "changeSet": [
+        18,
+        7,
+        6,
+        17,
+        8,
+        12
+      ]
+    }
+  ]
+}

@@ -1,0 +1,371 @@
+{
+  "$schema": "../../schemas/season.schema.json",
+  "id": "winter",
+  "name": "Winter",
+  "order": 3,
+  "weathers": [
+    {
+      "name": "Cold and humid",
+      "descriptions": [
+        "The air is cold and heavy with moisture"
+      ],
+      "temperature": 3,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 3,
+      "precipitation": 1,
+      "changeSet": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "name": "Cold fog wafts",
+      "descriptions": [
+        "Cold fog drifts in slow wafts over the water"
+      ],
+      "temperature": 4,
+      "wind": 1,
+      "clouds": {
+        "min": 0,
+        "max": 2
+      },
+      "precipitation": 1,
+      "changeSet": [
+        8,
+        9,
+        2,
+        0,
+        6,
+        7
+      ]
+    },
+    {
+      "name": "Cold rain showers",
+      "descriptions": [
+        "Icy rain falls in short, sharp showers"
+      ],
+      "temperature": 4,
+      "wind": 2,
+      "clouds": 4,
+      "precipitation": 3,
+      "changeSet": [
+        9,
+        10,
+        11,
+        3,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "Cold and cloudy",
+      "descriptions": [
+        "A grey blanket of cloud hangs over the cold water"
+      ],
+      "temperature": 3,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 3,
+      "precipitation": 0,
+      "changeSet": [
+        2,
+        11,
+        12,
+        13,
+        4,
+        0
+      ]
+    },
+    {
+      "name": "Wet snowfall",
+      "descriptions": [
+        "Wet, heavy snowflakes melt as they hit the water"
+      ],
+      "temperature": 4,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 4,
+      "precipitation": 3,
+      "changeSet": [
+        0,
+        3,
+        13,
+        14,
+        15,
+        5
+      ]
+    },
+    {
+      "name": "Snowy rain",
+      "descriptions": [
+        "Rain and snow fall together, neither quite winning"
+      ],
+      "temperature": 3,
+      "wind": 1,
+      "clouds": 4,
+      "precipitation": 3,
+      "changeSet": [
+        6,
+        0,
+        4,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "name": "Clear and windy",
+      "descriptions": [
+        "The sky is clear, and a sharp wind cuts across the water"
+      ],
+      "temperature": 4,
+      "wind": 3,
+      "clouds": 0,
+      "precipitation": 0,
+      "changeSet": [
+        7,
+        1,
+        0,
+        5,
+        17,
+        18
+      ]
+    },
+    {
+      "name": "Cloudy and nippy",
+      "descriptions": [
+        "Clouds cover the sky, and the air is nippy"
+      ],
+      "temperature": 5,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 3,
+      "precipitation": 0,
+      "changeSet": [
+        7,
+        8,
+        1,
+        6,
+        18,
+        11
+      ]
+    },
+    {
+      "name": "Sunny and nippy",
+      "descriptions": [
+        "The winter sun shines, but gives little warmth"
+      ],
+      "temperature": 6,
+      "wind": 1,
+      "clouds": 0,
+      "precipitation": 0,
+      "changeSet": [
+        8,
+        18,
+        9,
+        1,
+        7,
+        10
+      ]
+    },
+    {
+      "name": "Light drizzle",
+      "descriptions": [
+        "A light drizzle falls from a dull sky"
+      ],
+      "temperature": 4,
+      "wind": 1,
+      "clouds": 3,
+      "precipitation": 2,
+      "changeSet": [
+        13,
+        17,
+        10,
+        2,
+        1,
+        8
+      ]
+    },
+    {
+      "name": "Heavy rain",
+      "descriptions": [
+        "Heavy, cold rain hammers the water"
+      ],
+      "temperature": 5,
+      "wind": 2,
+      "clouds": 4,
+      "precipitation": 4,
+      "changeSet": [
+        12,
+        10,
+        8,
+        11,
+        2,
+        9
+      ]
+    },
+    {
+      "name": "Cold winds",
+      "descriptions": [
+        "Bitter winds sweep across the shore"
+      ],
+      "temperature": 3,
+      "wind": 3,
+      "clouds": 1,
+      "precipitation": 0,
+      "changeSet": [
+        10,
+        15,
+        7,
+        12,
+        3,
+        2
+      ]
+    },
+    {
+      "name": "Icy and cloudy",
+      "descriptions": [
+        "Ice creeps along the shore under a cloudy sky"
+      ],
+      "temperature": 1,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 3,
+      "precipitation": 0,
+      "changeSet": [
+        11,
+        14,
+        18,
+        10,
+        13,
+        3
+      ]
+    },
+    {
+      "name": "Sleet",
+      "descriptions": [
+        "Sleet stings your face"
+      ],
+      "temperature": 3,
+      "wind": 2,
+      "clouds": 4,
+      "precipitation": 3,
+      "changeSet": [
+        3,
+        12,
+        17,
+        9,
+        14,
+        4
+      ]
+    },
+    {
+      "name": "Light snowfall",
+      "descriptions": [
+        "Light snow drifts down and settles on the reeds"
+      ],
+      "temperature": 2,
+      "wind": 1,
+      "clouds": 4,
+      "precipitation": 2,
+      "changeSet": [
+        4,
+        13,
+        16,
+        14,
+        12,
+        15
+      ]
+    },
+    {
+      "name": "Windy and snowy",
+      "descriptions": [
+        "Wind drives the snow across the water"
+      ],
+      "temperature": 1,
+      "wind": 3,
+      "clouds": 4,
+      "precipitation": 3,
+      "changeSet": [
+        5,
+        4,
+        14,
+        15,
+        11,
+        16
+      ]
+    },
+    {
+      "name": "Blizzard",
+      "descriptions": [
+        "A blizzard turns the world white"
+      ],
+      "temperature": 0,
+      "wind": 5,
+      "clouds": 4,
+      "precipitation": 4,
+      "changeSet": [
+        17,
+        5,
+        15,
+        18,
+        16,
+        14
+      ]
+    },
+    {
+      "name": "Hail",
+      "descriptions": [
+        "Hailstones bounce off the ice at the water's edge"
+      ],
+      "temperature": 3,
+      "wind": 2,
+      "clouds": 4,
+      "precipitation": 4,
+      "changeSet": [
+        18,
+        6,
+        5,
+        16,
+        9,
+        13
+      ]
+    },
+    {
+      "name": "Cold and clear",
+      "descriptions": [
+        "The sky is clear, and the cold is biting"
+      ],
+      "temperature": 1,
+      "wind": {
+        "min": 0,
+        "max": 1
+      },
+      "clouds": 0,
+      "precipitation": 0,
+      "changeSet": [
+        16,
+        7,
+        6,
+        17,
+        8,
+        12
+      ]
+    }
+  ]
+}

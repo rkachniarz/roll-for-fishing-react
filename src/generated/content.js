@@ -870,6 +870,1477 @@ export const content = {
     }
   },
   "tables": {},
+  "weather": {
+    "autumn": {
+      "id": "autumn",
+      "name": "weather.autumn.name",
+      "order": 2,
+      "weathers": [
+        {
+          "name": "weather.autumn.weathers.0.name",
+          "descriptions": [
+            "weather.autumn.weathers.0.descriptions.0"
+          ],
+          "temperature": 9,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 3,
+          "precipitation": 1,
+          "changeSet": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.1.name",
+          "descriptions": [
+            "weather.autumn.weathers.1.descriptions.0"
+          ],
+          "temperature": 11,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            8,
+            9,
+            2,
+            0,
+            6,
+            7
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.2.name",
+          "descriptions": [
+            "weather.autumn.weathers.2.descriptions.0"
+          ],
+          "temperature": 6,
+          "wind": 1,
+          "clouds": 0,
+          "precipitation": 2,
+          "changeSet": [
+            9,
+            10,
+            11,
+            3,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.3.name",
+          "descriptions": [
+            "weather.autumn.weathers.3.descriptions.0"
+          ],
+          "temperature": 7,
+          "wind": 0,
+          "clouds": 4,
+          "precipitation": 1,
+          "changeSet": [
+            2,
+            11,
+            12,
+            13,
+            4,
+            0
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.4.name",
+          "descriptions": [
+            "weather.autumn.weathers.4.descriptions.0"
+          ],
+          "temperature": 6,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 4,
+          "precipitation": 3,
+          "changeSet": [
+            0,
+            3,
+            13,
+            14,
+            15,
+            5
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.5.name",
+          "descriptions": [
+            "weather.autumn.weathers.5.descriptions.0"
+          ],
+          "temperature": 7,
+          "wind": 3,
+          "clouds": 4,
+          "precipitation": 3,
+          "changeSet": [
+            6,
+            0,
+            4,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.6.name",
+          "descriptions": [
+            "weather.autumn.weathers.6.descriptions.0"
+          ],
+          "temperature": 11,
+          "wind": 1,
+          "clouds": 2,
+          "precipitation": 0,
+          "changeSet": [
+            7,
+            1,
+            0,
+            5,
+            17,
+            18
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.7.name",
+          "descriptions": [
+            "weather.autumn.weathers.7.descriptions.0"
+          ],
+          "temperature": 12,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 1,
+          "precipitation": 0,
+          "changeSet": [
+            7,
+            8,
+            1,
+            6,
+            18,
+            7
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.8.name",
+          "descriptions": [
+            "weather.autumn.weathers.8.descriptions.0"
+          ],
+          "temperature": 13,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": {
+            "min": 0,
+            "max": 2
+          },
+          "precipitation": 0,
+          "changeSet": [
+            14,
+            18,
+            9,
+            1,
+            7,
+            8
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.9.name",
+          "descriptions": [
+            "weather.autumn.weathers.9.descriptions.0"
+          ],
+          "temperature": 9,
+          "wind": 3,
+          "clouds": 2,
+          "precipitation": 0,
+          "changeSet": [
+            13,
+            17,
+            10,
+            2,
+            1,
+            8
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.10.name",
+          "descriptions": [
+            "weather.autumn.weathers.10.descriptions.0"
+          ],
+          "temperature": 5,
+          "wind": 3,
+          "clouds": 2,
+          "precipitation": 0,
+          "changeSet": [
+            12,
+            16,
+            10,
+            11,
+            2,
+            9
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.11.name",
+          "descriptions": [
+            "weather.autumn.weathers.11.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 3,
+          "precipitation": 0,
+          "changeSet": [
+            10,
+            15,
+            11,
+            12,
+            3,
+            2
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.12.name",
+          "descriptions": [
+            "weather.autumn.weathers.12.descriptions.0"
+          ],
+          "temperature": 8,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 3,
+          "precipitation": 0,
+          "changeSet": [
+            11,
+            14,
+            18,
+            10,
+            13,
+            3
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.13.name",
+          "descriptions": [
+            "weather.autumn.weathers.13.descriptions.0"
+          ],
+          "temperature": 8,
+          "wind": 3,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            3,
+            12,
+            17,
+            9,
+            14,
+            4
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.14.name",
+          "descriptions": [
+            "weather.autumn.weathers.14.descriptions.0"
+          ],
+          "temperature": 9,
+          "wind": 2,
+          "clouds": 3,
+          "precipitation": 2,
+          "changeSet": [
+            4,
+            13,
+            16,
+            8,
+            12,
+            15
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.15.name",
+          "descriptions": [
+            "weather.autumn.weathers.15.descriptions.0"
+          ],
+          "temperature": 7,
+          "wind": 2,
+          "clouds": 4,
+          "precipitation": 4,
+          "changeSet": [
+            5,
+            4,
+            14,
+            15,
+            11,
+            16
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.16.name",
+          "descriptions": [
+            "weather.autumn.weathers.16.descriptions.0"
+          ],
+          "temperature": 6,
+          "wind": 4,
+          "clouds": 4,
+          "precipitation": 4,
+          "changeSet": [
+            17,
+            5,
+            15,
+            16,
+            10,
+            14
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.17.name",
+          "descriptions": [
+            "weather.autumn.weathers.17.descriptions.0"
+          ],
+          "temperature": 9,
+          "wind": 1,
+          "clouds": 3,
+          "precipitation": 2,
+          "changeSet": [
+            18,
+            6,
+            5,
+            16,
+            9,
+            13
+          ]
+        },
+        {
+          "name": "weather.autumn.weathers.18.name",
+          "descriptions": [
+            "weather.autumn.weathers.18.descriptions.0"
+          ],
+          "temperature": 10,
+          "wind": 1,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            18,
+            7,
+            6,
+            17,
+            8,
+            12
+          ]
+        }
+      ]
+    },
+    "spring": {
+      "id": "spring",
+      "name": "weather.spring.name",
+      "order": 0,
+      "weathers": [
+        {
+          "name": "weather.spring.weathers.0.name",
+          "descriptions": [
+            "weather.spring.weathers.0.descriptions.0"
+          ],
+          "temperature": 7,
+          "wind": 0,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.1.name",
+          "descriptions": [
+            "weather.spring.weathers.1.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": 2,
+          "clouds": 4,
+          "precipitation": 3,
+          "changeSet": [
+            8,
+            9,
+            2,
+            0,
+            6,
+            7
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.2.name",
+          "descriptions": [
+            "weather.spring.weathers.2.descriptions.0",
+            "weather.spring.weathers.2.descriptions.1",
+            "weather.spring.weathers.2.descriptions.2"
+          ],
+          "temperature": 4,
+          "wind": 3,
+          "clouds": 4,
+          "precipitation": 4,
+          "changeSet": [
+            9,
+            10,
+            11,
+            3,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.3.name",
+          "descriptions": [
+            "weather.spring.weathers.3.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": 1,
+          "clouds": 0,
+          "precipitation": 2,
+          "changeSet": [
+            2,
+            11,
+            12,
+            13,
+            4,
+            0
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.4.name",
+          "descriptions": [
+            "weather.spring.weathers.4.descriptions.0"
+          ],
+          "temperature": 6,
+          "wind": 1,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            0,
+            3,
+            13,
+            14,
+            15,
+            5
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.5.name",
+          "descriptions": [
+            "weather.spring.weathers.5.descriptions.0",
+            "weather.spring.weathers.5.descriptions.1"
+          ],
+          "temperature": 8,
+          "wind": {
+            "min": 0,
+            "max": 2
+          },
+          "clouds": 2,
+          "precipitation": 0,
+          "changeSet": [
+            6,
+            0,
+            4,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.6.name",
+          "descriptions": [
+            "weather.spring.weathers.6.descriptions.0"
+          ],
+          "temperature": 7,
+          "wind": 2,
+          "clouds": 2,
+          "precipitation": 1,
+          "changeSet": [
+            7,
+            1,
+            0,
+            5,
+            17,
+            18
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.7.name",
+          "descriptions": [
+            "weather.spring.weathers.7.descriptions.0"
+          ],
+          "temperature": 7,
+          "wind": 2,
+          "clouds": 2,
+          "precipitation": 2,
+          "changeSet": [
+            7,
+            8,
+            1,
+            6,
+            18,
+            11
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.8.name",
+          "descriptions": [
+            "weather.spring.weathers.8.descriptions.0",
+            "weather.spring.weathers.8.descriptions.1"
+          ],
+          "temperature": 6,
+          "wind": {
+            "min": 0,
+            "max": 2
+          },
+          "clouds": 4,
+          "precipitation": 4,
+          "changeSet": [
+            8,
+            18,
+            9,
+            1,
+            7,
+            10
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.9.name",
+          "descriptions": [
+            "weather.spring.weathers.9.descriptions.0"
+          ],
+          "temperature": 4,
+          "wind": {
+            "min": 0,
+            "max": 2
+          },
+          "clouds": 4,
+          "precipitation": 3,
+          "changeSet": [
+            13,
+            17,
+            10,
+            2,
+            1,
+            8
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.10.name",
+          "descriptions": [
+            "weather.spring.weathers.10.descriptions.0"
+          ],
+          "temperature": 2,
+          "wind": 3,
+          "clouds": 4,
+          "precipitation": 3,
+          "changeSet": [
+            12,
+            10,
+            8,
+            11,
+            2,
+            9
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.11.name",
+          "descriptions": [
+            "weather.spring.weathers.11.descriptions.0"
+          ],
+          "temperature": 2,
+          "wind": 0,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            10,
+            11,
+            7,
+            12,
+            3,
+            2
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.12.name",
+          "descriptions": [
+            "weather.spring.weathers.12.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": 1,
+          "clouds": {
+            "min": 2,
+            "max": 4
+          },
+          "precipitation": 2,
+          "changeSet": [
+            11,
+            14,
+            18,
+            10,
+            13,
+            3
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.13.name",
+          "descriptions": [
+            "weather.spring.weathers.13.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": 0,
+          "clouds": {
+            "min": 2,
+            "max": 4
+          },
+          "precipitation": 0,
+          "changeSet": [
+            3,
+            12,
+            13,
+            9,
+            14,
+            4
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.14.name",
+          "descriptions": [
+            "weather.spring.weathers.14.descriptions.0"
+          ],
+          "temperature": 10,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": {
+            "min": 0,
+            "max": 1
+          },
+          "precipitation": 0,
+          "changeSet": [
+            4,
+            13,
+            16,
+            14,
+            12,
+            15
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.15.name",
+          "descriptions": [
+            "weather.spring.weathers.15.descriptions.0"
+          ],
+          "temperature": 9,
+          "wind": 3,
+          "clouds": {
+            "min": 0,
+            "max": 2
+          },
+          "precipitation": 0,
+          "changeSet": [
+            5,
+            4,
+            14,
+            15,
+            15,
+            16
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.16.name",
+          "descriptions": [
+            "weather.spring.weathers.16.descriptions.0"
+          ],
+          "temperature": 13,
+          "wind": 0,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            17,
+            5,
+            15,
+            18,
+            16,
+            14
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.17.name",
+          "descriptions": [
+            "weather.spring.weathers.17.descriptions.0"
+          ],
+          "temperature": 12,
+          "wind": 1,
+          "clouds": 2,
+          "precipitation": 1,
+          "changeSet": [
+            18,
+            6,
+            5,
+            16,
+            9,
+            17
+          ]
+        },
+        {
+          "name": "weather.spring.weathers.18.name",
+          "descriptions": [
+            "weather.spring.weathers.18.descriptions.0"
+          ],
+          "temperature": 9,
+          "wind": 2,
+          "clouds": 3,
+          "precipitation": 2,
+          "changeSet": [
+            16,
+            7,
+            6,
+            17,
+            8,
+            12
+          ]
+        }
+      ]
+    },
+    "summer": {
+      "id": "summer",
+      "name": "weather.summer.name",
+      "order": 1,
+      "weathers": [
+        {
+          "name": "weather.summer.weathers.0.name",
+          "descriptions": [
+            "weather.summer.weathers.0.descriptions.0"
+          ],
+          "temperature": 13,
+          "wind": 0,
+          "clouds": 1,
+          "precipitation": 0,
+          "changeSet": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.1.name",
+          "descriptions": [
+            "weather.summer.weathers.1.descriptions.0"
+          ],
+          "temperature": 11,
+          "wind": 0,
+          "clouds": 3,
+          "precipitation": 1,
+          "changeSet": [
+            8,
+            9,
+            2,
+            0,
+            6,
+            7
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.2.name",
+          "descriptions": [
+            "weather.summer.weathers.2.descriptions.0"
+          ],
+          "temperature": 12,
+          "wind": 3,
+          "clouds": 3,
+          "precipitation": 0,
+          "changeSet": [
+            9,
+            10,
+            11,
+            3,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.3.name",
+          "descriptions": [
+            "weather.summer.weathers.3.descriptions.0"
+          ],
+          "temperature": 14,
+          "wind": 2,
+          "clouds": 1,
+          "precipitation": 0,
+          "changeSet": [
+            2,
+            11,
+            12,
+            13,
+            4,
+            0
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.4.name",
+          "descriptions": [
+            "weather.summer.weathers.4.descriptions.0"
+          ],
+          "temperature": 15,
+          "wind": 0,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            0,
+            3,
+            13,
+            14,
+            15,
+            5
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.5.name",
+          "descriptions": [
+            "weather.summer.weathers.5.descriptions.0"
+          ],
+          "temperature": 14,
+          "wind": 1,
+          "clouds": 2,
+          "precipitation": 0,
+          "changeSet": [
+            6,
+            0,
+            4,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.6.name",
+          "descriptions": [
+            "weather.summer.weathers.6.descriptions.0"
+          ],
+          "temperature": 13,
+          "wind": 2,
+          "clouds": 3,
+          "precipitation": 2,
+          "changeSet": [
+            7,
+            1,
+            0,
+            5,
+            17,
+            18
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.7.name",
+          "descriptions": [
+            "weather.summer.weathers.7.descriptions.0"
+          ],
+          "temperature": 12,
+          "wind": 1,
+          "clouds": 4,
+          "precipitation": 4,
+          "changeSet": [
+            7,
+            8,
+            1,
+            6,
+            18,
+            11
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.8.name",
+          "descriptions": [
+            "weather.summer.weathers.8.descriptions.0"
+          ],
+          "temperature": 10,
+          "wind": 4,
+          "clouds": 4,
+          "precipitation": 4,
+          "changeSet": [
+            8,
+            18,
+            9,
+            1,
+            7,
+            10
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.9.name",
+          "descriptions": [
+            "weather.summer.weathers.9.descriptions.0"
+          ],
+          "temperature": 12,
+          "wind": 3,
+          "clouds": 4,
+          "precipitation": 4,
+          "changeSet": [
+            9,
+            17,
+            10,
+            2,
+            1,
+            8
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.10.name",
+          "descriptions": [
+            "weather.summer.weathers.10.descriptions.0"
+          ],
+          "temperature": 12,
+          "wind": 4,
+          "clouds": 2,
+          "precipitation": 0,
+          "changeSet": [
+            12,
+            10,
+            8,
+            11,
+            2,
+            9
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.11.name",
+          "descriptions": [
+            "weather.summer.weathers.11.descriptions.0"
+          ],
+          "temperature": 12,
+          "wind": 0,
+          "clouds": 2,
+          "precipitation": 0,
+          "changeSet": [
+            10,
+            15,
+            7,
+            12,
+            3,
+            2
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.12.name",
+          "descriptions": [
+            "weather.summer.weathers.12.descriptions.0"
+          ],
+          "temperature": 12,
+          "wind": 2,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            11,
+            14,
+            18,
+            10,
+            13,
+            3
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.13.name",
+          "descriptions": [
+            "weather.summer.weathers.13.descriptions.0"
+          ],
+          "temperature": 14,
+          "wind": 0,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            3,
+            12,
+            17,
+            13,
+            14,
+            4
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.14.name",
+          "descriptions": [
+            "weather.summer.weathers.14.descriptions.0"
+          ],
+          "temperature": 15,
+          "wind": 0,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            4,
+            13,
+            16,
+            14,
+            12,
+            15
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.15.name",
+          "descriptions": [
+            "weather.summer.weathers.15.descriptions.0"
+          ],
+          "temperature": 15,
+          "wind": 2,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            5,
+            4,
+            14,
+            15,
+            11,
+            16
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.16.name",
+          "descriptions": [
+            "weather.summer.weathers.16.descriptions.0"
+          ],
+          "temperature": 15,
+          "wind": 0,
+          "clouds": 1,
+          "precipitation": 1,
+          "changeSet": [
+            17,
+            5,
+            15,
+            18,
+            16,
+            14
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.17.name",
+          "descriptions": [
+            "weather.summer.weathers.17.descriptions.0"
+          ],
+          "temperature": 14,
+          "wind": 1,
+          "clouds": 2,
+          "precipitation": 2,
+          "changeSet": [
+            18,
+            6,
+            5,
+            16,
+            9,
+            13
+          ]
+        },
+        {
+          "name": "weather.summer.weathers.18.name",
+          "descriptions": [
+            "weather.summer.weathers.18.descriptions.0"
+          ],
+          "temperature": 13,
+          "wind": 1,
+          "clouds": 3,
+          "precipitation": 3,
+          "changeSet": [
+            16,
+            7,
+            6,
+            17,
+            8,
+            12
+          ]
+        }
+      ]
+    },
+    "winter": {
+      "id": "winter",
+      "name": "weather.winter.name",
+      "order": 3,
+      "weathers": [
+        {
+          "name": "weather.winter.weathers.0.name",
+          "descriptions": [
+            "weather.winter.weathers.0.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 3,
+          "precipitation": 1,
+          "changeSet": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.1.name",
+          "descriptions": [
+            "weather.winter.weathers.1.descriptions.0"
+          ],
+          "temperature": 4,
+          "wind": 1,
+          "clouds": {
+            "min": 0,
+            "max": 2
+          },
+          "precipitation": 1,
+          "changeSet": [
+            8,
+            9,
+            2,
+            0,
+            6,
+            7
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.2.name",
+          "descriptions": [
+            "weather.winter.weathers.2.descriptions.0"
+          ],
+          "temperature": 4,
+          "wind": 2,
+          "clouds": 4,
+          "precipitation": 3,
+          "changeSet": [
+            9,
+            10,
+            11,
+            3,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.3.name",
+          "descriptions": [
+            "weather.winter.weathers.3.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 3,
+          "precipitation": 0,
+          "changeSet": [
+            2,
+            11,
+            12,
+            13,
+            4,
+            0
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.4.name",
+          "descriptions": [
+            "weather.winter.weathers.4.descriptions.0"
+          ],
+          "temperature": 4,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 4,
+          "precipitation": 3,
+          "changeSet": [
+            0,
+            3,
+            13,
+            14,
+            15,
+            5
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.5.name",
+          "descriptions": [
+            "weather.winter.weathers.5.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": 1,
+          "clouds": 4,
+          "precipitation": 3,
+          "changeSet": [
+            6,
+            0,
+            4,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.6.name",
+          "descriptions": [
+            "weather.winter.weathers.6.descriptions.0"
+          ],
+          "temperature": 4,
+          "wind": 3,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            7,
+            1,
+            0,
+            5,
+            17,
+            18
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.7.name",
+          "descriptions": [
+            "weather.winter.weathers.7.descriptions.0"
+          ],
+          "temperature": 5,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 3,
+          "precipitation": 0,
+          "changeSet": [
+            7,
+            8,
+            1,
+            6,
+            18,
+            11
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.8.name",
+          "descriptions": [
+            "weather.winter.weathers.8.descriptions.0"
+          ],
+          "temperature": 6,
+          "wind": 1,
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            8,
+            18,
+            9,
+            1,
+            7,
+            10
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.9.name",
+          "descriptions": [
+            "weather.winter.weathers.9.descriptions.0"
+          ],
+          "temperature": 4,
+          "wind": 1,
+          "clouds": 3,
+          "precipitation": 2,
+          "changeSet": [
+            13,
+            17,
+            10,
+            2,
+            1,
+            8
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.10.name",
+          "descriptions": [
+            "weather.winter.weathers.10.descriptions.0"
+          ],
+          "temperature": 5,
+          "wind": 2,
+          "clouds": 4,
+          "precipitation": 4,
+          "changeSet": [
+            12,
+            10,
+            8,
+            11,
+            2,
+            9
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.11.name",
+          "descriptions": [
+            "weather.winter.weathers.11.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": 3,
+          "clouds": 1,
+          "precipitation": 0,
+          "changeSet": [
+            10,
+            15,
+            7,
+            12,
+            3,
+            2
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.12.name",
+          "descriptions": [
+            "weather.winter.weathers.12.descriptions.0"
+          ],
+          "temperature": 1,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 3,
+          "precipitation": 0,
+          "changeSet": [
+            11,
+            14,
+            18,
+            10,
+            13,
+            3
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.13.name",
+          "descriptions": [
+            "weather.winter.weathers.13.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": 2,
+          "clouds": 4,
+          "precipitation": 3,
+          "changeSet": [
+            3,
+            12,
+            17,
+            9,
+            14,
+            4
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.14.name",
+          "descriptions": [
+            "weather.winter.weathers.14.descriptions.0"
+          ],
+          "temperature": 2,
+          "wind": 1,
+          "clouds": 4,
+          "precipitation": 2,
+          "changeSet": [
+            4,
+            13,
+            16,
+            14,
+            12,
+            15
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.15.name",
+          "descriptions": [
+            "weather.winter.weathers.15.descriptions.0"
+          ],
+          "temperature": 1,
+          "wind": 3,
+          "clouds": 4,
+          "precipitation": 3,
+          "changeSet": [
+            5,
+            4,
+            14,
+            15,
+            11,
+            16
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.16.name",
+          "descriptions": [
+            "weather.winter.weathers.16.descriptions.0"
+          ],
+          "temperature": 0,
+          "wind": 5,
+          "clouds": 4,
+          "precipitation": 4,
+          "changeSet": [
+            17,
+            5,
+            15,
+            18,
+            16,
+            14
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.17.name",
+          "descriptions": [
+            "weather.winter.weathers.17.descriptions.0"
+          ],
+          "temperature": 3,
+          "wind": 2,
+          "clouds": 4,
+          "precipitation": 4,
+          "changeSet": [
+            18,
+            6,
+            5,
+            16,
+            9,
+            13
+          ]
+        },
+        {
+          "name": "weather.winter.weathers.18.name",
+          "descriptions": [
+            "weather.winter.weathers.18.descriptions.0"
+          ],
+          "temperature": 1,
+          "wind": {
+            "min": 0,
+            "max": 1
+          },
+          "clouds": 0,
+          "precipitation": 0,
+          "changeSet": [
+            16,
+            7,
+            6,
+            17,
+            8,
+            12
+          ]
+        }
+      ]
+    }
+  },
   "rules": {
     "size-bands": {
       "id": "size-bands",
@@ -916,6 +2387,63 @@ export const content = {
           "difficulty": 5,
           "rarity": 2
         }
+      ]
+    },
+    "weather-scales": {
+      "id": "weather-scales",
+      "temperature": [
+        {
+          "upTo": 0,
+          "word": "rules.weather-scales.temperature.0.word"
+        },
+        {
+          "upTo": 3,
+          "word": "rules.weather-scales.temperature.1.word"
+        },
+        {
+          "upTo": 6,
+          "word": "rules.weather-scales.temperature.2.word"
+        },
+        {
+          "upTo": 9,
+          "word": "rules.weather-scales.temperature.3.word"
+        },
+        {
+          "upTo": 12,
+          "word": "rules.weather-scales.temperature.4.word"
+        },
+        {
+          "upTo": 14,
+          "word": "rules.weather-scales.temperature.5.word"
+        },
+        {
+          "upTo": 99,
+          "word": "rules.weather-scales.temperature.6.word"
+        }
+      ],
+      "wind": [
+        "rules.weather-scales.wind.0",
+        "rules.weather-scales.wind.1",
+        "rules.weather-scales.wind.2",
+        "rules.weather-scales.wind.3",
+        "rules.weather-scales.wind.4",
+        "rules.weather-scales.wind.5"
+      ],
+      "clouds": [
+        "rules.weather-scales.clouds.0",
+        "rules.weather-scales.clouds.1",
+        "rules.weather-scales.clouds.2",
+        "rules.weather-scales.clouds.3",
+        "rules.weather-scales.clouds.4",
+        "rules.weather-scales.clouds.5"
+      ],
+      "precipitation": [
+        "rules.weather-scales.precipitation.0",
+        "rules.weather-scales.precipitation.1",
+        "rules.weather-scales.precipitation.2",
+        "rules.weather-scales.precipitation.3",
+        "rules.weather-scales.precipitation.4",
+        "rules.weather-scales.precipitation.5"
       ]
     }
   }
@@ -1057,11 +2585,196 @@ export const strings = {
     "location.lake.spots.old-mans-cove.name": "Old Man's Cove",
     "location.lake.spots.forest-edge.name": "forest's edge",
     "location.lake.spots.deep-reeds.name": "in deep reeds",
+    "weather.autumn.name": "Autumn",
+    "weather.autumn.weathers.0.name": "Humid and cloudy",
+    "weather.autumn.weathers.1.name": "Sunny and clear",
+    "weather.autumn.weathers.2.name": "Cold wafts of mist",
+    "weather.autumn.weathers.3.name": "Thick fog soup",
+    "weather.autumn.weathers.4.name": "Rain and fog",
+    "weather.autumn.weathers.5.name": "Rain and gusts",
+    "weather.autumn.weathers.6.name": "Sunny and cloudy",
+    "weather.autumn.weathers.7.name": "Pleasantly warm",
+    "weather.autumn.weathers.8.name": "Goose summer",
+    "weather.autumn.weathers.9.name": "Sporadic gusts",
+    "weather.autumn.weathers.10.name": "Cold winds",
+    "weather.autumn.weathers.11.name": "Frosty and cloudy",
+    "weather.autumn.weathers.12.name": "Cloudy and nippy",
+    "weather.autumn.weathers.13.name": "Windy and clear",
+    "weather.autumn.weathers.14.name": "Short, light showers",
+    "weather.autumn.weathers.15.name": "Heavy downpour",
+    "weather.autumn.weathers.16.name": "Rainy windstorm",
+    "weather.autumn.weathers.17.name": "Drizzle",
+    "weather.autumn.weathers.18.name": "Sunny and nippy",
+    "weather.autumn.weathers.0.descriptions.0": "Low clouds hang heavy, and the air feels damp on your skin",
+    "weather.autumn.weathers.1.descriptions.0": "The sun shines on golden trees around the water",
+    "weather.autumn.weathers.2.descriptions.0": "Gentle wind blows cold mist across the water",
+    "weather.autumn.weathers.3.descriptions.0": "A thick fog swallows the far shore whole",
+    "weather.autumn.weathers.4.descriptions.0": "Rain patters through a grey, drifting fog",
+    "weather.autumn.weathers.5.descriptions.0": "Rain lashes sideways as gusts whip across the water",
+    "weather.autumn.weathers.6.descriptions.0": "Sunlight breaks through in patches between the clouds",
+    "weather.autumn.weathers.7.descriptions.0": "A mild, pleasant day, with the scent of fallen leaves in the air",
+    "weather.autumn.weathers.8.descriptions.0": "Summer has come back for one last visit",
+    "weather.autumn.weathers.9.descriptions.0": "Sudden gusts send leaves skittering across the water",
+    "weather.autumn.weathers.10.descriptions.0": "A cold wind cuts through your coat",
+    "weather.autumn.weathers.11.descriptions.0": "Frost sparkles on the reeds under a grey sky",
+    "weather.autumn.weathers.12.descriptions.0": "The clouds are thick, and the air has a bite to it",
+    "weather.autumn.weathers.13.descriptions.0": "The sky is clear, but the wind is strong",
+    "weather.autumn.weathers.14.descriptions.0": "Brief, light showers come and go",
+    "weather.autumn.weathers.15.descriptions.0": "Rain pours down in heavy sheets",
+    "weather.autumn.weathers.16.descriptions.0": "Howling wind drives the rain across the water",
+    "weather.autumn.weathers.17.descriptions.0": "A fine drizzle settles on everything",
+    "weather.autumn.weathers.18.descriptions.0": "The sun is bright, but the air is cool",
+    "weather.spring.name": "Spring",
+    "weather.spring.weathers.0.name": "Clear and nippy",
+    "weather.spring.weathers.1.name": "Sleet",
+    "weather.spring.weathers.2.name": "Hail",
+    "weather.spring.weathers.3.name": "Cold wafts of mist",
+    "weather.spring.weathers.4.name": "Sunny and clear",
+    "weather.spring.weathers.5.name": "Cloudy and warm",
+    "weather.spring.weathers.6.name": "Nippy and humid",
+    "weather.spring.weathers.7.name": "Short showers",
+    "weather.spring.weathers.8.name": "Heavy rainfall",
+    "weather.spring.weathers.9.name": "Snowy rain",
+    "weather.spring.weathers.10.name": "Windy and snowy",
+    "weather.spring.weathers.11.name": "Heavy snowfall",
+    "weather.spring.weathers.12.name": "Light snowfall",
+    "weather.spring.weathers.13.name": "Cold and dry",
+    "weather.spring.weathers.14.name": "Pleasantly warm",
+    "weather.spring.weathers.15.name": "Strong pollen drift",
+    "weather.spring.weathers.16.name": "Hot and dry",
+    "weather.spring.weathers.17.name": "Warm and humid",
+    "weather.spring.weathers.18.name": "Warm drizzle",
+    "weather.spring.weathers.0.descriptions.0": "The skies are clear, and the air is fresh",
+    "weather.spring.weathers.1.descriptions.0": "Ice-cold rain falls steadily all around you",
+    "weather.spring.weathers.2.descriptions.0": "Large hailstones cause large splashes as they fall in the water",
+    "weather.spring.weathers.2.descriptions.1": "Small hailstones fall along with strong rain",
+    "weather.spring.weathers.2.descriptions.2": "Hailstones the size of chicken eggs fall from the sky",
+    "weather.spring.weathers.3.descriptions.0": "Gentle wind blows cold mist in your face",
+    "weather.spring.weathers.4.descriptions.0": "Clear sky allows plenty of sun",
+    "weather.spring.weathers.5.descriptions.0": "Scattered clouds rush through the sky",
+    "weather.spring.weathers.5.descriptions.1": "Big, still clouds seem to enjoy the warmth of the sun",
+    "weather.spring.weathers.6.descriptions.0": "Cold air is made unpleasant by high humidity",
+    "weather.spring.weathers.7.descriptions.0": "Rain sometimes falls from gathering clouds",
+    "weather.spring.weathers.8.descriptions.0": "A wall of rain is coming down from the sky",
+    "weather.spring.weathers.8.descriptions.1": "Dense, heavy rain makes it hard to see far",
+    "weather.spring.weathers.9.descriptions.0": "Rain mixed with snow makes everything wet and cold",
+    "weather.spring.weathers.10.descriptions.0": "Strong winds bring snow and memories of winter",
+    "weather.spring.weathers.11.descriptions.0": "Large snowflakes are falling everywhere around you",
+    "weather.spring.weathers.12.descriptions.0": "Occasional snow has little chance of staying for good",
+    "weather.spring.weathers.13.descriptions.0": "Dry, freezing cold makes your breath steam",
+    "weather.spring.weathers.14.descriptions.0": "Pleasant warmth gives hope for early summer",
+    "weather.spring.weathers.15.descriptions.0": "Strong, warm wind carries spring pollen everywhere",
+    "weather.spring.weathers.16.descriptions.0": "The air is hot and unmoving.",
+    "weather.spring.weathers.17.descriptions.0": "Humid, warm air makes everything sticky",
+    "weather.spring.weathers.18.descriptions.0": "Light rain does not get in the way of spring warmth",
+    "weather.summer.name": "Summer",
+    "weather.summer.weathers.0.name": "Pleasantly warm",
+    "weather.summer.weathers.1.name": "Cloudy and humid",
+    "weather.summer.weathers.2.name": "Cloudy and windy",
+    "weather.summer.weathers.3.name": "Warm breeze",
+    "weather.summer.weathers.4.name": "Hot and dry",
+    "weather.summer.weathers.5.name": "Warm and cloudy",
+    "weather.summer.weathers.6.name": "Short, warm showers",
+    "weather.summer.weathers.7.name": "Downpour",
+    "weather.summer.weathers.8.name": "Torrential rain",
+    "weather.summer.weathers.9.name": "Warm storm",
+    "weather.summer.weathers.10.name": "Fierce wind",
+    "weather.summer.weathers.11.name": "Nippy, partly cloudy",
+    "weather.summer.weathers.12.name": "Clear and nippy",
+    "weather.summer.weathers.13.name": "Sunny and clear",
+    "weather.summer.weathers.14.name": "Dry heat surges",
+    "weather.summer.weathers.15.name": "Hot and windy",
+    "weather.summer.weathers.16.name": "Hot and muggy",
+    "weather.summer.weathers.17.name": "Warm drizzle",
+    "weather.summer.weathers.18.name": "Warm rain",
+    "weather.summer.weathers.0.descriptions.0": "It is pleasantly warm.",
+    "weather.summer.weathers.1.descriptions.0": "It's cloudy and humid.",
+    "weather.summer.weathers.2.descriptions.0": "Strong winds move plentiful clouds across the sky.",
+    "weather.summer.weathers.3.descriptions.0": "The wind blows warm air in your face.",
+    "weather.summer.weathers.4.descriptions.0": "The air is hot and unmoving.",
+    "weather.summer.weathers.5.descriptions.0": "Numerous clouds provide much-needed shade.",
+    "weather.summer.weathers.6.descriptions.0": "Occasional rain makes the warm air feel like soup.",
+    "weather.summer.weathers.7.descriptions.0": "A wall of rain makes it hard to see far.",
+    "weather.summer.weathers.8.descriptions.0": "Strong winds make it seem like it's raining sideways.",
+    "weather.summer.weathers.9.descriptions.0": "Thunder and lightning. The warm, wet air smells like summer.",
+    "weather.summer.weathers.10.descriptions.0": "This wind means business.",
+    "weather.summer.weathers.11.descriptions.0": "It gets cold when the sun hides behind the clouds.",
+    "weather.summer.weathers.12.descriptions.0": "Light wind carries cold air.",
+    "weather.summer.weathers.13.descriptions.0": "Clear skies and no wind.",
+    "weather.summer.weathers.14.descriptions.0": "Hot, dry air makes you feel like a fry.",
+    "weather.summer.weathers.15.descriptions.0": "The wind blows hot air in your face.",
+    "weather.summer.weathers.16.descriptions.0": "Hot, wet air makes everything sticky.",
+    "weather.summer.weathers.17.descriptions.0": "A bit of rain makes the heat bearable.",
+    "weather.summer.weathers.18.descriptions.0": "It feels like nature giving you a shower.",
+    "weather.winter.name": "Winter",
+    "weather.winter.weathers.0.name": "Cold and humid",
+    "weather.winter.weathers.1.name": "Cold fog wafts",
+    "weather.winter.weathers.2.name": "Cold rain showers",
+    "weather.winter.weathers.3.name": "Cold and cloudy",
+    "weather.winter.weathers.4.name": "Wet snowfall",
+    "weather.winter.weathers.5.name": "Snowy rain",
+    "weather.winter.weathers.6.name": "Clear and windy",
+    "weather.winter.weathers.7.name": "Cloudy and nippy",
+    "weather.winter.weathers.8.name": "Sunny and nippy",
+    "weather.winter.weathers.9.name": "Light drizzle",
+    "weather.winter.weathers.10.name": "Heavy rain",
+    "weather.winter.weathers.11.name": "Cold winds",
+    "weather.winter.weathers.12.name": "Icy and cloudy",
+    "weather.winter.weathers.13.name": "Sleet",
+    "weather.winter.weathers.14.name": "Light snowfall",
+    "weather.winter.weathers.15.name": "Windy and snowy",
+    "weather.winter.weathers.16.name": "Blizzard",
+    "weather.winter.weathers.17.name": "Hail",
+    "weather.winter.weathers.18.name": "Cold and clear",
+    "weather.winter.weathers.0.descriptions.0": "The air is cold and heavy with moisture",
+    "weather.winter.weathers.1.descriptions.0": "Cold fog drifts in slow wafts over the water",
+    "weather.winter.weathers.2.descriptions.0": "Icy rain falls in short, sharp showers",
+    "weather.winter.weathers.3.descriptions.0": "A grey blanket of cloud hangs over the cold water",
+    "weather.winter.weathers.4.descriptions.0": "Wet, heavy snowflakes melt as they hit the water",
+    "weather.winter.weathers.5.descriptions.0": "Rain and snow fall together, neither quite winning",
+    "weather.winter.weathers.6.descriptions.0": "The sky is clear, and a sharp wind cuts across the water",
+    "weather.winter.weathers.7.descriptions.0": "Clouds cover the sky, and the air is nippy",
+    "weather.winter.weathers.8.descriptions.0": "The winter sun shines, but gives little warmth",
+    "weather.winter.weathers.9.descriptions.0": "A light drizzle falls from a dull sky",
+    "weather.winter.weathers.10.descriptions.0": "Heavy, cold rain hammers the water",
+    "weather.winter.weathers.11.descriptions.0": "Bitter winds sweep across the shore",
+    "weather.winter.weathers.12.descriptions.0": "Ice creeps along the shore under a cloudy sky",
+    "weather.winter.weathers.13.descriptions.0": "Sleet stings your face",
+    "weather.winter.weathers.14.descriptions.0": "Light snow drifts down and settles on the reeds",
+    "weather.winter.weathers.15.descriptions.0": "Wind drives the snow across the water",
+    "weather.winter.weathers.16.descriptions.0": "A blizzard turns the world white",
+    "weather.winter.weathers.17.descriptions.0": "Hailstones bounce off the ice at the water's edge",
+    "weather.winter.weathers.18.descriptions.0": "The sky is clear, and the cold is biting",
     "rules.size-bands.bands.tiny.name": "Tiny",
     "rules.size-bands.bands.small.name": "Small",
     "rules.size-bands.bands.medium.name": "Medium",
     "rules.size-bands.bands.large.name": "Large",
     "rules.size-bands.bands.gigantic.name": "Gigantic",
-    "rules.size-bands.bands.humongous.name": "Humongous"
+    "rules.size-bands.bands.humongous.name": "Humongous",
+    "rules.weather-scales.temperature.0.word": "Extremely cold",
+    "rules.weather-scales.temperature.1.word": "Cold",
+    "rules.weather-scales.temperature.2.word": "Moderate",
+    "rules.weather-scales.temperature.3.word": "Just right",
+    "rules.weather-scales.temperature.4.word": "Warm",
+    "rules.weather-scales.temperature.5.word": "Hot",
+    "rules.weather-scales.temperature.6.word": "Extremely hot",
+    "rules.weather-scales.wind.0": "None",
+    "rules.weather-scales.wind.1": "Light",
+    "rules.weather-scales.wind.2": "Moderate",
+    "rules.weather-scales.wind.3": "Considerable",
+    "rules.weather-scales.wind.4": "Strong",
+    "rules.weather-scales.wind.5": "Extreme",
+    "rules.weather-scales.clouds.0": "Clear",
+    "rules.weather-scales.clouds.1": "A few",
+    "rules.weather-scales.clouds.2": "Scattered",
+    "rules.weather-scales.clouds.3": "Mostly cloudy",
+    "rules.weather-scales.clouds.4": "Overcast",
+    "rules.weather-scales.clouds.5": "Black",
+    "rules.weather-scales.precipitation.0": "None",
+    "rules.weather-scales.precipitation.1": "Moist air",
+    "rules.weather-scales.precipitation.2": "Light",
+    "rules.weather-scales.precipitation.3": "Constant",
+    "rules.weather-scales.precipitation.4": "Intense",
+    "rules.weather-scales.precipitation.5": "Extreme"
   }
 };

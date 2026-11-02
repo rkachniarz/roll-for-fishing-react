@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schemas/weather-scales.schema.json",
+  "id": "weather-scales",
+  "temperature": [
+    { "upTo": 0, "word": "Extremely cold" },
+    { "upTo": 3, "word": "Cold" },
+    { "upTo": 6, "word": "Moderate" },
+    { "upTo": 9, "word": "Just right" },
+    { "upTo": 12, "word": "Warm" },
+    { "upTo": 14, "word": "Hot" },
+    { "upTo": 99, "word": "Extremely hot" }
+  ],
+  "wind": ["None", "Light", "Moderate", "Considerable", "Strong", "Extreme"],
+  "clouds": ["Clear", "A few", "Scattered", "Mostly cloudy", "Overcast", "Black"],
+  "precipitation": ["None", "Moist air", "Light", "Constant", "Intense", "Extreme"]
+}

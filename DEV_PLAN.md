@@ -65,7 +65,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
   (R15.2).
 - [ ] **2.3** Port the fish data into `content/fish/` and fish generation, fixing the defects in PORTING-NOTES §1.3
   (R3.2, R3.3, R4.1). Rarity from species and size band (R4.7, D49). §C.4 then points at `content/` (D56).
-- [ ] **2.4** Port the weather engine faithfully, fixing PORTING-NOTES §1.1 (Torrential rain's missed edge line,
+- [x] **2.4** Port the weather engine faithfully, fixing PORTING-NOTES §1.1 (Torrential rain's missed edge line,
   random-at-load values); write the 38 missing Autumn and Winter descriptions (R11.3). A data test for the edge rule
   (D26): every marked edge repeats, every other edge wraps.
 - [ ] **2.5** Time as its own clock: 30 game minutes per resolved cast, 48-cast days, 28-day seasons, the weather

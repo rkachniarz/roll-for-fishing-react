@@ -58,6 +58,11 @@ test('mistakes in content are caught', async () => {
     lake.treasure.push({ id: 'vendor-trash', weight: 1 });
     await writeFile(lakePath, JSON.stringify(lake));
     await writeFile(join(dir, 'content/fish/eel.json'), JSON.stringify({ id: 'eeel', name: 'Eel', size: { min: 5, max: 5 }, difficulty: 0, rarity: 'common' }));
+    // The prototype's own defect: Summer #8 leading north past its edge line.
+    const summerPath = join(dir, 'content/weather/summer.json');
+    const summer = JSON.parse(await readFile(summerPath, 'utf8'));
+    summer.weathers[8].changeSet[0] = 14;
+    await writeFile(summerPath, JSON.stringify(summer));
     await writeFile(join(dir, 'content/items/bad.json'), JSON.stringify({ id: 'bad', category: 'junk', name: 'Bad', rarity: 'shiny', value: 1 }));
 
     const broken = await buildContent(dir);
@@ -67,6 +72,7 @@ test('mistakes in content are caught', async () => {
     assert.ok(has('id "eeel" doesn\'t match'), 'id and file name');
     assert.ok(has('size.min must be below size.max'), 'size range');
     assert.ok(has('content/items/bad.json: /rarity'), 'schema');
+    assert.ok(has("goes to 14, but 14 doesn't come back"), 'weather edge line');
   } finally {
     await rm(dir, { recursive: true, force: true });
   }

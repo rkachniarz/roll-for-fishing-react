@@ -20,6 +20,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { GAME_VALUES, EFFECT_DICE, effectSign } from '../src/engine/values.js';
+import { HEX_NEIGHBOURS, OPPOSITE } from '../src/engine/hexmap.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -29,6 +30,7 @@ const KINDS = {
   items: { schema: 'item', prefix: 'item' },
   locations: { schema: 'location', prefix: 'location' },
   tables: { schema: 'table', prefix: 'table' },
+  weather: { schema: 'season', prefix: 'weather' },
   // One file per rule set; each has its own schema, named after its id.
   rules: { schema: null, prefix: 'rules' },
 };
@@ -43,7 +45,14 @@ const TEXT = {
   items: [['name'], ['flavor']],
   locations: [['name'], ['spots', '@', 'name']],
   tables: [],
-  rules: [['bands', '@', 'name']],
+  weather: [['name'], ['weathers', '#', 'name'], ['weathers', '#', 'descriptions', '#']],
+  rules: [
+    ['bands', '@', 'name'],
+    ['temperature', '#', 'word'],
+    ['wind', '#'],
+    ['clouds', '#'],
+    ['precipitation', '#'],
+  ],
 };
 
 const GENERATED = 'src/generated/content.js';
@@ -178,6 +187,8 @@ export async function buildContent(root = ROOT) {
     if (!foundAt.has(item.id) && !item.retired) warnings.push(`${where}: no location lists it`);
   }
 
+  checkSeasons(all.weather, errors);
+
   const bands = all.rules['size-bands']?.bands;
   if (!bands) errors.push('content/rules/size-bands.json: missing');
   else if (new Set(bands.map((b) => b.id)).size !== bands.length) errors.push('content/rules/size-bands.json: two bands share an id');
@@ -202,6 +213,37 @@ export async function buildContent(root = ROOT) {
   );
 
   return { errors, warnings, all, bundle, strings, foundAt, missingArt };
+}
+
+/**
+ * The weather maps (D26, PORTING-NOTES §1.1). Every season has the same 19
+ * cells; each move either goes to the hex map's neighbour (wrapping round the
+ * edge) or, across an edge line, stays put; and every move can be made back.
+ * @param {Record<string, any>} seasons
+ * @param {string[]} errors
+ */
+function checkSeasons(seasons, errors) {
+  const list = Object.values(seasons).sort((a, b) => a.order - b.order);
+  if (list.length === 0) return;
+  list.forEach((season, i) => {
+    if (season.order !== i) errors.push(`content/weather/${season.id}.json: order should be ${i}`);
+  });
+  for (const season of list) {
+    const where = `content/weather/${season.id}.json`;
+    season.weathers.forEach((w, cell) => {
+      w.changeSet.forEach((to, dir) => {
+        if (to !== cell && to !== HEX_NEIGHBOURS[cell][dir]) {
+          errors.push(`${where}: cell ${cell} "${w.name}" direction ${dir} goes to ${to}, not its neighbour ${HEX_NEIGHBOURS[cell][dir]} or itself`);
+        } else if (to !== cell && season.weathers[to].changeSet[OPPOSITE[dir]] !== cell) {
+          errors.push(`${where}: cell ${cell} "${w.name}" goes to ${to}, but ${to} doesn't come back`);
+        }
+      });
+      for (const level of ['temperature', 'wind', 'clouds', 'precipitation']) {
+        const v = w[level];
+        if (typeof v === 'object' && v.min > v.max) errors.push(`${where}: cell ${cell} ${level} min is above max`);
+      }
+    });
+  }
 }
 
 /**

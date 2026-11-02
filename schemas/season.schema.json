@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A season's weather map: 19 weathers on a hex map (R11.3, PORTING-NOTES §1.1)",
+  "definitions": {
+    "level": {
+      "description": "A fixed level, or a range rolled each time the weather turns to this cell.",
+      "oneOf": [
+        { "type": "integer", "minimum": 0 },
+        {
+          "type": "object",
+          "properties": { "min": { "type": "integer", "minimum": 0 }, "max": { "type": "integer", "minimum": 0 } },
+          "required": ["min", "max"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "$ref": "common.schema.json#/definitions/id" },
+    "name": { "$ref": "common.schema.json#/definitions/text" },
+    "order": { "description": "0 for the first season of the year.", "type": "integer", "minimum": 0 },
+    "weathers": {
+      "description": "Every season has the same 19 cells in the same layout, so a season change keeps the cell.",
+      "type": "array",
+      "minItems": 19,
+      "maxItems": 19,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "$ref": "common.schema.json#/definitions/text" },
+          "descriptions": {
+            "description": "One is picked each time the weather turns to this cell.",
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "common.schema.json#/definitions/text" }
+          },
+          "temperature": { "$ref": "#/definitions/level", "description": "0 to 15." },
+          "wind": { "$ref": "#/definitions/level", "description": "0 to 5." },
+          "clouds": { "$ref": "#/definitions/level", "description": "0 to 4." },
+          "precipitation": { "$ref": "#/definitions/level", "description": "0 to 4." },
+          "changeSet": {
+            "description": "The neighbouring cell in each direction: n, ne, se, s, sw, nw. Its own index where an edge line holds the weather (D26).",
+            "type": "array",
+            "minItems": 6,
+            "maxItems": 6,
+            "items": { "type": "integer", "minimum": 0, "maximum": 18 }
+          }
+        },
+        "required": ["name", "descriptions", "temperature", "wind", "clouds", "precipitation", "changeSet"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "name", "order", "weathers"],
+  "additionalProperties": false
+}

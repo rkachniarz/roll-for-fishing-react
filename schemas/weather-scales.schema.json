@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Words for the weather's levels, as the prototype showed them",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "const": "weather-scales" },
+    "temperature": {
+      "description": "The first entry whose upTo is at or above the temperature.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "upTo": { "type": "integer" }, "word": { "$ref": "common.schema.json#/definitions/text" } },
+        "required": ["upTo", "word"],
+        "additionalProperties": false
+      }
+    },
+    "wind": { "description": "One word per level, from 0.", "type": "array", "items": { "$ref": "common.schema.json#/definitions/text" } },
+    "clouds": { "description": "One word per level, from 0.", "type": "array", "items": { "$ref": "common.schema.json#/definitions/text" } },
+    "precipitation": { "description": "One word per level, from 0.", "type": "array", "items": { "$ref": "common.schema.json#/definitions/text" } }
+  },
+  "required": ["id", "temperature", "wind", "clouds", "precipitation"],
+  "additionalProperties": false
+}
