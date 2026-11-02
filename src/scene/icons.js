@@ -19,6 +19,25 @@ const KEYS = {
   c: '#b58a5a', // cork
   P: '#d05bd6', // potion
   p: '#9b3aa3', // potion, shaded
+  // The button row (R16.4), in the owner's sketch's colours.
+  V: '#c9b8ea', // book cover
+  v: '#9a55b8', // book spine
+  M: '#f6ecbf', // map parchment
+  m: '#e2c46a', // map edge
+  T: '#2f9e4f', // trees
+  L: '#8fd3ef', // water
+  R: '#e0393b', // map marker
+  I: '#b9bec2', // bucket
+  i: '#8c9296', // bucket, shaded
+  A: '#d9a07e', // bag leather
+  a: '#b57a58', // bag leather, shaded
+  // Weather: no dark outlines, since these sit on the dark page.
+  Y: '#ffe23d', // sun
+  O: '#f1edcf', // moon
+  C: '#eef3f6', // cloud
+  D: '#b3c0c8', // cloud, shaded
+  E: '#7b8992', // rain cloud
+  r: '#5bb4ff', // rain
 };
 
 /** @type {Record<string, string[]>} */
@@ -72,6 +91,172 @@ export const ICONS = {
   ],
 };
 
+const CLOUD = [
+  '.....CCCC.......',
+  '....CCCCCC.CC...',
+  '..CCCCCCCCCCCC..',
+  '.CCCCCCCCCCCCCC.',
+  '.CCCCCCCCCCCCCC.',
+  '..DDDDDDDDDDDD..',
+];
+const RAIN_CLOUD = CLOUD.map((row) => row.replace(/D/g, 'E').replace(/C/g, 'D'));
+const PARTLY = [
+  '..........Y.....',
+  '.......Y..Y..Y..',
+  '........YYYYY...',
+  '.......YYYYYYY..',
+  '....CCCCYYYYYYYY',
+  '...CCCCCCYYYYY..',
+  '.CCCCCCCCCCYYY..',
+  'CCCCCCCCCCCCC...',
+  'CCCCCCCCCCCCC...',
+  '.DDDDDDDDDDD....',
+];
+
+/** The button row and the weather (R16.4). */
+Object.assign(ICONS, {
+  // A stand-in until portraits exist.
+  'ui/portrait': [
+    '.....kkkkkk.....',
+    '....kkkkkkkk....',
+    '....kkkkkkkk....',
+    '...kkwkkkkwkk...',
+    '...kkkkkkkkkk...',
+    '...kkkwkkwkkk...',
+    '....kkkwwkkk....',
+    '....kkkkkkkk....',
+    '.....kkkkkk.....',
+    '....kkkkkkkk....',
+    '...kkkkkkkkkk...',
+    '..kkkkkkkkkkkk..',
+    '.kkkkkkkkkkkkkk.',
+    'kkkkkkkkkkkkkkkk',
+  ],
+  'ui/journal': [
+    '....kkkkkkkkkk..',
+    '...kVVVVVVVVvk..',
+    '..kkkkkkkkkkvk..',
+    '..kVVVVVVVVkvk..',
+    '..kVVVVVVVVkvk..',
+    '..kVVVVVVVVkvk..',
+    '..kVVVVVVVVkvk..',
+    '..kVVVVVVVVkvk..',
+    '..kVVVVVVVVkvk..',
+    '..kVVVVVVVVkvk..',
+    '..kVVVVVVVVkvk..',
+    '..kVVVVVVVVkk...',
+    '..kkkkkkkkkk....',
+  ],
+  'ui/map': [
+    '.mmmmmm..mmmmmm.',
+    '.mMMMMMmmMMMMMm.',
+    '.mMMMMMMMMTMTMm.',
+    '.mMMMMMMMTTTTTm.',
+    '.mMMMMMMMMkMkMm.',
+    '.mMMMMMMMMMLLMm.',
+    '.mMMMMMMMLLLLLm.',
+    '.mMMMRMMMLLLLMm.',
+    '.mMMRRRMMMLLMMm.',
+    '.mMMMkMMMMMMMMm.',
+    '.mMMMMMMMMMMMMm.',
+    '.mMMMMMMmmMMMMm.',
+    '.mmmmmmm..mmmmm.',
+  ],
+  'ui/bucket': [
+    '....kkkkkkkk....',
+    '...k........k...',
+    '..k..........k..',
+    '.kkkkkkkkkkkkkk.',
+    '.kLLLLLLLLLLLLk.',
+    '.kLLLkkLLLLkLLk.',
+    '.kLLkLLkkkkkLLk.',
+    '.kLLLkkLLLLkLLk.',
+    '..kIIIIIIIIIIk..',
+    '..kIIIIIIIIIik..',
+    '..kIIIIIIIIIik..',
+    '...kIIIIIIIIk...',
+    '...kIIIIIIIik...',
+    '...kIIIIIIIik...',
+    '....kkkkkkkk....',
+  ],
+  'ui/bag': [
+    '......kkkk......',
+    '.....k....k.....',
+    '....kkkkkkkk....',
+    '...kAAAAAAAAk...',
+    '..kAAAAAAAAAAk..',
+    '..kaaaaaaaaaak..',
+    '..kAAAAkkAAAAk..',
+    '..kAAAAkykAAAk..',
+    '..kAAAAkkkAAAk..',
+    '..kAAAAAAAAAAk..',
+    '..kAAAAAAAAAAk..',
+    '..kaAAAAAAAAak..',
+    '...kkkkkkkkkk...',
+  ],
+  'ui/menu': [
+    '..kkkkkkkkkkkk..',
+    '................',
+    '................',
+    '..kkkkkkkkkkkk..',
+    '................',
+    '................',
+    '..kkkkkkkkkkkk..',
+  ],
+  'weather/clear-day': [
+    '.......Y........',
+    '..Y....Y....Y...',
+    '...Y.......Y....',
+    '......YYY.......',
+    '.....YYYYY......',
+    'YY..YYYYYYY..YY.',
+    '.....YYYYY......',
+    '......YYY.......',
+    '...Y.......Y....',
+    '..Y....Y....Y...',
+    '.......Y........',
+  ],
+  'weather/clear-night': [
+    '.....OOOO.......',
+    '...OOOO.........',
+    '..OOOO..........',
+    '..OOO...........',
+    '.OOOO...........',
+    '.OOOO...........',
+    '.OOOOO..........',
+    '..OOOOO......O..',
+    '..OOOOOOOOOOOO..',
+    '...OOOOOOOOOO...',
+    '.....OOOOOO.....',
+  ],
+  'weather/partly-day': PARTLY,
+  'weather/partly-night': PARTLY.map((row) => row.replace(/Y/g, 'O')),
+  'weather/overcast': [
+    '.........EEEE...',
+    '.......EEEEEEE..',
+    '.....DDDDEEEEEE.',
+    '....DDDDDDEDDEE.',
+    '..DDDDDDDDDDDDE.',
+    '.DDDDDDDDDDDDDD.',
+    '.DDDDDDDDDDDDDD.',
+    '..EEEEEEEEEEEE..',
+  ],
+  'weather/rain': [...RAIN_CLOUD, '................', '..r...r...r.....', '.r...r...r......', '................', '....r...r...r...', '...r...r...r....'],
+  'weather/storm': [...RAIN_CLOUD, '.......YY.......', '.r...rYY..r.r...', 'r...rYYYY.r.r...', '.....r.YY.......', '...r..YY..r.r...', '..r...Y..r.r....'],
+  'weather/snow': [...RAIN_CLOUD, '................', '..C....C....C...', '................', '.....C....C.....', '................', '...C....C....C..'],
+  'weather/wind': [
+    '..........CCC...',
+    '.............C..',
+    'CCCCCCCCCCCCC...',
+    '................',
+    'CCCCCCCCCCCCCCC.',
+    '................',
+    'CCCCCCCCCCC.....',
+    '............C...',
+    '..........CC....',
+  ],
+});
+
 /** WoW's rarity colours (D49), for names and icon borders. */
 export const RARITY_COLOURS = {
   poor: '#9d9d9d',
@@ -93,6 +278,24 @@ export function iconName(thing) {
   const entity = thing.kind === 'fish' ? content.fish[thing.id] : content.items[thing.id];
   if (entity?.icon && ICONS[entity.icon]) return entity.icon;
   return thing.kind === 'fish' ? 'default/fish' : `default/${entity?.category ?? 'junk'}`;
+}
+
+/**
+ * The weather's icon (R16.4), from its levels: snow or rain first, then
+ * cloud, then wind. A clear sky shows the sun, or the moon after dark. Snow
+ * falls when it is as cold as the scene's snow (src/scene/sky.js).
+ * @param {{ temperature: number, wind: number, clouds: number, precipitation: number }} weather
+ * @param {boolean} dark  Night or evening.
+ */
+export function weatherIcon(weather, dark) {
+  if (weather.precipitation >= 2) {
+    if (weather.temperature <= 2) return 'weather/snow';
+    return weather.precipitation >= 4 ? 'weather/storm' : 'weather/rain';
+  }
+  if (weather.clouds >= 4) return 'weather/overcast';
+  if (weather.clouds >= 2) return dark ? 'weather/partly-night' : 'weather/partly-day';
+  if (weather.wind >= 4) return 'weather/wind';
+  return dark ? 'weather/clear-night' : 'weather/clear-day';
 }
 
 /**

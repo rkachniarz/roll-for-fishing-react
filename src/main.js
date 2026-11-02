@@ -1,21 +1,20 @@
 // @ts-check
 // Wiring: input -> engine -> scene and page. The engine (src/engine/) decides
 // everything; this file feeds it taps and frame times, draws what it returns,
-// and saves (DEV_PLAN 3.1). The panel is plain until the owner's layout sketch
-// (Q-38).
+// and saves (DEV_PLAN 3.1). The page is laid out as the owner's phone sketch
+// (D79): the scene, a row of buttons that open panes over it, and the log.
 //
-//   ?dev          shows the dev bench
+//   ?dev          puts the dev bench in the menu
 //   ?seed=N       a new game from seed N (an existing save still wins)
 //   ?wait=MS      fixes the time from cast to bite (used by tools/verify.mjs)
 
 import { createRng, deriveSeed, randomSeed } from './rng.js';
 import { diceFor } from './dice.js';
 import { content } from './generated/content.js';
-import { t } from './strings.js';
+import { t, tParts } from './strings.js';
 import { newGame, levelFor } from './engine/state.js';
-import { MISS_LIMIT, cancelBuff, castLine, releaseFish, strikeLine, tick, tickBuffs } from './engine/game.js';
-import { classes, className, generateName, rollStats } from './engine/character.js';
-import { fishNameKeys } from './engine/fish.js';
+import { MISS_LIMIT, cancelBuff, castLine, releaseFish, strikeLine, tick, tickBuffs, valuesFor } from './engine/game.js';
+import { classes, generateName, rollStats } from './engine/character.js';
 import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
 import { GAME_VALUES } from './engine/values.js';
@@ -24,7 +23,11 @@ import { WATER, createScene, fitCanvas } from './scene/scene.js';
 import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
-import { RARITY_COLOURS, iconName } from './scene/icons.js';
+import { createLog } from './ui/log.js';
+import { fishName, itemName, link, rarityColour } from './ui/links.js';
+import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane } from './ui/panels.js';
+import { hideTip, showTip } from './ui/tooltip.js';
+import { iconName, paintIcon, weatherIcon } from './scene/icons.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 /** @typedef {import('./engine/game.js').GameCast} GameCast */
@@ -65,12 +68,28 @@ const canvas = /** @type {HTMLCanvasElement} */ ($('scene'));
 const scenery = createRng(deriveSeed(seedParam ?? randomSeed(), 'scenery'));
 const scene = await createScene(canvas, () => scenery.next());
 
+/** The button row and log beside the scene on a wide screen. */
+const HUD_WIDTH = 360;
+/** On a phone, the room kept under the scene for the log, at least. */
+const LOG_MIN = 150;
+
 function fit() {
   const wide = window.innerWidth >= 900;
-  const width = wide ? window.innerWidth - 360 - 3 * 16 : window.innerWidth - 2 * 16;
-  const height = wide ? window.innerHeight - 2 * 16 : window.innerHeight * 0.62;
+  const gutter = wide ? 16 : 8;
+  const width = wide ? window.innerWidth - HUD_WIDTH - 3 * gutter : window.innerWidth - 2 * gutter;
+  // On a phone the row's buttons are an eighth of the width, square.
+  const height = wide ? window.innerHeight - 2 * gutter : window.innerHeight - 2 * gutter - width / 8 - 16 - LOG_MIN;
   // Less the wrapper's border, so the canvas itself gets the whole multiple.
   fitCanvas(canvas, width - 4, height - 4);
+  const scene = canvas.getBoundingClientRect().width + 4;
+  const root = document.documentElement.style;
+  root.setProperty('--gutter', `${gutter}px`);
+  root.setProperty('--scene', `${scene}px`);
+  // The row's icons, like the scene, at a whole number of device pixels per
+  // icon pixel (D10).
+  const dpr = window.devicePixelRatio || 1;
+  const square = (wide ? HUD_WIDTH : scene) / 8;
+  root.setProperty('--icon', `${(16 * Math.max(1, Math.floor(((square - 10) * dpr) / 16))) / dpr}px`);
 }
 fit();
 window.addEventListener('resize', fit);
@@ -83,8 +102,7 @@ let state = null;
 /** @type {GameCast} */
 let cast = /** @type {GameCast} */ ({ phase: 'idle' });
 let lastActAt = -Infinity;
-/** @type {string[]} */
-const logLines = [];
+const log = createLog($('log'));
 
 /** The pause after a first missed splash, before the line counts as cast again (D64). */
 function pausing() {
@@ -103,11 +121,14 @@ function pausing() {
  */
 function apply(out) {
   const changed = out.state !== state;
+  const ended = out.cast.phase === 'done' && cast.phase !== 'done';
   state = out.state;
   cast = out.cast;
   if (cast.landing && out.events.some((e) => e.type === 'cast')) scene.aimAt(cast.landing);
-  // Newest first, but one cast's lines in the order they happened.
-  log(...out.events.map(describeEvent).filter((line) => line !== null));
+  // The strike and roll first, then what came of them.
+  const roll = ended ? describeRoll() : null;
+  if (roll) log.add(roll, 'roll');
+  logEvents(out.events);
   for (const e of out.events) {
     if ((e.type === 'caught' || e.type === 'found') && cast.landing) {
       const thing = e.type === 'caught' ? { kind: /** @type {const} */ ('fish'), id: e.fish.species } : { kind: /** @type {const} */ ('item'), id: e.item };
@@ -115,7 +136,7 @@ function apply(out) {
         icon: iconName(thing),
         rarity: e.type === 'caught' ? e.fish.rarity : content.items[e.item].rarity,
         from: scene.toClient(cast.landing),
-        to: $('bags'),
+        to: $(e.type === 'caught' ? 'bucket' : 'bag'),
         scale: scene.pixelScale(),
       });
     }
@@ -144,11 +165,11 @@ function openRelease() {
     const b = document.createElement('button');
     b.type = 'button';
     b.textContent = t('release.fish', { fish: fishName(fish), size: fish.size }) + (note ? ` (${note})` : '');
-    b.style.color = RARITY_COLOURS[/** @type {keyof typeof RARITY_COLOURS} */ (fish.rarity)];
+    b.style.color = rarityColour(fish.rarity);
     b.addEventListener('click', () => {
       const out = releaseFish(s, choice);
       state = out.state;
-      log(...out.events.map(describeEvent).filter((line) => line !== null));
+      logEvents(out.events);
       saveGame(storage, state);
       dialog.close();
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
@@ -188,9 +209,14 @@ canvas.addEventListener('pointerdown', (e) => {
 });
 
 window.addEventListener('keydown', (e) => {
+  if (document.querySelector('dialog[open]')) return;
+  if (e.key === 'Escape') {
+    closePane();
+    return;
+  }
   if (e.repeat || (e.key !== ' ' && e.key !== 'Enter')) return;
-  if (e.target instanceof HTMLInputElement || e.target instanceof HTMLButtonElement) return;
-  if (/** @type {HTMLDialogElement} */ ($('create')).open) return;
+  const target = e.target;
+  if (target instanceof HTMLInputElement || target instanceof HTMLButtonElement || target instanceof HTMLSelectElement) return;
   e.preventDefault();
   act(e.timeStamp, null);
 });
@@ -222,7 +248,7 @@ scene.app.ticker.add((ticker) => {
     const buffs = tickBuffs(state, ticker.deltaMS);
     if (buffs.state !== state) {
       state = buffs.state;
-      for (const e of buffs.events) log(describeEvent(e) ?? '');
+      logEvents(buffs.events);
       const idle = cast.phase === 'idle' || cast.phase === 'done';
       if (idle && (buffs.events.length || now - buffSavedAt > 5000)) {
         saveGame(storage, state);
@@ -234,156 +260,227 @@ scene.app.ticker.add((ticker) => {
   scene.update(cast, now);
 });
 
-// ---------- Text ----------
+// ---------- The log (R16.5) ----------
 
 /** @param {import('./engine/fish.js').FishInstance} fish */
-const fishName = (fish) => fishNameKeys(fish).map((k) => t(k)).join(' ');
+const fishLink = (fish) => link({ kind: 'fish', fish });
 /** @param {string} id */
-const itemName = (id) => t(content.items[id].name);
+const itemLink = (id) => link({ kind: 'item', id });
 
 /**
  * The log line for an event, or null for none.
  * @param {GameEvent} e
+ * @returns {(string | Node)[] | null}
  */
 function describeEvent(e) {
   switch (e.type) {
-    case 'caught':
-      return t('log.caught', { fish: fishName(e.fish), size: e.fish.size, xp: e.fish.xp }) + (e.seenBefore ? ' ' + t('log.seenBefore') : '');
-    case 'escaped':
-      return t('log.escaped', { fish: fishName(e.fish) });
-    case 'missed':
-      return e.fish ? t('log.missed', { fish: fishName(e.fish) }) : t('log.missedSomething');
-    case 'found': {
-      const item = content.items[e.item];
-      return t('log.found', { item: t(item.name), flavor: item.flavor ? t(item.flavor) : '' }).trim();
+    case 'caught': {
+      const parts = tParts('log.caught', { fish: fishLink(e.fish), size: e.fish.size, xp: e.fish.xp });
+      return e.seenBefore ? [...parts, ' ' + t('log.seenBefore')] : parts;
     }
+    case 'escaped':
+      return tParts('log.escaped', { fish: fishLink(e.fish) });
+    case 'missed':
+      return e.fish ? tParts('log.missed', { fish: fishLink(e.fish) }) : [t('log.missedSomething')];
+    case 'found':
+      return tParts('log.found', { item: itemLink(e.item) });
     case 'bait-saved':
-      return t('log.bait-saved', { bait: itemName(e.bait) });
+      return tParts('log.bait-saved', { bait: itemLink(e.bait) });
     case 'bait-eaten':
     case 'bait-lost':
-      return t(`log.${e.type}`, { bait: itemName(e.bait), fish: fishName(e.fish) });
+      return tParts(`log.${e.type}`, { bait: itemLink(e.bait), fish: fishLink(e.fish) });
     case 'level-up':
-      return t('log.level-up', { level: e.level });
+      return [t('log.level-up', { level: e.level })];
     case 'weather':
-      return t('log.weather', { description: t(e.weather.description) });
+      return [t('log.weather', { description: t(e.weather.description) })];
     case 'season':
-      return t('log.season', { season: t(content.weather[e.season].name), description: t(e.weather.description) });
+      return [t('log.season', { season: t(content.weather[e.season].name), description: t(e.weather.description) })];
     case 'buff-ended':
-      return t('log.buff-ended', { buff: e.buff });
+      return [t('log.buff-ended', { buff: e.buff })];
     case 'feature-appeared':
     case 'feature-hit':
     case 'feature-gone': {
       const name = t(content.features[e.feature].name);
-      return t(`log.${e.type}`, { feature: name, Feature: name.charAt(0).toUpperCase() + name.slice(1) });
+      return [t(`log.${e.type}`, { feature: name, Feature: name.charAt(0).toUpperCase() + name.slice(1) })];
     }
     case 'released':
-      return t('log.released', { fish: fishName(e.fish) });
+      return tParts('log.released', { fish: fishLink(e.fish) });
     case 'bucket-full':
     case 'too-early':
     case 'empty':
     case 'reeled-in':
     case 'recast':
-      return t(`log.${e.type}`);
+      return [t(`log.${e.type}`)];
     default:
       return null;
   }
 }
 
-/** @param {...string} lines  In the order they happened. */
-function log(...lines) {
-  logLines.unshift(...lines.filter(Boolean));
-  logLines.length = Math.min(logLines.length, 12);
+/** @param {GameEvent[]} events  In the order they happened. */
+function logEvents(events) {
+  for (const e of events) {
+    const line = describeEvent(e);
+    if (line) log.add(line);
+  }
 }
 
 /** @param {number} ms */
 const duration = (ms) => (ms < 1000 ? `${Math.round(ms)} ms` : `${(ms / 1000).toFixed(1)} s`);
 
-/** The result box: what came up, and the visible roll (R2.6, R5). */
-function describeResult() {
+/** The strike and the visible roll (R2.6, R5), for the log; null if there were neither. */
+function describeRoll() {
   if (cast.phase !== 'done') return null;
-  const { outcome, line } = cast;
-  const strikeText =
-    outcome.reactionMs !== undefined && outcome.grade !== 'late'
-      ? t('result.strike', { grade: t(`grade.${outcome.grade}`), time: duration(outcome.reactionMs) }) + ' '
-      : '';
+  const { outcome } = cast;
+  const parts = [];
+  if (outcome.reactionMs !== undefined && outcome.grade !== 'late') {
+    parts.push(t('log.strike', { grade: t(`grade.${outcome.grade}`), time: duration(outcome.reactionMs) }));
+  }
   const roll = outcome.rolls[0];
-  const rollText = roll
-    ? t('result.roll', {
+  if (roll) {
+    parts.push(
+      t('log.roll', {
         roll: roll.result,
         mods: roll.mods.map((m) => ` ${m.value < 0 ? '−' : '+'} ${Math.abs(m.value)} ${m.label}`).join(''),
         total: roll.total,
         // The fish's own roll stays hidden until something reveals it (R5.2).
         needed: '?',
-      }) + (roll.result === 20 ? t('result.natural20') : '')
-    : '';
-  switch (outcome.result) {
-    case 'caught':
-    case 'escaped':
-      return { headline: t(`result.${outcome.result}`), detail: strikeText + rollText, good: outcome.result === 'caught' };
-    case 'landed':
-      return line.kind === 'item'
-        ? { headline: t('result.landed'), detail: strikeText + itemName(line.id), good: true }
-        : { headline: t('result.empty'), detail: strikeText, good: false };
-    default:
-      return { headline: t(`result.${outcome.result}`), detail: '', good: false };
+      }) + (roll.result === 20 ? t('log.natural20') : ''),
+    );
+  }
+  return parts.length ? [parts.join(' ')] : null;
+}
+
+// ---------- The button row, the time and the weather (R16.4) ----------
+
+/** @type {Record<string, string>} */
+const BAR_ICONS = { player: 'ui/portrait', journal: 'ui/journal', map: 'ui/map', bucket: 'ui/bucket', bag: 'ui/bag', menu: 'ui/menu' };
+for (const [id, icon] of Object.entries(BAR_ICONS)) {
+  const button = $(id);
+  const art = paintIcon(icon);
+  art.className = 'icon';
+  button.append(art);
+  button.setAttribute('aria-label', t(`hud.${id}`));
+  button.title = t(`hud.${id}`);
+  button.addEventListener('click', (e) => {
+    togglePane(/** @type {Pane} */ (id));
+    // A click shouldn't leave the keyboard on the button: Space casts (R16.3).
+    if (e.detail > 0) button.blur();
+  });
+}
+$('weather').setAttribute('aria-label', t('hud.weather'));
+$('weather').addEventListener('click', () => {
+  if (state) showTip($('weather'), { title: t(weatherWords(state.weather).name), lines: [] });
+});
+
+function renderHud() {
+  if (!state) return;
+  const now = clock(state.time);
+  $('timeOfDay').textContent = t(`time.${now.partOfDay}`);
+  $('seasonDay').textContent = t('hud.seasonDay', { season: t(content.weather[now.season].name), day: now.day });
+  // The exact time isn't shown (R16.4); the checks read it from here.
+  $('world').dataset.clock = `${String(now.hour).padStart(2, '0')}:${String(now.minute).padStart(2, '0')}`;
+  const icon = weatherIcon(state.weather, now.partOfDay === 'night' || now.partOfDay === 'evening');
+  const weather = $('weather');
+  if (weather.dataset.icon !== icon) {
+    const art = paintIcon(icon);
+    art.className = 'icon';
+    weather.replaceChildren(art);
+    weather.dataset.icon = icon;
+  }
+
+  const xp = state.character.xp;
+  const curve = content.rules.levels.xp;
+  const level = levelFor(xp);
+  const next = curve[level + 1];
+  $('xpFill').style.width = next === undefined ? '100%' : `${(100 * (xp - curve[level])) / (next - curve[level])}%`;
+  $('xp').title = next === undefined ? t('player.maxLevel', { xp }) : t('hud.xp', { xp, next });
+}
+
+// ---------- The panes over the scene (R16.4) ----------
+
+/** @typedef {'player' | 'journal' | 'map' | 'bucket' | 'bag' | 'menu' | 'dev'} Pane */
+/** @type {Pane | null} */
+let pane = null;
+/** @type {import('./ui/panels.js').BagTab} */
+let bagTabShown = 'equipment';
+
+/** @param {Pane} name */
+function togglePane(name) {
+  pane = pane === name ? null : name;
+  hideTip();
+  renderPane();
+}
+
+function closePane() {
+  if (!pane) return;
+  pane = null;
+  hideTip();
+  renderPane();
+}
+$('paneClose').setAttribute('aria-label', t('hud.close'));
+$('paneClose').addEventListener('click', closePane);
+
+function renderPane() {
+  const box = $('pane');
+  box.hidden = !pane || !state;
+  for (const b of document.querySelectorAll('[data-pane]')) b.setAttribute('aria-pressed', String(b.getAttribute('data-pane') === pane));
+  if (!pane || !state) return;
+  const s = state;
+  const body = $('paneBody');
+  $('paneTitle').textContent = pane === 'player' ? s.character.name : pane === 'dev' ? t('menu.dev') : t(`hud.${pane}`);
+  switch (pane) {
+    case 'player':
+      body.replaceChildren(...playerPane(s, valuesFor(s, extraSources()).flat));
+      break;
+    case 'journal':
+      body.replaceChildren(...journalPane(s));
+      break;
+    case 'map':
+      body.replaceChildren(...mapPane(s));
+      break;
+    case 'bucket':
+      body.replaceChildren(...bucketPane(s, valuesFor(s, extraSources()).flat.bucketSize));
+      break;
+    case 'bag':
+      body.replaceChildren(
+        ...bagPane(s, bagTabShown, (tab) => {
+          bagTabShown = tab;
+          hideTip();
+          renderPane();
+        }),
+      );
+      break;
+    case 'menu':
+      body.replaceChildren(...menuPane({ onNewGame: startOver, onDev: bench ? () => togglePane('dev') : null }));
+      break;
+    case 'dev':
+      // Put back only if it isn't there, so a field being typed in keeps focus.
+      if (body.firstChild !== benchRoot) body.replaceChildren(benchRoot);
+      bench?.refresh();
+      break;
   }
 }
+
+// ---------- Drawing it all ----------
 
 function render() {
   document.body.dataset.phase = cast.phase;
   $('status').textContent = t(pausing() ? 'status.pause' : `status.${cast.phase}`);
-
-  const result = $('result');
-  const r = describeResult();
-  result.hidden = !r;
-  if (r) {
-    result.className = `result ${r.good ? 'caught' : 'lost'}`;
-    const h = document.createElement('p');
-    h.className = 'headline';
-    h.textContent = r.headline;
-    const d = document.createElement('p');
-    d.className = 'detail';
-    d.textContent = r.detail;
-    result.replaceChildren(h, ...(r.detail ? [d] : []));
+  if (!state) {
+    renderPane();
+    return;
   }
-
-  const list = $('log');
-  list.replaceChildren(
-    ...logLines.map((line) => {
-      const li = document.createElement('li');
-      li.textContent = line;
-      return li;
-    }),
-  );
-
-  if (!state) return;
   buffBar.update(state.buffs);
   scene.setFeatures(state.features.map((f) => ({ ...f, kind: content.features[f.id].kind })));
   const now = clock(state.time);
   scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, weather: state.weather });
-  const c = state.character;
-  $('who').textContent = t('panel.character', {
-    name: c.name,
-    className: t(className(c.classId, c.gender)),
-    level: levelFor(c.xp),
-    xp: c.xp,
-  });
-  const time = clock(state.time);
-  $('where').textContent = t('panel.world', {
-    location: t(content.locations[state.location].name),
-    season: t(content.weather[time.season].name),
-    day: time.day,
-    clock: `${String(time.hour).padStart(2, '0')}:${String(time.minute).padStart(2, '0')}`,
-    weather: t(weatherWords(state.weather).name),
-  });
-  renderInventory();
-  bench?.refresh();
+  renderHud();
+  renderPane();
 }
 
 // ---------- Character creation (DEV_PLAN 3.3) ----------
 
-/** @param {string | null} notice  Shown on the page while creating, e.g. why the save couldn't load. */
-function openCreation(notice) {
+function openCreation() {
   const seed = seedParam ?? randomSeed();
   const dice = diceFor(createRng(deriveSeed(seed, 'character')));
   const dialog = /** @type {HTMLDialogElement} */ ($('create'));
@@ -393,8 +490,6 @@ function openCreation(notice) {
   let classId = list[0].id;
   let stats = rollStats(classId, dice);
 
-  $('notice').hidden = !notice;
-  $('notice').textContent = notice ?? '';
   $('createTitle').textContent = t('create.title');
   $('createNameLabel').textContent = t('create.name');
   $('createRerollName').textContent = t('create.rerollName');
@@ -479,8 +574,6 @@ function openCreation(notice) {
     state = newGame({ seed, character: { name, gender, classId, stats, luck: 0, xp: 0 } });
     saveGame(storage, state);
     cast = /** @type {GameCast} */ ({ phase: 'idle' });
-    logLines.length = 0;
-    $('notice').hidden = true;
     dialog.close();
     // Give the keyboard back to the game: Space and Enter cast (R2.1).
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
@@ -490,75 +583,25 @@ function openCreation(notice) {
   dialog.showModal();
 }
 
-// ---------- Bucket and bags: a plain list until Phase 5's inventory ----------
-
-$('bags').textContent = t('panel.bags');
-$('bags').addEventListener('click', () => {
-  const list = $('inventory');
-  list.hidden = !list.hidden;
-  $('bags').setAttribute('aria-expanded', String(!list.hidden));
-  render();
-});
-
-/**
- * @param {string} text
- * @param {string} rarity
- */
-function rarityItem(text, rarity) {
-  const li = document.createElement('li');
-  li.textContent = text;
-  li.style.color = RARITY_COLOURS[/** @type {keyof typeof RARITY_COLOURS} */ (rarity)];
-  return li;
-}
-
-function renderInventory() {
-  const box = $('inventory');
-  if (box.hidden || !state) return;
-  const s = state;
-  /** @param {string} title @param {HTMLElement[]} items */
-  const group = (title, items) => {
-    const h = document.createElement('h3');
-    h.textContent = title;
-    const ul = document.createElement('ul');
-    if (items.length) ul.append(...items);
-    else ul.append(Object.assign(document.createElement('li'), { textContent: t('panel.empty') }));
-    return [h, ul];
-  };
-  const fishCount = s.bucket.reduce((n, b) => n + b.count, 0);
-  box.replaceChildren(
-    ...group(
-      t('panel.equipped'),
-      /** @type {const} */ (['rod', 'bait']).map((slot) => {
-        const id = s.equipped[slot];
-        return id ? rarityItem(`${t(`slot.${slot}`)}: ${itemName(id)}`, content.items[id].rarity) : rarityItem(`${t(`slot.${slot}`)}: ${t('slot.none')}`, 'poor');
-      }),
-    ),
-    ...group(
-      t('panel.bucket', { count: fishCount }),
-      s.bucket.map((b) => rarityItem(t('panel.fishLine', { fish: fishName(b.fish), size: b.fish.size }) + (b.count > 1 ? ` ×${b.count}` : ''), b.fish.rarity)),
-    ),
-    ...group(
-      t('panel.bagsList'),
-      s.bags.map((b) => rarityItem(itemName(b.id) + (b.count > 1 ? ` ×${b.count}` : ''), content.items[b.id].rarity)),
-    ),
-  );
-}
-
-$('newGame').textContent = t('panel.newGame');
-$('newGame').addEventListener('click', () => {
+function startOver() {
   if (cast.phase === 'waiting' || cast.phase === 'bite') return;
-  if (!confirm(t('panel.confirmNewGame'))) return;
+  if (!confirm(t('menu.confirmNewGame'))) return;
   deleteSave(storage);
   state = null;
   cast = /** @type {GameCast} */ ({ phase: 'idle' });
+  pane = null;
+  log.clear();
   render();
-  openCreation(null);
-});
+  openCreation();
+}
 
-// ---------- ?dev: the bench (DEV_PLAN 3.4) ----------
+// ---------- ?dev: the bench, opened from the menu (DEV_PLAN 3.4) ----------
 
+const benchRoot = document.createElement('div');
+benchRoot.className = 'dev';
+benchRoot.id = 'devBench';
 const bench = DEV
-  ? createBench(/** @type {HTMLElement} */ ($('devBench')), {
+  ? createBench(benchRoot, {
       getState: () => state,
       // Only between casts, so a cast in progress keeps its checkpoint (D74).
       setState: (/** @type {GameState} */ next) => {
@@ -572,7 +615,6 @@ const bench = DEV
       onChange: render,
     })
   : null;
-if (DEV) $('devPanel').hidden = false;
 
 // ---------- Start ----------
 
@@ -583,5 +625,6 @@ if (loaded.state) {
   if (state.pendingCatch) openRelease();
 } else {
   render();
-  openCreation(loaded.error ? t('panel.badSave', { error: loaded.error }) : null);
+  if (loaded.error) log.add([t('menu.badSave', { error: loaded.error })], 'bad');
+  openCreation();
 }

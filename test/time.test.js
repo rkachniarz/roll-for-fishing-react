@@ -45,5 +45,8 @@ test('the cast that crosses into a new season says so', () => {
 
 test('parts of the day', () => {
   const at = (/** @type {number} */ h) => clock(h * 60).partOfDay;
-  assert.deepEqual([at(3), at(6), at(9), at(14), at(19), at(23)], ['night', 'dawn', 'morning', 'afternoon', 'evening', 'night']);
+  assert.deepEqual(
+    [at(3), at(6), at(9), at(12), at(14), at(19), at(21), at(23)],
+    ['night', 'dawn', 'morning', 'noon', 'afternoon', 'sunset', 'evening', 'night'],
+  );
 });

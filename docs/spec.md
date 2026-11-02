@@ -294,12 +294,18 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 
 ### R16: The screen
 
-- **R16.1** The layout follows WoW's: the log under the scene (the chat frame), the XP bar along the bottom, weather,
-  time and season top right (the minimap and clock) beside the buff bar (R12.3), and a row of buttons (the micro menu)
-  opening the character, accomplishments, bucket and bags, and spot map panels over the scene. On a wide screen the log
-  and panels sit beside the scene. *(D67; the owner's sketch to come)*
+- **R16.1** The layout follows the owner's sketch (D79), in WoW's spirit: the scene on top, then a row of buttons
+  (the micro menu) for the character, the time and weather, the journal (the accomplishments book), the map, the
+  bucket and the bag, then the log (the chat frame) with the menu button in its corner. The buttons open panes over
+  the scene. On a wide screen the row and the log sit beside the scene. *(D67, D79)*
 - **R16.2** Every cast's result is written to the log. Anything landed also appears as its icon at the bobber, flies to
   the bucket and bags button and disappears; escapes and empty hooks get only the log line. *(D70)*
+- **R16.4** The time is shown as a word (Night, Dawn, Morning, Noon, Afternoon, Sunset, Evening) with the season and
+  day, never as a clock. The weather is an icon; a tap names it. The character pane shows the portrait (a default
+  until portraits exist), level, XP, stats and equipment; the bag has the tabs Equipment, Consumables and Stuff; the
+  menu holds New game, the main menu and settings when they exist, and the dev bench. *(D79)*
+- **R16.5** The log scrolls, oldest line at the top, and isn't numbered. Fish and items in it are links: the name in
+  brackets in its rarity colour, showing its tooltip when tapped. *(D79)*
 - **R16.3** The player can keep fishing with a panel open; taps on a panel stay in it. On a phone the main view is the
   scene, a small log and the buttons, and inventory or equipment panels may take most of the screen. *(D71)*
 ---

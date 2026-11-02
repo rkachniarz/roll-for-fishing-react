@@ -23,7 +23,7 @@ export const TIME = {
 const DAY = 24 * 60;
 
 /**
- * @typedef {'night' | 'dawn' | 'morning' | 'afternoon' | 'evening'} PartOfDay
+ * @typedef {'night' | 'dawn' | 'morning' | 'noon' | 'afternoon' | 'sunset' | 'evening'} PartOfDay
  *
  * @typedef {Object} Clock
  * @property {number} year        From 1.
@@ -31,16 +31,22 @@ const DAY = 24 * 60;
  * @property {number} day         Day of the season, from 1.
  * @property {number} hour
  * @property {number} minute
- * @property {PartOfDay} partOfDay  For the day/night palettes (R7.5).
+ * @property {PartOfDay} partOfDay  Shown instead of the clock (R16.4).
  */
 
-/** @param {number} hour @returns {PartOfDay} */
+/**
+ * The words the player sees for the time (R16.4), lined up with the scene's
+ * light (src/scene/light.js): dawn and sunset are when it glows warm.
+ * @param {number} hour @returns {PartOfDay}
+ */
 function partOfDay(hour) {
   if (hour < 5) return 'night';
   if (hour < 7) return 'dawn';
-  if (hour < 12) return 'morning';
-  if (hour < 17) return 'afternoon';
-  if (hour < 21) return 'evening';
+  if (hour < 11) return 'morning';
+  if (hour < 13) return 'noon';
+  if (hour < 18) return 'afternoon';
+  if (hour < 20) return 'sunset';
+  if (hour < 22) return 'evening';
   return 'night';
 }
 

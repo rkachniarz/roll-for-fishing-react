@@ -5,6 +5,36 @@ an item is settled, delete it from this list (and record a decision if the answe
 
 Newest first.
 
+## The layout (3.2, from the sketch)
+
+- **The page stays dark**, with the sketch's dark red frames and its icons on pale tiles. The sketch is white; if you
+  meant a light page, say so.
+- **The XP bar** isn't in the sketch: it's a thin purple bar between the scene and the button row (WoW keeps it just
+  above its action bars).
+- **The hours behind each time word:** Night 22–5, Dawn 5–7, Morning 7–11, Noon 11–13, Afternoon 13–18, Sunset 18–20,
+  Evening 20–22. Dawn and Sunset match the scene's warm light.
+- **The weather icon** comes from the weather's levels, not from each named weather: snow, storm, rain, overcast, part
+  cloudy, windy, clear (a moon after Sunset). Each named weather could get its own icon later if you want that.
+- **The weather tap** shows the name only (e.g. "Blizzard"), as you described; the description stays in the log.
+- **Log wording follows the sketch:** "You caught: [Large Roach] (23 cm). +5 XP.", "You caught: [Empty vial]",
+  "Your [Ball of stale bread] was saved." The size and XP are my additions. An item's flavour text moved from the log
+  line to its tooltip.
+- **The strike and roll** ("Fast strike (261 ms). d20: 14 + 2 stat = 16, needed ?.") is a quieter grey line in the log,
+  before the result; the old result box is gone. The status line ("Splash! Strike now!") is gone from view; it's kept
+  only for screen readers.
+- **Tooltips** show the name, Unique, the slot or Consumable, the flavour text, and "Sells for N copper". Effects join
+  them with 5.4.
+- **The brackets look like round ones** in Pixelify Sans; that's the font's square bracket.
+- **The panes** open over the left of the scene, 360 px wide at most, so on a phone they cover the scene and on a wide
+  screen there's still water to cast at. One pane at a time; Escape closes it.
+- **The bucket pane** is a grid with an empty slot for each fish there's still room for. The bag shows whole rows of
+  four; it has no size limit yet.
+- **What goes in which tab:** anything with an equipment slot is Equipment, consumables are Consumables, everything else
+  (junk and treasure without a slot) is Stuff. The equipped rod shows on the character pane, not in the bag.
+- **The map pane** only says where you are, until Phase 8 brings spots and the town.
+- **The menu** has New game and, with `?dev`, the dev bench. There's no main menu or settings yet.
+- **The default portrait** is your sketch's black figure, drawn 16×16.
+
 ## Items (Phase 5)
 
 - **A full bucket's dialog** (5.5): "Your bucket is full. Let one fish go to make room. It goes back into the water
@@ -48,12 +78,12 @@ Newest first.
   is all in one place, `UI_STRINGS` in `src/strings.js`.
 - **Character creation** preselects a random gender and the Fish Fighter; the classes are listed Fighter, Wizard,
   Rogue. Each class shows its stat ranges.
-- **The result shows "needed ?"** for a fish: its own d20 is a hidden roll until something reveals it (R5.2). The
+- **The roll shows "needed ?"** for a fish: its own d20 is a hidden roll until something reveals it (R5.2). The
   prototype printed the number.
 - **The log isn't saved:** it starts empty after a reload. The accomplishments book (3.2) is what keeps records.
 - **The buff bar's look** (3.6): 36 px squares, ▲ and ▼ as stand-in icons until buffs have art, a long-press of
   0.6 s to cancel on touch, and a tooltip reading "+20 Fish Find · right-click or long-press to cancel". The squares
-  aren't yet drawn at the scene's pixel scale (D71); that comes with the layout.
+  aren't yet drawn at the scene's pixel scale (D71). Their tooltip no longer blocks clicks on the row below.
 - **`?seed=N` only seeds a new game;** with a save in the browser, the save wins. Use New game first to replay a seed.
 
 ## Guesses at numbers and content

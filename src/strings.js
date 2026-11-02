@@ -40,30 +40,24 @@ const UI_STRINGS = {
   'status.done': 'Tap to cast again.',
   'status.pause': 'The bobber bobs back up…',
 
-  // ---- The result of a cast ----
-  'result.caught': 'Caught it!',
-  'result.escaped': 'It got away.',
-  'result.landed': 'Got something!',
-  'result.empty': 'Nothing on the hook.',
-  'result.missed': 'Too slow.',
-  'result.too-early': 'Too early!',
-  'result.strike': '{grade} strike ({time}).',
-  'result.roll': 'd20: {roll}{mods} = {total}, needed {needed}.',
-  'result.natural20': ' Natural 20!',
+  // ---- A cast's strike and roll, in the log ----
+  'log.strike': '{grade} strike ({time}).',
+  'log.roll': 'd20: {roll}{mods} = {total}, needed {needed}.',
+  'log.natural20': ' Natural 20!',
   'grade.fast': 'Fast',
   'grade.ok': 'OK',
   'grade.bad': 'Slow',
 
   // ---- The log ----
-  'log.caught': 'You caught a {fish} ({size} cm)! +{xp} XP.',
+  'log.caught': 'You caught: {fish} ({size} cm). +{xp} XP.',
   'log.seenBefore': "You've seen this one before.",
-  'log.escaped': 'The {fish} got away.',
+  'log.escaped': 'The {fish} got away!',
   'log.missed': 'Too slow: the {fish} got away.',
   'log.missedSomething': 'Too slow: whatever it was is gone.',
   'log.too-early': 'Too early! You pulled the line out.',
-  'log.found': 'You found: {item}. {flavor}',
+  'log.found': 'You caught: {item}',
   'log.empty': 'Your hook comes up empty.',
-  'log.bait-saved': 'Your {bait} was recovered.',
+  'log.bait-saved': 'Your {bait} was saved.',
   'log.bait-eaten': 'The {fish} has eaten your {bait}.',
   'log.bait-lost': 'The {fish} got away with your {bait}.',
   'log.reeled-in': 'You reel the line in.',
@@ -84,21 +78,56 @@ const UI_STRINGS = {
   'log.feature-hit': 'Your bobber lands in {feature}.',
   'log.feature-gone': '{Feature} is gone.',
 
-  // ---- The panel ----
-  'panel.character': '{name}, {className} · level {level} ({xp} XP)',
-  'panel.world': '{location} · {season}, day {day}, {clock} · {weather}',
-  'panel.newGame': 'New game',
-  'panel.bags': 'Bucket & bags',
-  'panel.bucket': 'Bucket ({count} fish)',
-  'panel.bagsList': 'Bags',
-  'panel.equipped': 'Equipped',
-  'panel.empty': 'Empty.',
-  'panel.fishLine': '{fish}, {size} cm',
+  // ---- The button row and the time (R16.4) ----
+  'hud.player': 'Character',
+  'hud.weather': 'Weather',
+  'hud.journal': 'Journal',
+  'hud.map': 'Map',
+  'hud.bucket': 'Bucket',
+  'hud.bag': 'Bag',
+  'hud.menu': 'Menu',
+  'hud.close': 'Close',
+  'hud.xp': '{xp} / {next} XP',
+  'hud.seasonDay': '{season}, day {day}',
+  'time.night': 'Night',
+  'time.dawn': 'Dawn',
+  'time.morning': 'Morning',
+  'time.noon': 'Noon',
+  'time.afternoon': 'Afternoon',
+  'time.sunset': 'Sunset',
+  'time.evening': 'Evening',
+
+  // ---- The panes ----
+  'player.level': 'Level {level} {className}',
+  'player.xp': '{xp} / {next} XP',
+  'player.maxLevel': '{xp} XP, the highest level',
+  'player.stats': 'Stats',
+  'player.equipment': 'Equipment',
   'slot.rod': 'Rod',
   'slot.bait': 'Bait',
-  'slot.none': '(none)',
-  'panel.confirmNewGame': 'Start a new game? This one will be lost for good.',
-  'panel.badSave': "Your saved game couldn't be loaded: {error}. It is still stored; starting a new game will replace it.",
+  'slot.none': 'Empty',
+  'journal.casts': 'Casts',
+  'journal.catches': 'Fish caught',
+  'journal.fish': 'Fish',
+  'journal.entry': '{caught} caught, {smallest}–{largest} cm, average {average} cm',
+  'journal.none': 'Nothing caught yet.',
+  'map.shore': 'The shore',
+  'map.later': 'Other spots, other waters and the town come later.',
+  'bucket.count': '{count} of {size} fish',
+  'bag.equipment': 'Equipment',
+  'bag.consumables': 'Consumables',
+  'bag.stuff': 'Stuff',
+  'menu.newGame': 'New game',
+  'menu.dev': 'Dev bench',
+  'menu.confirmNewGame': 'Start a new game? This one will be lost for good.',
+  'menu.badSave': "Your saved game couldn't be loaded: {error}. It is still stored; starting a new game will replace it.",
+
+  // ---- Tooltips ----
+  'tip.fish': 'Fish',
+  'tip.size': '{size} cm',
+  'tip.unique': 'Unique',
+  'tip.consumable': 'Consumable',
+  'tip.value': 'Sells for {value} copper',
 
   // ---- Character creation ----
   'create.title': 'A new fisher',
@@ -126,4 +155,37 @@ export function t(key, params) {
   const text = table[key] ?? key;
   if (!params) return text;
   return text.replace(/\{(\w+)\}/g, (whole, name) => (name in params ? String(params[name]) : whole));
+}
+
+/**
+ * t() in pieces, so a placeholder can be filled with something other than
+ * text: a link in the log (R16.5).
+ *   tParts('log.found', { item: linkElement }) -> ['You caught: ', linkElement]
+ * @template P
+ * @param {string} key
+ * @param {Record<string, string | number | P>} params
+ * @returns {(string | P)[]}
+ */
+export function tParts(key, params) {
+  const text = table[key] ?? key;
+  /** @type {(string | P)[]} */
+  const parts = [];
+  let last = 0;
+  for (const m of text.matchAll(/\{(\w+)\}/g)) {
+    parts.push(text.slice(last, m.index));
+    const value = m[1] in params ? params[m[1]] : m[0];
+    parts.push(typeof value === 'number' ? String(value) : value);
+    last = /** @type {number} */ (m.index) + m[0].length;
+  }
+  parts.push(text.slice(last));
+  // Neighbouring text joins up, so only the links stand apart.
+  /** @type {(string | P)[]} */
+  const joined = [];
+  for (const p of parts) {
+    if (p === '') continue;
+    const prev = joined.length - 1;
+    if (typeof p === 'string' && typeof joined[prev] === 'string') joined[prev] += p;
+    else joined.push(p);
+  }
+  return joined;
 }

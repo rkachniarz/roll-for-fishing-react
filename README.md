@@ -49,8 +49,12 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
-| `src/scene/icons.js` | 16×16 item and fish icons, the default for each kind, rarity colours |
-| `src/ui/flight.js` | A catch's icon flying from the bobber to the bags |
+| `src/scene/icons.js` | 16×16 icons: items and fish (a default for each kind), the button row, the weather; rarity colours |
+| `src/ui/flight.js` | A catch's icon flying from the bobber to the bucket or bag |
+| `src/ui/log.js` | The log under the scene |
+| `src/ui/links.js` | Names of fish and items, links to them in rarity colours, bag tabs |
+| `src/ui/tooltip.js` | The one tooltip, for links and slots |
+| `src/ui/panels.js` | The panes over the scene: character, journal, map, bucket, bag, menu |
 | `test/` | Unit tests (`node:test`) |
 | `tools/content.mjs` | Checks content and builds the generated module, plus `dist/content-overview.html` |
 | `tools/verify.mjs` | Browser checks (Playwright) |

@@ -119,6 +119,19 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   right-click or long-press, debuffs not. Taps on it never cast. Its browser check first failed because the bar only
   redrew on the next frame; it now redraws with the rest of the page too.
 
+- **3.2** The owner's phone sketch, built (D79). The scene, then a row of eight square columns: the portrait, the
+  time and weather across three, then the journal, map, bucket and bag; the log fills what's left, with the menu
+  button in its corner. On a wide screen the row and log sit in a 360 px column beside the scene. The row's icons, like
+  the scene, are a whole number of device pixels per icon pixel. The phone gutter went from 16 to 8 px, so the scene at
+  devicePixelRatio 2.625 grew from 292 to 390 CSS px. Fifteen new 16×16 icons as code, in the sketch's colours. Each
+  button opens a pane over the scene (`src/ui/panels.js`): character, journal, map, a bucket grid with a slot per
+  free place, a bag grid with three tabs, and the menu, which now holds New game and the dev bench. The log
+  (`src/ui/log.js`) runs oldest to newest and follows new lines unless scrolled up; fish and items are links in rarity
+  colours (`src/ui/links.js`) with a tooltip (`src/ui/tooltip.js`), built with `tParts()`. The time shows as one of
+  seven words; the clock moved to a data attribute the checks read. Browser checks now number 86, with the layout measured
+  on three screens (square buttons, the log on screen, no sideways scroll) and every pane opened. The buff bar's
+  tooltip turned out to block clicks on the debuff row below it; it no longer catches clicks.
+
 ## Phase 4: Art pipeline and the living scene (in progress)
 
 - **4.4** A catch's icon appears at the bobber, rises, and flies to the new "Bucket & bags" button, outlined in its

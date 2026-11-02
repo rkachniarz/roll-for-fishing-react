@@ -24,6 +24,19 @@ function report(name, ok, detail = '') {
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  - ' + detail : ''}`);
 }
 
+/** The log's lines, as text. */
+const logText = async (page) => (await page.textContent('#log')) ?? '';
+/** The game's clock, which the page keeps out of sight (R16.4). */
+const clockShown = (page) => page.getAttribute('#world', 'data-clock');
+const closePane = async (page) => {
+  if (await page.isVisible('#pane')) await page.click('#paneClose');
+};
+/** Opens the dev bench from the menu. */
+const openBench = async (page) => {
+  await page.click('#menu');
+  await page.click('#openBench');
+};
+
 const server = spawn('npx', ['serve', '.', '--listen', String(PORT), '--no-port-switching'], {
   stdio: 'ignore',
   shell: true,
@@ -57,7 +70,9 @@ async function check(label, device, query, fn) {
     };
     await fn(page, tap);
   } catch (e) {
-    report(label, false, e.message.split('\n')[0]);
+    // The first line, and what was in the way if something was.
+    const lines = e.message.split('\n');
+    report(label, false, [lines[0], ...lines.filter((l) => /intercepts|not visible|not stable/.test(l)).slice(-1)].join(' | '));
   }
   report(`${label}: no page errors`, errors.length === 0, errors.join(' | '));
   await context.close();
@@ -83,9 +98,41 @@ for (const [name, device] of [
       `×${scale.toFixed(3)}`,
     );
     report(`layout on ${name}: scene fits the screen width`, m.css <= m.vw - 16, `${m.css.toFixed(1)} of ${m.vw}`);
+    const hud = await page.evaluate(() => {
+      const box = (/** @type {string} */ sel) => /** @type {Element} */ (document.querySelector(sel)).getBoundingClientRect();
+      const buttons = [...document.querySelectorAll('.bar .bar-button')].map((b) => b.getBoundingClientRect());
+      return {
+        square: buttons.every((b) => Math.abs(b.width - b.height) < 1),
+        inside: buttons.every((b) => b.left >= 0 && b.right <= innerWidth && b.bottom <= innerHeight),
+        log: box('#log').height,
+        logBottom: box('.log-frame').bottom,
+        scroll: document.documentElement.scrollWidth - innerWidth,
+        vh: innerHeight,
+      };
+    });
+    report(`layout on ${name}: the row's buttons are square and on screen`, hud.square && hud.inside);
+    report(`layout on ${name}: the log has room and ends on screen`, hud.log >= 100 && hud.logBottom <= hud.vh, `${hud.log.toFixed(0)} px tall`);
+    report(`layout on ${name}: no sideways scrolling`, hud.scroll <= 0, `${hud.scroll} px`);
     await page.screenshot({ path: `dist/verify/${name.replace(/\W+/g, '-')}.png` });
   });
 }
+
+await check('panes over the scene', PHONE, '?seed=1', async (page) => {
+  for (const id of ['player', 'journal', 'map', 'bucket', 'bag', 'menu']) {
+    await page.click(`#${id}`);
+    const open = (await page.isVisible('#pane')) && (await page.getAttribute(`#${id}`, 'aria-pressed')) === 'true';
+    report(`panes: ${id} opens`, open);
+    await page.screenshot({ path: `dist/verify/pane-${id}.png` });
+  }
+  await page.click('#menu');
+  report('panes: a second tap closes it', !(await page.isVisible('#pane')));
+  await page.click('#bag');
+  await page.click('#paneClose');
+  report('panes: the close button closes it', !(await page.isVisible('#pane')));
+  await page.click('#bag');
+  const names = await page.locator('#pane .tab').allTextContents();
+  report('panes: the bag has its three tabs', names.join(',') === 'Equipment,Consumables,Stuff', names.join(','));
+});
 
 await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, tap) => {
   await tap();
@@ -94,9 +141,9 @@ await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, t
   await page.screenshot({ path: 'dist/verify/bite.png' });
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
-  const headline = await page.textContent('#result .headline');
-  const detail = await page.textContent('#result .detail');
-  report('strike after the splash: an outcome with a roll', /Caught it!|It got away\./.test(headline ?? ''), headline);
+  const log = await logText(page);
+  const detail = await page.textContent('#log .roll');
+  report('strike after the splash: an outcome with a roll', /You caught: \[.*\]|got away!/.test(log), log);
   report('strike after the splash: the d20 roll is shown', /d20: \d+/.test(detail ?? ''), detail);
   report('strike after the splash: a quick strike is graded fast', /Fast strike/.test(detail ?? ''), detail);
   report("strike after the splash: the fish's roll stays hidden", /needed \?/.test(detail ?? ''), detail);
@@ -107,18 +154,25 @@ await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (p
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
-  report('junk: landed', (await page.textContent('#result .headline')) === 'Got something!');
-  report('junk: no d20', !/d20/.test((await page.textContent('#result')) ?? ''));
-  const log = (await page.textContent('#log')) ?? '';
-  report('junk: in the log', /You found: Bit of scroll parchment\./.test(log), log);
+  const log = await logText(page);
+  report('junk: no d20', !/d20/.test(log), log);
+  report('junk: in the log as a link', /You caught: \[Bit of scroll parchment\]/.test(log), log);
   report('junk: its icon flies to the bag', (await page.locator('.flying-icon').count()) === 1);
   await page.waitForTimeout(150);
   await page.screenshot({ path: 'dist/verify/catch-flight.png' });
   await page.waitForTimeout(1200);
   report('junk: and disappears', (await page.locator('.flying-icon').count()) === 0);
-  await page.click('#bags');
-  const inv = (await page.textContent('#inventory')) ?? '';
-  report('junk: listed in the bags', inv.includes('Bit of scroll parchment') && inv.includes('A stick with some string tied to it'), inv);
+  await page.click('#log .link');
+  const tip = (await page.textContent('.tip')) ?? '';
+  report('junk: a tap on the link shows its tooltip', tip.startsWith('Bit of scroll parchment'), tip);
+  await page.click('#bag');
+  await page.click('#tab-stuff');
+  const slots = await page.locator('#paneBody .slot:not(.empty)').evaluateAll((els) => els.map((e) => e.getAttribute('aria-label')));
+  report('junk: in the bag, under Stuff', slots.includes('Bit of scroll parchment'), slots.join(', '));
+  await page.screenshot({ path: 'dist/verify/bag.png' });
+  await page.click('#player');
+  const sheet = (await page.textContent('#paneBody')) ?? '';
+  report('junk: the stick is equipped', sheet.includes('A stick with some string tied to it'), sheet);
 });
 
 await check('strike too early', DESKTOP, '?seed=1&wait=6000', async (page, tap) => {
@@ -127,14 +181,14 @@ await check('strike too early', DESKTOP, '?seed=1&wait=6000', async (page, tap) 
   await page.waitForTimeout(300);
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
-  report('strike too early: pulled out', (await page.textContent('#result .headline')) === 'Too early!');
+  report('strike too early: pulled out', (await logText(page)).includes('Too early!'));
 });
 
 await check('no strike: the fish is gone after 3 s', DESKTOP, '?seed=1&wait=500', async (page, tap) => {
   await tap();
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await page.waitForSelector('body[data-phase="done"]', { timeout: 4000 });
-  report('no strike: too slow', (await page.textContent('#result .headline')) === 'Too slow.');
+  report('no strike: too slow', (await logText(page)).includes('Too slow'));
   report('no strike: the pause', (await page.textContent('#status')) === 'The bobber bobs back up…');
 });
 
@@ -150,27 +204,30 @@ await check('a missed splash: pause, cast again, then reel in', DESKTOP, '?seed=
 });
 
 await check('saving', PHONE, '?seed=1&wait=600', async (page, tap) => {
-  const who = await page.textContent('#who');
-  report('saving: the character is shown', /level 0/.test(who ?? ''), who);
+  await page.click('#player');
+  const who = await page.textContent('#paneBody');
+  report('saving: the character is shown', /Level 0/.test(who ?? ''), who);
+  await closePane(page);
   await tap();
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
-  report('saving: a cast takes 30 minutes', /08:30/.test((await page.textContent('#where')) ?? ''));
+  report('saving: a cast takes 30 minutes', (await clockShown(page)) === '08:30');
   await page.reload();
   await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
   report('saving: no character creation after a reload', !(await page.isVisible('#create')));
-  report('saving: the game is back', /08:30/.test((await page.textContent('#where')) ?? ''));
+  report('saving: the game is back', (await clockShown(page)) === '08:30');
 
   await tap();
   await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });
   await page.reload();
   await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
-  report('saving: leaving mid-cast voids the cast, no time passes', /08:30/.test((await page.textContent('#where')) ?? ''));
+  report('saving: leaving mid-cast voids the cast, no time passes', (await clockShown(page)) === '08:30');
 });
 
 await check('new game', DESKTOP, '?seed=5', async (page) => {
   page.on('dialog', (d) => d.accept());
+  await page.click('#menu');
   await page.click('#newGame');
   await page.waitForSelector('#create[open]', { timeout: 2000 });
   await page.click('#createGender label:nth-child(2)');
@@ -178,7 +235,8 @@ await check('new game', DESKTOP, '?seed=5', async (page) => {
   const name = await page.inputValue('#createName');
   await page.screenshot({ path: 'dist/verify/character-creation.png' });
   await page.click('#createStart');
-  const who = (await page.textContent('#who')) ?? '';
+  await page.click('#player');
+  const who = (await page.textContent('#pane')) ?? '';
   report('new game: back to character creation, and the choices stick', who.includes('Rogue Fisherwoman') && who.includes(name), who);
 });
 
@@ -191,20 +249,21 @@ await check('keyboard: space casts and strikes', DESKTOP, '?seed=2&wait=600', as
 });
 
 await check('?dev shows the bench', DESKTOP, '?dev&seed=3', async (page) => {
-  report('?dev: panel visible', await page.isVisible('#devPanel'));
-  await page.click('#devPanel summary');
+  await page.click('#menu');
+  report('?dev: the bench is in the menu', await page.isVisible('#openBench'));
+  await page.click('#openBench');
   report('?dev: seed shown for replay', /seed=3/.test((await page.textContent('#devBench')) ?? ''));
   report('?dev: game values shown', (await page.inputValue('#dev-strikeLimit')) === '3000');
   await page.fill('#dev-strikeLimit', '4000');
   await page.press('#dev-strikeLimit', 'Enter');
-  await page.click('body', { position: { x: 5, y: 5 } });
+  await page.click('#paneTitle');
   report('?dev: a value can be changed', (await page.inputValue('#dev-strikeLimit')) === '4000');
   report('?dev: an empty bucket button', await page.isVisible('text=Empty bucket'));
-  await page.screenshot({ path: 'dist/verify/dev-bench.png', fullPage: true });
+  await page.screenshot({ path: 'dist/verify/dev-bench.png' });
 });
 
 await check('the buff bar', DESKTOP, '?dev&seed=3', async (page) => {
-  await page.click('#devPanel summary');
+  await openBench(page);
   await page.click('text=+ Fish Find buff, 3 casts');
   await page.click('text=+ Fish Find buff, 2 min');
   await page.click('text=+ debuff, 90 s');
@@ -223,22 +282,22 @@ await check('the buff bar', DESKTOP, '?dev&seed=3', async (page) => {
 });
 
 await check('surface features', PHONE, '?dev&seed=3&wait=600', async (page) => {
-  await page.click('#devPanel summary');
+  await openBench(page);
   await page.selectOption('#dev-feature', 'roach-school');
   await page.click('text=Spawn in the middle');
-  await page.locator('#scene').scrollIntoViewIfNeeded();
+  await closePane(page);
   await page.waitForTimeout(400);
   await page.screenshot({ path: 'dist/verify/surface-feature.png' });
   // Cast at the middle of the scene (128, 100), where the school is.
   const box = await page.locator('#scene').boundingBox();
   await page.touchscreen.tap(box.x + (box.width * 128) / 256, box.y + (box.height * 100) / 256);
   await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });
-  const log = (await page.textContent('#log')) ?? '';
+  const log = await logText(page);
   report('surface features: landing in a school says so', log.includes('Your bobber lands in a school of roach.'), log);
 });
 
 await check('the sky', PHONE, '?dev&seed=3', async (page) => {
-  await page.click('#devPanel summary');
+  await openBench(page);
   const bench = page.locator('#devBench');
   /** @param {string} season @param {string} cell */
   const weather = async (season, cell) => {
@@ -249,28 +308,32 @@ await check('the sky', PHONE, '?dev&seed=3', async (page) => {
   // Heavy rain at dusk (spring, 20:00).
   for (let i = 0; i < 2; i++) await page.click('text=+6 hours');
   await weather('spring', '8');
-  await page.locator('#scene').scrollIntoViewIfNeeded();
+  await closePane(page);
   await page.waitForTimeout(1500);
   await page.screenshot({ path: 'dist/verify/sky-rain-dusk.png' });
   // A winter blizzard at night (02:00).
+  await openBench(page);
   for (let i = 0; i < 3; i++) await page.click('text=+1 season');
   await page.click('text=+6 hours');
   await weather('winter', '16');
-  await page.locator('#scene').scrollIntoViewIfNeeded();
+  await closePane(page);
   await page.waitForTimeout(1500);
   await page.screenshot({ path: 'dist/verify/sky-blizzard-night.png' });
-  const where = (await page.textContent('#where')) ?? '';
-  report('the sky: the weather and time are set', /Winter.*02:00.*Blizzard/.test(where), where);
+  const shown = [await page.textContent('#timeOfDay'), await page.textContent('#seasonDay'), await page.getAttribute('#weather', 'data-icon')].join(' ');
+  report('the sky: the time and weather are shown', /^Night Winter, day \d+ weather\/snow$/.test(shown), shown);
+  await page.click('#weather');
+  report('the sky: a tap on the weather names it', (await page.textContent('.tip')) === 'Blizzard', (await page.textContent('.tip')) ?? '');
+  await page.screenshot({ path: 'dist/verify/weather-name.png' });
 });
 
 await check('a full bucket', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
-  await page.click('#devPanel summary');
+  await openBench(page);
   for (const [name, value] of [['fishingSkill', '100'], ['fishFind', '100']]) {
     await page.fill(`#dev-${name}`, value);
     await page.press(`#dev-${name}`, 'Enter');
   }
   await page.click('text=Fill bucket');
-  await page.locator('#scene').scrollIntoViewIfNeeded();
+  await closePane(page);
   await tap();
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await tap();
@@ -280,7 +343,11 @@ await check('a full bucket', PHONE, '?dev&seed=1&wait=600', async (page, tap) =>
   report('a full bucket: the new fish and the bucket to choose from', options >= 2, `${options} options`);
   await page.click('#releaseList button >> nth=1');
   report('a full bucket: the choice closes it', !(await page.isVisible('#release')));
-  report('a full bucket: the log says so', /You let the .* go\./.test((await page.textContent('#log')) ?? ''));
+  report('a full bucket: the log says so', /You let the .* go\./.test(await logText(page)));
+  await page.click('#bucket');
+  const full = (await page.textContent('#paneBody')) ?? '';
+  report('a full bucket: 16 of 16 in the bucket pane', full.includes('16 of 16 fish'), full);
+  await page.screenshot({ path: 'dist/verify/bucket.png' });
 });
 
 await browser.close();

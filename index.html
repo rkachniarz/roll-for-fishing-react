@@ -27,28 +27,36 @@
   <div class="scene-wrap" id="sceneWrap">
     <canvas id="scene" aria-label="The lake, seen from the shore"></canvas>
     <div id="buffBar" hidden></div>
+    <!-- The panes open over the scene, WoW style (docs/spec.md, R16.4). -->
+    <section class="pane" id="pane" hidden aria-labelledby="paneTitle">
+      <header class="pane-head">
+        <h2 id="paneTitle"></h2>
+        <button type="button" class="pane-close" id="paneClose">×</button>
+      </header>
+      <div class="pane-body" id="paneBody"></div>
+    </section>
   </div>
 
-  <!-- Until the owner's layout sketch (DEV_PLAN Q-38): a plain panel. -->
-  <section class="panel">
-    <h1>Roll for Fishing</h1>
-    <p class="who" id="who"></p>
-    <p class="where" id="where"></p>
-    <p class="status" id="status" aria-live="polite">Loading the lake…</p>
-    <div class="result" id="result" hidden></div>
-    <ol class="log" id="log"></ol>
-    <p class="notice" id="notice" hidden></p>
-    <div class="buttons">
-      <button type="button" class="quiet" id="bags" aria-expanded="false"></button>
-      <button type="button" class="quiet" id="newGame"></button>
+  <!-- The owner's phone sketch (D79): the button row, then the log. -->
+  <div class="hud">
+    <div class="xp" id="xp"><div class="xp-fill" id="xpFill"></div></div>
+    <nav class="bar">
+      <button type="button" class="bar-button" id="player" data-pane="player"></button>
+      <div class="world" id="world">
+        <button type="button" class="weather" id="weather"></button>
+        <p><span id="timeOfDay"></span><br><span id="seasonDay"></span></p>
+      </div>
+      <button type="button" class="bar-button" id="journal" data-pane="journal"></button>
+      <button type="button" class="bar-button" id="map" data-pane="map"></button>
+      <button type="button" class="bar-button" id="bucket" data-pane="bucket"></button>
+      <button type="button" class="bar-button" id="bag" data-pane="bag"></button>
+    </nav>
+    <div class="log-frame">
+      <div class="log" id="log" role="log" aria-live="polite"></div>
+      <button type="button" class="bar-button menu" id="menu" data-pane="menu"></button>
     </div>
-    <div class="inventory" id="inventory" hidden></div>
-
-    <details class="dev" id="devPanel" hidden>
-      <summary>Dev bench</summary>
-      <div id="devBench"></div>
-    </details>
-  </section>
+    <p class="sr-only" id="status" aria-live="polite"></p>
+  </div>
 </main>
 
 <dialog class="create release" id="release">

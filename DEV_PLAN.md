@@ -5,9 +5,9 @@ silently changing requirements. Within a phase, tasks are listed in the order th
 only ids, so a task added later keeps its number wherever it lands.
 
 **Where things stand (2026-11-02):** Phases 0, 1 and 2 are done. **Phase 3: the game is playable on the real engine**:
-character creation, the full cast with its hidden rolls, the log, saving, New game, the buff bar and the `?dev` bench.
-Left in Phase 3: the layout (3.2), which gets a refinement pass later, and GitHub Pages (3.5), deferred (D77). Work
-moves on to the phases that don't depend on the layout. Claude's guesses and calls are listed in
+character creation, the full cast with its hidden rolls, saving, New game, the buff bar and the `?dev` bench, all in
+the owner's phone layout (D79). Left in Phase 3: GitHub Pages (3.5), deferred (D77). Phases 4 and 5 are under way;
+most of what's left in them needs the owner's art or design. Claude's guesses and calls are listed in
 [docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
 
 ## Where things are
@@ -28,9 +28,9 @@ moves on to the phases that don't depend on the layout. Claude's guesses and cal
 Answered ones move into decisions.md (Q-1 → D9, Q-2 → D10, Q-3 → D19, Q-4 → D20/D21, Q-5 → D11, Q-6 → D22,
 Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, Q-13 → D2/D3/D8, Q-14 → "Ideas for later",
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
-Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66, Q-39 → D70).
+Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66, Q-38 → D79, Q-39 → D70).
 
-- **Q-38** The screen layout (R16.1, D67, D71): the WoW mapping is agreed; the owner's sketch is to come before Phase 3.
+None open. The owner has a sketch of the equipment slots to come (5.2).
 
 ---
 
@@ -90,8 +90,9 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 ## Phase 3: Core loop, playable
 
 - [x] **3.1** The scene driven by the Phase 2 engine: whatever bit, how big, what came up; the visible roll (R2.6, R5).
-- [ ] **3.2** The screen laid out as WoW's (R16.1, D67; Q-38): log, accomplishments book (R4.2), weather and time
-  display, class and stats, XP bar and levels.
+- [x] **3.2** The screen laid out as the owner's sketch (R16.1, R16.4, R16.5, D79): the button row, panes over the
+  scene, the log with links and tooltips, the journal (R4.2), weather and time, the character with stats, XP bar and
+  levels. A refinement pass on the looks comes later (D77).
 - [x] **3.3** Character creation: name generator, gender, class (gendered names, D19), stat rolls (R6.1).
 - [x] **3.4** `?dev` bench: location, spot, weather, time, items, level, and as many game values as practical; an
   "empty bucket" button (R9.5, D27, D68).
@@ -117,7 +118,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 Requirements R8.
 
 - [ ] **5.1** Bag grid, stacking, drag and drop by touch and mouse, tap-to-inspect tooltips, names in rarity colours
-  (R8.1, R8.7, R8.8).
+  (R8.1, R8.7, R8.8). *The tabbed grid, stacking, tooltips and colours landed with 3.2; dragging is left.*
 - [ ] **5.2** Equipment slots; effects on the engine's hooks (R8.2).
 - [ ] **5.3** Port the seven items with real downsides (§C.3), plus about 15 more; the "every upside has a downside" data
   test (R8.5).
