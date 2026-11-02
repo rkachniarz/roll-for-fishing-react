@@ -48,6 +48,7 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |
+| `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
 | `src/scene/icons.js` | 16×16 item and fish icons, the default for each kind, rarity colours |
 | `src/ui/flight.js` | A catch's icon flying from the bobber to the bags |
 | `test/` | Unit tests (`node:test`) |

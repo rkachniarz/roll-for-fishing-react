@@ -5,6 +5,7 @@
 // wait for it (docs/decisions.md, D7).
 
 import { Application, Container, Graphics, Sprite, Texture, TextureStyle } from 'pixi.js';
+import { createSky } from './sky.js';
 import {
   BOBBER,
   BOBBER_DIPPED,
@@ -94,6 +95,10 @@ export async function createScene(canvas, rand) {
     }
   }
 
+  // Cloud shadows lie on the water, under everything that floats.
+  const shadowLayer = new Container();
+  app.stage.addChild(shadowLayer);
+
   const ripples = new Container();
   app.stage.addChild(ripples);
   /** @type {Map<string, Texture>} */
@@ -143,6 +148,12 @@ export async function createScene(canvas, rand) {
   const reedsRight = new Sprite(reedFrames.right[0]);
   reedsRight.position.set(SIZE - 26, SIZE - reedHeight);
   app.stage.addChild(reedsLeft, reedsRight);
+
+  // Rain, snow and the light of the hour, over everything (R7.5).
+  const skyLayer = new Container();
+  app.stage.addChild(skyLayer);
+  const sky = createSky(shadowLayer, skyLayer, SIZE, rand);
+  let lastFrame = 0;
 
   // ---------- What the scene remembers between frames ----------
 
@@ -247,15 +258,20 @@ export async function createScene(canvas, rand) {
     const phaseChanged = cast.phase !== lastPhase;
     lastPhase = cast.phase;
 
-    // Waves shimmer by flipping frames now and then; reeds sway together.
+    sky.update(now, lastFrame ? now - lastFrame : 16);
+    lastFrame = now;
+
+    // Waves shimmer by flipping frames now and then, faster in the wind; reeds
+    // sway together, faster in the wind too.
+    const windy = 1 + sky.wind() * 0.5;
     for (const w of waves) {
       if (now >= w.next) {
         w.frame = 1 - w.frame;
         w.sprite.texture = w.frames[w.frame];
-        w.next = now + 700 + rand() * 1800;
+        w.next = now + (700 + rand() * 1800) / windy;
       }
     }
-    const sway = Math.floor(now / 900) % 2;
+    const sway = Math.floor((now * windy) / 900) % 2;
     reedsLeft.texture = reedFrames.left[sway];
     reedsRight.texture = reedFrames.right[sway];
 
@@ -365,6 +381,7 @@ export async function createScene(canvas, rand) {
     aimAt,
     update,
     setFeatures,
+    setWorld: sky.setWorld,
     /**
      * Turns a pointer position on the page into scene pixels.
      * @param {number} clientX @param {number} clientY

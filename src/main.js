@@ -318,6 +318,8 @@ function render() {
   if (!state) return;
   buffBar.update(state.buffs);
   scene.setFeatures(state.features.map((f) => ({ ...f, kind: content.features[f.id].kind })));
+  const now = clock(state.time);
+  scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, weather: state.weather });
   const c = state.character;
   $('who').textContent = t('panel.character', {
     name: c.name,

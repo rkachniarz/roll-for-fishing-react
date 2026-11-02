@@ -133,3 +133,8 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   Gigantic; a voided cast leaves the feature untouched. The save moved to version 2, its first migration (surface
   features and their own stream). The scene draws each kind differently and glides them between casts; the bench can
   spawn them. Disturbances have their kind and an `event` field, waiting for Phase 7.
+- **4.3** Time, season and weather on the scene (`src/scene/sky.js`), drawn as code: tints for night, dawn and dusk
+  that follow the game clock and ease between casts, a faint cast per season, an overcast grey with the clouds, cloud
+  shadows drifting with the wind, rain slanting with it, snow when it's 2 or colder, livelier waves and reeds in the
+  wind. Tints rather than palette swaps for now, which works for generated art; hand-drawn art may want real palettes
+  (4.1). The first night screenshot lost the blizzard under the night tint, so rain and snow are now drawn above it.

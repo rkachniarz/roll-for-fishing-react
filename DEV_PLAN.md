@@ -106,7 +106,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 - [ ] **4.1** A fixed palette, sprite sizes per depth band, the atlas format and naming; Aseprite → atlas export ready for
   when hand-drawn art arrives (D9).
 - [ ] **4.2** Backdrops per spot in the sketch's layout.
-- [ ] **4.3** Day/night and seasonal palettes; weather overlays: rain, snow, wind on the water, cloud shadows (R7.5).
+- [x] **4.3** Day/night and seasonal palettes; weather overlays: rain, snow, wind on the water, cloud shadows (R7.5).
 - [x] **4.4** Catch feedback: the catch's icon appears at the bobber, flies to the bucket and bags button and disappears;
   no reeling-in animation; the log line always (R16.2, D69, D70).
 - [x] **4.5** Surface features: schools, curious spots and disturbances on the water, with their own stream, and their

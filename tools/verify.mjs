@@ -237,6 +237,32 @@ await check('surface features', PHONE, '?dev&seed=3&wait=600', async (page) => {
   report('surface features: landing in a school says so', log.includes('Your bobber lands in a school of roach.'), log);
 });
 
+await check('the sky', PHONE, '?dev&seed=3', async (page) => {
+  await page.click('#devPanel summary');
+  const bench = page.locator('#devBench');
+  /** @param {string} season @param {string} cell */
+  const weather = async (season, cell) => {
+    await bench.locator('select').nth(2).selectOption(season);
+    await bench.locator('select').nth(3).selectOption(cell);
+    await page.click('text=Set weather');
+  };
+  // Heavy rain at dusk (spring, 20:00).
+  for (let i = 0; i < 2; i++) await page.click('text=+6 hours');
+  await weather('spring', '8');
+  await page.locator('#scene').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: 'dist/verify/sky-rain-dusk.png' });
+  // A winter blizzard at night (02:00).
+  for (let i = 0; i < 3; i++) await page.click('text=+1 season');
+  await page.click('text=+6 hours');
+  await weather('winter', '16');
+  await page.locator('#scene').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: 'dist/verify/sky-blizzard-night.png' });
+  const where = (await page.textContent('#where')) ?? '';
+  report('the sky: the weather and time are set', /Winter.*02:00.*Blizzard/.test(where), where);
+});
+
 await browser.close();
 server.kill();
 console.log(failures ? `\n${failures} check(s) failed` : '\nAll checks passed');

@@ -120,3 +120,16 @@ test('the same seed rolls the same fish', () => {
   const run = () => Array.from({ length: 50 }, ((d) => () => rollFish('trout', plain, d))(dice(9)));
   assert.deepEqual(run(), run());
 });
+
+// ---------- The light of the hour (4.3) ----------
+
+test('night is dark, midday is not, dawn and dusk are warm', async () => {
+  const { darkness, warmth } = await import('../src/scene/light.js');
+  assert.equal(darkness(12), 0);
+  assert.equal(darkness(23), 0.55);
+  assert.equal(darkness(3), 0.55);
+  assert.ok(darkness(6) > 0 && darkness(6) < 0.55);
+  assert.ok(darkness(19.5) > 0 && darkness(19.5) < 0.55);
+  assert.ok(Math.abs(warmth(6) - 0.2) < 1e-9 && Math.abs(warmth(19) - 0.2) < 1e-9);
+  assert.equal(warmth(12), 0);
+});

@@ -7,6 +7,12 @@ Newest first.
 
 ## The scene (Phase 4)
 
+- **The light of the day** (4.3, `src/scene/light.js`): full night from 21:00 to 05:00, lightening until 07:00,
+  darkening from 18:00; a warm glow at its strongest at 06:00 and 19:00. Night darkens the view by about half.
+- **Seasons and weather on the scene** (4.3, `src/scene/sky.js`): summer slightly golden, autumn amber, winter pale
+  and cold; spring as drawn. Cloud level 2 and up brings one to three drifting cloud shadows; rain from
+  precipitation 2 up; snow instead of rain at temperature 2 or below. Tints over the whole view, not palette swaps.
+
 - **Surface features' numbers** (4.5, D78), all in `content/features/` and `content/locations/lake.json`:
   - The Lake: a 12% chance of a new one after each cast, at most two at once; roach school weight 5, carp school 3,
     glint 2, big pike 1.
