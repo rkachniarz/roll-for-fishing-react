@@ -51,3 +51,6 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   the maps: every move goes to the hex neighbour or holds, and every move can be made back. Restoring the prototype's
   Summer #8 makes that check fail, which a test confirms. The display words from `LocationInfo.jsx` are in
   `content/rules/weather-scales.json`; the cloud emoji became words until there are icons.
+- **2.5** Time as its own clock (`src/engine/time.js`): whole game minutes since the first spring midnight, with day,
+  season, year and part of the day worked out from them. A new game starts at 08:00 on day 1 of spring. The D66
+  baseline (30 minutes a cast, 28-day seasons) is a `TIME` object the bench can change, like `TIMING`.

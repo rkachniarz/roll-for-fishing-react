@@ -35,6 +35,7 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `src/dice.js` | The dice: `roll20`, `roll2d6`, `roll100`… |
 | `src/engine/cast.js` | One cast: waiting, bite, strike, reaction grade, the d20 roll |
 | `src/engine/values.js` | Game values and the effect vocabulary |
+| `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |

@@ -68,7 +68,7 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 - [x] **2.4** Port the weather engine faithfully, fixing PORTING-NOTES §1.1 (Torrential rain's missed edge line,
   random-at-load values); write the 38 missing Autumn and Winter descriptions (R11.3). A data test for the edge rule
   (D26): every marked edge repeats, every other edge wraps.
-- [ ] **2.5** Time as its own clock: 30 game minutes per resolved cast, 48-cast days, 28-day seasons, the weather
+- [x] **2.5** Time as its own clock: 30 game minutes per resolved cast, 48-cast days, 28-day seasons, the weather
   stepping once per cast (R11.4, D66).
 - [ ] **2.6** The cast pipeline with hooks: bite → which fish → size → strike → player roll → fish roll → outcome → loot
   → XP. Base stats plus derived modifiers on every game value (D13, R6.6), including the base Fish Find and Treasure
