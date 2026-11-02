@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "rusted-saucepan",
+  "category": "junk",
+  "name": "Rusted saucepan",
+  "flavor": "Contains mud sauce.",
+  "rarity": "poor",
+  "value": 2
+}

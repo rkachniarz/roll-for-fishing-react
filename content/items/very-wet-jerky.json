@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "very-wet-jerky",
+  "category": "junk",
+  "name": "Very wet jerky",
+  "flavor": "Chewy.",
+  "rarity": "poor",
+  "value": 1
+}

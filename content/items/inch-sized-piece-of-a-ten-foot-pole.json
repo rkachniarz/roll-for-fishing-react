@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "inch-sized-piece-of-a-ten-foot-pole",
+  "category": "junk",
+  "name": "An inch-sized piece of a ten foot pole",
+  "flavor": "You can still come up with many uses.",
+  "rarity": "poor",
+  "value": 2
+}

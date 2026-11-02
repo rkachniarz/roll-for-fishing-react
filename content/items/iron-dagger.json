@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "iron-dagger",
+  "category": "junk",
+  "name": "Iron dagger",
+  "flavor": "Someone clearly made a lot of them.",
+  "rarity": "poor",
+  "value": 1
+}

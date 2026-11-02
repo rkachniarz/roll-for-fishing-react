@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "industrial-strength-gelatin",
+  "category": "treasure",
+  "name": "Industrial-strength gelatin",
+  "flavor": "In waterproof packaging.",
+  "rarity": "uncommon",
+  "value": 0,
+  "unique": true,
+  "effects": [
+    {
+      "value": "fishVantage",
+      "add": -1
+    },
+    {
+      "value": "fishFind",
+      "add": -10
+    }
+  ]
+}

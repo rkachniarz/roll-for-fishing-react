@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "sturgeon",
+  "name": "Sturgeon",
+  "subnames": [
+    "Beluga",
+    "Starry",
+    "Dwarf",
+    "Shovelnose",
+    "Shortnose"
+  ],
+  "size": {
+    "min": 50,
+    "max": 300
+  },
+  "difficulty": 3,
+  "rarity": "rare",
+  "weather": [
+    {
+      "param": "temperature",
+      "max": 6,
+      "bonus": 8
+    },
+    {
+      "param": "precipitation",
+      "min": 2,
+      "bonus": 5
+    }
+  ]
+}

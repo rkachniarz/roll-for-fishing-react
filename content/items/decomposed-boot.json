@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "decomposed-boot",
+  "category": "junk",
+  "name": "Decomposed boot",
+  "flavor": "A frog's palace.",
+  "rarity": "poor",
+  "value": 0
+}

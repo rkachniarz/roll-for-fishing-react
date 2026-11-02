@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "crows-feather",
+  "category": "junk",
+  "name": "A crow's feather",
+  "flavor": "Chewed and ink-stained.",
+  "rarity": "poor",
+  "value": 1
+}

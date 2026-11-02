@@ -35,3 +35,12 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
 - **1.6** The cast engine. Its tests found a bug on the first run: a single tick moved a cast from waiting to bite but
   didn't then check whether the bite had already run out, so a strike long after the bite was still rolled. Fixed in
   `tickCast`.
+
+## Phase 2: Engine core and the port (in progress)
+
+- **2.14** The content pipeline (D42–D46, D72). The prototype's Lake ported into `content/` by a one-off script, not by
+  hand: 7 fish, 38 junk items, 7 treasures, 5 spots, and the size bands. Two flavour typos fixed ("bif", "Severly");
+  `items-junk.js` turned out to be an older copy of the same list, differing only in "Rusted iron dagger". The laser
+  sight finally has the −2 Treasure Find its text promised. `npm run content` checks schemas, ids against file names,
+  every reference, and R8.5 (a warning for now: only the Mega Mass Fish Chum fails it), then writes the generated module
+  (139 strings) and an overview page. A test feeds it a broken copy of the content to show each check bites.

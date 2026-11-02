@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "fishing-pole-laser-sight",
+  "category": "treasure",
+  "name": "Fishing pole laser sight",
+  "flavor": "Now if only you could shoot at them...",
+  "rarity": "rare",
+  "value": 0,
+  "unique": true,
+  "effects": [
+    {
+      "value": "fishingSkill",
+      "add": 2
+    },
+    {
+      "value": "treasureFind",
+      "add": -2
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "bit-of-oily-leather",
+  "category": "junk",
+  "name": "Bit of oily leather",
+  "flavor": "There's a dagger blade sized hole in the middle.",
+  "rarity": "poor",
+  "value": 2
+}

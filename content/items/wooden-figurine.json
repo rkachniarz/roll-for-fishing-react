@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "wooden-figurine",
+  "category": "junk",
+  "name": "Wooden figurine",
+  "flavor": "Half rotten remnants of a lesser deity.",
+  "rarity": "poor",
+  "value": 1
+}

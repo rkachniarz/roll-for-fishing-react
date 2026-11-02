@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "eight-leaf-underwater-clover",
+  "category": "treasure",
+  "name": "Eight-leaf underwater clover",
+  "flavor": "Sometimes luck only makes things complicated.",
+  "rarity": "epic",
+  "value": 0,
+  "unique": true,
+  "effects": [
+    {
+      "value": "playerVantage",
+      "add": 2
+    },
+    {
+      "value": "fishDifficulty",
+      "add": 5
+    }
+  ]
+}

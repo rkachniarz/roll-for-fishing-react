@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "empty-glass-flask",
+  "category": "junk",
+  "name": "An empty glass flask",
+  "flavor": "Something tiny is living inside.",
+  "rarity": "poor",
+  "value": 1
+}

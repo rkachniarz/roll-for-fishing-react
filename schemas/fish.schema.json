@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A fish species (R4.1)",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "$ref": "common.schema.json#/definitions/id" },
+    "name": { "$ref": "common.schema.json#/definitions/text" },
+    "subnames": {
+      "description": "One is picked per fish: Rainbow Trout, Northern Pike.",
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/definitions/text" }
+    },
+    "size": {
+      "description": "In whole centimetres. Split into six equal slices, one per size band (R3.3).",
+      "type": "object",
+      "properties": { "min": { "type": "integer", "minimum": 1 }, "max": { "type": "integer", "minimum": 1 } },
+      "required": ["min", "max"],
+      "additionalProperties": false
+    },
+    "difficulty": { "description": "Added to the size band's difficulty.", "type": "integer" },
+    "rarity": {
+      "description": "The species' rarity; the size band shifts it (D49, D63).",
+      "$ref": "common.schema.json#/definitions/rarity"
+    },
+    "weather": {
+      "description": "Added to the fish's weight in a table when the weather matches (§C.4).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "param": { "enum": ["temperature", "wind", "clouds", "precipitation"] },
+          "min": { "type": "integer" },
+          "max": { "type": "integer" },
+          "bonus": { "type": "integer" }
+        },
+        "required": ["param", "bonus"],
+        "additionalProperties": false
+      }
+    },
+    "icon": { "$ref": "common.schema.json#/definitions/icon" },
+    "retired": { "$ref": "common.schema.json#/definitions/retired" }
+  },
+  "required": ["id", "name", "size", "difficulty", "rarity"],
+  "additionalProperties": false
+}

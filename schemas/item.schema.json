@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "An item: treasure, a consumable or junk (R8.4)",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "$ref": "common.schema.json#/definitions/id" },
+    "category": {
+      "description": "Junk is the catch-all for everything that isn't treasure or a consumable (D65).",
+      "enum": ["treasure", "consumable", "junk"]
+    },
+    "name": { "$ref": "common.schema.json#/definitions/text" },
+    "flavor": { "$ref": "common.schema.json#/definitions/text" },
+    "rarity": { "$ref": "common.schema.json#/definitions/rarity" },
+    "value": { "description": "In copper.", "type": "integer", "minimum": 0 },
+    "unique": { "description": "Found once per save (R8.10).", "type": "boolean" },
+    "xp": { "description": "XP for finding it (D63).", "type": "integer", "minimum": 0 },
+    "effects": {
+      "description": "Every item with an upside needs a downside too (R8.5).",
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/definitions/effect" }
+    },
+    "icon": { "$ref": "common.schema.json#/definitions/icon" },
+    "retired": { "$ref": "common.schema.json#/definitions/retired" }
+  },
+  "required": ["id", "category", "name", "rarity", "value"],
+  "additionalProperties": false
+}

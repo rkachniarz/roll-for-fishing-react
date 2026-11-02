@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "small-wheel",
+  "category": "junk",
+  "name": "Small wheel",
+  "flavor": "Hopefully it was a third.",
+  "rarity": "poor",
+  "value": 1
+}

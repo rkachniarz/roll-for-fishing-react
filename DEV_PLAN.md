@@ -53,7 +53,7 @@ The riskiest part first: the reflex loop and the scene tech, before anything is 
 Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype` (PORTING-NOTES). Ported data lands in
 `content/` (D42), not in code.
 
-- [ ] **2.14** The content pipeline: `content/` laid out one file per entity, a JSON Schema per kind, `npm run content`
+- [x] **2.14** The content pipeline: `content/` laid out one file per entity, a JSON Schema per kind, `npm run content`
   (checks, bundle, string table, missing-art report, overview page), the same checks in `npm test`, and a test that the
   committed bundle is up to date (R15.1–R15.3, R15.5, R15.7, D42, D43, D46).
 - [ ] **2.1** `GameState` and save v1 in localStorage: versioned, saved after every resolved cast, New game (R1). The

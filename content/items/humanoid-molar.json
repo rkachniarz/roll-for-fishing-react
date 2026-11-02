@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "humanoid-molar",
+  "category": "junk",
+  "name": "Humanoid molar",
+  "flavor": "Severely rotten.",
+  "rarity": "poor",
+  "value": 0
+}

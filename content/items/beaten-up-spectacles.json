@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "beaten-up-spectacles",
+  "category": "junk",
+  "name": "Beaten up spectacles",
+  "flavor": "Or rather, just the frame.",
+  "rarity": "poor",
+  "value": 1
+}

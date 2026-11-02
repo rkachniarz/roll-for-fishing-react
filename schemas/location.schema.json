@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A location and its spots (R11.1, R15.2)",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "$ref": "common.schema.json#/definitions/id" },
+    "name": { "$ref": "common.schema.json#/definitions/text" },
+    "biteThreshold": {
+      "description": "A fish bites when d100 + Fish Find reaches this (R3.1).",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "treasureThreshold": {
+      "description": "With no bite, treasure comes up when d100 - Treasure Find is at or below this; otherwise junk (R3.4).",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "fish": { "$ref": "common.schema.json#/definitions/entries" },
+    "treasure": { "$ref": "common.schema.json#/definitions/entries" },
+    "junk": { "$ref": "common.schema.json#/definitions/entries" },
+    "emptyHook": {
+      "description": "The weight of nothing at all in the junk list: the hook comes up empty (R2.8).",
+      "type": "integer",
+      "minimum": 0
+    },
+    "spots": {
+      "description": "Parts of the location, each adding to its lists (R11.8).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/id" },
+          "name": { "$ref": "common.schema.json#/definitions/text" },
+          "fish": { "$ref": "common.schema.json#/definitions/entries" },
+          "treasure": { "$ref": "common.schema.json#/definitions/entries" },
+          "junk": { "$ref": "common.schema.json#/definitions/entries" }
+        },
+        "required": ["id", "name"],
+        "additionalProperties": false
+      }
+    },
+    "icon": { "$ref": "common.schema.json#/definitions/icon" },
+    "retired": { "$ref": "common.schema.json#/definitions/retired" }
+  },
+  "required": ["id", "name", "biteThreshold", "treasureThreshold", "fish", "treasure", "junk", "emptyHook"],
+  "additionalProperties": false
+}

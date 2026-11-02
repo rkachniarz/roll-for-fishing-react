@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "old-compass",
+  "category": "junk",
+  "name": "An old compass",
+  "flavor": "The needle won't stop spinning.",
+  "rarity": "poor",
+  "value": 2
+}

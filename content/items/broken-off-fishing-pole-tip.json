@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "broken-off-fishing-pole-tip",
+  "category": "junk",
+  "name": "Broken off fishing pole tip",
+  "flavor": "Lost in a fight. Possibly with oneself.",
+  "rarity": "poor",
+  "value": 1
+}

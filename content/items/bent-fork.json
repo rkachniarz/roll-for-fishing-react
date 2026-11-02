@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "bent-fork",
+  "category": "junk",
+  "name": "Bent fork",
+  "flavor": "A bit of animal bone is stuck in it.",
+  "rarity": "poor",
+  "value": 1
+}

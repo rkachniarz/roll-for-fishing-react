@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "cod",
+  "name": "Cod",
+  "subnames": [
+    "Murray",
+    "Sleepy",
+    "Trout",
+    "Black"
+  ],
+  "size": {
+    "min": 20,
+    "max": 100
+  },
+  "difficulty": 2,
+  "rarity": "uncommon"
+}

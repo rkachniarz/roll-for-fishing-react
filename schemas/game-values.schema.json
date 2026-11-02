@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Game values and dice an effect may use. Generated from src/engine/values.js by npm run content.",
+  "definitions": {
+    "value": {
+      "enum": [
+        "fishingSkill",
+        "fishFind",
+        "treasureFind",
+        "playerVantage",
+        "fishVantage",
+        "fishDifficulty",
+        "fishSizeBand",
+        "fishXp"
+      ]
+    },
+    "die": {
+      "enum": [
+        "d6",
+        "2d6",
+        "d20",
+        "d100"
+      ]
+    }
+  }
+}

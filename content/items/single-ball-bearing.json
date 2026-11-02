@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "single-ball-bearing",
+  "category": "junk",
+  "name": "A single ball bearing",
+  "flavor": "How did you even get it on a hook?",
+  "rarity": "poor",
+  "value": 2
+}

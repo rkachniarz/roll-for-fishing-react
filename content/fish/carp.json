@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "carp",
+  "name": "Carp",
+  "subnames": [
+    "Black",
+    "Predatory",
+    "Common"
+  ],
+  "size": {
+    "min": 20,
+    "max": 120
+  },
+  "difficulty": 0,
+  "rarity": "common",
+  "weather": [
+    {
+      "param": "temperature",
+      "min": 9,
+      "bonus": 10
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "hempen-tangles",
+  "category": "junk",
+  "name": "Hempen tangles",
+  "flavor": "Bits of old rope.",
+  "rarity": "poor",
+  "value": 0
+}

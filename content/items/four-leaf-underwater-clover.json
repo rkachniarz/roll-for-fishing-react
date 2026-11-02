@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "four-leaf-underwater-clover",
+  "category": "treasure",
+  "name": "Four-leaf underwater clover",
+  "flavor": "You are so lucky, you only find the GOOD fish.",
+  "rarity": "rare",
+  "value": 0,
+  "unique": true,
+  "effects": [
+    {
+      "value": "playerVantage",
+      "add": 1
+    },
+    {
+      "value": "fishDifficulty",
+      "add": 3
+    }
+  ]
+}

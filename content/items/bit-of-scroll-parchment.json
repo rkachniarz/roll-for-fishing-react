@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "bit-of-scroll-parchment",
+  "category": "junk",
+  "name": "Bit of scroll parchment",
+  "flavor": "You could probably fit a really tiny spell on it.",
+  "rarity": "poor",
+  "value": 2
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "dwarven-stein",
+  "category": "junk",
+  "name": "Dwarven stein",
+  "flavor": "Somehow, still smells of beer.",
+  "rarity": "poor",
+  "value": 5
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "leaky-waterskin",
+  "category": "junk",
+  "name": "Leaky waterskin",
+  "flavor": "Still holds some water!",
+  "rarity": "poor",
+  "value": 1
+}

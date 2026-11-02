@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Shared definitions for the content schemas",
+  "definitions": {
+    "id": {
+      "description": "Permanent: never renamed, never deleted (D44). Lower case, words joined by hyphens, and the same as the file name.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "text": {
+      "description": "Player-facing English text. `npm run content` moves it into the string table (D46).",
+      "type": "string",
+      "minLength": 1
+    },
+    "rarity": {
+      "description": "WoW's tiers (D49).",
+      "enum": ["poor", "common", "uncommon", "rare", "epic", "legendary"]
+    },
+    "icon": {
+      "description": "The sprite's name. Without one, the kind's default icon is used (R15.5).",
+      "type": "string"
+    },
+    "retired": {
+      "description": "Removed from the game, but old saves still understand it (D44).",
+      "type": "boolean"
+    },
+    "weight": {
+      "description": "How likely, relative to the other entries in the same list.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": { "id": { "$ref": "#/definitions/id" }, "weight": { "$ref": "#/definitions/weight" } },
+            "required": ["id", "weight"],
+            "additionalProperties": false
+          },
+          {
+            "description": "Everything in a shared list from content/tables/.",
+            "type": "object",
+            "properties": { "table": { "$ref": "#/definitions/id" } },
+            "required": ["table"],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "effect": {
+      "type": "object",
+      "properties": {
+        "value": { "$ref": "game-values.schema.json#/definitions/value" },
+        "add": {
+          "description": "A whole number, or a die rolled each time the effect applies (D48).",
+          "oneOf": [{ "type": "integer" }, { "$ref": "game-values.schema.json#/definitions/die" }]
+        }
+      },
+      "required": ["value", "add"],
+      "additionalProperties": false
+    }
+  }
+}

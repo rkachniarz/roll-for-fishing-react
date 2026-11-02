@@ -1,0 +1,259 @@
+{
+  "$schema": "../../schemas/location.schema.json",
+  "id": "lake",
+  "name": "The Lake",
+  "biteThreshold": 50,
+  "treasureThreshold": 5,
+  "fish": [
+    {
+      "id": "carp",
+      "weight": 20
+    },
+    {
+      "id": "bass",
+      "weight": 10
+    },
+    {
+      "id": "trout",
+      "weight": 10
+    },
+    {
+      "id": "pike",
+      "weight": 10
+    },
+    {
+      "id": "roach",
+      "weight": 35
+    },
+    {
+      "id": "cod",
+      "weight": 10
+    },
+    {
+      "id": "sturgeon",
+      "weight": 5
+    }
+  ],
+  "treasure": [
+    {
+      "id": "mega-mass-fish-chum",
+      "weight": 1
+    },
+    {
+      "id": "fishing-pole-laser-sight",
+      "weight": 1
+    },
+    {
+      "id": "heavy-bait",
+      "weight": 1
+    },
+    {
+      "id": "industrial-strength-gelatin",
+      "weight": 1
+    },
+    {
+      "id": "four-leaf-underwater-clover",
+      "weight": 1
+    },
+    {
+      "id": "fish-compendium",
+      "weight": 1
+    },
+    {
+      "id": "eight-leaf-underwater-clover",
+      "weight": 1
+    }
+  ],
+  "junk": [
+    {
+      "id": "vendor-trash",
+      "weight": 2
+    },
+    {
+      "id": "iron-dagger",
+      "weight": 2
+    },
+    {
+      "id": "soggy-treasure-map",
+      "weight": 2
+    },
+    {
+      "id": "bent-fork",
+      "weight": 2
+    },
+    {
+      "id": "leaky-waterskin",
+      "weight": 2
+    },
+    {
+      "id": "hempen-tangles",
+      "weight": 2
+    },
+    {
+      "id": "freshwater-seaweed",
+      "weight": 2
+    },
+    {
+      "id": "single-ball-bearing",
+      "weight": 2
+    },
+    {
+      "id": "candle-stump",
+      "weight": 2
+    },
+    {
+      "id": "empty-glass-flask",
+      "weight": 2
+    },
+    {
+      "id": "very-wet-jerky",
+      "weight": 2
+    },
+    {
+      "id": "ruined-playing-card",
+      "weight": 2
+    },
+    {
+      "id": "bit-of-oily-leather",
+      "weight": 1
+    },
+    {
+      "id": "crows-feather",
+      "weight": 2
+    },
+    {
+      "id": "clump-of-hair",
+      "weight": 2
+    },
+    {
+      "id": "back-cover-of-a-spellbook",
+      "weight": 1
+    },
+    {
+      "id": "snail-shell",
+      "weight": 1
+    },
+    {
+      "id": "decomposed-boot",
+      "weight": 2
+    },
+    {
+      "id": "rusted-saucepan",
+      "weight": 2
+    },
+    {
+      "id": "inch-sized-piece-of-a-ten-foot-pole",
+      "weight": 1
+    },
+    {
+      "id": "bit-of-scroll-parchment",
+      "weight": 1
+    },
+    {
+      "id": "waterlogged-stick",
+      "weight": 2
+    },
+    {
+      "id": "ruined-hat",
+      "weight": 1
+    },
+    {
+      "id": "old-skull",
+      "weight": 1
+    },
+    {
+      "id": "intact-fish-skeleton",
+      "weight": 1
+    },
+    {
+      "id": "iron-key",
+      "weight": 1
+    },
+    {
+      "id": "small-wheel",
+      "weight": 1
+    },
+    {
+      "id": "rusted-chain",
+      "weight": 1
+    },
+    {
+      "id": "humanoid-molar",
+      "weight": 1
+    },
+    {
+      "id": "brass-doorknob",
+      "weight": 1
+    },
+    {
+      "id": "small-bag-of-tiny-rocks",
+      "weight": 1
+    },
+    {
+      "id": "wooden-figurine",
+      "weight": 1
+    },
+    {
+      "id": "beaten-up-spectacles",
+      "weight": 1
+    },
+    {
+      "id": "dwarven-stein",
+      "weight": 1
+    },
+    {
+      "id": "broken-off-fishing-pole-tip",
+      "weight": 1
+    },
+    {
+      "id": "tangled-fishing-line",
+      "weight": 1
+    },
+    {
+      "id": "moldy-piece-of-bread",
+      "weight": 1
+    },
+    {
+      "id": "old-compass",
+      "weight": 1
+    }
+  ],
+  "emptyHook": 45,
+  "spots": [
+    {
+      "id": "crossroads",
+      "name": "by the crossroads",
+      "fish": [],
+      "treasure": [],
+      "junk": []
+    },
+    {
+      "id": "back-of-the-inn",
+      "name": "by the back of the inn",
+      "fish": [],
+      "treasure": [],
+      "junk": []
+    },
+    {
+      "id": "old-mans-cove",
+      "name": "Old Man's Cove",
+      "fish": [],
+      "treasure": [],
+      "junk": []
+    },
+    {
+      "id": "forest-edge",
+      "name": "forest's edge",
+      "fish": [],
+      "treasure": [],
+      "junk": []
+    },
+    {
+      "id": "deep-reeds",
+      "name": "in deep reeds",
+      "fish": [],
+      "treasure": [],
+      "junk": []
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Fish size bands, smallest first (R3.3)",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "const": "size-bands" },
+    "bands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/id" },
+          "name": { "$ref": "common.schema.json#/definitions/text" },
+          "weight": { "$ref": "common.schema.json#/definitions/weight" },
+          "difficulty": { "description": "Added to the species' difficulty.", "type": "integer" },
+          "rarity": {
+            "description": "Tiers added to the species' rarity, never below Poor or above Epic (D63).",
+            "type": "integer"
+          }
+        },
+        "required": ["id", "name", "weight", "difficulty", "rarity"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "bands"],
+  "additionalProperties": false
+}

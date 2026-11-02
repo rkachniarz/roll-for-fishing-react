@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "freshwater-seaweed",
+  "category": "junk",
+  "name": "Freshwater seaweed",
+  "flavor": "Wait, there's no regular word for it?",
+  "rarity": "poor",
+  "value": 0
+}

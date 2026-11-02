@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "mega-mass-fish-chum",
+  "category": "treasure",
+  "name": "Mega Mass Fish Chum",
+  "flavor": "Dad, should trout have biceps this huge?",
+  "rarity": "rare",
+  "value": 0,
+  "unique": true,
+  "effects": [
+    {
+      "value": "fishSizeBand",
+      "add": 2
+    }
+  ]
+}

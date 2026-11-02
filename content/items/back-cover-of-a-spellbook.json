@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "back-cover-of-a-spellbook",
+  "category": "junk",
+  "name": "Back cover of a spellbook",
+  "flavor": "Looks like the thing exploded.",
+  "rarity": "poor",
+  "value": 5
+}

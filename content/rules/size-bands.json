@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/size-bands.schema.json",
+  "id": "size-bands",
+  "bands": [
+    { "id": "tiny", "name": "Tiny", "weight": 5, "difficulty": 0, "rarity": -1 },
+    { "id": "small", "name": "Small", "weight": 20, "difficulty": 1, "rarity": 0 },
+    { "id": "medium", "name": "Medium", "weight": 35, "difficulty": 2, "rarity": 0 },
+    { "id": "large", "name": "Large", "weight": 20, "difficulty": 3, "rarity": 0 },
+    { "id": "gigantic", "name": "Gigantic", "weight": 15, "difficulty": 4, "rarity": 1 },
+    { "id": "humongous", "name": "Humongous", "weight": 5, "difficulty": 5, "rarity": 2 }
+  ]
+}

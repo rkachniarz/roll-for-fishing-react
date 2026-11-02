@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "heavy-bait",
+  "category": "treasure",
+  "name": "Heavy bait",
+  "flavor": "If you manage to hit 'em, they ain't got no chance",
+  "rarity": "uncommon",
+  "value": 0,
+  "unique": true,
+  "effects": [
+    {
+      "value": "fishingSkill",
+      "add": 5
+    },
+    {
+      "value": "playerVantage",
+      "add": -1
+    }
+  ]
+}

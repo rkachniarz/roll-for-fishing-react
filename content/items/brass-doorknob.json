@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "brass-doorknob",
+  "category": "junk",
+  "name": "Brass doorknob",
+  "flavor": "Door not included.",
+  "rarity": "poor",
+  "value": 3
+}

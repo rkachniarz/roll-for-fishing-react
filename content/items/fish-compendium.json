@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "fish-compendium",
+  "category": "treasure",
+  "name": "Fish and where to find them - waterproof compendium",
+  "flavor": "You now know so much about fish, there's not much else to learn.",
+  "rarity": "epic",
+  "value": 0,
+  "unique": true,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 30
+    },
+    {
+      "value": "fishXp",
+      "add": -1
+    }
+  ]
+}

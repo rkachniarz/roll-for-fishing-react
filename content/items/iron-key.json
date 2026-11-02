@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "iron-key",
+  "category": "junk",
+  "name": "Iron key",
+  "flavor": "Surprisingly not rusted.",
+  "rarity": "poor",
+  "value": 2
+}

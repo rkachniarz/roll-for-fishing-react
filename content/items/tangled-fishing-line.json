@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "tangled-fishing-line",
+  "category": "junk",
+  "name": "Tangled fishing line",
+  "flavor": "Impressively knotted.",
+  "rarity": "poor",
+  "value": 0
+}

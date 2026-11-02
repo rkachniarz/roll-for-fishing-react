@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "intact-fish-skeleton",
+  "category": "junk",
+  "name": "Intact fish skeleton",
+  "flavor": "Bit late on catching this one.",
+  "rarity": "poor",
+  "value": 1
+}

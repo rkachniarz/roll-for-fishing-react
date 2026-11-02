@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "ruined-playing-card",
+  "category": "junk",
+  "name": "Ruined playing card",
+  "flavor": "You're pretty sure it was clubs.",
+  "rarity": "poor",
+  "value": 0
+}

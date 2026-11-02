@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "waterlogged-stick",
+  "category": "junk",
+  "name": "Waterlogged stick",
+  "flavor": "Sticky.",
+  "rarity": "poor",
+  "value": 0
+}
