@@ -2371,21 +2371,21 @@ export const content = {
           "name": "rules.size-bands.bands.large.name",
           "weight": 20,
           "difficulty": 3,
-          "rarity": 0
+          "rarity": 1
         },
         {
           "id": "gigantic",
           "name": "rules.size-bands.bands.gigantic.name",
           "weight": 15,
           "difficulty": 4,
-          "rarity": 1
+          "rarity": 2
         },
         {
           "id": "humongous",
           "name": "rules.size-bands.bands.humongous.name",
           "weight": 5,
           "difficulty": 5,
-          "rarity": 2
+          "rarity": 3
         }
       ]
     },

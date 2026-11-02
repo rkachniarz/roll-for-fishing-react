@@ -102,7 +102,7 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R4.6** A location's completion can drop when content is added. Retired content stays in the book for whoever found
   it but doesn't count towards completion. *(D52)*
 - **R4.7** Every fish has a rarity (R8.8): its species' rarity, shifted by its size band (Tiny −1 tier, never below
-  Poor; Gigantic +1; Humongous +2; capped at Epic). Legendary fish are named and unique. *(D49, D63)*
+  Poor; Large +1; Gigantic +2; Humongous +3; capped at Epic). Legendary fish are named and unique. *(D49, D63, D73)*
 
 ### R5: Hidden rolls and knowledge
 
@@ -380,8 +380,8 @@ Levels 1, 3, 6 and 9 per class; even levels draw from the universal list. Cooldo
 ### §C.4 The Lake
 
 - **Fish:** Carp, Bass, Trout, Pike, Roach, Cod, Sturgeon, with sizes from 10–35 cm (Roach) to 50–300 cm (Sturgeon) and
-  weather preferences (e.g. Trout: +8 when the temperature is 9 or below, +5 when it's dry). Full data in the prototype's
-  `src/Data/locations.js`.
+  weather preferences (e.g. Trout: +8 when the temperature is 9 or below, +5 when it's dry). The data is in
+  `content/fish/` and `content/locations/lake.json`; `dist/content-overview.html` (from `npm run content`) lists it.
 - **Spots:** by the crossroads, by the back of the inn, Old Man's Cove, the forest's edge, in deep reeds. Their tables are
   still empty.
 - **Non-fish:** 38 junk items (Vendor trash, Soggy treasure map, Dwarven stein…) and the seven items in §C.3.

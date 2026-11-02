@@ -54,3 +54,14 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
 - **2.5** Time as its own clock (`src/engine/time.js`): whole game minutes since the first spring midnight, with day,
   season, year and part of the day worked out from them. A new game starts at 08:00 on day 1 of spring. The D66
   baseline (30 minutes a cast, 28-day seasons) is a `TIME` object the bench can change, like `TIMING`.
+- **2.15** Game values and the effect vocabulary (`src/engine/values.js`): 19 named values with their bases and which
+  direction helps the player, covering the rolls, the cast's timings, the rod's scatter and the bait chances.
+  `deriveValues` totals them from the character's stats and any sources of effects; `applyValue` rolls an effect's
+  dice each time a value is used and keeps the breakdown for the roll record.
+- **2.2** Weighted tables (`src/engine/tables.js`) built from a location's lists plus its spot's, with shared tables
+  expanded, retired content and found unique items skipped, the weather bonuses added to fish, and the empty hook as an
+  entry of its own.
+- **2.3** Fish generation (`src/engine/fish.js`), the prototype's algorithm with the PORTING-NOTES §1.3 fixes: the
+  difficulty follows the shifted band, Medium has a name, plain weights. Sizes are whole centimetres in non-overlapping
+  slices. Writing the rarity test showed that D63's band shifts didn't match the owner's examples (a Humongous roach came
+  out Rare); D73 corrects them.

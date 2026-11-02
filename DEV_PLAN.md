@@ -59,11 +59,11 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 - [ ] **2.1** `GameState` and save v1 in localStorage: versioned, saved after every resolved cast, New game (R1). The
   save holds ids only; retired content still resolves; a test loads an old save against new content (R15.4, D44). The
   save holds every random stream's position (R1.6, D53).
-- [ ] **2.15** Game values and the effect vocabulary: every number a modifier can change, by name (R6.6), and the
+- [x] **2.15** Game values and the effect vocabulary: every number a modifier can change, by name (R6.6), and the
   effects items, rods, bait, buffs and events use, including dice rolled when an effect applies (R8.9, D48, D56).
-- [ ] **2.2** Weighted tables (`src/engine/tables.js`), built from the location files and shared tables in `content/`
+- [x] **2.2** Weighted tables (`src/engine/tables.js`), built from the location files and shared tables in `content/`
   (R15.2).
-- [ ] **2.3** Port the fish data into `content/fish/` and fish generation, fixing the defects in PORTING-NOTES §1.3
+- [x] **2.3** Port the fish data into `content/fish/` and fish generation, fixing the defects in PORTING-NOTES §1.3
   (R3.2, R3.3, R4.1). Rarity from species and size band (R4.7, D49). §C.4 then points at `content/` (D56).
 - [x] **2.4** Port the weather engine faithfully, fixing PORTING-NOTES §1.1 (Torrential rain's missed edge line,
   random-at-load values); write the 38 missing Autumn and Winter descriptions (R11.3). A data test for the edge rule

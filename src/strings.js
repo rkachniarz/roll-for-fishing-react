@@ -18,6 +18,15 @@ const UI_STRINGS = {
   'value.fishDifficulty': 'fish difficulty',
   'value.fishSizeBand': 'fish size',
   'value.fishXp': 'XP per fish',
+  'value.castScatter': 'cast scatter',
+  'value.biteDelayMin': 'shortest wait for a bite',
+  'value.biteDelayMax': 'longest wait for a bite',
+  'value.reactionFast': 'time for a fast strike',
+  'value.reactionOk': 'time for an ok strike',
+  'value.strikeLimit': 'time to strike',
+  'value.missPause': 'pause after a missed splash',
+  'value.baitRecovery': 'chance to save bait',
+  'value.baitEscapeLoss': 'chance to lose bait to an escaping fish',
 };
 
 const table = { ...strings.en, ...UI_STRINGS };
