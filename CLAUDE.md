@@ -14,6 +14,8 @@ by number:
   requirements.
 - `docs/spec.md`: the vision, requirements (`R1.1`–`R16.3`) and catalogues (`§C.1`–`§C.6`).
 - `docs/history.md`: finished phases, task by task, with what was measured.
+- `docs/REVIEW.md`: guesses and calls Claude made that the owner hasn't checked yet. **Add to it** whenever you pick a
+  number, write content, or decide something the owner didn't (D76); the owner deletes items once settled.
 - `docs/PORTING-NOTES.md`: what to port from the React prototype (tag `legacy-prototype`; read old files with
   `git show legacy-prototype:src/Data/weather.js`) and the lessons it taught.
 

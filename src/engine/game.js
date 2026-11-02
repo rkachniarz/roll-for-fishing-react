@@ -42,7 +42,7 @@ export const MISS_LIMIT = 2;
  * @typedef {{ kind: 'fish', fish: PoolFish, required: number, seenBefore: boolean, fromPool: boolean,
  *     player: { mods: { label: string, value: number }[], vantage: number } }
  *   | { kind: 'item', id: string }
- *   | { kind: 'empty', reason: 'nothing' | 'cleaned-out' }} Line
+ *   | { kind: 'empty', reason: 'nothing' }} Line
  *
  * @typedef {import('./cast.js').Cast & {
  *   timing: typeof import('./cast.js').TIMING,
@@ -245,8 +245,8 @@ function rollLine(state, values, dice) {
   });
   if (treasureRoll - treasureFind.total <= loc.treasureThreshold) {
     const treasure = pick(locationTable(where, 'treasure', { found: state.found }), dice.line);
-    // Every unique treasure here found: the prototype's "cleaned out".
-    return { line: treasure ? { kind: 'item', id: /** @type {string} */ (treasure.id) } : { kind: 'empty', reason: 'cleaned-out' }, rolls };
+    if (treasure) return { line: { kind: 'item', id: /** @type {string} */ (treasure.id) }, rolls };
+    // Every unique treasure here is found: junk instead (D75).
   }
   const junk = pick(locationTable(where, 'junk', { found: state.found }), dice.line);
   return { line: junk?.id ? { kind: 'item', id: junk.id } : { kind: 'empty', reason: 'nothing' }, rolls };

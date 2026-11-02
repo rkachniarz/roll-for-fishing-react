@@ -170,7 +170,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R8.9** Items are hand-made: each is defined once and is always the same. An effect may roll when it applies (+1d4
   to a roll), with a named die (D5). *(D48)*
 - **R8.10** An item marked unique can be found once per save. Most treasure is unique, as are some junk items (quest
-  items). A location whose unique items are all found stops offering them. *(D65)*
+  items). A location whose unique items are all found stops offering them: a treasure roll there brings up junk. *(D65,
+  D75)*
 
 ### R9: Non-functional
 

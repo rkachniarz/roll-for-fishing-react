@@ -10,7 +10,7 @@ Lake, fish, junk, treasure and weather, ported by script), `npm run content` che
 the whole cast: what is on the line, the strike, catches, the escaped pool, bait, buffs, time and weather, saves with
 their random streams. A 1,000-cast session runs headless and replays exactly from its seed. The page is still the
 Phase 1 trial; Phase 3 puts the engine behind it, and waits for the owner's layout sketch (Q-38). The calls made while
-building are in D72–D74, for the owner to check.
+building are listed in [docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
 
 ## Where things are
 
@@ -21,6 +21,7 @@ building are in D72–D74, for the owner to check.
 | `PORTING-NOTES §n` | What carries over from the prototype, and its lessons | [docs/PORTING-NOTES.md](docs/PORTING-NOTES.md) |
 | `0.1`… | Finished phases, task by task | [docs/history.md](docs/history.md) |
 | `Q-n`, `1.x`–`9.x` | Open questions, work still to do | here |
+| | Claude's guesses and calls, for the owner to check | [docs/REVIEW.md](docs/REVIEW.md) |
 
 ---
 

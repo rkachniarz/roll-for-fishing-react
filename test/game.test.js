@@ -313,3 +313,12 @@ test('the save slot: save, load, a broken save reported, New game', async () => 
   deleteSave(storage);
   assert.deepEqual(loadGame(storage), { state: null });
 });
+
+test('once every unique treasure here is found, a treasure roll brings up junk (D75)', async () => {
+  const { content } = await import('../src/generated/content.js');
+  const found = Object.fromEntries(content.locations.lake.treasure.map((/** @type {{ id: string }} */ e) => [e.id, 1]));
+  const { cast } = castUntil({ ...game(12), found }, (c) =>
+    c.rolls.some((r) => r.kind === 'treasure' && r.total <= content.locations.lake.treasureThreshold),
+  );
+  assert.ok(cast.line.kind === 'item' ? content.items[cast.line.id].category === 'junk' : cast.line.kind === 'empty');
+});

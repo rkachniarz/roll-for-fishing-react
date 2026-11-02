@@ -84,6 +84,7 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   that is Phase 3's wiring.
 - **2.8** A 1,000-cast session runs headless and replays exactly from its seed. Seed 2026, striking at 300 ms: 56% of
   casts bite, 55% of fish are landed, all seven treasures are found, and the weather changes on 38% of casts, as in the
-  prototype. Once the treasures are gone, treasure rolls come up as "cleaned out" (D74).
+  prototype. Once the treasures were gone, treasure rolls came up as "cleaned out" 47 times; the owner chose junk
+  instead (D75).
 - Phase end: 75 unit tests and all browser checks pass; the artifact builds (26 kB). The page is still the Phase 1
   trial, unaffected.
