@@ -30,7 +30,7 @@ Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, 
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
 Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66, Q-39 → D70).
 
-- **Q-38** The screen layout (R16.1, D67): the WoW mapping is agreed; the owner's sketch is to come before Phase 3.
+- **Q-38** The screen layout (R16.1, D67, D71): the WoW mapping is agreed; the owner's sketch is to come before Phase 3.
 
 ---
 

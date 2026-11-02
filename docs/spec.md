@@ -299,6 +299,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   and panels sit beside the scene. *(D67; the owner's sketch to come)*
 - **R16.2** Every cast's result is written to the log. Anything landed also appears as its icon at the bobber, flies to
   the bucket and bags button and disappears; escapes and empty hooks get only the log line. *(D70)*
+- **R16.3** The player can keep fishing with a panel open; taps on a panel stay in it. On a phone the main view is the
+  scene, a small log and the buttons, and inventory or equipment panels may take most of the screen. *(D71)*
 ---
 
 ## 3. Catalogues
