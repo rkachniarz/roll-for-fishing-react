@@ -19,6 +19,7 @@ import { featureAt, updateFeatures } from './features.js';
 import { startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
 import { equippedIds } from './equipment.js';
+import { afterCast } from './events.js';
 import { advanceTime } from './time.js';
 import { changeSeason, stepWeather } from './weather.js';
 
@@ -140,6 +141,8 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   if (state.pendingCatch) {
     return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'bucket-full' }] };
   }
+  // Nor while an event is open (D84).
+  if (state.event) return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [] };
   // No rod, no cast (D83). The line and the bobber are optional.
   if (!state.equipped.rod) {
     return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'no-rod' }] };
@@ -428,6 +431,12 @@ function resolveCast(state, cast) {
       events.push({ type: 'weather', weather: next.weather });
     }
   }
+
+  // Last, so an event sees the cast's catch and the new time (D84).
+  events.push(...afterCast(next, dice.events, {
+    found: result === 'landed' && line.kind === 'item' ? line.id : undefined,
+    empty: result === 'landed' && line.kind === 'empty',
+  }));
 
   next.streams = commit();
   return { state: next, cast, events };

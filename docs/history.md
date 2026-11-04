@@ -187,3 +187,14 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   "+15% chance to save bait", "+d6 Fishing Skill", in green when the change helps and red when it hurts, by the
   direction each game value is better in. Advantage reads as words ("Strong advantage on your roll" for 2 or more).
   Game values gained a `unit` for this. A test checks every game value and every effect in content has words.
+- **7.1–7.3** Events, written as text in `content/events/` (D84; the format and its words in `docs/events.md`).
+  `tools/event-text.mjs` reads a file into slides, choices, requirements and effects, with line numbers in its
+  errors; `npm run content` checks what each event names and warns about slides nothing leads to and slides where
+  every choice is locked. The engine (`src/engine/events.js`) hides a choice whose needs aren't met, applies Luck, XP,
+  items and flags, and starts events three ways after a cast: an item fished up, an event's own needs met (hidden
+  objectives), and the event meter (a d20 per cast, +5 for an empty hook, above 100), which picks from the location's
+  list. The save moved to version 4, with an `events` stream, the meter and the open slide; no cast goes out while
+  an event is open. The dialog copies WoW's gossip window and ignores a click in its first 400 ms, so the tap or key
+  that ended the cast can't pick a choice. The frog is the first event, `once: true`, at the Lake; in the 1,000-cast
+  test session the meter brings it once. The bench can start any event, fill the meter, forget seen events, clear
+  flags and change class.

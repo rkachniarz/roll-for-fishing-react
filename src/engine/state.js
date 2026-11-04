@@ -17,15 +17,16 @@ import { TIME } from './time.js';
 import { emptyEquipment } from './equipment.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
  * cast-timing: bite delays · fishing: the player's d20 · line: what is on the
  * line · effects: dice on effects · weather · scatter: where the bobber lands ·
- * bait: saving or losing bait · features: surface features appearing and drifting.
+ * bait: saving or losing bait · features: surface features appearing and drifting ·
+ * events: the event meter and which event it picks.
  */
-export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features'];
+export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events'];
 
 /**
  * @typedef {import('./fish.js').FishInstance & { tries?: number }} PoolFish  A fish
@@ -64,6 +65,10 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {{ casts: number, catches: number, fish: Record<string, BookEntry> }} book  The
  *   accomplishments book (R4.2).
  * @property {Record<string, boolean | number | string>} flags  For events (R10).
+ * @property {number} eventMeter  Fills with each cast; an event may start above 100 (events.js).
+ * @property {{ id: string, slide: string } | null} event  The open event and its slide (D84).
+ *   No cast goes out until it ends.
+ * @property {Record<string, number>} eventsSeen  Event id -> how many times it has started.
  * @property {number} missStreak  Splashes missed in a row (D64).
  */
 
@@ -115,6 +120,9 @@ export function newGame({ seed, character }) {
     pendingCatch: null,
     book: { casts: 0, catches: 0, fish: {} },
     flags: {},
+    eventMeter: 0,
+    event: null,
+    eventsSeen: {},
     missStreak: 0,
   };
 }
@@ -174,6 +182,14 @@ const MIGRATIONS = {
       bags: bait ? save.bags.filter((/** @type {{ id: string }} */ b) => b !== bait) : save.bags,
     };
   },
+  // 3 -> 4: events (D84), with their own stream.
+  3: (save) => ({
+    ...save,
+    eventMeter: 0,
+    event: null,
+    eventsSeen: {},
+    streams: { ...save.streams, events: deriveSeed(save.seed, 'events') },
+  }),
 };
 
 /** @param {GameState} state */

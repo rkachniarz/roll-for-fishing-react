@@ -3,7 +3,8 @@
 //   npm run content
 //
 // Reads content/<kind>/*.json, checks each file against its schema in schemas/
-// and every reference between them, then writes:
+// and every reference between them, reads the events in content/events/*.md
+// (tools/event-text.mjs), then writes:
 //
 //   src/generated/content.js        the game's content, with text replaced by
 //                                   string keys, and the English string table
@@ -21,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { GAME_VALUES, EFFECT_DICE, effectSign } from '../src/engine/values.js';
 import { HEX_NEIGHBOURS, OPPOSITE } from '../src/engine/hexmap.js';
+import { parseEvent } from './event-text.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -122,6 +124,21 @@ export async function buildContent(root = ROOT) {
     }
   }
 
+  // ---------- Events, written as text (D45, D84) ----------
+
+  all.events = {};
+  const eventsDir = join(root, 'content', 'events');
+  if (existsSync(eventsDir)) {
+    for (const file of (await readdir(eventsDir)).filter((f) => f.endsWith('.md')).sort()) {
+      const where = `content/events/${file}`;
+      const { event, errors: problems } = parseEvent(await readFile(join(eventsDir, file), 'utf8'));
+      for (const p of problems) errors.push(`${where}: ${p}`);
+      if (!event) continue;
+      if (`${event.id}.md` !== file) errors.push(`${where}: id "${event.id}" doesn't match the file name`);
+      all.events[event.id] = event;
+    }
+  }
+
   // ---------- References between files ----------
 
   /** id -> the locations (and spots) that list it, for the overview and the unused check. */
@@ -219,6 +236,7 @@ export async function buildContent(root = ROOT) {
   }
 
   checkSeasons(all.weather, errors);
+  checkEvents(all, errors, warnings);
 
   const bands = all.rules['size-bands']?.bands;
   if (!bands) errors.push('content/rules/size-bands.json: missing');
@@ -234,7 +252,8 @@ export async function buildContent(root = ROOT) {
     bundle[kind] = {};
     for (const [id, entity] of Object.entries(entities)) {
       const copy = structuredClone(entity);
-      for (const path of TEXT[kind]) moveText(copy, path, `${KINDS[kind].prefix}.${id}`, strings);
+      if (kind === 'events') eventText(copy, strings);
+      else for (const path of TEXT[kind]) moveText(copy, path, `${KINDS[kind].prefix}.${id}`, strings);
       bundle[kind][id] = copy;
     }
   }
@@ -273,6 +292,92 @@ function checkSeasons(seasons, errors) {
         const v = w[level];
         if (typeof v === 'object' && v.min > v.max) errors.push(`${where}: cell ${cell} ${level} min is above max`);
       }
+    });
+  }
+}
+
+/**
+ * An event's references: classes, items, fish, seasons, slides that nothing
+ * leads to, and what starts it (D84).
+ * @param {Record<string, Record<string, any>>} all
+ * @param {string[]} errors
+ * @param {string[]} warnings
+ */
+function checkEvents(all, errors, warnings) {
+  /** Event id -> what can start it. */
+  /** @type {Map<string, string[]>} */
+  const startedBy = new Map();
+  const started = (/** @type {string} */ id, /** @type {string} */ by) => startedBy.set(id, [...(startedBy.get(id) ?? []), by]);
+
+  for (const loc of Object.values(all.locations)) {
+    const where = `content/locations/${loc.id}.json`;
+    for (const list of [loc.events ?? [], ...(loc.spots ?? []).map((/** @type {any} */ s) => s.events ?? [])]) {
+      for (const e of list) {
+        const event = all.events[e.id];
+        if (!event) errors.push(`${where}: no event "${e.id}"`);
+        else if (event.trigger !== 'meter') errors.push(`${where}: event "${e.id}" has "trigger: ${event.trigger}", so the event meter never starts it`);
+        else started(e.id, loc.id);
+      }
+    }
+  }
+  for (const item of Object.values(all.items)) {
+    if (!item.event) continue;
+    const event = all.events[item.event];
+    const where = `content/items/${item.id}.json`;
+    if (!event) errors.push(`${where}: no event "${item.event}"`);
+    else if (event.trigger !== 'item') errors.push(`${where}: event "${item.event}" needs "trigger: item" to be started by an item`);
+    else started(item.event, item.id);
+  }
+
+  /** @param {string} where @param {any} need */
+  const checkNeed = (where, need) => {
+    if (need.kind === 'class' && !all.classes[need.id]) errors.push(`${where}: no class "${need.id}"`);
+    if (need.kind === 'season' && !all.weather[need.id]) errors.push(`${where}: no season "${need.id}"`);
+    if (need.kind === 'item' && !all.items[need.id]) errors.push(`${where}: no item "${need.id}"`);
+    if (need.kind === 'caught' && !all.fish[need.fish]) errors.push(`${where}: no fish "${need.fish}"`);
+  };
+
+  for (const event of Object.values(all.events)) {
+    const where = `content/events/${event.id}.md`;
+    for (const need of event.needs) checkNeed(where, need);
+    if (event.trigger === 'needs' && event.needs.length === 0) errors.push(`${where}: "trigger: needs" with no needs would start at once`);
+    if (event.trigger === 'needs' && !event.once) warnings.push(`${where}: "trigger: needs" without "once: true" starts again after every cast while its needs are met`);
+    if (event.trigger !== 'needs' && !startedBy.has(event.id)) warnings.push(`${where}: nothing starts it`);
+    const reached = new Set([event.first]);
+    for (const [id, slide] of Object.entries(event.slides)) {
+      const s = /** @type {any} */ (slide);
+      for (const choice of s.choices) {
+        reached.add(choice.to);
+        for (const need of choice.needs) checkNeed(`${where} (${id})`, need);
+        for (const effect of choice.effects) {
+          if (effect.kind === 'item' && !all.items[effect.id]) errors.push(`${where} (${id}): no item "${effect.id}"`);
+        }
+      }
+      if (!s.choices.some((/** @type {any} */ c) => c.needs.length === 0)) {
+        warnings.push(`${where} (${id}): every choice has a requirement, so a player could be stuck`);
+      }
+    }
+    for (const id of Object.keys(event.slides)) if (!reached.has(id)) warnings.push(`${where}: nothing leads to slide "${id}"`);
+  }
+}
+
+/**
+ * An event's text into the string table: event.frog.title,
+ * event.frog.start.text, event.frog.start.0 (the first choice).
+ * @param {any} event  A copy, changed in place.
+ * @param {Record<string, string>} strings
+ */
+function eventText(event, strings) {
+  const key = `event.${event.id}`;
+  strings[`${key}.title`] = event.title;
+  event.title = `${key}.title`;
+  for (const [id, slide] of Object.entries(event.slides)) {
+    const s = /** @type {any} */ (slide);
+    strings[`${key}.${id}.text`] = s.text;
+    s.text = `${key}.${id}.text`;
+    s.choices.forEach((/** @type {any} */ c, /** @type {number} */ n) => {
+      strings[`${key}.${id}.${n}`] = c.text;
+      c.text = `${key}.${id}.${n}`;
     });
   }
 }
@@ -406,7 +511,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
 
   const count = (kind) => Object.keys(result.all[kind]).length;
   console.log(
-    `\n${count('fish')} fish, ${count('items')} items, ${count('locations')} location(s), ${count('tables')} table(s); ` +
+    `\n${count('fish')} fish, ${count('items')} items, ${count('locations')} location(s), ${count('tables')} table(s), ${count('events')} event(s); ` +
       `${Object.keys(result.strings).length} strings.`,
   );
   const art = Object.entries(result.missingArt).filter(([, n]) => n > 0);

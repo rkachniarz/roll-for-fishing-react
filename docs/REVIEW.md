@@ -5,6 +5,26 @@ an item is settled, delete it from this list (and record a decision if the answe
 
 Newest first.
 
+## Events (7.1–7.3)
+
+- **The event format** (D84, `docs/events.md`): front matter, `## slide` headings, `- choice -> slide` bullets,
+  indented `needs:` / `gain:` / `lose:` / `set:` / `clear:` lines. Worth reading the guide and trying a small event
+  of your own before writing ten; the words are easy to change now and harder later.
+- **The frog happens once per game** (`once: true`). Without it, +2 Luck could be farmed. It's at the Lake with weight
+  1, the only event there.
+- **A choice the player can't take is hidden**, as the prototype's comments said. WoW does the same with gossip
+  options. The alternative is showing it greyed out with what it needs, which tells the player more.
+- **The event meter** is the prototype's: a d20 per cast, +5 when the hook comes up empty, fires above 100, so about
+  one event every 9–10 casts once there are events to fire. When it fires and nothing can happen, it empties anyway.
+  It keeps filling while an event is open.
+- **Luck and flags change silently;** items and XP get a log line: "You receive: [Iron key]", "You lose: [Bent
+  fork]", "You gain 50 XP.". Starting an event writes nothing to the log.
+- **The dialog** uses the same box as the full-bucket and title dialogs: title in gold, then the picture's frame (only
+  when the event has `art`, 2:1), the text, and the choices as buttons with gold text. It can't be closed with Escape.
+  A click in its first 0.4 s is ignored, so a Space press or tap that ended the cast can't pick a choice by accident.
+- **Events are checked after time has moved on,** so `needs: time dawn` means the cast ended at dawn.
+- **`trigger: needs` events are checked anywhere,** not per location: the angry deity finds you wherever you are.
+
 ## The title screen, settings and strike words (3.7–3.9)
 
 - **The light theme's colours** are mine: pale pine, a darker seam every 40 px, the sketch's red frames turned

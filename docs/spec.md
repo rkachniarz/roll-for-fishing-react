@@ -294,7 +294,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R15.4** Existing saves pick up new and changed content. Ids are permanent; removed content is retired, not deleted.
   *(D44)*
 - **R15.5** Every kind of entity has a default icon, used until its own art exists. *(D42)*
-- **R15.6** Events are written as text, with a fixed vocabulary of requirements and effects. *(D45)*
+- **R15.6** Events are written as text, with a fixed vocabulary of requirements and effects (`docs/events.md`).
+  *(D45, D84)*
 - **R15.7** All player-facing text is read through a string table, so the game could be translated. *(D46)*
 
 
@@ -410,11 +411,6 @@ Four seasons × 19 weathers, on a hex map per season: `content/weather/`, with t
 
 ### §C.6 Events
 
-**A froggy encounter** (the prototype's sketch): "You see a frog in the shallow water, just outside your reach."
-- *Observe it closely* → "After a moment, a wave of calm washes over you. Everything is going to be alright." → *Thank
-  you, frog* (+2 Luck).
-- *Ignore it* → end.
-- *Attempt to catch the frog* (Rogue only) → "You lunge forward and get wet, and it's like it was never there." → *Well,
-  shit.* (−1 Luck).
-
-Luck is the hidden fourth stat (R6.7). *(D21)*
+In `content/events/`, one file each, in the format of `docs/events.md` (D84). The first is **A froggy encounter**
+(`frog.md`, the prototype's sketch): observe the frog for +2 Luck, ignore it, or, as a Rogue, try to catch it for −1
+Luck. Luck is the hidden fourth stat (R6.7). *(D21)*

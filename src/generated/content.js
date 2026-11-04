@@ -960,6 +960,12 @@ export const content = {
           "weight": 2
         }
       ],
+      "events": [
+        {
+          "id": "frog",
+          "weight": 1
+        }
+      ],
       "spots": [
         {
           "id": "crossroads",
@@ -2805,6 +2811,78 @@ export const content = {
         "rules.weather-scales.precipitation.5"
       ]
     }
+  },
+  "events": {
+    "frog": {
+      "id": "frog",
+      "title": "event.frog.title",
+      "once": true,
+      "trigger": "meter",
+      "needs": [],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": "event.frog.start.text",
+          "choices": [
+            {
+              "text": "event.frog.start.0",
+              "to": "observe",
+              "needs": [],
+              "effects": []
+            },
+            {
+              "text": "event.frog.start.1",
+              "to": "end",
+              "needs": [],
+              "effects": []
+            },
+            {
+              "text": "event.frog.start.2",
+              "to": "lunge",
+              "needs": [
+                {
+                  "kind": "class",
+                  "id": "rogue-fisher"
+                }
+              ],
+              "effects": []
+            }
+          ]
+        },
+        "observe": {
+          "text": "event.frog.observe.text",
+          "choices": [
+            {
+              "text": "event.frog.observe.0",
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "luck",
+                  "add": 2
+                }
+              ]
+            }
+          ]
+        },
+        "lunge": {
+          "text": "event.frog.lunge.text",
+          "choices": [
+            {
+              "text": "event.frog.lunge.0",
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "luck",
+                  "add": -1
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
   }
 };
 
@@ -3156,6 +3234,15 @@ export const strings = {
     "rules.weather-scales.precipitation.2": "Light",
     "rules.weather-scales.precipitation.3": "Constant",
     "rules.weather-scales.precipitation.4": "Intense",
-    "rules.weather-scales.precipitation.5": "Extreme"
+    "rules.weather-scales.precipitation.5": "Extreme",
+    "event.frog.title": "A froggy encounter",
+    "event.frog.start.text": "You see a frog in the shallow water, just outside your reach.",
+    "event.frog.start.0": "Observe it closely",
+    "event.frog.start.1": "Ignore it",
+    "event.frog.start.2": "Attempt to catch the frog",
+    "event.frog.observe.text": "After a moment, a wave of calm washes over you. Everything is going to be alright.",
+    "event.frog.observe.0": "Thank you, frog",
+    "event.frog.lunge.text": "You lunge forward and get wet, and it's like it was never there.",
+    "event.frog.lunge.0": "Well, shit."
   }
 };

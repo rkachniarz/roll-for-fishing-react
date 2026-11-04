@@ -34,6 +34,7 @@ import { iconName, paintIcon, weatherIcon } from './scene/icons.js';
 import { equip, fits, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_SLOTS } from './engine/equipment.js';
 import { setupDrag } from './ui/drag.js';
 import { showError } from './ui/errors.js';
+import { choose, openSlide } from './engine/events.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 /** @typedef {import('./engine/game.js').GameCast} GameCast */
@@ -167,7 +168,13 @@ function apply(out) {
   if (out.checkpoint) save(out.checkpoint);
   else if (changed && cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
   render();
-  if (state.pendingCatch) openRelease();
+  promptPlayer();
+}
+
+/** Whatever waits for the player: a full bucket first, then an open event. */
+function promptPlayer() {
+  if (state?.pendingCatch) openRelease();
+  else if (state?.event) openEvent();
 }
 
 // ---------- A full bucket: let one go (D59) ----------
@@ -196,6 +203,7 @@ function openRelease() {
       dialog.close();
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
       render();
+      promptPlayer();
     });
     return b;
   };
@@ -205,6 +213,55 @@ function openRelease() {
   );
   dialog.addEventListener('cancel', (e) => e.preventDefault());
   dialog.showModal();
+}
+
+// ---------- Events (R10, D84) ----------
+
+/**
+ * The open event's slide, as WoW's gossip window: the title, room for a
+ * picture, the text, and the choices the player can take.
+ */
+function openEvent() {
+  const dialog = /** @type {HTMLDialogElement} */ ($('event'));
+  const slide = state ? openSlide(state) : null;
+  if (!slide) {
+    if (dialog.open) dialog.close();
+    return;
+  }
+  // The key or tap that ended the cast mustn't also pick a choice.
+  const openedAt = performance.now();
+  $('eventTitle').textContent = t(slide.title);
+  const art = $('eventArt');
+  art.hidden = !slide.art;
+  art.replaceChildren(...(slide.art ? [Object.assign(document.createElement('img'), { src: `assets/events/${slide.art}.png`, alt: '' })] : []));
+  $('eventText').replaceChildren(
+    ...t(slide.text).split('\n\n').map((p) => Object.assign(document.createElement('p'), { textContent: p })),
+  );
+  $('eventChoices').replaceChildren(
+    ...slide.choices.map((c) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = t(c.text);
+      b.addEventListener('click', () => {
+        if (!state || performance.now() - openedAt < 400) return;
+        const out = choose(state, c.index);
+        state = out.state;
+        logEvents(out.events);
+        save(state);
+        if (state.event) openEvent();
+        else {
+          dialog.close();
+          if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+        }
+        render();
+      });
+      return b;
+    }),
+  );
+  if (!dialog.open) {
+    dialog.addEventListener('cancel', (e) => e.preventDefault());
+    dialog.showModal();
+  }
 }
 
 /**
@@ -327,6 +384,13 @@ function describeEvent(e) {
     }
     case 'released':
       return tParts('log.released', { fish: fishLink(e.fish) });
+    case 'event-gained':
+    case 'event-lost': {
+      const parts = tParts(`log.${e.type}`, { item: itemLink(e.item) });
+      return e.count > 1 ? [...parts, ` ×${e.count}`] : parts;
+    }
+    case 'event-xp':
+      return [t('log.event-xp', { xp: e.xp })];
     case 'bucket-full':
     case 'too-early':
     case 'empty':
@@ -785,7 +849,7 @@ function openTitle(view = 'main') {
             cast = /** @type {GameCast} */ ({ phase: 'idle' });
             log.clear();
             render();
-            if (state?.pendingCatch) openRelease();
+            promptPlayer();
           });
       } else {
         b.onclick = () => {
@@ -838,6 +902,7 @@ const bench = DEV
         state = next;
         save(state);
         render();
+        promptPlayer();
       },
       overrides: devOverrides,
       extraSources,

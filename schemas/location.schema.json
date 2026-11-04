@@ -43,6 +43,16 @@
         "additionalProperties": false
       }
     },
+    "events": {
+      "description": "Events the event meter can start here, with weights (R10.2, D84). Only events with trigger: meter.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "id": { "$ref": "common.schema.json#/definitions/id" }, "weight": { "$ref": "common.schema.json#/definitions/weight" } },
+        "required": ["id", "weight"],
+        "additionalProperties": false
+      }
+    },
     "spots": {
       "description": "Parts of the location, each adding to its lists (R11.8).",
       "type": "array",
@@ -53,7 +63,8 @@
           "name": { "$ref": "common.schema.json#/definitions/text" },
           "fish": { "$ref": "common.schema.json#/definitions/entries" },
           "treasure": { "$ref": "common.schema.json#/definitions/entries" },
-          "junk": { "$ref": "common.schema.json#/definitions/entries" }
+          "junk": { "$ref": "common.schema.json#/definitions/entries" },
+          "events": { "$ref": "#/properties/events" }
         },
         "required": ["id", "name"],
         "additionalProperties": false

@@ -239,6 +239,12 @@
       "weight": 2
     }
   ],
+  "events": [
+    {
+      "id": "frog",
+      "weight": 1
+    }
+  ],
   "spots": [
     {
       "id": "crossroads",

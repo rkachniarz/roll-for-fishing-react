@@ -80,6 +80,9 @@ const UI_STRINGS = {
   'log.buff-ended': '{buff} has worn off.',
   'log.bucket-full': 'Your bucket is full. Choose a fish to let go.',
   'log.released': 'You let the {fish} go.',
+  'log.event-gained': 'You receive: {item}',
+  'log.event-lost': 'You lose: {item}',
+  'log.event-xp': 'You gain {xp} XP.',
 
   // ---- A full bucket (D59) ----
   'release.title': 'Your bucket is full',

@@ -14,6 +14,7 @@ by number:
   requirements.
 - `docs/spec.md`: the vision, requirements (`R1.1`–`R16.5`) and catalogues (`§C.1`–`§C.6`).
 - `docs/history.md`: finished phases, task by task, with what was measured.
+- `docs/events.md`: how to write an event, and every word of the format (D84).
 - `docs/REVIEW.md`: guesses and calls Claude made that the owner hasn't checked yet. **Add to it** whenever you pick a
   number, write content, or decide something the owner didn't (D76); the owner deletes items once settled.
 - `docs/PORTING-NOTES.md`: what to port from the React prototype (tag `legacy-prototype`; read old files with
@@ -84,5 +85,9 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
 - **`src/ui/drag.js` reads `data-drag` / `data-drop` (`bag:3`, `bag:end`, `bag:pane`, `equip:rod`) off the elements;**
   `main.js` decides what a drop does. A `contextmenu` from a long-press on a phone is swallowed; only a mouse's
   right-click equips.
+- **Events are `.md`, not JSON (D45, D84).** `tools/event-text.mjs` reads them and owns the vocabulary;
+  `docs/events.md` is the author's guide, so a new word goes in both. The engine imports only typedefs from it.
+- **The event dialog ignores clicks for 400 ms after it opens,** so the Space press or tap that ended the cast can't
+  pick a choice.
 - **`src/main.js`: a tap within 500 ms of the last action is ignored after a cast ends,** so a double tap on the splash
   strikes once instead of striking and instantly recasting.

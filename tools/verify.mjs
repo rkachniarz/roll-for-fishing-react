@@ -537,6 +537,49 @@ await check('equipment by touch: long-press drag', PHONE, '?dev&seed=1', async (
   await page.screenshot({ path: 'dist/verify/tooltip-effects.png' });
 });
 
+// ---------- Events (7.1-7.3, D84) ----------
+
+await check('events: the frog, from the event meter', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+  await openBench(page);
+  await page.selectOption('#dev-class', 'rogue-fisher');
+  await page.click('text=Fill the meter');
+  await closePane(page);
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('#event[open]', { timeout: 2000 });
+  report('events: a full meter brings the frog after the cast', (await page.textContent('#eventTitle')) === 'A froggy encounter');
+  const choices = await page.locator('#eventChoices button').allTextContents();
+  report('events: a rogue may try to catch it', choices.join('|') === 'Observe it closely|Ignore it|Attempt to catch the frog', choices.join('|'));
+  const box = await page.locator('#event').boundingBox();
+  report('events: the dialog fits a phone', Boolean(box && box.x >= 0 && box.x + box.width <= 390), JSON.stringify(box));
+  await page.screenshot({ path: 'dist/verify/event-frog.png' });
+  await page.waitForTimeout(450);
+  await page.click('#eventChoices button >> nth=2');
+  report('events: a choice leads to the next slide', ((await page.textContent('#eventText')) ?? '').startsWith('You lunge forward'));
+  await page.waitForTimeout(450);
+  await page.click('text=Well, shit.');
+  report('events: the last choice closes it', !(await page.isVisible('#event')));
+  await openBench(page);
+  report('events: Luck went down by 1, unseen', (await page.inputValue('#dev-luck')) === '-1' && !(await logText(page)).includes('Luck'));
+  report('events: the frog is seen once', ((await page.textContent('#devBench')) ?? '').includes('Seen: frog ×1'));
+});
+
+await check('events: a fighter only sees two choices, and a quick tap picks nothing', DESKTOP, '?dev&seed=1', async (page) => {
+  await openBench(page);
+  await page.click('#devBench >> text=Start');
+  await page.waitForSelector('#event[open]', { timeout: 2000 });
+  report('events: no rogue choice for a fighter', (await page.locator('#eventChoices button').count()) === 2);
+  // Straight after it opens, a click is taken as the end of whatever opened it.
+  await page.click('#eventChoices button >> nth=0', { delay: 0 });
+  report('events: a click as it opens picks nothing', ((await page.textContent('#eventText')) ?? '').startsWith('You see a frog'));
+  await page.waitForTimeout(450);
+  await page.click('#eventChoices button >> nth=0');
+  await page.waitForTimeout(450);
+  await page.click('text=Thank you, frog');
+  report('events: Thank you, frog closes it', !(await page.isVisible('#event')));
+});
+
 await browser.close();
 server.kill();
 console.log(failures ? `\n${failures} check(s) failed` : '\nAll checks passed');

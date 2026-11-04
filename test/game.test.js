@@ -6,6 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { SAVE_VERSION, deserialize, levelFor, newGame, serialize } from '../src/engine/state.js';
 import { MISS_LIMIT, cancelBuff, castLine, fishInBucket, releaseFish, scatter, strikeLine, tick, tickBuffs, valuesFor } from '../src/engine/game.js';
+import { choose, openSlide } from '../src/engine/events.js';
 import { createRng } from '../src/rng.js';
 import { diceFor } from '../src/dice.js';
 import { TIME } from '../src/engine/time.js';
@@ -36,6 +37,16 @@ function castUntil(state, wanted) {
   throw new Error('never came up');
 }
 
+/**
+ * Takes the first choice on every slide until the open event ends, as a
+ * player in a hurry would.
+ * @param {GameState} state
+ */
+function endEvent(state) {
+  while (state.event) state = choose(state, /** @type {NonNullable<ReturnType<typeof openSlide>>} */ (openSlide(state)).choices[0].index).state;
+  return state;
+}
+
 /** Strikes `ms` after the splash. */
 function strikeAfter(/** @type {GameState} */ state, /** @type {GameCast} */ cast, ms) {
   const bitten = tick(state, cast, cast.biteAt);
@@ -52,7 +63,7 @@ test('a new game: the Lake, the stick, spring at 08:00, every stream seeded', ()
   assert.equal(s.time, TIME.startMinutes);
   assert.equal(s.weather.season, 'spring');
   assert.equal(s.character.luck, 0, 'Luck starts at 0 (R6.7)');
-  assert.equal(Object.keys(s.streams).length, 8);
+  assert.equal(Object.keys(s.streams).length, 9);
   assert.deepEqual(s.features, []);
 });
 
@@ -265,6 +276,7 @@ function session(seed) {
     state = out.state;
     // A full bucket: let the one just caught go (D59).
     if (state.pendingCatch) state = releaseFish(state, 'new').state;
+    state = endEvent(state);
     now = (out.cast.phase === 'done' ? out.cast.endedAt : now) + 1000;
     log.push(out.events.map((e) => e.type).join(','));
   }
@@ -287,6 +299,7 @@ test('a whole session runs headless, and the same seed gives the same session', 
   const uniques = Object.entries(s.found).filter(([, n]) => n > 1).map(([id]) => id);
   for (const id of uniques) assert.ok(!['heavy-bait', 'fish-compendium', 'mega-mass-fish-chum'].includes(id), `${id} found twice`);
   assert.ok(a.log.some((l) => l.includes('weather')), 'the weather changed');
+  assert.equal(s.eventsSeen.frog, 1, 'the event meter brought the frog, once');
   assert.ok(levelFor(s.character.xp) > 0);
   // And the state still saves.
   assert.deepEqual(deserialize(serialize(s)), s);
@@ -405,7 +418,7 @@ test('features appear on the water, drift, and go', () => {
   for (let n = 0; n < 400; n++) {
     const out = castLine(state, 0);
     const done = strikeLine(out.state, out.cast, 1);
-    state = done.state;
+    state = endEvent(done.state);
     seen += done.events.filter((e) => e.type === 'feature-appeared').length;
     gone += done.events.filter((e) => e.type === 'feature-gone').length;
     assert.ok(state.features.length <= 2, 'never more than the location allows');

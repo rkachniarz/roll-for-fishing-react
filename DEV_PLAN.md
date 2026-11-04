@@ -8,7 +8,9 @@ only ids, so a task added later keeps its number wherever it lands.
 character creation, the full cast with its hidden rolls, saving, New game, the buff bar and the `?dev` bench, all in
 the owner's phone layout (D79), with a title screen, three save slots and a light theme (D80, D81). Left in Phase 3: GitHub Pages (3.5), deferred (D77). Phases 4 and 5 are under way:
 the bag and the seven equipment slots work by drag and drop and right-click (5.1, 5.2, D83), with a placeholder item
-for each slot. Most of what's left needs the owner's art or design, or the real items (5.3). Claude's guesses and calls are listed in
+for each slot. Most of what's left needs the owner's art or design, or the real items (5.3). **Phase 7 has begun:**
+events are written as text (`docs/events.md`, D84), the event meter brings them, and the frog encounter is the
+first. Claude's guesses and calls are listed in
 [docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
 
 ## Where things are
@@ -148,13 +150,14 @@ Requirements R5.2, R6.
 
 Requirements R10.
 
-- [ ] **7.1** The event engine: slides, options, requirements, effects, as data. The event text format and its
+- [x] **7.1** The event engine: slides, options, requirements, effects, as data. The event text format and its
   vocabulary written down alongside the frog encounter, and parsed by `npm run content`; effects come from 2.15
-  (R15.6, D45, D56).
-- [ ] **7.2** Triggers: event meter, world conditions, fished-up items, and hidden objectives on counters and flags
-  (R10.7, D51).
-- [ ] **7.3** The event dialog (with room for an illustration).
-- [ ] **7.4** The frog encounter (§C.6), about ten more, and one short quest chain started by a quest item.
+  (R15.6, D45, D56, D84).
+- [x] **7.2** Triggers: event meter, world conditions, fished-up items, and hidden objectives on counters and flags
+  (R10.7, D51). *World conditions are season and time of day for now; the weather comes when an event needs it.*
+- [x] **7.3** The event dialog (with room for an illustration).
+- [ ] **7.4** The frog encounter (§C.6), about ten more, and one short quest chain started by a quest item. *The frog
+  is in; the rest is the owner's writing.*
 - [ ] **7.6** Locations an event can lock the player into until an objective is met (R10.8, D51).
 - [ ] **7.5** The content editor app: forms generated from the schemas, saving into `content/` (D47).
 

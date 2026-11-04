@@ -14,6 +14,7 @@ import { diceFrom, levelFor } from './engine/state.js';
 import { weatherAt } from './engine/weather.js';
 import { clock, TIME } from './engine/time.js';
 import { EQUIPMENT_SLOTS, quickEquip } from './engine/equipment.js';
+import { METER_FIRES, startEvent } from './engine/events.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 
@@ -164,6 +165,16 @@ export function createBench(root, { getState, setState, overrides, extraSources,
   );
   const inventoryLine = el('p');
 
+  // ---------- Events ----------
+  const eventSelect = el('select', { id: 'dev-event' });
+  for (const event of Object.values(content.events)) {
+    eventSelect.append(el('option', { value: event.id, textContent: `${t(event.title)} (${event.trigger})` }));
+  }
+  const eventsLine = el('p');
+  const classSelect = el('select', { id: 'dev-class' });
+  for (const c of Object.values(content.classes)) classSelect.append(el('option', { value: c.id, textContent: t(c.name.m) }));
+  classSelect.addEventListener('change', () => edit((s) => ((s.character.classId = classSelect.value), s)));
+
   // ---------- Buffs ----------
   const buffsLine = el('p');
   let buffCount = 0;
@@ -193,7 +204,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       el('div', { className: 'dev-row' }, ['Surface feature ', featureSelect, spawnFeature, button('Clear', () => edit((s) => ({ ...s, features: [] })))]),
       featuresLine,
     ]),
-    section('Character', [el('div', { className: 'dev-fields' }, [el('label', { htmlFor: 'dev-xp', textContent: 'XP' }), xpInput, el('label', { htmlFor: 'dev-luck', textContent: 'Luck' }), luckInput]), statsLine]),
+    section('Character', [el('div', { className: 'dev-fields' }, [el('label', { htmlFor: 'dev-xp', textContent: 'XP' }), xpInput, el('label', { htmlFor: 'dev-luck', textContent: 'Luck' }), luckInput, el('label', { htmlFor: 'dev-class', textContent: 'Class' }), classSelect]), statsLine]),
     section('Inventory', [
       el('div', { className: 'dev-row' }, [itemSelect, addItem, addTen, equipItem]),
       el('div', { className: 'dev-row' }, [addEquippable]),
@@ -208,6 +219,15 @@ export function createBench(root, { getState, setState, overrides, extraSources,
           }),
         ),
       ]),
+    ]),
+    section('Events', [
+      el('div', { className: 'dev-row' }, [eventSelect, button('Start', () => edit((s) => startEvent(s, eventSelect.value)))]),
+      el('div', { className: 'dev-row' }, [
+        button('Fill the meter', () => edit((s) => ({ ...s, eventMeter: METER_FIRES }))),
+        button('Forget seen events', () => edit((s) => ({ ...s, eventsSeen: {} }))),
+        button('Clear flags', () => edit((s) => ({ ...s, flags: {} }))),
+      ]),
+      eventsLine,
     ]),
     section('Buffs', [el('div', { className: 'dev-row' }, [button('+ Fish Find buff, 3 casts', () => addBuff('casts')), button('+ Fish Find buff, 2 min', () => addBuff('ms')), button('+ debuff, 90 s', () => addBuff('debuff'))]), buffsLine]),
   );
@@ -256,6 +276,13 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       inventoryLine.textContent =
         `Equipped: ${EQUIPMENT_SLOTS.map(({ key }) => `${key} ${s.equipped[key] ? `${s.equipped[key]?.id}${(s.equipped[key]?.count ?? 1) > 1 ? ` ×${s.equipped[key]?.count}` : ''}` : '-'}`).join(', ')}. Bucket: ${fish} fish in ${s.bucket.length} stacks. ` +
         `Bags: ${items || '(empty)'}. Escaped pools: ${pools || '(none)'}.`;
+
+      if (document.activeElement !== classSelect) classSelect.value = s.character.classId;
+      const seen = Object.entries(s.eventsSeen).map(([id, n]) => `${id} ×${n}`).join(', ');
+      const flags = Object.entries(s.flags).map(([k, v]) => (v === true ? k : `${k}=${v}`)).join(', ');
+      eventsLine.textContent =
+        `Meter ${s.eventMeter} (fires above ${METER_FIRES}). Open: ${s.event ? `${s.event.id}, slide ${s.event.slide}` : '-'}. ` +
+        `Seen: ${seen || '-'}. Flags: ${flags || '-'}.`;
 
       buffsLine.textContent = s.buffs.length
         ? s.buffs.map((b) => `${b.id}: ${b.casts !== undefined ? `${b.casts} casts` : `${Math.ceil((b.ms ?? 0) / 1000)} s`}`).join(', ')

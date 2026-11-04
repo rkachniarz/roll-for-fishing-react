@@ -26,7 +26,7 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 |---|---|
 | `index.html` | The page, and the import map pinning PixiJS |
 | `styles.css` | Layout: scene above the panel on phones, beside it on wide screens |
-| `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, weather, surface features, tables, rules |
+| `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, weather, surface features, tables, rules; events are text (`.md`) |
 | `schemas/` | A JSON Schema per kind of content; VS Code uses them to check and complete content files |
 | `src/generated/content.js` | Built from `content/` by `npm run content`; don't edit |
 | `src/strings.js` | `t()`: all player-facing text goes through it |
@@ -44,6 +44,7 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `src/engine/state.js` | The game state: new game, saves and their migrations, the random streams |
 | `src/engine/game.js` | One cast from the game's side: the line, the strike, what it changes; buffs |
 | `src/engine/equipment.js` | The equipment slots; moving items between them and the bags |
+| `src/engine/events.js` | Events: requirements, choices and their effects, the event meter and other triggers |
 | `src/engine/character.js` | Character creation: names, classes, stat rolls |
 | `src/engine/features.js` | Surface features: appearing, drifting, thinning out; the open water's bounds |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
@@ -63,6 +64,7 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `src/ui/panels.js` | The panes: character (the paper doll), journal, map, bucket, bag (over the log), menu |
 | `test/` | Unit tests (`node:test`) |
 | `tools/content.mjs` | Checks content and builds the generated module, plus `dist/content-overview.html` |
+| `tools/event-text.mjs` | Reads the event text format (`content/events/*.md`) and holds its vocabulary |
 | `tools/verify.mjs` | Browser checks (Playwright) |
 | `tools/build-artifact.mjs` | Builds `dist/artifact.html` |
-| `docs/` | Spec, decisions, history, porting notes, design sketches |
+| `docs/` | Spec, decisions, history, porting notes, design sketches; `docs/events.md` is how to write an event |
