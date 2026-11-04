@@ -30,6 +30,18 @@ const UI_STRINGS = {
   'value.baitRecovery': 'chance to save bait',
   'value.baitEscapeLoss': 'chance to lose bait to an escaping fish',
 
+  // ---- Effects in tooltips (R8.6) ----
+  'effect.amount': '{amount} {value}',
+  'effect.advantage': 'Advantage on your roll',
+  'effect.strongAdvantage': 'Strong advantage on your roll',
+  'effect.disadvantage': 'Disadvantage on your roll',
+  'effect.strongDisadvantage': 'Strong disadvantage on your roll',
+  'effect.fishAdvantage': "Advantage on the fish's roll",
+  'effect.fishStrongAdvantage': "Strong advantage on the fish's roll",
+  'effect.fishDisadvantage': "Disadvantage on the fish's roll",
+  'effect.fishStrongDisadvantage': "Strong disadvantage on the fish's roll",
+  'effect.cosmetic': 'Changes how your bobber looks.',
+
   // ---- The buff bar ----
   'buff.cancelHint': 'right-click or long-press to cancel',
 
@@ -104,8 +116,20 @@ const UI_STRINGS = {
   'player.stats': 'Stats',
   'player.equipment': 'Equipment',
   'slot.rod': 'Rod',
+  'slot.line': 'Line',
+  'slot.bobber': 'Bobber',
   'slot.bait': 'Bait',
+  'slot.hat': 'Hat',
+  'slot.trinket': 'Trinket',
+  'slot.trinket1': 'Trinket',
+  'slot.trinket2': 'Trinket',
   'slot.none': 'Empty',
+
+  // ---- Errors, in red over the scene, as WoW's (D83) ----
+  'error.noRod': 'Must have a fishing pole equipped.',
+  'error.wrongSlot': "That item doesn't go in that slot.",
+  'error.notEquippable': "That item can't be equipped.",
+  'error.busy': "You can't change equipment while the line is out.",
   'journal.casts': 'Casts',
   'journal.catches': 'Fish caught',
   'journal.fish': 'Fish',

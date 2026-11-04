@@ -37,11 +37,12 @@ Newest first.
   them with 5.4.
 - **The brackets look like round ones** in Pixelify Sans; that's the font's square bracket.
 - **The panes** open over the left of the scene, 360 px wide at most, so on a phone they cover the scene and on a wide
-  screen there's still water to cast at. One pane at a time; Escape closes it.
+  screen there's still water to cast at. One pane at a time, except the bag (below); Escape closes the pane, then the
+  bag.
 - **The bucket pane** is a grid with an empty slot for each fish there's still room for. The bag shows whole rows of
   four; it has no size limit yet.
 - **What goes in which tab:** anything with an equipment slot is Equipment, consumables are Consumables, everything else
-  (junk and treasure without a slot) is Stuff. The equipped rod shows on the character pane, not in the bag.
+  (junk and treasure without a slot) is Stuff. Equipped items show on the character pane, not in the bag.
 - **The map pane** only says where you are, until Phase 8 brings spots and the town.
 - **The menu** has New game and, with `?dev`, the dev bench. There's no main menu or settings yet.
 - **The default portrait** is your sketch's black figure, drawn 16×16.
@@ -51,6 +52,30 @@ Newest first.
 - **A full bucket's dialog** (5.5): "Your bucket is full. Let one fish go to make room. It goes back into the water
   here, and you may meet it again." The new fish is listed first, marked "Just caught". A dialog rather than WoW's
   loot window, since D59 asks the player to choose.
+- **The bag opens over the log** (5.1, D83), not over the scene, on phone and desktop alike, so it can sit beside the
+  character pane; it hides the log while open. On a phone there wasn't room for the paper doll and the bag both over
+  the scene.
+- **The paper doll** (5.2): hat and the two trinkets down the left, rod, line, bobber and bait down the right, the
+  stats between. Your sketch of the slots never reached me, so this is a guess. Empty slots show the slot's name in a
+  dashed box where WoW draws a silhouette.
+- **How items move** (5.1): a finger holds still for 350 ms to start a drag (the phone buzzes briefly where it can); the
+  carried icon floats 36 px above the finger. Two bag stacks dropped on each other swap places; dropped on an empty
+  slot, a stack moves to the end. Dropping on the bag button takes an equipped item off. Dropping outside does
+  nothing (WoW would ask to destroy it). Right-click on a trinket fills the first empty trinket slot, else replaces
+  the first, as WoW's.
+- **No equipment changes while the line is out** (5.2), including the pause after a missed splash: "You can't change
+  equipment while the line is out." WoW would let you and interrupt the cast.
+- **Other error texts** (5.2): "That item doesn't go in that slot." and "That item can't be equipped." (WoW's wording).
+  Errors show in red near the top of the scene for 2.5 s.
+- **The test items** (5.2), all `devOnly` and to be replaced: Willow rod (scatter −6, bite delay +0.5 s), Horsehair
+  line (strike limit +0.5 s, fast reaction window −50 ms), Bluejay-feather bobber (blue feather, no effects), Bread
+  crumbs (bait: Fish Find +10, size band −1), Straw hat (Treasure Find +2, Fishing Skill −1). Flavour texts are mine.
+- **Effect wording in tooltips** (5.4): times in seconds ("+0.5 s time to strike"), chances in percent, everything
+  else as "+N name" using the game values' names (lower case except the three stats). Advantage as words, "Strong"
+  for 2 or more, as the prototype's notes called the Eight-leaf clover's. A bobber says "Changes how your bobber
+  looks."
+- **Heavy bait is a trinket** (5.2), like the prototype's other effect items, not bait: it's a unique, lasting item,
+  and the bait slot is for consumable bait (5.8).
 - **A released fish comes back with its tries reset to 0** (5.5): the catch record's "most tries" (R3.6) counts escapes,
   not releases.
 

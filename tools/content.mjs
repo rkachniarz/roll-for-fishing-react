@@ -197,7 +197,8 @@ export async function buildContent(root = ROOT) {
     if (!all.locations[start.location]) errors.push(`${where}: no location "${start.location}"`);
     if (!all.weather[start.weather.season]) errors.push(`${where}: no season "${start.weather.season}"`);
     for (const [slot, id] of Object.entries(start.equipped)) {
-      if (all.items[id]?.slot !== slot) errors.push(`${where}: "${id}" isn't an item for the ${slot} slot`);
+      // trinket1 and trinket2 both take trinkets.
+      if (all.items[id]?.slot !== slot.replace(/\d+$/, '')) errors.push(`${where}: "${id}" isn't an item for the ${slot} slot`);
       else note(id, 'a new game');
     }
   } else errors.push('content/rules/new-game.json: missing');
@@ -213,7 +214,8 @@ export async function buildContent(root = ROOT) {
     const signs = (item.effects ?? []).map(effectSign);
     // R8.5. A warning until Phase 5 gives the prototype's treasure real downsides (5.3).
     if (signs.includes(1) && !signs.includes(-1)) warnings.push(`${where}: an upside with no downside (R8.5)`);
-    if (!foundAt.has(item.id) && !item.retired) warnings.push(`${where}: no location lists it`);
+    if (!foundAt.has(item.id) && !item.retired && !item.devOnly) warnings.push(`${where}: no location lists it`);
+    if (item.bobber && item.slot !== 'bobber') errors.push(`${where}: only a bobber has a bobber's looks`);
   }
 
   checkSeasons(all.weather, errors);

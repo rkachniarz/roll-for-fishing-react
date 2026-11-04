@@ -16,12 +16,13 @@
 // one in content isn't (D42).
 
 /** @typedef {'higher' | 'lower' | 'neither'} Better */
+/** @typedef {'ms' | '%'} Unit  How a tooltip shows an amount (R8.6): ms as seconds, % as a percentage. */
 /** @typedef {{ value: string, add: number | string }} Effect */
 
 /**
  * `base` is the starting value; the character's stats have none here, since
- * they come from the character (R6.1).
- * @type {Record<string, { better: Better, base?: number }>}
+ * they come from the character (R6.1). `unit` is for tooltips.
+ * @type {Record<string, { better: Better, base?: number, unit?: Unit }>}
  */
 export const GAME_VALUES = {
   // ---- The rolls (fed mostly by the character, D35) ----
@@ -46,16 +47,16 @@ export const GAME_VALUES = {
   /** How far from the aimed point the bobber may land, in scene pixels (D34). */
   castScatter: { better: 'lower', base: 12 },
   /** The shortest and longest wait from the cast to the bite, in ms (R2.2). */
-  biteDelayMin: { better: 'lower', base: 2500 },
-  biteDelayMax: { better: 'lower', base: 8000 },
+  biteDelayMin: { better: 'lower', base: 2500, unit: 'ms' },
+  biteDelayMax: { better: 'lower', base: 8000, unit: 'ms' },
   /** A strike faster than this is 'fast' (+1 to the roll), in ms (R2.3). */
-  reactionFast: { better: 'higher', base: 450 },
+  reactionFast: { better: 'higher', base: 450, unit: 'ms' },
   /** Faster than this (and not fast) is 'ok' (+0); slower is 'bad' (-1). */
-  reactionOk: { better: 'higher', base: 900 },
+  reactionOk: { better: 'higher', base: 900, unit: 'ms' },
   /** At or past this after the splash, whatever bit is gone (R2.4). */
-  strikeLimit: { better: 'higher', base: 3000 },
+  strikeLimit: { better: 'higher', base: 3000, unit: 'ms' },
   /** After a missed splash, how long nothing happens before the line counts as cast again (D64). */
-  missPause: { better: 'lower', base: 5000 },
+  missPause: { better: 'lower', base: 5000, unit: 'ms' },
 
   // ---- The bucket (D57) ----
   /** How many fish the bucket holds; a full one sends the player to town. */
@@ -63,9 +64,9 @@ export const GAME_VALUES = {
 
   // ---- Bait (D39, D61) ----
   /** The chance, in percent, that bait is saved when a fish is caught. */
-  baitRecovery: { better: 'higher', base: 10 },
+  baitRecovery: { better: 'higher', base: 10, unit: '%' },
   /** The chance, in percent, that a fish that gets away takes the bait. */
-  baitEscapeLoss: { better: 'lower', base: 5 },
+  baitEscapeLoss: { better: 'lower', base: 5, unit: '%' },
 };
 
 /**

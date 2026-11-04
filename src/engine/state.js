@@ -14,9 +14,10 @@ import { diceFor } from '../dice.js';
 import { content } from '../generated/content.js';
 import { weatherAt } from './weather.js';
 import { TIME } from './time.js';
+import { emptyEquipment } from './equipment.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -49,7 +50,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {string | null} spot
  * @property {number} time  Game minutes (time.js).
  * @property {import('./weather.js').Weather} weather
- * @property {{ rod: string, bait: string | null }} equipped  Item ids.
+ * @property {Record<string, { id: string, count: number } | null>} equipped  Slot -> what is in it
+ *   (equipment.js, D83). Equipped items aren't in the bags.
  * @property {{ id: string, count: number }[]} bags
  * @property {{ fish: import('./fish.js').FishInstance, count: number }[]} bucket
  * @property {Record<string, number>} found  Item id -> how many ever found.
@@ -100,7 +102,10 @@ export function newGame({ seed, character }) {
     spot: null,
     time: TIME.startMinutes,
     weather,
-    equipped: { rod: start.equipped.rod, bait: start.equipped.bait ?? null },
+    equipped: {
+      ...emptyEquipment(),
+      ...Object.fromEntries(Object.entries(start.equipped).map(([slot, id]) => [slot, { id, count: 1 }])),
+    },
     bags: [],
     bucket: [],
     found: {},
@@ -155,6 +160,20 @@ export function levelFor(xp) {
 const MIGRATIONS = {
   // 1 -> 2: surface features (R14), with their own stream.
   1: (save) => ({ ...save, features: [], streams: { ...save.streams, features: deriveSeed(save.seed, 'features') } }),
+  // 2 -> 3: seven equipment slots holding stacks (D83). Equipped bait used to
+  // stay in the bags; its stack moves into the slot.
+  2: (save) => {
+    const bait = save.equipped.bait ? save.bags.find((/** @type {{ id: string }} */ b) => b.id === save.equipped.bait) : null;
+    return {
+      ...save,
+      equipped: {
+        ...emptyEquipment(),
+        rod: save.equipped.rod ? { id: save.equipped.rod, count: 1 } : null,
+        bait: bait ? { ...bait } : null,
+      },
+      bags: bait ? save.bags.filter((/** @type {{ id: string }} */ b) => b !== bait) : save.bags,
+    };
+  },
 };
 
 /** @param {GameState} state */

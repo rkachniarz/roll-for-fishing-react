@@ -130,7 +130,7 @@ for (const [name, device] of [
 }
 
 await check('panes over the scene', PHONE, '?seed=1', async (page) => {
-  for (const id of ['player', 'journal', 'map', 'bucket', 'bag', 'menu']) {
+  for (const id of ['player', 'journal', 'map', 'bucket', 'menu']) {
     await page.click(`#${id}`);
     const open = (await page.isVisible('#pane')) && (await page.getAttribute(`#${id}`, 'aria-pressed')) === 'true';
     report(`panes: ${id} opens`, open);
@@ -138,12 +138,19 @@ await check('panes over the scene', PHONE, '?seed=1', async (page) => {
   }
   await page.click('#menu');
   report('panes: a second tap closes it', !(await page.isVisible('#pane')));
-  await page.click('#bag');
+  await page.click('#journal');
   await page.click('#paneClose');
   report('panes: the close button closes it', !(await page.isVisible('#pane')));
+  // The bag is its own pane, over the log, open alongside the others (D83).
   await page.click('#bag');
-  const names = await page.locator('#pane .tab').allTextContents();
+  await page.click('#bucket');
+  report('panes: the bag stays open beside another pane', (await page.isVisible('#bagPane')) && (await page.isVisible('#pane')));
+  report('panes: the bag button shows it is open', (await page.getAttribute('#bag', 'aria-pressed')) === 'true');
+  await page.screenshot({ path: 'dist/verify/pane-bag.png' });
+  const names = await page.locator('#bagPane .tab').allTextContents();
   report('panes: the bag has its three tabs', names.join(',') === 'Equipment,Consumables,Stuff', names.join(','));
+  await page.click('#bagClose');
+  report('panes: the bag closes on its own', !(await page.isVisible('#bagPane')) && (await page.isVisible('#pane')));
 });
 
 await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, tap) => {
@@ -185,12 +192,12 @@ await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (p
   report('junk: a tap on the link shows its tooltip', tip.startsWith('Bit of scroll parchment'), tip);
   await page.click('#bag');
   await page.click('#tab-stuff');
-  const slots = await page.locator('#paneBody .slot:not(.empty)').evaluateAll((els) => els.map((e) => e.getAttribute('aria-label')));
+  const slots = await page.locator('#bagBody .slot:not(.empty)').evaluateAll((els) => els.map((e) => e.getAttribute('aria-label')));
   report('junk: in the bag, under Stuff', slots.includes('Bit of scroll parchment'), slots.join(', '));
   await page.screenshot({ path: 'dist/verify/bag.png' });
   await page.click('#player');
-  const sheet = (await page.textContent('#paneBody')) ?? '';
-  report('junk: the stick is equipped', sheet.includes('A stick with some string tied to it'), sheet);
+  const rod = await page.getAttribute('[data-slot="rod"]', 'aria-label');
+  report('junk: the stick is equipped', rod === 'A stick with some string tied to it', rod ?? '');
 });
 
 await check('strike too early', DESKTOP, '?seed=1&wait=6000', async (page, tap) => {
@@ -396,6 +403,138 @@ await check('a full bucket', PHONE, '?dev&seed=1&wait=600', async (page, tap) =>
   const full = (await page.textContent('#paneBody')) ?? '';
   report('a full bucket: 16 of 16 in the bucket pane', full.includes('16 of 16 fish'), full);
   await page.screenshot({ path: 'dist/verify/bucket.png' });
+});
+
+// ---------- Equipment and the bag (5.1, 5.2, D83) ----------
+
+/** The middle of an element, on the page. */
+const centre = async (page, selector) => {
+  const box = await page.locator(selector).boundingBox();
+  if (!box) throw new Error(`${selector} not visible`);
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+};
+/** What a slot holds, by its aria-label. */
+const slotLabel = (page, key) => page.getAttribute(`[data-slot="${key}"]`, 'aria-label');
+/** A bag slot by the item's name. */
+const bagSlot = (name) => `#bagBody .slot[aria-label^="${name}"]`;
+/** The ?dev bench's button that puts one of every equippable item in the bags. */
+const addEquippables = async (page) => {
+  await openBench(page);
+  await page.click('text=Add every equippable item');
+};
+
+await check('equipment: drag, right-click, no rod', DESKTOP, '?dev&seed=1', async (page, tap) => {
+  await addEquippables(page);
+  await page.click('#player');
+  await page.click('#bag');
+  report('equipment: the character and the bag open together', (await page.isVisible('#pane')) && (await page.isVisible('#bagPane')));
+  const shown = await page.locator('#doll .slot').count();
+  report('equipment: seven slots on the paper doll', shown === 7, `${shown}`);
+
+  // A mouse drag from the bag onto the hat slot.
+  const from = await centre(page, bagSlot('Straw hat'));
+  const to = await centre(page, '[data-slot="hat"]');
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  await page.mouse.move(from.x + 20, from.y, { steps: 3 });
+  report('equipment: dragging lights up the slot it fits', await page.locator('[data-slot="hat"].drop-ok').count() === 1);
+  await page.mouse.move(to.x, to.y, { steps: 8 });
+  await page.mouse.up();
+  report('equipment: dragged into the hat slot', (await slotLabel(page, 'hat')) === 'Straw hat', await slotLabel(page, 'hat'));
+  report('equipment: and out of the bag', (await page.locator(bagSlot('Straw hat')).count()) === 0);
+  report('equipment: no tooltip left over from the drag', !(await page.isVisible('.tip')));
+
+  // The wrong slot is refused, in red.
+  const crumbs = await centre(page, bagSlot('Bread crumbs'));
+  const rod = await centre(page, '[data-slot="rod"]');
+  await page.mouse.move(crumbs.x, crumbs.y);
+  await page.mouse.down();
+  await page.mouse.move(rod.x, rod.y, { steps: 8 });
+  await page.mouse.up();
+  report('equipment: the wrong slot says so', ((await page.textContent('#errors')) ?? '').includes("doesn't go in that slot"));
+
+  // Right-click equips, and swaps with what was there.
+  await page.click(bagSlot('Willow rod'), { button: 'right' });
+  report('equipment: right-click equips', (await slotLabel(page, 'rod')) === 'Willow rod', await slotLabel(page, 'rod'));
+  report('equipment: the old rod goes to the bag', (await page.locator(bagSlot('A stick with some string tied to it')).count()) === 1);
+  await page.click(bagSlot('Bread crumbs'), { button: 'right' });
+  report('equipment: bait goes in as the whole stack', (await slotLabel(page, 'bait')) === 'Bread crumbs ×10', await slotLabel(page, 'bait'));
+  await page.click(bagSlot('Fish and where to find them'), { button: 'right' });
+  await page.click(bagSlot('Heavy bait'), { button: 'right' });
+  report('equipment: two trinkets', (await slotLabel(page, 'trinket1')) === 'Fish and where to find them - waterproof compendium' && (await slotLabel(page, 'trinket2')) === 'Heavy bait');
+  await page.click(bagSlot('Bluejay-feather bobber'), { button: 'right' });
+  await page.screenshot({ path: 'dist/verify/equipment.png' });
+
+  // Right-click on the rod takes it off; a cast then needs one.
+  await page.click('[data-slot="rod"]', { button: 'right' });
+  report('equipment: right-click on a slot takes it off', ((await slotLabel(page, 'rod')) ?? '').startsWith('Rod'), await slotLabel(page, 'rod'));
+  await closePane(page);
+  await tap();
+  await page.waitForTimeout(100);
+  report('equipment: no rod, no cast', (await page.getAttribute('body', 'data-phase')) === 'idle');
+  const error = (await page.textContent('#errors')) ?? '';
+  report('equipment: "Must have a fishing pole equipped."', error.includes('Must have a fishing pole equipped.'), error);
+  await page.screenshot({ path: 'dist/verify/no-rod.png' });
+
+  // It all survives a reload.
+  await page.reload();
+  await loadFrom(page, 1);
+  await page.click('#player');
+  report('equipment: saved', (await slotLabel(page, 'hat')) === 'Straw hat' && (await slotLabel(page, 'trinket2')) === 'Heavy bait');
+});
+
+await check('equipment: the bobber, and nothing changes while the line is out', DESKTOP, '?dev&seed=1&wait=6000', async (page, tap) => {
+  await addEquippables(page);
+  await closePane(page);
+  await page.click('#bag');
+  await page.click(bagSlot('Bluejay-feather bobber'), { button: 'right' });
+  await page.click('#bag');
+  await tap();
+  await page.waitForSelector('body[data-phase="waiting"]');
+  await page.waitForTimeout(1500);
+  // The canvas can't be read back (WebGL), so the check reads what the scene
+  // was told to draw; the screenshot shows it.
+  const look = await page.getAttribute('#scene', 'data-bobber');
+  report('equipment: the bobber drawn in the bluejay blue', (look ?? '').includes('#3a6fd8'), look ?? '');
+  await page.screenshot({ path: 'dist/verify/bobber.png' });
+  await page.click('#player');
+  await page.click('[data-slot="rod"]', { button: 'right' });
+  report('equipment: not while the line is out', (await slotLabel(page, 'rod')) === 'A stick with some string tied to it');
+  report('equipment: and says so', ((await page.textContent('#errors')) ?? '').includes("can't change equipment"));
+});
+
+await check('equipment by touch: long-press drag', PHONE, '?dev&seed=1', async (page) => {
+  await addEquippables(page);
+  await page.click('#player');
+  await page.click('#bag');
+  report('equipment by touch: the bag over the log, the character over the scene', (await page.isVisible('#pane')) && (await page.isVisible('#bagPane')));
+  await page.screenshot({ path: 'dist/verify/equipment-phone.png' });
+  const cdp = await page.context().newCDPSession(page);
+  const touch = (type, p) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: p ? [{ x: p.x, y: p.y }] : [] });
+  const from = await centre(page, bagSlot('Horsehair line'));
+  const to = await centre(page, '[data-slot="line"]');
+
+  // A quick swipe is a scroll, not a drag.
+  await touch('touchStart', from);
+  await touch('touchMove', { x: from.x, y: from.y - 40 });
+  await touch('touchEnd');
+  report('equipment by touch: a swipe doesn\'t drag', (await slotLabel(page, 'line')) === 'Line: Empty', await slotLabel(page, 'line'));
+
+  // Hold, then drag. The icon is carried above the finger, so the finger ends below the slot.
+  await touch('touchStart', from);
+  await page.waitForTimeout(500);
+  for (let i = 1; i <= 10; i++) await touch('touchMove', { x: from.x + ((to.x - from.x) * i) / 10, y: from.y + ((to.y + 36 - from.y) * i) / 10 });
+  await touch('touchEnd');
+  report('equipment by touch: long-press and drag equips', (await slotLabel(page, 'line')) === 'Horsehair line', await slotLabel(page, 'line'));
+
+  // A tap still shows the tooltip.
+  await page.tap('[data-slot="line"]');
+  report('equipment by touch: a tap shows the tooltip', ((await page.textContent('.tip')) ?? '').startsWith('Horsehair line'));
+  // Its effects, made from the item (5.4): the upside green, the downside red.
+  const good = await page.locator('.tip .tip-good').allTextContents();
+  const bad = await page.locator('.tip .tip-bad').allTextContents();
+  report('tooltips: effects in green and red', good.join() === '+0.5 s time to strike' && bad.join() === '−0.05 s time for a fast strike', `${good} / ${bad}`);
+  await page.screenshot({ path: 'dist/verify/tooltip-effects.png' });
 });
 
 await browser.close();

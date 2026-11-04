@@ -215,6 +215,20 @@ export const content = {
       "rarity": "poor",
       "value": 2
     },
+    "bluejay-bobber": {
+      "id": "bluejay-bobber",
+      "category": "treasure",
+      "name": "item.bluejay-bobber.name",
+      "flavor": "item.bluejay-bobber.flavor",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bobber",
+      "bobber": {
+        "feather": "#3a6fd8",
+        "featherLight": "#9cc4ff"
+      },
+      "devOnly": true
+    },
     "brass-doorknob": {
       "id": "brass-doorknob",
       "category": "junk",
@@ -222,6 +236,26 @@ export const content = {
       "flavor": "item.brass-doorknob.flavor",
       "rarity": "poor",
       "value": 3
+    },
+    "bread-crumbs": {
+      "id": "bread-crumbs",
+      "category": "consumable",
+      "name": "item.bread-crumbs.name",
+      "flavor": "item.bread-crumbs.flavor",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bait",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
+        },
+        {
+          "value": "fishSizeBand",
+          "add": -1
+        }
+      ],
+      "devOnly": true
     },
     "broken-off-fishing-pole-tip": {
       "id": "broken-off-fishing-pole-tip",
@@ -279,6 +313,7 @@ export const content = {
       "rarity": "epic",
       "value": 0,
       "unique": true,
+      "slot": "trinket",
       "effects": [
         {
           "value": "playerVantage",
@@ -306,6 +341,7 @@ export const content = {
       "rarity": "epic",
       "value": 0,
       "unique": true,
+      "slot": "trinket",
       "effects": [
         {
           "value": "fishFind",
@@ -325,6 +361,7 @@ export const content = {
       "rarity": "rare",
       "value": 0,
       "unique": true,
+      "slot": "trinket",
       "effects": [
         {
           "value": "fishingSkill",
@@ -344,6 +381,7 @@ export const content = {
       "rarity": "rare",
       "value": 0,
       "unique": true,
+      "slot": "trinket",
       "effects": [
         {
           "value": "playerVantage",
@@ -371,6 +409,7 @@ export const content = {
       "rarity": "uncommon",
       "value": 0,
       "unique": true,
+      "slot": "trinket",
       "effects": [
         {
           "value": "fishingSkill",
@@ -389,6 +428,26 @@ export const content = {
       "flavor": "item.hempen-tangles.flavor",
       "rarity": "poor",
       "value": 0
+    },
+    "horsehair-line": {
+      "id": "horsehair-line",
+      "category": "treasure",
+      "name": "item.horsehair-line.name",
+      "flavor": "item.horsehair-line.flavor",
+      "rarity": "common",
+      "value": 2,
+      "slot": "line",
+      "effects": [
+        {
+          "value": "strikeLimit",
+          "add": 500
+        },
+        {
+          "value": "reactionFast",
+          "add": -50
+        }
+      ],
+      "devOnly": true
     },
     "humanoid-molar": {
       "id": "humanoid-molar",
@@ -414,6 +473,7 @@ export const content = {
       "rarity": "uncommon",
       "value": 0,
       "unique": true,
+      "slot": "trinket",
       "effects": [
         {
           "value": "fishVantage",
@@ -465,6 +525,7 @@ export const content = {
       "rarity": "rare",
       "value": 0,
       "unique": true,
+      "slot": "trinket",
       "effects": [
         {
           "value": "fishSizeBand",
@@ -577,6 +638,26 @@ export const content = {
       "value": 0,
       "slot": "rod"
     },
+    "straw-hat": {
+      "id": "straw-hat",
+      "category": "treasure",
+      "name": "item.straw-hat.name",
+      "flavor": "item.straw-hat.flavor",
+      "rarity": "common",
+      "value": 2,
+      "slot": "hat",
+      "effects": [
+        {
+          "value": "treasureFind",
+          "add": 2
+        },
+        {
+          "value": "fishingSkill",
+          "add": -1
+        }
+      ],
+      "devOnly": true
+    },
     "tangled-fishing-line": {
       "id": "tangled-fishing-line",
       "category": "junk",
@@ -608,6 +689,26 @@ export const content = {
       "flavor": "item.waterlogged-stick.flavor",
       "rarity": "poor",
       "value": 0
+    },
+    "willow-rod": {
+      "id": "willow-rod",
+      "category": "treasure",
+      "name": "item.willow-rod.name",
+      "flavor": "item.willow-rod.flavor",
+      "rarity": "common",
+      "value": 5,
+      "slot": "rod",
+      "effects": [
+        {
+          "value": "castScatter",
+          "add": -6
+        },
+        {
+          "value": "biteDelayMin",
+          "add": 500
+        }
+      ],
+      "devOnly": true
     },
     "wooden-figurine": {
       "id": "wooden-figurine",
@@ -2757,8 +2858,12 @@ export const strings = {
     "item.bit-of-oily-leather.flavor": "There's a dagger blade sized hole in the middle.",
     "item.bit-of-scroll-parchment.name": "Bit of scroll parchment",
     "item.bit-of-scroll-parchment.flavor": "You could probably fit a really tiny spell on it.",
+    "item.bluejay-bobber.name": "Bluejay-feather bobber",
+    "item.bluejay-bobber.flavor": "The fish will never know the difference. You will.",
     "item.brass-doorknob.name": "Brass doorknob",
     "item.brass-doorknob.flavor": "Door not included.",
+    "item.bread-crumbs.name": "Bread crumbs",
+    "item.bread-crumbs.flavor": "Small fish love them. So do ducks.",
     "item.broken-off-fishing-pole-tip.name": "Broken off fishing pole tip",
     "item.broken-off-fishing-pole-tip.flavor": "Lost in a fight. Possibly with oneself.",
     "item.candle-stump.name": "A candle stump",
@@ -2787,6 +2892,8 @@ export const strings = {
     "item.heavy-bait.flavor": "If you manage to hit 'em, they ain't got no chance",
     "item.hempen-tangles.name": "Hempen tangles",
     "item.hempen-tangles.flavor": "Bits of old rope.",
+    "item.horsehair-line.name": "Horsehair line",
+    "item.horsehair-line.flavor": "The horse was not consulted.",
     "item.humanoid-molar.name": "Humanoid molar",
     "item.humanoid-molar.flavor": "Severely rotten.",
     "item.inch-sized-piece-of-a-ten-foot-pole.name": "An inch-sized piece of a ten foot pole",
@@ -2829,6 +2936,8 @@ export const strings = {
     "item.soggy-treasure-map.flavor": "If you look really closely, you can make out a fading X.",
     "item.stick.name": "A stick with some string tied to it",
     "item.stick.flavor": "Everyone starts somewhere.",
+    "item.straw-hat.name": "Straw hat",
+    "item.straw-hat.flavor": "Keeps the sun off, and most of the view.",
     "item.tangled-fishing-line.name": "Tangled fishing line",
     "item.tangled-fishing-line.flavor": "Impressively knotted.",
     "item.vendor-trash.name": "Vendor trash",
@@ -2837,6 +2946,8 @@ export const strings = {
     "item.very-wet-jerky.flavor": "Chewy.",
     "item.waterlogged-stick.name": "Waterlogged stick",
     "item.waterlogged-stick.flavor": "Sticky.",
+    "item.willow-rod.name": "Willow rod",
+    "item.willow-rod.flavor": "Bends without breaking. Mostly.",
     "item.wooden-figurine.name": "Wooden figurine",
     "item.wooden-figurine.flavor": "Half rotten remnants of a lesser deity.",
     "location.lake.name": "The Lake",

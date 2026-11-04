@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "horsehair-line",
+  "category": "treasure",
+  "name": "Horsehair line",
+  "flavor": "The horse was not consulted.",
+  "rarity": "common",
+  "value": 2,
+  "slot": "line",
+  "effects": [
+    {
+      "value": "strikeLimit",
+      "add": 500
+    },
+    {
+      "value": "reactionFast",
+      "add": -50
+    }
+  ],
+  "devOnly": true
+}

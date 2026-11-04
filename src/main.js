@@ -26,11 +26,14 @@ import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
 import { createLog } from './ui/log.js';
-import { fishName, itemName, link, rarityColour } from './ui/links.js';
+import { bagTab, fishName, itemName, link, rarityColour } from './ui/links.js';
 import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settingsPane } from './ui/panels.js';
 import { floatText } from './ui/floater.js';
 import { hideTip, showTip } from './ui/tooltip.js';
 import { iconName, paintIcon, weatherIcon } from './scene/icons.js';
+import { equip, fits, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_SLOTS } from './engine/equipment.js';
+import { setupDrag } from './ui/drag.js';
+import { showError } from './ui/errors.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 /** @typedef {import('./engine/game.js').GameCast} GameCast */
@@ -127,6 +130,11 @@ function pausing() {
   );
 }
 
+/** The line is out, or about to go out again: no changing equipment (D83). */
+function lineOut() {
+  return cast.phase === 'waiting' || cast.phase === 'bite' || pausing();
+}
+
 /**
  * Takes what the engine returned: the new state and cast, the log, the save.
  * @param {{ state: GameState, cast: GameCast, checkpoint?: GameState, events: GameEvent[] }} out
@@ -142,6 +150,7 @@ function apply(out) {
   const roll = ended ? describeRoll() : null;
   if (roll) log.add(roll, 'roll');
   logEvents(out.events);
+  if (out.events.some((e) => e.type === 'no-rod')) showError($('errors'), t('error.noRod'));
   for (const e of out.events) {
     if ((e.type === 'caught' || e.type === 'found') && cast.landing) {
       const thing = e.type === 'caught' ? { kind: /** @type {const} */ ('fish'), id: e.fish.species } : { kind: /** @type {const} */ ('item'), id: e.item };
@@ -373,7 +382,8 @@ for (const [id, icon] of Object.entries(BAR_ICONS)) {
   button.setAttribute('aria-label', t(`hud.${id}`));
   button.title = t(`hud.${id}`);
   button.addEventListener('click', (e) => {
-    togglePane(/** @type {Pane} */ (id));
+    if (id === 'bag') toggleBag();
+    else togglePane(/** @type {Pane} */ (id));
     // A click shouldn't leave the keyboard on the button: Space casts (R16.3).
     if (e.detail > 0) button.blur();
   });
@@ -409,9 +419,11 @@ function renderHud() {
 
 // ---------- The panes over the scene (R16.4) ----------
 
-/** @typedef {'player' | 'journal' | 'map' | 'bucket' | 'bag' | 'menu' | 'settings' | 'dev'} Pane */
+/** @typedef {'player' | 'journal' | 'map' | 'bucket' | 'menu' | 'settings' | 'dev'} Pane */
 /** @type {Pane | null} */
 let pane = null;
+/** The bag opens over the log, alongside any pane (D83). */
+let bagOpen = false;
 /** @type {import('./ui/panels.js').BagTab} */
 let bagTabShown = 'equipment';
 
@@ -422,22 +434,47 @@ function togglePane(name) {
   renderPane();
 }
 
+function toggleBag() {
+  bagOpen = !bagOpen;
+  hideTip();
+  renderPane();
+}
+
+/** Escape closes the pane over the scene first, then the bag. */
 function closePane() {
-  if (!pane) return;
-  pane = null;
+  if (pane) pane = null;
+  else if (bagOpen) bagOpen = false;
+  else return;
   hideTip();
   renderPane();
 }
 $('paneClose').setAttribute('aria-label', t('hud.close'));
-$('paneClose').addEventListener('click', closePane);
+$('paneClose').addEventListener('click', () => {
+  pane = null;
+  hideTip();
+  renderPane();
+});
+$('bagClose').setAttribute('aria-label', t('hud.close'));
+$('bagClose').addEventListener('click', toggleBag);
+// Dropped on the bag button, an equipped item goes back to the bags.
+$('bag').dataset.drop = 'bag:pane';
 
 function renderPane() {
+  renderBag();
   const box = $('pane');
   box.hidden = !pane || !state;
-  for (const b of document.querySelectorAll('[data-pane]')) b.setAttribute('aria-pressed', String(b.getAttribute('data-pane') === pane));
+  for (const b of document.querySelectorAll('[data-pane]')) {
+    const name = b.getAttribute('data-pane');
+    b.setAttribute('aria-pressed', String(name === 'bag' ? bagOpen && Boolean(state) : name === pane));
+  }
   if (!pane || !state) return;
   const s = state;
   const body = $('paneBody');
+  // Another pane starts at its top, not where the last one was scrolled to.
+  if (body.dataset.shown !== pane) {
+    body.dataset.shown = pane;
+    queueMicrotask(() => (body.scrollTop = 0));
+  }
   $('paneTitle').textContent = pane === 'player' ? s.character.name : pane === 'dev' || pane === 'settings' ? t(`menu.${pane}`) : t(`hud.${pane}`);
   switch (pane) {
     case 'player':
@@ -451,15 +488,6 @@ function renderPane() {
       break;
     case 'bucket':
       body.replaceChildren(...bucketPane(s, valuesFor(s, extraSources()).flat.bucketSize));
-      break;
-    case 'bag':
-      body.replaceChildren(
-        ...bagPane(s, bagTabShown, (tab) => {
-          bagTabShown = tab;
-          hideTip();
-          renderPane();
-        }),
-      );
       break;
     case 'menu':
       body.replaceChildren(
@@ -484,6 +512,104 @@ function renderPane() {
   }
 }
 
+function renderBag() {
+  const box = $('bagPane');
+  box.hidden = !bagOpen || !state;
+  if (box.hidden || !state) return;
+  $('bagTitle').textContent = t('hud.bag');
+  $('bagBody').replaceChildren(
+    ...bagPane(state, bagTabShown, (tab) => {
+      bagTabShown = tab;
+      hideTip();
+      renderBag();
+    }),
+  );
+}
+
+// ---------- Moving items: drag and drop, right-click (R8.1, R8.7; D83) ----------
+
+/**
+ * Takes what an equipment move returned: an error in red, or the new state,
+ * saved. Only between casts, so a cast keeps its checkpoint (D74).
+ * @param {{ state: GameState, error?: string }} out
+ */
+function changeItems(out) {
+  if (out.error) showError($('errors'), t(`error.${out.error}`));
+  if (out.state === state) return;
+  state = out.state;
+  save(state);
+  hideTip();
+  render();
+}
+
+/** @param {string} where  "bag:3", "bag:end", "bag:pane" or "equip:rod". */
+const parseSpot = (where) => {
+  const [kind, key] = where.split(':');
+  return { kind, key, index: kind === 'bag' && /^\d+$/.test(key) ? Number(key) : null };
+};
+
+/**
+ * @param {string} fromSpot
+ * @param {string} toSpot
+ */
+function moveItem(fromSpot, toSpot) {
+  if (!state || fromSpot === toSpot) return;
+  if (lineOut()) {
+    showError($('errors'), t('error.busy'));
+    return;
+  }
+  const from = parseSpot(fromSpot);
+  const to = parseSpot(toSpot);
+  if (from.kind === 'bag' && from.index !== null) {
+    if (to.kind === 'equip') changeItems(equip(state, from.index, to.key));
+    // Onto the bag's background: it stays where it was.
+    else if (to.key !== 'pane') changeItems(moveInBags(state, from.index, to.index));
+  } else if (from.kind === 'equip') {
+    const stack = state.equipped[from.key];
+    if (to.kind === 'equip') changeItems(moveEquipped(state, from.key, to.key));
+    else {
+      // Show the tab it lands in.
+      if (stack) bagTabShown = bagTab(stack.id);
+      changeItems(unequip(state, from.key, to.index));
+    }
+  }
+}
+
+setupDrag({
+  onDrop: moveItem,
+  // While dragging, the slots it fits light up.
+  targetsFor: (fromSpot) => {
+    if (!state) return [];
+    const from = parseSpot(fromSpot);
+    const id = from.kind === 'bag' ? state.bags[from.index ?? -1]?.id : state.equipped[from.key]?.id;
+    if (!id) return [];
+    return EQUIPMENT_SLOTS.filter((s) => fits(id, s.key) && s.key !== from.key).map((s) => `equip:${s.key}`);
+  },
+});
+
+// Right-click (desktop): a bag item into its slot, an equipped item back to
+// the bags, as WoW's. A long-press on a phone also fires contextmenu; there it
+// starts a drag instead (drag.js).
+let lastPointer = 'mouse';
+document.addEventListener('pointerdown', (e) => (lastPointer = e.pointerType), true);
+document.addEventListener('contextmenu', (e) => {
+  const node = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest?.('[data-drag]'));
+  if (!node) return;
+  e.preventDefault();
+  if (lastPointer !== 'mouse' || !state) return;
+  if (lineOut()) {
+    showError($('errors'), t('error.busy'));
+    return;
+  }
+  const spot = parseSpot(/** @type {string} */ (node.dataset.drag));
+  if (spot.kind === 'bag' && spot.index !== null) changeItems(quickEquip(state, spot.index));
+  else if (spot.kind === 'equip') {
+    const stack = state.equipped[spot.key];
+    if (stack) bagTabShown = bagTab(stack.id);
+    changeItems(unequip(state, spot.key));
+  }
+});
+
 // ---------- Drawing it all ----------
 
 function render() {
@@ -495,6 +621,9 @@ function render() {
   }
   buffBar.update(state.buffs);
   scene.setFeatures(state.features.map((f) => ({ ...f, kind: content.features[f.id].kind })));
+  // The bobber slot is cosmetic: it only changes how the bobber looks (D83).
+  const bobber = state.equipped.bobber;
+  scene.setBobber(bobber ? (content.items[bobber.id]?.bobber ?? null) : null);
   const now = clock(state.time);
   scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, weather: state.weather });
   renderHud();
@@ -689,6 +818,7 @@ function toTitle() {
   state = null;
   cast = /** @type {GameCast} */ ({ phase: 'idle' });
   pane = null;
+  bagOpen = false;
   log.clear();
   render();
   openTitle();

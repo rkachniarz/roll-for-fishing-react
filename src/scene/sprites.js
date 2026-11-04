@@ -100,10 +100,33 @@ export const WAVES = {
 };
 
 /**
+ * A bobber's colours in place of the sketch's (D83): an equipped bobber item's
+ * `bobber` field. Any it leaves out stay as they are.
+ * @typedef {{ feather?: string, featherLight?: string, rim?: string, float?: string }} BobberLook
+ */
+
+/**
+ * The palette keys for a bobber with this look.
+ * @param {BobberLook | null} look
+ * @returns {Record<string, string>}
+ */
+export function bobberKeys(look) {
+  if (!look) return KEYS;
+  return {
+    ...KEYS,
+    ...(look.feather ? { r: look.feather } : {}),
+    ...(look.featherLight ? { R: look.featherLight } : {}),
+    ...(look.rim ? { b: look.rim } : {}),
+    ...(look.float ? { Y: look.float } : {}),
+  };
+}
+
+/**
  * A canvas with the grid painted on it, one pixel per character.
  * @param {string[]} rows
+ * @param {Record<string, string>} [keys]  The palette, if not the usual one.
  */
-export function paintGrid(rows) {
+export function paintGrid(rows, keys = KEYS) {
   const canvas = document.createElement('canvas');
   canvas.width = Math.max(...rows.map((r) => r.length));
   canvas.height = rows.length;
@@ -111,7 +134,7 @@ export function paintGrid(rows) {
   rows.forEach((row, y) => {
     [...row].forEach((key, x) => {
       if (key === '.') return;
-      ctx.fillStyle = KEYS[key];
+      ctx.fillStyle = keys[key];
       ctx.fillRect(x, y, 1, 1);
     });
   });

@@ -13,6 +13,7 @@ import { valuesFor } from './engine/game.js';
 import { diceFrom, levelFor } from './engine/state.js';
 import { weatherAt } from './engine/weather.js';
 import { clock, TIME } from './engine/time.js';
+import { EQUIPMENT_SLOTS, quickEquip } from './engine/equipment.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 
@@ -138,18 +139,26 @@ export function createBench(root, { getState, setState, overrides, extraSources,
   for (const item of Object.values(content.items).sort((a, b) => a.category.localeCompare(b.category) || a.id.localeCompare(b.id))) {
     itemSelect.append(el('option', { value: item.id, textContent: `${item.category}: ${t(item.name)}${item.slot ? ` [${item.slot}]` : ''}` }));
   }
-  const addItem = button('Add to bags', () =>
-    edit((s) => {
-      const stack = s.bags.find((b) => b.id === itemSelect.value);
-      if (stack) stack.count++;
-      else s.bags.push({ id: itemSelect.value, count: 1 });
-      return s;
-    }),
-  );
+  /** @param {GameState} s @param {string} id @param {number} [count] */
+  const toBags = (s, id, count = 1) => {
+    const stack = s.bags.find((b) => b.id === id);
+    if (stack) stack.count += count;
+    else s.bags.push({ id, count });
+  };
+  const addItem = button('Add to bags', () => edit((s) => (toBags(s, itemSelect.value), s)));
+  const addTen = button('Add 10', () => edit((s) => (toBags(s, itemSelect.value, 10), s)));
+  // Into the bags, then into its slot, as a right-click would (D83).
   const equipItem = button('Equip', () =>
     edit((s) => {
-      const slot = content.items[itemSelect.value].slot;
-      if (slot) s.equipped = { ...s.equipped, [slot]: itemSelect.value };
+      if (!content.items[itemSelect.value].slot) return s;
+      toBags(s, itemSelect.value);
+      return quickEquip(s, s.bags.findIndex((b) => b.id === itemSelect.value)).state;
+    }),
+  );
+  // Every item that goes in a slot, one of each, for trying the slots out.
+  const addEquippable = button('Add every equippable item', () =>
+    edit((s) => {
+      for (const item of Object.values(content.items)) if (item.slot && !item.retired) toBags(s, item.id, item.slot === 'bait' ? 10 : 1);
       return s;
     }),
   );
@@ -186,7 +195,8 @@ export function createBench(root, { getState, setState, overrides, extraSources,
     ]),
     section('Character', [el('div', { className: 'dev-fields' }, [el('label', { htmlFor: 'dev-xp', textContent: 'XP' }), xpInput, el('label', { htmlFor: 'dev-luck', textContent: 'Luck' }), luckInput]), statsLine]),
     section('Inventory', [
-      el('div', { className: 'dev-row' }, [itemSelect, addItem, equipItem]),
+      el('div', { className: 'dev-row' }, [itemSelect, addItem, addTen, equipItem]),
+      el('div', { className: 'dev-row' }, [addEquippable]),
       inventoryLine,
       el('div', { className: 'dev-row' }, [
         button('Empty bucket', () => edit((s) => ({ ...s, bucket: [] }))),
@@ -244,7 +254,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       const items = s.bags.map((b) => `${t(content.items[b.id].name)}${b.count > 1 ? ` ×${b.count}` : ''}`).join(', ');
       const pools = Object.entries(s.escaped).map(([k, v]) => `${k}: ${v.length}`).join(', ');
       inventoryLine.textContent =
-        `Equipped: rod ${s.equipped.rod}, bait ${s.equipped.bait ?? '(none)'}. Bucket: ${fish} fish in ${s.bucket.length} stacks. ` +
+        `Equipped: ${EQUIPMENT_SLOTS.map(({ key }) => `${key} ${s.equipped[key] ? `${s.equipped[key]?.id}${(s.equipped[key]?.count ?? 1) > 1 ? ` ×${s.equipped[key]?.count}` : ''}` : '-'}`).join(', ')}. Bucket: ${fish} fish in ${s.bucket.length} stacks. ` +
         `Bags: ${items || '(empty)'}. Escaped pools: ${pools || '(none)'}.`;
 
       buffsLine.textContent = s.buffs.length

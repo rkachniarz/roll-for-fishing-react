@@ -154,7 +154,10 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 
 - **R8.1** Inventory works like WoW's: a grid of bag slots, one item per slot, identical items stacking, drag and drop,
   and a tooltip with name (coloured by rarity), effects, downsides (in red) and flavour text.
-- **R8.2** Equipment slots (e.g. rod, line, bait, hat, two trinkets): only equipped items apply their effects.
+- **R8.2** Equipment slots: rod, line, bobber, bait, hat and two trinkets; only equipped items apply their effects. The
+  trinket is the generic slot for extra effects; perks and items may add more slots. The bobber slot is cosmetic: it
+  changes how the bobber looks. Items move between the bags and the slots by dragging, and on desktop by right-click.
+  *(D83)*
 - **R8.3** Caught fish go into a bucket container, which holds only fish; the bags hold everything else. Fish keep their
   species and size, and stack only with an identical twin. The starting bucket holds 16 fish, so a full one sends the
   player to town; the bags stay generous. Uses for fish (selling, eating for buffs, quests) unlock gradually as the
@@ -249,8 +252,9 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 
 ### R13: Rods and bait
 
-- **R13.1** A rod is always equipped (R8.2). A new game starts with a stick with some string tied to it; better rods
-  come from fished-up treasure, events and the like. *(D35)*
+- **R13.1** A rod is needed to fish: with none equipped, a cast is refused with "Must have a fishing pole equipped."
+  The line and the bobber are optional (R8.2). A new game starts with a stick with some string tied to it; better rods
+  come from fished-up treasure, events and the like. *(D35, D83)*
 - **R13.2** All stats are the player's, each a total of what feeds it: character, items, buffs (R6.6). The rod and the
   character feed different stats. The character feeds the stats behind the rolls (R6.1); the rod feeds the stats behind
   the cast: **accuracy** (how far from the aim the bobber may land, R2.1), the **reaction window** for the strike bonus

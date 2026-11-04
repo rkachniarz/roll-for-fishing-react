@@ -43,6 +43,7 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `src/engine/fish.js` | One fish: species, subname, size band, size, difficulty, rarity |
 | `src/engine/state.js` | The game state: new game, saves and their migrations, the random streams |
 | `src/engine/game.js` | One cast from the game's side: the line, the strike, what it changes; buffs |
+| `src/engine/equipment.js` | The equipment slots; moving items between them and the bags |
 | `src/engine/character.js` | Character creation: names, classes, stat rolls |
 | `src/engine/features.js` | Surface features: appearing, drifting, thinning out; the open water's bounds |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
@@ -56,7 +57,10 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `src/ui/log.js` | The log under the scene |
 | `src/ui/links.js` | Names of fish and items, links to them in rarity colours, bag tabs |
 | `src/ui/tooltip.js` | The one tooltip, for links and slots |
-| `src/ui/panels.js` | The panes over the scene: character, journal, map, bucket, bag, menu |
+| `src/ui/drag.js` | Dragging items between the bag and the slots, by mouse and long-press |
+| `src/ui/effects.js` | An item's effects as tooltip lines, green or red |
+| `src/ui/errors.js` | Red error text over the scene ("Must have a fishing pole equipped.") |
+| `src/ui/panels.js` | The panes: character (the paper doll), journal, map, bucket, bag (over the log), menu |
 | `test/` | Unit tests (`node:test`) |
 | `tools/content.mjs` | Checks content and builds the generated module, plus `dist/content-overview.html` |
 | `tools/verify.mjs` | Browser checks (Playwright) |

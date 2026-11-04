@@ -15,6 +15,7 @@ import {
   SPLASH,
   WATERLINE,
   WAVES,
+  bobberKeys,
   paintBackdrop,
   paintGrid,
   paintReeds,
@@ -122,12 +123,18 @@ export async function createScene(canvas, rand) {
   const line = new Graphics();
   app.stage.addChild(line);
 
-  const bobberTextures = {
-    near: tex(paintGrid(BOBBER)),
-    nearDipped: tex(paintGrid(BOBBER_DIPPED)),
-    far: tex(paintGrid(BOBBER_FAR)),
-    farDipped: tex(paintGrid(BOBBER_FAR_DIPPED)),
+  /** @param {import('./sprites.js').BobberLook | null} look */
+  const paintBobber = (look) => {
+    const keys = bobberKeys(look);
+    return {
+      near: tex(paintGrid(BOBBER, keys)),
+      nearDipped: tex(paintGrid(BOBBER_DIPPED, keys)),
+      far: tex(paintGrid(BOBBER_FAR, keys)),
+      farDipped: tex(paintGrid(BOBBER_FAR_DIPPED, keys)),
+    };
   };
+  let bobberTextures = paintBobber(null);
+  let bobberLook = 'null';
   const bobber = new Sprite(bobberTextures.near);
   bobber.visible = false;
   app.stage.addChild(bobber);
@@ -382,6 +389,22 @@ export async function createScene(canvas, rand) {
     update,
     setFeatures,
     setWorld: sky.setWorld,
+    /**
+     * How the bobber looks: the equipped bobber item's colours, or the
+     * sketch's red feather (D83). Repainted only when it changes.
+     * @param {import('./sprites.js').BobberLook | null} look
+     */
+    setBobber(look) {
+      const key = JSON.stringify(look);
+      if (key === bobberLook) return;
+      bobberLook = key;
+      // For tools/verify.mjs, which can't read a WebGL canvas back.
+      canvas.dataset.bobber = key;
+      const old = bobberTextures;
+      bobberTextures = paintBobber(look);
+      bobber.texture = bobberTextures.near;
+      for (const t of Object.values(old)) t.destroy(true);
+    },
     /**
      * Turns a pointer position on the page into scene pixels.
      * @param {number} clientX @param {number} clientY

@@ -48,7 +48,7 @@ test('a new game: the Lake, the stick, spring at 08:00, every stream seeded', ()
   const s = game();
   assert.equal(s.version, SAVE_VERSION);
   assert.equal(s.location, 'lake');
-  assert.deepEqual(s.equipped, { rod: 'stick', bait: null });
+  assert.deepEqual(s.equipped, { rod: { id: 'stick', count: 1 }, line: null, bobber: null, bait: null, hat: null, trinket1: null, trinket2: null });
   assert.equal(s.time, TIME.startMinutes);
   assert.equal(s.weather.season, 'spring');
   assert.equal(s.character.luck, 0, 'Luck starts at 0 (R6.7)');
@@ -206,12 +206,12 @@ test('timed buffs count down; debuffs can\'t be cancelled', () => {
 
 test('bait is used up on a catch unless saved, and the last one empties the slot', () => {
   for (let seed = 1; seed < 300; seed++) {
-    let state = { ...game(seed), bags: [{ id: 'moldy-piece-of-bread', count: 1 }], equipped: { rod: 'stick', bait: 'moldy-piece-of-bread' } };
+    const start = game(seed);
+    const state = { ...start, equipped: { ...start.equipped, bait: { id: 'bread-crumbs', count: 1 } } };
     const { state: s, cast } = castUntil(state, (c) => c.line.kind === 'fish');
     const out = strikeAfter(s, cast, 200);
     if (!out.events.some((e) => e.type === 'bait-eaten')) continue;
     assert.equal(out.state.equipped.bait, null);
-    assert.deepEqual(out.state.bags, []);
     return;
   }
   assert.fail('bait never eaten');
@@ -351,11 +351,51 @@ const water = { x0: 40, y0: 30, x1: 216, y1: 185 };
 
 test('a save from version 1 gains surface features and their stream', () => {
   const { features, ...v1 } = game(13);
-  const old = { ...v1, version: 1, streams: Object.fromEntries(Object.entries(v1.streams).filter(([k]) => k !== 'features')) };
+  const old = {
+    ...v1,
+    version: 1,
+    equipped: { rod: 'stick', bait: null },
+    streams: Object.fromEntries(Object.entries(v1.streams).filter(([k]) => k !== 'features')),
+  };
   const migrated = deserialize(JSON.stringify(old));
   assert.equal(migrated.version, SAVE_VERSION);
   assert.deepEqual(migrated.features, []);
   assert.equal(migrated.streams.features, game(13).streams.features);
+});
+
+test('a save from version 2 gets the seven slots; equipped bait moves out of the bags', () => {
+  const v2 = { ...game(14), version: 2, equipped: { rod: 'stick', bait: 'bread-crumbs' }, bags: [{ id: 'bent-fork', count: 1 }, { id: 'bread-crumbs', count: 4 }] };
+  const migrated = deserialize(JSON.stringify(v2));
+  assert.deepEqual(migrated.equipped, { rod: { id: 'stick', count: 1 }, line: null, bobber: null, bait: { id: 'bread-crumbs', count: 4 }, hat: null, trinket1: null, trinket2: null });
+  assert.deepEqual(migrated.bags, [{ id: 'bent-fork', count: 1 }]);
+});
+
+test('no rod, no cast; the line and the bobber are optional (D83)', () => {
+  const state = { ...game(15), equipped: { ...game(15).equipped, rod: null } };
+  const out = castLine(state, 0);
+  assert.equal(out.cast.phase, 'idle');
+  assert.equal(out.state, state);
+  assert.deepEqual(out.events, [{ type: 'no-rod' }]);
+  assert.equal(castLine(game(15), 0).cast.phase, 'waiting', 'the stick alone is enough');
+});
+
+test('equipped items apply their effects, in every slot; items in the bags do not', () => {
+  const start = game(16);
+  const base = valuesFor(start).flat;
+  const bagged = valuesFor({ ...start, bags: [{ id: 'straw-hat', count: 1 }, { id: 'fishing-pole-laser-sight', count: 1 }] }).flat;
+  assert.deepEqual(bagged, base);
+  const worn = valuesFor({
+    ...start,
+    equipped: {
+      ...start.equipped,
+      hat: { id: 'straw-hat', count: 1 },
+      trinket2: { id: 'fishing-pole-laser-sight', count: 1 },
+      rod: { id: 'willow-rod', count: 1 },
+    },
+  }).flat;
+  assert.equal(worn.fishingSkill, base.fishingSkill - 1 + 2);
+  assert.equal(worn.treasureFind, base.treasureFind + 2 - 2);
+  assert.equal(worn.castScatter, base.castScatter - 6);
 });
 
 test('features appear on the water, drift, and go', () => {

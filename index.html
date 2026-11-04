@@ -43,6 +43,8 @@
       </header>
       <div class="pane-body" id="paneBody"></div>
     </section>
+    <!-- What the player can't do, in red, as WoW's error frame (D83). -->
+    <div class="errors" id="errors" aria-live="assertive"></div>
   </div>
 
   <!-- The owner's phone sketch (D79): the button row, then the log. -->
@@ -61,6 +63,15 @@
     </nav>
     <div class="log-frame">
       <div class="log" id="log" role="log" aria-live="polite"></div>
+      <!-- The bag opens over the log, beside whatever pane is over the scene,
+           so items can be dragged between it and the character's slots (D83). -->
+      <section class="pane bag-pane" id="bagPane" hidden aria-labelledby="bagTitle" data-drop="bag:pane">
+        <header class="pane-head">
+          <h2 id="bagTitle"></h2>
+          <button type="button" class="pane-close" id="bagClose">×</button>
+        </header>
+        <div class="pane-body" id="bagBody"></div>
+      </section>
       <button type="button" class="bar-button menu" id="menu" data-pane="menu"></button>
     </div>
     <p class="sr-only" id="status" aria-live="polite"></p>

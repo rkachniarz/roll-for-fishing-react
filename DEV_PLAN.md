@@ -4,10 +4,11 @@ What's left to do. Tick boxes as work lands; record decisions in [docs/decisions
 silently changing requirements. Within a phase, tasks are listed in the order they should be done; their numbers are
 only ids, so a task added later keeps its number wherever it lands.
 
-**Where things stand (2026-11-02):** Phases 0, 1 and 2 are done. **Phase 3: the game is playable on the real engine**:
+**Where things stand (2026-11-04):** Phases 0, 1 and 2 are done. **Phase 3: the game is playable on the real engine**:
 character creation, the full cast with its hidden rolls, saving, New game, the buff bar and the `?dev` bench, all in
-the owner's phone layout (D79), with a title screen, three save slots and a light theme (D80, D81). Left in Phase 3: GitHub Pages (3.5), deferred (D77). Phases 4 and 5 are under way;
-most of what's left in them needs the owner's art or design. Claude's guesses and calls are listed in
+the owner's phone layout (D79), with a title screen, three save slots and a light theme (D80, D81). Left in Phase 3: GitHub Pages (3.5), deferred (D77). Phases 4 and 5 are under way:
+the bag and the seven equipment slots work by drag and drop and right-click (5.1, 5.2, D83), with a placeholder item
+for each slot. Most of what's left needs the owner's art or design, or the real items (5.3). Claude's guesses and calls are listed in
 [docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
 
 ## Where things are
@@ -30,7 +31,7 @@ Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, 
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
 Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66, Q-38 → D79, Q-39 → D70).
 
-None open. The owner has a sketch of the equipment slots to come (5.2).
+None open.
 
 ---
 
@@ -121,12 +122,12 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 
 Requirements R8.
 
-- [ ] **5.1** Bag grid, stacking, drag and drop by touch and mouse, tap-to-inspect tooltips, names in rarity colours
-  (R8.1, R8.7, R8.8). *The tabbed grid, stacking, tooltips and colours landed with 3.2; dragging is left.*
-- [ ] **5.2** Equipment slots; effects on the engine's hooks (R8.2).
+- [x] **5.1** Bag grid, stacking, drag and drop by touch and mouse, tap-to-inspect tooltips, names in rarity colours
+  (R8.1, R8.7, R8.8).
+- [x] **5.2** Equipment slots; effects on the engine's hooks (R8.2, D83).
 - [ ] **5.3** Port the seven items with real downsides (§C.3), plus about 15 more; the "every upside has a downside" data
   test (R8.5).
-- [ ] **5.4** Tooltips generated from effects (R8.6).
+- [x] **5.4** Tooltips generated from effects (R8.6).
 - [x] **5.5** Fish bucket: fish only, identical twins stack, 16 fish to start; a full bucket asks which fish to release,
   and the released fish joins the spot's escaped-fish pool (R8.3, R3.6, D24, D50, D57, D59).
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI.

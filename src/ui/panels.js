@@ -8,7 +8,8 @@ import { t } from '../strings.js';
 import { levelFor } from '../engine/state.js';
 import { className } from '../engine/character.js';
 import { paintIcon } from '../scene/icons.js';
-import { bagTab, link, slot } from './links.js';
+import { bagTab, slot } from './links.js';
+import { EQUIPMENT_SLOTS } from '../engine/equipment.js';
 
 /** @typedef {import('../engine/state.js').GameState} GameState */
 
@@ -23,8 +24,31 @@ function el(tag, props = {}, kids = []) {
 const empties = (count) => Array.from({ length: Math.max(0, count) }, () => el('span', { className: 'slot empty' }));
 
 /**
- * The character: portrait, level and XP, stats, and what is equipped. The
- * equipment slots get their own layout with the owner's next sketch.
+ * An equipment slot (D83): the item in it, or its name when empty. Both take
+ * drops; a full one can be dragged off.
+ * @param {GameState} state
+ * @param {string} key
+ */
+function equipSlot(state, key) {
+  const stack = state.equipped[key];
+  /** @type {HTMLElement} */
+  let node;
+  if (stack) {
+    node = slot({ kind: 'item', id: stack.id }, stack.count);
+    node.dataset.drag = `equip:${key}`;
+  } else {
+    node = el('span', { className: 'slot empty equip-empty' }, [el('span', { className: 'slot-name', textContent: t(`slot.${key}`) })]);
+    node.setAttribute('aria-label', `${t(`slot.${key}`)}: ${t('slot.none')}`);
+  }
+  node.dataset.drop = `equip:${key}`;
+  node.dataset.slot = key;
+  return node;
+}
+
+/**
+ * The character: portrait, level and XP, and the paper doll as WoW's (D29,
+ * D83): the hat and trinkets down the left, the rod, line, bobber and bait
+ * down the right, the stats between them.
  * @param {GameState} state
  * @param {Record<string, number>} values  The game values' totals (valuesFor().flat).
  */
@@ -38,6 +62,9 @@ export function playerPane(state, values) {
   const fill = el('div', { className: 'xp-fill' });
   fill.style.width = next === undefined ? '100%' : `${(100 * (c.xp - curve[level])) / (next - curve[level])}%`;
   const statKeys = ['fishingSkill', 'fishFind', 'treasureFind'];
+  const column = (/** @type {string[]} */ keys) => el('div', { className: 'doll-column' }, keys.map((k) => equipSlot(state, k)));
+  const left = ['hat', ...EQUIPMENT_SLOTS.filter((s) => s.kind === 'trinket').map((s) => s.key)];
+  const right = EQUIPMENT_SLOTS.map((s) => s.key).filter((k) => !left.includes(k));
   return [
     el('div', { className: 'who' }, [
       portrait,
@@ -48,20 +75,14 @@ export function playerPane(state, values) {
     ]),
     el('div', { className: 'xp-bar' }, [fill]),
     el('p', { className: 'muted', textContent: next === undefined ? t('player.maxLevel', { xp: c.xp }) : t('player.xp', { xp: c.xp, next }) }),
-    el('h3', { textContent: t('player.stats') }),
-    el('dl', { className: 'stats' }, statKeys.flatMap((k) => [el('dt', { textContent: t(`value.${k}`) }), el('dd', { textContent: String(values[k]) })])),
-    el('h3', { textContent: t('player.equipment') }),
-    el(
-      'dl',
-      { className: 'stats' },
-      /** @type {const} */ (['rod', 'bait']).flatMap((s) => {
-        const id = state.equipped[s];
-        return [
-          el('dt', { textContent: t(`slot.${s}`) }),
-          el('dd', {}, [id ? link({ kind: 'item', id }) : el('span', { className: 'muted', textContent: t('slot.none') })]),
-        ];
-      }),
-    ),
+    el('div', { className: 'doll', id: 'doll' }, [
+      column(left),
+      el('div', { className: 'doll-middle' }, [
+        el('h3', { textContent: t('player.stats') }),
+        el('dl', { className: 'stats' }, statKeys.flatMap((k) => [el('dt', { textContent: t(`value.${k}`) }), el('dd', { textContent: String(values[k]) })])),
+      ]),
+      column(right),
+    ]),
   ];
 }
 
@@ -125,14 +146,14 @@ export function bucketPane(state, size) {
 export const BAG_TABS = /** @type {BagTab[]} */ (['equipment', 'consumables', 'stuff']);
 
 /**
- * The bag, in tabs (R8.1): a grid of slots. Dragging and equipping come with
- * 5.1 and 5.2.
+ * The bag, in tabs (R8.1): a grid of slots. Each stack can be dragged by its
+ * place in state.bags; an empty slot takes a drop at the end (D83).
  * @param {GameState} state
  * @param {BagTab} tab
  * @param {(tab: BagTab) => void} onTab
  */
 export function bagPane(state, tab, onTab) {
-  const items = state.bags.filter((b) => bagTab(b.id) === tab);
+  const items = state.bags.map((b, i) => ({ ...b, i })).filter((b) => bagTab(b.id) === tab);
   // Whole rows of four, and at least one row.
   const shown = Math.max(4, Math.ceil(items.length / 4) * 4);
   return [
@@ -146,7 +167,18 @@ export function bagPane(state, tab, onTab) {
         return b;
       }),
     ),
-    el('div', { className: 'grid' }, [...items.map((b) => slot({ kind: 'item', id: b.id }, b.count)), ...empties(shown - items.length)]),
+    el('div', { className: 'grid' }, [
+      ...items.map((b) => {
+        const node = slot({ kind: 'item', id: b.id }, b.count);
+        node.dataset.drag = `bag:${b.i}`;
+        node.dataset.drop = `bag:${b.i}`;
+        return node;
+      }),
+      ...empties(shown - items.length).map((node) => {
+        node.dataset.drop = 'bag:end';
+        return node;
+      }),
+    ]),
   ];
 }
 

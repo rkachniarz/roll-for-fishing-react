@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "bluejay-bobber",
+  "category": "treasure",
+  "name": "Bluejay-feather bobber",
+  "flavor": "The fish will never know the difference. You will.",
+  "rarity": "common",
+  "value": 1,
+  "slot": "bobber",
+  "bobber": {
+    "feather": "#3a6fd8",
+    "featherLight": "#9cc4ff"
+  },
+  "devOnly": true
+}

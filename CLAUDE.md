@@ -77,5 +77,12 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
 - **Rarity colours are CSS variables (`--rarity-*`),** not the hex values in `src/scene/icons.js`: each theme has its
   own, so use `rarityColour()` from `src/ui/links.js` for anything on the page (D81).
 - **`styles.css`: `font-variant-ligatures: none`.** Pixelify Sans draws its "fi" ligature as an "A".
+- **Equipped items are not in the bags (D83).** A slot holds a stack (`{ id, count }`); only the bait slot ever holds
+  more than one, and bait is used up from it. Move items with `src/engine/equipment.js`, never by editing
+  `equipped` and `bags` by hand.
+- **The bag pane sits over the log, not over the scene (D83),** so it can be open with the character pane on a phone.
+- **`src/ui/drag.js` reads `data-drag` / `data-drop` (`bag:3`, `bag:end`, `bag:pane`, `equip:rod`) off the elements;**
+  `main.js` decides what a drop does. A `contextmenu` from a long-press on a phone is swallowed; only a mouse's
+  right-click equips.
 - **`src/main.js`: a tap within 500 ms of the last action is ignored after a cast ends,** so a double tap on the splash
   strikes once instead of striking and instantly recasting.

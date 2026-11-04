@@ -8,6 +8,7 @@ import { t } from '../strings.js';
 import { fishNameKeys } from '../engine/fish.js';
 import { RARITY_COLOURS, iconName, paintIcon } from '../scene/icons.js';
 import { showTip } from './tooltip.js';
+import { effectLine } from './effects.js';
 
 /** @typedef {import('../engine/fish.js').FishInstance} FishInstance */
 /** @typedef {{ kind: 'fish', fish: FishInstance } | { kind: 'item', id: string }} Thing */
@@ -37,7 +38,8 @@ export function bagTab(id) {
 }
 
 /**
- * What a thing's tooltip says. Effects join it with 5.4 (R8.6).
+ * What a thing's tooltip says, WoW's order: name, Unique, slot, effects (made
+ * from the effects themselves, R8.6), flavour text, price.
  * @param {Thing} thing
  * @returns {import('./tooltip.js').Tip}
  */
@@ -55,6 +57,8 @@ export function tipFor(thing) {
   if (item.unique) lines.push({ text: t('tip.unique') });
   if (item.slot) lines.push({ text: t(`slot.${item.slot}`) });
   else if (item.category === 'consumable') lines.push({ text: t('tip.consumable') });
+  for (const effect of item.effects ?? []) lines.push(effectLine(effect));
+  if (item.bobber) lines.push({ text: t('effect.cosmetic') });
   if (item.flavor) lines.push({ text: `"${t(item.flavor)}"`, tone: 'flavor' });
   if (item.value > 0) lines.push({ text: t('tip.value', { value: item.value }) });
   return { title: itemName(thing.id), colour: rarityColour(item.rarity), lines };

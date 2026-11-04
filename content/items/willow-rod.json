@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "willow-rod",
+  "category": "treasure",
+  "name": "Willow rod",
+  "flavor": "Bends without breaking. Mostly.",
+  "rarity": "common",
+  "value": 5,
+  "slot": "rod",
+  "effects": [
+    {
+      "value": "castScatter",
+      "add": -6
+    },
+    {
+      "value": "biteDelayMin",
+      "add": 500
+    }
+  ],
+  "devOnly": true
+}

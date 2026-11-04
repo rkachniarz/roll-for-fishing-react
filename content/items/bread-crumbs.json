@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "bread-crumbs",
+  "category": "consumable",
+  "name": "Bread crumbs",
+  "flavor": "Small fish love them. So do ducks.",
+  "rarity": "common",
+  "value": 1,
+  "slot": "bait",
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 10
+    },
+    {
+      "value": "fishSizeBand",
+      "add": -1
+    }
+  ],
+  "devOnly": true
+}

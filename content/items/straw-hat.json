@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "straw-hat",
+  "category": "treasure",
+  "name": "Straw hat",
+  "flavor": "Keeps the sun off, and most of the view.",
+  "rarity": "common",
+  "value": 2,
+  "slot": "hat",
+  "effects": [
+    {
+      "value": "treasureFind",
+      "add": 2
+    },
+    {
+      "value": "fishingSkill",
+      "add": -1
+    }
+  ],
+  "devOnly": true
+}

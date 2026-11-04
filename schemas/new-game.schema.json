@@ -34,12 +34,27 @@
     },
     "equipped": {
       "type": "object",
-      "description": "Item ids in their slots (R13.1).",
+      "description": "Item ids in their slots (R13.1, D83).",
       "properties": {
         "rod": {
           "$ref": "common.schema.json#/definitions/id"
         },
+        "line": {
+          "$ref": "common.schema.json#/definitions/id"
+        },
+        "bobber": {
+          "$ref": "common.schema.json#/definitions/id"
+        },
         "bait": {
+          "$ref": "common.schema.json#/definitions/id"
+        },
+        "hat": {
+          "$ref": "common.schema.json#/definitions/id"
+        },
+        "trinket1": {
+          "$ref": "common.schema.json#/definitions/id"
+        },
+        "trinket2": {
           "$ref": "common.schema.json#/definitions/id"
         }
       },

@@ -7,6 +7,7 @@
   "rarity": "uncommon",
   "value": 0,
   "unique": true,
+  "slot": "trinket",
   "effects": [
     {
       "value": "fishingSkill",

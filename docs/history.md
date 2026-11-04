@@ -172,3 +172,18 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   that can be met again. A dialog lists the choices in rarity colours; the bench can fill the bucket. Two fixes from
   the phone-sized checks: the bench's long item names pushed its layout wider than the screen, so a section covered
   its buttons; and the dialog's scrolling list squeezed its buttons until their text spilled out.
+- **5.1, 5.2** Seven equipment slots (`src/engine/equipment.js`): rod, line, bobber, bait, hat, two trinkets, each
+  holding a stack; equipped items leave the bags, and every slot's effects feed the game values. Bait goes in as the
+  whole stack and is used up from the slot. No rod: the cast is refused with "Must have a fishing pole equipped." in red
+  over the scene (`src/ui/errors.js`). The save moved to version 3: equipped bait moves out of the bags. The character
+  pane is a paper doll; the bag became its own pane over the log, so both can be open, on a phone too
+  (`src/ui/drag.js`): a mouse drags at once, a finger after 350 ms of holding still, and the slots an item fits light up.
+  Right-click equips and takes off. A bobber item recolours the bobber (`bobber` in an item's content). One placeholder
+  item per slot, `devOnly`; the prototype's seven effect items became trinkets; the bench adds every equippable item at
+  once. The phone checks drive real touch events through Chromium's DevTools protocol: a quick swipe scrolls, a
+  long-press drags. Found on the way: the bench's scroll position carried over to the next pane, which opened halfway
+  down; and a tap straight after a drag was being swallowed as the drag's own click.
+- **5.4** Tooltips are made from an item's effects (`src/ui/effects.js`): "+2 Fishing Skill", "+0.5 s time to strike",
+  "+15% chance to save bait", "+d6 Fishing Skill", in green when the change helps and red when it hurts, by the
+  direction each game value is better in. Advantage reads as words ("Strong advantage on your roll" for 2 or more).
+  Game values gained a `unit` for this. A test checks every game value and every effect in content has words.

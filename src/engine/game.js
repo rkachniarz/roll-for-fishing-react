@@ -18,6 +18,7 @@ import { rollFish, sameFish, sizeBands } from './fish.js';
 import { featureAt, updateFeatures } from './features.js';
 import { startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
+import { equippedIds } from './equipment.js';
 import { advanceTime } from './time.js';
 import { changeSeason, stepWeather } from './weather.js';
 
@@ -71,8 +72,8 @@ export const MISS_LIMIT = 2;
 export function valuesFor(state, extra = []) {
   /** @type {import('./values.js').Source[]} */
   const sources = [];
-  for (const id of [state.equipped.rod, state.equipped.bait]) {
-    const effects = id ? content.items[id]?.effects : null;
+  for (const id of equippedIds(state)) {
+    const effects = content.items[id]?.effects;
     if (effects) sources.push({ label: id, effects });
   }
   for (const buff of state.buffs) sources.push({ label: buff.id, effects: buff.effects });
@@ -138,6 +139,10 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   // A full bucket waits for the player's choice before anything else (D59).
   if (state.pendingCatch) {
     return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'bucket-full' }] };
+  }
+  // No rod, no cast (D83). The line and the bobber are optional.
+  if (!state.equipped.rod) {
+    return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'no-rod' }] };
   }
   // The values for this cast are taken before its charges are spent, so a
   // "next 3 casts" buff covers this one (R1.5).
@@ -368,7 +373,7 @@ function resolveCast(state, cast) {
       events.push({ type: 'caught', fish, roll: cast.outcome.rolls[0], required: line.required, seenBefore: line.seenBefore });
       if (next.pendingCatch) events.push({ type: 'bucket-full' });
       if (next.equipped.bait) {
-        if (dice.bait.roll100() <= cast.bait.recovery) events.push({ type: 'bait-saved', bait: next.equipped.bait });
+        if (dice.bait.roll100() <= cast.bait.recovery) events.push({ type: 'bait-saved', bait: next.equipped.bait.id });
         else events.push({ type: 'bait-eaten', bait: useBait(next), fish });
       }
     } else if (result === 'escaped' || result === 'missed') {
@@ -510,17 +515,16 @@ function addToBags(state, id) {
 }
 
 /**
- * One bait used up, from the bags; the slot empties with the last one (D39).
+ * One bait used up from the stack in the bait slot; the slot empties with the
+ * last one (D39, D83).
  * @param {GameState} state
  * @returns {string} The bait's id.
  */
 function useBait(state) {
-  const id = /** @type {string} */ (state.equipped.bait);
-  const stack = state.bags.find((b) => b.id === id);
-  if (stack) stack.count--;
-  state.bags = state.bags.filter((b) => b.count > 0);
-  if (!state.bags.some((b) => b.id === id)) state.equipped.bait = null;
-  return id;
+  const stack = /** @type {{ id: string, count: number }} */ (state.equipped.bait);
+  stack.count--;
+  if (stack.count <= 0) state.equipped.bait = null;
+  return stack.id;
 }
 
 // ---------- Buffs (R12) ----------
