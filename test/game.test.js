@@ -292,28 +292,48 @@ test('a whole session runs headless, and the same seed gives the same session', 
   assert.deepEqual(deserialize(serialize(s)), s);
 });
 
-// ---------- The save slot ----------
+// ---------- The save slots ----------
 
-test('the save slot: save, load, a broken save reported, New game', async () => {
-  const { saveGame, loadGame, deleteSave } = await import('../src/save.js');
+/** A stand-in for localStorage, and what's in it. */
+function memoryStorage() {
   /** @type {Record<string, string>} */
   const data = {};
-  const storage = {
+  return {
+    data,
     getItem: (/** @type {string} */ k) => data[k] ?? null,
     setItem: (/** @type {string} */ k, /** @type {string} */ v) => void (data[k] = v),
     removeItem: (/** @type {string} */ k) => void delete data[k],
   };
-  assert.deepEqual(loadGame(storage), { state: null });
+}
+
+test('the save slots: save, load, a broken save reported, New game', async () => {
+  const { saveGame, loadGame, deleteSave, listSlots } = await import('../src/save.js');
+  const storage = memoryStorage();
+  assert.deepEqual(loadGame(storage, 1), { state: null });
   const state = game(11);
-  saveGame(storage, state);
-  assert.deepEqual(loadGame(storage).state, state);
-  storage.setItem('roll-for-fishing:save', '{"version": 99}');
-  const broken = loadGame(storage);
+  saveGame(storage, 2, state);
+  assert.deepEqual(loadGame(storage, 2).state, state);
+  assert.deepEqual(
+    listSlots(storage).map((s) => s.state !== null),
+    [false, true, false],
+    'each slot on its own',
+  );
+  storage.setItem('roll-for-fishing:save:3', '{"version": 99}');
+  const broken = loadGame(storage, 3);
   assert.equal(broken.state, null);
   assert.match(broken.error ?? '', /newer version/);
-  assert.equal(data['roll-for-fishing:save'], '{"version": 99}', 'left where it is');
-  deleteSave(storage);
-  assert.deepEqual(loadGame(storage), { state: null });
+  assert.equal(storage.data['roll-for-fishing:save:3'], '{"version": 99}', 'left where it is');
+  deleteSave(storage, 2);
+  assert.deepEqual(loadGame(storage, 2), { state: null });
+});
+
+test('the save slots: a save from before them becomes slot 1', async () => {
+  const { loadGame } = await import('../src/save.js');
+  const storage = memoryStorage();
+  const state = game(12);
+  storage.setItem('roll-for-fishing:save', JSON.stringify(state));
+  assert.deepEqual(loadGame(storage, 1).state, state);
+  assert.equal(storage.data['roll-for-fishing:save'], undefined, 'moved, not copied');
 });
 
 test('once every unique treasure here is found, a treasure roll brings up junk (D75)', async () => {

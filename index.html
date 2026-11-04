@@ -10,6 +10,14 @@
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap">
   <link rel="stylesheet" href="./styles.css">
+  <!-- The theme before anything draws, so a light page doesn't flash dark
+       (src/settings.js keeps the same key). -->
+  <script>
+    try {
+      const theme = JSON.parse(localStorage.getItem('roll-for-fishing:settings') || '{}').theme;
+      if (theme) document.documentElement.dataset.theme = theme;
+    } catch {}
+  </script>
 
   <!-- Pinned here rather than in each module, so there's one place to change a
        version (docs/decisions.md, D2). -->
@@ -58,6 +66,12 @@
     <p class="sr-only" id="status" aria-live="polite"></p>
   </div>
 </main>
+
+<dialog class="create title" id="title">
+  <h1 id="titleName"></h1>
+  <p id="titlePrompt"></p>
+  <div class="menu-list" id="titleMenu"></div>
+</dialog>
 
 <dialog class="create release" id="release">
   <h2 id="releaseTitle"></h2>

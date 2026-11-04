@@ -30,7 +30,8 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `schemas/` | A JSON Schema per kind of content; VS Code uses them to check and complete content files |
 | `src/generated/content.js` | Built from `content/` by `npm run content`; don't edit |
 | `src/strings.js` | `t()`: all player-facing text goes through it |
-| `src/save.js` | The save slot in the browser's storage |
+| `src/save.js` | The three save slots in the browser's storage |
+| `src/settings.js` | Settings, kept per device: the theme |
 | `src/ui/buffbar.js` | The buff and debuff bar over the scene's top right |
 | `src/dev.js` | The `?dev` bench: game values, world, character, inventory, buffs |
 | `src/main.js` | Wiring: input → engine → scene and page; character creation; saving |
@@ -51,6 +52,7 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
 | `src/scene/icons.js` | 16×16 icons: items and fish (a default for each kind), the button row, the weather; rarity colours |
 | `src/ui/flight.js` | A catch's icon flying from the bobber to the bucket or bag |
+| `src/ui/floater.js` | How a strike went, floating up from the bobber |
 | `src/ui/log.js` | The log under the scene |
 | `src/ui/links.js` | Names of fish and items, links to them in rarity colours, bag tabs |
 | `src/ui/tooltip.js` | The one tooltip, for links and slots |

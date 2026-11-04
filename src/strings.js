@@ -40,13 +40,13 @@ const UI_STRINGS = {
   'status.done': 'Tap to cast again.',
   'status.pause': 'The bobber bobs back up…',
 
-  // ---- A cast's strike and roll, in the log ----
-  'log.strike': '{grade} strike ({time}).',
+  // ---- The strike, floating over the bobber (D82); the roll, in the log ----
+  'float.fast': 'Fast strike!',
+  'float.ok': 'Strike!',
+  'float.bad': 'Slow strike',
+  'float.early': 'Too early!',
   'log.roll': 'd20: {roll}{mods} = {total}, needed {needed}.',
   'log.natural20': ' Natural 20!',
-  'grade.fast': 'Fast',
-  'grade.ok': 'OK',
-  'grade.bad': 'Slow',
 
   // ---- The log ----
   'log.caught': 'You caught: {fish} ({size} cm). +{xp} XP.',
@@ -117,10 +117,26 @@ const UI_STRINGS = {
   'bag.equipment': 'Equipment',
   'bag.consumables': 'Consumables',
   'bag.stuff': 'Stuff',
-  'menu.newGame': 'New game',
+  'menu.mainMenu': 'Main menu',
+  'menu.settings': 'Settings',
   'menu.dev': 'Dev bench',
-  'menu.confirmNewGame': 'Start a new game? This one will be lost for good.',
-  'menu.badSave': "Your saved game couldn't be loaded: {error}. It is still stored; starting a new game will replace it.",
+  'settings.theme': 'Theme',
+  'settings.dark': 'Dark',
+  'settings.light': 'Light',
+
+  // ---- The title screen (D80) ----
+  'title.name': 'Roll for Fishing',
+  'title.new': 'New game',
+  'title.load': 'Load game',
+  'title.back': 'Back',
+  'title.pickNew': 'Which slot for the new game?',
+  'title.pickLoad': 'Which game?',
+  'title.slot': 'Slot {slot}',
+  'title.empty': 'Empty',
+  'title.game': '{name}, level {level} {className} · {season}, day {day}',
+  'title.broken': "Can't be read: {error}",
+  'title.overwrite': 'Slot {slot} holds {name}. Start a new game there? {name} will be lost for good.',
+  'title.overwriteBroken': "Slot {slot} can't be read. Start a new game there? What's in it will be lost.",
 
   // ---- Tooltips ----
   'tip.fish': 'Fish',

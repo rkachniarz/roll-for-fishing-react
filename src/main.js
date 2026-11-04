@@ -3,6 +3,7 @@
 // everything; this file feeds it taps and frame times, draws what it returns,
 // and saves (DEV_PLAN 3.1). The page is laid out as the owner's phone sketch
 // (D79): the scene, a row of buttons that open panes over it, and the log.
+// It opens on the title screen, with three save slots (D80).
 //
 //   ?dev          puts the dev bench in the menu
 //   ?seed=N       a new game from seed N (an existing save still wins)
@@ -14,18 +15,20 @@ import { content } from './generated/content.js';
 import { t, tParts } from './strings.js';
 import { newGame, levelFor } from './engine/state.js';
 import { MISS_LIMIT, cancelBuff, castLine, releaseFish, strikeLine, tick, tickBuffs, valuesFor } from './engine/game.js';
-import { classes, generateName, rollStats } from './engine/character.js';
+import { className, classes, generateName, rollStats } from './engine/character.js';
 import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
 import { GAME_VALUES } from './engine/values.js';
-import { deleteSave, loadGame, saveGame } from './save.js';
+import { deleteSave, listSlots, saveGame } from './save.js';
+import { applySettings, loadSettings, saveSettings } from './settings.js';
 import { WATER, createScene, fitCanvas } from './scene/scene.js';
 import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
 import { createLog } from './ui/log.js';
 import { fishName, itemName, link, rarityColour } from './ui/links.js';
-import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane } from './ui/panels.js';
+import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settingsPane } from './ui/panels.js';
+import { floatText } from './ui/floater.js';
 import { hideTip, showTip } from './ui/tooltip.js';
 import { iconName, paintIcon, weatherIcon } from './scene/icons.js';
 
@@ -89,7 +92,10 @@ function fit() {
   // icon pixel (D10).
   const dpr = window.devicePixelRatio || 1;
   const square = (wide ? HUD_WIDTH : scene) / 8;
-  root.setProperty('--icon', `${(16 * Math.max(1, Math.floor(((square - 10) * dpr) / 16))) / dpr}px`);
+  const k = Math.max(1, Math.floor(((square - 10) * dpr) / 16));
+  root.setProperty('--icon', `${(16 * k) / dpr}px`);
+  // The weather's icon is smaller, as in the sketch, leaving room for the words.
+  root.setProperty('--icon-small', `${(16 * Math.max(1, Math.floor((k * 3) / 4))) / dpr}px`);
 }
 fit();
 window.addEventListener('resize', fit);
@@ -97,6 +103,12 @@ window.addEventListener('resize', fit);
 // ---------- The game ----------
 
 const storage = window.localStorage;
+let settings = loadSettings(storage);
+applySettings(settings);
+/** The save slot being played (D80). */
+let slot = 1;
+/** @param {GameState} s */
+const save = (s) => saveGame(storage, slot, s);
 /** @type {GameState | null} */
 let state = null;
 /** @type {GameCast} */
@@ -125,7 +137,8 @@ function apply(out) {
   state = out.state;
   cast = out.cast;
   if (cast.landing && out.events.some((e) => e.type === 'cast')) scene.aimAt(cast.landing);
-  // The strike and roll first, then what came of them.
+  if (ended) floatStrike();
+  // The roll first, then what came of it.
   const roll = ended ? describeRoll() : null;
   if (roll) log.add(roll, 'roll');
   logEvents(out.events);
@@ -142,8 +155,8 @@ function apply(out) {
     }
   }
   // While a cast is in progress, only the checkpoint is saved (D74).
-  if (out.checkpoint) saveGame(storage, out.checkpoint);
-  else if (changed && cast.phase !== 'waiting' && cast.phase !== 'bite') saveGame(storage, state);
+  if (out.checkpoint) save(out.checkpoint);
+  else if (changed && cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
   render();
   if (state.pendingCatch) openRelease();
 }
@@ -170,7 +183,7 @@ function openRelease() {
       const out = releaseFish(s, choice);
       state = out.state;
       logEvents(out.events);
-      saveGame(storage, state);
+      save(state);
       dialog.close();
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
       render();
@@ -227,7 +240,7 @@ const buffBar = createBuffBar($('buffBar'), (id) => {
   if (!state) return;
   state = cancelBuff(state, id);
   // Mid-cast, the resolved cast will save it (D74).
-  if (cast.phase !== 'waiting' && cast.phase !== 'bite') saveGame(storage, state);
+  if (cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
   render();
 });
 
@@ -251,7 +264,7 @@ scene.app.ticker.add((ticker) => {
       logEvents(buffs.events);
       const idle = cast.phase === 'idle' || cast.phase === 'done';
       if (idle && (buffs.events.length || now - buffSavedAt > 5000)) {
-        saveGame(storage, state);
+        save(state);
         buffSavedAt = now;
       }
     }
@@ -324,30 +337,28 @@ function logEvents(events) {
   }
 }
 
-/** @param {number} ms */
-const duration = (ms) => (ms < 1000 ? `${Math.round(ms)} ms` : `${(ms / 1000).toFixed(1)} s`);
-
-/** The strike and the visible roll (R2.6, R5), for the log; null if there were neither. */
+/** The visible roll (R2.6, R5), for the log; null if there was none. */
 function describeRoll() {
   if (cast.phase !== 'done') return null;
-  const { outcome } = cast;
-  const parts = [];
-  if (outcome.reactionMs !== undefined && outcome.grade !== 'late') {
-    parts.push(t('log.strike', { grade: t(`grade.${outcome.grade}`), time: duration(outcome.reactionMs) }));
-  }
-  const roll = outcome.rolls[0];
-  if (roll) {
-    parts.push(
-      t('log.roll', {
-        roll: roll.result,
-        mods: roll.mods.map((m) => ` ${m.value < 0 ? '−' : '+'} ${Math.abs(m.value)} ${m.label}`).join(''),
-        total: roll.total,
-        // The fish's own roll stays hidden until something reveals it (R5.2).
-        needed: '?',
-      }) + (roll.result === 20 ? t('log.natural20') : ''),
-    );
-  }
-  return parts.length ? [parts.join(' ')] : null;
+  const roll = cast.outcome.rolls[0];
+  if (!roll) return null;
+  const text = t('log.roll', {
+    roll: roll.result,
+    mods: roll.mods.map((m) => ` ${m.value < 0 ? '−' : '+'} ${Math.abs(m.value)} ${m.label}`).join(''),
+    total: roll.total,
+    // The fish's own roll stays hidden until something reveals it (R5.2).
+    needed: '?',
+  });
+  return [text + (roll.result === 20 ? t('log.natural20') : '')];
+}
+
+/** How the strike went, floating up from the bobber (D82): only when the player struck. */
+function floatStrike() {
+  if (cast.phase !== 'done' || !cast.landing) return;
+  const { result, grade } = cast.outcome;
+  const tone = result === 'too-early' ? 'early' : grade === 'fast' || grade === 'ok' || grade === 'bad' ? grade : null;
+  if (!tone) return;
+  floatText({ text: t(`float.${tone}`), tone, at: scene.toClient(cast.landing), scale: scene.pixelScale() });
 }
 
 // ---------- The button row, the time and the weather (R16.4) ----------
@@ -398,7 +409,7 @@ function renderHud() {
 
 // ---------- The panes over the scene (R16.4) ----------
 
-/** @typedef {'player' | 'journal' | 'map' | 'bucket' | 'bag' | 'menu' | 'dev'} Pane */
+/** @typedef {'player' | 'journal' | 'map' | 'bucket' | 'bag' | 'menu' | 'settings' | 'dev'} Pane */
 /** @type {Pane | null} */
 let pane = null;
 /** @type {import('./ui/panels.js').BagTab} */
@@ -427,7 +438,7 @@ function renderPane() {
   if (!pane || !state) return;
   const s = state;
   const body = $('paneBody');
-  $('paneTitle').textContent = pane === 'player' ? s.character.name : pane === 'dev' ? t('menu.dev') : t(`hud.${pane}`);
+  $('paneTitle').textContent = pane === 'player' ? s.character.name : pane === 'dev' || pane === 'settings' ? t(`menu.${pane}`) : t(`hud.${pane}`);
   switch (pane) {
     case 'player':
       body.replaceChildren(...playerPane(s, valuesFor(s, extraSources()).flat));
@@ -451,7 +462,19 @@ function renderPane() {
       );
       break;
     case 'menu':
-      body.replaceChildren(...menuPane({ onNewGame: startOver, onDev: bench ? () => togglePane('dev') : null }));
+      body.replaceChildren(
+        ...menuPane({ onMainMenu: toTitle, onSettings: () => togglePane('settings'), onDev: bench ? () => togglePane('dev') : null }),
+      );
+      break;
+    case 'settings':
+      body.replaceChildren(
+        ...settingsPane(settings, (next) => {
+          settings = next;
+          saveSettings(storage, settings);
+          applySettings(settings);
+          renderPane();
+        }),
+      );
       break;
     case 'dev':
       // Put back only if it isn't there, so a field being typed in keeps focus.
@@ -480,7 +503,8 @@ function render() {
 
 // ---------- Character creation (DEV_PLAN 3.3) ----------
 
-function openCreation() {
+/** @param {number} chosen  The slot the new game goes in. */
+function openCreation(chosen) {
   const seed = seedParam ?? randomSeed();
   const dice = diceFor(createRng(deriveSeed(seed, 'character')));
   const dialog = /** @type {HTMLDialogElement} */ ($('create'));
@@ -571,8 +595,10 @@ function openCreation() {
   $('createForm').onsubmit = (e) => {
     e.preventDefault();
     const name = nameInput.value.trim() || generateName(dice);
+    slot = chosen;
     state = newGame({ seed, character: { name, gender, classId, stats, luck: 0, xp: 0 } });
-    saveGame(storage, state);
+    save(state);
+    log.clear();
     cast = /** @type {GameCast} */ ({ phase: 'idle' });
     dialog.close();
     // Give the keyboard back to the game: Space and Enter cast (R2.1).
@@ -583,16 +609,89 @@ function openCreation() {
   dialog.showModal();
 }
 
-function startOver() {
-  if (cast.phase === 'waiting' || cast.phase === 'bite') return;
-  if (!confirm(t('menu.confirmNewGame'))) return;
-  deleteSave(storage);
+// ---------- The title screen: new game, load game (D80) ----------
+
+/** @param {'main' | 'new' | 'load'} view */
+function openTitle(view = 'main') {
+  const dialog = /** @type {HTMLDialogElement} */ ($('title'));
+  $('titleName').textContent = t('title.name');
+  /** @param {string} text @param {() => void} onclick @param {string} [id] */
+  const button = (text, onclick, id) => Object.assign(document.createElement('button'), { type: 'button', textContent: text, onclick, ...(id ? { id } : {}) });
+  /** @param {() => void} next */
+  const leave = (next) => {
+    dialog.close();
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    next();
+  };
+
+  if (view === 'main') {
+    $('titlePrompt').textContent = '';
+    $('titleMenu').replaceChildren(button(t('title.new'), () => openTitle('new'), 'titleNew'), button(t('title.load'), () => openTitle('load'), 'titleLoad'));
+  } else {
+    $('titlePrompt').textContent = t(view === 'new' ? 'title.pickNew' : 'title.pickLoad');
+    const slots = listSlots(storage).map((saved) => {
+      const b = button('', () => {}, `slot-${saved.slot}`);
+      b.className = 'slot-choice';
+      const head = document.createElement('strong');
+      head.textContent = t('title.slot', { slot: saved.slot });
+      const line = document.createElement('span');
+      if (saved.state) {
+        const c = saved.state.character;
+        const when = clock(saved.state.time);
+        line.textContent = t('title.game', {
+          name: c.name,
+          level: levelFor(c.xp),
+          className: t(className(c.classId, c.gender)),
+          season: t(content.weather[when.season].name),
+          day: when.day,
+        });
+      } else line.textContent = saved.error ? t('title.broken', { error: saved.error }) : t('title.empty');
+      b.append(head, line);
+      if (view === 'load') {
+        b.disabled = !saved.state;
+        b.onclick = () =>
+          leave(() => {
+            slot = saved.slot;
+            state = saved.state;
+            cast = /** @type {GameCast} */ ({ phase: 'idle' });
+            log.clear();
+            render();
+            if (state?.pendingCatch) openRelease();
+          });
+      } else {
+        b.onclick = () => {
+          const taken = saved.state
+            ? t('title.overwrite', { slot: saved.slot, name: saved.state.character.name })
+            : saved.error
+              ? t('title.overwriteBroken', { slot: saved.slot })
+              : null;
+          if (taken && !confirm(taken)) return;
+          leave(() => {
+            deleteSave(storage, saved.slot);
+            openCreation(saved.slot);
+          });
+        };
+      }
+      return b;
+    });
+    $('titleMenu').replaceChildren(...slots, button(t('title.back'), () => openTitle('main'), 'titleBack'));
+  }
+  if (!dialog.open) {
+    dialog.addEventListener('cancel', (e) => e.preventDefault());
+    dialog.showModal();
+  }
+}
+
+/** Back to the title screen from the menu, between casts. The game is already saved. */
+function toTitle() {
+  if (!state || cast.phase === 'waiting' || cast.phase === 'bite') return;
+  save(state);
   state = null;
   cast = /** @type {GameCast} */ ({ phase: 'idle' });
   pane = null;
   log.clear();
   render();
-  openCreation();
+  openTitle();
 }
 
 // ---------- ?dev: the bench, opened from the menu (DEV_PLAN 3.4) ----------
@@ -607,7 +706,7 @@ const bench = DEV
       setState: (/** @type {GameState} */ next) => {
         if (cast.phase === 'waiting' || cast.phase === 'bite') return;
         state = next;
-        saveGame(storage, state);
+        save(state);
         render();
       },
       overrides: devOverrides,
@@ -618,13 +717,5 @@ const bench = DEV
 
 // ---------- Start ----------
 
-const loaded = loadGame(storage);
-if (loaded.state) {
-  state = loaded.state;
-  render();
-  if (state.pendingCatch) openRelease();
-} else {
-  render();
-  if (loaded.error) log.add([t('menu.badSave', { error: loaded.error })], 'bad');
-  openCreation();
-}
+render();
+openTitle();

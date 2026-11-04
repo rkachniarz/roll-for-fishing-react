@@ -16,8 +16,12 @@ import { showTip } from './tooltip.js';
 export const fishName = (fish) => fishNameKeys(fish).map((k) => t(k)).join(' ');
 /** @param {string} id */
 export const itemName = (id) => t(content.items[id].name);
-/** @param {string} rarity */
-export const rarityColour = (rarity) => RARITY_COLOURS[/** @type {keyof typeof RARITY_COLOURS} */ (rarity)] ?? RARITY_COLOURS.common;
+/**
+ * A rarity's colour as a CSS value: WoW's colours on the dark theme, darker
+ * ones that read on the light theme (styles.css, --rarity-*).
+ * @param {string} rarity
+ */
+export const rarityColour = (rarity) => `var(--rarity-${rarity in RARITY_COLOURS ? rarity : 'common'})`;
 
 /**
  * The bag tab an item goes in (R8.1): anything with a slot is equipment,

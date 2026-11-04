@@ -151,14 +151,43 @@ export function bagPane(state, tab, onTab) {
 }
 
 /**
- * The menu: a new game, and the dev bench with ?dev. Settings come with 9.3.
- * @param {{ onNewGame: () => void, onDev: (() => void) | null }} actions
+ * The menu: back to the title screen, settings, and the dev bench with ?dev.
+ * @param {{ onMainMenu: () => void, onSettings: () => void, onDev: (() => void) | null }} actions
  */
-export function menuPane({ onNewGame, onDev }) {
+export function menuPane({ onMainMenu, onSettings, onDev }) {
   return [
     el('div', { className: 'menu-list' }, [
-      el('button', { type: 'button', id: 'newGame', textContent: t('menu.newGame'), onclick: onNewGame }),
+      el('button', { type: 'button', id: 'mainMenu', textContent: t('menu.mainMenu'), onclick: onMainMenu }),
+      el('button', { type: 'button', id: 'openSettings', textContent: t('menu.settings'), onclick: onSettings }),
       ...(onDev ? [el('button', { type: 'button', id: 'openBench', textContent: t('menu.dev'), onclick: onDev })] : []),
     ]),
+  ];
+}
+
+/**
+ * Settings (D81): for now, the theme.
+ * @param {import('../settings.js').Settings} settings
+ * @param {(next: import('../settings.js').Settings) => void} onChange
+ */
+export function settingsPane(settings, onChange) {
+  return [
+    el('h3', { textContent: t('settings.theme') }),
+    el(
+      'div',
+      { className: 'choices' },
+      /** @type {const} */ (['dark', 'light']).map((theme) =>
+        el('label', {}, [
+          el('input', {
+            type: 'radio',
+            name: 'theme',
+            id: `theme-${theme}`,
+            value: theme,
+            checked: settings.theme === theme,
+            onchange: () => onChange({ ...settings, theme }),
+          }),
+          el('span', { textContent: t(`settings.${theme}`) }),
+        ]),
+      ),
+    ),
   ];
 }

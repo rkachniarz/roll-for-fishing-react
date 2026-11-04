@@ -7,7 +7,8 @@
 // scene's pixel scale so it looks part of the pixel art. It only moves, never
 // scales (R7.3).
 
-import { RARITY_COLOURS, paintIcon } from '../scene/icons.js';
+import { paintIcon } from '../scene/icons.js';
+import { rarityColour } from './links.js';
 
 const POP_MS = 250;
 const FLIGHT_MS = 650;
@@ -29,7 +30,7 @@ export function flyIcon({ icon, rarity, from, to, scale }) {
     height: `${size}px`,
     left: `${Math.round(from.x - size / 2)}px`,
     top: `${Math.round(from.y - size)}px`,
-    outline: `${Math.max(1, Math.round(scale))}px solid ${RARITY_COLOURS[/** @type {keyof typeof RARITY_COLOURS} */ (rarity)] ?? '#fff'}`,
+    outline: `${Math.max(1, Math.round(scale))}px solid ${rarityColour(rarity)}`,
   });
   document.body.append(canvas);
 

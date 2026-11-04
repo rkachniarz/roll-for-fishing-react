@@ -132,6 +132,18 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   on three screens (square buttons, the log on screen, no sideways scroll) and every pane opened. The buff bar's
   tooltip turned out to block clicks on the debuff row below it; it no longer catches clicks.
 
+- **3.7** The title screen (D80): New game and Load game, each listing three slots with who is in them. The old single
+  save moves to slot 1 on first load. `src/save.js` takes a slot; the menu's Main menu goes back to the title between
+  casts.
+- **3.8** Settings (`src/settings.js`, D81), kept per device: the theme. The light one is wooden planks drawn in CSS,
+  and rarity colours became CSS variables so each theme has its own. A line in `index.html`'s head applies the theme
+  before the page draws.
+- **3.9** The strike's grade floats over the bobber (`src/ui/floater.js`, D82), without the milliseconds; the roll
+  stays in the log. The first screenshot showed the word sitting on the catch's flying icon, so it now starts higher.
+  The weather icon shrank to three quarters of the row's icons, as in the sketch, since "Spring, day 1" was clipped.
+  Unit tests 92, browser checks all passing, with new ones for the slots, the theme surviving a reload and the
+  floating words.
+
 ## Phase 4: Art pipeline and the living scene (in progress)
 
 - **4.4** A catch's icon appears at the bobber, rises, and flies to the new "Bucket & bags" button, outlined in its

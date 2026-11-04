@@ -40,6 +40,8 @@ decides. *(D29)*
 - **R1.3** A save holds the whole game state and a version number. Loading an older save migrates it. Saves keep
   working as content is added and changed (R15.4). *(D13, D44)*
 - **R1.4** There is always a way to start a new game, with a confirmation step.
+- **R1.7** Three save slots, chosen on the title screen: New game or Load game, each listing the slots with who is in
+  them. Starting in a taken slot asks first. *(D80)*
 - **R1.5** Leaving or reloading during a cast voids that cast: no time passes and no roll is made. Buffs that last "the
   next n casts" spend a charge when the line goes out, so a voided cast still uses one up. *(D22)*
 - **R1.6** A save holds the position of every random stream, so a reload continues the same dice. *(D53)*
@@ -303,9 +305,13 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R16.4** The time is shown as a word (Night, Dawn, Morning, Noon, Afternoon, Sunset, Evening) with the season and
   day, never as a clock. The weather is an icon; a tap names it. The character pane shows the portrait (a default
   until portraits exist), level, XP, stats and equipment; the bag has the tabs Equipment, Consumables and Stuff; the
-  menu holds New game, the main menu and settings when they exist, and the dev bench. *(D79)*
+  menu holds the main menu (the title screen), settings, and the dev bench. *(D79, D80)*
 - **R16.5** The log scrolls, oldest line at the top, and isn't numbered. Fish and items in it are links: the name in
   brackets in its rarity colour, showing its tooltip when tapped. *(D79)*
+- **R16.6** Settings belong to the device, not to a save. The first is the theme: dark, or light wooden planks, with
+  rarity colours that stay readable on each. *(D81)*
+- **R16.7** How a strike went ("Fast strike!", "Too early!") floats up from the bobber and fades; no milliseconds. The
+  roll goes in the log. *(D82)*
 - **R16.3** The player can keep fishing with a panel open; taps on a panel stay in it. On a phone the main view is the
   scene, a small log and the buttons, and inventory or equipment panels may take most of the screen. *(D71)*
 ---

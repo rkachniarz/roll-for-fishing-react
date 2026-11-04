@@ -31,6 +31,18 @@ const clockShown = (page) => page.getAttribute('#world', 'data-clock');
 const closePane = async (page) => {
   if (await page.isVisible('#pane')) await page.click('#paneClose');
 };
+/** From the title screen: New game, a slot, and character creation's defaults. */
+const newGameIn = async (page, slot) => {
+  await page.click('#titleNew');
+  await page.click(`#slot-${slot}`);
+  await page.click('#createStart');
+};
+/** From the title screen: Load game, a slot. */
+const loadFrom = async (page, slot) => {
+  await page.waitForSelector('#title[open]', { timeout: 15000 });
+  await page.click('#titleLoad');
+  await page.click(`#slot-${slot}`);
+};
 /** Opens the dev bench from the menu. */
 const openBench = async (page) => {
   await page.click('#menu');
@@ -59,8 +71,8 @@ async function check(label, device, query, fn) {
   try {
     await page.goto(BASE + query);
     await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
-    // A fresh browser has no save: take character creation's defaults.
-    if (await page.isVisible('#create')) await page.click('#createStart');
+    // A fresh browser has no save: a new game in slot 1, with character creation's defaults.
+    await newGameIn(page, 1);
     const tap = async () => {
       const box = await page.locator('#scene').boundingBox();
       const x = box.x + box.width / 2;
@@ -141,11 +153,17 @@ await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, t
   await page.screenshot({ path: 'dist/verify/bite.png' });
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  const floated = (await page.textContent('.floater')) ?? '';
+  await page.waitForTimeout(250);
+  await page.screenshot({ path: 'dist/verify/strike-floater.png' });
   const log = await logText(page);
   const detail = await page.textContent('#log .roll');
   report('strike after the splash: an outcome with a roll', /You caught: \[.*\]|got away!/.test(log), log);
   report('strike after the splash: the d20 roll is shown', /d20: \d+/.test(detail ?? ''), detail);
-  report('strike after the splash: a quick strike is graded fast', /Fast strike/.test(detail ?? ''), detail);
+  report('strike after the splash: "Fast strike!" floats over the bobber', floated === 'Fast strike!', floated);
+  report('strike after the splash: no milliseconds anywhere', !/ ms\b/.test(log + floated), log);
+  await page.waitForTimeout(1200);
+  report('strike after the splash: the word fades and goes', (await page.locator('.floater').count()) === 0);
   report("strike after the splash: the fish's roll stays hidden", /needed \?/.test(detail ?? ''), detail);
 });
 
@@ -182,6 +200,7 @@ await check('strike too early', DESKTOP, '?seed=1&wait=6000', async (page, tap) 
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
   report('strike too early: pulled out', (await logText(page)).includes('Too early!'));
+  report('strike too early: says so over the bobber', (await page.textContent('.floater')) === 'Too early!');
 });
 
 await check('no strike: the fish is gone after 3 s', DESKTOP, '?seed=1&wait=500', async (page, tap) => {
@@ -214,21 +233,30 @@ await check('saving', PHONE, '?seed=1&wait=600', async (page, tap) => {
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
   report('saving: a cast takes 30 minutes', (await clockShown(page)) === '08:30');
   await page.reload();
-  await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
-  report('saving: no character creation after a reload', !(await page.isVisible('#create')));
+  await page.waitForSelector('#title[open]', { timeout: 15000 });
+  await page.screenshot({ path: 'dist/verify/title.png' });
+  report('saving: a reload opens the title screen', !(await page.isVisible('#create')));
+  await page.click('#titleLoad');
+  report('saving: empty slots can\'t be loaded', await page.isDisabled('#slot-2'));
+  report('saving: the slot says who is in it', /Level 0|level 0/.test((await page.textContent('#slot-1')) ?? ''), (await page.textContent('#slot-1')) ?? '');
+  await page.screenshot({ path: 'dist/verify/title-load.png' });
+  await page.click('#slot-1');
   report('saving: the game is back', (await clockShown(page)) === '08:30');
 
   await tap();
   await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });
   await page.reload();
-  await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+  await loadFrom(page, 1);
   report('saving: leaving mid-cast voids the cast, no time passes', (await clockShown(page)) === '08:30');
 });
 
 await check('new game', DESKTOP, '?seed=5', async (page) => {
   page.on('dialog', (d) => d.accept());
   await page.click('#menu');
-  await page.click('#newGame');
+  await page.click('#mainMenu');
+  await page.waitForSelector('#title[open]', { timeout: 2000 });
+  await page.click('#titleNew');
+  await page.click('#slot-2');
   await page.waitForSelector('#create[open]', { timeout: 2000 });
   await page.click('#createGender label:nth-child(2)');
   await page.click('#createClass label:nth-child(3)');
@@ -238,6 +266,26 @@ await check('new game', DESKTOP, '?seed=5', async (page) => {
   await page.click('#player');
   const who = (await page.textContent('#pane')) ?? '';
   report('new game: back to character creation, and the choices stick', who.includes('Rogue Fisherwoman') && who.includes(name), who);
+  await closePane(page);
+  await page.click('#menu');
+  await page.click('#mainMenu');
+  await page.click('#titleLoad');
+  const filled = [await page.isDisabled('#slot-1'), await page.isDisabled('#slot-2'), await page.isDisabled('#slot-3')];
+  report('new game: in its own slot, the first game kept', filled.join() === 'false,false,true', filled.join());
+});
+
+await check('settings: the light theme', PHONE, '?seed=6', async (page) => {
+  await page.click('#menu');
+  await page.click('#openSettings');
+  await page.click('#theme-light');
+  report('settings: the page turns light', (await page.getAttribute('html', 'data-theme')) === 'light');
+  await closePane(page);
+  await page.click('#bag');
+  await page.screenshot({ path: 'dist/verify/light-theme.png' });
+  await page.reload();
+  await page.waitForSelector('#title[open]', { timeout: 15000 });
+  report('settings: kept after a reload', (await page.getAttribute('html', 'data-theme')) === 'light');
+  await page.screenshot({ path: 'dist/verify/light-title.png' });
 });
 
 await check('keyboard: space casts and strikes', DESKTOP, '?seed=2&wait=600', async (page) => {

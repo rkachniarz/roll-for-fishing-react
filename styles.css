@@ -15,7 +15,54 @@
   /* Set by main.js (fit): the scene's width and the button row's icon size. */
   --scene: 360px;
   --icon: 32px;
+  --icon-small: 24px;
+  /* Behind the log, the panes, the bag's slots and tooltips. */
+  --log-bg: rgb(0 0 0 / 0.25);
+  --pane-bg: rgb(20 35 43 / 0.96);
+  --slot-bg: rgb(0 0 0 / 0.35);
+  --tip-bg: rgb(10 18 24 / 0.95);
+  --weather-bg: none;
+  /* WoW's rarity colours (D49); the light theme darkens them to stay readable. */
+  --rarity-poor: #9d9d9d;
+  --rarity-common: #ffffff;
+  --rarity-uncommon: #1eff00;
+  --rarity-rare: #0070dd;
+  --rarity-epic: #a335ee;
+  --rarity-legendary: #ff8000;
   color-scheme: dark;
+}
+
+/* The light theme (D81): light wooden planks. */
+:root[data-theme='light'] {
+  --bg: #d9b98a;
+  --panel: #ecd7ae;
+  --panel-edge: #a87c4f;
+  --text: #3a2715;
+  --muted: #745334;
+  --good: #2e7d32;
+  --bad: #b3261e;
+  --accent: #8a4b0f;
+  --frame: #7a2a1c;
+  --tile: #f7ecd4;
+  --log-bg: rgb(246 232 203 / 0.75);
+  --pane-bg: rgb(236 215 174 / 0.97);
+  --slot-bg: rgb(120 80 40 / 0.15);
+  --tip-bg: rgb(250 241 222 / 0.97);
+  --weather-bg: #4d7a96;
+  --rarity-poor: #6f6f6f;
+  --rarity-common: #3a2715;
+  --rarity-uncommon: #1c7a12;
+  --rarity-rare: #0a5cb3;
+  --rarity-epic: #7b2bbf;
+  --rarity-legendary: #b85a00;
+  color-scheme: light;
+}
+
+/* The planks: a darker seam every 40 px, and a faint grain. */
+:root[data-theme='light'] body {
+  background-image:
+    repeating-linear-gradient(180deg, transparent 0 38px, rgb(110 70 30 / 0.3) 38px 40px),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.05) 0 2px, transparent 2px 11px);
 }
 
 * {
@@ -457,8 +504,17 @@ body {
 
 .weather {
   flex: none;
-  padding: 0;
-  background: none;
+  padding: 2px;
+}
+
+.weather .icon {
+  width: var(--icon-small);
+  height: var(--icon-small);
+}
+
+.weather {
+  background: var(--weather-bg);
+  border-radius: 3px;
   border: 0;
   cursor: pointer;
 }
@@ -469,7 +525,7 @@ body {
   min-height: 0;
   border: 2px solid var(--frame);
   border-radius: 2px;
-  background: rgb(0 0 0 / 0.25);
+  background: var(--log-bg);
 }
 
 .log {
@@ -521,7 +577,7 @@ body {
   display: flex;
   flex-direction: column;
   line-height: 1.35;
-  background: rgb(20 35 43 / 0.96);
+  background: var(--pane-bg);
   border-right: 2px solid var(--frame);
 }
 
@@ -627,7 +683,7 @@ body {
   padding: 0;
   display: grid;
   place-items: center;
-  background: rgb(0 0 0 / 0.35);
+  background: var(--slot-bg);
   border: 2px solid var(--panel-edge);
   border-radius: 3px;
   cursor: pointer;
@@ -692,7 +748,7 @@ body {
   padding: 6px 10px;
   font-size: 15px;
   line-height: 1.3;
-  background: rgb(10 18 24 / 0.95);
+  background: var(--tip-bg);
   border: 1px solid var(--panel-edge);
   border-radius: 3px;
   pointer-events: none;
@@ -716,4 +772,66 @@ body {
 
 .tip-bad {
   color: var(--bad);
+}
+
+/* ---------- The strike, floating over the bobber (D82) ---------- */
+
+.floater {
+  position: fixed;
+  z-index: 15;
+  pointer-events: none;
+  white-space: nowrap;
+  font-weight: 600;
+  line-height: 1;
+  /* A dark outline, so it reads over water, sky and sand alike. */
+  text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+}
+
+.floater.fast {
+  color: #8dff7a;
+}
+
+.floater.ok {
+  color: #ffffff;
+}
+
+.floater.bad {
+  color: #ffbf5e;
+}
+
+.floater.early {
+  color: #ff7070;
+}
+
+/* ---------- The title screen (D80) ---------- */
+
+.title h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--accent);
+}
+
+.title p {
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+.slot-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+}
+
+.slot-choice span {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.slot-choice:disabled {
+  opacity: 0.5;
+  cursor: default;
 }

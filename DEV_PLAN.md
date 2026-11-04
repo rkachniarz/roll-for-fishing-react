@@ -6,7 +6,7 @@ only ids, so a task added later keeps its number wherever it lands.
 
 **Where things stand (2026-11-02):** Phases 0, 1 and 2 are done. **Phase 3: the game is playable on the real engine**:
 character creation, the full cast with its hidden rolls, saving, New game, the buff bar and the `?dev` bench, all in
-the owner's phone layout (D79). Left in Phase 3: GitHub Pages (3.5), deferred (D77). Phases 4 and 5 are under way;
+the owner's phone layout (D79), with a title screen, three save slots and a light theme (D80, D81). Left in Phase 3: GitHub Pages (3.5), deferred (D77). Phases 4 and 5 are under way;
 most of what's left in them needs the owner's art or design. Claude's guesses and calls are listed in
 [docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
 
@@ -101,6 +101,10 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 - [x] **3.6** Buff and debuff bar at the top right of the game area, WoW style: green and red rows, the duration in the
   corner (nearest minute, then seconds), a description on hover or tap, cancel a buff by right-click or long-press
   (R12.3–R12.7, D29, D31).
+- [x] **3.7** A title screen with New game and Load game over three save slots; Main menu in the in-game menu goes
+  back to it (R1.7, D80).
+- [x] **3.8** Settings in the menu, kept per device: the theme, dark or light wooden planks (R16.6, D81).
+- [x] **3.9** How a strike went floats up from the bobber; the roll stays in the log (R16.7, D82).
 
 ## Phase 4: Art pipeline and the living scene
 
@@ -172,7 +176,7 @@ Requirements R5.3, R11.
 
 - [ ] **9.1** Balance simulation over the seeded engine: catch rates, XP curve, loot rates per class and build.
 - [ ] **9.2** Audio: water, splash, catch.
-- [ ] **9.3** Settings, save export/import.
+- [ ] **9.3** More settings (sound, once there is any), save export/import. *(Settings and the theme landed with 3.8.)*
 - [ ] **9.4** Collection view, fish and treasure (R4.3).
 - [ ] **9.5** Installable and offline: web app manifest and service worker (R9.8, D55).
 

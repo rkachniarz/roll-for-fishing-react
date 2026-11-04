@@ -72,6 +72,10 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
 - **`src/main.js` saves the `checkpoint` while a cast is in progress, the full state otherwise.** The dev bench
   only changes the state between casts for the same reason. Its game value overrides and `?wait` are `extra`
   sources passed to the engine, never saved.
+- **`index.html` has a small script in `<head>`** that reads the theme from the settings key before the page draws,
+  so a light page doesn't flash dark. It duplicates `src/settings.js`'s key on purpose (D81).
+- **Rarity colours are CSS variables (`--rarity-*`),** not the hex values in `src/scene/icons.js`: each theme has its
+  own, so use `rarityColour()` from `src/ui/links.js` for anything on the page (D81).
 - **`styles.css`: `font-variant-ligatures: none`.** Pixelify Sans draws its "fi" ligature as an "A".
 - **`src/main.js`: a tap within 500 ms of the last action is ignored after a cast ends,** so a double tap on the splash
   strikes once instead of striking and instantly recasting.

@@ -5,10 +5,21 @@ an item is settled, delete it from this list (and record a decision if the answe
 
 Newest first.
 
+## The title screen, settings and strike words (3.7–3.9)
+
+- **The light theme's colours** are mine: pale pine, a darker seam every 40 px, the sketch's red frames turned
+  browner, and darker rarity colours (Common is dark brown rather than white). The weather icon sits on a small patch
+  of sky blue in the light theme, since a yellow sun doesn't show on pale wood.
+- **Dark is the default** for a new device.
+- **The floating words:** "Fast strike!" in green, "Strike!" in white for an OK one, "Slow strike" in orange, "Too
+  early!" in red. They rise from just above the bobber and fade over about a second.
+- **The title screen** has no Continue: it's New game or Load game, then a slot, as you described. A reload always
+  comes back to it. Character creation has no way back to the title once opened.
+- **The menu lost New game**: it's on the title screen now, through Main menu.
+- **The title shows over a dimmed scene,** using the same dialog style as character creation.
+
 ## The layout (3.2, from the sketch)
 
-- **The page stays dark**, with the sketch's dark red frames and its icons on pale tiles. The sketch is white; if you
-  meant a light page, say so.
 - **The XP bar** isn't in the sketch: it's a thin purple bar between the scene and the button row (WoW keeps it just
   above its action bars).
 - **The hours behind each time word:** Night 22–5, Dawn 5–7, Morning 7–11, Noon 11–13, Afternoon 13–18, Sunset 18–20,
