@@ -35,6 +35,7 @@ import { equip, fits, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_S
 import { setupDrag } from './ui/drag.js';
 import { showError } from './ui/errors.js';
 import { choose, openSlide } from './engine/events.js';
+import { eventWords, sayEventText } from './ui/event-words.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 /** @typedef {import('./engine/game.js').GameCast} GameCast */
@@ -234,18 +235,20 @@ function openEvent() {
   }
   // The key or tap that ended the cast mustn't also pick a choice.
   const openedAt = performance.now();
-  $('eventTitle').textContent = t(slide.title);
+  const words = eventWords(state);
+  const say = (/** @type {string[]} */ keys) => sayEventText(keys, words);
+  $('eventTitle').textContent = say(slide.title);
   const art = $('eventArt');
   art.hidden = !slide.art;
   art.replaceChildren(...(slide.art ? [Object.assign(document.createElement('img'), { src: `assets/events/${slide.art}.png`, alt: '' })] : []));
   $('eventText').replaceChildren(
-    ...t(slide.text).split('\n\n').map((p) => Object.assign(document.createElement('p'), { textContent: p })),
+    ...say(slide.text).split('\n\n').map((p) => Object.assign(document.createElement('p'), { textContent: p })),
   );
   $('eventChoices').replaceChildren(
     ...slide.choices.map((c) => {
       const b = document.createElement('button');
       b.type = 'button';
-      b.textContent = t(c.text);
+      b.textContent = say(c.text);
       b.addEventListener('click', () => {
         if (!state || performance.now() - openedAt < 400) return;
         const out = choose(state, c.index);

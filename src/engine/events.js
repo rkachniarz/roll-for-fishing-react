@@ -38,6 +38,8 @@ export function meets(state, need) {
   switch (need.kind) {
     case 'class':
       return state.character.classId === need.id;
+    case 'gender':
+      return state.character.gender === need.gender;
     case 'level':
       return levelFor(state.character.xp) >= need.at;
     case 'luck':
@@ -54,6 +56,10 @@ export function meets(state, need) {
       return clock(state.time).partOfDay === need.part;
     case 'caught':
       return (state.book.fish[need.fish]?.caught ?? 0) >= need.count;
+    case 'weather': {
+      const now = state.weather[/** @type {'temperature' | 'wind' | 'clouds' | 'precipitation'} */ (need.level)];
+      return (need.min === null || now >= need.min) && (need.max === null || now <= need.max);
+    }
     default:
       return false;
   }
@@ -81,11 +87,31 @@ export function canStart(state, id) {
 }
 
 /**
- * The open event's slide, and its choices with whether each can be taken.
- * A choice whose requirements aren't met is hidden (the prototype's rule).
+ * Which of a text's parts show now (D88): the string keys to put together, in
+ * order. A conditional part shows its text when its needs are met, else its
+ * otherwise, if it has one.
  * @param {GameState} state
- * @returns {{ id: string, title: string, art?: string, text: string,
- *   choices: { index: number, text: string }[] } | null}
+ * @param {import('../../tools/event-text.mjs').Text} parts
+ * @returns {string[]}
+ */
+export function textNow(state, parts) {
+  /** @type {string[]} */
+  const keys = [];
+  for (const part of parts) {
+    if (typeof part === 'string') keys.push(part);
+    else if (meetsAll(state, part.needs)) keys.push(part.text);
+    else if (part.otherwise !== undefined) keys.push(part.otherwise);
+  }
+  return keys;
+}
+
+/**
+ * The open event's slide, and the choices the player can take, each text as
+ * the string keys of the parts that show now (textNow). A choice whose
+ * requirements aren't met is hidden (the prototype's rule).
+ * @param {GameState} state
+ * @returns {{ id: string, title: string[], art?: string, text: string[],
+ *   choices: { index: number, text: string[] }[] } | null}
  */
 export function openSlide(state) {
   if (!state.event) return null;
@@ -94,11 +120,11 @@ export function openSlide(state) {
   if (!slide) return null;
   return {
     id: event.id,
-    title: event.title,
+    title: textNow(state, event.title),
     ...(event.art ? { art: event.art } : {}),
-    text: slide.text,
+    text: textNow(state, slide.text),
     choices: slide.choices
-      .map((/** @type {Choice} */ c, /** @type {number} */ index) => ({ index, text: c.text, ok: meetsAll(state, c.needs) }))
+      .map((/** @type {Choice} */ c, /** @type {number} */ index) => ({ index, text: textNow(state, c.text), ok: meetsAll(state, c.needs) }))
       .filter((/** @type {{ ok: boolean }} */ c) => c.ok)
       .map(({ index, text }) => ({ index, text })),
   };

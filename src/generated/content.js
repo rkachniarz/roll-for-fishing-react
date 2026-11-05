@@ -2820,29 +2820,39 @@ export const content = {
   "events": {
     "frog": {
       "id": "frog",
-      "title": "event.frog.title",
+      "title": [
+        "event.frog.title"
+      ],
       "once": true,
       "trigger": "meter",
       "needs": [],
       "first": "start",
       "slides": {
         "start": {
-          "text": "event.frog.start.text",
+          "text": [
+            "event.frog.start.text"
+          ],
           "choices": [
             {
-              "text": "event.frog.start.0",
+              "text": [
+                "event.frog.start.0"
+              ],
               "to": "observe",
               "needs": [],
               "effects": []
             },
             {
-              "text": "event.frog.start.1",
+              "text": [
+                "event.frog.start.1"
+              ],
               "to": "end",
               "needs": [],
               "effects": []
             },
             {
-              "text": "event.frog.start.2",
+              "text": [
+                "event.frog.start.2"
+              ],
               "to": "lunge",
               "needs": [
                 {
@@ -2855,10 +2865,14 @@ export const content = {
           ]
         },
         "observe": {
-          "text": "event.frog.observe.text",
+          "text": [
+            "event.frog.observe.text"
+          ],
           "choices": [
             {
-              "text": "event.frog.observe.0",
+              "text": [
+                "event.frog.observe.0"
+              ],
               "to": "end",
               "needs": [],
               "effects": [
@@ -2871,10 +2885,14 @@ export const content = {
           ]
         },
         "lunge": {
-          "text": "event.frog.lunge.text",
+          "text": [
+            "event.frog.lunge.text"
+          ],
           "choices": [
             {
-              "text": "event.frog.lunge.0",
+              "text": [
+                "event.frog.lunge.0"
+              ],
               "to": "end",
               "needs": [],
               "effects": [

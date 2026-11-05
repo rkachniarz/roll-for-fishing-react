@@ -8,10 +8,11 @@ import { readFile, mkdtemp, cp, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseEvent } from '../tools/event-text.mjs';
-import { buildContent } from '../tools/content.mjs';
+import { PLACEHOLDERS, parseEvent, parseText } from '../tools/event-text.mjs';
+import { eventWords, sayEventText } from '../src/ui/event-words.js';
+import { buildContent, eventText } from '../tools/content.mjs';
 import { content } from '../src/generated/content.js';
-import { METER_FIRES, afterCast, canStart, choose, openSlide, startEvent } from '../src/engine/events.js';
+import { METER_FIRES, afterCast, canStart, choose, meets, openSlide, startEvent, textNow } from '../src/engine/events.js';
 import { castLine, tick } from '../src/engine/game.js';
 import { deserialize, newGame } from '../src/engine/state.js';
 import { createRng } from '../src/rng.js';
@@ -27,7 +28,7 @@ const game = (classId = 'fish-fighter', seed = 1) =>
   newGame({ seed, character: { name: 'Testek', gender: 'f', classId, stats: { fishingSkill: 3, fishFind: 5, treasureFind: 7 }, luck: 0, xp: 0 } });
 
 /** The choice texts on the open slide, in English. */
-const choices = (/** @type {GameState} */ s) => openSlide(s)?.choices.map((c) => t(c.text));
+const choices = (/** @type {GameState} */ s) => openSlide(s)?.choices.map((c) => c.text.map((k) => t(k)).join(''));
 
 /**
  * A made-up event, put into the content for one test.
@@ -55,12 +56,12 @@ test('the frog reads as three slides, with a class requirement and Luck', async 
   assert.equal(event.trigger, 'meter');
   assert.deepEqual(Object.keys(event.slides), ['start', 'observe', 'lunge']);
   const [observe, ignore, lunge] = event.slides.start.choices;
-  assert.deepEqual(observe, { text: 'Observe it closely', to: 'observe', needs: [], effects: [] });
+  assert.deepEqual(observe, { text: ['Observe it closely'], to: 'observe', needs: [], effects: [] });
   assert.equal(ignore.to, 'end');
   assert.deepEqual(lunge.needs, [{ kind: 'class', id: 'rogue-fisher' }]);
   assert.deepEqual(event.slides.observe.choices[0].effects, [{ kind: 'luck', add: 2 }]);
   assert.deepEqual(event.slides.lunge.choices[0].effects, [{ kind: 'luck', add: -1 }]);
-  assert.equal(event.slides.lunge.choices[0].text, 'Well, shit.');
+  assert.deepEqual(event.slides.lunge.choices[0].text, ['Well, shit.']);
 });
 
 test('every word in the vocabulary reads', () => {
@@ -98,7 +99,7 @@ The end.
 `);
   assert.deepEqual(errors, []);
   assert.ok(event);
-  assert.equal(event.slides.a.text, 'First paragraph, still the first.\n\nSecond paragraph.');
+  assert.deepEqual(event.slides.a.text, ['First paragraph, still the first.\n\nSecond paragraph.']);
   assert.deepEqual(event.needs, [{ kind: 'caught', fish: 'roach', count: 3 }, { kind: 'no-flag', name: 'met' }]);
   const go = event.slides.a.choices[0];
   assert.deepEqual(go.needs, [
@@ -166,11 +167,110 @@ test('npm run content checks what an event names', async () => {
 });
 
 test("the frog's text is in the string table", () => {
-  assert.equal(t(content.events.frog.title), 'A froggy encounter');
-  assert.equal(t(content.events.frog.slides.start.text), 'You see a frog in the shallow water, just outside your reach.');
+  assert.deepEqual(content.events.frog.title, ['event.frog.title']);
+  assert.equal(t(content.events.frog.title[0]), 'A froggy encounter');
+  assert.equal(t(content.events.frog.slides.start.text[0]), 'You see a frog in the shallow water, just outside your reach.');
+});
+
+test('conditional text: needs, an otherwise, escapes, and mistakes (D88)', () => {
+  assert.deepEqual(parseText('You stand on the shore. [precipitation 3+: Your clothes are getting wet.]'), [
+    'You stand on the shore. ',
+    { needs: [{ kind: 'weather', level: 'precipitation', min: 3, max: null }], text: 'Your clothes are getting wet.' },
+  ]);
+  assert.deepEqual(parseText('The water is [temperature 0-, season winter: frozen solid | cold and dark].'), [
+    'The water is ',
+    {
+      needs: [{ kind: 'weather', level: 'temperature', min: null, max: 0 }, { kind: 'season', id: 'winter' }],
+      text: 'frozen solid',
+      otherwise: 'cold and dark',
+    },
+    '.',
+  ]);
+  assert.deepEqual(parseText('A \\[bracket\\] and [gender f: a lass: yes | a lad]'), [
+    'A [bracket] and ',
+    { needs: [{ kind: 'gender', gender: 'f' }], text: 'a lass: yes', otherwise: 'a lad' },
+  ]);
+  assert.match(String(parseText('[wind 3+ no colon]')), /needs requirements, a colon/);
+  assert.match(String(parseText('[wind 3+: a [b: c]]')), /can't nest/);
+  assert.match(String(parseText('[wind 3+: a')), /no "]"/);
+  assert.match(String(parseText('a ] b')), /no "\[" before it/);
+  assert.match(String(parseText('[wind 3+: a | b | c]')), /one "\|" at most/);
+  assert.match(String(parseText('[weather rainy: a]')), /no requirement "weather"/);
+});
+
+test('npm run content gives each part its key and checks placeholders and conditions', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'rff-text-'));
+  try {
+    await cp(join(root, 'schemas'), join(dir, 'schemas'), { recursive: true });
+    await cp(join(root, 'content'), join(dir, 'content'), { recursive: true });
+    await writeFile(
+      join(dir, 'content/events/shore.md'),
+      "---\nid: shore\ntitle: The shore, {Season}\n---\n## a\nHello, {name}. [gender f: Ma'am. | Sir.] {nmae}\n- Hi [class wizzard: mage] -> end\n",
+    );
+    const built = await buildContent(dir);
+    const has = (/** @type {string} */ text) => built.errors.some((e) => e.includes(text));
+    assert.ok(has('shore.md (a): no placeholder {nmae}'), built.errors.join('\n'));
+    assert.ok(has('shore.md (a): no class "wizzard"'));
+    const parsed = parseEvent("---\nid: shore\ntitle: The shore, {Season}\n---\n## a\nHello, {name}. [gender f: Ma'am. | Sir.] Bye.\n- Hi -> end\n");
+    assert.ok(parsed.event);
+    const strings = /** @type {Record<string, string>} */ ({});
+    const copy = structuredClone(parsed.event);
+    eventText(copy, strings);
+    assert.deepEqual(copy.slides.a.text, [
+      'event.shore.a.text.0',
+      { needs: [{ kind: 'gender', gender: 'f' }], text: 'event.shore.a.text.1', otherwise: 'event.shore.a.text.1.else' },
+      'event.shore.a.text.2',
+    ]);
+    assert.equal(strings['event.shore.a.text.1.else'], 'Sir.');
+    assert.deepEqual(copy.title, ['event.shore.title']);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('event text put together: placeholders filled, conditions chosen, spaces tidied (D88)', () => {
+  const base = game('rogue-fisher');
+  const s = { ...base, character: { ...base.character, name: 'Wanda', gender: /** @type {const} */ ('f') } };
+  const words = eventWords(s);
+  for (const name of Object.keys(PLACEHOLDERS)) assert.ok(name in words, `{${name}} is filled`);
+  assert.equal(words.class, 'Rogue Fisherwoman');
+  assert.equal(words.location, 'the Lake');
+  assert.equal(words.Location, 'The Lake');
+  assert.match(String(words.season), /^[a-z]/);
+  assert.match(String(words.Season), /^[A-Z]/);
+  // Plain text in place of string keys: t() hands back a key it doesn't know as it is.
+  const parts = /** @type {any} */ (parseText("Hello, {name} the {class}. [gender m: Sir! | Ma'am!] [wind 9+: It howls.] It is {season}."));
+  assert.equal(sayEventText(textNow(s, parts), words), `Hello, Wanda the Rogue Fisherwoman. Ma'am! It is ${words.season}.`);
+  assert.equal(sayEventText(['The water is ', '', '.'], {}), 'The water is.');
+  assert.equal(sayEventText(['One.\n\n', '', '\n\nTwo.'], {}), 'One.\n\nTwo.');
 });
 
 // ---------- Playing an event ----------
+
+test('an event happens once unless it says "once: false"; a key given twice is a mistake (D87)', () => {
+  const head = (/** @type {string} */ extra) => `---\nid: x\ntitle: X\n${extra}---\n## a\nText.\n- Bye -> end\n`;
+  assert.equal(parseEvent(head('')).event?.once, true);
+  assert.equal(parseEvent(head('once: false\n')).event?.once, false);
+  assert.ok(parseEvent(head('trigger: item\ntrigger: needs\n')).errors.some((e) => e.includes('"trigger" twice')));
+});
+
+test('weather requirements: exactly, at least, at most, between', () => {
+  const { event, errors } = parseEvent(
+    '---\nid: x\ntitle: X\nneeds: wind 3+\nneeds: temperature 0-\nneeds: precipitation 2..4\nneeds: clouds 5\n---\n## a\nText.\n- Bye -> end\n',
+  );
+  assert.deepEqual(errors, []);
+  assert.deepEqual(event?.needs, [
+    { kind: 'weather', level: 'wind', min: 3, max: null },
+    { kind: 'weather', level: 'temperature', min: null, max: 0 },
+    { kind: 'weather', level: 'precipitation', min: 2, max: 4 },
+    { kind: 'weather', level: 'clouds', min: 5, max: 5 },
+  ]);
+  assert.ok(parseEvent('---\nid: x\ntitle: X\nneeds: wind strong\n---\n## a\nText.\n- Bye -> end\n').errors.some((e) => e.includes('"wind" takes an amount')));
+  const s = { ...game(), weather: { ...game().weather, wind: 4, temperature: -2, precipitation: 3, clouds: 5 } };
+  for (const need of /** @type {any[]} */ (event?.needs)) assert.ok(meets(s, need), JSON.stringify(need));
+  assert.ok(!meets({ ...s, weather: { ...s.weather, wind: 2 } }, /** @type {any} */ (event?.needs[0])));
+  assert.ok(!meets({ ...s, weather: { ...s.weather, precipitation: 5 } }, /** @type {any} */ (event?.needs[2])));
+});
 
 test('the frog: a rogue may lunge, others only observe or ignore it (§C.6)', () => {
   const fighter = startEvent(game('fish-fighter'), 'frog');
@@ -180,7 +280,7 @@ test('the frog: a rogue may lunge, others only observe or ignore it (§C.6)', ()
 
   // Observe: +2 Luck, hidden, so nothing for the log.
   let s = choose(fighter, 0).state;
-  assert.equal(openSlide(s)?.text, 'event.frog.observe.text');
+  assert.deepEqual(openSlide(s)?.text, ['event.frog.observe.text']);
   assert.equal(s.character.luck, 0);
   const end = choose(s, 0);
   assert.equal(end.state.character.luck, 2);
@@ -198,7 +298,7 @@ test('the frog: a rogue may lunge, others only observe or ignore it (§C.6)', ()
   assert.equal(choose(fighter, 1).state.character.luck, 0);
 });
 
-test('the frog happens once (it is "once: true")', () => {
+test('the frog happens once', () => {
   const s = choose(startEvent(game(), 'frog'), 1).state;
   assert.equal(s.eventsSeen.frog, 1);
   assert.equal(canStart(s, 'frog'), false);

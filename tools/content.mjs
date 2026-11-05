@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { GAME_VALUES, EFFECT_DICE, effectSign } from '../src/engine/values.js';
 import { HEX_NEIGHBOURS, OPPOSITE } from '../src/engine/hexmap.js';
-import { parseEvent } from './event-text.mjs';
+import { PLACEHOLDERS, parseEvent } from './event-text.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -335,18 +335,36 @@ function checkEvents(all, errors, warnings) {
     if (need.kind === 'season' && !all.weather[need.id]) errors.push(`${where}: no season "${need.id}"`);
     if (need.kind === 'item' && !all.items[need.id]) errors.push(`${where}: no item "${need.id}"`);
     if (need.kind === 'caught' && !all.fish[need.fish]) errors.push(`${where}: no fish "${need.fish}"`);
+    if (need.kind === 'weather' && need.level !== 'temperature') {
+      for (const v of [need.min, need.max]) if (v !== null && (v < 0 || v > 5)) errors.push(`${where}: ${need.level} goes from 0 to 5, not ${v}`);
+    }
   };
 
   for (const event of Object.values(all.events)) {
     const where = `content/events/${event.id}.md`;
     for (const need of event.needs) checkNeed(where, need);
     if (event.trigger === 'needs' && event.needs.length === 0) errors.push(`${where}: "trigger: needs" with no needs would start at once`);
-    if (event.trigger === 'needs' && !event.once) warnings.push(`${where}: "trigger: needs" without "once: true" starts again after every cast while its needs are met`);
+    if (event.trigger === 'needs' && !event.once) warnings.push(`${where}: "trigger: needs" with "once: false" starts again after every cast while its needs are met`);
     if (event.trigger !== 'needs' && !startedBy.has(event.id)) warnings.push(`${where}: nothing starts it`);
+    /** Placeholders and the needs of conditional text. @param {string} at @param {any[]} parts */
+    const checkText = (at, parts) => {
+      for (const part of parts) {
+        const strings = typeof part === 'string' ? [part] : [part.text, part.otherwise ?? ''];
+        if (typeof part !== 'string') for (const need of part.needs) checkNeed(at, need);
+        for (const s of strings) {
+          for (const m of s.matchAll(/\{(\w+)\}/g)) {
+            if (!(m[1] in PLACEHOLDERS)) errors.push(`${at}: no placeholder {${m[1]}} (known: ${Object.keys(PLACEHOLDERS).join(', ')})`);
+          }
+        }
+      }
+    };
+    checkText(`${where} (title)`, event.title);
     const reached = new Set([event.first]);
     for (const [id, slide] of Object.entries(event.slides)) {
       const s = /** @type {any} */ (slide);
+      checkText(`${where} (${id})`, s.text);
       for (const choice of s.choices) {
+        checkText(`${where} (${id})`, choice.text);
         reached.add(choice.to);
         for (const need of choice.needs) checkNeed(`${where} (${id})`, need);
         for (const effect of choice.effects) {
@@ -363,21 +381,38 @@ function checkEvents(all, errors, warnings) {
 
 /**
  * An event's text into the string table: event.frog.title,
- * event.frog.start.text, event.frog.start.0 (the first choice).
+ * event.frog.start.text, event.frog.start.0 (the first choice). Text in
+ * several parts (D88) gets a key per part, `.text.1`, and a conditional
+ * part's otherwise `.text.1.else`.
  * @param {any} event  A copy, changed in place.
  * @param {Record<string, string>} strings
  */
-function eventText(event, strings) {
+export function eventText(event, strings) {
   const key = `event.${event.id}`;
-  strings[`${key}.title`] = event.title;
-  event.title = `${key}.title`;
+  /** @param {any[]} parts @param {string} base */
+  const move = (parts, base) => {
+    if (parts.length === 1 && typeof parts[0] === 'string') {
+      strings[base] = parts[0];
+      return [base];
+    }
+    return parts.map((part, n) => {
+      if (typeof part === 'string') {
+        strings[`${base}.${n}`] = part;
+        return `${base}.${n}`;
+      }
+      strings[`${base}.${n}`] = part.text;
+      const out = { needs: part.needs, text: `${base}.${n}` };
+      if (part.otherwise === undefined) return out;
+      strings[`${base}.${n}.else`] = part.otherwise;
+      return { ...out, otherwise: `${base}.${n}.else` };
+    });
+  };
+  event.title = move(event.title, `${key}.title`);
   for (const [id, slide] of Object.entries(event.slides)) {
     const s = /** @type {any} */ (slide);
-    strings[`${key}.${id}.text`] = s.text;
-    s.text = `${key}.${id}.text`;
+    s.text = move(s.text, `${key}.${id}.text`);
     s.choices.forEach((/** @type {any} */ c, /** @type {number} */ n) => {
-      strings[`${key}.${id}.${n}`] = c.text;
-      c.text = `${key}.${id}.${n}`;
+      c.text = move(c.text, `${key}.${id}.${n}`);
     });
   }
 }

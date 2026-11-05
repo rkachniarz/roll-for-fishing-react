@@ -206,3 +206,8 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   big pike swims off once with the same fish. Medium fish lost their size word, tooltips their sell price (barter,
   D86), character creation its stat ranges (a random class, class descriptions instead); the title screen gained
   Continue; a buff's cancel long-press is 1.2 s. Hidden numbers became open question Q-40.
+- **Events, once more (D87)** `once` defaults to true; requirements on the weather's four levels, with exact, at
+  least, at most and between amounts; a front matter key given twice is an error.
+- **Event text (D88)** Placeholders (`{name}`, `{class}`…, filled by `src/ui/event-words.js`) and conditional
+  text in square brackets (`tools/event-text.mjs`, `parseText`); slide, choice and title text became lists of parts,
+  each with its own string key, which the engine picks from when a slide opens (`textNow`). A `gender` requirement.

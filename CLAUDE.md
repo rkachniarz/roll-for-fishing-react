@@ -90,6 +90,8 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   right-click equips.
 - **Events are `.md`, not JSON (D45, D84).** `tools/event-text.mjs` reads them and owns the vocabulary;
   `docs/events.md` is the author's guide, so a new word goes in both. The engine imports only typedefs from it.
+  Event text is a list of parts, each its own string key (D88); a new placeholder goes in `PLACEHOLDERS` there and
+  in `src/ui/event-words.js`, and a test checks the two agree.
 - **The event dialog ignores clicks for 400 ms after it opens,** so the Space press or tap that ended the cast can't
   pick a choice.
 - **`src/main.js`: a tap within 500 ms of the last action is ignored after a cast ends,** so a double tap on the splash

@@ -168,7 +168,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
   // ---------- Events ----------
   const eventSelect = el('select', { id: 'dev-event' });
   for (const event of Object.values(content.events)) {
-    eventSelect.append(el('option', { value: event.id, textContent: `${t(event.title)} (${event.trigger})` }));
+    eventSelect.append(el('option', { value: event.id, textContent: `${event.id} (${event.trigger})` }));
   }
   const eventsLine = el('p');
   const classSelect = el('select', { id: 'dev-class' });

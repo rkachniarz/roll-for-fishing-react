@@ -1,7 +1,6 @@
 ---
 id: frog
 title: A froggy encounter
-once: true
 ---
 
 ## start

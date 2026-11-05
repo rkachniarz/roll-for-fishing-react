@@ -4,7 +4,6 @@
 //   ---
 //   id: frog
 //   title: A froggy encounter
-//   once: true
 //   ---
 //
 //   ## start
@@ -21,7 +20,9 @@
 //     lose: 1 luck
 //
 // The first slide is where the event starts. A choice's arrow points at a
-// slide, or at `end`. The indented lines under a choice are its requirements
+// slide, or at `end`. Text may hold placeholders, `{name}`, and conditional
+// text, `[wind 3+: The wind howls. | All is still.]` (D88).
+// The indented lines under a choice are its requirements
 // (`needs:`) and effects (`gain:`, `lose:`, `set:`, `clear:`), one per line;
 // the words after them are the vocabulary below, and a new word is code work
 // (D42). This file only reads the text; tools/content.mjs checks that the
@@ -30,6 +31,7 @@
 /** Requirement words, as `needs: <word> …` (D84). */
 export const NEEDS = {
   class: 'class <class id>: the player is of that class',
+  gender: 'gender m | f: the player is male (m) or female (f)',
   level: 'level <n>: the player is at least level n',
   luck: 'luck <n>: Luck is at least n (R6.7)',
   item: 'item <item id> [n]: n of the item (default 1) in the bags',
@@ -38,6 +40,31 @@ export const NEEDS = {
   season: 'season <season id>',
   time: 'time <part of day>: night, dawn, morning, noon, afternoon, sunset or evening',
   caught: 'caught <fish id> <n>: at least n of that fish caught, ever (R4.2)',
+  temperature: 'temperature <amount>: the temperature now; 5 exactly, 5+ at least, 5- at most, 3..8 between',
+  wind: 'wind <amount>: the wind now, 0 (none) to 5 (extreme), as temperature',
+  clouds: 'clouds <amount>: the clouds now, 0 (clear) to 5 (black), as temperature',
+  precipitation: 'precipitation <amount>: rain or snow now, 0 (none) to 5 (extreme), as temperature',
+};
+
+/** The weather's levels a requirement can check (src/engine/weather.js). */
+export const WEATHER_LEVELS = ['temperature', 'wind', 'clouds', 'precipitation'];
+
+/**
+ * Placeholders in event text (D88), filled in by src/ui/event-words.js. The
+ * capitalised ones are for the start of a sentence.
+ */
+export const PLACEHOLDERS = {
+  name: "the player's name",
+  class: "the player's class, as it reads for their gender: Rogue Fisherwoman",
+  level: "the player's level",
+  location: 'where the player is: the Lake',
+  Location: 'the same, capitalised: The Lake',
+  season: 'the season: spring',
+  Season: 'the same, capitalised: Spring',
+  time: 'the time of day: dawn',
+  Time: 'the same, capitalised: Dawn',
+  weather: "the weather's name: clear and nippy",
+  Weather: 'the same, capitalised: Clear and nippy',
 };
 
 /** Effect words (D84). `gain` and `lose` take an amount and what of. */
@@ -58,12 +85,17 @@ const INT = /^-?\d+$/;
  * @typedef {{ kind: 'class', id: string } | { kind: 'level' | 'luck', at: number }
  *   | { kind: 'item', id: string, count: number } | { kind: 'flag' | 'no-flag', name: string }
  *   | { kind: 'season', id: string } | { kind: 'time', part: string }
- *   | { kind: 'caught', fish: string, count: number }} Need
+ *   | { kind: 'caught', fish: string, count: number }
+ *   | { kind: 'weather', level: string, min: number | null, max: number | null }
+ *   | { kind: 'gender', gender: 'm' | 'f' }} Need
  * @typedef {{ kind: 'luck' | 'xp', add: number } | { kind: 'item', id: string, add: number }
  *   | { kind: 'flag', name: string, set: boolean }} Effect
- * @typedef {{ text: string, to: string, needs: Need[], effects: Effect[] }} Choice
- * @typedef {{ text: string, choices: Choice[] }} Slide
- * @typedef {{ id: string, title: string, once: boolean, trigger: string, needs: Need[],
+ * @typedef {string | { needs: Need[], text: string, otherwise?: string }} Part  Plain text, or text
+ *   shown only when its needs are met, with what to show otherwise (D88).
+ * @typedef {Part[]} Text
+ * @typedef {{ text: Text, to: string, needs: Need[], effects: Effect[] }} Choice
+ * @typedef {{ text: Text, choices: Choice[] }} Slide
+ * @typedef {{ id: string, title: Text, once: boolean, trigger: string, needs: Need[],
  *   art?: string, first: string, slides: Record<string, Slide> }} GameEventData
  */
 
@@ -75,6 +107,9 @@ function parseNeed(words) {
   const [word, ...args] = words.trim().split(/\s+/);
   const n = (/** @type {string | undefined} */ s, fallback = NaN) => (s === undefined ? fallback : INT.test(s) ? Number(s) : NaN);
   switch (word) {
+    case 'gender':
+      if (args.length !== 1 || (args[0] !== 'm' && args[0] !== 'f')) return '"gender" takes m or f';
+      return { kind: 'gender', gender: args[0] };
     case 'class':
     case 'season':
       if (args.length !== 1) return `"${word}" takes one id`;
@@ -102,9 +137,97 @@ function parseNeed(words) {
       if (args.length !== 2 || Number.isNaN(count) || count < 1) return '"caught" takes a fish id and a count';
       return { kind: 'caught', fish: args[0], count };
     }
+    case 'temperature':
+    case 'wind':
+    case 'clouds':
+    case 'precipitation': {
+      const range = args.length === 1 ? parseAmount(args[0]) : null;
+      if (!range) return `"${word}" takes an amount: 3 exactly, 3+ at least, 3- at most, or 2..4 between`;
+      return { kind: 'weather', level: word, ...range };
+    }
     default:
       return `no requirement "${word}" (known: ${Object.keys(NEEDS).join(', ')})`;
   }
+}
+
+/**
+ * Text with conditional parts (D88): `[needs: shown | otherwise]`, where the
+ * needs are requirement words separated by commas, all of which must be met,
+ * and `| otherwise` may be left out. `\[`, `\]` and `\|` are the characters
+ * themselves. Conditions can't nest.
+ * @param {string} text
+ * @returns {Text | string}  The parts, or what is wrong.
+ */
+export function parseText(text) {
+  /** @type {Text} */
+  const parts = [];
+  let plain = '';
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (c === '\\' && '[]|'.includes(text[i + 1] ?? '')) {
+      plain += text[++i];
+      continue;
+    }
+    if (c === ']') return 'a "]" with no "[" before it (write \\] for the character)';
+    if (c !== '[') {
+      plain += c;
+      continue;
+    }
+    // A condition: up to the next "]" that isn't escaped.
+    /** @type {string[]} */
+    const pieces = [''];
+    let colon = -1;
+    let j = i + 1;
+    for (; j < text.length && text[j] !== ']'; j++) {
+      if (text[j] === '\\' && '[]|'.includes(text[j + 1] ?? '')) {
+        pieces[pieces.length - 1] += text[++j];
+        continue;
+      }
+      if (text[j] === '[') return 'a "[" inside another: conditional text can\'t nest';
+      if (text[j] === ':' && colon < 0) {
+        colon = pieces[0].length;
+        pieces[0] += ':';
+        continue;
+      }
+      if (text[j] === '|' && colon >= 0) {
+        pieces.push('');
+        continue;
+      }
+      pieces[pieces.length - 1] += text[j];
+    }
+    if (j >= text.length) return 'a "[" with no "]"';
+    if (colon < 0) return `"[${pieces[0]}]" needs requirements, a colon and the text: [wind 3+: The wind howls.]`;
+    if (pieces.length > 2) return 'one "|" at most in a condition';
+    /** @type {Need[]} */
+    const needs = [];
+    for (const words of pieces[0].slice(0, colon).split(',')) {
+      const need = parseNeed(words);
+      if (typeof need === 'string') return need;
+      needs.push(need);
+    }
+    if (plain) parts.push(plain);
+    plain = '';
+    const shown = pieces[0].slice(colon + 1).trim();
+    parts.push(pieces.length === 2 ? { needs, text: shown, otherwise: pieces[1].trim() } : { needs, text: shown });
+    i = j;
+  }
+  if (plain) parts.push(plain);
+  return parts;
+}
+
+/**
+ * An amount for a weather requirement: `3`, `3+`, `3-` or `2..4`.
+ * @param {string} text
+ * @returns {{ min: number | null, max: number | null } | null}
+ */
+function parseAmount(text) {
+  const num = '(-?\\d+)';
+  let m;
+  if ((m = new RegExp(`^${num}$`).exec(text))) return { min: Number(m[1]), max: Number(m[1]) };
+  if ((m = new RegExp(`^${num}\\+$`).exec(text))) return { min: Number(m[1]), max: null };
+  if ((m = new RegExp(`^${num}-$`).exec(text))) return { min: null, max: Number(m[1]) };
+  if ((m = new RegExp(`^${num}\\.\\.${num}$`).exec(text)) && Number(m[1]) <= Number(m[2])) return { min: Number(m[1]), max: Number(m[2]) };
+  return null;
 }
 
 /**
@@ -156,6 +279,7 @@ export function parseEvent(text) {
       if (typeof need === 'string') fail(i, need);
       else eventNeeds.push(need);
     } else if (!['id', 'title', 'once', 'trigger', 'art'].includes(m[1])) fail(i, `no front matter key "${m[1]}"`);
+    else if (m[1] in front) fail(i, `"${m[1]}" twice (an event has one ${m[1]})`);
     else front[m[1]] = m[2];
   }
   if (i >= lines.length) return { event: null, errors: ['the front matter has no closing ---'] };
@@ -190,8 +314,11 @@ export function parseEvent(text) {
   const endSlide = () => {
     endParagraph();
     if (slide) {
-      slide.text = paragraphs.join('\n\n');
-      if (!slide.text) errors.push(`slide "${Object.keys(slides).at(-1)}" has no text`);
+      const id = Object.keys(slides).at(-1);
+      const text = parseText(paragraphs.join('\n\n'));
+      if (typeof text === 'string') errors.push(`slide "${id}": ${text}`);
+      else slide.text = text;
+      if (!paragraphs.length) errors.push(`slide "${id}" has no text`);
       if (!slide.choices.length) errors.push(`slide "${Object.keys(slides).at(-1)}" has no choices`);
     }
     paragraphs = [];
@@ -207,7 +334,7 @@ export function parseEvent(text) {
       if (!ID.test(id)) fail(i, `slide id "${id}" must be lowercase-with-dashes`);
       else if (id === 'end') fail(i, '"end" is reserved for ending the event');
       else if (slides[id]) fail(i, `two slides called "${id}"`);
-      slide = { text: '', choices: [] };
+      slide = { text: [], choices: [] };
       slides[id] = slide;
       first ??= id;
       choice = null;
@@ -229,7 +356,9 @@ export function parseEvent(text) {
         choice = null;
         continue;
       }
-      choice = { text: m[1], to: m[2], needs: [], effects: [] };
+      const text = parseText(m[1]);
+      if (typeof text === 'string') fail(i, text);
+      choice = { text: typeof text === 'string' ? [] : text, to: m[2], needs: [], effects: [] };
       slide.choices.push(choice);
       arrows.push({ to: m[2], line: i });
       continue;
@@ -260,11 +389,15 @@ export function parseEvent(text) {
   for (const a of arrows) if (a.to !== 'end' && !slides[a.to]) fail(a.line, `no slide "${a.to}"`);
   if (errors.length) return { event: null, errors };
 
+  const title = parseText(front.title);
+  if (typeof title === 'string') return { event: null, errors: [`the title: ${title}`] };
+
   /** @type {GameEventData} */
   const event = {
     id: front.id,
-    title: front.title,
-    once: front.once === 'true',
+    title,
+    // Once per game unless it says otherwise (D87).
+    once: front.once !== 'false',
     trigger,
     needs: eventNeeds,
     first: /** @type {string} */ (first),
