@@ -85,12 +85,13 @@ export function fishRarity(species, shift) {
 
 /**
  * The string keys that make up the fish's name: band, subname, species
- * ("Gigantic" "Northern" "Pike").
+ * ("Gigantic" "Northern" "Pike"). A plain band, Medium, has no word (D85).
  * @param {FishInstance} fish
  */
 export function fishNameKeys(fish) {
   const s = content.fish[fish.species];
-  return [sizeBands()[fish.band].name, ...(fish.subname >= 0 ? [s.subnames[fish.subname]] : []), s.name];
+  const band = sizeBands()[fish.band];
+  return [...(band.plain ? [] : [band.name]), ...(fish.subname >= 0 ? [s.subnames[fish.subname]] : []), s.name];
 }
 
 /**

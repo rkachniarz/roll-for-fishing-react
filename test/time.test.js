@@ -3,17 +3,37 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { TIME, advanceTime, clock } from '../src/engine/time.js';
+import { TIME, advanceTime, clock, seasonOfMonth, startTime, sunAt } from '../src/engine/time.js';
+import { createRng } from '../src/rng.js';
+import { diceFor } from '../src/dice.js';
 
-test('a new game starts at 08:00 on the first day of spring, year 1', () => {
-  assert.deepEqual(clock(TIME.startMinutes), {
-    year: 1,
-    season: 'spring',
-    day: 1,
-    hour: 8,
-    minute: 0,
-    partOfDay: 'morning',
-  });
+test('a new game starts on a random day in year 1, in the morning, leaning to the season outside (D85)', () => {
+  const counts = /** @type {Record<string, number>} */ ({});
+  const days = new Set();
+  for (let seed = 1; seed <= 400; seed++) {
+    const c = clock(startTime('autumn', diceFor(createRng(seed))));
+    assert.equal(c.year, 1);
+    assert.equal(c.partOfDay, 'morning', `${c.season} ${c.day} ${c.hour}:${c.minute}`);
+    assert.ok(c.minute === 0 || c.minute === 30);
+    counts[c.season] = (counts[c.season] ?? 0) + 1;
+    days.add(c.day);
+  }
+  assert.ok(counts.autumn > 160 && counts.autumn < 240, `autumn ${counts.autumn} of 400`);
+  for (const s of ['spring', 'summer', 'winter']) assert.ok(counts[s] > 40, `${s} ${counts[s]}`);
+  assert.equal(days.size, TIME.seasonDays);
+});
+
+test('the season outside, northern hemisphere, spring from March', () => {
+  assert.deepEqual([0, 1, 2, 4, 5, 7, 8, 10, 11].map(seasonOfMonth), ['winter', 'winter', 'spring', 'spring', 'summer', 'summer', 'autumn', 'autumn', 'winter']);
+});
+
+test("the sun follows Gdynia's year: long summer days, short winter ones", () => {
+  const midsummer = sunAt(0.307);
+  const midwinter = sunAt(0.807);
+  assert.equal(Math.round(midsummer.rise * 60), 4 * 60 + 12);
+  assert.equal(Math.round(midsummer.set * 60), 21 * 60 + 22);
+  assert.equal(Math.round(midwinter.rise * 60), 7 * 60 + 48);
+  assert.equal(Math.round(midwinter.set * 60), 15 * 60 + 28);
 });
 
 test('a cast is 30 minutes, so a day is 48 casts', () => {
@@ -43,10 +63,19 @@ test('the cast that crosses into a new season says so', () => {
   assert.equal(advanceTime(lastCast - TIME.castMinutes).newSeason, null);
 });
 
-test('parts of the day', () => {
-  const at = (/** @type {number} */ h) => clock(h * 60).partOfDay;
+test('parts of the day move with the sun (D85)', () => {
+  const day = 24 * 60;
+  const on = (/** @type {number} */ dayIndex) => (/** @type {number} */ h) => clock(dayIndex * day + h * 60).partOfDay;
+  // Early spring: sunrise about 06:50, sunset about 17:40.
+  const spring = on(0);
   assert.deepEqual(
-    [at(3), at(6), at(9), at(12), at(14), at(19), at(21), at(23)],
+    [3, 6.5, 9, 12, 14, 17.5, 19.5, 23].map(spring),
     ['night', 'dawn', 'morning', 'noon', 'afternoon', 'sunset', 'evening', 'night'],
   );
+  // Midsummer: light by 05:00, the sun still setting at 22:00, evening till midnight.
+  const summer = on(34);
+  assert.deepEqual([2, 5, 16, 22, 23.5].map(summer), ['night', 'dawn', 'afternoon', 'sunset', 'evening']);
+  // Midwinter: still dawn at 08:00, sunset by 15:00, night by 19:00.
+  const winter = on(90);
+  assert.deepEqual([6, 8, 15, 19].map(winter), ['night', 'dawn', 'sunset', 'night']);
 });

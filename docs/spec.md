@@ -59,7 +59,8 @@ decides. *(D29)*
   ends as resolved; then nothing happens to the bobber for 5 seconds, after which the line counts as freshly cast, a
   new cast with new dice. A tap during those 5 seconds pulls the line out (R2.5). A second miss in a row reels the line
   in. *(D64)*
-- **R2.5** A strike before any bite pulls the line out: the cast ends with nothing. *(D15, provisional)*
+- **R2.5** A strike before any bite pulls the line out: the cast ends with nothing, and no game time passes. *(D15,
+  D85)*
 - **R2.6** A successful strike leads to the fishing roll: d20 + skill + modifiers against the fish's difficulty. A natural
   20 always lands the fish. This roll is always shown to the player (R5).
 - **R2.7** Reaction windows, bite delays and the 3-second limit are game values that items, perks and abilities can change.
@@ -222,9 +223,12 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   precipitation. The directions carry no meaning; the 2d6 bias towards some of them is intended. A move off the map
   wraps around, except across a marked edge, where the weather stays the same. *(D26)*
 - **R11.4** **Time** is its own clock: each resolved cast advances it by 30 game minutes; a day is 48 casts and a season
-  28 days. The weather steps once per cast. All of these are game values. *(D66)*
-- **R11.5** The town: the inn (buys fish; upgrades raise demand), a scrap dealer (buys junk), later more vendors. Copper
-  is the currency. The first use of fish: putting them into the inn's perpetual stew for a buff (R12.6). *(D24, D28)*
+  28 days. The weather steps once per cast. All of these are game values. A strike before any bite moves nothing on.
+  A new game starts on a random morning of the year, leaning towards the season outside. Sunrise and sunset follow
+  Gdynia's year. *(D66, D85)*
+- **R11.5** The town: the inn (trades for fish; upgrades raise demand), a scrap dealer (trades for junk), later more
+  vendors. There is no money: trading is barter, and what an item is worth stays hidden. The first use of fish:
+  putting them into the inn's perpetual stew for a buff (R12.6). *(D24, D28, D86)*
 - **R11.6** The game has no ending; it ends when the player stops. Collecting (R4) is the long-term goal. *(D23)*
 - **R11.7** **The Alchemist** visits town from time to time (R10.6). While in town, they sell buffing potions and buy
   alchemical ingredients, which are fished up as junk and range from vials to rare magical goo. *(D30)*
@@ -308,7 +312,7 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R16.2** Every cast's result is written to the log. Anything landed also appears as its icon at the bobber, flies to
   the bucket and bags button and disappears; escapes and empty hooks get only the log line. *(D70)*
 - **R16.4** The time is shown as a word (Night, Dawn, Morning, Noon, Afternoon, Sunset, Evening) with the season and
-  day, never as a clock. The weather is an icon; a tap names it. The character pane shows the portrait (a default
+  day, never as a clock; the words follow the sun through the year (D85). The weather is an icon; a tap names it. The character pane shows the portrait (a default
   until portraits exist), level, XP, stats and equipment; the bag has the tabs Equipment, Consumables and Stuff; the
   menu holds the main menu (the title screen), settings, and the dev bench. *(D79, D80)*
 - **R16.5** The log scrolls, oldest line at the top, and isn't numbered. Fish and items in it are links: the name in
@@ -376,7 +380,7 @@ Levels 1, 3, 6 and 9 per class; even levels draw from the universal list. Cooldo
 - A chance to find edible fish, which give temporary bonuses.
 - Immediately find a piece of treasure from the current location.
 - Reroll your base stats twice and keep one of the three sets.
-- See the copper value of everything; the elusive vendor fish is twice as likely.
+- See the barter value of everything; the elusive vendor fish is twice as likely.
 - Put any fish from your inventory into an aquarium.
 - Fish with two rods at once.
 - +level to your main stat; or +½ level to your main stat and another random stat.

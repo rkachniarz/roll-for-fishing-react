@@ -3,6 +3,7 @@
   "id": "rogue-fisher",
   "role": "rogue",
   "order": 2,
+  "description": "Has an eye for anything that glints: the most Treasure Find.",
   "name": {
     "m": "Rogue Fisherman",
     "f": "Rogue Fisherwoman"

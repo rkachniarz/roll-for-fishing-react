@@ -234,27 +234,31 @@ await check('saving', PHONE, '?seed=1&wait=600', async (page, tap) => {
   const who = await page.textContent('#paneBody');
   report('saving: the character is shown', /Level 0/.test(who ?? ''), who);
   await closePane(page);
+  // A new game starts on a random morning (D85).
+  const [h, m] = ((await clockShown(page)) ?? '').split(':').map(Number);
+  const later = `${String(h + (m === 30 ? 1 : 0)).padStart(2, '0')}:${m === 30 ? '00' : '30'}`;
   await tap();
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
-  report('saving: a cast takes 30 minutes', (await clockShown(page)) === '08:30');
+  report('saving: a cast takes 30 minutes', (await clockShown(page)) === later, `${h}:${m} -> ${await clockShown(page)}`);
   await page.reload();
   await page.waitForSelector('#title[open]', { timeout: 15000 });
   await page.screenshot({ path: 'dist/verify/title.png' });
   report('saving: a reload opens the title screen', !(await page.isVisible('#create')));
+  report('saving: Continue is offered for the game played last', await page.isVisible('#titleContinue'));
   await page.click('#titleLoad');
   report('saving: empty slots can\'t be loaded', await page.isDisabled('#slot-2'));
   report('saving: the slot says who is in it', /Level 0|level 0/.test((await page.textContent('#slot-1')) ?? ''), (await page.textContent('#slot-1')) ?? '');
   await page.screenshot({ path: 'dist/verify/title-load.png' });
   await page.click('#slot-1');
-  report('saving: the game is back', (await clockShown(page)) === '08:30');
+  report('saving: the game is back', (await clockShown(page)) === later);
 
   await tap();
   await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });
   await page.reload();
   await loadFrom(page, 1);
-  report('saving: leaving mid-cast voids the cast, no time passes', (await clockShown(page)) === '08:30');
+  report('saving: leaving mid-cast voids the cast, no time passes', (await clockShown(page)) === later);
 });
 
 await check('new game', DESKTOP, '?seed=5', async (page) => {
@@ -375,7 +379,7 @@ await check('the sky', PHONE, '?dev&seed=3', async (page) => {
   await page.waitForTimeout(1500);
   await page.screenshot({ path: 'dist/verify/sky-blizzard-night.png' });
   const shown = [await page.textContent('#timeOfDay'), await page.textContent('#seasonDay'), await page.getAttribute('#weather', 'data-icon')].join(' ');
-  report('the sky: the time and weather are shown', /^Night Winter, day \d+ weather\/snow$/.test(shown), shown);
+  report('the sky: the time and weather are shown', /^Night \w+, day \d+ weather\/snow$/.test(shown), shown);
   await page.click('#weather');
   report('the sky: a tap on the weather names it', (await page.textContent('.tip')) === 'Blizzard', (await page.textContent('.tip')) ?? '');
   await page.screenshot({ path: 'dist/verify/weather-name.png' });
@@ -533,6 +537,7 @@ await check('equipment by touch: long-press drag', PHONE, '?dev&seed=1', async (
   // Its effects, made from the item (5.4): the upside green, the downside red.
   const good = await page.locator('.tip .tip-good').allTextContents();
   const bad = await page.locator('.tip .tip-bad').allTextContents();
+  report('tooltips: no sell price, there is no money (D85)', !((await page.textContent('.tip')) ?? '').includes('Sells'));
   report('tooltips: effects in green and red', good.join() === '+0.5 s time to strike' && bad.join() === '−0.05 s time for a fast strike', `${good} / ${bad}`);
   await page.screenshot({ path: 'dist/verify/tooltip-effects.png' });
 });
@@ -567,6 +572,7 @@ await check('events: the frog, from the event meter', PHONE, '?dev&seed=1&wait=6
 
 await check('events: a fighter only sees two choices, and a quick tap picks nothing', DESKTOP, '?dev&seed=1', async (page) => {
   await openBench(page);
+  await page.selectOption('#dev-class', 'fish-fighter');
   await page.click('#devBench >> text=Start');
   await page.waitForSelector('#event[open]', { timeout: 2000 });
   report('events: no rogue choice for a fighter', (await page.locator('#eventChoices button').count()) === 2);

@@ -9,7 +9,8 @@ import { MISS_LIMIT, cancelBuff, castLine, fishInBucket, releaseFish, scatter, s
 import { choose, openSlide } from '../src/engine/events.js';
 import { createRng } from '../src/rng.js';
 import { diceFor } from '../src/dice.js';
-import { TIME } from '../src/engine/time.js';
+import { TIME, clock } from '../src/engine/time.js';
+import { WATER } from '../src/engine/features.js';
 
 /** @typedef {import('../src/engine/state.js').GameState} GameState */
 /** @typedef {import('../src/engine/game.js').GameCast} GameCast */
@@ -55,13 +56,16 @@ function strikeAfter(/** @type {GameState} */ state, /** @type {GameCast} */ cas
 
 // ---------- State and saves (2.1) ----------
 
-test('a new game: the Lake, the stick, spring at 08:00, every stream seeded', () => {
+test('a new game: the Lake, the stick, a morning in year 1, every stream seeded', () => {
   const s = game();
   assert.equal(s.version, SAVE_VERSION);
   assert.equal(s.location, 'lake');
   assert.deepEqual(s.equipped, { rod: { id: 'stick', count: 1 }, line: null, bobber: null, bait: null, hat: null, trinket1: null, trinket2: null });
-  assert.equal(s.time, TIME.startMinutes);
-  assert.equal(s.weather.season, 'spring');
+  const c = clock(s.time);
+  assert.equal(c.year, 1);
+  assert.equal(c.partOfDay, 'morning');
+  assert.equal(s.weather.season, c.season, "the weather is the start's season");
+  assert.deepEqual(game(), s, 'the same seed, the same start');
   assert.equal(s.character.luck, 0, 'Luck starts at 0 (R6.7)');
   assert.equal(Object.keys(s.streams).length, 9);
   assert.deepEqual(s.features, []);
@@ -136,9 +140,61 @@ test('junk and treasure are landed by any strike in time, with no d20 (D64)', ()
 });
 
 test('every resolved cast moves time on 30 minutes and may move the weather', () => {
-  const { state, cast } = castLine(game(), 0);
-  const out = strikeLine(state, cast, 1); // too early
-  assert.equal(out.state.time, TIME.startMinutes + 30);
+  const start = game();
+  const { state, cast } = castLine(start, 0);
+  const out = tick(state, cast, cast.biteAt + cast.timing.lateMs + 1); // missed
+  assert.equal(out.state.time, start.time + 30);
+});
+
+test('pulling out before anything bites: no time, no meter, the feature keeps its use but ages (D85)', () => {
+  const start = { ...game(), features: [{ id: 'roach-school', x: 120, y: 100, uses: 2, castsLeft: 10, born: 0 }] };
+  const { state, cast } = castLine(start, 0, { landing: { x: 120, y: 100 } });
+  assert.equal(state.features[0].uses, 1);
+  const out = strikeLine(state, cast, 1);
+  assert.equal(out.cast.phase === 'done' && out.cast.outcome.result, 'too-early');
+  assert.equal(out.state.time, start.time);
+  assert.equal(out.state.eventMeter, start.eventMeter);
+  assert.equal(out.state.features.length, 1, 'no new feature');
+  assert.equal(out.state.features[0].uses, 2, 'its use back');
+  assert.equal(out.state.features[0].castsLeft, 9, 'but a cast older, so retrying until it hits costs its lifetime');
+  assert.deepEqual(out.state.weather, start.weather);
+});
+
+test('one cast in a hundred flies way off target (D85)', () => {
+  let wild = 0;
+  let state = game(40);
+  for (let n = 0; n < 2000; n++) {
+    const out = castLine(state, 0, { aim: { x: 60, y: 40 }, bounds: WATER });
+    const landing = /** @type {{ x: number, y: number }} */ (out.cast.landing);
+    const far = Math.hypot(landing.x - 60, landing.y - 40) > 20;
+    const flagged = out.events.some((e) => e.type === 'wild-cast');
+    if (!flagged) assert.ok(!far, 'an ordinary cast stays within the scatter');
+    if (flagged) wild++;
+    state = { ...state, streams: out.state.streams };
+  }
+  assert.ok(wild > 8 && wild < 40, `${wild} wild casts in 2000`);
+});
+
+test('a big fish that gets away swims off with the same fish, then goes for good (D85)', () => {
+  const pike = { id: 'big-pike', x: 120, y: 100, uses: 1, castsLeft: 10, born: 0 };
+  const first = castLine({ ...game(41), features: [pike] }, 0, { landing: { x: 120, y: 100 } });
+  assert.equal(first.cast.line.kind, 'fish');
+  const fish = first.cast.line.kind === 'fish' ? first.cast.line.fish : null;
+  const missed = tick(first.state, first.cast, first.cast.biteAt + first.cast.timing.lateMs + 1);
+  assert.ok(missed.events.some((e) => e.type === 'feature-moved'));
+  const moved = missed.state.features.find((f) => f.id === 'big-pike');
+  assert.ok(moved);
+  assert.ok(Math.hypot(moved.x - 120, moved.y - 100) >= 50, 'far off, not a drift');
+  assert.equal(moved.uses, 1);
+  assert.deepEqual(missed.state.escaped, {}, 'not in the pool while the feature holds it');
+
+  const again = castLine({ ...missed.state, missStreak: 0 }, 0, { landing: { x: moved.x, y: moved.y } });
+  assert.ok(again.cast.line.kind === 'fish');
+  assert.equal(again.cast.line.kind === 'fish' && again.cast.line.fish.size, fish?.size, 'the same pike');
+  assert.equal(again.cast.line.kind === 'fish' && again.cast.line.seenBefore, true);
+  const gone = tick(again.state, again.cast, again.cast.biteAt + again.cast.timing.lateMs + 1);
+  assert.ok(!gone.state.features.some((f) => f.id === 'big-pike'), 'the second time it goes');
+  assert.equal(Object.values(gone.state.escaped).flat().length, 1, 'and the pike is in the pool');
 });
 
 // ---------- Missing the splash (D64) and the escaped pool (2.7) ----------
@@ -292,7 +348,9 @@ test('a whole session runs headless, and the same seed gives the same session', 
 
   const s = a.state;
   assert.equal(s.book.casts, 1000);
-  assert.equal(s.time, TIME.startMinutes + 1000 * TIME.castMinutes);
+  const tooEarly = a.log.filter((l) => l.includes('too-early')).length;
+  assert.ok(tooEarly > 100);
+  assert.equal(s.time, game(2026).time + (1000 - tooEarly) * TIME.castMinutes, 'every cast but the too-early ones');
   assert.equal(fishInBucket(s), 16, 'the bucket filled up, and never past 16');
   assert.ok(s.book.catches > 100, `caught ${s.book.catches}`);
   assert.ok(Object.keys(s.found).length > 10, 'found plenty of junk');
@@ -320,11 +378,13 @@ function memoryStorage() {
 }
 
 test('the save slots: save, load, a broken save reported, New game', async () => {
-  const { saveGame, loadGame, deleteSave, listSlots } = await import('../src/save.js');
+  const { saveGame, loadGame, deleteSave, listSlots, lastSlot } = await import('../src/save.js');
   const storage = memoryStorage();
   assert.deepEqual(loadGame(storage, 1), { state: null });
+  assert.equal(lastSlot(storage), null);
   const state = game(11);
   saveGame(storage, 2, state);
+  assert.equal(lastSlot(storage), 2, 'Continue picks the slot saved to last');
   assert.deepEqual(loadGame(storage, 2).state, state);
   assert.deepEqual(
     listSlots(storage).map((s) => s.state !== null),
@@ -417,8 +477,8 @@ test('features appear on the water, drift, and go', () => {
   let gone = 0;
   for (let n = 0; n < 400; n++) {
     const out = castLine(state, 0);
-    const done = strikeLine(out.state, out.cast, 1);
-    state = endEvent(done.state);
+    const done = tick(out.state, out.cast, out.cast.biteAt + out.cast.timing.lateMs + 1);
+    state = endEvent({ ...done.state, missStreak: 0 });
     seen += done.events.filter((e) => e.type === 'feature-appeared').length;
     gone += done.events.filter((e) => e.type === 'feature-gone').length;
     assert.ok(state.features.length <= 2, 'never more than the location allows');
@@ -433,7 +493,7 @@ test('landing in a school brings up its fish, and fishes it out', () => {
   assert.ok(out.events.some((e) => e.type === 'feature-hit' && e.feature === 'roach-school'));
   assert.equal(out.cast.line.kind, 'fish', 'the school raises the bite chance');
   assert.equal(out.cast.line.kind === 'fish' && out.cast.line.fish.species, 'roach');
-  const done = strikeLine(out.state, out.cast, 1);
+  const done = strikeAfter(out.state, out.cast, 300);
   assert.equal(done.state.features.length, 0);
   assert.ok(done.events.some((e) => e.type === 'feature-gone' && e.fishedOut));
   assert.equal(out.checkpoint.features[0].uses, 1, 'a voided cast leaves the feature as it was');

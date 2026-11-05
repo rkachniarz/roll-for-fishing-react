@@ -949,6 +949,10 @@ body.is-dragging {
   color: #ff7070;
 }
 
+.floater.wild {
+  color: #d2a8ff;
+}
+
 /* ---------- The title screen (D80) ---------- */
 
 .title h1 {

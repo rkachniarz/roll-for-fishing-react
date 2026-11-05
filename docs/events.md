@@ -104,4 +104,4 @@ class, for choices like the rogue's.
 ## Not there yet
 
 These are code work first (D42): requirements on the weather, a buff as an effect, starting another event as an
-effect, money (no currency yet), and moving the player to a location (7.6).
+effect, trading (barter comes with the town, D86), and moving the player to a location (7.6).

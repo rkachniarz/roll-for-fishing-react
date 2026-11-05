@@ -2482,6 +2482,7 @@ export const content = {
       "id": "fish-fighter",
       "role": "warrior",
       "order": 0,
+      "description": "class.fish-fighter.description",
       "name": {
         "m": "class.fish-fighter.name.m",
         "f": "class.fish-fighter.name.f"
@@ -2505,6 +2506,7 @@ export const content = {
       "id": "fishing-wizard",
       "role": "mage",
       "order": 1,
+      "description": "class.fishing-wizard.description",
       "name": {
         "m": "class.fishing-wizard.name.m",
         "f": "class.fishing-wizard.name.f"
@@ -2528,6 +2530,7 @@ export const content = {
       "id": "rogue-fisher",
       "role": "rogue",
       "order": 2,
+      "description": "class.rogue-fisher.description",
       "name": {
         "m": "class.rogue-fisher.name.m",
         "f": "class.rogue-fisher.name.f"
@@ -2556,6 +2559,7 @@ export const content = {
       "radius": 8,
       "uses": 1,
       "lifetime": 10,
+      "swimsOff": 1,
       "drift": 6,
       "effects": [
         {
@@ -2597,8 +2601,8 @@ export const content = {
       "name": "feature.glint.name",
       "kind": "curious",
       "radius": 8,
-      "uses": 2,
-      "lifetime": 16,
+      "uses": 1,
+      "lifetime": 8,
       "drift": 0,
       "effects": [
         {
@@ -2727,6 +2731,7 @@ export const content = {
         {
           "id": "medium",
           "name": "rules.size-bands.bands.medium.name",
+          "plain": true,
           "weight": 35,
           "difficulty": 2,
           "rarity": 0
@@ -3196,10 +3201,13 @@ export const strings = {
     "weather.winter.weathers.18.descriptions.0": "The sky is clear, and the cold is biting.",
     "class.fish-fighter.name.m": "Fish Fighter",
     "class.fish-fighter.name.f": "Fish Fighter",
+    "class.fish-fighter.description": "Strong on the line: the best Fishing Skill, for landing whatever bites.",
     "class.fishing-wizard.name.m": "Fishing Wizard",
     "class.fishing-wizard.name.f": "Fishing Wizard",
+    "class.fishing-wizard.description": "Knows where the fish are: the most Fish Find, so more of them bite.",
     "class.rogue-fisher.name.m": "Rogue Fisherman",
     "class.rogue-fisher.name.f": "Rogue Fisherwoman",
+    "class.rogue-fisher.description": "Has an eye for anything that glints: the most Treasure Find.",
     "feature.big-pike.name": "a big pike just under the surface",
     "feature.carp-school.name": "a school of carp",
     "feature.glint.name": "something glinting in the water",

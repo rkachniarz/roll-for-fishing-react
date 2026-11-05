@@ -45,7 +45,7 @@ export const GAME_VALUES = {
 
   // ---- The cast (fed mostly by the rod, D35) ----
   /** How far from the aimed point the bobber may land, in scene pixels (D34). */
-  castScatter: { better: 'lower', base: 12 },
+  castScatter: { better: 'lower', base: 20 },
   /** The shortest and longest wait from the cast to the bite, in ms (R2.2). */
   biteDelayMin: { better: 'lower', base: 2500, unit: 'ms' },
   biteDelayMax: { better: 'lower', base: 8000, unit: 'ms' },

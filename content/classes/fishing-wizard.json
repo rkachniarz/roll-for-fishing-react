@@ -3,6 +3,7 @@
   "id": "fishing-wizard",
   "role": "mage",
   "order": 1,
+  "description": "Knows where the fish are: the most Fish Find, so more of them bite.",
   "name": {
     "m": "Fishing Wizard",
     "f": "Fishing Wizard"

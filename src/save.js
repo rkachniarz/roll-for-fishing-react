@@ -16,6 +16,8 @@ export const SLOTS = [1, 2, 3];
 const OLD_KEY = 'roll-for-fishing:save';
 /** @param {number} slot */
 const key = (slot) => `roll-for-fishing:save:${slot}`;
+/** The slot saved to last, for Continue on the title screen. */
+const LAST_KEY = 'roll-for-fishing:last-slot';
 
 /**
  * @typedef {{ getItem(key: string): string | null, setItem(key: string, value: string): void,
@@ -42,6 +44,16 @@ function moveOldSave(storage) {
  */
 export function saveGame(storage, slot, state) {
   storage.setItem(key(slot), serialize(state));
+  storage.setItem(LAST_KEY, String(slot));
+}
+
+/**
+ * The slot played last, or null.
+ * @param {Storage} storage
+ */
+export function lastSlot(storage) {
+  const slot = Number(storage.getItem(LAST_KEY));
+  return SLOTS.includes(slot) ? slot : null;
 }
 
 /**

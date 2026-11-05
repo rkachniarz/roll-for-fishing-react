@@ -112,6 +112,7 @@ test('XP is the difficulty plus fishXp, never below 0', () => {
 test('a fish has a name: band, subname, species', () => {
   const f = { species: 'pike', subname: 0, band: 4, size: 120, difficulty: 6, xp: 6, rarity: 'epic' };
   assert.equal(fishNameKeys(f).map(t).join(' '), 'Gigantic Northern Pike');
+  assert.equal(fishNameKeys({ ...f, band: 2 }).map(t).join(' '), 'Northern Pike', 'Medium has no word (D85)');
   assert.ok(sameFish(f, { ...f }));
   assert.ok(!sameFish(f, { ...f, size: 121 }));
 });
@@ -123,13 +124,20 @@ test('the same seed rolls the same fish', () => {
 
 // ---------- The light of the hour (4.3) ----------
 
-test('night is dark, midday is not, dawn and dusk are warm', async () => {
-  const { darkness, warmth } = await import('../src/scene/light.js');
-  assert.equal(darkness(12), 0);
-  assert.equal(darkness(23), 0.55);
-  assert.equal(darkness(3), 0.55);
-  assert.ok(darkness(6) > 0 && darkness(6) < 0.55);
-  assert.ok(darkness(19.5) > 0 && darkness(19.5) < 0.55);
-  assert.ok(Math.abs(warmth(6) - 0.2) < 1e-9 && Math.abs(warmth(19) - 0.2) < 1e-9);
-  assert.equal(warmth(12), 0);
+test('night is dark, midday is not, dawn and dusk are warm, all by the sun', async () => {
+  const { darkness, warmth, NIGHT } = await import('../src/scene/light.js');
+  const sun = { rise: 6, set: 19 };
+  assert.equal(darkness(12, sun), 0);
+  assert.equal(darkness(23, sun), NIGHT);
+  assert.equal(darkness(3, sun), NIGHT);
+  assert.ok(darkness(6, sun) > 0 && darkness(6, sun) < NIGHT);
+  assert.ok(darkness(19.5, sun) > 0 && darkness(19.5, sun) < NIGHT);
+  assert.ok(Math.abs(warmth(6, sun) - 0.2) < 1e-9 && Math.abs(warmth(19, sun) - 0.2) < 1e-9);
+  assert.equal(warmth(12, sun), 0);
+  // Midsummer in Gdynia: still light at 21:00; midwinter: dark by then, and at 07:00.
+  const summer = { rise: 4.2, set: 21.37 };
+  const winter = { rise: 7.8, set: 15.47 };
+  assert.ok(darkness(21, summer) < NIGHT / 2);
+  assert.equal(darkness(21, winter), NIGHT);
+  assert.ok(darkness(7, winter) > NIGHT / 2);
 });

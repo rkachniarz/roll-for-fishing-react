@@ -40,6 +40,10 @@
       "type": "integer",
       "minimum": 0
     },
+    "description": {
+      "description": "A line on what the class is good at, shown at character creation (D85).",
+      "$ref": "common.schema.json#/definitions/text"
+    },
     "name": {
       "description": "The name for each gender (D19).",
       "type": "object",

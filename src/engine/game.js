@@ -15,7 +15,7 @@ import { content } from '../generated/content.js';
 import { applyValue, deriveValues } from './values.js';
 import { listTable, locationTable, pick } from './tables.js';
 import { rollFish, sameFish, sizeBands } from './fish.js';
-import { featureAt, updateFeatures } from './features.js';
+import { featureAt, swimOff, updateFeatures } from './features.js';
 import { startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
 import { equippedIds } from './equipment.js';
@@ -32,6 +32,9 @@ import { changeSeason, stepWeather } from './weather.js';
 
 /** A second missed splash in a row reels the line in (D64). */
 export const MISS_LIMIT = 2;
+
+/** One cast in this many flies off somewhere else entirely (D85). */
+export const WILD_CAST = 100;
 
 /**
  * @typedef {Object} Roll  A hidden or visible roll, for the record (R5.1).
@@ -57,6 +60,7 @@ export const MISS_LIMIT = 2;
  *   bucketSize: number,
  *   reeledIn?: boolean,
  *   recast?: boolean,
+ *   feature?: { id: string, born: number } | null,
  *   extra: import('./values.js').Source[],
  * }} GameCast
  *
@@ -159,19 +163,26 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   next.book.casts++;
   const { dice, commit } = diceFrom(next);
   const timing = timingFrom(values);
+  /** @type {GameEvent[]} */
+  const events = [];
   if (!landing && bounds) {
-    // No aim (the keyboard): somewhere on the water, from the same stream,
-    // since where the bobber lands can change the odds (R14).
-    const target = aim ?? {
+    const anywhere = () => ({
       x: dice.scatter.getRandomNumber(bounds.x0, bounds.x1),
       y: dice.scatter.getRandomNumber(bounds.y0, bounds.y1),
-    };
-    landing = scatter(target, bounds, values.flat.castScatter, dice.scatter);
+    });
+    if (dice.scatter.getRandomNumber(1, WILD_CAST) === 1) {
+      // Way off target, wherever it was aimed (D85).
+      landing = anywhere();
+      events.push({ type: 'wild-cast' });
+    } else {
+      // No aim (the keyboard): somewhere on the water, from the same stream,
+      // since where the bobber lands can change the odds (R14).
+      landing = scatter(aim ?? anywhere(), bounds, values.flat.castScatter, dice.scatter);
+    }
   }
   // Landing in a surface feature: its effects and tables for this cast, and
   // one use of it gone (R14).
-  /** @type {GameEvent[]} */
-  const events = [{ type: 'cast', landing }];
+  events.unshift({ type: 'cast', landing });
   const hit = featureAt(next.features, landing);
   const feature = hit ? content.features[hit.id] : null;
   let lineValues = values;
@@ -180,7 +191,7 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     lineValues = valuesFor(state, [...extra, { label: feature.id, effects: feature.effects ?? [] }]);
     events.push({ type: 'feature-hit', feature: feature.id });
   }
-  const { line, rolls } = rollLine(next, lineValues, dice, feature);
+  const { line, rolls } = rollLine(next, lineValues, dice, feature, hit?.fish ?? null);
 
   /** @type {GameCast} */
   const cast = {
@@ -193,6 +204,7 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     bait: { recovery: values.flat.baitRecovery, escapeLoss: values.flat.baitEscapeLoss },
     bucketSize: values.flat.bucketSize,
     extra,
+    feature: hit ? { id: hit.id, born: hit.born } : null,
     ...(recast ? { recast: true } : {}),
   };
   next.streams = commit();
@@ -206,9 +218,11 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
  * @param {Values} values
  * @param {Record<string, Dice>} dice
  * @param {any} [feature]  The surface feature the cast landed in, from content.
+ * @param {PoolFish | null} [featureFish]  The fish that feature holds, if one
+ *   already got away from it once (a big fish that swam off, D85).
  * @returns {{ line: Line, rolls: Roll[] }}
  */
-function rollLine(state, values, dice, feature = null) {
+function rollLine(state, values, dice, feature = null, featureFish = null) {
   const loc = content.locations[state.location];
   const where = { location: state.location, spot: state.spot };
   /** @type {Roll[]} */
@@ -229,7 +243,10 @@ function rollLine(state, values, dice, feature = null) {
     let fish = null;
     let fromPool = false;
     // A feature with its own fish (a school, a big fish) brings up those, not the pool's.
-    if (!feature?.fish && pool.length > 0 && dice.line.roll100() <= pool.length) {
+    if (featureFish) {
+      // Not from the pool: it stays with the feature if pulled out too early.
+      fish = featureFish;
+    } else if (!feature?.fish && pool.length > 0 && dice.line.roll100() <= pool.length) {
       const i = dice.line.getRandomNumber(0, pool.length - 1);
       fish = pool[i];
       state.escaped[key] = pool.filter((_, j) => j !== i);
@@ -270,7 +287,7 @@ function rollLine(state, values, dice, feature = null) {
           kind: 'fish',
           fish,
           required: fish.difficulty + resistance,
-          seenBefore: fromPool,
+          seenBefore: fromPool || Boolean(featureFish),
           fromPool,
           player: {
             mods: skill.mods.map((m) => (m.label === 'stat' ? { ...m, label: 'skill' } : m)),
@@ -365,6 +382,8 @@ function resolveCast(state, cast) {
   const events = [];
   const result = cast.outcome.result;
   const line = cast.line;
+  // The surface feature it landed in, if it's still there.
+  const hit = cast.feature ? next.features.find((f) => f.id === cast.feature?.id && f.born === cast.feature?.born) : null;
   const levelBefore = levelFor(next.character.xp);
 
   next.missStreak = result === 'missed' ? next.missStreak + 1 : 0;
@@ -380,9 +399,18 @@ function resolveCast(state, cast) {
         else events.push({ type: 'bait-eaten', bait: useBait(next), fish });
       }
     } else if (result === 'escaped' || result === 'missed') {
-      const key = poolKey(next);
-      next.escaped[key] = [...(next.escaped[key] ?? []), { ...fish, tries: (fish.tries ?? 0) + 1 }];
+      const escaped = { ...fish, tries: (fish.tries ?? 0) + 1 };
       events.push({ type: result, fish, roll: cast.outcome.rolls[0], required: line.required });
+      const def = hit ? content.features[hit.id] : null;
+      if (hit && def?.swimsOff && (hit.swamOff ?? 0) < def.swimsOff) {
+        // A big fish swims off somewhere else and can be tried again, the
+        // same fish (D85). After its last escape it goes, into the pool.
+        swimOff(hit, def, escaped, dice.features);
+        events.push({ type: 'feature-moved', feature: hit.id });
+      } else {
+        const key = poolKey(next);
+        next.escaped[key] = [...(next.escaped[key] ?? []), escaped];
+      }
       if (next.equipped.bait && dice.bait.roll100() <= cast.bait.escapeLoss) {
         events.push({ type: 'bait-lost', bait: useBait(next), fish });
       }
@@ -406,6 +434,18 @@ function resolveCast(state, cast) {
     }
   } else {
     events.push({ type: result === 'missed' ? 'missed' : 'too-early' });
+  }
+
+  // Pulled out before anything bit: no time passes, the weather stays, the
+  // event meter doesn't fill and no new feature appears, so pulling out at
+  // once can't hurry the day along. The features on the water still age and
+  // drift, so recasting until one is hit costs a cast of its lifetime each
+  // time; the one it landed in gets its use back (D85).
+  if (result === 'too-early') {
+    if (hit) hit.uses++;
+    events.push(...updateFeatures(next, dice.features, { appear: false }));
+    next.streams = commit();
+    return { state: next, cast, events };
   }
 
   if (result === 'missed' && next.missStreak >= MISS_LIMIT) {

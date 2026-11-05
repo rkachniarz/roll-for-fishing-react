@@ -4,13 +4,15 @@ What's left to do. Tick boxes as work lands; record decisions in [docs/decisions
 silently changing requirements. Within a phase, tasks are listed in the order they should be done; their numbers are
 only ids, so a task added later keeps its number wherever it lands.
 
-**Where things stand (2026-11-04):** Phases 0, 1 and 2 are done. **Phase 3: the game is playable on the real engine**:
+**Where things stand (2026-11-05):** Phases 0, 1 and 2 are done. **Phase 3: the game is playable on the real engine**:
 character creation, the full cast with its hidden rolls, saving, New game, the buff bar and the `?dev` bench, all in
 the owner's phone layout (D79), with a title screen, three save slots and a light theme (D80, D81). Left in Phase 3: GitHub Pages (3.5), deferred (D77). Phases 4 and 5 are under way:
 the bag and the seven equipment slots work by drag and drop and right-click (5.1, 5.2, D83), with a placeholder item
 for each slot. Most of what's left needs the owner's art or design, or the real items (5.3). **Phase 7 has begun:**
 events are written as text (`docs/events.md`, D84), the event meter brings them, and the frog encounter is the
-first. Claude's guesses and calls are listed in
+first.
+The owner's first review is acted on (D85, D86): the sun and the time words follow Gdynia's year, a new game starts on
+a random morning, there's no money, and a few numbers and screens changed. Claude's guesses and calls are listed in
 [docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
 
 ## Where things are
@@ -33,7 +35,9 @@ Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, 
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
 Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66, Q-38 → D79, Q-39 → D70).
 
-None open.
+- **Q-40 How are hidden numbers revealed?** Hidden rolls stay hidden until something reveals them (R5.2): the fish's
+  own d20 (the log's "needed ?"), the bite and treasure rolls, Luck. What reveals each: a level, a perk, an item, a
+  class? The owner's steer: the number a fish needed should be revealed early, perhaps from level 1.
 
 ---
 
@@ -179,6 +183,8 @@ Requirements R5.3, R11.
 ## Phase 9: Content, balance, polish
 
 - [ ] **9.1** Balance simulation over the seeded engine: catch rates, XP curve, loot rates per class and build.
+  *Notes for it: the stick's scatter is 20 px so a school isn't hit every time; a 12 px rod is the next tier up, and
+  hits a school whenever it's aimed at (D85).*
 - [ ] **9.2** Audio: water, splash, catch.
 - [ ] **9.3** More settings (sound, once there is any), save export/import. *(Settings and the theme landed with 3.8.)*
 - [ ] **9.4** Collection view, fish and treasure (R4.3).
@@ -189,6 +195,11 @@ Requirements R5.3, R11.
 ## Ideas for later
 
 Not scheduled.
+
+- **A precision timing bar for the cast**: tap a spot, a bar appears with a marker running up and down; the target
+  area depends on the rod's quality, the marker's speed on the wind. The scatter (D85) would carry over to it. The
+  owner's idea.
+- **Random scenes on the title screen**, from the locations the player has unlocked.
 
 - **Consumables as a hand of cards** along the bottom of the screen, to make using them more tempting. A loose idea from
   the owner, not a decision.

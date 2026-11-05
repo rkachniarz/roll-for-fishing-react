@@ -198,3 +198,11 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   that ended the cast can't pick a choice. The frog is the first event, `once: true`, at the Lake; in the 1,000-cast
   test session the meter brings it once. The bench can start any event, fill the meter, forget seen events, clear
   flags and change class.
+- **Review 1 (D85, D86)** The owner's first pass through docs/REVIEW.md. `src/engine/time.js` gained the sun
+  (Gdynia's sunrise and sunset as a curve over the year), time words that follow it, and a random start date leaning
+  to the season outside; the light (`src/scene/light.js`) follows the same sun. An early strike moves no time on (the features already there still age, or retrying a school would be free), so
+  the 1,000-cast test session ends 142 casts' worth of time sooner. One cast in 100 goes wild ("Way off!"); the
+  stick's scatter went from 12 to 20 px after measuring that a 14 px school was hit every time it was aimed at. The
+  big pike swims off once with the same fish. Medium fish lost their size word, tooltips their sell price (barter,
+  D86), character creation its stat ranges (a random class, class descriptions instead); the title screen gained
+  Continue; a buff's cancel long-press is 1.2 s. Hidden numbers became open question Q-40.

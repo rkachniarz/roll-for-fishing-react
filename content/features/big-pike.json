@@ -6,6 +6,7 @@
   "radius": 8,
   "uses": 1,
   "lifetime": 10,
+  "swimsOff": 1,
   "drift": 6,
   "effects": [
     {

@@ -28,7 +28,36 @@ export const WATER = { x0: 40, y0: 30, x1: 216, y1: 185 };
  * @property {number} uses       Casts into it left before it's fished out.
  * @property {number} castsLeft  Casts before it goes anyway.
  * @property {number} born       The cast it appeared after: tells two of the same kind apart.
+ * @property {number} [swamOff]  How many times its fish got away and it swam off (D85).
+ * @property {import('./state.js').PoolFish} [fish]  The fish it holds, once one got away from it.
  */
+
+/** How far a big fish swims off when it gets away, at the least, in scene pixels (D85). */
+export const SWIM_OFF = 60;
+
+/**
+ * A fish got away from this feature, and it swims off: far across the water,
+ * with the same fish and its uses and lifetime back. Changes `feature`.
+ * @param {Feature} feature
+ * @param {any} def  Its content.
+ * @param {import('./state.js').PoolFish} fish
+ * @param {Dice} dice  The `features` stream.
+ */
+export function swimOff(feature, def, fish, dice) {
+  let x, y;
+  let tries = 0;
+  do {
+    x = dice.getRandomNumber(WATER.x0, WATER.x1);
+    y = dice.getRandomNumber(WATER.y0, WATER.y1);
+    tries++;
+  } while (Math.hypot(x - feature.x, y - feature.y) < SWIM_OFF && tries < 50);
+  feature.x = x;
+  feature.y = y;
+  feature.uses = def.uses;
+  feature.castsLeft = def.lifetime;
+  feature.swamOff = (feature.swamOff ?? 0) + 1;
+  feature.fish = fish;
+}
 
 /**
  * The feature a cast landed in, if any: the nearest whose radius covers the
@@ -56,9 +85,11 @@ export function featureAt(features, landing) {
  * Changes `state` (a copy the caller owns).
  * @param {import('./state.js').GameState} state
  * @param {Dice} dice  The `features` stream.
+ * @param {{ appear?: boolean }} [options]  appear: false for a cast pulled out
+ *   before a bite, which ages and moves what's there but brings nothing new (D85).
  * @returns {import('./game.js').GameEvent[]}
  */
-export function updateFeatures(state, dice) {
+export function updateFeatures(state, dice, { appear = true } = {}) {
   /** @type {import('./game.js').GameEvent[]} */
   const events = [];
   const kept = [];
@@ -77,6 +108,7 @@ export function updateFeatures(state, dice) {
   }
   state.features = kept;
 
+  if (!appear) return events;
   const loc = content.locations[state.location];
   if ((loc.features ?? []).length && state.features.length < (loc.maxFeatures ?? 0) && dice.roll100() <= (loc.featureChance ?? 0)) {
     const choice = pick(

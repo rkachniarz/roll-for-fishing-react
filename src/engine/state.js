@@ -13,7 +13,7 @@ import { createRng, deriveSeed } from '../rng.js';
 import { diceFor } from '../dice.js';
 import { content } from '../generated/content.js';
 import { weatherAt } from './weather.js';
-import { TIME } from './time.js';
+import { clock, seasonOfMonth, startTime } from './time.js';
 import { emptyEquipment } from './equipment.js';
 
 /** Bump with a migration below whenever the shape changes. */
@@ -88,15 +88,20 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @param {Object} options
  * @param {number} options.seed
  * @param {GameState['character']} options.character
+ * @param {number} [options.month]  This month outside (0 for January), from
+ *   the page: the start leans towards its season (D85). The engine never reads
+ *   a clock (D7); without it, the season in new-game.json.
  * @returns {GameState}
  */
-export function newGame({ seed, character }) {
+export function newGame({ seed, character, month }) {
   const start = content.rules['new-game'];
   /** @type {Record<string, number>} */
   const streams = {};
   for (const label of STREAMS) streams[label] = deriveSeed(seed, label);
+  // Once, at the start: its own stream, never stored (D4).
+  const time = startTime(month === undefined ? start.weather.season : seasonOfMonth(month), diceFor(createRng(deriveSeed(seed, 'start'))));
   const weatherRng = createRng(streams.weather);
-  const weather = weatherAt(start.weather.season, start.weather.cell, diceFor(weatherRng));
+  const weather = weatherAt(clock(time).season, start.weather.cell, diceFor(weatherRng));
   streams.weather = weatherRng.state;
   return {
     version: SAVE_VERSION,
@@ -105,7 +110,7 @@ export function newGame({ seed, character }) {
     character: { ...character, luck: character.luck ?? 0, xp: character.xp ?? 0 },
     location: start.location,
     spot: null,
-    time: TIME.startMinutes,
+    time,
     weather,
     equipped: {
       ...emptyEquipment(),

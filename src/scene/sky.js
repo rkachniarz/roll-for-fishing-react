@@ -133,8 +133,8 @@ export function createSky(below, above, size, rand) {
     const ease = (/** @type {keyof typeof shown} */ key, /** @type {number} */ target) => (shown[key] += (target - shown[key]) * rate);
     const season = ease('season', seasonTint?.alpha ?? 0);
     const overcast = ease('overcast', weather.clouds * 0.045 + (weather.precipitation >= 3 ? 0.06 : 0));
-    const warm = ease('warm', warmth(h));
-    const night = ease('night', darkness(h));
+    const warm = ease('warm', warmth(h, world.sun));
+    const night = ease('night', darkness(h, world.sun));
     if (seasonTint && season > 0.005) tint.rect(0, 0, size, size).fill({ color: seasonTint.color, alpha: season });
     if (overcast > 0.005) tint.rect(0, 0, size, size).fill({ color: OVERCAST, alpha: overcast });
     if (warm > 0.005) tint.rect(0, 0, size, size).fill({ color: WARM, alpha: warm });

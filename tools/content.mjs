@@ -50,7 +50,7 @@ const TEXT = {
   locations: [['name'], ['spots', '@', 'name']],
   tables: [],
   weather: [['name'], ['weathers', '#', 'name'], ['weathers', '#', 'descriptions', '#']],
-  classes: [['name', 'm'], ['name', 'f']],
+  classes: [['name', 'm'], ['name', 'f'], ['description']],
   features: [['name']],
   rules: [
     ['bands', '@', 'name'],

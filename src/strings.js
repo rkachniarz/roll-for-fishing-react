@@ -57,6 +57,7 @@ const UI_STRINGS = {
   'float.ok': 'Strike!',
   'float.bad': 'Slow strike',
   'float.early': 'Too early!',
+  'float.wild': 'Way off!',
   'log.roll': 'd20: {roll}{mods} = {total}, needed {needed}.',
   'log.natural20': ' Natural 20!',
 
@@ -92,6 +93,7 @@ const UI_STRINGS = {
   'log.feature-appeared': 'On the water: {feature}.',
   'log.feature-hit': 'Your bobber lands in {feature}.',
   'log.feature-gone': '{Feature} is gone.',
+  'log.feature-moved': '{Feature} swims off somewhere else.',
 
   // ---- The button row and the time (R16.4) ----
   'hud.player': 'Character',
@@ -153,6 +155,7 @@ const UI_STRINGS = {
 
   // ---- The title screen (D80) ----
   'title.name': 'Roll for Fishing',
+  'title.continue': 'Continue',
   'title.new': 'New game',
   'title.load': 'Load game',
   'title.back': 'Back',
@@ -170,7 +173,6 @@ const UI_STRINGS = {
   'tip.size': '{size} cm',
   'tip.unique': 'Unique',
   'tip.consumable': 'Consumable',
-  'tip.value': 'Sells for {value} copper',
 
   // ---- Character creation ----
   'create.title': 'A new fisher',
@@ -182,7 +184,6 @@ const UI_STRINGS = {
   'create.class': 'Class',
   'create.stats': 'Stats',
   'create.rerollStats': 'Roll again',
-  'create.range': '{min}–{max}',
   'create.start': 'Go fishing',
 };
 

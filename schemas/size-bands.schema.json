@@ -13,6 +13,7 @@
         "properties": {
           "id": { "$ref": "common.schema.json#/definitions/id" },
           "name": { "$ref": "common.schema.json#/definitions/text" },
+          "plain": { "description": "A fish of this size has no size word in its name: \"Northern Pike\", not \"Medium Northern Pike\".", "type": "boolean" },
           "weight": { "$ref": "common.schema.json#/definitions/weight" },
           "difficulty": { "description": "Added to the species' difficulty.", "type": "integer" },
           "rarity": {

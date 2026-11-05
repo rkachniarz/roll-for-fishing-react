@@ -37,6 +37,11 @@
       "type": "integer",
       "minimum": 1
     },
+    "swimsOff": {
+      "description": "How many times its fish can get away and the feature swims off elsewhere with the same fish, before it goes for good (D85).",
+      "type": "integer",
+      "minimum": 1
+    },
     "drift": {
       "description": "How far it may drift with each cast, in scene pixels.",
       "type": "integer",

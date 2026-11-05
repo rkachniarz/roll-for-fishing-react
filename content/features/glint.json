@@ -4,8 +4,8 @@
   "name": "something glinting in the water",
   "kind": "curious",
   "radius": 8,
-  "uses": 2,
-  "lifetime": 16,
+  "uses": 1,
+  "lifetime": 8,
   "drift": 0,
   "effects": [
     {

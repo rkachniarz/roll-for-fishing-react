@@ -26,6 +26,9 @@ A phase ends with `npm test` and `npm run verify` passing, then `npm run build`,
 **UI: when in doubt, copy World of Warcraft (D29).** If you aren't sure how WoW does something, ask the owner instead
 of guessing.
 
+**Strings the owner changes:** when text in `src/strings.js` or `content/` changes without Claude changing it, the
+owner did it on purpose (D85). Keep it; don't put Claude's wording back.
+
 ## Commands
 
 ```bash

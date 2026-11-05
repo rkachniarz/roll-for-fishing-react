@@ -60,7 +60,7 @@ export function tipFor(thing) {
   for (const effect of item.effects ?? []) lines.push(effectLine(effect));
   if (item.bobber) lines.push({ text: t('effect.cosmetic') });
   if (item.flavor) lines.push({ text: `"${t(item.flavor)}"`, tone: 'flavor' });
-  if (item.value > 0) lines.push({ text: t('tip.value', { value: item.value }) });
+  // No sell price: there's no money, only barter (D85).
   return { title: itemName(thing.id), colour: rarityColour(item.rarity), lines };
 }
 

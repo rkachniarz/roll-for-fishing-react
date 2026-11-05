@@ -12,7 +12,7 @@ import { parseEvent } from '../tools/event-text.mjs';
 import { buildContent } from '../tools/content.mjs';
 import { content } from '../src/generated/content.js';
 import { METER_FIRES, afterCast, canStart, choose, openSlide, startEvent } from '../src/engine/events.js';
-import { castLine, strikeLine } from '../src/engine/game.js';
+import { castLine, tick } from '../src/engine/game.js';
 import { deserialize, newGame } from '../src/engine/state.js';
 import { createRng } from '../src/rng.js';
 import { diceFor } from '../src/dice.js';
@@ -306,7 +306,7 @@ test('no cast goes out while an event is open; the meter fills through a whole c
 
   const fresh = game();
   const cast = castLine(fresh, 0);
-  const done = strikeLine(cast.state, cast.cast, 1);
+  const done = tick(cast.state, cast.cast, cast.cast.biteAt + cast.cast.timing.lateMs + 1);
   assert.ok(done.state.eventMeter > 0);
 });
 

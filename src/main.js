@@ -19,7 +19,7 @@ import { className, classes, generateName, rollStats } from './engine/character.
 import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
 import { GAME_VALUES } from './engine/values.js';
-import { deleteSave, listSlots, saveGame } from './save.js';
+import { deleteSave, lastSlot, listSlots, saveGame } from './save.js';
 import { applySettings, loadSettings, saveSettings } from './settings.js';
 import { WATER, createScene, fitCanvas } from './scene/scene.js';
 import { createBench } from './dev.js';
@@ -146,6 +146,10 @@ function apply(out) {
   state = out.state;
   cast = out.cast;
   if (cast.landing && out.events.some((e) => e.type === 'cast')) scene.aimAt(cast.landing);
+  // One cast in a hundred flies way off (D85): said over where it landed.
+  if (cast.landing && out.events.some((e) => e.type === 'wild-cast')) {
+    floatText({ text: t('float.wild'), tone: 'wild', at: scene.toClient(cast.landing), scale: scene.pixelScale() });
+  }
   if (ended) floatStrike();
   // The roll first, then what came of it.
   const roll = ended ? describeRoll() : null;
@@ -378,6 +382,7 @@ function describeEvent(e) {
       return [t('log.buff-ended', { buff: e.buff })];
     case 'feature-appeared':
     case 'feature-hit':
+    case 'feature-moved':
     case 'feature-gone': {
       const name = t(content.features[e.feature].name);
       return [t(`log.${e.type}`, { feature: name, Feature: name.charAt(0).toUpperCase() + name.slice(1) })];
@@ -689,7 +694,7 @@ function render() {
   const bobber = state.equipped.bobber;
   scene.setBobber(bobber ? (content.items[bobber.id]?.bobber ?? null) : null);
   const now = clock(state.time);
-  scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, weather: state.weather });
+  scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, sun: now.sun, weather: state.weather });
   renderHud();
   renderPane();
 }
@@ -704,7 +709,7 @@ function openCreation(chosen) {
   const nameInput = /** @type {HTMLInputElement} */ ($('createName'));
   const list = classes();
   let gender = /** @type {'m' | 'f'} */ (dice.getRandomNumber(0, 1) ? 'f' : 'm');
-  let classId = list[0].id;
+  let classId = list[dice.getRandomNumber(0, list.length - 1)].id;
   let stats = rollStats(classId, dice);
 
   $('createTitle').textContent = t('create.title');
@@ -759,7 +764,7 @@ function openCreation(chosen) {
       list.map((c) => ({
         value: c.id,
         label: t(c.name[gender]),
-        detail: statKeys.map((k) => `${t(`value.${k}`)} ${t('create.range', c.stats[k])}`).join(' · '),
+        detail: c.description ? t(c.description) : undefined,
       })),
       classId,
       (v) => {
@@ -789,7 +794,7 @@ function openCreation(chosen) {
     e.preventDefault();
     const name = nameInput.value.trim() || generateName(dice);
     slot = chosen;
-    state = newGame({ seed, character: { name, gender, classId, stats, luck: 0, xp: 0 } });
+    state = newGame({ seed, character: { name, gender, classId, stats, luck: 0, xp: 0 }, month: new Date().getMonth() });
     save(state);
     log.clear();
     cast = /** @type {GameCast} */ ({ phase: 'idle' });
@@ -817,9 +822,26 @@ function openTitle(view = 'main') {
     next();
   };
 
+  /** @param {import('./save.js').Loaded & { slot: number }} saved */
+  const play = (saved) =>
+    leave(() => {
+      slot = saved.slot;
+      state = saved.state;
+      cast = /** @type {GameCast} */ ({ phase: 'idle' });
+      log.clear();
+      render();
+      promptPlayer();
+    });
+
   if (view === 'main') {
     $('titlePrompt').textContent = '';
-    $('titleMenu').replaceChildren(button(t('title.new'), () => openTitle('new'), 'titleNew'), button(t('title.load'), () => openTitle('load'), 'titleLoad'));
+    // Continue: the game played last, if it's still there.
+    const last = listSlots(storage).find((s) => s.slot === lastSlot(storage) && s.state);
+    $('titleMenu').replaceChildren(
+      ...(last ? [button(t('title.continue'), () => play(last), 'titleContinue')] : []),
+      button(t('title.new'), () => openTitle('new'), 'titleNew'),
+      button(t('title.load'), () => openTitle('load'), 'titleLoad'),
+    );
   } else {
     $('titlePrompt').textContent = t(view === 'new' ? 'title.pickNew' : 'title.pickLoad');
     const slots = listSlots(storage).map((saved) => {
@@ -842,15 +864,7 @@ function openTitle(view = 'main') {
       b.append(head, line);
       if (view === 'load') {
         b.disabled = !saved.state;
-        b.onclick = () =>
-          leave(() => {
-            slot = saved.slot;
-            state = saved.state;
-            cast = /** @type {GameCast} */ ({ phase: 'idle' });
-            log.clear();
-            render();
-            promptPlayer();
-          });
+        b.onclick = () => play(saved);
       } else {
         b.onclick = () => {
           const taken = saved.state

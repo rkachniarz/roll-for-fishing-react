@@ -3,6 +3,7 @@
   "id": "fish-fighter",
   "role": "warrior",
   "order": 0,
+  "description": "Strong on the line: the best Fishing Skill, for landing whatever bites.",
   "name": {
     "m": "Fish Fighter",
     "f": "Fish Fighter"

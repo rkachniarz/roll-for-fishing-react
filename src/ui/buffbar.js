@@ -11,7 +11,7 @@ import { t } from '../strings.js';
 
 /** @typedef {import('../engine/state.js').Buff} Buff */
 
-const LONG_PRESS_MS = 600;
+const LONG_PRESS_MS = 1200;
 
 /**
  * What's left, for the square's corner (R12.4): casts as a number; time to the
