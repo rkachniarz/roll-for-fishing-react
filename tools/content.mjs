@@ -333,6 +333,10 @@ function checkEvents(all, errors, warnings) {
   const checkNeed = (where, need) => {
     if (need.kind === 'class' && !all.classes[need.id]) errors.push(`${where}: no class "${need.id}"`);
     if (need.kind === 'season' && !all.weather[need.id]) errors.push(`${where}: no season "${need.id}"`);
+    if (need.kind === 'location' && !all.locations[need.id]) errors.push(`${where}: no location "${need.id}"`);
+    if (need.kind === 'spot' && !Object.values(all.locations).some((l) => (l.spots ?? []).some((/** @type {{ id: string }} */ s) => s.id === need.id))) {
+      errors.push(`${where}: no location has a spot "${need.id}"`);
+    }
     if (need.kind === 'item' && !all.items[need.id]) errors.push(`${where}: no item "${need.id}"`);
     if (need.kind === 'caught' && !all.fish[need.fish]) errors.push(`${where}: no fish "${need.fish}"`);
     if (need.kind === 'weather' && need.level !== 'temperature') {
@@ -345,7 +349,10 @@ function checkEvents(all, errors, warnings) {
     for (const need of event.needs) checkNeed(where, need);
     if (event.trigger === 'needs' && event.needs.length === 0) errors.push(`${where}: "trigger: needs" with no needs would start at once`);
     if (event.trigger === 'needs' && !event.once) warnings.push(`${where}: "trigger: needs" with "once: false" starts again after every cast while its needs are met`);
-    if (event.trigger !== 'needs' && !startedBy.has(event.id)) warnings.push(`${where}: nothing starts it`);
+    if ((event.trigger === 'meter' || event.trigger === 'item') && !startedBy.has(event.id)) warnings.push(`${where}: nothing starts it`);
+    if (event.trigger === 'arrive' && !event.needs.some((/** @type {any} */ n) => n.kind === 'location' || n.kind === 'spot')) {
+      warnings.push(`${where}: "trigger: arrive" with no "needs: location" or "needs: spot" starts on arriving anywhere`);
+    }
     /** Placeholders and the needs of conditional text. @param {string} at @param {any[]} parts */
     const checkText = (at, parts) => {
       for (const part of parts) {

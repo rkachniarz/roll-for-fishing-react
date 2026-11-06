@@ -9,6 +9,7 @@
 //   item    fishing up an item that names the event
 //   needs   its requirements being met, checked after every cast: hidden
 //           objectives on flags and counters (R10.7, D51)
+//   arrive  the player arriving somewhere, a new game included (D89)
 //
 // The open event and its slide are in the state, so a reload comes back to
 // the same slide. Choices draw no dice: what a choice does is written on it.
@@ -38,6 +39,10 @@ export function meets(state, need) {
   switch (need.kind) {
     case 'class':
       return state.character.classId === need.id;
+    case 'location':
+      return state.location === need.id;
+    case 'spot':
+      return state.spot === need.id;
     case 'gender':
       return state.character.gender === need.gender;
     case 'level':
@@ -154,6 +159,22 @@ export function startEvent(state, id) {
   const next = structuredClone(state);
   open(next, id);
   return next;
+}
+
+/**
+ * The player has arrived where `state` says: at the start of a new game, or
+ * on moving to another location or spot. The first `trigger: arrive` event
+ * that can start, starts (D89). Changes `state` in place (a copy the caller
+ * owns).
+ * @param {GameState} state
+ * @returns {GameEvent[]}
+ */
+export function arrive(state) {
+  if (state.event) return [];
+  for (const event of Object.values(content.events)) {
+    if (event.trigger === 'arrive' && canStart(state, event.id)) return [open(state, event.id)];
+  }
+  return [];
 }
 
 /**

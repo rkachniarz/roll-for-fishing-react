@@ -32,6 +32,8 @@
 export const NEEDS = {
   class: 'class <class id>: the player is of that class',
   gender: 'gender m | f: the player is male (m) or female (f)',
+  location: 'location <location id>: the player is there',
+  spot: 'spot <spot id>: the player is at that spot',
   level: 'level <n>: the player is at least level n',
   luck: 'luck <n>: Luck is at least n (R6.7)',
   item: 'item <item id> [n]: n of the item (default 1) in the bags',
@@ -76,7 +78,7 @@ export const EFFECTS = {
 };
 
 export const TIMES = ['night', 'dawn', 'morning', 'noon', 'afternoon', 'sunset', 'evening'];
-export const TRIGGERS = ['meter', 'needs', 'item'];
+export const TRIGGERS = ['meter', 'needs', 'item', 'arrive'];
 
 const ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const INT = /^-?\d+$/;
@@ -87,7 +89,8 @@ const INT = /^-?\d+$/;
  *   | { kind: 'season', id: string } | { kind: 'time', part: string }
  *   | { kind: 'caught', fish: string, count: number }
  *   | { kind: 'weather', level: string, min: number | null, max: number | null }
- *   | { kind: 'gender', gender: 'm' | 'f' }} Need
+ *   | { kind: 'gender', gender: 'm' | 'f' }
+ *   | { kind: 'location' | 'spot', id: string }} Need
  * @typedef {{ kind: 'luck' | 'xp', add: number } | { kind: 'item', id: string, add: number }
  *   | { kind: 'flag', name: string, set: boolean }} Effect
  * @typedef {string | { needs: Need[], text: string, otherwise?: string }} Part  Plain text, or text
@@ -112,6 +115,8 @@ function parseNeed(words) {
       return { kind: 'gender', gender: args[0] };
     case 'class':
     case 'season':
+    case 'location':
+    case 'spot':
       if (args.length !== 1) return `"${word}" takes one id`;
       return { kind: word, id: args[0] };
     case 'level':
@@ -237,6 +242,7 @@ function parseAmount(text) {
  */
 function parseEffect(verb, words) {
   const args = words.trim().split(/\s+/);
+  if (!words.trim()) return verb === 'set' || verb === 'clear' ? `"${verb}" needs a flag name` : `"${verb}" needs something to ${verb}: an item id, luck or xp`;
   if (verb === 'set' || verb === 'clear') {
     if (args.length !== 1 || !args[0]) return `"${verb}" takes one flag name`;
     return { kind: 'flag', name: args[0], set: verb === 'set' };

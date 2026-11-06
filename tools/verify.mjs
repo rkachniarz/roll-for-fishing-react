@@ -9,7 +9,8 @@
 
 import { chromium } from 'playwright';
 import { spawn } from 'node:child_process';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
+import { decodePng } from './sprite-png.mjs';
 
 const PORT = 8123;
 const BASE = `http://localhost:${PORT}/`;
@@ -585,6 +586,61 @@ await check('events: a fighter only sees two choices, and a quick tap picks noth
   await page.click('text=Thank you, frog');
   report('events: Thank you, frog closes it', !(await page.isVisible('#event')));
 });
+
+// The art sheet (art.html, docs/art.md) is its own page, not the game, so it
+// skips check()'s title screen. Its screenshot is the one Claude looks at
+// after changing art: dist/verify/art.png.
+if (!ONLY || 'art sheet'.includes(ONLY)) {
+  const context = await browser.newContext(DESKTOP);
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  try {
+    await page.goto(BASE + 'art.html');
+    await page.waitForSelector('body[data-ready="true"]', { timeout: 20000 });
+    const counts = await page.evaluate(() => ({
+      scenes: document.querySelectorAll('figure:not(.sprite) > canvas').length,
+      sprites: document.querySelectorAll('figure.sprite').length,
+    }));
+    report('art sheet: scenes and sprites drawn', counts.scenes > 0 && counts.sprites > 0, `${counts.scenes} scenes, ${counts.sprites} sprites`);
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: 'dist/verify/art.png', fullPage: true });
+    // Save as PNG gives the owner the scene at its real size, to draw over.
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      page.click('text=Spring, noon, clear >> .. >> button.save'),
+    ]);
+    await download.saveAs('dist/verify/art-scene.png');
+    const png = decodePng(await readFile('dist/verify/art-scene.png'));
+    const topLeft = [...png.rgba.slice(0, 3)].map((v) => v.toString(16).padStart(2, '0')).join('');
+    report(
+      'art sheet: Save as PNG gives the scene at 256×256',
+      png.width === 256 && png.height === 256 && topLeft === 'b4e6f2',
+      `${download.suggestedFilename()}, ${png.width}×${png.height}, top left #${topLeft}`,
+    );
+  } catch (e) {
+    report('art sheet', false, e.message.split('\n')[0]);
+  }
+  report('art sheet: no page errors', errors.length === 0, errors.join(' | '));
+  await context.close();
+}
+
+// The owner reads the art sheet on a phone too, away from the computer.
+if (!ONLY || 'art sheet on a phone'.includes(ONLY)) {
+  const context = await browser.newContext(PHONE);
+  const page = await context.newPage();
+  try {
+    await page.goto(BASE + 'art.html');
+    await page.waitForSelector('body[data-ready="true"]', { timeout: 20000 });
+    const m = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, width: innerWidth }));
+    report('art sheet on a phone: no sideways scrolling', m.scroll <= m.width, `${m.scroll} of ${m.width}`);
+    await page.screenshot({ path: 'dist/verify/art-phone.png' });
+  } catch (e) {
+    report('art sheet on a phone', false, e.message.split('\n')[0]);
+  }
+  await context.close();
+}
 
 await browser.close();
 server.kill();

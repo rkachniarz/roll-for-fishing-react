@@ -12,19 +12,31 @@ The game is in early development: see [DEV_PLAN.md](DEV_PLAN.md) for where thing
 ```bash
 npm install
 npm run dev      # then open http://localhost:8001 (add ?dev for the dev bench)
+                 # and http://localhost:8001/art.html for the art sheet
 npm run content  # after editing content/: checks it and regenerates the game's copy
 npm test         # unit tests
-npm run verify   # browser checks (headless Chromium)
+npm run verify   # browser checks (headless Chromium); `npm run verify strike` runs only those
 npm run build    # single-file copy in dist/artifact.html
+npm run check    # all three in turn: test, verify, build (what ends a phase)
+
+npm run sprite list                    # the sprites that can go out to MS Paint
+npm run sprite export bobber           # -> art/bobber.png, to draw on
+npm run sprite import art/bobber.png   # a drawing back into code (PNG or 24-bit BMP)
 ```
 
-No build step is needed to play: any static file server works, and GitHub Pages serves the repo as-is.
+How the art is made, and drawing for the game in MS Paint: [docs/art.md](docs/art.md).
+
+No build step is needed to play: any static file server works. The game is published to GitHub Pages from every push
+to `fresh-start` whose tests pass (`.github/workflows/pages.yml`): https://rkachniarz.github.io/roll-for-fishing-react/,
+and the art sheet at `/art.html` there.
 
 ## Files
 
 | Path | What |
 |---|---|
 | `index.html` | The page, and the import map pinning PixiJS |
+| `art.html` | The art sheet: trials, every sprite enlarged, the scene in five lights (`src/art.js`, `src/art-trials.js`; how we work: `docs/art.md`) |
+| `art/` | The owner's real-size drawings, and sprites exported to draw on |
 | `styles.css` | Layout: scene above the panel on phones, beside it on wide screens |
 | `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, weather, surface features, tables, rules; events are text (`.md`) |
 | `schemas/` | A JSON Schema per kind of content; VS Code uses them to check and complete content files |
@@ -67,5 +79,6 @@ No build step is needed to play: any static file server works, and GitHub Pages 
 | `tools/content.mjs` | Checks content and builds the generated module, plus `dist/content-overview.html` |
 | `tools/event-text.mjs` | Reads the event text format (`content/events/*.md`) and holds its vocabulary |
 | `tools/verify.mjs` | Browser checks (Playwright) |
+| `tools/sprite-png.mjs` | Sprites out to PNG for drawing in MS Paint, and PNG or BMP drawings back into the code's grids |
 | `tools/build-artifact.mjs` | Builds `dist/artifact.html` |
-| `docs/` | Spec, decisions, history, porting notes, design sketches; `docs/events.md` is how to write an event |
+| `docs/` | Spec, decisions, history, porting notes, design sketches; `docs/events.md` is how to write an event, `docs/art.md` how the art is made |

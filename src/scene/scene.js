@@ -46,14 +46,24 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
  * @typedef {{ id: string, kind: string, x: number, y: number, uses: number, born: number }} SceneFeature
  */
 
+/**
+ * Knobs on how the scene looks, for trying options side by side on the art
+ * sheet (art.html, docs/art.md). The game passes none, so it gets the
+ * defaults; a knob whose option the owner picks becomes the default and
+ * leaves this list.
+ * @typedef {Object} SceneLook
+ * @property {number} [reedBlades]  Blades of reed on each side.
+ */
+
 /** The open water a cast may land on (the engine's, so features and casts agree). */
 export { WATER } from '../engine/features.js';
 
 /**
  * @param {HTMLCanvasElement} canvas
  * @param {() => number} rand  Uniform [0, 1), for cosmetic variety only.
+ * @param {SceneLook} [look]
  */
-export async function createScene(canvas, rand) {
+export async function createScene(canvas, rand, look = {}) {
   // Nearest-neighbour everywhere: a pixel stays a hard-edged square.
   TextureStyle.defaultOptions.scaleMode = 'nearest';
   const app = new Application();
@@ -147,8 +157,8 @@ export async function createScene(canvas, rand) {
   // Reeds in front of everything, framing the view at both edges.
   const reedHeight = 110;
   const reedFrames = {
-    left: paintReeds(26, reedHeight, 'left', rand).map(tex),
-    right: paintReeds(26, reedHeight, 'right', rand).map(tex),
+    left: paintReeds(26, reedHeight, 'left', rand, look.reedBlades).map(tex),
+    right: paintReeds(26, reedHeight, 'right', rand, look.reedBlades).map(tex),
   };
   const reedsLeft = new Sprite(reedFrames.left[0]);
   reedsLeft.position.set(0, SIZE - reedHeight);

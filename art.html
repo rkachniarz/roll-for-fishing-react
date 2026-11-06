@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Art sheet - Roll for Fishing</title>
+  <!-- The game's import map, word for word: a test checks the two agree. -->
+  <script type="importmap">
+  {
+    "imports": {
+      "pixi.js": "https://cdn.jsdelivr.net/npm/pixi.js@8.22.0/dist/pixi.min.mjs"
+    }
+  }
+  </script>
+  <style>
+    body {
+      margin: 0;
+      padding: 16px 16px 48px;
+      background: #14232b;
+      color: #e8e2cf;
+      font: 15px/1.45 system-ui, sans-serif;
+    }
+    h1 { margin: 0 0 4px; font-size: 22px; }
+    h2 { margin: 36px 0 4px; font-size: 18px; color: #ffd100; }
+    h3 { margin: 18px 0 8px; font-size: 15px; }
+    .note, .intro { margin: 0 0 12px; color: #a9b4b8; max-width: 70ch; }
+    .row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+    figure { margin: 0; }
+    figcaption { margin-top: 6px; font-size: 13px; }
+    canvas { display: block; image-rendering: pixelated; }
+    .sprites { gap: 14px; }
+    .sprite figcaption { display: flex; align-items: center; gap: 6px; }
+    .actual { display: inline-block; }
+    .size { color: #7d898e; }
+    .swatches { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+    .swatch { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .chip { width: 22px; height: 22px; border: 1px solid #000; }
+    code { color: #ffd100; }
+    .save {
+      margin-left: 6px;
+      padding: 2px 8px;
+      border: 1px solid #5a6a70;
+      border-radius: 3px;
+      background: #22343c;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+    .save:hover { border-color: #ffd100; }
+  </style>
+</head>
+<body>
+  <h1>Art sheet</h1>
+  <p class="intro">Every piece of the game's art in one place. How we work on it: <code>docs/art.md</code>.
+    Add <code>?seed=2</code> to the address for another layout of the scenery.</p>
+  <main id="sheet"></main>
+  <script type="module" src="./src/art.js"></script>
+</body>
+</html>

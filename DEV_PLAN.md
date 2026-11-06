@@ -6,14 +6,16 @@ only ids, so a task added later keeps its number wherever it lands.
 
 **Where things stand (2026-11-05):** Phases 0, 1 and 2 are done. **Phase 3: the game is playable on the real engine**:
 character creation, the full cast with its hidden rolls, saving, New game, the buff bar and the `?dev` bench, all in
-the owner's phone layout (D79), with a title screen, three save slots and a light theme (D80, D81). Left in Phase 3: GitHub Pages (3.5), deferred (D77). Phases 4 and 5 are under way:
+the owner's phone layout (D79), with a title screen, three save slots and a light theme (D80, D81). The game is on GitHub Pages
+(3.5, D91), published from every push to `fresh-start`. Phases 4 and 5 are under way:
 the bag and the seven equipment slots work by drag and drop and right-click (5.1, 5.2, D83), with a placeholder item
 for each slot. Most of what's left needs the owner's art or design, or the real items (5.3). **Phase 7 has begun:**
 events are written as text (`docs/events.md`, D84), the event meter brings them, and the frog encounter is the
 first.
 The owner's first review is acted on (D85, D86): the sun and the time words follow Gdynia's year, a new game starts on
 a random morning, there's no money, and a few numbers and screens changed. Claude's guesses and calls are listed in
-[docs/REVIEW.md](docs/REVIEW.md), for the owner to check.
+[docs/REVIEW.md](docs/REVIEW.md), for the owner to check. The art now has a process (D90, `docs/art.md`): an art
+sheet at `art.html` and a way to draw sprites in MS Paint; its first trial asks how dense the reeds should be.
 
 ## Where things are
 
@@ -103,8 +105,8 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 - [x] **3.3** Character creation: name generator, gender, class (gendered names, D19), stat rolls (R6.1).
 - [x] **3.4** `?dev` bench: location, spot, weather, time, items, level, and as many game values as practical; an
   "empty bucket" button (R9.5, D27, D68).
-- [ ] **3.5** *(Deferred, D77.)* Deployed to GitHub Pages, so the owner can play anywhere without a server; playable end to end on a phone
-  (D68).
+- [x] **3.5** Deployed to GitHub Pages, so the owner can play anywhere without a server; playable end to end on a phone
+  (D68, D91): https://rkachniarz.github.io/roll-for-fishing-react/ and `art.html` there.
 - [x] **3.6** Buff and debuff bar at the top right of the game area, WoW style: green and red rows, the duration in the
   corner (nearest minute, then seconds), a description on hover or tap, cancel a buff by right-click or long-press
   (R12.3–R12.7, D29, D31).
@@ -117,6 +119,9 @@ Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype
 
 - [ ] **4.1** A fixed palette, sprite sizes per depth band, the atlas format and naming; Aseprite → atlas export ready for
   when hand-drawn art arrives (D9).
+- [x] **4.6** How the art is made (D90): the style guide (`docs/art.md`), the art sheet with trials (`art.html`),
+  sprites to PNG and back for drawing in MS Paint (`tools/sprite-png.mjs`), and any scene saved as a PNG to
+  draw over.
 - [ ] **4.2** Backdrops per spot in the sketch's layout.
 - [x] **4.3** Day/night and seasonal palettes; weather overlays: rain, snow, wind on the water, cloud shadows (R7.5).
 - [x] **4.4** Catch feedback: the catch's icon appears at the bobber, flies to the bucket and bags button and disappears;

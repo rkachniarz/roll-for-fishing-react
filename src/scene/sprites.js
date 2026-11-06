@@ -222,9 +222,10 @@ export function shoreY(x, size) {
  * @param {number} height
  * @param {'left' | 'right'} side  Which edge they grow from: they lean inward.
  * @param {() => number} rand
+ * @param {number} [count]  How many blades.
  */
-export function paintReeds(width, height, side, rand) {
-  const blades = Array.from({ length: 9 }, () => ({
+export function paintReeds(width, height, side, rand, count = 9) {
+  const blades = Array.from({ length: count }, () => ({
     x: Math.floor(rand() * (width - 4)) + 2,
     h: Math.floor(height * (0.45 + rand() * 0.55)),
     lean: (side === 'left' ? 1 : -1) * (0.05 + rand() * 0.2),

@@ -7,7 +7,7 @@
 import { content } from '../generated/content.js';
 
 /** The icons' own colours. */
-const KEYS = {
+export const KEYS = {
   k: '#1b2b34', // outline
   G: '#7fb3c9', // fish
   g: '#d7e8ee', // fish belly

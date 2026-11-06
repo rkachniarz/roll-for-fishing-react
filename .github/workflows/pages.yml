@@ -1,0 +1,48 @@
+# Publishes the game to GitHub Pages (D91): https://rkachniarz.github.io/roll-for-fishing-react/
+# and the art sheet at .../art.html.
+#
+# The site is the repo as it is, with no build step (D14): only the files the
+# page loads are copied, so node_modules and the tools stay out. It publishes
+# only when the unit tests pass, so a broken push leaves the last good version up.
+
+name: Pages
+
+on:
+  push:
+    branches: [fresh-start, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One publish at a time; a newer push replaces one still waiting.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Gather what the page loads
+        run: |
+          mkdir _site
+          cp -r index.html art.html styles.css src _site/
+          if [ -d assets ]; then cp -r assets _site/; fi
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

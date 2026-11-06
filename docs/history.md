@@ -211,3 +211,17 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
 - **Event text (D88)** Placeholders (`{name}`, `{class}`…, filled by `src/ui/event-words.js`) and conditional
   text in square brackets (`tools/event-text.mjs`, `parseText`); slide, choice and title text became lists of parts,
   each with its own string key, which the engine picks from when a slide opens (`textNow`). A `gender` requirement.
+- **Arriving (D89)** `trigger: arrive` and the `location` / `spot` requirement words; a new game arrives at its
+  location, and so does a move with the bench's pickers. An empty `gain:` or `lose:` line now says what's missing.
+- **4.6 How the art is made (D90)** `docs/art.md`: the loop, how to ask for changes, drawing at real size in MS
+  Paint, the sizes and the style rules as they stand. `art.html` (`src/art.js`) is the art sheet: trials from
+  `src/art-trials.js`, the scene at noon, sunset, in rain, in snow and at night, every sprite and icon enlarged on
+  its pixel grid, and the palettes. `createScene` takes a `SceneLook` for trials; the first knob is the reeds'
+  blade count. `tools/sprite-png.mjs` exports any grid sprite as a PNG on magenta and imports PNG or 24-bit BMP back
+  into keys, with no image library (zlib only); a test round-trips every sprite and reads filtered RGB, 4-bit palette
+  and BMP files. `npm run verify` loads the sheet and saves `dist/verify/art.png`; a test keeps the sheet's import
+  map the same as the game's. Each scene on the sheet has a Save as PNG button, which reads the frame back from
+  the renderer at 256×256 for the owner to draw over; `verify` presses it and checks the file.
+- **3.5 GitHub Pages (D91)** `.github/workflows/pages.yml` publishes on a push to `fresh-start` or `master` once
+  `npm test` passes, copying only what the page loads. The art sheet fits a phone's width (a verify check), so the owner
+  can look at it away from home.

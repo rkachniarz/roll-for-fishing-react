@@ -24,6 +24,26 @@ Items with no note are left alone.
 
 Newest first.
 
+## GitHub Pages (3.5, D91)
+
+- **Both `fresh-start` and `master` publish,** whichever was pushed last. Only `fresh-start` is used now; `master`
+  is there for when the work moves back to it.
+- **The 2023 prototype's site is replaced** at the same address. Its `gh-pages` branch is untouched, so it could be
+  put back, and the prototype's code is still at the tag `legacy-prototype`.
+
+## How the art is made (4.6, D90)
+
+- **The style rules in `docs/art.md`** were read off the sketch and the art so far: hard pixels, a small named
+  palette, drawn for a clear spring noon, depth by size and paleness, outlines on icons but not in the scene. Worth
+  a read, since every later piece of art will follow them.
+- **Event pictures are 128×64** (`docs/art.md`, Sizes). The dialog only fixes 2:1; the size is Claude's pick, small
+  enough to draw by hand.
+- **The first trial, reed density** (`art.html`): A is today's 9 blades a side, B 18, C 36. Pick one, or say what's
+  wrong with all three. With one-pixel blades the difference is small, which suggests the reeds need a different
+  shape (clumps, thicker stems) more than more blades.
+- **Magenta for "nothing here"** in drawings, since white is a colour in the palette. A drawing on white works too,
+  if you say so.
+
 ## Events (7.1–7.3)
 
 - **The event format** (D84, `docs/events.md`): front matter, `## slide` headings, `- choice -> slide` bullets,

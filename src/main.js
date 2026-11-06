@@ -34,7 +34,7 @@ import { iconName, paintIcon, weatherIcon } from './scene/icons.js';
 import { equip, fits, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_SLOTS } from './engine/equipment.js';
 import { setupDrag } from './ui/drag.js';
 import { showError } from './ui/errors.js';
-import { choose, openSlide } from './engine/events.js';
+import { arrive, choose, openSlide } from './engine/events.js';
 import { eventWords, sayEventText } from './ui/event-words.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
@@ -798,6 +798,8 @@ function openCreation(chosen) {
     const name = nameInput.value.trim() || generateName(dice);
     slot = chosen;
     state = newGame({ seed, character: { name, gender, classId, stats, luck: 0, xp: 0 }, month: new Date().getMonth() });
+    // The player arrives at the start: a welcome, if there is one (D89).
+    arrive(state);
     save(state);
     log.clear();
     cast = /** @type {GameCast} */ ({ phase: 'idle' });
@@ -805,6 +807,7 @@ function openCreation(chosen) {
     // Give the keyboard back to the game: Space and Enter cast (R2.1).
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     render();
+    promptPlayer();
   };
   dialog.addEventListener('cancel', (e) => e.preventDefault());
   dialog.showModal();

@@ -42,7 +42,7 @@ You lunge forward and get wet, and it's like it was never there.
 | `id` | required | lowercase-with-dashes, the same as the file name. Permanent once released (D44). |
 | `title` | required | Shown at the top of the dialog. |
 | `once` | `true` / `false` | Default `true`: it happens only once per game. `false` lets it happen again. |
-| `trigger` | `meter` / `item` / `needs` | What starts it; one per event, see below. Default `meter`. |
+| `trigger` | `meter` / `item` / `needs` / `arrive` | What starts it; one per event, see below. Default `meter`. |
 | `needs` | any number of lines | Requirements for it to start at all, in the words below. |
 | `art` | a file name | A picture for the top of the dialog, from `assets/events/<art>.png`. Optional. |
 
@@ -61,6 +61,8 @@ or a player could be stuck (`npm run content` warns about that).
 |---|---|
 | `needs: class rogue-fisher` | the player is of that class (`content/classes/`) |
 | `needs: gender f` / `needs: gender m` | the player is female or male |
+| `needs: location lake` | the player is at that location (`content/locations/`) |
+| `needs: spot crossroads` | the player is at that spot of a location |
 | `needs: level 3` | the player is at least level 3 |
 | `needs: luck 2` | Luck is at least 2 (R6.7) |
 | `needs: item iron-key` / `needs: item bent-fork 3` | that many of the item are in the bags (default 1) |
@@ -152,6 +154,22 @@ Flags are free-form names; use them to link events into quests (R10.7).
   `once: false` it starts again after every cast.
 
 One event is open at a time, and no cast goes out until it ends. A reload comes back to the same slide.
+
+- **`trigger: arrive`**: the player arriving somewhere, checked with its `needs`. A new game counts as arriving at
+  the start, so a welcome is:
+
+  ```
+  ---
+  id: welcome
+  title: A familiar shore
+  trigger: arrive
+  needs: location lake
+  ---
+  ```
+
+  With `once` at its default it happens on the first arrival only; `once: false` makes it every time (a greeting
+  on each visit to town). For now only a new game arrives anywhere: moving between locations and spots comes with
+  the world (Phase 8). The bench's location and spot pickers count as arriving, for testing.
 
 ## Trying one out
 

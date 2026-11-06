@@ -15,12 +15,17 @@ by number:
 - `docs/spec.md`: the vision, requirements (`R1.1`–`R16.5`) and catalogues (`§C.1`–`§C.6`).
 - `docs/history.md`: finished phases, task by task, with what was measured.
 - `docs/events.md`: how to write an event, and every word of the format (D84).
+- `docs/art.md`: how the art is made with the owner (D90): style rules, sizes, trials, drawings in MS Paint. Read it
+  before changing any art.
 - `docs/REVIEW.md`: guesses and calls Claude made that the owner hasn't checked yet. **Add to it** whenever you pick a
   number, write content, or decide something the owner didn't (D76); the owner deletes items once settled.
 - `docs/PORTING-NOTES.md`: what to port from the React prototype (tag `legacy-prototype`; read old files with
   `git show legacy-prototype:src/Data/weather.js`) and the lessons it taught.
 
-A phase ends with `npm test` and `npm run verify` passing, then `npm run build`, then a docs refresh: DEV_PLAN.md
+Pushing `fresh-start` publishes the game to GitHub Pages once `npm test` passes (D91):
+https://rkachniarz.github.io/roll-for-fishing-react/ (and `art.html`). Push only when the owner asks.
+
+A phase ends with `npm test` and `npm run verify` passing, then `npm run build` (`npm run check` does all three), then a docs refresh: DEV_PLAN.md
 (ticks, "Where things stand"), history.md, this file, README.md.
 
 **UI: when in doubt, copy World of Warcraft (D29).** If you aren't sure how WoW does something, ask the owner instead
@@ -37,8 +42,11 @@ npm run dev     # http://localhost:8001 - must be served, ES modules don't load 
 npm run content # check content/ and regenerate src/generated/content.js (run after editing content)
 npm test        # unit tests (node:test): rng, dice, content, weather, time, fish, the game engine
 npm run verify  # browser checks in headless Chromium; starts its own server on :8123
-node tools/verify.mjs strike   # only the checks whose label contains "strike"
+npm run verify strike   # only the checks whose label contains "strike"
 npm run build   # -> dist/artifact.html, the single-file copy for claude.ai
+npm run check   # test, verify, build in turn, stopping at the first failure
+npm run sprite export bobber   # a sprite as art/bobber.png to draw on; `import <file> [keys=icons] [bg=ffffff]` reads one back
+# http://localhost:8001/art.html   the art sheet: trials, every sprite enlarged, the scene in five lights
 # http://localhost:8001/?dev       dev bench; ?seed=N seeds a new game (a save wins); ?wait=MS fixes the bite delay
 ```
 
@@ -80,6 +88,10 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   so a light page doesn't flash dark. It duplicates `src/settings.js`'s key on purpose (D81).
 - **Rarity colours are CSS variables (`--rarity-*`),** not the hex values in `src/scene/icons.js`: each theme has its
   own, so use `rarityColour()` from `src/ui/links.js` for anything on the page (D81).
+- **`art.html` repeats `index.html`'s import map;** a test checks the two agree. It's the art sheet, not part of the
+  game, and the build leaves it out.
+- **`createScene` takes a `SceneLook`** only for the art sheet's trials (`src/art-trials.js`). The game passes none;
+  a knob goes once its trial is settled.
 - **`styles.css`: `font-variant-ligatures: none`.** Pixelify Sans draws its "fi" ligature as an "A".
 - **Equipped items are not in the bags (D83).** A slot holds a stack (`{ id, count }`); only the bait slot ever holds
   more than one, and bait is used up from it. Move items with `src/engine/equipment.js`, never by editing

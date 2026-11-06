@@ -12,7 +12,7 @@ import { PLACEHOLDERS, parseEvent, parseText } from '../tools/event-text.mjs';
 import { eventWords, sayEventText } from '../src/ui/event-words.js';
 import { buildContent, eventText } from '../tools/content.mjs';
 import { content } from '../src/generated/content.js';
-import { METER_FIRES, afterCast, canStart, choose, meets, openSlide, startEvent, textNow } from '../src/engine/events.js';
+import { METER_FIRES, afterCast, arrive, canStart, choose, meets, openSlide, startEvent, textNow } from '../src/engine/events.js';
 import { castLine, tick } from '../src/engine/game.js';
 import { deserialize, newGame } from '../src/engine/state.js';
 import { createRng } from '../src/rng.js';
@@ -353,6 +353,31 @@ test('effects: items in and out of the bags, XP with a level-up, flags', () => {
 });
 
 // ---------- What starts an event ----------
+
+test('an event can start on arriving: a new game arrives at its location (D89)', () => {
+  const welcome = {
+    id: 'test-welcome', title: ['x'], once: true, trigger: 'arrive', needs: [{ kind: 'location', id: 'lake' }], first: 'a',
+    slides: { a: { text: ['x'], choices: [{ text: ['x'], to: 'end', needs: [], effects: [] }] } },
+  };
+  withEvent(welcome, () => {
+    const s = game();
+    assert.deepEqual(arrive(s), [{ type: 'event-started', event: 'test-welcome' }]);
+    assert.deepEqual(s.event, { id: 'test-welcome', slide: 'a' }, 'open from the start');
+    const after = choose(s, 0).state;
+    const again = structuredClone(after);
+    assert.deepEqual(arrive(again), [], 'once: the first arrival only');
+    const elsewhere = structuredClone({ ...game(), event: null, eventsSeen: {}, location: 'river' });
+    assert.deepEqual(arrive(elsewhere), [], 'not at another location');
+  });
+});
+
+test('location and spot requirements, and an empty gain line', () => {
+  const s = { ...game(), spot: 'reeds' };
+  assert.ok(meets(s, { kind: 'location', id: 'lake' }));
+  assert.ok(!meets(s, { kind: 'location', id: 'river' }));
+  assert.ok(meets(s, { kind: 'spot', id: 'reeds' }));
+  assert.ok(parseEvent('---\nid: x\ntitle: X\n---\n## a\nT.\n- Hi -> end\n  gain:\n').errors.some((e) => e.includes('"gain" needs something to gain')));
+});
 
 test('the event meter: a d20 per cast, +5 for an empty hook, fires above 100 at the Lake', () => {
   const dice = diceFor(createRng(5));

@@ -14,7 +14,7 @@ import { diceFrom, levelFor } from './engine/state.js';
 import { weatherAt } from './engine/weather.js';
 import { clock, TIME } from './engine/time.js';
 import { EQUIPMENT_SLOTS, quickEquip } from './engine/equipment.js';
-import { METER_FIRES, startEvent } from './engine/events.js';
+import { METER_FIRES, arrive, startEvent } from './engine/events.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 
@@ -84,8 +84,10 @@ export function createBench(root, { getState, setState, overrides, extraSources,
   const locationSelect = el('select');
   for (const loc of Object.values(content.locations)) locationSelect.append(el('option', { value: loc.id, textContent: t(loc.name) }));
   const spotSelect = el('select');
-  locationSelect.addEventListener('change', () => edit((s) => ({ ...s, location: locationSelect.value, spot: null })));
-  spotSelect.addEventListener('change', () => edit((s) => ({ ...s, spot: spotSelect.value || null })));
+  // Moving counts as arriving, for `trigger: arrive` events (D89).
+  const moveTo = (/** @type {GameState} */ s) => (arrive(s), s);
+  locationSelect.addEventListener('change', () => edit((s) => moveTo({ ...s, location: locationSelect.value, spot: null })));
+  spotSelect.addEventListener('change', () => edit((s) => moveTo({ ...s, spot: spotSelect.value || null })));
 
   const seasonSelect = el('select');
   for (const season of Object.values(content.weather).sort((a, b) => a.order - b.order)) {
