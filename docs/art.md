@@ -82,7 +82,7 @@ places goes in the strips.
 | What | Size (pixels) | Notes |
 |---|---|---|
 | The scene | 256×256, up to 320 wide | Water about the top 86%, the sand below it. The strips either side are scenery only. |
-| Bobber | 9×14 near, 7×11 far | The float's waterline is row 11 near, row 8 far. A bite shows only the top 9 / 6 rows. |
+| Bobber | 11×18 near, 9×13 far | The float's waterline is row 14 near, row 10 far. A bite shows only the top 12 / 9 rows (D94). |
 | Splash | 15×5, 3 frames | |
 | Waves | 5×2 far, 8×2 mid, 12×3 near; 2 frames each | |
 | Reeds | 26×110 a side, 2 frames | Drawn by code today: a real-size drawing would replace it. |

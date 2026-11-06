@@ -39,8 +39,29 @@ const KEYS = {
 };
 
 // The bobber from the sketch: a red feather on a tan float. Two sizes, one per
-// depth band - a cast that lands further out uses the small one.
+// depth band - a cast that lands further out uses the small one. Bigger than
+// first drawn, so it reads on a phone (the owner's pick B, D94).
 export const BOBBER = [
+  '......r....',
+  '.....rR....',
+  '.....rR....',
+  '....rRr....',
+  '....rRRr...',
+  '....rRRr...',
+  '....rRRr...',
+  '....rRr....',
+  '.....rr....',
+  '.....r.....',
+  '.....r.....',
+  '.....r.....',
+  'bbbbbbbbbbb',
+  '.bYYYYYYYb.',
+  '.bYYYYYYYb.',
+  '.bYYYYYYYb.',
+  '..bYYYYYb..',
+  '...bbbbb...',
+];
+export const BOBBER_FAR = [
   '.....r...',
   '....rR...',
   '....rR...',
@@ -53,136 +74,13 @@ export const BOBBER = [
   'bbbbbbbbb',
   '.bYYYYYb.',
   '.bYYYYYb.',
-  '..bYYYb..',
-  '...bbb...',
-];
-export const BOBBER_FAR = [
-  '....r..',
-  '...rR..',
-  '..rRr..',
-  '..rRr..',
-  '...rr..',
-  '...r...',
-  '...r...',
-  'bbbbbbb',
-  '.bYYYb.',
-  '.bYYYb.',
-  '..bbb..',
+  '..bbbbb..',
 ];
 // Pulled under by a bite: only the feather shows above the water.
-export const BOBBER_DIPPED = BOBBER.slice(0, 9);
-export const BOBBER_FAR_DIPPED = BOBBER_FAR.slice(0, 6);
+export const BOBBER_DIPPED = BOBBER.slice(0, 12);
+export const BOBBER_FAR_DIPPED = BOBBER_FAR.slice(0, 9);
 /** Rows from the sprite's top to where the float meets the water. */
-export const WATERLINE = { near: 11, far: 8 };
-
-/**
- * A whole bobber at one size: near and far, each with its bitten frame (the
- * feather only), and where each meets the water.
- * @typedef {{ near: string[], nearDipped: string[], far: string[], farDipped: string[], waterline: { near: number, far: number } }} BobberSet
- */
-
-/** @param {string[]} near @param {string[]} far @returns {BobberSet} */
-function bobberSet(near, far) {
-  // The feather is everything above the float's top band ('b' all along).
-  const band = (/** @type {string[]} */ rows) => rows.findIndex((r) => /^b+$/.test(r));
-  return {
-    near,
-    nearDipped: near.slice(0, band(near)),
-    far,
-    farDipped: far.slice(0, band(far)),
-    waterline: { near: band(near) + 2, far: band(far) + 1 },
-  };
-}
-
-/**
- * The bobber's sizes: A as drawn, B and C bigger, for the art sheet's trial
- * (src/art-trials.js). The owner's pick becomes BOBBER and the rest go.
- * @type {Record<'a' | 'b' | 'c', BobberSet>}
- */
-export const BOBBER_SIZES = {
-  a: { near: BOBBER, nearDipped: BOBBER_DIPPED, far: BOBBER_FAR, farDipped: BOBBER_FAR_DIPPED, waterline: WATERLINE },
-  b: bobberSet(
-    [
-      '......r....',
-      '.....rR....',
-      '.....rR....',
-      '....rRr....',
-      '....rRRr...',
-      '....rRRr...',
-      '....rRRr...',
-      '....rRr....',
-      '.....rr....',
-      '.....r.....',
-      '.....r.....',
-      '.....r.....',
-      'bbbbbbbbbbb',
-      '.bYYYYYYYb.',
-      '.bYYYYYYYb.',
-      '.bYYYYYYYb.',
-      '..bYYYYYb..',
-      '...bbbbb...',
-    ],
-    [
-      '.....r...',
-      '....rR...',
-      '....rR...',
-      '...rRr...',
-      '...rRr...',
-      '...rRr...',
-      '....rr...',
-      '....r....',
-      '....r....',
-      'bbbbbbbbb',
-      '.bYYYYYb.',
-      '.bYYYYYb.',
-      '..bbbbb..',
-    ],
-  ),
-  c: bobberSet(
-    [
-      '.......r.....',
-      '......rR.....',
-      '......rR.....',
-      '.....rRR.....',
-      '.....rRr.....',
-      '.....rRRr....',
-      '....rRRRr....',
-      '....rRRRr....',
-      '....rRRRr....',
-      '....rRRr.....',
-      '.....rRr.....',
-      '......rr.....',
-      '......r......',
-      '......r......',
-      '......r......',
-      'bbbbbbbbbbbbb',
-      '.bYYYYYYYYYb.',
-      '.bYYYYYYYYYb.',
-      '.bYYYYYYYYYb.',
-      '.bYYYYYYYYYb.',
-      '..bYYYYYYYb..',
-      '...bYYYYYb...',
-      '....bbbbb....',
-    ],
-    [
-      '......r....',
-      '.....rR....',
-      '.....rR....',
-      '....rRr....',
-      '....rRRr...',
-      '....rRRr...',
-      '....rRr....',
-      '.....rr....',
-      '.....r.....',
-      '.....r.....',
-      'bbbbbbbbbbb',
-      '.bYYYYYYYb.',
-      '.bYYYYYYYb.',
-      '..bYYYYYb..',
-      '...bbbbb...',
-    ],
-  ),
-};
+export const WATERLINE = { near: 14, far: 10 };
 
 // The splash when a fish bites: three frames, up and falling back.
 export const SPLASH = [
@@ -337,7 +235,7 @@ export function shoreY(x, size) {
  * @param {() => number} rand
  * @param {number} [count]  How many blades.
  */
-export function paintReeds(width, height, side, rand, count = 9) {
+export function paintReeds(width, height, side, rand, count = 36) {
   const blades = Array.from({ length: count }, () => ({
     x: Math.floor(rand() * (width - 4)) + 2,
     h: Math.floor(height * (0.45 + rand() * 0.55)),

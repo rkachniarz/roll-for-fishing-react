@@ -90,7 +90,7 @@ const UI_STRINGS = {
   'release.text': 'Let one fish go to make room. It goes back into the water here, and you may meet it again.',
   'release.new': 'Just caught',
   'release.fish': '{fish}, {size} cm',
-  'log.feature-appeared': 'On the water: {feature}.',
+  'log.feature-appeared': '{Feature} appears.',
   'log.feature-hit': 'Your bobber lands in {feature}.',
   'log.feature-gone': '{Feature} is gone.',
   'log.feature-moved': '{Feature} swims off somewhere else.',

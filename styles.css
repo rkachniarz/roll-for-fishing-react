@@ -105,6 +105,20 @@ body {
   }
 }
 
+/* As tall as the button row: eight square buttons across the scene's width,
+   3 px apart (D94). */
+.top-spacer {
+  flex: none;
+  width: var(--scene);
+  height: calc((var(--scene) - 21px) / 8);
+}
+
+@media (min-width: 900px) {
+  .top-spacer {
+    display: none;
+  }
+}
+
 .scene-wrap {
   position: relative;
   flex: none;
@@ -621,6 +635,17 @@ body {
 
 .pane[hidden] {
   display: none;
+}
+
+/* The game menu and settings: a box in the middle of the scene, as WoW's
+   game menu (D29, D94), not a pane down the side. */
+.pane.pane-center {
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: min(calc(100% - 24px), 280px);
+  max-height: calc(100% - 24px);
+  border: 2px solid var(--frame);
+  border-radius: 4px;
 }
 
 .pane-head {

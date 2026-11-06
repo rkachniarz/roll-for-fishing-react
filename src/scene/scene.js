@@ -9,7 +9,11 @@
 import { Application, Container, Graphics, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { createSky } from './sky.js';
 import {
-  BOBBER_SIZES,
+  BOBBER,
+  BOBBER_DIPPED,
+  BOBBER_FAR,
+  BOBBER_FAR_DIPPED,
+  WATERLINE,
   PALETTE,
   SPLASH,
   WAVES,
@@ -52,8 +56,7 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
  * defaults; a knob whose option the owner picks becomes the default and
  * leaves this list.
  * @typedef {Object} SceneLook
- * @property {number} [reedBlades]  Blades of reed on each side.
- * @property {'a' | 'b' | 'c'} [bobberSize]  The bobber as drawn (a), or bigger (b, c).
+ * (None at the moment.)
  */
 
 /** The open water a cast may land on (the engine's, so features and casts agree). */
@@ -154,15 +157,14 @@ export async function createScene(canvas, rand, look = {}) {
   const line = new Graphics();
   play.addChild(line);
 
-  const bobberSprites = BOBBER_SIZES[look.bobberSize ?? 'a'];
   /** @param {import('./sprites.js').BobberLook | null} look */
   const paintBobber = (look) => {
     const keys = bobberKeys(look);
     return {
-      near: tex(paintGrid(bobberSprites.near, keys)),
-      nearDipped: tex(paintGrid(bobberSprites.nearDipped, keys)),
-      far: tex(paintGrid(bobberSprites.far, keys)),
-      farDipped: tex(paintGrid(bobberSprites.farDipped, keys)),
+      near: tex(paintGrid(BOBBER, keys)),
+      nearDipped: tex(paintGrid(BOBBER_DIPPED, keys)),
+      far: tex(paintGrid(BOBBER_FAR, keys)),
+      farDipped: tex(paintGrid(BOBBER_FAR_DIPPED, keys)),
     };
   };
   let bobberTextures = paintBobber(null);
@@ -180,8 +182,8 @@ export async function createScene(canvas, rand, look = {}) {
   // whole width, not the play area).
   const reedHeight = 110;
   const reedFrames = {
-    left: paintReeds(26, reedHeight, 'left', rand, look.reedBlades).map(tex),
-    right: paintReeds(26, reedHeight, 'right', rand, look.reedBlades).map(tex),
+    left: paintReeds(26, reedHeight, 'left', rand).map(tex),
+    right: paintReeds(26, reedHeight, 'right', rand).map(tex),
   };
   const reedsLeft = new Sprite(reedFrames.left[0]);
   reedsLeft.position.set(0, SIZE - reedHeight);
@@ -398,7 +400,7 @@ export async function createScene(canvas, rand, look = {}) {
           : bobberTextures.near;
       // Anchored at the float's waterline (a dipped bobber's whole sprite is
       // above it), snapped to whole pixels (R7.3).
-      const waterline = Math.min(far ? bobberSprites.waterline.far : bobberSprites.waterline.near, bobber.texture.height);
+      const waterline = Math.min(far ? WATERLINE.far : WATERLINE.near, bobber.texture.height);
       bobber.position.set(Math.round(bx - bobber.texture.width / 2), Math.round(by - waterline));
     }
 

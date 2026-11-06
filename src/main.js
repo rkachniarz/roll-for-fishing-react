@@ -85,8 +85,9 @@ function fit() {
   const wide = window.innerWidth >= 900;
   const gutter = wide ? 16 : 2;
   const width = wide ? window.innerWidth - HUD_WIDTH - 3 * gutter : window.innerWidth - 2 * gutter;
-  // On a phone the row's buttons are an eighth of the width, square.
-  const height = wide ? window.innerHeight - 2 * gutter : window.innerHeight - 2 * gutter - width / 8 - 16 - LOG_MIN;
+  // On a phone the row's buttons are an eighth of the width, square, and the
+  // spacer above the scene is as tall again (D94).
+  const height = wide ? window.innerHeight - 2 * gutter : window.innerHeight - 2 * gutter - width / 4 - 22 - LOG_MIN;
   // Less the wrapper's border, so the canvas itself gets the whole multiple.
   // On a phone the scene widens to fill the width (D93).
   scene.fit(width - 4, height - 4);
@@ -285,6 +286,9 @@ function act(now, point) {
   if (cast.phase === 'done' && now - lastActAt < 500) return;
   lastActAt = now;
   if (cast.phase === 'idle' || (cast.phase === 'done' && !pausing())) {
+    // No casting with the game menu open; a strike still lands, so opening
+    // it mid-cast never costs a fish (D94).
+    if (menuOpen()) return;
     apply(castLine(state, now, { aim: point, bounds: WATER, extra: extraSources() }));
   } else {
     apply(strikeLine(state, cast, now));
@@ -503,6 +507,11 @@ let bagOpen = false;
 let bagTabShown = 'equipment';
 
 /** @param {Pane} name */
+/** The game menu, or the settings opened from it, is over the scene. */
+function menuOpen() {
+  return pane === 'menu' || pane === 'settings';
+}
+
 function togglePane(name) {
   pane = pane === name ? null : name;
   hideTip();
@@ -538,6 +547,7 @@ function renderPane() {
   renderBag();
   const box = $('pane');
   box.hidden = !pane || !state;
+  box.classList.toggle('pane-center', menuOpen());
   for (const b of document.querySelectorAll('[data-pane]')) {
     const name = b.getAttribute('data-pane');
     b.setAttribute('aria-pressed', String(name === 'bag' ? bagOpen && Boolean(state) : name === pane));

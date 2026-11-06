@@ -144,6 +144,18 @@ await check('panes over the scene', PHONE, '?seed=1', async (page) => {
     report(`panes: ${id} opens`, open);
     await page.screenshot({ path: `dist/verify/pane-${id}.png` });
   }
+  // The menu is a box in the middle of the scene, and no line goes out past it (D94).
+  const centred = await page.evaluate(() => {
+    const p = /** @type {Element} */ (document.getElementById('pane')).getBoundingClientRect();
+    const s = /** @type {Element} */ (document.getElementById('scene')).getBoundingClientRect();
+    return Math.abs(p.left + p.width / 2 - (s.left + s.width / 2)) < 2 && Math.abs(p.top + p.height / 2 - (s.top + s.height / 2)) < 2;
+  });
+  report('panes: the menu sits in the middle of the scene', centred);
+  const box = await page.locator('#scene').boundingBox();
+  await page.touchscreen.tap(box.x + 12, box.y + 12);
+  await page.keyboard.press('Space');
+  await page.waitForTimeout(200);
+  report('panes: no casting with the menu open', (await page.getAttribute('body', 'data-phase')) === 'idle');
   await page.click('#menu');
   report('panes: a second tap closes it', !(await page.isVisible('#pane')));
   await page.click('#journal');

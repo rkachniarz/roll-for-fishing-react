@@ -24,12 +24,18 @@ Items with no note are left alone.
 
 Newest first.
 
+## Second notes from the phone (D94)
+
+- **The settings pane is centred too,** not only the menu: it opens from the menu, and WoW centres both. The other
+  panes stay down the side.
+- **A strike still works with the menu open;** only casting a new line is blocked. Blocking strikes too would let
+  the menu lose a fish that bit while it was open.
+- **The spacer is empty.** Something could live there later (the buff bar, the time of day).
+
 ## A wider scene (D93)
 
 - **The widest is 320 pixels** (5:4). It only matters on desktop, where the scene now goes 320 wide too (640×512 at
   1280×800); phones stay under it (286 on an iPhone, 314 on your Pixel).
-- **The bobber sizes on the art sheet** (B 11×18, C 13×23, with far versions) are Claude's drawings, scaled up from
-  the current one. Pick one, or draw your own over `node tools/sprite-png.mjs export bobber-b`.
 - **The Pixel 9 Pro in the browser checks** is read off your screenshot: 427×830 CSS pixels at 2.25 (the default
   "High resolution"). If you switch to Full resolution, the scene goes ×4 and 314 wide.
 
@@ -56,9 +62,6 @@ Newest first.
   a read, since every later piece of art will follow them.
 - **Event pictures are 128×64** (`docs/art.md`, Sizes). The dialog only fixes 2:1; the size is Claude's pick, small
   enough to draw by hand.
-- **The first trial, reed density** (`art.html`): A is today's 9 blades a side, B 18, C 36. Pick one, or say what's
-  wrong with all three. With one-pixel blades the difference is small, which suggests the reeds need a different
-  shape (clumps, thicker stems) more than more blades.
 - **Magenta for "nothing here"** in drawings, since white is a colour in the palette. A drawing on white works too,
   if you say so.
 
