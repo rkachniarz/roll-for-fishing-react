@@ -1011,3 +1011,127 @@ body.is-dragging {
   opacity: 0.5;
   cursor: default;
 }
+
+/* ---------- Perks (D96) ---------- */
+
+/* A perk to choose: the character button glows, as WoW's does for a talent point. */
+.bar-button.badge {
+  position: relative;
+  border-color: var(--accent);
+  animation: badge-glow 1.2s ease-in-out infinite alternate;
+}
+
+.bar-button.badge::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  border: 2px solid var(--frame);
+  border-radius: 50%;
+}
+
+@keyframes badge-glow {
+  from {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  to {
+    box-shadow: 0 0 6px 2px var(--accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-button.badge {
+    animation: none;
+  }
+}
+
+.perk-choice {
+  margin-bottom: 10px;
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 8px;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+}
+
+.perk-choice h3 {
+  margin: 0;
+  color: var(--accent);
+}
+
+.perk {
+  display: grid;
+  gap: 2px;
+  padding: 6px 8px;
+  text-align: left;
+  font: inherit;
+  font-variant-ligatures: none;
+  color: var(--text);
+  background: var(--slot-bg);
+  border: 2px solid var(--panel-edge);
+  border-radius: 3px;
+}
+
+button.perk {
+  cursor: pointer;
+}
+
+button.perk[aria-pressed='true'] {
+  border-color: var(--accent);
+}
+
+.perk-name {
+  font-weight: 600;
+}
+
+.perk-kind {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.perk-text {
+  font-size: 14px;
+}
+
+.perk-effect {
+  font-size: 14px;
+}
+
+.perk-effect.good {
+  color: var(--good);
+}
+
+.perk-effect.bad {
+  color: var(--bad);
+}
+
+.perk-choice .learn {
+  justify-self: end;
+  min-height: 36px;
+  padding: 2px 16px;
+  font: inherit;
+  font-variant-ligatures: none;
+  color: var(--accent);
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.perk-choice .learn:disabled {
+  color: var(--muted);
+  border-color: var(--panel-edge);
+  cursor: default;
+}
+
+.perks {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

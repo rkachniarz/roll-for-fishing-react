@@ -35,7 +35,7 @@ import { equip, fits, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_S
 import { setupDrag } from './ui/drag.js';
 import { showError } from './ui/errors.js';
 import { arrive, choose, openSlide } from './engine/events.js';
-import { owedLevels, settlePerks } from './engine/perks.js';
+import { owedLevels, settlePerks, takePerk } from './engine/perks.js';
 import { eventWords, sayEventText } from './ui/event-words.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
@@ -590,7 +590,7 @@ function renderPane() {
   $('paneTitle').textContent = pane === 'player' ? s.character.name : pane === 'dev' || pane === 'settings' ? t(`menu.${pane}`) : t(`hud.${pane}`);
   switch (pane) {
     case 'player':
-      body.replaceChildren(...playerPane(s, valuesFor(s, extraSources()).flat));
+      body.replaceChildren(...playerPane(s, valuesFor(s, extraSources()).flat, learnPerk));
       break;
     case 'journal':
       body.replaceChildren(...journalPane(s));
@@ -739,7 +739,28 @@ function render() {
   const now = clock(state.time);
   scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, sun: now.sun, weather: state.weather });
   renderHud();
+  // A perk to choose: the character button glows, as WoW's does for a talent
+  // point, without stopping the game (D96).
+  const owed = owedLevels(state).length > 0;
+  $('player').classList.toggle('badge', owed);
+  $('player').setAttribute('aria-label', owed ? `${t('hud.player')}: ${t('hud.perkOwed')}` : t('hud.player'));
   renderPane();
+}
+
+/**
+ * The player learns a perk from the character pane (D96).
+ * @param {string} id
+ */
+function learnPerk(id) {
+  if (!state) return;
+  const next = takePerk(state, id);
+  if (next === state) return;
+  state = next;
+  // Mid-cast the checkpoint stays the save (D74); the perk is saved when the
+  // cast ends, and a reload before then only offers the choice again.
+  if (cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
+  logEvents([{ type: 'perk', perk: id }]);
+  render();
 }
 
 // ---------- Character creation (DEV_PLAN 3.3) ----------
@@ -964,7 +985,10 @@ const bench = DEV
       // Only between casts, so a cast in progress keeps its checkpoint (D74).
       setState: (/** @type {GameState} */ next) => {
         if (cast.phase === 'waiting' || cast.phase === 'bite') return;
-        state = next;
+        // A new level from the bench gives its level-1 perk as a cast would (D96).
+        const settled = settlePerks(next);
+        state = settled.state;
+        logEvents(settled.taken.map((id) => ({ type: 'perk', perk: id })));
         save(state);
         render();
         promptPlayer();

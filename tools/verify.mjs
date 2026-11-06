@@ -211,6 +211,30 @@ await check('advantage shows both dice', PHONE, '?dev&seed=1&wait=600', async (p
   report('advantage: the die that did not count is struck through, before the one that did', dropped >= 1 && kept >= dropped, detail);
 });
 
+await check('perks: a badge, then a choice in the character pane', PHONE, '?dev&seed=1', async (page) => {
+  await openBench(page);
+  await page.selectOption('#dev-class', 'fish-fighter');
+  await page.fill('#dev-xp', '50');
+  await page.press('#dev-xp', 'Enter');
+  await closePane(page);
+  report('perks: the character button shows a badge for a perk to choose', await page.locator('#player.badge').isVisible());
+  await page.click('#player');
+  const heading = (await page.textContent('#perkChoice h3')) ?? '';
+  report('perks: level 1 gave its perk; the choice is for level 2', /level 2/.test(heading), heading);
+  report('perks: Learn waits for a pick', await page.isDisabled('#learnPerk'));
+  await page.click('#perkChoice .perk >> nth=0');
+  await page.click('#learnPerk');
+  await page.click('#perkChoice [data-perk="heavy-hand"]');
+  await page.screenshot({ path: 'dist/verify/perk-choice.png' });
+  await page.click('#learnPerk');
+  report('perks: every level chosen, the choice goes', (await page.locator('#perkChoice').count()) === 0);
+  report('perks: three perks taken', (await page.locator('#perksTaken li').count()) === 3);
+  report('perks: the badge goes', (await page.locator('#player.badge').count()) === 0);
+  const log = await logText(page);
+  report('perks: the log says what was learnt', /You learn Jump In..*You learn Heavy Hand./s.test(log), log);
+  await page.screenshot({ path: 'dist/verify/perks-taken.png' });
+});
+
 await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (page, tap) => {
   await tap();
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });

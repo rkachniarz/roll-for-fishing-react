@@ -10,6 +10,7 @@ import { className } from '../engine/character.js';
 import { paintIcon } from '../scene/icons.js';
 import { bagTab, slot } from './links.js';
 import { EQUIPMENT_SLOTS } from '../engine/equipment.js';
+import { offers, owedLevels } from '../engine/perks.js';
 
 /** @typedef {import('../engine/state.js').GameState} GameState */
 
@@ -51,8 +52,9 @@ function equipSlot(state, key) {
  * down the right, the stats between them.
  * @param {GameState} state
  * @param {Record<string, number>} values  The game values' totals (valuesFor().flat).
+ * @param {(id: string) => void} [onTakePerk]  The player learns a perk on offer (D96).
  */
-export function playerPane(state, values) {
+export function playerPane(state, values, onTakePerk = () => {}) {
   const c = state.character;
   const level = levelFor(c.xp);
   const curve = content.rules.levels.xp;
@@ -65,7 +67,10 @@ export function playerPane(state, values) {
   const column = (/** @type {string[]} */ keys) => el('div', { className: 'doll-column' }, keys.map((k) => equipSlot(state, k)));
   const left = ['hat', ...EQUIPMENT_SLOTS.filter((s) => s.kind === 'trinket').map((s) => s.key)];
   const right = EQUIPMENT_SLOTS.map((s) => s.key).filter((k) => !left.includes(k));
+  const { choice, taken } = perksSection(state, onTakePerk);
   return [
+    // A perk to choose is why the pane was opened: it comes first (D96).
+    ...(choice ? [choice] : []),
     el('div', { className: 'who' }, [
       portrait,
       el('div', {}, [
@@ -83,7 +88,78 @@ export function playerPane(state, values) {
       ]),
       column(right),
     ]),
+    ...taken,
   ];
+}
+
+/**
+ * A perk as a card: its name, passive or active (with the cooldown), and what
+ * it does.
+ * @param {string} id
+ * @param {keyof HTMLElementTagNameMap} [tag]
+ */
+function perkCard(id, tag = 'div') {
+  const p = content.perks[id];
+  const cooldown = p.cooldown?.casts
+    ? t(p.cooldown.minusLevel ? 'perk.cooldownMinusLevel' : 'perk.cooldown', { casts: p.cooldown.casts })
+    : '';
+  return el(tag, { className: `perk perk-${p.kind}` }, [
+    el('span', { className: 'perk-name', textContent: t(p.name) }),
+    el('span', { className: 'perk-kind', textContent: [t(`perk.${p.kind}`), cooldown].filter(Boolean).join(' · ') }),
+    el('span', { className: 'perk-text', textContent: t(p.description) }),
+  ]);
+}
+
+/** The perk card picked but not yet learnt, kept while the pane is redrawn. */
+let picked = '';
+
+/**
+ * The perks (D96): the choice for the lowest owed level, if there is one, as
+ * cards to pick from and a button to learn the picked one; then every perk
+ * taken, by level.
+ * @param {GameState} state
+ * @param {(id: string) => void} onTakePerk
+ */
+function perksSection(state, onTakePerk) {
+  /** @type {HTMLElement | null} */
+  let choiceBox = null;
+  const [owed] = owedLevels(state);
+  if (owed !== undefined) {
+    const choice = offers(state, owed);
+    if (!choice.includes(picked)) picked = '';
+    const learn = el('button', { type: 'button', id: 'learnPerk', className: 'learn', textContent: t('perk.learn'), disabled: !picked });
+    learn.addEventListener('click', () => {
+      const id = picked;
+      picked = '';
+      if (id) onTakePerk(id);
+    });
+    const cards = choice.map((id) => {
+      const card = perkCard(id, 'button');
+      Object.assign(card, { type: 'button' });
+      card.dataset.perk = id;
+      card.setAttribute('aria-pressed', String(id === picked));
+      card.addEventListener('click', () => {
+        picked = id;
+        for (const c of cards) c.setAttribute('aria-pressed', String(c === card));
+        learn.disabled = false;
+      });
+      return card;
+    });
+    choiceBox = el('section', { className: 'perk-choice', id: 'perkChoice' }, [el('h3', { textContent: t('perk.choose', { level: owed }) }), ...cards, learn]);
+  }
+  const taken = Object.entries(state.character.perks)
+    .map(([level, id]) => ({ level: Number(level), id }))
+    .filter(({ id }) => content.perks[id])
+    .sort((a, b) => a.level - b.level);
+  return {
+    choice: choiceBox,
+    taken: [
+      el('h3', { textContent: t('perk.taken') }),
+      taken.length
+      ? el('ul', { className: 'perks', id: 'perksTaken' }, taken.map(({ id }) => el('li', {}, [perkCard(id)])))
+      : el('p', { className: 'muted', textContent: t('perk.none') }),
+    ],
+  };
 }
 
 /**

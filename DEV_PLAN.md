@@ -154,7 +154,7 @@ attempt at a catch, the action bar under the button row, abilities that light up
 
 - [x] **6.6** Perks as content (`content/perks/`), the save's `character.perks`, passive perks feeding the game
   values; crits as D96 (6); the bench grants perks.
-- [ ] **6.1** Choosing a perk at level-up: the badge, and the choice in the character pane (D96).
+- [x] **6.1** Choosing a perk at level-up: the badge, and the choice in the character pane (D96).
 - [ ] **6.2** Active abilities with cooldowns; the action bar under the button row.
 - [ ] **6.7** Abilities that light up after something happens: the warrior's jump, the rogue's gut, the mage's bend
   reality.
