@@ -45,6 +45,7 @@ and the art sheet at `/art.html` there.
 | `src/save.js` | The three save slots in the browser's storage |
 | `src/settings.js` | Settings, kept per device: the theme |
 | `src/ui/buffbar.js` | The buff and debuff bar over the scene's top right |
+| `src/ui/actionbar.js` | The action bar under the button row: abilities, cooldowns, glows |
 | `src/dev.js` | The `?dev` bench: game values, world, character, inventory, buffs |
 | `src/main.js` | Wiring: input → engine → scene and page; character creation; saving |
 | `src/rng.js` | Seeded random streams (from SuperRollies) |
@@ -58,6 +59,8 @@ and the art sheet at `/art.html` there.
 | `src/engine/equipment.js` | The equipment slots; moving items between them and the bags |
 | `src/engine/events.js` | Events: requirements, choices and their effects, the event meter and other triggers |
 | `src/engine/character.js` | Character creation: names, classes, stat rolls |
+| `src/engine/perks.js` | Perks: what each level offers, what is owed and taken, passive perks' effects |
+| `src/engine/abilities.js` | Active abilities: the action bar's contents, cooldowns, which are lit |
 | `src/engine/features.js` | Surface features: appearing, drifting, thinning out; the open water's bounds |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |

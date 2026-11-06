@@ -235,6 +235,73 @@ await check('perks: a badge, then a choice in the character pane', PHONE, '?dev&
   await page.screenshot({ path: 'dist/verify/perks-taken.png' });
 });
 
+/** From the bench: a warrior at level 3, with Battle Focus as the level-3 pick. */
+async function warriorAtLevel3(page) {
+  await openBench(page);
+  await page.selectOption('#dev-class', 'fish-fighter');
+  await page.fill('#dev-xp', '50');
+  await page.press('#dev-xp', 'Enter');
+  await closePane(page);
+  await page.click('#player');
+  await page.click('#perkChoice .perk >> nth=0');
+  await page.click('#learnPerk');
+  await page.click('#perkChoice [data-perk="battle-focus"]');
+  await page.click('#learnPerk');
+  await closePane(page);
+}
+
+await check('action bar: under the button row, a next-cast ability and its cooldown', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+  report('action bar: hidden before any ability', await page.isHidden('#actions'));
+  const sceneBefore = await page.locator('#scene').boundingBox();
+  await warriorAtLevel3(page);
+  report('action bar: two abilities', (await page.locator('#actions .action').count()) === 2);
+  const bar = await page.locator('.bar').boundingBox();
+  const actions = await page.locator('#actions').boundingBox();
+  const log = await page.locator('.log-frame').boundingBox();
+  report('action bar: between the button row and the log', actions.y > bar.y + bar.height - 1 && log.y >= actions.y + actions.height - 1, `${bar.y} ${actions.y} ${log.y}`);
+  const sceneAfter = await page.locator('#scene').boundingBox();
+  report('action bar: the scene keeps its size', sceneAfter.width === sceneBefore.width && sceneAfter.height === sceneBefore.height);
+  report('action bar: Jump In is greyed out until something lights it', await page.locator('[data-ability="jump-in"].unusable').isVisible());
+  await page.tap('[data-ability="battle-focus"]');
+  report('action bar: a used next-cast ability is armed and on the buff bar', await page.locator('[data-ability="battle-focus"].armed').isVisible() && (await page.locator('#buffBar .buff').count()) === 1);
+  await page.screenshot({ path: 'dist/verify/action-bar.png' });
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  const detail = (await page.textContent('#log .roll')) ?? '';
+  const left = (await page.textContent('[data-ability="battle-focus"] .action-cd')) ?? '';
+  report('action bar: after an attempt, the cooldown shows the casts left', left === '6', left);
+  report('action bar: the buff did its job', /Battle Focus/.test(detail) || !/d20/.test(detail), detail);
+});
+
+await check('action bar: Jump In lights up when a fish gets away', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+  await warriorAtLevel3(page);
+  await openBench(page);
+  for (const [name, value] of [['fishFind', '100'], ['fishDifficulty', '99']]) {
+    await page.fill(`#dev-${name}`, value);
+    await page.press(`#dev-${name}`, 'Enter');
+  }
+  await closePane(page);
+  // A strike against an impossible fish, until one gets away (a natural 20 still lands it).
+  for (let i = 0; i < 4; i++) {
+    await tap();
+    await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+    await tap();
+    await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+    if (/got away/.test(await logText(page))) break;
+    await page.waitForTimeout(600);
+  }
+  report('action bar: Jump In glows', await page.locator('[data-ability="jump-in"].lit').isVisible());
+  await page.screenshot({ path: 'dist/verify/action-lit.png' });
+  const bucket = await page.getAttribute('#bucket', 'aria-label');
+  await page.keyboard.press('1');
+  const log = await logText(page);
+  report('action bar: key 1 uses it, and the fish is caught', /You use Jump In\.You caught/.test(log), log.slice(-160));
+  report('action bar: then it cools down', (await page.textContent('[data-ability="jump-in"] .action-cd')) === '10');
+  report('action bar: no longer lit', (await page.locator('[data-ability="jump-in"].lit').count()) === 0, bucket ?? '');
+});
+
 await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (page, tap) => {
   await tap();
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });

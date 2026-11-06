@@ -100,6 +100,12 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   more than one, and bait is used up from it. Move items with `src/engine/equipment.js`, never by editing
   `equipped` and `bags` by hand.
 - **The bag pane sits over the log, not over the scene (D83),** so it can be open with the character pane on a phone.
+- **The save keeps only the perks taken, level -> id (D96).** What a character is owed is worked out from its level
+  (`src/engine/perks.js`), and only the lowest owed level can be chosen, so a later level's random offer never
+  depends on a choice not yet made. Universal offers come from a stream keyed by the level, never stored.
+- **Cooldowns and an ability's "next cast" count attempts, not casts (D96):** a strike in time on a splash, the
+  empty hook included. Ability buffs last `attempts`; one used mid-cast is `pending` and isn't spent by that cast.
+  Lit abilities (`state.lit`) go dark when the next line goes out (`castLine`).
 - **`src/ui/drag.js` reads `data-drag` / `data-drop` (`bag:3`, `bag:end`, `bag:pane`, `equip:rod`) off the elements;**
   `main.js` decides what a drop does. A `contextmenu` from a long-press on a phone is swallowed; only a mouse's
   right-click equips.

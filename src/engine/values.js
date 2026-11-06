@@ -38,6 +38,10 @@ export const GAME_VALUES = {
   vantageStacks: { better: 'higher', base: 0 },
   /** The lowest natural d20 that lands the fish whatever the total, unless the fish's own d20 is a 20 too (D96). */
   naturalCatch: { better: 'lower', base: 20 },
+  /** Above 0: a fish bites for certain; below 0: never a fish (abilities, D96). */
+  biteCertain: { better: 'neither', base: 0 },
+  /** Above 0: a fish that bites is one that got away here before, if there is one (D96). */
+  fromPool: { better: 'neither', base: 0 },
   /** The same for the fish's own d20 (R3.5). */
   fishVantage: { better: 'lower', base: 0 },
   /** Added to every fish's difficulty. */

@@ -158,6 +158,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
     }),
   );
   const clearPerks = button('Clear perks', () => edit((s) => ((s.character.perks = {}), s)));
+  const resetCooldowns = button('Reset cooldowns', () => edit((s) => ({ ...s, cooldowns: {} })));
 
   // ---------- Inventory ----------
   const itemSelect = el('select');
@@ -228,7 +229,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       el('div', { className: 'dev-row' }, ['Surface feature ', featureSelect, spawnFeature, button('Clear', () => edit((s) => ({ ...s, features: [] })))]),
       featuresLine,
     ]),
-    section('Character', [el('div', { className: 'dev-fields' }, [el('label', { htmlFor: 'dev-xp', textContent: 'XP' }), xpInput, el('label', { htmlFor: 'dev-luck', textContent: 'Luck' }), luckInput, el('label', { htmlFor: 'dev-class', textContent: 'Class' }), classSelect]), statsLine, el('div', { className: 'dev-row' }, [perkSelect, grantPerk, clearPerks])]),
+    section('Character', [el('div', { className: 'dev-fields' }, [el('label', { htmlFor: 'dev-xp', textContent: 'XP' }), xpInput, el('label', { htmlFor: 'dev-luck', textContent: 'Luck' }), luckInput, el('label', { htmlFor: 'dev-class', textContent: 'Class' }), classSelect]), statsLine, el('div', { className: 'dev-row' }, [perkSelect, grantPerk, clearPerks, resetCooldowns])]),
     section('Inventory', [
       el('div', { className: 'dev-row' }, [itemSelect, addItem, addTen, equipItem]),
       el('div', { className: 'dev-row' }, [addEquippable]),

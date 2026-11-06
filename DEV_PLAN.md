@@ -4,7 +4,7 @@ What's left to do. Tick boxes as work lands; record decisions in [docs/decisions
 silently changing requirements. Within a phase, tasks are listed in the order they should be done; their numbers are
 only ids, so a task added later keeps its number wherever it lands.
 
-**Where things stand (2026-11-05):** Phases 0, 1 and 2 are done. **Phase 3: the game is playable on the real engine**:
+**Where things stand (2026-11-06):** Phases 0, 1 and 2 are done. **Phase 3: the game is playable on the real engine**:
 character creation, the full cast with its hidden rolls, saving, New game, the buff bar and the `?dev` bench, all in
 the owner's phone layout (D79), with a title screen, three save slots and a light theme (D80, D81). The game is on GitHub Pages
 (3.5, D91), published from every push to `fresh-start`. Phases 4 and 5 are under way:
@@ -16,6 +16,8 @@ The owner's first review is acted on (D85, D86): the sun and the time words foll
 a random morning, there's no money, and a few numbers and screens changed. Claude's guesses and calls are listed in
 [docs/REVIEW.md](docs/REVIEW.md), for the owner to check. The art now has a process (D90, `docs/art.md`): an art
 sheet at `art.html` and a way to draw sprites in MS Paint; its first trial asks how dense the reeds should be.
+**Phase 6 has begun (D96):** perks at levels 1–8, chosen in the character pane, and an action bar of abilities
+with cooldowns, two of which light up (Jump In, Gut). Some class perks still need new fish or more work (6.3).
 
 ## Where things are
 
@@ -155,10 +157,12 @@ attempt at a catch, the action bar under the button row, abilities that light up
 - [x] **6.6** Perks as content (`content/perks/`), the save's `character.perks`, passive perks feeding the game
   values; crits as D96 (6); the bench grants perks.
 - [x] **6.1** Choosing a perk at level-up: the badge, and the choice in the character pane (D96).
-- [ ] **6.2** Active abilities with cooldowns; the action bar under the button row.
-- [ ] **6.7** Abilities that light up after something happens: the warrior's jump, the rogue's gut, the mage's bend
-  reality.
-- [ ] **6.3** Each class's level 1, 3 and 5 perks working (the notes' level 6 moved to 5, D96).
+- [x] **6.2** Active abilities with cooldowns; the action bar under the button row, keys 1–9.
+- [ ] **6.7** Abilities that light up after something happens: the warrior's jump and the rogue's gut done; the
+  mage's bend reality to come with 6.3.
+- [ ] **6.3** Each class's level 1, 3 and 5 perks working (the notes' level 6 moved to 5, D96). Working: all three
+  level-1 actives, Heavy Hand, Overwhelm, Battle Focus, Full Force, Recall, Sleight of Hook. Still to do: Rift Fishing
+  and Greedy Fish (need new fish), Ever-Summoning, Bend Reality, Fence, Polish.
 - [ ] **6.4** Hidden rolls revealed by levels, perks and items (R5.2, Q-40): the number a fish needed from level 1.
 - [ ] **6.5** Class-flavoured texts (R6.5).
 

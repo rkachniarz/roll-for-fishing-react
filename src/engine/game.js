@@ -21,6 +21,7 @@ import { diceFrom, levelFor } from './state.js';
 import { equippedIds } from './equipment.js';
 import { afterCast } from './events.js';
 import { owedLevels, perkSources, settlePerks } from './perks.js';
+import { LIGHTS, abilityStatus, spendCooldownCasts, startCooldown, tickCooldowns } from './abilities.js';
 import { advanceTime } from './time.js';
 import { changeSeason, stepWeather } from './weather.js';
 
@@ -159,7 +160,11 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   const checkpoint = structuredClone(state);
   checkpoint.buffs = checkpoint.buffs
     .map((b) => (b.casts !== undefined ? { ...b, casts: b.casts - 1 } : b))
-    .filter((b) => b.casts === undefined || b.casts > 0);
+    .filter((b) => b.casts === undefined || b.casts > 0)
+    // An ability used while the last line was out counts from this cast (D96).
+    .map(({ pending, ...b }) => b);
+  // Lit abilities go dark when the next line goes out (D96).
+  checkpoint.lit = {};
 
   const next = structuredClone(checkpoint);
   next.book.casts++;
@@ -238,7 +243,9 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
   const biteRoll = dice.line.roll100();
   rolls.push({ kind: 'bite', die: 'd100', result: biteRoll, mods: fishFind.mods, total: biteRoll + fishFind.total, visible: false });
 
-  if (biteRoll + fishFind.total >= loc.biteThreshold) {
+  // Abilities can make a fish certain, or rule one out (D96).
+  const certain = values.flat.biteCertain;
+  if (certain > 0 || (certain === 0 && biteRoll + fishFind.total >= loc.biteThreshold)) {
     // A fish that got away here may come back: the more there are, the likelier (R3.6).
     const key = poolKey(state);
     const pool = state.escaped[key] ?? [];
@@ -249,7 +256,7 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
     if (featureFish) {
       // Not from the pool: it stays with the feature if pulled out too early.
       fish = featureFish;
-    } else if (!feature?.fish && pool.length > 0 && dice.line.roll100() <= pool.length) {
+    } else if (!feature?.fish && pool.length > 0 && (values.flat.fromPool > 0 || dice.line.roll100() <= pool.length)) {
       const i = dice.line.getRandomNumber(0, pool.length - 1);
       fish = pool[i];
       state.escaped[key] = pool.filter((_, j) => j !== i);
@@ -305,9 +312,25 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
     }
   }
 
-  // No fish: treasure when d100 - Treasure Find is at or under the threshold, else junk (R3.4).
-  const treasureFind = value('treasureFind');
-  const treasureRoll = dice.line.roll100();
+  return rollLoot(state, values, dice.line, dice.effects, feature, rolls);
+}
+
+/**
+ * No fish: treasure when d100 - Treasure Find is at or under the threshold,
+ * else junk (R3.4). Also what a gutted fish had swallowed (D96).
+ * @param {GameState} state
+ * @param {Values} values
+ * @param {Dice} lootDice  The stream for the d100 and the tables.
+ * @param {Dice} effectDice  The `effects` stream.
+ * @param {any} [feature]
+ * @param {Roll[]} [rolls]  Added to.
+ * @returns {{ line: Line, rolls: Roll[] }}
+ */
+function rollLoot(state, values, lootDice, effectDice, feature = null, rolls = []) {
+  const loc = content.locations[state.location];
+  const where = { location: state.location, spot: state.spot };
+  const treasureFind = applyValue(values, 'treasureFind', effectDice);
+  const treasureRoll = lootDice.roll100();
   rolls.push({
     kind: 'treasure',
     die: 'd100',
@@ -317,12 +340,12 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
     visible: false,
   });
   if (treasureRoll - treasureFind.total <= loc.treasureThreshold) {
-    const treasure = pick(locationTable(where, 'treasure', { found: state.found }), dice.line);
+    const treasure = pick(locationTable(where, 'treasure', { found: state.found }), lootDice);
     if (treasure) return { line: { kind: 'item', id: /** @type {string} */ (treasure.id) }, rolls };
     // Every unique treasure here is found: junk instead (D75).
   }
   const junkTable = feature?.junk ? listTable(feature.junk, 'junk', { found: state.found }) : locationTable(where, 'junk', { found: state.found });
-  const junk = pick(junkTable, dice.line);
+  const junk = pick(junkTable, lootDice);
   return { line: junk?.id ? { kind: 'item', id: junk.id } : { kind: 'empty', reason: 'nothing' }, rolls };
 }
 
@@ -403,12 +426,22 @@ function resolveCast(state, cast) {
 
   next.missStreak = result === 'missed' ? next.missStreak + 1 : 0;
 
+  // An attempt at a catch, the empty hook included, counts for cooldowns and
+  // uses up an ability's "next cast" (D96). A missed splash doesn't.
+  if (result === 'caught' || result === 'escaped' || result === 'landed') {
+    spendCooldownCasts(next);
+    next.buffs = next.buffs
+      .map((b) => (b.attempts !== undefined && !b.pending ? { ...b, attempts: b.attempts - 1 } : b))
+      .filter((b) => b.attempts === undefined || b.attempts > 0);
+  }
+
   if (line.kind === 'fish') {
     const fish = line.fish;
     if (result === 'caught') {
       catchFish(next, fish, cast.bucketSize);
       events.push({ type: 'caught', fish, roll: cast.outcome.rolls[0], required: line.required, seenBefore: line.seenBefore });
       if (next.pendingCatch) events.push({ type: 'bucket-full' });
+      else light(next, 'caught', fish, events);
       if (next.equipped.bait) {
         if (dice.bait.roll100() <= cast.bait.recovery) events.push({ type: 'bait-saved', bait: next.equipped.bait.id });
         else events.push({ type: 'bait-eaten', bait: useBait(next), fish });
@@ -425,6 +458,9 @@ function resolveCast(state, cast) {
       } else {
         const key = poolKey(next);
         next.escaped[key] = [...(next.escaped[key] ?? []), escaped];
+        // Only a fish in the pool can be jumped in after: a big fish that swam
+        // off is somewhere else (D85).
+        light(next, 'got-away', escaped, events);
       }
       if (next.equipped.bait && dice.bait.roll100() <= cast.bait.escapeLoss) {
         events.push({ type: 'bait-lost', bait: useBait(next), fish });
@@ -468,16 +504,7 @@ function resolveCast(state, cast) {
     cast = { ...cast, reeledIn: true };
   }
 
-  const levelAfter = levelFor(next.character.xp);
-  if (levelAfter > levelBefore) {
-    events.push({ type: 'level-up', level: levelAfter });
-    // A level with only one perk on offer gives it; one with a choice waits
-    // for the player, without stopping the game (D96).
-    const settled = settlePerks(next);
-    Object.assign(next, settled.state);
-    for (const id of settled.taken) events.push({ type: 'perk', perk: id });
-    if (owedLevels(next).length > 0) events.push({ type: 'perk-owed' });
-  }
+  levelUp(next, levelBefore, events);
 
   events.push(...updateFeatures(next, dice.features));
 
@@ -504,6 +531,125 @@ function resolveCast(state, cast) {
 
   next.streams = commit();
   return { state: next, cast, events };
+}
+
+/**
+ * A level-up, if the XP made one: the level-1 perk given, a choice to come
+ * (D96). Changes `state` in place.
+ * @param {GameState} state
+ * @param {number} levelBefore
+ * @param {GameEvent[]} events  Added to.
+ */
+function levelUp(state, levelBefore, events) {
+  const levelAfter = levelFor(state.character.xp);
+  if (levelAfter <= levelBefore) return;
+  events.push({ type: 'level-up', level: levelAfter });
+  // A level with only one perk on offer gives it; one with a choice waits for
+  // the player, without stopping the game (D96).
+  const settled = settlePerks(state);
+  Object.assign(state, settled.state);
+  for (const id of settled.taken) events.push({ type: 'perk', perk: id });
+  if (owedLevels(state).length > 0) events.push({ type: 'perk-owed' });
+}
+
+/**
+ * Lights every ready ability that `what` lights, for this fish (D96).
+ * Changes `state` in place.
+ * @param {GameState} state
+ * @param {'caught' | 'got-away'} what
+ * @param {PoolFish} fish
+ * @param {GameEvent[]} events  Added to.
+ */
+function light(state, what, fish, events) {
+  for (const [id, by] of Object.entries(LIGHTS)) {
+    if (by !== what || !Object.values(state.character.perks).includes(id)) continue;
+    const { tries, ...instance } = fish;
+    state.lit[id] = { fish: instance };
+    if (abilityStatus(state, id).usable) events.push({ type: 'lit', perk: id });
+    else delete state.lit[id];
+  }
+}
+
+// ---------- Abilities (D96) ----------
+
+/**
+ * The player uses an ability from the action bar. Most add a buff for the
+ * next attempt at a catch; a lit one acts on the fish that lit it.
+ * @param {GameState} state
+ * @param {string} id
+ * @param {import('./values.js').Source[]} [extra]  See valuesFor.
+ * @returns {{ state: GameState, events: GameEvent[] }}  The same state if it can't be used now.
+ */
+export function useAbility(state, id, extra = []) {
+  if (!abilityStatus(state, id).usable) return { state, events: [] };
+  const next = structuredClone(state);
+  const values = valuesFor(state, extra).flat;
+  const levelBefore = levelFor(next.character.xp);
+  /** @type {GameEvent[]} */
+  const events = [{ type: 'ability', perk: id }];
+  /** @param {import('./values.js').Effect[]} effects */
+  const nextCast = (effects) => next.buffs.push({ id, source: id, effects, attempts: 1, pending: true });
+
+  switch (id) {
+    case 'battle-focus':
+      nextCast([{ value: 'fishingSkill', add: levelBefore }]);
+      break;
+    case 'full-force':
+      // Both stats, for both rolls: as they stand now.
+      nextCast([
+        { value: 'fishingSkill', add: values.fishFind },
+        { value: 'fishFind', add: values.fishingSkill },
+      ]);
+      break;
+    case 'summon-fish':
+      nextCast([{ value: 'biteCertain', add: 1 }]);
+      break;
+    case 'sleight-of-hook':
+      nextCast([{ value: 'biteCertain', add: -1 }]);
+      break;
+    case 'recall':
+      nextCast([{ value: 'fromPool', add: 1 }]);
+      break;
+    case 'jump-in': {
+      // The fish that just got away, out of the pool and into the bucket.
+      const fish = next.lit[id]?.fish;
+      const key = poolKey(next);
+      const pool = next.escaped[key] ?? [];
+      const i = fish ? pool.findLastIndex((f) => sameFish(f, fish)) : -1;
+      if (i < 0) return { state, events: [] };
+      const caught = pool[i];
+      next.escaped[key] = pool.filter((_, j) => j !== i);
+      catchFish(next, caught, values.bucketSize);
+      events.push({ type: 'caught', fish: caught, seenBefore: false });
+      if (next.pendingCatch) events.push({ type: 'bucket-full' });
+      break;
+    }
+    case 'gut': {
+      // The fish that was just caught, out of the bucket; what it swallowed,
+      // rolled as a cast that brought up no fish (R3.4).
+      const fish = next.lit[id]?.fish;
+      const stack = fish ? next.bucket.find((b) => sameFish(b.fish, fish)) : null;
+      if (!fish || !stack) return { state, events: [] };
+      stack.count--;
+      next.bucket = next.bucket.filter((b) => b.count > 0);
+      const { dice, commit } = diceFrom(next);
+      const { line } = rollLoot(next, valuesFor(next, extra), dice.abilities, dice.effects);
+      next.streams = commit();
+      if (line.kind === 'item') {
+        addToBags(next, line.id);
+        next.found[line.id] = (next.found[line.id] ?? 0) + 1;
+        next.character.xp += content.items[line.id].xp ?? 0;
+        events.push({ type: 'gutted', fish, item: line.id });
+      } else events.push({ type: 'gutted', fish });
+      break;
+    }
+    default:
+      return { state, events: [] };
+  }
+  delete next.lit[id];
+  startCooldown(next, id);
+  levelUp(next, levelBefore, events);
+  return { state: next, events };
 }
 
 /**
@@ -610,6 +756,8 @@ function useBait(state) {
  * @returns {{ state: GameState, events: GameEvent[] }}
  */
 export function tickBuffs(state, ms) {
+  // Cooldowns that count time run down with them (D96).
+  state = tickCooldowns(state, ms);
   if (!state.buffs.some((b) => b.ms !== undefined)) return { state, events: [] };
   const buffs = state.buffs.map((b) => (b.ms !== undefined ? { ...b, ms: b.ms - ms } : b));
   const ended = buffs.filter((b) => b.ms !== undefined && b.ms <= 0);

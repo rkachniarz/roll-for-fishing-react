@@ -1135,3 +1135,100 @@ button.perk[aria-pressed='true'] {
   padding: 0;
   list-style: none;
 }
+
+/* ---------- The action bar (D96) ---------- */
+
+/* Under the button row, its buttons the same size, centred. */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+}
+
+.actions[hidden] {
+  display: none;
+}
+
+.action {
+  position: relative;
+  width: calc((100% - 21px) / 8);
+  aspect-ratio: 1;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font: inherit;
+  font-variant-ligatures: none;
+  color: var(--frame);
+  background: var(--tile);
+  border: 2px solid var(--frame);
+  border-radius: 2px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* The placeholder icon until abilities have art: the name's initials. */
+.action-icon {
+  font-size: calc(var(--icon) * 0.55);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.action-key {
+  position: absolute;
+  top: 1px;
+  left: 3px;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--muted);
+}
+
+/* The cooldown, over a darkened button, as in WoW. */
+.action-cd {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  font-size: calc(var(--icon) * 0.6);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 1px 1px 0 #000;
+  background: rgb(0 0 0 / 0.55);
+}
+
+.action.cooling .action-cd {
+  display: grid;
+}
+
+.action.unusable:not(.cooling) {
+  opacity: 0.45;
+}
+
+.action.armed {
+  border-color: var(--good);
+}
+
+/* Lit, as WoW's Overpower after a dodge. */
+.action.lit {
+  border-color: var(--accent);
+  animation: action-glow 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes action-glow {
+  from {
+    box-shadow: 0 0 2px 1px var(--accent);
+  }
+  to {
+    box-shadow: 0 0 10px 4px var(--accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action.lit {
+    animation: none;
+    box-shadow: 0 0 8px 3px var(--accent);
+  }
+}

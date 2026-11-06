@@ -24,20 +24,24 @@ export const SAVE_VERSION = 5;
  * cast-timing: bite delays · fishing: the player's d20 · line: what is on the
  * line · effects: dice on effects · weather · scatter: where the bobber lands ·
  * bait: saving or losing bait · features: surface features appearing and drifting ·
- * events: the event meter and which event it picks.
+ * events: the event meter and which event it picks · abilities: dice an
+ * ability rolls when used (D96).
  */
-export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events'];
+export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities'];
 
 /**
  * @typedef {import('./fish.js').FishInstance & { tries?: number }} PoolFish  A fish
  *   that got away or was released, with how many times it was met.
  *
- * @typedef {Object} Buff  A temporary modifier (R12). Lasts `casts` casts or `ms` real milliseconds.
+ * @typedef {Object} Buff  A temporary modifier (R12). Lasts `casts` casts, `attempts` attempts at a
+ *   catch (an ability's "next cast", D96) or `ms` real milliseconds.
  * @property {string} id
  * @property {string} source
  * @property {import('./values.js').Effect[]} effects
  * @property {boolean} [debuff]
  * @property {number} [casts]
+ * @property {number} [attempts]
+ * @property {boolean} [pending]  Added while a line was out: that cast doesn't use it up.
  * @property {number} [ms]
  *
  * @typedef {Object} GameState
@@ -71,6 +75,10 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  *   No cast goes out until it ends.
  * @property {Record<string, number>} eventsSeen  Event id -> how many times it has started.
  * @property {number} missStreak  Splashes missed in a row (D64).
+ * @property {Record<string, { casts?: number, ms?: number }>} cooldowns  Ability -> what's left of its
+ *   cooldown (abilities.js, D96).
+ * @property {Record<string, { fish?: import('./fish.js').FishInstance }>} lit  Abilities lit up by what
+ *   just happened, and what they would act on, until the next cast goes out (D96).
  */
 
 /**
@@ -130,6 +138,8 @@ export function newGame({ seed, character, month }) {
     event: null,
     eventsSeen: {},
     missStreak: 0,
+    cooldowns: {},
+    lit: {},
   };
 }
 
@@ -196,8 +206,15 @@ const MIGRATIONS = {
     eventsSeen: {},
     streams: { ...save.streams, events: deriveSeed(save.seed, 'events') },
   }),
-  // 4 -> 5: perks (D96). None taken yet; the page offers what the level owes.
-  4: (save) => ({ ...save, character: { ...save.character, perks: {} } }),
+  // 4 -> 5: perks and abilities (D96), with their own stream. None taken yet;
+  // the page offers what the level owes.
+  4: (save) => ({
+    ...save,
+    character: { ...save.character, perks: {} },
+    cooldowns: {},
+    lit: {},
+    streams: { ...save.streams, abilities: deriveSeed(save.seed, 'abilities') },
+  }),
 };
 
 /** @param {GameState} state */

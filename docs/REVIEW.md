@@ -24,6 +24,27 @@ Items with no note are left alone.
 
 Newest first.
 
+## Perks and abilities (Phase 6, D96)
+
+- **Every perk's name is Claude's:** Jump In, Heavy Hand, Battle Focus, Overwhelm, Full Force; Summon Fish, Rift
+  Fishing, Recall, Ever-Summoning, Bend Reality; Gut, Greedy Fish, Sleight of Hook, Fence, Polish. The descriptions
+  too (`content/perks/`).
+- **The universal perks are Claude's for now,** standing in until the cheap ideas from the old notes are built:
+  Steady Hands (+1 Fishing Skill), Fish Sense (+5 Fish Find), Magpie Eye (+5 Treasure Find), Bigger Bucket (+4 fish)
+  and Trouble Magnet (events twice as often, from the notes). The first three can be taken again.
+- **Jump In also lights up after a missed splash** with a fish on, not only when a strike fails: the fish got away
+  either way.
+- **A lit ability that's on cooldown doesn't light up** at all, rather than glowing uselessly.
+- **"Next cast" abilities are a buff on the buff bar** that lasts one attempt at a catch: pulling out early or missing
+  the splash keeps it for the next cast, as with cooldowns. One used while the line is out waits for the next cast.
+- **Gut finds what a cast with no fish would:** the treasure roll with your Treasure Find, else junk.
+- **Full Force** adds your Fish Find to your Fishing Skill and the other way round, as they stand when you use it.
+- **The log says when an ability lights up** ("Jump In is ready!"), since a glow is easy to miss on a phone.
+- **The action bar is centred** under the button row, its buttons the same size. Until there's art, each shows the
+  ability's initials, with its key (1, 2, 3) in the corner. Abilities that don't work yet show greyed out:
+  Bend Reality, and the passives that need new fish are taken but do nothing yet.
+- **Choosing a perk** is two taps: pick a card, then Learn. The choice shows at the top of the character pane.
+
 ## Second notes from the phone (D94)
 
 - **The settings pane is centred too,** not only the menu: it opens from the menu, and WoW centres both. The other

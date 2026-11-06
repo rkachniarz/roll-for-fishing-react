@@ -14,7 +14,9 @@ import { diceFor } from './dice.js';
 import { content } from './generated/content.js';
 import { t, tParts } from './strings.js';
 import { newGame, levelFor } from './engine/state.js';
-import { MISS_LIMIT, cancelBuff, castLine, releaseFish, strikeLine, tick, tickBuffs, valuesFor } from './engine/game.js';
+import { MISS_LIMIT, cancelBuff, castLine, releaseFish, strikeLine, tick, tickBuffs, useAbility, valuesFor } from './engine/game.js';
+import { abilityStatus, activePerks } from './engine/abilities.js';
+import { createActionBar } from './ui/actionbar.js';
 import { className, classes, generateName, rollStats } from './engine/character.js';
 import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
@@ -87,8 +89,10 @@ function fit() {
   const gutter = wide ? 16 : 2;
   const width = wide ? window.innerWidth - HUD_WIDTH - 3 * gutter : window.innerWidth - 2 * gutter;
   // On a phone the row's buttons are an eighth of the width, square, and the
-  // spacer above the scene is as tall again (D94).
-  const height = wide ? window.innerHeight - 2 * gutter : window.innerHeight - 2 * gutter - width / 4 - 22 - LOG_MIN;
+  // spacer above the scene is as tall again (D94); the action bar, when there
+  // is one, is another row like it (D96).
+  const actions = document.getElementById('actions')?.hidden === false ? (width - 21) / 8 + 6 : 0;
+  const height = wide ? window.innerHeight - 2 * gutter : window.innerHeight - 2 * gutter - width / 4 - 22 - actions - LOG_MIN;
   // Less the wrapper's border, so the canvas itself gets the whole multiple.
   // On a phone the scene widens to fill the width (D93).
   scene.fit(width - 4, height - 4);
@@ -312,8 +316,17 @@ window.addEventListener('keydown', (e) => {
     closePane();
     return;
   }
-  if (e.repeat || (e.key !== ' ' && e.key !== 'Enter')) return;
   const target = e.target;
+  // 1, 2, 3…: the action bar, as in WoW (D96).
+  if (!e.repeat && /^[1-9]$/.test(e.key) && !(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) {
+    const id = state ? activePerks(state)[Number(e.key) - 1] : undefined;
+    if (id) {
+      e.preventDefault();
+      useFromBar(id);
+    }
+    return;
+  }
+  if (e.repeat || (e.key !== ' ' && e.key !== 'Enter')) return;
   if (target instanceof HTMLInputElement || target instanceof HTMLButtonElement || target instanceof HTMLSelectElement) return;
   e.preventDefault();
   act(e.timeStamp, null);
@@ -328,6 +341,40 @@ const buffBar = createBuffBar($('buffBar'), (id) => {
   if (cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
   render();
 });
+
+// ---------- The action bar (D96) ----------
+
+const actionBar = createActionBar($('actions'), useFromBar);
+
+/**
+ * The player uses an ability, from the bar or its key.
+ * @param {string} id
+ */
+function useFromBar(id) {
+  if (!state) return;
+  const status = abilityStatus(state, id);
+  if (!status.usable) {
+    const why = !status.working ? 'notYet' : status.cooldown ? 'notReady' : status.armed ? 'armed' : 'notLit';
+    showError($('errors'), t(`error.ability.${why}`));
+    return;
+  }
+  const out = useAbility(state, id, extraSources());
+  if (out.state === state) return;
+  state = out.state;
+  // Mid-cast the checkpoint stays the save (D74); the cast saves it when it ends.
+  if (cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
+  logEvents(out.events);
+  if (out.events.some((e) => e.type === 'bucket-full')) openRelease();
+  render();
+}
+
+/** The bar, from the state; the layout makes room when it comes or goes. */
+function renderActions() {
+  if (!state) return;
+  const before = !$('actions').hidden;
+  const shown = actionBar.update(activePerks(state).map((id) => abilityStatus(/** @type {GameState} */ (state), id)));
+  if (shown !== before) fit();
+}
 
 // ---------- The frame loop ----------
 
@@ -354,7 +401,10 @@ scene.app.ticker.add((ticker) => {
       }
     }
   }
-  if (state) buffBar.update(state.buffs);
+  if (state) {
+    buffBar.update(state.buffs);
+    renderActions();
+  }
   scene.update(cast, now);
 });
 
@@ -393,6 +443,12 @@ function describeEvent(e) {
       return [t('log.perk', { perk: t(content.perks[e.perk].name) })];
     case 'perk-owed':
       return [t('log.perk-owed')];
+    case 'ability':
+      return [t('log.ability', { ability: t(content.perks[e.perk].name) })];
+    case 'lit':
+      return [t('log.lit', { ability: t(content.perks[e.perk].name) })];
+    case 'gutted':
+      return e.item ? tParts('log.gutted', { fish: fishLink(e.fish), item: itemLink(e.item) }) : tParts('log.gutted-empty', { fish: fishLink(e.fish) });
     case 'weather':
       return [t('log.weather', { description: t(e.weather.description) })];
     case 'season':
@@ -732,6 +788,7 @@ function render() {
     return;
   }
   buffBar.update(state.buffs);
+  renderActions();
   scene.setFeatures(state.features.map((f) => ({ ...f, kind: content.features[f.id].kind })));
   // The bobber slot is cosmetic: it only changes how the bobber looks (D83).
   const bobber = state.equipped.bobber;
