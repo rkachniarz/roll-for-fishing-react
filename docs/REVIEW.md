@@ -24,6 +24,15 @@ Items with no note are left alone.
 
 Newest first.
 
+## A wider scene (D93)
+
+- **The widest is 320 pixels** (5:4). It only matters on desktop, where the scene now goes 320 wide too (640×512 at
+  1280×800); phones stay under it (286 on an iPhone, 314 on your Pixel).
+- **The bobber sizes on the art sheet** (B 11×18, C 13×23, with far versions) are Claude's drawings, scaled up from
+  the current one. Pick one, or draw your own over `node tools/sprite-png.mjs export bobber-b`.
+- **The Pixel 9 Pro in the browser checks** is read off your screenshot: 427×830 CSS pixels at 2.25 (the default
+  "High resolution"). If you switch to Full resolution, the scene goes ×4 and 314 wide.
+
 ## First notes from the phone (D92)
 
 - **Half as often is a d12 at 1–3.** The new die keeps the weather as rolled dice (D5) instead of a second roll or

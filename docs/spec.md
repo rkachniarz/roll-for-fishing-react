@@ -139,8 +139,9 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   along the bottom, reeds framing both sides, the bobber with its red feather out on the water, and the line running back
   to the player.
 - **R7.2** The scene is pixel art, drawn at **256×256** and scaled up by a **whole number of device pixels**, the largest
-  that fits. On a phone in portrait the scene sits above the rest of the UI; on a wide screen the UI sits beside it.
-  *(D10)*
+  that fits. Where there is room to spare at that scale, strips of scenery either side widen it to fill the width, up
+  to 320 pixels; the 256×256 play area stays in the middle. On a phone in portrait the scene sits above the rest of the
+  UI; on a wide screen the UI sits beside it. *(D10, D93)*
 - **R7.3** Pixels stay crisp: nearest-neighbour scaling only, sprite positions snapped to whole pixels, and nothing
   scaled at runtime. Things at different depths get pre-drawn sprites per depth band.
 - **R7.4** Depth is shown by layering: far water paler, with smaller and denser waves; ripples flatter further out; the

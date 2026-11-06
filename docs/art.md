@@ -75,11 +75,13 @@ lists any colour not in the palette with its nearest match.
 ## Sizes
 
 The scene is **256×256** and is only ever enlarged by whole steps (×2, ×3…), so a pixel drawn is a pixel shown,
-just bigger.
+just bigger. On a screen with room to spare, strips either side widen it to fill the width, up to 320 (D93): the water,
+the shore line, the waves and the weather carry on into them, and the reeds stand at the outer edges. Nothing the game
+places goes in the strips.
 
 | What | Size (pixels) | Notes |
 |---|---|---|
-| The scene | 256×256 | Water about the top 86%, the sand below it. |
+| The scene | 256×256, up to 320 wide | Water about the top 86%, the sand below it. The strips either side are scenery only. |
 | Bobber | 9×14 near, 7×11 far | The float's waterline is row 11 near, row 8 far. A bite shows only the top 9 / 6 rows. |
 | Splash | 15×5, 3 frames | |
 | Waves | 5×2 far, 8×2 mid, 12×3 near; 2 frames each | |

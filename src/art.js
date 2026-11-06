@@ -7,7 +7,7 @@
 //   http://localhost:8001/art.html          ?seed=N for another layout of the scenery
 
 import { Rectangle } from 'pixi.js';
-import { SIZE, createScene, fitCanvas } from './scene/scene.js';
+import { SIZE, createScene } from './scene/scene.js';
 import { BOBBER, BOBBER_DIPPED, BOBBER_FAR, PALETTE, SPLASH, WAVES, bobberKeys, paintGrid } from './scene/sprites.js';
 import { ICONS, KEYS as ICON_KEYS, paintIcon } from './scene/icons.js';
 import { TRIALS } from './art-trials.js';
@@ -46,9 +46,10 @@ const scenes = [];
  * @param {string} caption
  * @param {import('./scene/sky.js').World & { sun: { rise: number, set: number } }} world
  * @param {import('./scene/scene.js').SceneLook} look
- * @param {number} maxCss
+ * @param {number} maxCss  The most CSS pixels across for the 256-pixel play area.
+ * @param {number} [width]  The scene's width, strips included (D93).
  */
-async function sceneCard(parent, caption, world, look, maxCss) {
+async function sceneCard(parent, caption, world, look, maxCss, width = SIZE) {
   const canvas = /** @type {HTMLCanvasElement} */ (el('canvas'));
   const save = /** @type {HTMLButtonElement} */ (el('button', { type: 'button', class: 'save' }, ['Save as PNG']));
   parent.append(el('figure', {}, [canvas, el('figcaption', {}, [caption, ' ', save])]));
@@ -56,8 +57,8 @@ async function sceneCard(parent, caption, world, look, maxCss) {
   const rand = createRng(deriveSeed(seed, 'scenery'));
   const scene = await createScene(canvas, () => rand.next(), look);
   // No wider than a phone's screen, less the page's margins.
-  const fit = Math.min(maxCss, document.documentElement.clientWidth - 32);
-  fitCanvas(canvas, fit, fit);
+  const fit = Math.min(maxCss, ((document.documentElement.clientWidth - 32) * SIZE) / width);
+  scene.fit((fit * width) / SIZE, fit, width);
   scene.aimAt({ x: 150, y: 118 });
   scene.setWorld(world);
   scenes.push(scene);
@@ -68,7 +69,7 @@ async function sceneCard(parent, caption, world, look, maxCss) {
 const slug = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 /**
- * Saves the scene as it is now, at its real 256×256, for the owner to draw
+ * Saves the scene as it is now, at its real size (256×256 unless widened), for the owner to draw
  * over in Paint (docs/art.md). Read back from the renderer, since a WebGL
  * canvas can't be copied once it has been shown.
  * @param {import('pixi.js').Application} app
@@ -76,7 +77,7 @@ const slug = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^
  */
 async function saveScene(app, name) {
   const frame = /** @type {HTMLCanvasElement} */ (
-    app.renderer.extract.canvas({ target: app.stage, frame: new Rectangle(0, 0, SIZE, SIZE), resolution: 1 })
+    app.renderer.extract.canvas({ target: app.stage, frame: new Rectangle(0, 0, app.renderer.width, app.renderer.height), resolution: 1 })
   );
   const blob = await new Promise((resolve) => frame.toBlob(resolve, 'image/png'));
   const link = /** @type {HTMLAnchorElement} */ (el('a', { href: URL.createObjectURL(blob), download: name }));
@@ -97,7 +98,19 @@ for (const trial of TRIALS) {
   const row = el('div', { class: 'row' });
   trials.append(el('h3', {}, [trial.question]), row);
   for (const option of trial.options) await sceneCard(row, option.label, NOON, option.look, 512);
+  if (trial.sprites) {
+    const sprites = el('div', { class: 'row sprites' });
+    trials.append(sprites);
+    for (const [name, rows] of trial.sprites) spriteCard(sprites, name, paintGrid(rows), PALETTE.waterMid);
+  }
 }
+
+const widths = el('div', { class: 'row' });
+section(
+  'The scene on a wider screen',
+  'On a phone the scene widens to fill the screen (D93): the 256×256 play area in the middle, strips of water, shore and reeds either side. 256 is a square screen; 314 is a Pixel 9 Pro.',
+).append(widths);
+for (const width of [256, 288, 314]) await sceneCard(widths, `${width} wide`, NOON, {}, 300, width);
 
 const lights = el('div', { class: 'row' });
 section('The scene in different lights', 'The art is drawn for a clear spring noon; the rest is tints and overlays laid over it by code.').append(lights);

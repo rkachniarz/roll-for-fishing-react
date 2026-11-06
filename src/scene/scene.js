@@ -1,19 +1,17 @@
 // @ts-check
-// The fishing view (docs/spec.md, R7): a square of pixel art, drawn at its
-// native size and scaled up by whole device pixels only. It animates whatever
+// The fishing view (docs/spec.md, R7): pixel art drawn at its native size and
+// scaled up by whole device pixels only. The play area is a 256-pixel square;
+// on a screen with room to spare, strips of scenery either side widen the
+// view to fill it (D93), and everything the engine places stays in the square. It animates whatever
 // phase the cast is in and never changes the cast itself - the engine doesn't
 // wait for it (docs/decisions.md, D7).
 
 import { Application, Container, Graphics, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { createSky } from './sky.js';
 import {
-  BOBBER,
-  BOBBER_DIPPED,
-  BOBBER_FAR,
-  BOBBER_FAR_DIPPED,
+  BOBBER_SIZES,
   PALETTE,
   SPLASH,
-  WATERLINE,
   WAVES,
   bobberKeys,
   paintBackdrop,
@@ -23,14 +21,16 @@ import {
   shoreY,
 } from './sprites.js';
 
-/** The scene's side in pixels before scaling (R7.2). */
+/** The play area's side, and the scene's height, in pixels before scaling (R7.2). */
 export const SIZE = 256;
+/** The widest the scene gets, strips included (D93). */
+export const MAX_WIDTH = 320;
 
 /** How long the bobber is in the air after a cast. */
 const FLIGHT_MS = 450;
 /** Casts landing above this line use the far-band sprites. */
 const FAR_LINE = 95;
-/** Where the line comes from: the rod, just below the bottom edge. */
+/** Where the line comes from: the rod, just below the bottom edge (in the play area, as is everything below). */
 const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
 
 /**
@@ -53,6 +53,7 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
  * leaves this list.
  * @typedef {Object} SceneLook
  * @property {number} [reedBlades]  Blades of reed on each side.
+ * @property {'a' | 'b' | 'c'} [bobberSize]  The bobber as drawn (a), or bigger (b, c).
  */
 
 /** The open water a cast may land on (the engine's, so features and casts agree). */
@@ -80,38 +81,58 @@ export async function createScene(canvas, rand, look = {}) {
   /** @param {HTMLCanvasElement} c */
   const tex = (c) => Texture.from(c);
 
-  const backdrop = new Sprite(tex(paintBackdrop(SIZE, rand)));
+  /** The scene's width, strips included, and where the play area starts in it. */
+  let width = SIZE;
+  let offset = 0;
+
+  const backdrop = new Sprite();
   app.stage.addChild(backdrop);
 
-  // Waves: many small pale ones far out, a few big ones close in.
+  // Waves: many small pale ones far out, a few big ones close in; more of
+  // them for the width of the strips.
   const waveLayer = new Container();
   app.stage.addChild(waveLayer);
   /** @type {{ sprite: Sprite, frames: Texture[], next: number, frame: number }[]} */
-  const waves = [];
+  let waves = [];
   const waveBands = [
-    { frames: WAVES.far, count: 18, top: 6, bottom: 80 },
-    { frames: WAVES.mid, count: 12, top: 85, bottom: 160 },
-    { frames: WAVES.near, count: 7, top: 165, bottom: shoreY(0, SIZE) - 10 },
+    { frames: WAVES.far.map((rows) => tex(paintGrid(rows))), count: 18, top: 6, bottom: 80 },
+    { frames: WAVES.mid.map((rows) => tex(paintGrid(rows))), count: 12, top: 85, bottom: 160 },
+    { frames: WAVES.near.map((rows) => tex(paintGrid(rows))), count: 7, top: 165, bottom: shoreY(0, SIZE) - 10 },
   ];
-  for (const band of waveBands) {
-    const frames = band.frames.map((rows) => tex(paintGrid(rows)));
-    for (let i = 0; i < band.count; i++) {
-      const sprite = new Sprite(frames[0]);
-      sprite.position.set(
-        Math.floor(rand() * (SIZE - 24)) + 8,
-        Math.floor(band.top + rand() * (band.bottom - band.top)),
-      );
-      waveLayer.addChild(sprite);
-      waves.push({ sprite, frames, next: rand() * 2000, frame: 0 });
+
+  /** Paints what spans the whole width: the water and sand, and the waves on them. */
+  function paintWidth() {
+    const old = backdrop.texture;
+    backdrop.texture = tex(paintBackdrop(width, SIZE, offset, rand));
+    if (old && old !== Texture.EMPTY) old.destroy(true);
+    waveLayer.removeChildren();
+    waves = [];
+    for (const band of waveBands) {
+      const count = Math.round((band.count * width) / SIZE);
+      for (let i = 0; i < count; i++) {
+        const sprite = new Sprite(band.frames[0]);
+        sprite.position.set(
+          Math.floor(rand() * (width - 24)) + 8,
+          Math.floor(band.top + rand() * (band.bottom - band.top)),
+        );
+        waveLayer.addChild(sprite);
+        waves.push({ sprite, frames: band.frames, next: rand() * 2000, frame: 0 });
+      }
     }
   }
+  paintWidth();
 
   // Cloud shadows lie on the water, under everything that floats.
   const shadowLayer = new Container();
   app.stage.addChild(shadowLayer);
 
+  // The play area: everything the engine places, and the cast, in its own
+  // 256-pixel coordinates, moved right past the left strip.
+  const play = new Container();
+  app.stage.addChild(play);
+
   const ripples = new Container();
-  app.stage.addChild(ripples);
+  play.addChild(ripples);
   /** @type {Map<string, Texture>} */
   const ringCache = new Map();
   /** @param {number} rx @param {number} ry */
@@ -123,7 +144,7 @@ export async function createScene(canvas, rand, look = {}) {
 
   // Surface features (R14), under the line and the bobber.
   const featureLayer = new Graphics();
-  app.stage.addChild(featureLayer);
+  play.addChild(featureLayer);
   /** Where each feature is drawn, gliding towards where the engine says it is. */
   /** @type {Map<string, { x: number, y: number }>} */
   const shownAt = new Map();
@@ -131,30 +152,32 @@ export async function createScene(canvas, rand, look = {}) {
   let features = [];
 
   const line = new Graphics();
-  app.stage.addChild(line);
+  play.addChild(line);
 
+  const bobberSprites = BOBBER_SIZES[look.bobberSize ?? 'a'];
   /** @param {import('./sprites.js').BobberLook | null} look */
   const paintBobber = (look) => {
     const keys = bobberKeys(look);
     return {
-      near: tex(paintGrid(BOBBER, keys)),
-      nearDipped: tex(paintGrid(BOBBER_DIPPED, keys)),
-      far: tex(paintGrid(BOBBER_FAR, keys)),
-      farDipped: tex(paintGrid(BOBBER_FAR_DIPPED, keys)),
+      near: tex(paintGrid(bobberSprites.near, keys)),
+      nearDipped: tex(paintGrid(bobberSprites.nearDipped, keys)),
+      far: tex(paintGrid(bobberSprites.far, keys)),
+      farDipped: tex(paintGrid(bobberSprites.farDipped, keys)),
     };
   };
   let bobberTextures = paintBobber(null);
   let bobberLook = 'null';
   const bobber = new Sprite(bobberTextures.near);
   bobber.visible = false;
-  app.stage.addChild(bobber);
+  play.addChild(bobber);
 
   const splashFrames = SPLASH.map((rows) => tex(paintGrid(rows)));
   const splash = new Sprite(splashFrames[0]);
   splash.visible = false;
-  app.stage.addChild(splash);
+  play.addChild(splash);
 
-  // Reeds in front of everything, framing the view at both edges.
+  // Reeds in front of everything, framing the view at both edges (of the
+  // whole width, not the play area).
   const reedHeight = 110;
   const reedFrames = {
     left: paintReeds(26, reedHeight, 'left', rand, look.reedBlades).map(tex),
@@ -170,6 +193,23 @@ export async function createScene(canvas, rand, look = {}) {
   const skyLayer = new Container();
   app.stage.addChild(skyLayer);
   const sky = createSky(shadowLayer, skyLayer, SIZE, rand);
+
+  /**
+   * Widens the scene to `next` pixels: the play area in the middle, strips
+   * of scenery either side.
+   * @param {number} next
+   */
+  function setWidth(next) {
+    next = Math.max(SIZE, Math.round(next));
+    if (next === width) return;
+    width = next;
+    offset = Math.floor((width - SIZE) / 2);
+    app.renderer.resize(width, SIZE);
+    play.position.x = offset;
+    reedsRight.position.x = width - 26;
+    sky.setWidth(width);
+    paintWidth();
+  }
   let lastFrame = 0;
 
   // ---------- What the scene remembers between frames ----------
@@ -358,7 +398,7 @@ export async function createScene(canvas, rand, look = {}) {
           : bobberTextures.near;
       // Anchored at the float's waterline (a dipped bobber's whole sprite is
       // above it), snapped to whole pixels (R7.3).
-      const waterline = Math.min(far ? WATERLINE.far : WATERLINE.near, bobber.texture.height);
+      const waterline = Math.min(far ? bobberSprites.waterline.far : bobberSprites.waterline.near, bobber.texture.height);
       bobber.position.set(Math.round(bx - bobber.texture.width / 2), Math.round(by - waterline));
     }
 
@@ -424,7 +464,7 @@ export async function createScene(canvas, rand, look = {}) {
     toScene(clientX, clientY) {
       const rect = canvas.getBoundingClientRect();
       return {
-        x: ((clientX - rect.left) / rect.width) * SIZE,
+        x: ((clientX - rect.left) / rect.width) * width - offset,
         y: ((clientY - rect.top) / rect.height) * SIZE,
       };
     },
@@ -434,29 +474,32 @@ export async function createScene(canvas, rand, look = {}) {
      */
     toClient(point) {
       const rect = canvas.getBoundingClientRect();
-      return { x: rect.left + (point.x / SIZE) * rect.width, y: rect.top + (point.y / SIZE) * rect.height };
+      return { x: rect.left + ((point.x + offset) / width) * rect.width, y: rect.top + (point.y / SIZE) * rect.height };
     },
     /** CSS pixels per scene pixel, for drawing page elements at the scene's scale (D71). */
     pixelScale() {
-      return canvas.getBoundingClientRect().width / SIZE;
+      return canvas.getBoundingClientRect().height / SIZE;
+    },
+    /** The scene's width in pixels before scaling, strips included. */
+    width: () => width,
+    /**
+     * Sizes the scene to the space given (R7.2, D10, D93): the largest whole
+     * number of *device* pixels per scene pixel at which the 256-pixel play
+     * area fits, then as wide as the space allows at that scale, up to
+     * `widest`. A whole multiple in CSS pixels isn't enough: at a
+     * devicePixelRatio of 2.625 it still smears.
+     * @param {number} maxCssWidth
+     * @param {number} maxCssHeight
+     * @param {number} [widest]  Up to MAX_WIDTH; the art sheet picks its own.
+     * @returns {number} The scale, in device pixels per scene pixel.
+     */
+    fit(maxCssWidth, maxCssHeight, widest = MAX_WIDTH) {
+      const dpr = window.devicePixelRatio || 1;
+      const scale = Math.max(1, Math.floor((Math.min(maxCssWidth, maxCssHeight) * dpr) / SIZE));
+      setWidth(Math.min(widest, Math.floor((maxCssWidth * dpr) / scale)));
+      canvas.style.width = `${(width * scale) / dpr}px`;
+      canvas.style.height = `${(SIZE * scale) / dpr}px`;
+      return scale;
     },
   };
-}
-
-/**
- * Sizes the canvas on the page to the largest whole multiple of SIZE, counted
- * in device pixels, that fits the space given (R7.2). A whole multiple in CSS
- * pixels isn't enough: at a devicePixelRatio of 2.625 it still smears.
- * @param {HTMLCanvasElement} canvas
- * @param {number} maxCssWidth
- * @param {number} maxCssHeight
- * @returns {number} The scale, in device pixels per scene pixel.
- */
-export function fitCanvas(canvas, maxCssWidth, maxCssHeight) {
-  const dpr = window.devicePixelRatio || 1;
-  const scale = Math.max(1, Math.floor((Math.min(maxCssWidth, maxCssHeight) * dpr) / SIZE));
-  const css = `${(SIZE * scale) / dpr}px`;
-  canvas.style.width = css;
-  canvas.style.height = css;
-  return scale;
 }

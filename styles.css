@@ -12,8 +12,9 @@
   /* The icons' own tiles: the sketch draws them on white. */
   --tile: #e9e6dc;
   --gutter: 16px;
-  /* Set by main.js (fit): the scene's width and the button row's icon size. */
+  /* Set by main.js (fit): the scene's width and height, and the button row's icon size. */
   --scene: 360px;
+  --scene-height: 360px;
   --icon: 32px;
   --icon-small: 24px;
   /* Behind the log, the panes, the bag's slots and tooltips. */
@@ -465,7 +466,7 @@ body {
   .hud {
     flex: none;
     width: 360px;
-    height: var(--scene);
+    height: var(--scene-height);
   }
 }
 

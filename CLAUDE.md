@@ -74,9 +74,12 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   gap between ticks (a background tab, a late strike) would otherwise skip past a bite that has already run out.
 - **`src/main.js`: `biteAt` is reset to the frame that first shows the splash (D16).** The engine's scheduled time can
   be most of a frame earlier; the player is timed from what they can see.
-- **`src/scene/scene.js` (`fitCanvas`): the scale is a whole number of *device* pixels, not CSS pixels (D10).** At
-  devicePixelRatio 2.625 a whole CSS multiple still smears. The canvas backing store stays 256×256; the browser scales
-  it with `image-rendering: pixelated`.
+- **`src/scene/scene.js` (`scene.fit`): the scale is a whole number of *device* pixels, not CSS pixels (D10).** At
+  devicePixelRatio 2.625 a whole CSS multiple still smears. The canvas backing store is 256 tall and 256-320 wide; the
+  browser scales it with `image-rendering: pixelated`.
+- **The scene is wider than the play area (D93).** Strips of scenery either side fill the screen's width; everything the
+  engine places, the cast and the bobber live in the `play` container in 256×256 coordinates, moved right past the
+  left strip. Convert pointer positions with `scene.toScene` / `scene.toClient`, never by dividing by 256.
 - **Sprites are never scaled at runtime (R7.3).** Depth uses separate sprites per depth band (`BOBBER` / `BOBBER_FAR`).
   Positions are rounded every frame.
 - **`src/scene/sprites.js` (`paintBackdrop`): the dithered rows between water bands** stop the band edges reading as

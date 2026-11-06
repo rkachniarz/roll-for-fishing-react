@@ -35,10 +35,11 @@ const SEASON_TINT = {
 /**
  * @param {import('pixi.js').Container} below  Where the cloud shadows go: on the water.
  * @param {import('pixi.js').Container} above  Where rain, snow and tints go: over everything.
- * @param {number} size
+ * @param {number} size  The scene's height, and its width until setWidth.
  * @param {() => number} rand
  */
 export function createSky(below, above, size, rand) {
+  let width = size;
   const shadows = new Graphics();
   below.addChild(shadows);
   const weatherLayer = new Graphics();
@@ -62,7 +63,7 @@ export function createSky(below, above, size, rand) {
     // One shadow per level of cloud past "a few", up to three.
     const want = Math.max(0, Math.min(3, w.weather.clouds - 1));
     while (clouds.length < want) {
-      clouds.push({ x: rand() * size, y: WATER.y0 + rand() * (WATER.y1 - WATER.y0), w: 50 + rand() * 40, h: 10 + rand() * 6 });
+      clouds.push({ x: rand() * width, y: WATER.y0 + rand() * (WATER.y1 - WATER.y0), w: 50 + rand() * 40, h: 10 + rand() * 6 });
     }
     clouds.length = want;
   }
@@ -86,7 +87,7 @@ export function createSky(below, above, size, rand) {
     const drift = (0.03 + weather.wind * 0.05) * step;
     for (const c of clouds) {
       c.x += drift;
-      if (c.x - c.w / 2 > size) c.x = -c.w / 2;
+      if (c.x - c.w / 2 > width) c.x = -c.w / 2;
       // A flattened blob of rows, narrower at the top and bottom.
       for (let row = 0; row < c.h; row++) {
         const t = (row / (c.h - 1)) * 2 - 1;
@@ -99,7 +100,7 @@ export function createSky(below, above, size, rand) {
     const snowing = weather.temperature <= 2;
     // Level 1 is only moist air; drops from level 2.
     const want = weather.precipitation >= 2 ? (weather.precipitation - 1) * (snowing ? 50 : 40) : 0;
-    while (drops.length < want) drops.push({ x: rand() * size, y: rand() * size, speed: 0.8 + rand() * 0.6, sway: rand() * 6 });
+    while (drops.length < want) drops.push({ x: rand() * width, y: rand() * size, speed: 0.8 + rand() * 0.6, sway: rand() * 6 });
     drops.length = want;
     const slant = weather.wind * (snowing ? 0.25 : 0.4);
     for (const d of drops) {
@@ -112,9 +113,9 @@ export function createSky(below, above, size, rand) {
       }
       if (d.y > size) {
         d.y -= size;
-        d.x = rand() * size;
+        d.x = rand() * width;
       }
-      if (d.x > size) d.x -= size;
+      if (d.x > width) d.x -= width;
       const x = Math.round(d.x);
       const y = Math.round(d.y);
       if (snowing) weatherLayer.rect(x, y, 1, 1).fill({ color: 0xffffff, alpha: 0.85 });
@@ -135,15 +136,24 @@ export function createSky(below, above, size, rand) {
     const overcast = ease('overcast', weather.clouds * 0.045 + (weather.precipitation >= 3 ? 0.06 : 0));
     const warm = ease('warm', warmth(h, world.sun));
     const night = ease('night', darkness(h, world.sun));
-    if (seasonTint && season > 0.005) tint.rect(0, 0, size, size).fill({ color: seasonTint.color, alpha: season });
-    if (overcast > 0.005) tint.rect(0, 0, size, size).fill({ color: OVERCAST, alpha: overcast });
-    if (warm > 0.005) tint.rect(0, 0, size, size).fill({ color: WARM, alpha: warm });
-    if (night > 0.005) tint.rect(0, 0, size, size).fill({ color: NIGHT, alpha: night });
+    if (seasonTint && season > 0.005) tint.rect(0, 0, width, size).fill({ color: seasonTint.color, alpha: season });
+    if (overcast > 0.005) tint.rect(0, 0, width, size).fill({ color: OVERCAST, alpha: overcast });
+    if (warm > 0.005) tint.rect(0, 0, width, size).fill({ color: WARM, alpha: warm });
+    if (night > 0.005) tint.rect(0, 0, width, size).fill({ color: NIGHT, alpha: night });
   }
 
   return {
     setWorld,
     update,
+    /**
+     * The scene got wider or narrower: rain and cloud spread over the new width.
+     * @param {number} next
+     */
+    setWidth(next) {
+      for (const d of drops) d.x = (d.x / width) * next;
+      for (const c of clouds) c.x = (c.x / width) * next;
+      width = next;
+    },
     /** The wind's level, for the waves. */
     wind: () => world?.weather.wind ?? 0,
   };

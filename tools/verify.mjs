@@ -17,6 +17,8 @@ const BASE = `http://localhost:${PORT}/`;
 const ONLY = process.argv[2];
 const PHONE = { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true };
 const ODD_PHONE = { viewport: { width: 412, height: 915 }, deviceScaleFactor: 2.625, isMobile: true, hasTouch: true };
+// The owner's Pixel 9 Pro at its default "High resolution" (960 device pixels across), as read off a screenshot.
+const PIXEL = { viewport: { width: 427, height: 830 }, deviceScaleFactor: 2.25, isMobile: true, hasTouch: true };
 const DESKTOP = { viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 };
 
 let failures = 0;
@@ -94,23 +96,28 @@ async function check(label, device, query, fn) {
 for (const [name, device] of [
   ['phone', PHONE],
   ['phone at dpr 2.625', ODD_PHONE],
+  ['Pixel 9 Pro', PIXEL],
   ['desktop', DESKTOP],
 ]) {
   await check(`layout on ${name}`, device, '?seed=1', async (page) => {
     const m = await page.evaluate(() => {
       const c = /** @type {HTMLCanvasElement} */ (document.getElementById('scene'));
       const r = c.getBoundingClientRect();
-      return { w: c.width, h: c.height, css: r.width, dpr: devicePixelRatio, vw: innerWidth, vh: innerHeight };
+      return { w: c.width, h: c.height, css: r.width, cssH: r.height, dpr: devicePixelRatio, vw: innerWidth, vh: innerHeight };
     });
-    report(`layout on ${name}: scene drawn at 256×256`, m.w === 256 && m.h === 256, `${m.w}×${m.h}`);
-    const devicePx = m.css * m.dpr;
-    const scale = devicePx / 256;
+    // 256 tall, and 256 to 320 wide: strips either side of the play area (D93).
+    report(`layout on ${name}: scene drawn 256 tall, 256-320 wide`, m.h === 256 && m.w >= 256 && m.w <= 320, `${m.w}×${m.h}`);
+    const scale = (m.cssH * m.dpr) / 256;
     report(
       `layout on ${name}: scaled by a whole number of device pixels`,
-      Math.abs(scale - Math.round(scale)) < 0.01 && scale >= 1,
+      Math.abs(scale - Math.round(scale)) < 0.01 && scale >= 1 && Math.abs((m.css * m.dpr) / m.w - scale) < 0.01,
       `×${scale.toFixed(3)}`,
     );
-    report(`layout on ${name}: scene fits the screen width`, m.css <= m.vw - 16, `${m.css.toFixed(1)} of ${m.vw}`);
+    report(`layout on ${name}: scene fits the screen width`, m.css <= m.vw - 4, `${m.css.toFixed(1)} of ${m.vw}`);
+    if (device.isMobile) {
+      // Less the margins and border, the scene loses under one scale step.
+      report(`layout on ${name}: scene fills the width`, m.css >= m.vw - 8 - Math.round(scale) / m.dpr, `${m.css.toFixed(1)} of ${m.vw}`);
+    }
     const hud = await page.evaluate(() => {
       const box = (/** @type {string} */ sel) => /** @type {Element} */ (document.querySelector(sel)).getBoundingClientRect();
       const buttons = [...document.querySelectorAll('.bar .bar-button')].map((b) => b.getBoundingClientRect());

@@ -300,6 +300,11 @@ export async function sprites() {
   const all = new Map();
   all.set('bobber', { rows: scene.BOBBER, keys: sceneKeys });
   all.set('bobber-far', { rows: scene.BOBBER_FAR, keys: sceneKeys });
+  // The bobber-size trial's bigger options (src/art-trials.js).
+  for (const size of /** @type {const} */ (['b', 'c'])) {
+    all.set(`bobber-${size}`, { rows: scene.BOBBER_SIZES[size].near, keys: sceneKeys });
+    all.set(`bobber-${size}-far`, { rows: scene.BOBBER_SIZES[size].far, keys: sceneKeys });
+  }
   scene.SPLASH.forEach((rows, i) => all.set(`splash-${i + 1}`, { rows, keys: sceneKeys }));
   for (const [band, frames] of Object.entries(scene.WAVES)) {
     frames.forEach((rows, i) => all.set(`wave-${band}-${i + 1}`, { rows, keys: sceneKeys }));

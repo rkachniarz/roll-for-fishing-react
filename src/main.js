@@ -21,7 +21,7 @@ import { weatherWords } from './engine/weather.js';
 import { GAME_VALUES } from './engine/values.js';
 import { deleteSave, lastSlot, listSlots, saveGame } from './save.js';
 import { applySettings, loadSettings, saveSettings } from './settings.js';
-import { WATER, createScene, fitCanvas } from './scene/scene.js';
+import { WATER, createScene } from './scene/scene.js';
 import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
@@ -88,15 +88,18 @@ function fit() {
   // On a phone the row's buttons are an eighth of the width, square.
   const height = wide ? window.innerHeight - 2 * gutter : window.innerHeight - 2 * gutter - width / 8 - 16 - LOG_MIN;
   // Less the wrapper's border, so the canvas itself gets the whole multiple.
-  fitCanvas(canvas, width - 4, height - 4);
-  const scene = canvas.getBoundingClientRect().width + 4;
+  // On a phone the scene widens to fill the width (D93).
+  scene.fit(width - 4, height - 4);
+  const box = canvas.getBoundingClientRect();
+  const sceneWidth = box.width + 4;
   const root = document.documentElement.style;
   root.setProperty('--gutter', `${gutter}px`);
-  root.setProperty('--scene', `${scene}px`);
+  root.setProperty('--scene', `${sceneWidth}px`);
+  root.setProperty('--scene-height', `${box.height + 4}px`);
   // The row's icons, like the scene, at a whole number of device pixels per
   // icon pixel (D10).
   const dpr = window.devicePixelRatio || 1;
-  const square = (wide ? HUD_WIDTH : scene) / 8;
+  const square = (wide ? HUD_WIDTH : sceneWidth) / 8;
   const k = Math.max(1, Math.floor(((square - 10) * dpr) / 16));
   root.setProperty('--icon', `${(16 * k) / dpr}px`);
   // The weather's icon is smaller, as in the sketch, leaving room for the words.

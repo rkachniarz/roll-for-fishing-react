@@ -75,6 +75,115 @@ export const BOBBER_FAR_DIPPED = BOBBER_FAR.slice(0, 6);
 /** Rows from the sprite's top to where the float meets the water. */
 export const WATERLINE = { near: 11, far: 8 };
 
+/**
+ * A whole bobber at one size: near and far, each with its bitten frame (the
+ * feather only), and where each meets the water.
+ * @typedef {{ near: string[], nearDipped: string[], far: string[], farDipped: string[], waterline: { near: number, far: number } }} BobberSet
+ */
+
+/** @param {string[]} near @param {string[]} far @returns {BobberSet} */
+function bobberSet(near, far) {
+  // The feather is everything above the float's top band ('b' all along).
+  const band = (/** @type {string[]} */ rows) => rows.findIndex((r) => /^b+$/.test(r));
+  return {
+    near,
+    nearDipped: near.slice(0, band(near)),
+    far,
+    farDipped: far.slice(0, band(far)),
+    waterline: { near: band(near) + 2, far: band(far) + 1 },
+  };
+}
+
+/**
+ * The bobber's sizes: A as drawn, B and C bigger, for the art sheet's trial
+ * (src/art-trials.js). The owner's pick becomes BOBBER and the rest go.
+ * @type {Record<'a' | 'b' | 'c', BobberSet>}
+ */
+export const BOBBER_SIZES = {
+  a: { near: BOBBER, nearDipped: BOBBER_DIPPED, far: BOBBER_FAR, farDipped: BOBBER_FAR_DIPPED, waterline: WATERLINE },
+  b: bobberSet(
+    [
+      '......r....',
+      '.....rR....',
+      '.....rR....',
+      '....rRr....',
+      '....rRRr...',
+      '....rRRr...',
+      '....rRRr...',
+      '....rRr....',
+      '.....rr....',
+      '.....r.....',
+      '.....r.....',
+      '.....r.....',
+      'bbbbbbbbbbb',
+      '.bYYYYYYYb.',
+      '.bYYYYYYYb.',
+      '.bYYYYYYYb.',
+      '..bYYYYYb..',
+      '...bbbbb...',
+    ],
+    [
+      '.....r...',
+      '....rR...',
+      '....rR...',
+      '...rRr...',
+      '...rRr...',
+      '...rRr...',
+      '....rr...',
+      '....r....',
+      '....r....',
+      'bbbbbbbbb',
+      '.bYYYYYb.',
+      '.bYYYYYb.',
+      '..bbbbb..',
+    ],
+  ),
+  c: bobberSet(
+    [
+      '.......r.....',
+      '......rR.....',
+      '......rR.....',
+      '.....rRR.....',
+      '.....rRr.....',
+      '.....rRRr....',
+      '....rRRRr....',
+      '....rRRRr....',
+      '....rRRRr....',
+      '....rRRr.....',
+      '.....rRr.....',
+      '......rr.....',
+      '......r......',
+      '......r......',
+      '......r......',
+      'bbbbbbbbbbbbb',
+      '.bYYYYYYYYYb.',
+      '.bYYYYYYYYYb.',
+      '.bYYYYYYYYYb.',
+      '.bYYYYYYYYYb.',
+      '..bYYYYYYYb..',
+      '...bYYYYYb...',
+      '....bbbbb....',
+    ],
+    [
+      '......r....',
+      '.....rR....',
+      '.....rR....',
+      '....rRr....',
+      '....rRRr...',
+      '....rRRr...',
+      '....rRr....',
+      '.....rr....',
+      '.....r.....',
+      '.....r.....',
+      'bbbbbbbbbbb',
+      '.bYYYYYYYb.',
+      '.bYYYYYYYb.',
+      '..bYYYYYb..',
+      '...bbbbb...',
+    ],
+  ),
+};
+
 // The splash when a fish bites: three frames, up and falling back.
 export const SPLASH = [
   ['...............', '...............', '......w.w......', '....l.wlw.l....', '...w.l...l.w...'],
@@ -167,30 +276,34 @@ export function paintRing(rx, ry, color) {
  * The still part of the view: water in bands that pale towards the far side,
  * the sandy shore along the bottom with its wavy edge. The view from the shore
  * in docs/design/sketch-fishing-spot.png.
- * @param {number} size  The scene's side, in pixels.
+ * @param {number} width  The scene's width, strips included (D93).
+ * @param {number} size  The play area's side, and the scene's height.
+ * @param {number} offset  Where the play area starts: the shore follows its line.
  * @param {() => number} rand  Uniform [0, 1), for the sand's texture.
  */
-export function paintBackdrop(size, rand) {
+export function paintBackdrop(width, size, offset, rand) {
   const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = size;
+  canvas.width = width;
+  canvas.height = size;
   const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
 
   const bands = [PALETTE.waterFar, PALETTE.waterMid, PALETTE.waterNear];
   bands.forEach((color, i) => {
     const top = Math.floor((i * size) / 3.4);
     ctx.fillStyle = color;
-    ctx.fillRect(0, top, size, size);
+    ctx.fillRect(0, top, width, size);
     // Dither the edge into the band above, so the bands blend instead of
     // reading as horizon lines: a checkerboard, then every fourth pixel.
     if (i === 0) return;
-    for (let x = 0; x < size; x++) {
+    for (let x = 0; x < width; x++) {
       if ((x + top) % 2 === 0) ctx.fillRect(x, top - 1, 1, 1);
       if ((x + top) % 4 === 0) ctx.fillRect(x, top - 3, 1, 1);
     }
   });
 
-  for (let x = 0; x < size; x++) {
-    const top = shoreY(x, size);
+  // The play area's shore line, carried on into the strips.
+  for (let x = 0; x < width; x++) {
+    const top = shoreY(x - offset, size);
     ctx.fillStyle = PALETTE.shore;
     ctx.fillRect(x, top - 1, 1, 2);
     ctx.fillStyle = PALETTE.sand;
@@ -198,9 +311,9 @@ export function paintBackdrop(size, rand) {
   }
   // Short streaks in the sand, as in the sketch.
   ctx.fillStyle = PALETTE.sandShade;
-  for (let i = 0; i < 70; i++) {
-    const x = Math.floor(rand() * size);
-    const y = shoreY(x, size) + 4 + Math.floor(rand() * (size - shoreY(x, size) - 6));
+  for (let i = 0; i < Math.round((70 * width) / size); i++) {
+    const x = Math.floor(rand() * width);
+    const y = shoreY(x - offset, size) + 4 + Math.floor(rand() * (size - shoreY(x - offset, size) - 6));
     ctx.fillRect(x, y, 2 + Math.floor(rand() * 5), 1);
   }
   return canvas;
