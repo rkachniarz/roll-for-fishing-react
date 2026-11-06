@@ -45,6 +45,20 @@ test('advantage raises the average d20, disadvantage lowers it', () => {
   assert.equal(mean(2), mean(1));
 });
 
+test('roll20Kept says which die did not count, from the same draws as roll20', () => {
+  for (const vantage of [-1, 0, 1]) {
+    const a = diceFor(createRng(9));
+    const b = diceFor(createRng(9));
+    for (let i = 0; i < 200; i++) {
+      const kept = a.roll20Kept(vantage);
+      assert.equal(kept.result, b.roll20(vantage));
+      if (vantage === 0) assert.equal(kept.dropped, undefined);
+      else if (vantage > 0) assert.ok(/** @type {number} */ (kept.dropped) <= kept.result);
+      else assert.ok(/** @type {number} */ (kept.dropped) >= kept.result);
+    }
+  }
+});
+
 test('the same seed rolls the same dice', () => {
   const a = diceFor(createRng(99));
   const b = diceFor(createRng(99));

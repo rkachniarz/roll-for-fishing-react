@@ -33,11 +33,21 @@ export function diceFor(rng) {
    * @param {number} [vantage]
    */
   function roll20(vantage = 0) {
+    return roll20Kept(vantage).result;
+  }
+
+  /**
+   * The same d20, also saying which die didn't count, for the log to show
+   * struck through: `dropped` is undefined on a straight roll.
+   * @param {number} [vantage]
+   * @returns {{ result: number, dropped?: number }}
+   */
+  function roll20Kept(vantage = 0) {
     const firstroll = getRandomNumber(1, 20);
-    if (vantage === 0) return firstroll;
+    if (vantage === 0) return { result: firstroll };
     const secondroll = getRandomNumber(1, 20);
-    if (vantage < 0) return Math.min(firstroll, secondroll);
-    else return Math.max(firstroll, secondroll);
+    const keepFirst = vantage < 0 ? firstroll <= secondroll : firstroll >= secondroll;
+    return keepFirst ? { result: firstroll, dropped: secondroll } : { result: secondroll, dropped: firstroll };
   }
 
   function roll100() {
@@ -56,5 +66,5 @@ export function diceFor(rng) {
     return getRandomNumber(1, 6) + getRandomNumber(1, 6);
   }
 
-  return { getRandomNumber, roll20, roll100, roll12, roll6, roll2d6 };
+  return { getRandomNumber, roll20, roll20Kept, roll100, roll12, roll6, roll2d6 };
 }

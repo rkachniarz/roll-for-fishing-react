@@ -194,6 +194,23 @@ await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, t
   report("strike after the splash: the fish's roll stays hidden", /needed \?/.test(detail ?? ''), detail);
 });
 
+await check('advantage shows both dice', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+  await openBench(page);
+  for (const [name, value] of [['fishFind', '100'], ['playerVantage', '1']]) {
+    await page.fill(`#dev-${name}`, value);
+    await page.press(`#dev-${name}`, 'Enter');
+  }
+  await closePane(page);
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  const detail = (await page.textContent('#log .roll')) ?? '';
+  const dropped = Number(await page.textContent('#log .roll s'));
+  const kept = Number(/d20: \d+ (\d+)/.exec(detail)?.[1]);
+  report('advantage: the die that did not count is struck through, before the one that did', dropped >= 1 && kept >= dropped, detail);
+});
+
 await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (page, tap) => {
   await tap();
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
@@ -420,6 +437,10 @@ await check('a full bucket', PHONE, '?dev&seed=1&wait=600', async (page, tap) =>
   await page.screenshot({ path: 'dist/verify/full-bucket.png' });
   const options = await page.locator('#releaseList button').count();
   report('a full bucket: the new fish and the bucket to choose from', options >= 2, `${options} options`);
+  // On a phone the strike's own click lands on the dialog as it opens: ignored.
+  await page.click('#releaseList button >> nth=0', { delay: 0 });
+  report('a full bucket: a click as it opens lets nothing go', await page.isVisible('#release'));
+  await page.waitForTimeout(450);
   await page.click('#releaseList button >> nth=1');
   report('a full bucket: the choice closes it', !(await page.isVisible('#release')));
   report('a full bucket: the log says so', /You let the .* go\./.test(await logText(page)));

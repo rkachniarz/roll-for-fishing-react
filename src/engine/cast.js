@@ -38,6 +38,7 @@ export const TIMING = {
  * @property {string} kind      What the roll was for, e.g. 'fishing'.
  * @property {string} die       e.g. 'd20'.
  * @property {number} result    The die as rolled.
+ * @property {number} [dropped]  With advantage or disadvantage, the die that didn't count.
  * @property {{ label: string, value: number }[]} mods  Named additions.
  * @property {number} total
  * @property {boolean} visible  Shown to the player (R5.1).
@@ -135,14 +136,14 @@ export function strike(cast, now, dice, opponent, timing = TIMING) {
     return { ...cast, phase: 'done', endedAt: now, outcome: { result: 'landed', reactionMs, grade, rolls: [] } };
   }
   const { difficulty, skill, mods: extra = [], vantage = 0 } = opponent;
-  const result = dice.roll20(vantage);
+  const { result, dropped } = dice.roll20Kept(vantage);
   const mods = [...(skill !== undefined ? [{ label: 'skill', value: skill }] : []), ...extra];
   if (modifier !== 0) mods.push({ label: `${grade} reaction`, value: modifier });
   const total = result + mods.reduce((sum, m) => sum + m.value, 0);
   // A natural 20 always lands the fish, as in the prototype.
   const caught = result === 20 || total >= difficulty;
   /** @type {Roll} */
-  const roll = { kind: 'fishing', die: 'd20', result, mods, total, visible: true };
+  const roll = { kind: 'fishing', die: 'd20', result, ...(dropped !== undefined ? { dropped } : {}), mods, total, visible: true };
   return {
     ...cast,
     phase: 'done',

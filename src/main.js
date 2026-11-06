@@ -192,6 +192,9 @@ function openRelease() {
   const dialog = /** @type {HTMLDialogElement} */ ($('release'));
   if (dialog.open || !state?.pendingCatch) return;
   const s = state;
+  // The tap or key that struck the fish mustn't also let one go: on a phone,
+  // the tap's click lands on the first choice as the dialog opens under it.
+  const openedAt = performance.now();
   $('releaseTitle').textContent = t('release.title');
   $('releaseText').textContent = t('release.text');
   /**
@@ -205,6 +208,7 @@ function openRelease() {
     b.textContent = t('release.fish', { fish: fishName(fish), size: fish.size }) + (note ? ` (${note})` : '');
     b.style.color = rarityColour(fish.rarity);
     b.addEventListener('click', () => {
+      if (performance.now() - openedAt < 400) return;
       const out = releaseFish(s, choice);
       state = out.state;
       logEvents(out.events);
@@ -430,14 +434,21 @@ function describeRoll() {
   if (cast.phase !== 'done') return null;
   const roll = cast.outcome.rolls[0];
   if (!roll) return null;
+  // The roll goes in as a mark, so the die that didn't count can be put
+  // before it, struck through.
+  const MARK = '\u0001';
   const text = t('log.roll', {
-    roll: roll.result,
+    roll: MARK,
     mods: roll.mods.map((m) => ` ${m.value < 0 ? '−' : '+'} ${Math.abs(m.value)} ${m.label}`).join(''),
     total: roll.total,
     // The fish's own roll stays hidden until something reveals it (R5.2).
     needed: '?',
   });
-  return [text + (roll.result === 20 ? t('log.natural20') : '')];
+  const [before, after] = text.split(MARK);
+  /** @type {(string | Node)[]} */
+  const dice = [String(roll.result)];
+  if (roll.dropped !== undefined) dice.unshift(Object.assign(document.createElement('s'), { textContent: String(roll.dropped) }), ' ');
+  return [before, ...dice, after + (roll.result === 20 ? t('log.natural20') : '')];
 }
 
 /** How the strike went, floating up from the bobber (D82): only when the player struck. */
