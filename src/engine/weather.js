@@ -3,7 +3,8 @@
 // PORTING-NOTES §1.1). Each season is a map of 19 weathers on a hex grid, and
 // the weather drifts one cell at a time:
 //
-//   roll6: 4-6, nothing changes.
+//   roll12: 4-12, nothing changes (the prototype's d6 at 4-6 changed the
+//   weather twice as often; D92).
 //   Otherwise roll2d6 for the direction:  2 NW · 3-4 SW · 5-6 S · 7 SE · 8 NE ·
 //   9-10 stay · 11 N · 12 NW. The bias towards S and SE is intended (D26).
 //
@@ -64,7 +65,7 @@ export function weatherAt(season, cell, dice) {
  * @returns {{ weather: Weather, changed: boolean }}
  */
 export function stepWeather(weather, dice) {
-  if (dice.roll6() > 3) return { weather, changed: false };
+  if (dice.roll12() > 3) return { weather, changed: false };
   const direction = BY_2D6[dice.roll2d6()];
   if (direction === -1) return { weather, changed: false };
   const to = content.weather[weather.season].weathers[weather.cell].changeSet[direction];

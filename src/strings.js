@@ -76,7 +76,7 @@ const UI_STRINGS = {
   'log.reeled-in': 'You reel the line in.',
   'log.recast': 'The bobber settles. The line is out again.',
   'log.level-up': 'Level up! You are now level {level}.',
-  'log.weather': 'The weather changes. {description}',
+  'log.weather': '{description}',
   'log.season': 'It is now {season}. {description}',
   'log.buff-ended': '{buff} has worn off.',
   'log.bucket-full': 'Your bucket is full. Choose a fish to let go.',

@@ -19,7 +19,7 @@ The most finished system in the prototype. Port it faithfully; only the defects 
   description, and a `changeSet`: its six neighbours in the order `[n, ne, se, s, sw, nw]`.
 - The links are symmetric (checked: if A's north is B, then B's south is A). Cells on the edge point to themselves in the
   directions that would leave the map, so the weather "holds" there.
-- **One change step:** roll a d6; on 4–6 nothing changes. Otherwise roll 2d6 for the direction:
+- **One change step:** roll a d6; on 4–6 nothing changes. (Now a d12 at 4–12, half as often: D92.) Otherwise roll 2d6 for the direction:
 
   | 2d6 | 2 | 3–4 | 5–6 | 7 | 8 | 9–10 | 11 | 12 |
   |---|---|---|---|---|---|---|---|---|

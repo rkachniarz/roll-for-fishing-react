@@ -44,6 +44,10 @@ export function diceFor(rng) {
     return getRandomNumber(1, 100);
   }
 
+  function roll12() {
+    return getRandomNumber(1, 12);
+  }
+
   function roll6() {
     return getRandomNumber(1, 6);
   }
@@ -52,5 +56,5 @@ export function diceFor(rng) {
     return getRandomNumber(1, 6) + getRandomNumber(1, 6);
   }
 
-  return { getRandomNumber, roll20, roll100, roll6, roll2d6 };
+  return { getRandomNumber, roll20, roll100, roll12, roll6, roll2d6 };
 }

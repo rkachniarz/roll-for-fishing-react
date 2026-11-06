@@ -570,7 +570,7 @@ body {
   inset: 0;
   overflow-y: auto;
   /* Room under the newest line for the menu button. */
-  padding: 4px 8px calc(var(--icon) + 14px);
+  padding: 2px 4px calc(var(--icon) + 14px);
   font-size: 15px;
   overscroll-behavior: contain;
 }

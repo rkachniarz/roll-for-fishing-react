@@ -334,13 +334,15 @@ export async function createScene(canvas, rand, look = {}) {
       if (phaseChanged) doneAt = now;
       const t = Math.min((now - doneAt) / 350, 1);
       const result = cast.outcome.result;
-      if (result === 'caught' || result === 'landed' || result === 'too-early' || cast.reeledIn) {
+      // Only a missed splash leaves the bobber out: the line goes out again
+      // where it lies (D64). Everything else reels in, a fish that got away too.
+      if (result !== 'missed' || cast.reeledIn) {
         // Reeled in towards the rod.
         bx = target.x + (ROD_TIP.x - target.x) * t;
         by = target.y + (ROD_TIP.y - target.y) * t;
         shown = t < 1;
       } else {
-        // The fish let go: the bobber pops back up and settles.
+        // Missed: the bobber pops back up and settles.
         by += Math.floor(now / 650) % 2;
       }
     }

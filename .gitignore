@@ -9,3 +9,6 @@ dist/
 Thumbs.db
 .vscode/*
 !.vscode/extensions.json
+
+# The owner's drafts: content not ready for content/ yet.
+drafts/

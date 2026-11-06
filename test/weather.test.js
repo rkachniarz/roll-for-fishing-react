@@ -13,11 +13,11 @@ const dice = (seed = 1) => diceFor(createRng(deriveSeed(seed, 'weather')));
 
 /**
  * Dice that always roll the given numbers, to steer one step.
- * @param {number} r6
+ * @param {number} r12
  * @param {number} r2d6
  */
-function fixed(r6, r2d6) {
-  return { ...dice(), roll6: () => r6, roll2d6: () => r2d6 };
+function fixed(r12, r2d6) {
+  return { ...dice(), roll12: () => r12, roll2d6: () => r2d6 };
 }
 
 test('four seasons in order, 19 weathers each, every one described', () => {
@@ -34,9 +34,9 @@ test('Summer #8 "Torrential rain" holds to the north, under its edge line', () =
   assert.equal(cell.changeSet[0], 8);
 });
 
-test('4-6 on the d6: the weather holds', () => {
+test('4-12 on the d12: the weather holds (D92)', () => {
   const w = weatherAt('spring', 0, dice());
-  for (const r6 of [4, 5, 6]) assert.equal(stepWeather(w, fixed(r6, 7)).changed, false);
+  for (const r12 of [4, 5, 6, 9, 12]) assert.equal(stepWeather(w, fixed(r12, 7)).changed, false);
 });
 
 test('2d6 picks the direction: 2 NW, 3-4 SW, 5-6 S, 7 SE, 8 NE, 9-10 stay, 11 N, 12 NW', () => {

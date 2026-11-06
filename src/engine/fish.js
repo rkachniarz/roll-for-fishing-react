@@ -66,7 +66,7 @@ export function rollFish(species, values, dice, { minBand = 0 } = {}) {
     band,
     size,
     difficulty,
-    xp: Math.max(difficulty + values.fishXp, 0),
+    xp: Math.max(difficulty + values.fishXp, 1),
     rarity: fishRarity(s.rarity, bands[band].rarity),
   };
 }

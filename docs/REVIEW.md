@@ -24,6 +24,15 @@ Items with no note are left alone.
 
 Newest first.
 
+## First notes from the phone (D92)
+
+- **Half as often is a d12 at 1–3.** The new die keeps the weather as rolled dice (D5) instead of a second roll or
+  a percentage. The weather now changes on about 19% of casts.
+- **2 px beside the scene on a phone,** not 0, so the scene's border doesn't touch the edge of the screen. The
+  log's padding went from 4/8 px to 2/4 px.
+- **The weather line in the log** is now only the description ("Rain pours down in heavy sheets."). A season change
+  still says the season has turned.
+
 ## GitHub Pages (3.5, D91)
 
 - **Both `fresh-start` and `master` publish,** whichever was pushed last. Only `fresh-start` is used now; `master`

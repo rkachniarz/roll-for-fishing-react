@@ -6,11 +6,12 @@ import { diceFor } from '../src/dice.js';
 const rollMany = (fn, n = 20000) => Array.from({ length: n }, fn);
 
 test('each die covers exactly its faces', () => {
-  const { roll20, roll100, roll6, roll2d6 } = diceFor(createRng(1));
+  const { roll20, roll100, roll12, roll6, roll2d6 } = diceFor(createRng(1));
   const faces = (fn) => [...new Set(rollMany(fn))].sort((a, b) => a - b);
   const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
   assert.deepEqual(faces(() => roll20()), range(1, 20));
   assert.deepEqual(faces(roll100), range(1, 100));
+  assert.deepEqual(faces(roll12), range(1, 12));
   assert.deepEqual(faces(roll6), range(1, 6));
   assert.deepEqual(faces(roll2d6), range(2, 12));
 });

@@ -104,9 +104,9 @@ test('rarity: species shifted by band, never below Poor or above Epic', () => {
   assert.equal(fishRarity('legendary', -1), 'legendary');
 });
 
-test('XP is the difficulty plus fishXp, never below 0', () => {
+test('XP is the difficulty plus fishXp, never below 1', () => {
   const f = rollFish('roach', { ...plain, fishXp: -50 }, dice());
-  assert.equal(f.xp, 0);
+  assert.equal(f.xp, 1);
 });
 
 test('a fish has a name: band, subname, species', () => {

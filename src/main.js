@@ -83,7 +83,7 @@ const LOG_MIN = 150;
 
 function fit() {
   const wide = window.innerWidth >= 900;
-  const gutter = wide ? 16 : 8;
+  const gutter = wide ? 16 : 2;
   const width = wide ? window.innerWidth - HUD_WIDTH - 3 * gutter : window.innerWidth - 2 * gutter;
   // On a phone the row's buttons are an eighth of the width, square.
   const height = wide ? window.innerHeight - 2 * gutter : window.innerHeight - 2 * gutter - width / 8 - 16 - LOG_MIN;
