@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "ever-summoning",
+  "class": "fishing-wizard",
+  "level": 5,
+  "kind": "passive",
+  "name": "Ever-Summoning",
+  "description": "Summon Fish works by itself, every other cast."
+}

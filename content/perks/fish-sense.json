@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "fish-sense",
+  "class": "any",
+  "kind": "passive",
+  "name": "Fish Sense",
+  "repeatable": true,
+  "description": "+5 Fish Find.",
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 5
+    }
+  ]
+}

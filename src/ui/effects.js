@@ -44,6 +44,10 @@ export function effectLine(effect) {
     const key = effect.value === 'fishVantage' ? `effect.fish${strong}${kind}` : `effect.${strong ? 'strong' + kind : kind.toLowerCase()}`;
     return { text: t(key), tone };
   }
+  if (effect.value === 'vantageStacks' && typeof effect.add === 'number' && effect.add > 0) return { text: t('effect.vantageStacks'), tone };
+  if (effect.value === 'naturalCatch' && typeof effect.add === 'number') {
+    return { text: t('effect.naturalCatch', { from: (meta.base ?? 20) + effect.add }), tone };
+  }
   const shown = typeof effect.add === 'string' ? `+${effect.add}` : amount(effect.add, meta?.unit);
   return { text: t('effect.amount', { amount: shown, value: t(`value.${effect.value}`) }), tone };
 }

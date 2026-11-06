@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "jump-in",
+  "class": "fish-fighter",
+  "level": 1,
+  "kind": "active",
+  "name": "Jump In",
+  "description": "When a fish gets away, jump in after it and beat it into submission. It goes in your bucket.",
+  "cooldown": {
+    "casts": 10
+  }
+}

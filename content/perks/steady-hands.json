@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "steady-hands",
+  "class": "any",
+  "kind": "passive",
+  "name": "Steady Hands",
+  "repeatable": true,
+  "description": "+1 Fishing Skill.",
+  "effects": [
+    {
+      "value": "fishingSkill",
+      "add": 1
+    }
+  ]
+}

@@ -35,6 +35,7 @@ import { equip, fits, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_S
 import { setupDrag } from './ui/drag.js';
 import { showError } from './ui/errors.js';
 import { arrive, choose, openSlide } from './engine/events.js';
+import { owedLevels, settlePerks } from './engine/perks.js';
 import { eventWords, sayEventText } from './ui/event-words.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
@@ -388,6 +389,10 @@ function describeEvent(e) {
       return tParts(`log.${e.type}`, { bait: itemLink(e.bait), fish: fishLink(e.fish) });
     case 'level-up':
       return [t('log.level-up', { level: e.level })];
+    case 'perk':
+      return [t('log.perk', { perk: t(content.perks[e.perk].name) })];
+    case 'perk-owed':
+      return [t('log.perk-owed')];
     case 'weather':
       return [t('log.weather', { description: t(e.weather.description) })];
     case 'season':
@@ -439,7 +444,7 @@ function describeRoll() {
   const MARK = '\u0001';
   const text = t('log.roll', {
     roll: MARK,
-    mods: roll.mods.map((m) => ` ${m.value < 0 ? '−' : '+'} ${Math.abs(m.value)} ${m.label}`).join(''),
+    mods: roll.mods.map((m) => ` ${m.value < 0 ? '−' : '+'} ${Math.abs(m.value)} ${modName(m.label)}`).join(''),
     total: roll.total,
     // The fish's own roll stays hidden until something reveals it (R5.2).
     needed: '?',
@@ -447,8 +452,19 @@ function describeRoll() {
   const [before, after] = text.split(MARK);
   /** @type {(string | Node)[]} */
   const dice = [String(roll.result)];
-  if (roll.dropped !== undefined) dice.unshift(Object.assign(document.createElement('s'), { textContent: String(roll.dropped) }), ' ');
-  return [before, ...dice, after + (roll.result === 20 ? t('log.natural20') : '')];
+  for (const d of [...(roll.dropped ?? [])].reverse()) dice.unshift(Object.assign(document.createElement('s'), { textContent: String(d) }), ' ');
+  const crit = roll.result === 20 ? t('log.natural20') : roll.crit ? t('log.critical') : '';
+  return [before, ...dice, after + crit];
+}
+
+/**
+ * A roll modifier's name for the log: an item's or a perk's name for its id,
+ * anything else as it is ('skill', 'fast reaction').
+ * @param {string} label
+ */
+function modName(label) {
+  const named = content.items[label] ?? content.perks[label];
+  return named ? t(named.name) : label;
 }
 
 /** How the strike went, floating up from the bobber (D82): only when the player struck. */
@@ -821,7 +837,7 @@ function openCreation(chosen) {
     e.preventDefault();
     const name = nameInput.value.trim() || generateName(dice);
     slot = chosen;
-    state = newGame({ seed, character: { name, gender, classId, stats, luck: 0, xp: 0 }, month: new Date().getMonth() });
+    state = newGame({ seed, character: { name, gender, classId, stats, luck: 0, xp: 0, perks: {} }, month: new Date().getMonth() });
     // The player arrives at the start: a welcome, if there is one (D89).
     arrive(state);
     save(state);
@@ -856,9 +872,14 @@ function openTitle(view = 'main') {
   const play = (saved) =>
     leave(() => {
       slot = saved.slot;
-      state = saved.state;
+      // A character from before perks, or one that levelled up with an old
+      // version, gets what its level gives at once (D96).
+      const settled = settlePerks(saved.state);
+      state = settled.state;
+      if (settled.taken.length) save(state);
       cast = /** @type {GameCast} */ ({ phase: 'idle' });
       log.clear();
+      logEvents([...settled.taken.map((id) => ({ type: 'perk', perk: id })), ...(owedLevels(state).length ? [{ type: 'perk-owed' }] : [])]);
       render();
       promptPlayer();
     });

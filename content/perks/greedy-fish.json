@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "greedy-fish",
+  "class": "rogue-fisher",
+  "level": 3,
+  "kind": "passive",
+  "name": "Greedy Fish",
+  "description": "Now and then, you hook a Greedy fish, which has something shiny on it."
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "full-force",
+  "class": "fish-fighter",
+  "level": 5,
+  "kind": "active",
+  "name": "Full Force",
+  "description": "For the next cast, your Fish Find and your Fishing Skill are added together, for both rolls.",
+  "cooldown": {
+    "casts": 10,
+    "minusLevel": true
+  }
+}

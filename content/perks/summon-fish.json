@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "summon-fish",
+  "class": "fishing-wizard",
+  "level": 1,
+  "kind": "active",
+  "name": "Summon Fish",
+  "description": "A fish bites on your next cast, for certain.",
+  "cooldown": {
+    "casts": 10
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "recall",
+  "class": "fishing-wizard",
+  "level": 3,
+  "kind": "active",
+  "name": "Recall",
+  "description": "Your next fish is one that got away here before.",
+  "cooldown": {
+    "casts": 10
+  }
+}

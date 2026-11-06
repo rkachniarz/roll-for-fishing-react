@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "fence",
+  "class": "rogue-fisher",
+  "level": 5,
+  "kind": "passive",
+  "name": "Fence",
+  "description": "When you find treasure, choose between two. Gut is ready again after 3 casts."
+}

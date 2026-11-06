@@ -20,6 +20,7 @@ import { startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
 import { equippedIds } from './equipment.js';
 import { afterCast } from './events.js';
+import { owedLevels, perkSources, settlePerks } from './perks.js';
 import { advanceTime } from './time.js';
 import { changeSeason, stepWeather } from './weather.js';
 
@@ -45,8 +46,8 @@ export const WILD_CAST = 100;
  * @property {number} total
  * @property {boolean} visible
  *
- * @typedef {{ kind: 'fish', fish: PoolFish, required: number, seenBefore: boolean, fromPool: boolean,
- *     player: { mods: { label: string, value: number }[], vantage: number } }
+ * @typedef {{ kind: 'fish', fish: PoolFish, required: number, fishNatural?: number, seenBefore: boolean, fromPool: boolean,
+ *     player: { mods: { label: string, value: number }[], vantage: number, stacks?: boolean, natural?: number } }
  *   | { kind: 'item', id: string }
  *   | { kind: 'empty', reason: 'nothing' }} Line
  *
@@ -58,6 +59,7 @@ export const WILD_CAST = 100;
  *   missPause: number,
  *   bait: { recovery: number, escapeLoss: number },
  *   bucketSize: number,
+ *   meterFill: number,
  *   reeledIn?: boolean,
  *   recast?: boolean,
  *   feature?: { id: string, born: number } | null,
@@ -68,7 +70,7 @@ export const WILD_CAST = 100;
  */
 
 /**
- * Every game value, from the character, the equipped items and the buffs.
+ * Every game value, from the character, its perks, the equipped items and the buffs.
  * @param {GameState} state
  * @param {import('./values.js').Source[]} [extra]  Sources that aren't part of
  *   the state, such as the ?dev bench's overrides; never saved.
@@ -76,7 +78,7 @@ export const WILD_CAST = 100;
  */
 export function valuesFor(state, extra = []) {
   /** @type {import('./values.js').Source[]} */
-  const sources = [];
+  const sources = perkSources(state);
   for (const id of equippedIds(state)) {
     const effects = content.items[id]?.effects;
     if (effects) sources.push({ label: id, effects });
@@ -203,6 +205,7 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     missPause: values.flat.missPause,
     bait: { recovery: values.flat.baitRecovery, escapeLoss: values.flat.baitEscapeLoss },
     bucketSize: values.flat.bucketSize,
+    meterFill: values.flat.eventMeterFill,
     extra,
     feature: hit ? { id: hit.id, born: hit.born } : null,
     ...(recast ? { recast: true } : {}),
@@ -287,11 +290,14 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
           kind: 'fish',
           fish,
           required: fish.difficulty + resistance,
+          fishNatural: resistance,
           seenBefore: fromPool || Boolean(featureFish),
           fromPool,
           player: {
             mods: skill.mods.map((m) => (m.label === 'stat' ? { ...m, label: 'skill' } : m)),
             vantage: value('playerVantage').total,
+            stacks: value('vantageStacks').total > 0,
+            natural: value('naturalCatch').total,
           },
         },
         rolls,
@@ -361,7 +367,16 @@ export function strikeLine(state, cast, now) {
   }
   const line = cast.line;
   const opponent =
-    line.kind === 'fish' ? { difficulty: line.required, mods: line.player.mods, vantage: line.player.vantage } : null;
+    line.kind === 'fish'
+      ? {
+          difficulty: line.required,
+          mods: line.player.mods,
+          vantage: line.player.vantage,
+          stacks: line.player.stacks,
+          natural: line.player.natural,
+          fishNatural: line.fishNatural,
+        }
+      : null;
   const { dice, commit } = diceFrom(state);
   const next = /** @type {GameCast} */ (strike(cast, now, dice.fishing, opponent, cast.timing));
   if (next.phase !== 'done') return { state, cast: next, events: [] };
@@ -454,7 +469,15 @@ function resolveCast(state, cast) {
   }
 
   const levelAfter = levelFor(next.character.xp);
-  if (levelAfter > levelBefore) events.push({ type: 'level-up', level: levelAfter });
+  if (levelAfter > levelBefore) {
+    events.push({ type: 'level-up', level: levelAfter });
+    // A level with only one perk on offer gives it; one with a choice waits
+    // for the player, without stopping the game (D96).
+    const settled = settlePerks(next);
+    Object.assign(next, settled.state);
+    for (const id of settled.taken) events.push({ type: 'perk', perk: id });
+    if (owedLevels(next).length > 0) events.push({ type: 'perk-owed' });
+  }
 
   events.push(...updateFeatures(next, dice.features));
 
@@ -476,6 +499,7 @@ function resolveCast(state, cast) {
   events.push(...afterCast(next, dice.events, {
     found: result === 'landed' && line.kind === 'item' ? line.id : undefined,
     empty: result === 'landed' && line.kind === 'empty',
+    fill: cast.meterFill ?? 100,
   }));
 
   next.streams = commit();

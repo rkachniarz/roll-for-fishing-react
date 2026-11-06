@@ -17,7 +17,7 @@ import { clock, seasonOfMonth, startTime } from './time.js';
 import { emptyEquipment } from './equipment.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 4;
+export const SAVE_VERSION = 5;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -46,7 +46,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, number>} streams  Each stream's state (D53).
  * @property {{ name: string, gender: 'm' | 'f', classId: string,
  *   stats: { fishingSkill: number, fishFind: number, treasureFind: number },
- *   luck: number, xp: number }} character
+ *   luck: number, xp: number, perks: Record<number, string> }} character  `perks`: level -> the perk
+ *   taken for it (perks.js, D96).
  * @property {string} location
  * @property {string | null} spot
  * @property {number} time  Game minutes (time.js).
@@ -107,7 +108,7 @@ export function newGame({ seed, character, month }) {
     version: SAVE_VERSION,
     seed,
     streams,
-    character: { ...character, luck: character.luck ?? 0, xp: character.xp ?? 0 },
+    character: { ...character, luck: character.luck ?? 0, xp: character.xp ?? 0, perks: character.perks ?? {} },
     location: start.location,
     spot: null,
     time,
@@ -195,6 +196,8 @@ const MIGRATIONS = {
     eventsSeen: {},
     streams: { ...save.streams, events: deriveSeed(save.seed, 'events') },
   }),
+  // 4 -> 5: perks (D96). None taken yet; the page offers what the level owes.
+  4: (save) => ({ ...save, character: { ...save.character, perks: {} } }),
 };
 
 /** @param {GameState} state */

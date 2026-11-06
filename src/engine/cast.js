@@ -38,7 +38,8 @@ export const TIMING = {
  * @property {string} kind      What the roll was for, e.g. 'fishing'.
  * @property {string} die       e.g. 'd20'.
  * @property {number} result    The die as rolled.
- * @property {number} [dropped]  With advantage or disadvantage, the die that didn't count.
+ * @property {number[]} [dropped]  With advantage or disadvantage, the dice that didn't count.
+ * @property {boolean} [crit]   It landed the fish on its natural roll alone (D96).
  * @property {{ label: string, value: number }[]} mods  Named additions.
  * @property {number} total
  * @property {boolean} visible  Shown to the player (R5.1).
@@ -62,6 +63,9 @@ export const TIMING = {
  * @property {number} [skill]     Added to the roll, labelled 'skill'.
  * @property {{ label: string, value: number }[]} [mods]  Further named additions.
  * @property {number} [vantage]   Advantage (> 0) or disadvantage (< 0) on the d20.
+ * @property {boolean} [stacks]   Every point of vantage adds a die (D96).
+ * @property {number} [natural]   The lowest natural roll that lands the fish whatever the total (20).
+ * @property {number} [fishNatural]  The fish's own d20: a 20 there cancels a natural catch (D96).
  */
 
 /** @returns {Cast} */
@@ -135,15 +139,26 @@ export function strike(cast, now, dice, opponent, timing = TIMING) {
   if (!opponent) {
     return { ...cast, phase: 'done', endedAt: now, outcome: { result: 'landed', reactionMs, grade, rolls: [] } };
   }
-  const { difficulty, skill, mods: extra = [], vantage = 0 } = opponent;
-  const { result, dropped } = dice.roll20Kept(vantage);
+  const { difficulty, skill, mods: extra = [], vantage = 0, stacks = false, natural = 20, fishNatural } = opponent;
+  const { result, dropped } = dice.roll20Kept(vantage, stacks);
   const mods = [...(skill !== undefined ? [{ label: 'skill', value: skill }] : []), ...extra];
   if (modifier !== 0) mods.push({ label: `${grade} reaction`, value: modifier });
   const total = result + mods.reduce((sum, m) => sum + m.value, 0);
-  // A natural 20 always lands the fish, as in the prototype.
-  const caught = result === 20 || total >= difficulty;
+  // A natural 20 lands the fish, as in the prototype, unless the fish rolled
+  // a 20 too: then the totals decide (D96).
+  const crit = result >= natural && fishNatural !== 20;
+  const caught = crit || total >= difficulty;
   /** @type {Roll} */
-  const roll = { kind: 'fishing', die: 'd20', result, ...(dropped !== undefined ? { dropped } : {}), mods, total, visible: true };
+  const roll = {
+    kind: 'fishing',
+    die: 'd20',
+    result,
+    ...(dropped !== undefined ? { dropped } : {}),
+    ...(crit ? { crit: true } : {}),
+    mods,
+    total,
+    visible: true,
+  };
   return {
     ...cast,
     phase: 'done',

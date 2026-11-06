@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "magpie-eye",
+  "class": "any",
+  "kind": "passive",
+  "name": "Magpie Eye",
+  "repeatable": true,
+  "description": "+5 Treasure Find.",
+  "effects": [
+    {
+      "value": "treasureFind",
+      "add": 5
+    }
+  ]
+}

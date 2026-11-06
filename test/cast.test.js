@@ -104,6 +104,50 @@ test('a natural 20 always lands the fish', () => {
   assert.ok(seen > 0);
 });
 
+/**
+ * Strikes `count` times against an unbeatable fish; the rolls and outcomes.
+ * @param {import('../src/engine/cast.js').Opponent} opponent
+ */
+function strikes(opponent, count = 600) {
+  const d = dice();
+  const out = [];
+  for (let i = 0; i < count; i++) {
+    const cast = startCast(0, d);
+    if (cast.phase !== 'waiting') throw new Error();
+    const done = strike(cast, cast.biteAt + 2000, d, opponent);
+    if (done.phase !== 'done') throw new Error();
+    out.push({ roll: done.outcome.rolls[0], result: done.outcome.result });
+  }
+  return out;
+}
+
+test("a natural 20 doesn't land the fish when the fish rolled a 20 too: the totals decide (D96)", () => {
+  const all = strikes({ skill: 0, difficulty: 99, fishNatural: 20 });
+  assert.ok(all.some((s) => s.roll.result === 20));
+  for (const s of all) {
+    assert.equal(s.result, 'escaped');
+    assert.equal(s.roll.crit, undefined);
+  }
+  // Against a fish that rolled 19, the 20 still lands it.
+  for (const s of strikes({ skill: 0, difficulty: 99, fishNatural: 19 })) assert.equal(s.result, s.roll.result === 20 ? 'caught' : 'escaped');
+});
+
+test('a lower natural catch makes 19 a crit too (the Heavy Hand perk, D96)', () => {
+  const all = strikes({ skill: 0, difficulty: 99, natural: 19 });
+  assert.ok(all.some((s) => s.roll.result === 19));
+  for (const s of all) {
+    assert.equal(s.result, s.roll.result >= 19 ? 'caught' : 'escaped');
+    assert.equal(Boolean(s.roll.crit), s.roll.result >= 19);
+  }
+});
+
+test('stacking advantage rolls a die per point and keeps the best (D96)', () => {
+  for (const s of strikes({ skill: 0, difficulty: 10, vantage: 2, stacks: true }, 100)) {
+    assert.equal(s.roll.dropped?.length, 2);
+    for (const d of s.roll.dropped ?? []) assert.ok(d <= s.roll.result);
+  }
+});
+
 test('an idle cast ignores a strike', () => {
   assert.equal(strike(idleCast(), 0, dice(), FISH).phase, 'idle');
 });

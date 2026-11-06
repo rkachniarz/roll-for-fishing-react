@@ -15,6 +15,7 @@ import { weatherAt } from './engine/weather.js';
 import { clock, TIME } from './engine/time.js';
 import { EQUIPMENT_SLOTS, quickEquip } from './engine/equipment.js';
 import { METER_FIRES, arrive, startEvent } from './engine/events.js';
+import { owedLevels } from './engine/perks.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 
@@ -137,6 +138,27 @@ export function createBench(root, { getState, setState, overrides, extraSources,
   luckInput.addEventListener('change', () => edit((s) => ({ ...s, character: { ...s.character, luck: Number(luckInput.value) } })));
   const statsLine = el('p');
 
+  // Any perk, whatever the class or level: a class perk at its own level, a
+  // universal one at the first universal level without a perk (or above the
+  // last, if they're all taken), replacing whatever was there (D96).
+  const perkSelect = el('select', { id: 'dev-perk' });
+  for (const p of Object.values(content.perks).sort((a, b) => a.class.localeCompare(b.class) || (a.level ?? 0) - (b.level ?? 0))) {
+    perkSelect.append(el('option', { value: p.id, textContent: `${p.class}${p.level ? ` L${p.level}` : ''} ${p.kind}: ${t(p.name)}` }));
+  }
+  const grantPerk = button('Grant perk', () =>
+    edit((s) => {
+      const p = content.perks[perkSelect.value];
+      let level = p.level;
+      if (level === undefined) {
+        const universal = content.rules.levels.universal;
+        level = universal.find((/** @type {number} */ l) => !s.character.perks[l]) ?? 100 + Object.keys(s.character.perks).length;
+      }
+      s.character.perks = { ...s.character.perks, [level]: p.id };
+      return s;
+    }),
+  );
+  const clearPerks = button('Clear perks', () => edit((s) => ((s.character.perks = {}), s)));
+
   // ---------- Inventory ----------
   const itemSelect = el('select');
   for (const item of Object.values(content.items).sort((a, b) => a.category.localeCompare(b.category) || a.id.localeCompare(b.id))) {
@@ -206,7 +228,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       el('div', { className: 'dev-row' }, ['Surface feature ', featureSelect, spawnFeature, button('Clear', () => edit((s) => ({ ...s, features: [] })))]),
       featuresLine,
     ]),
-    section('Character', [el('div', { className: 'dev-fields' }, [el('label', { htmlFor: 'dev-xp', textContent: 'XP' }), xpInput, el('label', { htmlFor: 'dev-luck', textContent: 'Luck' }), luckInput, el('label', { htmlFor: 'dev-class', textContent: 'Class' }), classSelect]), statsLine]),
+    section('Character', [el('div', { className: 'dev-fields' }, [el('label', { htmlFor: 'dev-xp', textContent: 'XP' }), xpInput, el('label', { htmlFor: 'dev-luck', textContent: 'Luck' }), luckInput, el('label', { htmlFor: 'dev-class', textContent: 'Class' }), classSelect]), statsLine, el('div', { className: 'dev-row' }, [perkSelect, grantPerk, clearPerks])]),
     section('Inventory', [
       el('div', { className: 'dev-row' }, [itemSelect, addItem, addTen, equipItem]),
       el('div', { className: 'dev-row' }, [addEquippable]),
@@ -270,7 +292,8 @@ export function createBench(root, { getState, setState, overrides, extraSources,
 
       if (document.activeElement !== xpInput) xpInput.value = String(s.character.xp);
       if (document.activeElement !== luckInput) luckInput.value = String(s.character.luck);
-      statsLine.textContent = `Level ${levelFor(s.character.xp)}. Stats: skill ${s.character.stats.fishingSkill}, fish find ${s.character.stats.fishFind}, treasure find ${s.character.stats.treasureFind}. Casts ${s.book.casts}, catches ${s.book.catches}.`;
+      statsLine.textContent = `Level ${levelFor(s.character.xp)}. Stats: skill ${s.character.stats.fishingSkill}, fish find ${s.character.stats.fishFind}, treasure find ${s.character.stats.treasureFind}. Casts ${s.book.casts}, catches ${s.book.catches}. ` +
+        `Perks: ${Object.entries(s.character.perks).map(([l, id]) => `L${l} ${id}`).join(', ') || '-'}; owed levels: ${owedLevels(s).join(', ') || '-'}.`;
 
       const fish = s.bucket.reduce((n, b) => n + b.count, 0);
       const items = s.bags.map((b) => `${t(content.items[b.id].name)}${b.count > 1 ? ` ×${b.count}` : ''}`).join(', ');

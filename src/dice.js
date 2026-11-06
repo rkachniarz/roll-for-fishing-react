@@ -37,17 +37,26 @@ export function diceFor(rng) {
   }
 
   /**
-   * The same d20, also saying which die didn't count, for the log to show
-   * struck through: `dropped` is undefined on a straight roll.
+   * The same d20, also saying which dice didn't count, for the log to show
+   * struck through, in the order rolled: `dropped` is undefined on a straight
+   * roll. With `stacks`, every point of vantage adds a die (D96): advantage 2
+   * rolls three and keeps the best.
    * @param {number} [vantage]
-   * @returns {{ result: number, dropped?: number }}
+   * @param {boolean} [stacks]
+   * @returns {{ result: number, dropped?: number[] }}
    */
-  function roll20Kept(vantage = 0) {
+  function roll20Kept(vantage = 0, stacks = false) {
     const firstroll = getRandomNumber(1, 20);
     if (vantage === 0) return { result: firstroll };
-    const secondroll = getRandomNumber(1, 20);
-    const keepFirst = vantage < 0 ? firstroll <= secondroll : firstroll >= secondroll;
-    return keepFirst ? { result: firstroll, dropped: secondroll } : { result: secondroll, dropped: firstroll };
+    const rolls = [firstroll];
+    const count = stacks ? Math.abs(vantage) + 1 : 2;
+    while (rolls.length < count) rolls.push(getRandomNumber(1, 20));
+    // The first of the best, so equal dice keep the earlier one.
+    let kept = 0;
+    rolls.forEach((r, i) => {
+      if (vantage < 0 ? r < rolls[kept] : r > rolls[kept]) kept = i;
+    });
+    return { result: rolls[kept], dropped: rolls.filter((_, i) => i !== kept) };
   }
 
   function roll100() {

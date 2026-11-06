@@ -8,6 +8,8 @@
         "fishFind",
         "treasureFind",
         "playerVantage",
+        "vantageStacks",
+        "naturalCatch",
         "fishVantage",
         "fishDifficulty",
         "fishSizeBand",
@@ -20,6 +22,7 @@
         "strikeLimit",
         "missPause",
         "bucketSize",
+        "eventMeterFill",
         "baitRecovery",
         "baitEscapeLoss"
       ]

@@ -34,6 +34,10 @@ export const GAME_VALUES = {
   treasureFind: { better: 'higher' },
   /** Above 0: the fishing d20 is rolled with advantage; below 0, disadvantage. */
   playerVantage: { better: 'higher', base: 0 },
+  /** Above 0: every source of advantage adds a die, the best one kept, rather than all of them counting as one (D96). */
+  vantageStacks: { better: 'higher', base: 0 },
+  /** The lowest natural d20 that lands the fish whatever the total, unless the fish's own d20 is a 20 too (D96). */
+  naturalCatch: { better: 'lower', base: 20 },
   /** The same for the fish's own d20 (R3.5). */
   fishVantage: { better: 'lower', base: 0 },
   /** Added to every fish's difficulty. */
@@ -61,6 +65,10 @@ export const GAME_VALUES = {
   // ---- The bucket (D57) ----
   /** How many fish the bucket holds; a full one sends the player to town. */
   bucketSize: { better: 'higher', base: 16 },
+
+  // ---- Events (D84) ----
+  /** How fast the event meter fills, in percent of the usual. */
+  eventMeterFill: { better: 'neither', base: 100, unit: '%' },
 
   // ---- Bait (D39, D61) ----
   /** The chance, in percent, that bait is saved when a fish is caught. */

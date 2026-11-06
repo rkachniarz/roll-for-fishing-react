@@ -17,11 +17,20 @@
         "minimum": 0
       },
       "minItems": 1
+    },
+    "universal": {
+      "description": "The levels that offer a choice of two universal perks (D96). Class perks say their own level.",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
     }
   },
   "required": [
     "id",
-    "xp"
+    "xp",
+    "universal"
   ],
   "additionalProperties": false
 }

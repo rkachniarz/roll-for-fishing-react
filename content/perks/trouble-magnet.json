@@ -1,0 +1,14 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "trouble-magnet",
+  "class": "any",
+  "kind": "passive",
+  "name": "Trouble Magnet",
+  "description": "Things happen to you twice as often.",
+  "effects": [
+    {
+      "value": "eventMeterFill",
+      "add": 100
+    }
+  ]
+}

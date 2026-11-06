@@ -35,6 +35,7 @@ const KINDS = {
   weather: { schema: 'season', prefix: 'weather' },
   classes: { schema: 'class', prefix: 'class' },
   features: { schema: 'feature', prefix: 'feature' },
+  perks: { schema: 'perk', prefix: 'perk' },
   // One file per rule set; each has its own schema, named after its id.
   rules: { schema: null, prefix: 'rules' },
 };
@@ -52,6 +53,7 @@ const TEXT = {
   weather: [['name'], ['weathers', '#', 'name'], ['weathers', '#', 'descriptions', '#']],
   classes: [['name', 'm'], ['name', 'f'], ['description']],
   features: [['name']],
+  perks: [['name'], ['description']],
   rules: [
     ['bands', '@', 'name'],
     ['temperature', '#', 'word'],
@@ -235,6 +237,7 @@ export async function buildContent(root = ROOT) {
     if (item.bobber && item.slot !== 'bobber') errors.push(`${where}: only a bobber has a bobber's looks`);
   }
 
+  checkPerks(all, errors, warnings);
   checkSeasons(all.weather, errors);
   checkEvents(all, errors, warnings);
 
@@ -263,6 +266,42 @@ export async function buildContent(root = ROOT) {
   );
 
   return { errors, warnings, all, bundle, strings, foundAt, missingArt };
+}
+
+/**
+ * Perks (D96): a class perk has a level and a real class; a universal one has
+ * neither. Each class has one perk at level 1 and a passive and an active at
+ * each later class level, for the player to choose between.
+ * @param {Record<string, Record<string, any>>} all
+ * @param {string[]} errors
+ * @param {string[]} warnings
+ */
+function checkPerks(all, errors, warnings) {
+  /** @type {Record<string, Record<number, any[]>>} */
+  const byClass = {};
+  for (const perk of Object.values(all.perks)) {
+    const where = `content/perks/${perk.id}.json`;
+    if (perk.class === 'any') {
+      if (perk.level !== undefined) errors.push(`${where}: a universal perk comes on the levels in rules/levels.json, not its own`);
+    } else {
+      if (!all.classes[perk.class]) errors.push(`${where}: no class "${perk.class}"`);
+      if (perk.level === undefined) errors.push(`${where}: a class perk needs a level`);
+      if (perk.repeatable) errors.push(`${where}: only a universal perk can be repeatable`);
+      if (!perk.retired) ((byClass[perk.class] ??= {})[perk.level] ??= []).push(perk);
+    }
+    if (perk.kind === 'active' && !perk.cooldown) errors.push(`${where}: an active perk needs a cooldown`);
+    if (perk.kind === 'passive' && perk.cooldown) errors.push(`${where}: a passive perk has no cooldown`);
+    if (perk.kind === 'active' && perk.effects) errors.push(`${where}: an active perk's effects come from its ability, not from effects`);
+  }
+  const universal = new Set(all.rules.levels?.universal ?? []);
+  for (const [classId, levels] of Object.entries(byClass)) {
+    for (const [level, perks] of Object.entries(levels)) {
+      const where = `content/perks (${classId}, level ${level})`;
+      if (universal.has(Number(level))) errors.push(`${where}: level ${level} is a universal perk level`);
+      const want = Number(level) === 1 ? 1 : 2;
+      if (perks.length !== want) warnings.push(`${where}: ${perks.length} perks, expected ${want}`);
+    }
+  }
 }
 
 /**

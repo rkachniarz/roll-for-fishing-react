@@ -1,0 +1,14 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "bigger-bucket",
+  "class": "any",
+  "kind": "passive",
+  "name": "Bigger Bucket",
+  "description": "Your bucket holds 4 more fish.",
+  "effects": [
+    {
+      "value": "bucketSize",
+      "add": 4
+    }
+  ]
+}

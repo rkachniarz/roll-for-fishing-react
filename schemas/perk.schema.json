@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A perk: a passive bonus or an active ability, taken at a level-up (R6.3, D96)",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "$ref": "common.schema.json#/definitions/id"
+    },
+    "class": {
+      "description": "The class it belongs to (an id from content/classes/), or \"any\" for a universal perk, offered on the levels in content/rules/levels.json.",
+      "$ref": "common.schema.json#/definitions/id"
+    },
+    "level": {
+      "description": "A class perk's level. Each class has one perk at level 1 and two (a passive and an active) at each later class level, to choose between.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "kind": {
+      "enum": [
+        "passive",
+        "active"
+      ]
+    },
+    "name": {
+      "$ref": "common.schema.json#/definitions/text"
+    },
+    "description": {
+      "description": "What it does, in a sentence or two, for the tooltip.",
+      "$ref": "common.schema.json#/definitions/text"
+    },
+    "effects": {
+      "description": "A passive perk's game value changes, there for as long as the perk is.",
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/definitions/effect"
+      }
+    },
+    "cooldown": {
+      "description": "An active perk's cooldown: casts that count (an attempt at a catch, D96), or real milliseconds while the game is open (D32). minusLevel takes the character's level off the count.",
+      "type": "object",
+      "properties": {
+        "casts": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ms": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "minusLevel": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "repeatable": {
+      "description": "A universal perk that can be offered and taken again.",
+      "type": "boolean"
+    },
+    "icon": {
+      "$ref": "common.schema.json#/definitions/icon"
+    },
+    "retired": {
+      "$ref": "common.schema.json#/definitions/retired"
+    }
+  },
+  "required": [
+    "id",
+    "class",
+    "kind",
+    "name",
+    "description"
+  ],
+  "additionalProperties": false
+}

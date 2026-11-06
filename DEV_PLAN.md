@@ -149,10 +149,17 @@ Requirements R8.
 
 Requirements R5.2, R6.
 
-- [ ] **6.1** Level-up perk choice between two (§C.2).
-- [ ] **6.2** Active abilities with cooldowns; an ability bar.
-- [ ] **6.3** Each class's level 1, 3 and 6 perks.
-- [ ] **6.4** Hidden rolls revealed by levels, perks and items (R5.2).
+How it works is D96: perks at levels 1–8, a badge rather than a stop, cooldowns in casts that count only an
+attempt at a catch, the action bar under the button row, abilities that light up, crits.
+
+- [x] **6.6** Perks as content (`content/perks/`), the save's `character.perks`, passive perks feeding the game
+  values; crits as D96 (6); the bench grants perks.
+- [ ] **6.1** Choosing a perk at level-up: the badge, and the choice in the character pane (D96).
+- [ ] **6.2** Active abilities with cooldowns; the action bar under the button row.
+- [ ] **6.7** Abilities that light up after something happens: the warrior's jump, the rogue's gut, the mage's bend
+  reality.
+- [ ] **6.3** Each class's level 1, 3 and 5 perks working (the notes' level 6 moved to 5, D96).
+- [ ] **6.4** Hidden rolls revealed by levels, perks and items (R5.2, Q-40): the number a fish needed from level 1.
 - [ ] **6.5** Class-flavoured texts (R6.5).
 
 ## Phase 7: Events

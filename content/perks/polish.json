@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "polish",
+  "class": "rogue-fisher",
+  "level": 5,
+  "kind": "active",
+  "name": "Polish",
+  "description": "The next junk you find turns out to be treasure.",
+  "cooldown": {
+    "casts": 10
+  }
+}

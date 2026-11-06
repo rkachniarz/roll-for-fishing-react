@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "sleight-of-hook",
+  "class": "rogue-fisher",
+  "level": 3,
+  "kind": "active",
+  "name": "Sleight of Hook",
+  "description": "Your next catch is not a fish.",
+  "cooldown": {
+    "casts": 10
+  }
+}

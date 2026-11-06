@@ -184,11 +184,12 @@ export function arrive(state) {
  * caller owns).
  * @param {GameState} state
  * @param {Dice} dice  The `events` stream.
- * @param {{ found?: string, empty?: boolean }} cast  What the cast brought up.
+ * @param {{ found?: string, empty?: boolean, fill?: number }} cast  What the cast brought up,
+ *   and how fast the meter fills, in percent (the eventMeterFill game value).
  * @returns {GameEvent[]}
  */
-export function afterCast(state, dice, { found, empty = false }) {
-  state.eventMeter += dice.roll20() + (empty ? METER_EMPTY_BONUS : 0);
+export function afterCast(state, dice, { found, empty = false, fill = 100 }) {
+  state.eventMeter += Math.round(((dice.roll20() + (empty ? METER_EMPTY_BONUS : 0)) * fill) / 100);
   const meterFull = state.eventMeter > METER_FIRES;
   if (meterFull) state.eventMeter = 0;
   if (state.event) return [];

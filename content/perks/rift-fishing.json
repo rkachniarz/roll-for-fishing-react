@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "rift-fishing",
+  "class": "fishing-wizard",
+  "level": 3,
+  "kind": "passive",
+  "name": "Rift Fishing",
+  "description": "Now and then, a fish from another dimension takes the bait."
+}

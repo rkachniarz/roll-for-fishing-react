@@ -15,6 +15,8 @@ const UI_STRINGS = {
   'value.fishFind': 'Fish Find',
   'value.treasureFind': 'Treasure Find',
   'value.playerVantage': 'advantage on your roll',
+  'value.vantageStacks': 'advantage that stacks',
+  'value.naturalCatch': 'lowest natural roll that always lands a fish',
   'value.fishVantage': "advantage on the fish's roll",
   'value.fishDifficulty': 'fish difficulty',
   'value.fishSizeBand': 'fish size',
@@ -26,6 +28,7 @@ const UI_STRINGS = {
   'value.reactionOk': 'time for an ok strike',
   'value.strikeLimit': 'time to strike',
   'value.missPause': 'pause after a missed splash',
+  'value.eventMeterFill': 'chance of events',
   'value.bucketSize': 'bucket size',
   'value.baitRecovery': 'chance to save bait',
   'value.baitEscapeLoss': 'chance to lose bait to an escaping fish',
@@ -40,6 +43,8 @@ const UI_STRINGS = {
   'effect.fishStrongAdvantage': "Strong advantage on the fish's roll",
   'effect.fishDisadvantage': "Disadvantage on the fish's roll",
   'effect.fishStrongDisadvantage': "Strong disadvantage on the fish's roll",
+  'effect.vantageStacks': 'Every source of advantage adds a die, and the best counts',
+  'effect.naturalCatch': 'A natural {from} or higher lands the fish',
   'effect.cosmetic': 'Changes how your bobber looks.',
 
   // ---- The buff bar ----
@@ -60,6 +65,7 @@ const UI_STRINGS = {
   'float.wild': 'Way off!',
   'log.roll': 'd20: {roll}{mods} = {total}, needed {needed}.',
   'log.natural20': ' Natural 20!',
+  'log.critical': ' Critical!',
 
   // ---- The log ----
   'log.caught': 'You caught: {fish} ({size} cm). +{xp} XP.',
@@ -76,6 +82,8 @@ const UI_STRINGS = {
   'log.reeled-in': 'You reel the line in.',
   'log.recast': 'The bobber settles. The line is out again.',
   'log.level-up': 'Level up! You are now level {level}.',
+  'log.perk': 'You learn {perk}.',
+  'log.perk-owed': 'You can choose a new perk.',
   'log.weather': '{description}',
   'log.season': 'It is now {season}. {description}',
   'log.buff-ended': '{buff} has worn off.',

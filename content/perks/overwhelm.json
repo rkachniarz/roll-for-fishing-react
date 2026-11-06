@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "overwhelm",
+  "class": "fish-fighter",
+  "level": 5,
+  "kind": "passive",
+  "name": "Overwhelm",
+  "description": "You fish with advantage, and advantage stacks: every source of it adds a die, and the best one counts.",
+  "effects": [
+    {
+      "value": "playerVantage",
+      "add": 1
+    },
+    {
+      "value": "vantageStacks",
+      "add": 1
+    }
+  ]
+}

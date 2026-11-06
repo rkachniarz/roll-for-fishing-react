@@ -53,10 +53,26 @@ test('roll20Kept says which die did not count, from the same draws as roll20', (
       const kept = a.roll20Kept(vantage);
       assert.equal(kept.result, b.roll20(vantage));
       if (vantage === 0) assert.equal(kept.dropped, undefined);
-      else if (vantage > 0) assert.ok(/** @type {number} */ (kept.dropped) <= kept.result);
-      else assert.ok(/** @type {number} */ (kept.dropped) >= kept.result);
+      else {
+        const dropped = /** @type {number[]} */ (kept.dropped);
+        assert.equal(dropped.length, 1);
+        assert.ok(vantage > 0 ? dropped[0] <= kept.result : dropped[0] >= kept.result);
+      }
     }
   }
+});
+
+test('stacking advantage rolls a die per point and keeps the best (D96)', () => {
+  const dice = diceFor(createRng(4));
+  for (let i = 0; i < 300; i++) {
+    for (const vantage of [2, 3, -2]) {
+      const { result, dropped = [] } = dice.roll20Kept(vantage, true);
+      assert.equal(dropped.length, Math.abs(vantage));
+      for (const d of dropped) assert.ok(vantage > 0 ? d <= result : d >= result);
+    }
+  }
+  // Without stacking, more advantage is still two dice.
+  assert.equal(dice.roll20Kept(3).dropped?.length, 1);
 });
 
 test('the same seed rolls the same dice', () => {

@@ -2637,6 +2637,241 @@ export const content = {
       ]
     }
   },
+  "perks": {
+    "battle-focus": {
+      "id": "battle-focus",
+      "class": "fish-fighter",
+      "level": 3,
+      "kind": "active",
+      "name": "perk.battle-focus.name",
+      "description": "perk.battle-focus.description",
+      "cooldown": {
+        "casts": 10,
+        "minusLevel": true
+      }
+    },
+    "bend-reality": {
+      "id": "bend-reality",
+      "class": "fishing-wizard",
+      "level": 5,
+      "kind": "active",
+      "name": "perk.bend-reality.name",
+      "description": "perk.bend-reality.description",
+      "cooldown": {
+        "casts": 10
+      }
+    },
+    "bigger-bucket": {
+      "id": "bigger-bucket",
+      "class": "any",
+      "kind": "passive",
+      "name": "perk.bigger-bucket.name",
+      "description": "perk.bigger-bucket.description",
+      "effects": [
+        {
+          "value": "bucketSize",
+          "add": 4
+        }
+      ]
+    },
+    "ever-summoning": {
+      "id": "ever-summoning",
+      "class": "fishing-wizard",
+      "level": 5,
+      "kind": "passive",
+      "name": "perk.ever-summoning.name",
+      "description": "perk.ever-summoning.description"
+    },
+    "fence": {
+      "id": "fence",
+      "class": "rogue-fisher",
+      "level": 5,
+      "kind": "passive",
+      "name": "perk.fence.name",
+      "description": "perk.fence.description"
+    },
+    "fish-sense": {
+      "id": "fish-sense",
+      "class": "any",
+      "kind": "passive",
+      "name": "perk.fish-sense.name",
+      "repeatable": true,
+      "description": "perk.fish-sense.description",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 5
+        }
+      ]
+    },
+    "full-force": {
+      "id": "full-force",
+      "class": "fish-fighter",
+      "level": 5,
+      "kind": "active",
+      "name": "perk.full-force.name",
+      "description": "perk.full-force.description",
+      "cooldown": {
+        "casts": 10,
+        "minusLevel": true
+      }
+    },
+    "greedy-fish": {
+      "id": "greedy-fish",
+      "class": "rogue-fisher",
+      "level": 3,
+      "kind": "passive",
+      "name": "perk.greedy-fish.name",
+      "description": "perk.greedy-fish.description"
+    },
+    "gut": {
+      "id": "gut",
+      "class": "rogue-fisher",
+      "level": 1,
+      "kind": "active",
+      "name": "perk.gut.name",
+      "description": "perk.gut.description",
+      "cooldown": {
+        "casts": 10
+      }
+    },
+    "heavy-hand": {
+      "id": "heavy-hand",
+      "class": "fish-fighter",
+      "level": 3,
+      "kind": "passive",
+      "name": "perk.heavy-hand.name",
+      "description": "perk.heavy-hand.description",
+      "effects": [
+        {
+          "value": "naturalCatch",
+          "add": -1
+        }
+      ]
+    },
+    "jump-in": {
+      "id": "jump-in",
+      "class": "fish-fighter",
+      "level": 1,
+      "kind": "active",
+      "name": "perk.jump-in.name",
+      "description": "perk.jump-in.description",
+      "cooldown": {
+        "casts": 10
+      }
+    },
+    "magpie-eye": {
+      "id": "magpie-eye",
+      "class": "any",
+      "kind": "passive",
+      "name": "perk.magpie-eye.name",
+      "repeatable": true,
+      "description": "perk.magpie-eye.description",
+      "effects": [
+        {
+          "value": "treasureFind",
+          "add": 5
+        }
+      ]
+    },
+    "overwhelm": {
+      "id": "overwhelm",
+      "class": "fish-fighter",
+      "level": 5,
+      "kind": "passive",
+      "name": "perk.overwhelm.name",
+      "description": "perk.overwhelm.description",
+      "effects": [
+        {
+          "value": "playerVantage",
+          "add": 1
+        },
+        {
+          "value": "vantageStacks",
+          "add": 1
+        }
+      ]
+    },
+    "polish": {
+      "id": "polish",
+      "class": "rogue-fisher",
+      "level": 5,
+      "kind": "active",
+      "name": "perk.polish.name",
+      "description": "perk.polish.description",
+      "cooldown": {
+        "casts": 10
+      }
+    },
+    "recall": {
+      "id": "recall",
+      "class": "fishing-wizard",
+      "level": 3,
+      "kind": "active",
+      "name": "perk.recall.name",
+      "description": "perk.recall.description",
+      "cooldown": {
+        "casts": 10
+      }
+    },
+    "rift-fishing": {
+      "id": "rift-fishing",
+      "class": "fishing-wizard",
+      "level": 3,
+      "kind": "passive",
+      "name": "perk.rift-fishing.name",
+      "description": "perk.rift-fishing.description"
+    },
+    "sleight-of-hook": {
+      "id": "sleight-of-hook",
+      "class": "rogue-fisher",
+      "level": 3,
+      "kind": "active",
+      "name": "perk.sleight-of-hook.name",
+      "description": "perk.sleight-of-hook.description",
+      "cooldown": {
+        "casts": 10
+      }
+    },
+    "steady-hands": {
+      "id": "steady-hands",
+      "class": "any",
+      "kind": "passive",
+      "name": "perk.steady-hands.name",
+      "repeatable": true,
+      "description": "perk.steady-hands.description",
+      "effects": [
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ]
+    },
+    "summon-fish": {
+      "id": "summon-fish",
+      "class": "fishing-wizard",
+      "level": 1,
+      "kind": "active",
+      "name": "perk.summon-fish.name",
+      "description": "perk.summon-fish.description",
+      "cooldown": {
+        "casts": 10
+      }
+    },
+    "trouble-magnet": {
+      "id": "trouble-magnet",
+      "class": "any",
+      "kind": "passive",
+      "name": "perk.trouble-magnet.name",
+      "description": "perk.trouble-magnet.description",
+      "effects": [
+        {
+          "value": "eventMeterFill",
+          "add": 100
+        }
+      ]
+    }
+  },
   "rules": {
     "levels": {
       "id": "levels",
@@ -2651,6 +2886,12 @@ export const content = {
         1000,
         2000,
         5000
+      ],
+      "universal": [
+        2,
+        4,
+        6,
+        8
       ]
     },
     "names": {
@@ -3230,6 +3471,46 @@ export const strings = {
     "feature.carp-school.name": "a school of carp",
     "feature.glint.name": "something glinting in the water",
     "feature.roach-school.name": "a school of roach",
+    "perk.battle-focus.name": "Battle Focus",
+    "perk.battle-focus.description": "Add your level to your Fishing Skill for the next cast.",
+    "perk.bend-reality.name": "Bend Reality",
+    "perk.bend-reality.description": "Right after a catch: bend reality around the fish, to make it bigger and special.",
+    "perk.bigger-bucket.name": "Bigger Bucket",
+    "perk.bigger-bucket.description": "Your bucket holds 4 more fish.",
+    "perk.ever-summoning.name": "Ever-Summoning",
+    "perk.ever-summoning.description": "Summon Fish works by itself, every other cast.",
+    "perk.fence.name": "Fence",
+    "perk.fence.description": "When you find treasure, choose between two. Gut is ready again after 3 casts.",
+    "perk.fish-sense.name": "Fish Sense",
+    "perk.fish-sense.description": "+5 Fish Find.",
+    "perk.full-force.name": "Full Force",
+    "perk.full-force.description": "For the next cast, your Fish Find and your Fishing Skill are added together, for both rolls.",
+    "perk.greedy-fish.name": "Greedy Fish",
+    "perk.greedy-fish.description": "Now and then, you hook a Greedy fish, which has something shiny on it.",
+    "perk.gut.name": "Gut",
+    "perk.gut.description": "Right after a catch: gut the fish and see what it swallowed. The fish is gone; there may be junk or treasure inside.",
+    "perk.heavy-hand.name": "Heavy Hand",
+    "perk.heavy-hand.description": "A natural 19 lands the fish, as a natural 20 does.",
+    "perk.jump-in.name": "Jump In",
+    "perk.jump-in.description": "When a fish gets away, jump in after it and beat it into submission. It goes in your bucket.",
+    "perk.magpie-eye.name": "Magpie Eye",
+    "perk.magpie-eye.description": "+5 Treasure Find.",
+    "perk.overwhelm.name": "Overwhelm",
+    "perk.overwhelm.description": "You fish with advantage, and advantage stacks: every source of it adds a die, and the best one counts.",
+    "perk.polish.name": "Polish",
+    "perk.polish.description": "The next junk you find turns out to be treasure.",
+    "perk.recall.name": "Recall",
+    "perk.recall.description": "Your next fish is one that got away here before.",
+    "perk.rift-fishing.name": "Rift Fishing",
+    "perk.rift-fishing.description": "Now and then, a fish from another dimension takes the bait.",
+    "perk.sleight-of-hook.name": "Sleight of Hook",
+    "perk.sleight-of-hook.description": "Your next catch is not a fish.",
+    "perk.steady-hands.name": "Steady Hands",
+    "perk.steady-hands.description": "+1 Fishing Skill.",
+    "perk.summon-fish.name": "Summon Fish",
+    "perk.summon-fish.description": "A fish bites on your next cast, for certain.",
+    "perk.trouble-magnet.name": "Trouble Magnet",
+    "perk.trouble-magnet.description": "Things happen to you twice as often.",
     "rules.size-bands.bands.tiny.name": "Tiny",
     "rules.size-bands.bands.small.name": "Small",
     "rules.size-bands.bands.medium.name": "Medium",

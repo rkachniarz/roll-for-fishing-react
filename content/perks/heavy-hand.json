@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "heavy-hand",
+  "class": "fish-fighter",
+  "level": 3,
+  "kind": "passive",
+  "name": "Heavy Hand",
+  "description": "A natural 19 lands the fish, as a natural 20 does.",
+  "effects": [
+    {
+      "value": "naturalCatch",
+      "add": -1
+    }
+  ]
+}

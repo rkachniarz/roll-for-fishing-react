@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "bend-reality",
+  "class": "fishing-wizard",
+  "level": 5,
+  "kind": "active",
+  "name": "Bend Reality",
+  "description": "Right after a catch: bend reality around the fish, to make it bigger and special.",
+  "cooldown": {
+    "casts": 10
+  }
+}

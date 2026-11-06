@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "gut",
+  "class": "rogue-fisher",
+  "level": 1,
+  "kind": "active",
+  "name": "Gut",
+  "description": "Right after a catch: gut the fish and see what it swallowed. The fish is gone; there may be junk or treasure inside.",
+  "cooldown": {
+    "casts": 10
+  }
+}

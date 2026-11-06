@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "battle-focus",
+  "class": "fish-fighter",
+  "level": 3,
+  "kind": "active",
+  "name": "Battle Focus",
+  "description": "Add your level to your Fishing Skill for the next cast.",
+  "cooldown": {
+    "casts": 10,
+    "minusLevel": true
+  }
+}
