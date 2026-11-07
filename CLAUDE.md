@@ -19,6 +19,8 @@ by number:
   before changing any art.
 - `docs/REVIEW.md`: guesses and calls Claude made that the owner hasn't checked yet. **Add to it** whenever you pick a
   number, write content, or decide something the owner didn't (D76); the owner deletes items once settled.
+- `docs/ideas.md`: the owner's loose ideas for events, people and the story, not requirements yet. Read it before
+  writing events or content; the engine work they need is in DEV_PLAN.md.
 - `docs/PORTING-NOTES.md`: what to port from the React prototype (tag `legacy-prototype`; read old files with
   `git show legacy-prototype:src/Data/weather.js`) and the lessons it taught.
 

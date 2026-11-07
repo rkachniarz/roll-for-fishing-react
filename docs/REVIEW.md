@@ -24,6 +24,14 @@ Items with no note are left alone.
 
 Newest first.
 
+## Your ideas (`docs/ideas.md`)
+
+- **The story is tidied a little:** grammar and a few words ("observed a hundred years of peace" became "enjoyed"),
+  nothing in what happens. Put back anything you liked better.
+- **The engine work the ideas need** is Claude's reading of them, now tasks 7.7–7.10 and 8.7–8.9 in the plan:
+  counters, taking fish from the bucket, giving up a whole kind of item for a reward by value, visitors with a gap
+  between visits, item sets, raid orders and companions.
+
 ## Perks and abilities (Phase 6, D96)
 
 - **Every perk's name is Claude's:** Jump In, Heavy Hand, Battle Focus, Overwhelm, Full Force; Summon Fish, Rift

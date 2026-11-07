@@ -84,4 +84,4 @@ and the art sheet at `/art.html` there.
 | `tools/verify.mjs` | Browser checks (Playwright) |
 | `tools/sprite-png.mjs` | Sprites out to PNG for drawing in MS Paint, and PNG or BMP drawings back into the code's grids |
 | `tools/build-artifact.mjs` | Builds `dist/artifact.html` |
-| `docs/` | Spec, decisions, history, porting notes, design sketches; `docs/events.md` is how to write an event, `docs/art.md` how the art is made |
+| `docs/` | Spec, decisions, history, porting notes, design sketches; `docs/events.md` is how to write an event, `docs/art.md` how the art is made, `docs/ideas.md` the owner's ideas for events and the story |
