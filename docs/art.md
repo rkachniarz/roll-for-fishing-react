@@ -6,12 +6,15 @@ the rules the art follows, then Claude's checklist.
 
 ## The loop
 
-1. **The owner sketches** what something should be (see "Drawing for this game" below).
-2. **Claude draws it** as code, keeping to the sketch and to the style rules below.
+1. **The owner gives a photo** of what something should be, with a few words on what matters (D97). For things no
+   photo shows, a sketch instead (see "Drawing for this game" below).
+2. **Claude draws it** as code, keeping to the photo or sketch and to the style rules below.
 3. **Both look at the art sheet**, `http://localhost:8001/art.html` (with `npm run dev` running). It shows every
    sprite enlarged, the scene in five different lights, and any open **trials**: two or three options side by side.
    Any scene on it can be saved as a PNG, to draw over.
-4. **The owner says what's wrong or picks an option.** Claude changes it and the sheet shows the new version.
+4. **The owner marks up what's wrong or picks an option.** Exporting Claude's version and marking it in Paint
+   ("change this", "delete that") avoids misunderstandings; words work too. Claude changes it and the sheet shows the
+   new version.
 5. **Once settled**, the chosen version becomes the game's and the trial is deleted. Numbers Claude picked go on
    `docs/REVIEW.md`, as everything else Claude decides does (D76).
 
@@ -32,10 +35,15 @@ Any plain request works: "make the reeds more dense" is fine. Some kinds of requ
 
 ## Drawing for this game
 
+**A photo comes first** when the thing exists in life (D97): a spot, a fish, a tree. Claude carries far more detail
+from a photo than a sketch can hold, then the drawing gets marked up as below. Photos go in `docs/design/`, which
+isn't tracked by git (local only, to keep the repo small); the pond (`photo-autumn-pond.jpg`) and the carp
+(`photo-carp.jpg`) were the first.
+
 There are two kinds of drawing, and both help.
 
 **A sketch** is any size, in any tool, as rough as you like. It says what's there, where it goes and what colour it
-is. Write notes on it ("this is a lily pad", "darker here"). Sketches go in `docs/design/` and Claude reads them by
+is. Write notes on it ("this is a lily pad", "darker here"). Sketches go in `docs/design/` too, and Claude reads them by
 eye. The scene's layout came from `docs/design/sketch-fishing-spot.png`.
 
 **A real-size drawing** is drawn at the size the game uses, pixel for pixel, so it *is* the sprite rather than a
@@ -52,7 +60,8 @@ picture of it. This is the most useful thing the owner can draw. In MS Paint:
 6. Put it in `art/` and tell Claude its name.
 
 **Drawing over the scene** is how a whole spot gets worked on. Press **Save as PNG** under any scene on the art sheet
-to get that frame at its real 256×256, open it in Paint, and mark it up: paint what you want where you want it, or
+to get that frame at its real size (256×256, or up to 320×256 where the card shows the strips either side), open it
+in Paint, and mark it up: paint what you want where you want it, or
 scribble and write notes ("lily pads here", "too bright"). Save it in `art/` and tell Claude. Your marks land on real
 pixels, so "here" means exactly there. A spot goes round this loop as often as it needs: your sketch first, Claude's
 scene from it, then your marks on that scene, then the next version.
@@ -86,7 +95,7 @@ places goes in the strips.
 | Splash | 15×5, 3 frames | |
 | Waves | 5×2 far, 8×2 mid, 12×3 near; 2 frames each | |
 | Reeds | 26×110 a side, 2 frames | Drawn by code today: a real-size drawing would replace it. |
-| Icons | 16×16 | Items, fish, the button row, the weather. |
+| Icons | 32×32 | Items, fish, the button row, the weather (D98). Fish lie tilted about 30°, to fill the square. Older icons drawn at 16 show doubled until redrawn. |
 | Event pictures | 128×64 (2:1) | Shown in the event dialog, enlarged to fit. PNGs in `assets/events/`. |
 
 Anything at two distances needs **one drawing per distance**. Nothing is shrunk in the game, because shrinking pixel

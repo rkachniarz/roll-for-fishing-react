@@ -12,3 +12,6 @@ Thumbs.db
 
 # The owner's drafts: content not ready for content/ yet.
 drafts/
+
+# The owner's reference photos and sketches (D97): local only, too big to track.
+docs/design/

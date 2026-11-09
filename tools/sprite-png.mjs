@@ -4,6 +4,7 @@
 //   npm run sprite export bobber           -> art/bobber.png, to open in Paint
 //   npm run sprite export all              every sprite at once
 //   npm run sprite import art/bobber.png   prints the grid, to paste into the code
+//                                          (a file named after a sprite uses its palette)
 //   npm run sprite import art/new.bmp keys=icons bg=ffffff
 //
 // (`node tools/sprite-png.mjs ...` is the same, and also takes --keys / --bg.)
@@ -24,7 +25,7 @@
 import { inflateSync, deflateSync, crc32 } from 'node:zlib';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 
 /** The background colour exports are painted on, and imports read as transparent. */
 export const MAGENTA = '#ff00ff';
@@ -305,16 +306,23 @@ export async function sprites() {
     frames.forEach((rows, i) => all.set(`wave-${band}-${i + 1}`, { rows, keys: sceneKeys }));
   }
   for (const [name, rows] of Object.entries(icons.ICONS)) {
-    all.set(`icon-${name.replace('/', '-')}`, { rows, keys: icons.KEYS });
+    all.set(`icon-${name.replace('/', '-')}`, { rows, keys: icons.iconKeys(name) });
   }
   return all;
 }
 
-/** The palettes `import keys=` can read against. */
+/**
+ * The palettes `import keys=` can read against: the scene's, the icons',
+ * and any sprite's own by its name (`keys=icon-fish-carp`).
+ * @returns {Promise<Record<string, Record<string, string>>>}
+ */
 async function palettes() {
   const scene = await import('../src/scene/sprites.js');
   const icons = await import('../src/scene/icons.js');
-  return { scene: scene.bobberKeys(null), icons: icons.KEYS };
+  /** @type {Record<string, Record<string, string>>} */
+  const all = { scene: scene.bobberKeys(null), icons: icons.KEYS };
+  for (const [name, sprite] of await sprites()) all[name] = sprite.keys;
+  return all;
 }
 
 // ---------- Command line ----------
@@ -351,9 +359,13 @@ async function main() {
   }
 
   if (command === 'import' && target) {
-    const which = option('keys') ?? 'scene';
-    const keys = (await palettes())[/** @type {'scene' | 'icons'} */ (which)];
-    if (!keys) throw new Error(`keys= must be scene or icons, not "${which}"`);
+    // A file named after a sprite (art/icon-fish-carp.png, as export names
+    // it) reads against that sprite's palette; otherwise the scene's.
+    const all = await palettes();
+    const named = basename(target).replace(/\.(png|bmp)$/i, '');
+    const which = option('keys') ?? (named in all ? named : 'scene');
+    const keys = all[which];
+    if (!keys) throw new Error(`keys= must be scene, icons or a sprite's name, not "${which}"`);
     const image = decodeImage(await readFile(target));
     const { rows, added } = gridFromImage(image, keys, option('bg') ?? MAGENTA);
     console.log(`// ${target}: ${image.width}×${image.height}, ${which} palette`);
@@ -370,7 +382,7 @@ async function main() {
     return;
   }
 
-  console.log('Usage: npm run sprite list | export <name|all> | import <file.png|file.bmp> [keys=scene|icons] [bg=rrggbb]');
+  console.log('Usage: npm run sprite list | export <name|all> | import <file.png|file.bmp> [keys=scene|icons|<sprite>] [bg=rrggbb]');
   process.exitCode = 1;
 }
 

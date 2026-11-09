@@ -24,6 +24,33 @@ Items with no note are left alone.
 
 Newest first.
 
+## Icons at 32×32 (D98)
+
+- **The carp is the carp's icon now** (`fish/carp`), the tilted 32 from the trial as it was. Its scales come out as
+  spots on the upper body; mark it up if they bother you.
+- **The other nineteen icons are the old 16s, doubled.** They look as before, just with their pixels in 2×2 blocks.
+  Redrawn at 32 whenever you like, from photos where there's something to photograph.
+- **The catch flies to the bucket a little bigger:** about 64 device pixels on your phone instead of 48. A 32-pixel
+  icon needs a whole number of device pixels per pixel, and 48 isn't one.
+- **Sizes on screen:** on your phone the buttons' icons and the weather icon come out as before. On a desktop at
+  100% zoom the button icons stay 32 px, but the weather icon grows from 16 to 32 px, since a 32-pixel icon can't go
+  below ×1. Where the old size was an odd multiple of 16 (×5, ×7), the button icons are now one step smaller.
+
+## The pond from a photo (art sheet trial, `src/scene/pond.js`)
+
+- **Eye level, or slightly from above?** `docs/art.md` says the view is "from the shore, looking out, slightly from
+  above", and the game's scene is drawn that way: water filling most of the view, no sky. You said you always meant
+  eye level. If so, that rule changes (a decision), and the game's scene with it. The pond is drawn at eye level.
+- **The sky is squeezed** compared with the photo (the horizon sits about a quarter of the way down, not 40%), so the
+  water gets more of the height. Water starts at row 122 of 256.
+- **Fifty named colours,** far more than the game's scene uses, to get close to the photo. A real spot would want them
+  cut down.
+- **Drawn in autumn colours,** against the rule that the art is drawn for a clear spring noon. The seasons' tints then
+  go on top of autumn; the drizzle card shows it.
+- **A bobber at 150, 172** to show the scale. Casting doesn't work there: the engine's open water (`WATER`) belongs
+  to the game's own view.
+- **The photo is kept in the repo** (`docs/design/photo-autumn-pond.jpg`, 1.3 MB) as the reference.
+
 ## Your ideas (`docs/ideas.md`)
 
 - **The story is tidied a little:** grammar and a few words ("observed a hundred years of peace" became "enjoyed"),

@@ -11,6 +11,7 @@
     "test": "node --test \"test/**/*.test.js\"",
     "verify": "node tools/verify.mjs",
     "sprite": "node tools/sprite-png.mjs",
+    "photo-icon": "node tools/photo-icon.mjs",
     "check": "npm test && npm run verify && npm run build"
   },
   "devDependencies": {

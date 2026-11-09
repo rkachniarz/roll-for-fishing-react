@@ -48,6 +48,7 @@ npm run verify strike   # only the checks whose label contains "strike"
 npm run build   # -> dist/artifact.html, the single-file copy for claude.ai
 npm run check   # test, verify, build in turn, stopping at the first failure
 npm run sprite export bobber   # a sprite as art/bobber.png to draw on; `import <file> [keys=icons] [bg=ffffff]` reads one back
+npm run photo-icon <photo> name=icon-fish-<id>   # a first-draft 32×32 icon from a photo; follow the photo-to-icon skill
 # http://localhost:8001/art.html   the art sheet: trials, every sprite enlarged, the scene in five lights
 # http://localhost:8001/?dev       dev bench; ?seed=N seeds a new game (a save wins); ?wait=MS fixes the bite delay
 ```
@@ -91,6 +92,9 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   sources passed to the engine, never saved.
 - **`index.html` has a small script in `<head>`** that reads the theme from the settings key before the page draws,
   so a light page doesn't flash dark. It duplicates `src/settings.js`'s key on purpose (D81).
+- **Icons are 32×32 (D98), but most grids in `src/scene/icons.js` are 16 wide:** those were drawn before D98 and
+  `paintIcon` doubles them (`DRAWN_AT_16`). New icons go after that line, at 32. An icon can keep its own colours in
+  `OWN_KEYS`; always draw and export with `iconKeys(name)`, never `KEYS` alone.
 - **Rarity colours are CSS variables (`--rarity-*`),** not the hex values in `src/scene/icons.js`: each theme has its
   own, so use `rarityColour()` from `src/ui/links.js` for anything on the page (D81).
 - **`art.html` repeats `index.html`'s import map;** a test checks the two agree. It's the art sheet, not part of the

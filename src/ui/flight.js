@@ -24,7 +24,10 @@ const FLIGHT_MS = 650;
 export function flyIcon({ icon, rarity, from, to, scale }) {
   const canvas = paintIcon(icon);
   canvas.className = 'flying-icon';
-  const size = 16 * scale;
+  // About the size it flew at as a 16-pixel icon (D98): half the scene's
+  // scale, rounded to whole device pixels so the 32-pixel icon stays sharp.
+  const dpr = window.devicePixelRatio || 1;
+  const size = (32 * Math.max(1, Math.round((scale * dpr) / 2))) / dpr;
   Object.assign(canvas.style, {
     width: `${size}px`,
     height: `${size}px`,

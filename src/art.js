@@ -8,8 +8,9 @@
 
 import { Rectangle } from 'pixi.js';
 import { SIZE, createScene } from './scene/scene.js';
+import { POND, createPondScene } from './scene/pond.js';
 import { BOBBER, BOBBER_DIPPED, BOBBER_FAR, PALETTE, SPLASH, WAVES, bobberKeys, paintGrid } from './scene/sprites.js';
-import { ICONS, KEYS as ICON_KEYS, paintIcon } from './scene/icons.js';
+import { ICONS, KEYS as ICON_KEYS, OWN_KEYS, paintIcon } from './scene/icons.js';
 import { TRIALS } from './art-trials.js';
 import { createRng, deriveSeed } from './rng.js';
 
@@ -105,6 +106,46 @@ for (const trial of TRIALS) {
   }
 }
 
+// ---------- A trial: a whole scene painted from a photo ----------
+
+/**
+ * One live pond scene, captioned, as sceneCard does for the game's.
+ * @param {HTMLElement} parent @param {string} caption
+ * @param {import('./scene/sky.js').World & { sun: { rise: number, set: number } }} world
+ * @param {number} maxCss  The most CSS pixels across for the 256-pixel play area.
+ * @param {number} width  How much of the 320-pixel painting shows.
+ */
+async function pondCard(parent, caption, world, maxCss, width) {
+  const canvas = /** @type {HTMLCanvasElement} */ (el('canvas'));
+  const save = /** @type {HTMLButtonElement} */ (el('button', { type: 'button', class: 'save' }, ['Save as PNG']));
+  parent.append(el('figure', {}, [canvas, el('figcaption', {}, [caption, ' ', save])]));
+  const rand = createRng(deriveSeed(seed, 'scenery'));
+  const scene = await createPondScene(canvas, () => rand.next());
+  const fit = Math.min(maxCss, ((document.documentElement.clientWidth - 32) * SIZE) / width);
+  scene.fit((fit * width) / SIZE, fit, width);
+  scene.setWorld(world);
+  scenes.push(scene);
+  save.addEventListener('click', () => saveScene(scene.app, `pond-${slug(caption)}-seed${seed}.png`));
+}
+
+const AS_DRAWN = { ...NOON, weather: { ...CLEAR, wind: 2 } };
+const pond = section(
+  'Trial: a scene from a photo',
+  'The whole scene painted as code from a photo of an autumn pond (docs/design/photo-autumn-pond.jpg), instead of from a sketch. Art sheet only: the game is unchanged. Drawn 320 wide; a square screen sees the middle 256. Gusts roll across the reeds, the birch twigs and the beech leaves; the reflection wobbles; rings spread now and then, all over in rain.',
+);
+const pondBig = el('div', { class: 'row' });
+const pondLights = el('div', { class: 'row' });
+pond.append(pondBig, pondLights);
+await pondCard(pondBig, 'Pond, as drawn, breezy', AS_DRAWN, 640, 320);
+await pondCard(pondBig, 'Pond, 256 wide', AS_DRAWN, 384, 256);
+for (const [caption, world] of /** @type {const} */ ([
+  ['Pond, drizzle and wind, as in the photo', { ...NOON, season: 'autumn', hour: 14, weather: { temperature: 9, wind: 3, clouds: 4, precipitation: 3 } }],
+  ['Pond, sunset', { ...AS_DRAWN, hour: 20, minute: 30 }],
+  ['Pond, night', { ...AS_DRAWN, hour: 1 }],
+])) {
+  await pondCard(pondLights, caption, world, 300, 320);
+}
+
 const widths = el('div', { class: 'row' });
 section(
   'The scene on a wider screen',
@@ -179,7 +220,7 @@ for (const [band, frames] of Object.entries(WAVES)) {
 }
 
 const icons = el('div', { class: 'row sprites' });
-section('Icons', '16×16, on the page rather than the scene.').append(icons);
+section('Icons', '32×32, on the page rather than the scene (D98). The first ones were drawn at 16 and show doubled until redrawn. Export one to mark up: npm run sprite export icon-fish-carp.').append(icons);
 for (const name of Object.keys(ICONS)) spriteCard(icons, `icon-${name.replace('/', '-')}`, paintIcon(name), '#14232b');
 
 // ---------- Palettes ----------
@@ -195,7 +236,9 @@ function palette(title, colours) {
 section('Palettes', 'Every colour the art uses. A new colour gets a name here before it is used.').append(
   palette('Scene (PALETTE in src/scene/sprites.js)', PALETTE),
   palette('Scene sprite keys', bobberKeys(null)),
+  palette('Trial: the pond from a photo (POND in src/scene/pond.js)', POND),
   palette('Icon keys (src/scene/icons.js)', ICON_KEYS),
+  ...Object.entries(OWN_KEYS).map(([name, keys]) => palette(`The ${name} icon's own colours (OWN_KEYS)`, keys)),
 );
 
 document.body.dataset.ready = 'true';

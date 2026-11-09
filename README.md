@@ -22,6 +22,7 @@ npm run check    # all three in turn: test, verify, build (what ends a phase)
 npm run sprite list                    # the sprites that can go out to MS Paint
 npm run sprite export bobber           # -> art/bobber.png, to draw on
 npm run sprite import art/bobber.png   # a drawing back into code (PNG or 24-bit BMP)
+npm run photo-icon docs/design/photo-carp.jpg name=icon-fish-carp   # a photo to a first-draft 32×32 icon
 ```
 
 How the art is made, and drawing for the game in MS Paint: [docs/art.md](docs/art.md).
@@ -67,7 +68,8 @@ and the art sheet at `/art.html` there.
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
-| `src/scene/icons.js` | 16×16 icons: items and fish (a default for each kind), the button row, the weather; rarity colours |
+| `src/scene/pond.js` | A trial for the art sheet only: a whole scene painted from a photo (`docs/design/photo-autumn-pond.jpg`) |
+| `src/scene/icons.js` | 32×32 icons (D98): items and fish (a default for each kind), the button row, the weather; rarity colours |
 | `src/ui/flight.js` | A catch's icon flying from the bobber to the bucket or bag |
 | `src/ui/floater.js` | How a strike went, floating up from the bobber |
 | `src/ui/log.js` | The log under the scene |

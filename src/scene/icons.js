@@ -1,5 +1,6 @@
 // @ts-check
-// Item and fish icons, 16×16, written as code like the scene's sprites
+// Item and fish icons, 32×32 (D98; the first ones were drawn at 16 and are
+// shown doubled until redrawn), written as code like the scene's sprites
 // (docs/decisions.md, D9). Every kind has a default icon, used by anything
 // whose own art doesn't exist yet (docs/spec.md, R15.5). Content names an icon
 // with its `icon` field; an unknown name falls back to the default too.
@@ -257,6 +258,78 @@ Object.assign(ICONS, {
   ],
 });
 
+/** Every icon above was drawn at 16×16, before D98: shown doubled until redrawn at 32. */
+const DRAWN_AT_16 = new Set(Object.keys(ICONS));
+
+/** Icons drawn at 32×32 (D98). Fish are tilted to fill the square. */
+Object.assign(ICONS, {
+  // The common carp, from a photo (docs/design/photo-carp.jpg, D97).
+  'fish/carp': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '....k..kkkkkk...................',
+    '.kkkekkOOOOOOkk.................',
+    'kLLexOOODOoOODOkkkkk............',
+    'kLgoooooDoooooOOFFFfk...........',
+    '.kcggooDDoOoOoOODFFFk...........',
+    '..kccggDGGooooooOfffk...........',
+    '...kccDgGGGGoOoOoOFffk..........',
+    '....kDDFggGGGoooooOFFfk.........',
+    '.....kcfFFFgGGOoOoOOFFFk........',
+    '......kfffFggGGGGoooOFFk........',
+    '.......kkcccgGgGoOoOoOffk.......',
+    '.........kccgggGGGooooffk.......',
+    '..........kcfcgggGGoGoOOkkkkkkk.',
+    '...........kRRcccgggGooofffffFFk',
+    '............kckkccggGGoGFFFfffk.',
+    '.............k..kkrrRGGFfFFFFk..',
+    '..................krRkkFrrfkk...',
+    '..................kcRk.krrrk....',
+    '...................kk...kRRck...',
+    '.........................kRRk...',
+    '..........................kRk...',
+    '...........................k....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+});
+
+/**
+ * Colours an icon keeps to itself, over KEYS: in that icon, these letters
+ * mean these colours. Lets a detailed icon have its own palette without
+ * running the shared one out of letters.
+ * @type {Record<string, Record<string, string>>}
+ */
+export const OWN_KEYS = {
+  'fish/carp': {
+    D: '#3f4426', // back, scale rims
+    O: '#6e7043', // back
+    o: '#8c8a55', // flank
+    G: '#ae9f5e', // gold flank
+    g: '#cbbd80', // lower flank
+    c: '#e6dfc0', // belly
+    F: '#c4a86e', // fin
+    f: '#8c7349', // fin ray
+    R: '#cf5427', // red fin
+    r: '#e2883c', // red fin, lighter
+    L: '#d9a25a', // lips
+    e: '#e9e6de', // eye ring
+    x: '#141414', // eye
+  },
+};
+
+/**
+ * The palette an icon is drawn with.
+ * @param {string} name
+ */
+export const iconKeys = (name) => ({ ...KEYS, ...(OWN_KEYS[name] ?? {}) });
+
 /** WoW's rarity colours (D49), for names and icon borders. */
 export const RARITY_COLOURS = {
   poor: '#9d9d9d',
@@ -267,7 +340,8 @@ export const RARITY_COLOURS = {
   legendary: '#ff8000',
 };
 
-const SIZE = 16;
+/** An icon's side, in pixels (D98). */
+const SIZE = 32;
 
 /**
  * The icon's name for a fish species or an item: its own, if that art exists,
@@ -299,21 +373,25 @@ export function weatherIcon(weather, dark) {
 }
 
 /**
- * A 16×16 canvas with the icon centred on it.
+ * A 32×32 canvas with the icon centred on it (D98). An icon drawn at 16 is
+ * doubled, each pixel a 2×2 block, so it stays sharp.
  * @param {string} name
  */
 export function paintIcon(name) {
-  const rows = ICONS[name] ?? ICONS['default/junk'];
+  if (!ICONS[name]) name = 'default/junk';
+  const rows = ICONS[name];
+  const keys = iconKeys(name);
+  const zoom = DRAWN_AT_16.has(name) ? 2 : 1;
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = SIZE;
   const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-  const top = Math.floor((SIZE - rows.length) / 2);
+  const top = Math.floor((SIZE / zoom - rows.length) / 2);
   rows.forEach((row, y) => {
-    const left = Math.floor((SIZE - row.length) / 2);
+    const left = Math.floor((SIZE / zoom - row.length) / 2);
     [...row].forEach((key, x) => {
       if (key === '.') return;
-      ctx.fillStyle = KEYS[/** @type {keyof typeof KEYS} */ (key)];
-      ctx.fillRect(left + x, top + y, 1, 1);
+      ctx.fillStyle = keys[key];
+      ctx.fillRect((left + x) * zoom, (top + y) * zoom, zoom, zoom);
     });
   });
   return canvas;

@@ -38,6 +38,7 @@ export const content = {
     "carp": {
       "id": "carp",
       "name": "fish.carp.name",
+      "icon": "fish/carp",
       "subnames": [
         "fish.carp.subnames.0",
         "fish.carp.subnames.1",

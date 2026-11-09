@@ -2,6 +2,7 @@
   "$schema": "../../schemas/fish.schema.json",
   "id": "carp",
   "name": "Carp",
+  "icon": "fish/carp",
   "subnames": [
     "Black",
     "Predatory",

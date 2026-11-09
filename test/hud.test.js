@@ -4,7 +4,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { tParts } from '../src/strings.js';
-import { ICONS, weatherIcon } from '../src/scene/icons.js';
+import { ICONS, iconKeys, weatherIcon } from '../src/scene/icons.js';
+import { content } from '../src/generated/content.js';
 
 test('a line can hold a link where its placeholder was', () => {
   const link = { link: 'Large Roach' };
@@ -25,10 +26,18 @@ test('the weather picks its icon: wet first, then cloud, then wind', () => {
   assert.equal(weatherIcon(w({ precipitation: 3, temperature: 1 }), false), 'weather/snow');
 });
 
-test('every icon is at most 16×16, with rows of one width', () => {
+test('every icon is at most 32×32, with rows of one width and keys it has colours for (D98)', () => {
   for (const [name, rows] of Object.entries(ICONS)) {
-    assert.ok(rows.length <= 16, name);
+    assert.ok(rows.length <= 32, name);
     assert.equal(new Set(rows.map((r) => r.length)).size, 1, name);
-    assert.ok(rows[0].length <= 16, name);
+    assert.ok(rows[0].length <= 32, name);
+    const keys = iconKeys(name);
+    for (const key of new Set(rows.join(''))) assert.ok(key === '.' || key in keys, `${name}: no colour for "${key}"`);
+  }
+});
+
+test('every icon a fish or item names exists', () => {
+  for (const entity of [...Object.values(content.fish), ...Object.values(content.items)]) {
+    if (entity.icon) assert.ok(ICONS[entity.icon], `${entity.id}: no icon "${entity.icon}"`);
   }
 });

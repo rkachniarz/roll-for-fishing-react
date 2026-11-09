@@ -106,10 +106,11 @@ function fit() {
   // icon pixel (D10).
   const dpr = window.devicePixelRatio || 1;
   const square = (wide ? HUD_WIDTH : sceneWidth) / 8;
-  const k = Math.max(1, Math.floor(((square - 10) * dpr) / 16));
-  root.setProperty('--icon', `${(16 * k) / dpr}px`);
+  // Icons are 32 pixels square (D98).
+  const k = Math.max(1, Math.floor(((square - 10) * dpr) / 32));
+  root.setProperty('--icon', `${(32 * k) / dpr}px`);
   // The weather's icon is smaller, as in the sketch, leaving room for the words.
-  root.setProperty('--icon-small', `${(16 * Math.max(1, Math.floor((k * 3) / 4))) / dpr}px`);
+  root.setProperty('--icon-small', `${(32 * Math.max(1, Math.floor((k * 3) / 4))) / dpr}px`);
 }
 fit();
 window.addEventListener('resize', fit);
