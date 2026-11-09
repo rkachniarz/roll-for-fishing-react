@@ -186,6 +186,8 @@ const UI_STRINGS = {
   'settings.theme': 'Theme',
   'settings.dark': 'Dark',
   'settings.light': 'Light',
+  'settings.dice': 'Dice',
+  'settings.showDice': 'Show dice',
 
   // ---- The title screen (D80) ----
   'title.name': 'Roll for Fishing',

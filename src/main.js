@@ -22,7 +22,7 @@ import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
 import { GAME_VALUES } from './engine/values.js';
 import { deleteSave, lastSlot, listSlots, saveGame } from './save.js';
-import { applySettings, loadSettings, saveSettings } from './settings.js';
+import { applySettings, loadSettings, saveSettings, showDice } from './settings.js';
 import { WATER, createScene } from './scene/scene.js';
 import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
@@ -191,7 +191,7 @@ function apply(out) {
   if (out.checkpoint) save(out.checkpoint);
   else if (changed && cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
   render();
-  if (roll && cast.phase === 'done' && !reducedMotion.matches) rollDice(cast.outcome.rolls[0], reveal, flights);
+  if (roll && cast.phase === 'done' && showDice(settings, reducedMotion.matches)) rollDice(cast.outcome.rolls[0], reveal, flights);
   else {
     reveal();
     flights();
@@ -741,7 +741,7 @@ function renderPane() {
           saveSettings(storage, settings);
           applySettings(settings);
           renderPane();
-        }),
+        }, showDice(settings, reducedMotion.matches)),
       );
       break;
     case 'dev':

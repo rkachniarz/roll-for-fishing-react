@@ -273,11 +273,12 @@ export function menuPane({ onMainMenu, onSettings, onDev }) {
 }
 
 /**
- * Settings (D81): for now, the theme.
+ * Settings (D81): the theme, and whether the dice are shown (D99).
  * @param {import('../settings.js').Settings} settings
  * @param {(next: import('../settings.js').Settings) => void} onChange
+ * @param {boolean} diceShown  The box's tick: the setting, or what the device's "reduce motion" chose.
  */
-export function settingsPane(settings, onChange) {
+export function settingsPane(settings, onChange, diceShown) {
   return [
     el('h3', { textContent: t('settings.theme') }),
     el(
@@ -297,5 +298,17 @@ export function settingsPane(settings, onChange) {
         ]),
       ),
     ),
+    el('h3', { textContent: t('settings.dice') }),
+    el('div', { className: 'choices' }, [
+      el('label', {}, [
+        el('input', {
+          type: 'checkbox',
+          id: 'show-dice',
+          checked: diceShown,
+          onchange: (/** @type {Event} */ e) => onChange({ ...settings, dice: /** @type {HTMLInputElement} */ (e.target).checked }),
+        }),
+        el('span', { textContent: t('settings.showDice') }),
+      ]),
+    ]),
   ];
 }

@@ -1,14 +1,18 @@
 // @ts-check
 // Settings: kept per device, apart from the save slots, since they belong to
-// the player at this screen rather than to a game (D81). For now only the
-// theme: dark, or light wooden planks.
+// the player at this screen rather than to a game (D81): the theme (dark, or
+// light wooden planks), and whether the fight's dice are shown (D99).
 //
 // The theme is also read by a line in index.html's <head>, before the page
 // draws, so a light page doesn't flash dark first. That line uses the same key.
 
 const KEY = 'roll-for-fishing:settings';
 
-/** @typedef {{ theme: 'dark' | 'light' }} Settings */
+/**
+ * `dice` is left out until the player sets it: the dice then follow the
+ * device's "reduce motion" (`showDice`).
+ * @typedef {{ theme: 'dark' | 'light', dice?: boolean }} Settings
+ */
 
 /** @type {Settings} */
 const DEFAULTS = { theme: 'dark' };
@@ -33,6 +37,14 @@ export function loadSettings(storage) {
 export function saveSettings(storage, settings) {
   storage.setItem(KEY, JSON.stringify(settings));
 }
+
+/**
+ * Whether the fight's dice are rolled over the scene (D99): the player's
+ * choice, or if they haven't made one, not when the device asks for less motion.
+ * @param {Settings} settings
+ * @param {boolean} reduceMotion
+ */
+export const showDice = (settings, reduceMotion) => settings.dice ?? !reduceMotion;
 
 /**
  * Shows the page in the settings' theme.

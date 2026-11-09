@@ -461,6 +461,24 @@ await check('settings: the light theme', PHONE, '?seed=6', async (page) => {
   await page.screenshot({ path: 'dist/verify/light-title.png' });
 });
 
+await check('settings: no dice (D99)', PHONE, '?seed=1&wait=700', async (page, tap) => {
+  await page.click('#menu');
+  await page.click('#openSettings');
+  report('settings: dice are shown at first', await page.isChecked('#show-dice'));
+  await page.click('#show-dice');
+  await page.screenshot({ path: 'dist/verify/settings.png' });
+  await closePane(page);
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  report('settings: with no dice, the roll is in the log at once', (await page.locator('body[data-dice]').count()) === 0 && (await page.locator('#log .roll').count()) === 1);
+  await page.reload();
+  await page.waitForSelector('#title[open]', { timeout: 15000 });
+  const kept = await page.evaluate(() => JSON.parse(localStorage.getItem('roll-for-fishing:settings') ?? '{}').dice);
+  report('settings: no dice, kept after a reload', kept === false, String(kept));
+});
+
 await check('keyboard: space casts and strikes', DESKTOP, '?seed=2&wait=600', async (page) => {
   await page.keyboard.press(' ');
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });

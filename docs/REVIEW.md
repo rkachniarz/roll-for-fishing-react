@@ -37,7 +37,8 @@ Newest first.
   narrow screen.
 - **"Starts when a fish bites"**: the dice are thrown at the strike, not the bite, since nothing is rolled if the
   splash is missed.
-- **"Reduce motion"** on the device turns the dice off; the roll then shows at once, as before.
+- **"Show dice"** is under Settings, a checkbox under its own heading, "Dice". Until you set it, it's ticked unless
+  the device asks for reduced motion. With it off, the roll shows at once, as before.
 
 ## Icons at 32×32 (D98)
 
