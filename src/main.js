@@ -152,6 +152,8 @@ function lineOut() {
  * @param {{ state: GameState, cast: GameCast, checkpoint?: GameState, events: GameEvent[] }} out
  */
 function apply(out) {
+  // Whatever the last dice held back happens now: the game never waits for them (R7.6).
+  finishDice();
   const changed = out.state !== state;
   const ended = out.cast.phase === 'done' && cast.phase !== 'done';
   state = out.state;
@@ -162,28 +164,96 @@ function apply(out) {
     floatText({ text: t('float.wild'), tone: 'wild', at: scene.toClient(cast.landing), scale: scene.pixelScale() });
   }
   if (ended) floatStrike();
+  if (out.events.some((e) => e.type === 'no-rod')) showError($('errors'), t('error.noRod'));
   // The roll first, then what came of it.
   const roll = ended ? describeRoll() : null;
-  if (roll) log.add(roll, 'roll');
-  logEvents(out.events);
-  if (out.events.some((e) => e.type === 'no-rod')) showError($('errors'), t('error.noRod'));
-  for (const e of out.events) {
-    if ((e.type === 'caught' || e.type === 'found') && cast.landing) {
-      const thing = e.type === 'caught' ? { kind: /** @type {const} */ ('fish'), id: e.fish.species } : { kind: /** @type {const} */ ('item'), id: e.item };
-      flyIcon({
-        icon: iconName(thing),
-        rarity: e.type === 'caught' ? e.fish.rarity : content.items[e.item].rarity,
-        from: scene.toClient(cast.landing),
-        to: $(e.type === 'caught' ? 'bucket' : 'bag'),
-        scale: scene.pixelScale(),
-      });
+  const landing = cast.landing;
+  const reveal = () => {
+    if (roll) log.add(roll, 'roll');
+    logEvents(out.events);
+  };
+  const flights = () => {
+    for (const e of out.events) {
+      if ((e.type === 'caught' || e.type === 'found') && landing) {
+        const thing = e.type === 'caught' ? { kind: /** @type {const} */ ('fish'), id: e.fish.species } : { kind: /** @type {const} */ ('item'), id: e.item };
+        flyIcon({
+          icon: iconName(thing),
+          rarity: e.type === 'caught' ? e.fish.rarity : content.items[e.item].rarity,
+          from: scene.toClient(landing),
+          to: $(e.type === 'caught' ? 'bucket' : 'bag'),
+          scale: scene.pixelScale(),
+        });
+      }
     }
-  }
+    promptPlayer();
+  };
   // While a cast is in progress, only the checkpoint is saved (D74).
   if (out.checkpoint) save(out.checkpoint);
   else if (changed && cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
   render();
-  promptPlayer();
+  if (roll && cast.phase === 'done' && !reducedMotion.matches) rollDice(cast.outcome.rolls[0], reveal, flights);
+  else {
+    reveal();
+    flights();
+  }
+}
+
+// ---------- The dice on the desk (D99) ----------
+
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+/**
+ * The dice being shown: what happens when they land (the log, the score) and
+ * when they go (the catch's flight, any dialog).
+ * @type {{ settled: number, gone: number, landed: (() => void) | null, after: (() => void) | null } | null}
+ */
+let diceShow = null;
+
+/**
+ * Rolls the fight's d20 over the scene, every die of it, each to rest on
+ * what the engine rolled.
+ * @param {import('./engine/cast.js').Roll} roll
+ * @param {() => void} landed
+ * @param {() => void} after
+ */
+function rollDice(roll, landed, after) {
+  const now = performance.now();
+  const crit = roll.result === 20;
+  const values = [...(roll.dropped ?? []).map((value) => ({ value, kept: false })), { value: roll.result, kept: true, crit }];
+  const out = scene.rollDice(values, now);
+  const kept = out.points[out.points.length - 1];
+  diceShow = {
+    settled: out.settled,
+    gone: out.gone,
+    landed: () => {
+      landed();
+      floatText({ text: String(roll.total), tone: crit || roll.crit ? 'crit' : 'roll', at: scene.toClient(kept), scale: scene.pixelScale() });
+    },
+    after,
+  };
+  document.body.dataset.dice = '';
+}
+
+/** @param {number} now */
+function updateDice(now) {
+  if (!diceShow) return;
+  if (diceShow.landed && now >= diceShow.settled) {
+    const landed = diceShow.landed;
+    diceShow.landed = null;
+    landed();
+  }
+  if (now >= diceShow.gone) finishDice();
+}
+
+/** Ends the show now, doing whatever it still held back. */
+function finishDice() {
+  if (!diceShow) return;
+  const { landed, after } = diceShow;
+  diceShow = null;
+  delete document.body.dataset.dice;
+  scene.clearDice();
+  landed?.();
+  after?.();
 }
 
 /** Whatever waits for the player: a full bucket first, then an open event. */
@@ -407,6 +477,7 @@ scene.app.ticker.add((ticker) => {
     renderActions();
   }
   scene.update(cast, now);
+  updateDice(now);
 });
 
 // ---------- The log (R16.5) ----------

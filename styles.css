@@ -979,6 +979,15 @@ body.is-dragging {
   color: #d2a8ff;
 }
 
+/* The roll's total over the die (D99). */
+.floater.roll {
+  color: #fbf1d3;
+}
+
+.floater.crit {
+  color: #ffd75e;
+}
+
 /* ---------- The title screen (D80) ---------- */
 
 .title h1 {

@@ -121,5 +121,8 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   in `src/ui/event-words.js`, and a test checks the two agree.
 - **The event dialog ignores clicks for 400 ms after it opens,** so the Space press or tap that ended the cast can't
   pick a choice.
+- **`src/main.js`: the roll's log lines, the catch's flight and any dialog wait for the dice (D99),** and the next
+  `apply` ends the show at once (`finishDice`). `body[data-dice]` is set while they're out; `tools/verify.mjs` waits
+  for it to go before reading the log.
 - **`src/main.js`: a tap within 500 ms of the last action is ignored after a cast ends,** so a double tap on the splash
   strikes once instead of striking and instantly recasting.

@@ -8,6 +8,7 @@
 
 import { Application, Container, Graphics, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { createSky } from './sky.js';
+import { createDice } from './dice.js';
 import {
   BOBBER,
   BOBBER_DIPPED,
@@ -196,6 +197,10 @@ export async function createScene(canvas, rand, look = {}) {
   app.stage.addChild(skyLayer);
   const sky = createSky(shadowLayer, skyLayer, SIZE, rand);
 
+  // Dice, over everything: they're on the desk, not in the picture, so the
+  // light of the hour doesn't tint them (D99).
+  const dice = createDice((s) => app.stage.addChild(s), rand);
+
   /**
    * Widens the scene to `next` pixels: the play area in the middle, strips
    * of scenery either side.
@@ -210,6 +215,7 @@ export async function createScene(canvas, rand, look = {}) {
     play.position.x = offset;
     reedsRight.position.x = width - 26;
     sky.setWidth(width);
+    dice.setSize(width, SIZE);
     paintWidth();
   }
   let lastFrame = 0;
@@ -319,6 +325,7 @@ export async function createScene(canvas, rand, look = {}) {
 
     sky.update(now, lastFrame ? now - lastFrame : 16);
     lastFrame = now;
+    dice.update(now);
 
     // Waves shimmer by flipping frames now and then, faster in the wind; reeds
     // sway together, faster in the wind too.
@@ -443,6 +450,19 @@ export async function createScene(canvas, rand, look = {}) {
     update,
     setFeatures,
     setWorld: sky.setWorld,
+    /**
+     * Rolls dice across the scene (D99), to rest in the play area's lower
+     * middle on the numbers given.
+     * @param {{ value: number, kept: boolean, crit?: boolean }[]} values
+     * @param {number} now
+     * @returns {{ settled: number, gone: number, points: { x: number, y: number }[] }}  Times, and where each die stops in the play area's pixels.
+     */
+    rollDice(values, now) {
+      const out = dice.roll(values, { x: offset + SIZE / 2, y: 196 }, now);
+      return { ...out, points: out.points.map((p) => ({ x: p.x - offset, y: p.y })) };
+    },
+    /** Takes any dice away at once. */
+    clearDice: dice.clear,
     /**
      * How the bobber looks: the equipped bobber item's colours, or the
      * sketch's red feather (D83). Repainted only when it changes.

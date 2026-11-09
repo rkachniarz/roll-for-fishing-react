@@ -24,6 +24,21 @@ Items with no note are left alone.
 
 Newest first.
 
+## Dice over the scene (D99, branch `dice-on-the-desk`)
+
+- **Timing**: 0.7 s rolling, 0.55 s at rest, 0.2 s dithering away, so the catch flies about 1.45 s after the strike
+  (`ROLL_MS`, `HOLD_MS`, `FADE_MS` in `src/scene/dice.js`). First guesses.
+- **The log waits for the dice**, so it doesn't give the result away before they land. The bucket's count and the XP
+  bar don't wait; they change at the strike.
+- **The die**: ivory with dark ink, 35 pixels across, numbers in a 3×5 pixel font, upright on the page whichever way
+  the face is turned. A natural 20's number is red, and its total floats up gold. The colours are `DICE_COLOURS`.
+- **Where**: thrown in from below the scene, a little from the right, to rest side by side in the lower middle of the
+  play area, over the shore line. They never cover the bobber's usual spots, but they can cover the reeds' tips on a
+  narrow screen.
+- **"Starts when a fish bites"**: the dice are thrown at the strike, not the bite, since nothing is rolled if the
+  splash is missed.
+- **"Reduce motion"** on the device turns the dice off; the roll then shows at once, as before.
+
 ## Icons at 32×32 (D98)
 
 - **The carp is the carp's icon now** (`fish/carp`), the tilted 32 from the trial as it was. Its scales come out as

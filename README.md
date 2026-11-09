@@ -69,6 +69,7 @@ and the art sheet at `/art.html` there.
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
 | `src/scene/pond.js` | A trial for the art sheet only: a whole scene painted from a photo (`docs/design/photo-autumn-pond.jpg`) |
+| `src/scene/dice.js` | The fight's d20s thrown over the scene, coming to rest on the numbers rolled (D99; `d20.js`: the die's shape and numbering) |
 | `src/scene/icons.js` | 32×32 icons (D98): items and fish (a default for each kind), the button row, the weather; rarity colours |
 | `src/ui/flight.js` | A catch's icon flying from the bobber to the bucket or bag |
 | `src/ui/floater.js` | How a strike went, floating up from the bobber |

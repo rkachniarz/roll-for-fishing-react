@@ -183,14 +183,15 @@ await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, t
   const floated = (await page.textContent('.floater')) ?? '';
   await page.waitForTimeout(250);
   await page.screenshot({ path: 'dist/verify/strike-floater.png' });
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
   const log = await logText(page);
   const detail = await page.textContent('#log .roll');
   report('strike after the splash: an outcome with a roll', /You caught: \[.*\]|got away!/.test(log), log);
   report('strike after the splash: the d20 roll is shown', /d20: \d+/.test(detail ?? ''), detail);
   report('strike after the splash: "Fast strike!" floats over the bobber', floated === 'Fast strike!', floated);
   report('strike after the splash: no milliseconds anywhere', !/ ms\b/.test(log + floated), log);
-  await page.waitForTimeout(1200);
-  report('strike after the splash: the word fades and goes', (await page.locator('.floater').count()) === 0);
+  await page.waitForTimeout(1300);
+  report('strike after the splash: the words fade and go', (await page.locator('.floater').count()) === 0);
   report("strike after the splash: the fish's roll stays hidden", /needed \?/.test(detail ?? ''), detail);
 });
 
@@ -205,10 +206,38 @@ await check('advantage shows both dice', PHONE, '?dev&seed=1&wait=600', async (p
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
   const detail = (await page.textContent('#log .roll')) ?? '';
   const dropped = Number(await page.textContent('#log .roll s'));
   const kept = Number(/d20: \d+ (\d+)/.exec(detail)?.[1]);
   report('advantage: the die that did not count is struck through, before the one that did', dropped >= 1 && kept >= dropped, detail);
+});
+
+await check('dice roll over the scene, then the catch flies (D99)', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+  await openBench(page);
+  for (const [name, value] of [['fishFind', '100'], ['playerVantage', '1']]) {
+    await page.fill(`#dev-${name}`, value);
+    await page.press(`#dev-${name}`, 'Enter');
+  }
+  await closePane(page);
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  report('dice: out while they roll', (await page.locator('body[data-dice]').count()) === 1);
+  report('dice: the roll waits for them to land', (await page.locator('#log .roll').count()) === 0);
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: 'dist/verify/dice-rolling.png' });
+  await page.waitForSelector('#log .roll', { timeout: 2000 });
+  await page.waitForTimeout(150);
+  await page.screenshot({ path: 'dist/verify/dice-landed.png' });
+  const detail = (await page.textContent('#log .roll')) ?? '';
+  const total = /= (\d+)/.exec(detail)?.[1];
+  const floated = await page.locator('.floater.roll, .floater.crit').allTextContents();
+  report('dice: the total floats up over the die', total !== undefined && floated.includes(total), `${floated} vs ${detail}`);
+  report('dice: no catch flies before they go', (await page.locator('.flying-icon').count()) === 0);
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
+  report('dice: then the catch flies', (await page.locator('.flying-icon').count()) === 1 || !/You caught/.test(await logText(page)));
 });
 
 await check('perks: a badge, then a choice in the character pane', PHONE, '?dev&seed=1', async (page) => {
@@ -269,6 +298,7 @@ await check('action bar: under the button row, a next-cast ability and its coold
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
   const detail = (await page.textContent('#log .roll')) ?? '';
   const left = (await page.textContent('[data-ability="battle-focus"] .action-cd')) ?? '';
   report('action bar: after an attempt, the cooldown shows the casts left', left === '6', left);
@@ -289,6 +319,7 @@ await check('action bar: Jump In lights up when a fish gets away', PHONE, '?dev&
     await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
     await tap();
     await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+    await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
     if (/got away/.test(await logText(page))) break;
     await page.waitForTimeout(600);
   }
@@ -307,6 +338,7 @@ await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (p
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
   const log = await logText(page);
   report('junk: no d20', !/d20/.test(log), log);
   report('junk: in the log as a link', /You caught: \[Bit of scroll parchment\]/.test(log), log);
@@ -334,6 +366,7 @@ await check('strike too early', DESKTOP, '?seed=1&wait=6000', async (page, tap) 
   await page.waitForTimeout(300);
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
   report('strike too early: pulled out', (await logText(page)).includes('Too early!'));
   report('strike too early: says so over the bobber', (await page.textContent('.floater')) === 'Too early!');
 });
@@ -369,6 +402,7 @@ await check('saving', PHONE, '?seed=1&wait=600', async (page, tap) => {
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await tap();
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
   report('saving: a cast takes 30 minutes', (await clockShown(page)) === later, `${h}:${m} -> ${await clockShown(page)}`);
   await page.reload();
   await page.waitForSelector('#title[open]', { timeout: 15000 });
@@ -432,6 +466,7 @@ await check('keyboard: space casts and strikes', DESKTOP, '?seed=2&wait=600', as
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
   await page.keyboard.press(' ');
   await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
   report('keyboard: a full cast with the space bar', true);
 });
 

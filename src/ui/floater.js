@@ -1,7 +1,7 @@
 // @ts-check
 // A word that floats up from the bobber when the player strikes, and fades:
-// "Fast strike!", "Too early!" (D82), like WoW's combat text. The log keeps
-// the roll; this only says how the strike went.
+// "Fast strike!", "Too early!" (D82), like WoW's combat text; and the roll's
+// total over the die once it lands (D99). The log keeps the roll in full.
 //
 // A page element in the layer over the scene (D71), like the catch's flight.
 // The game never waits for it (R7.6).
@@ -11,8 +11,8 @@ const MS = 1100;
 /**
  * @param {Object} options
  * @param {string} options.text
- * @param {'fast' | 'ok' | 'bad' | 'early' | 'wild'} options.tone  Sets its colour.
- * @param {{ x: number, y: number }} options.at  Page coordinates of the bobber.
+ * @param {'fast' | 'ok' | 'bad' | 'early' | 'wild' | 'roll' | 'crit'} options.tone  Sets its colour.
+ * @param {{ x: number, y: number }} options.at  Page coordinates of the bobber (or the die).
  * @param {number} options.scale  CSS pixels per scene pixel.
  */
 export function floatText({ text, tone, at, scale }) {
