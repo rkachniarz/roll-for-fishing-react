@@ -3420,28 +3420,28 @@ Object.assign(ICONS, {
     '................................',
     '................................',
     '................................',
-    '.....kk.........................',
-    '....kLJk........................',
-    '...kLJJk...kk...................',
-    '..kMLJHGk.kMJkk.................',
-    '..kLexHFkkLJHFDkkkkkkk..........',
-    '.kMJxxGDDkJHEDCCFGEBBCkkk.......',
-    '.kJIIGGGDGGECCCDDFECCBCFCk......',
-    '.kIIIGHHGGGFFEDCDFDCBBBFCEk.....',
-    '..kkkkkJIHGGGFEECBDCBBACAABk....',
-    '.......kLJHHHGGDFDCDCCBAABBk....',
-    '......kMJJLIGGEDDDDDDDDCAAAAk...',
-    '......kLIJLJHHFFDCCCEDDFBAAAk...',
-    '......kJHIJLJJHGGGDBCCDDCAAAk...',
-    '.......kkkkJLJJJIIHFCBBCCDBADk..',
-    '..........kJMLLMMMJHFDBBCEDCDk..',
-    '...........kLMLMMMMJIGEBCFECDDk.',
-    '............kLMMMMMLIHFGEDCBDCk.',
-    '.............kkLLLMMJIGGHECBAEk.',
-    '...............kkLLLJIHIIECBADk.',
-    '.................kLJIIHIIGECCk..',
-    '..................kkkkHIIHFEk...',
-    '......................kkkkkk....',
+    '.......kkkkkkkkk................',
+    '....kkkDCBAAAACBk...............',
+    '...kCACBAAAAAAAEEk..............',
+    '..kBeeCDFAABBAAEDDkk............',
+    '.kDBexCGDCDCCBBAABABk...........',
+    '.kECBCCDDBCEEECBBBBCk...........',
+    '.kGFEEGEBABCCDEBBCCEFk..........',
+    '..kGHJHGFDBBBDDCCDDDEEk.........',
+    '...kJJIFFFFCBBCDDBCDCEkk........',
+    '...kIIIIIIIHFDBCECBDDBCGk.......',
+    '....kIIJLLLLJIGCDDECDDEGLk......',
+    '.....kILLMMMMJGFDEFGDDDGMk......',
+    '......kJLLMMMMJHFFFFFEDILk......',
+    '.......kLLLMMMLIIHGGGEEJk.kkkk..',
+    '........kkLMMMLLLIIIHGEDkkEGJMk.',
+    '..........kkLMMLLLLLIJHFECHJLLk.',
+    '............kkLLJJLJJLJHHEHJJMk.',
+    '..............kkkJIILMkJHGIJJk..',
+    '.................kIJMk.kFHLJLk..',
+    '..................kLMk.kFIJLk...',
+    '...................kk...kJJk....',
+    '.........................kk.....',
     '................................',
     '................................',
     '................................',
@@ -3775,8 +3775,8 @@ Object.assign(ICONS, {
     '..kHGFJJLLMMLJLLLJLJLLJJJIJIGk..',
     '..kGHHJLLLLJIIJJIIJJJJIHIJFILJk.',
     '..kEGIIIJJJGEHHHGGFHIIHGHHGGIFk.',
-    '.kEeeHIIGJIHGFHGFFGHIHGEEGEDGDk.',
-    '.kIexEHIHJJIHHHHGFFIHHGEGDDDGGk.',
+    '.kEFFHIIGJIHGFHGFFGHIHGEEGEDGDk.',
+    '.kIECEHIHJJIHHHHGFFIHHGEGDDDGGk.',
     '.kFECDHGFIJHHGGHGFHHGGFEDEDCIk..',
     '.kEFCCEEFHIJHGFEGFHFGFEECCCBIk..',
     '.kGFDBCDEFFHIGFFGGHFEFEDCBBEk...',
@@ -3876,26 +3876,26 @@ Object.assign(ICONS, {
     '................................',
     '................................',
     '................................',
-    '....k...........................',
-    '...kAk..........................',
-    '...kAk..........................',
-    '...kCBk.........................',
-    '..kBCEkk........................',
-    '.kABBDDCkkkk....................',
-    '..kkkkCEGCAAkkk.................',
-    '......kkDJexFBAkkkkk............',
-    '........kDxxJJJCBAAAk...........',
-    '........kAHJJJJJJHBAk...........',
-    '.........kCDJJJJJJJGBkk.........',
-    '..........kkCJJJJJJJFDAk........',
-    '............kCJJJJJJJJFBk.......',
-    '.............kCHJJJJJJJGCkk.....',
-    '..............kBFGJJJJJJHEAk....',
-    '...............kkCFHJJJJJHCAk...',
-    '.................kACFEIIJJJBAk..',
-    '..................kCFCCBBJJBAAk.',
-    '...................kkkkCCCBCkk..',
-    '.......................kkkkk....',
+    '..kk............................',
+    '.kAAkkkk........................',
+    '..kBABBAkk......................',
+    '..kDexIFDAkk....................',
+    '..kBxxLLEGEBkkkk................',
+    '...kDBLLLLLLFAAAk...............',
+    '....kBCLLLLLLLDBAk..............',
+    '.....kCELLLLLLLHBk..............',
+    '.....kBFFELLLLLLLCk.............',
+    '......kBCEHLLLLLLLDk............',
+    '.......kkkCGLLLLLLLDkk..........',
+    '..........kkEGLLLLLLDAk.........',
+    '............kkCDHLLLLEAk........',
+    '..............kkkBEELLEAk.......',
+    '.................kABkkDEBkkkk...',
+    '..................kk..kkDEGDAk..',
+    '........................kACCk...',
+    '........................kABk....',
+    '.........................kAk....',
+    '..........................k.....',
     '................................',
     '................................',
     '................................',
@@ -4293,33 +4293,33 @@ Object.assign(ICONS, {
     '................................',
     '................................',
     '................................',
-    '....k...........................',
-    '...kCk..........................',
-    '...kCk..........................',
-    '...kCk..........................',
-    '...kCCk.........................',
-    '...kGCk.........................',
-    '...kFGCk...........k............',
-    '...kGICkkk........kFk...........',
-    '...kGLIIGIkkk....kFGk...........',
-    '...kFLLeeGGIIkkkkDFFDk..........',
-    '..kFFkMexFFFFFGFADDFDk..........',
-    '...kkkGMLJGDDDDDBBDDAk..........',
-    '......kJLJIFFDDDBAABBk..........',
-    '.....kGFJLJGFFEDBBABDk..........',
-    '......kkkMLJFFFEEEBABDk.........',
-    '........kMMLJFEEEEBBABFk........',
-    '.........kLMLJHEBBBAABDGk.......',
-    '..........kMMLJHEBAAAABEGk......',
-    '...........kILLJHBBBABBEDGk.....',
-    '............kkJFJBHHEBBEEFk.....',
-    '.............kDAEBBEHHBBEEGk....',
-    '............kIGFEHHBHHHHBEFIk...',
-    '...........kIGGFEDHJLLLJIHEIk...',
-    '............kkkkkkkkLMMMLJIFJk..',
-    '....................kkMMMMLIIk..',
-    '......................kkMMMMLLk.',
-    '........................kkkkkk..',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '.................kk.............',
+    '..kkkkkkkkkk...kkDDk............',
+    '.kLIIFFFFFFGkkkBFGFk............',
+    '..kMLeeCEEBBBBBBFFk.............',
+    '...kMexHCCAAABAABBk.............',
+    '....kMMJHHCAACBBBBk.............',
+    '.....kMMIHHCCCEEEEGk............',
+    '......kkJECEEEEFFEFGkk..........',
+    '........kFEGIIHFFFFFGIk....kk...',
+    '........kFFAJLLJIIIIGIGkkkkDDk..',
+    '.........kGGkJJMMLJJJIIDDGDDk...',
+    '.........kGIkkkLkLLJLLLJIDkk....',
+    '..........kGk..k.kkGkkGGkk......',
+    '...........k.......k.kGk........',
+    '.....................kGk........',
+    '......................k.........',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
     '................................',
     '................................',
   ],
@@ -5762,20 +5762,20 @@ export const OWN_KEYS = {
     e: '#e9e6de', // eye glint
   },
   'fish/lumpfish': {
-    A: '#0a0908', // back, dark shading
-    B: '#131313', // back, dark shading
-    C: '#1b1a1d', // back, dark shading
-    D: '#232427', // upper flank
-    E: '#2e2d30', // upper flank
-    F: '#36363b', // upper flank
-    G: '#43444d', // upper flank
-    H: '#5e606d', // lower flank
-    I: '#7f7f83', // lower flank
-    J: '#92949e', // belly, highlights
-    L: '#a2a7b4', // belly, highlights
-    M: '#b9bdc6', // belly, highlights
+    A: '#0a0909', // back, dark shading
+    B: '#151515', // back, dark shading
+    C: '#1e1d20', // back, dark shading
+    D: '#26262a', // upper flank
+    E: '#2d2e33', // upper flank
+    F: '#3e3e41', // upper flank
+    G: '#4d4c50', // upper flank
+    H: '#585968', // lower flank
+    I: '#70727b', // lower flank
+    J: '#858692', // belly, highlights
+    L: '#9ea1ac', // belly, highlights
+    M: '#b9bec6', // belly, highlights
     x: '#141414', // eye
-    e: '#e9e6de', // eye glint
+    e: '#e9e6de', // eye ring
   },
   'fish/frontosa': {
     A: '#1d1815', // back, dark shading
@@ -5922,20 +5922,18 @@ export const OWN_KEYS = {
     e: '#e9e6de', // eye glint
   },
   'fish/giant-freshwater-stingray': {
-    A: '#010505', // back, dark shading
-    B: '#0a0e0b', // back, dark shading
-    C: '#151610', // back, dark shading
-    D: '#1f1e16', // upper flank
-    E: '#2e2518', // upper flank
-    F: '#3e2e1e', // upper flank
-    G: '#4e3825', // upper flank
-    H: '#66472c', // lower flank
-    I: '#845936', // lower flank
-    J: '#aa7649', // belly, highlights; fin colour
-    L: '#d8a172', // belly, highlights; fin colour
-    M: '#edd4af', // belly, highlights
-    x: '#141414', // eye
-    e: '#e9e6de', // eye ring
+    A: '#010505', // darkest
+    B: '#0a0e0b', // darkest
+    C: '#151610', // darkest
+    D: '#1f1e16', // dark
+    E: '#2e2518', // dark
+    F: '#3e2e1e', // dark
+    G: '#4e3825', // dark
+    H: '#66472c', // light
+    I: '#845936', // light
+    J: '#aa7649', // lightest; strong colour
+    L: '#d8a172', // lightest; strong colour
+    M: '#edd4af', // lightest
   },
   'fish/icefish': {
     A: '#505050', // back, dark shading
@@ -5970,16 +5968,17 @@ export const OWN_KEYS = {
     e: '#e9e6de', // eye glint
   },
   'fish/strange-shark': {
-    A: '#555555', // back, dark shading
-    B: '#898989', // back, dark shading
-    C: '#b5b5b5', // back, dark shading
-    D: '#cacaca', // upper flank
-    E: '#d7d7d7', // upper flank
-    F: '#e8e8e8', // lower flank
-    G: '#f3f3f3', // lower flank
-    H: '#fbfbfb', // lower flank
-    I: '#fefefe', // belly, highlights
-    J: '#ffffff', // belly, highlights
+    A: '#676767', // back, dark shading
+    B: '#949494', // back, dark shading
+    C: '#b2b2b2', // back, dark shading
+    D: '#c8c8c8', // upper flank
+    E: '#dcdcdc', // upper flank
+    F: '#e8e8e8', // upper flank
+    G: '#f4f4f4', // lower flank
+    H: '#f8f8f8', // lower flank
+    I: '#fcfcfc', // belly, highlights
+    J: '#fefefe', // belly, highlights
+    L: '#ffffff', // belly, highlights
     x: '#141414', // eye
     e: '#e9e6de', // eye glint
   },
@@ -6160,18 +6159,18 @@ export const OWN_KEYS = {
     e: '#e9e6de', // eye glint
   },
   'fish/bull-shark': {
-    A: '#091a16', // back, dark shading
-    B: '#0f2620', // back, dark shading
-    C: '#032a49', // back, dark shading
-    D: '#0d2b34', // upper flank
-    E: '#16332f', // upper flank
-    F: '#153b46', // upper flank
-    G: '#154254', // upper flank
-    H: '#214434', // lower flank
-    I: '#1d4e5b', // lower flank
-    J: '#2c6365', // belly, highlights
-    L: '#408382', // belly, highlights
-    M: '#5da79e', // belly, highlights
+    A: '#091b15', // back, dark shading
+    B: '#0b2427', // back, dark shading
+    C: '#13291e', // back, dark shading
+    D: '#082e4a', // upper flank
+    E: '#142f2b', // upper flank
+    F: '#14363d', // upper flank
+    G: '#143e4e', // upper flank
+    H: '#214230', // lower flank
+    I: '#1f4f57', // lower flank
+    J: '#2f696b', // belly, highlights
+    L: '#478a89', // belly, highlights
+    M: '#5ba59c', // belly, highlights
     x: '#141414', // eye
     e: '#e9e6de', // eye ring
   },
