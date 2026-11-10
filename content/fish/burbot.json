@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "burbot",
+  "name": "Burbot",
+  "icon": "fish/burbot",
+  "size": {
+    "min": 30,
+    "max": 100
+  },
+  "difficulty": 1,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "snow"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

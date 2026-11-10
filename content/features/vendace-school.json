@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "vendace-school",
+  "name": "a school of vendace",
+  "kind": "school",
+  "radius": 14,
+  "uses": 4,
+  "lifetime": 24,
+  "drift": 4,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 40
+    }
+  ],
+  "fish": [
+    {
+      "id": "vendace",
+      "weight": 1
+    }
+  ]
+}

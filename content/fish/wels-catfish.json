@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "wels-catfish",
+  "name": "Wels catfish",
+  "icon": "fish/wels-catfish",
+  "size": {
+    "min": 80,
+    "max": 270
+  },
+  "difficulty": 3,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "storm"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

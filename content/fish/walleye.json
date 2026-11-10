@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "walleye",
+  "name": "Walleye",
+  "icon": "fish/walleye",
+  "size": {
+    "min": 30,
+    "max": 80
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "dawn",
+      "sunset"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

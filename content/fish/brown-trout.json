@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "brown-trout",
+  "name": "Brown trout",
+  "icon": "fish/brown-trout",
+  "size": {
+    "min": 20,
+    "max": 80
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "dawn",
+      "sunset"
+    ],
+    "weather": [
+      "overcast",
+      "rain"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "fly"
+    ]
+  }
+}

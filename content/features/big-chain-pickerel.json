@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "big-chain-pickerel",
+  "name": "a big chain pickerel just under the surface",
+  "kind": "big-fish",
+  "radius": 8,
+  "uses": 1,
+  "lifetime": 10,
+  "swimsOff": 1,
+  "drift": 6,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 100
+    }
+  ],
+  "fish": [
+    {
+      "id": "chain-pickerel",
+      "weight": 1
+    }
+  ],
+  "minBand": "gigantic"
+}

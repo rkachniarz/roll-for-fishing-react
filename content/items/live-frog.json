@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "live-frog",
+  "category": "consumable",
+  "name": "Live frog",
+  "rarity": "common",
+  "value": 1,
+  "slot": "bait",
+  "bait": "frog",
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 10
+    }
+  ],
+  "devOnly": true
+}

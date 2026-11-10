@@ -2,15 +2,23 @@
   "$schema": "../../schemas/fish.schema.json",
   "id": "roach",
   "name": "Roach",
-  "subnames": [
-    "Common",
-    "White",
-    "Pigo"
-  ],
+  "icon": "fish/roach",
   "size": {
     "min": 10,
-    "max": 35
+    "max": 40
   },
   "difficulty": -1,
-  "rarity": "common"
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "bait": [
+      "maggot"
+    ]
+  }
 }

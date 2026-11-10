@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "rudd",
+  "name": "Rudd",
+  "icon": "fish/rudd",
+  "size": {
+    "min": 10,
+    "max": 40
+  },
+  "difficulty": -1,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "noon",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "bread"
+    ]
+  }
+}

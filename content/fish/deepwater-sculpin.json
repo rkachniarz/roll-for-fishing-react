@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "deepwater-sculpin",
+  "name": "Deepwater sculpin",
+  "icon": "fish/deepwater-sculpin",
+  "size": {
+    "min": 5,
+    "max": 23
+  },
+  "difficulty": -1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

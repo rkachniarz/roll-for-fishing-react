@@ -17,7 +17,7 @@ import { clock, seasonOfMonth, startTime } from './time.js';
 import { emptyEquipment } from './equipment.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -118,7 +118,7 @@ export function newGame({ seed, character, month }) {
     streams,
     character: { ...character, luck: character.luck ?? 0, xp: character.xp ?? 0, perks: character.perks ?? {} },
     location: start.location,
-    spot: null,
+    spot: start.spot,
     time,
     weather,
     equipped: {
@@ -215,6 +215,25 @@ const MIGRATIONS = {
     lit: {},
     streams: { ...save.streams, abilities: deriveSeed(save.seed, 'abilities') },
   }),
+  // 5 -> 6: the fish and spots from the owner's spawn table (D101). The old
+  // seven fish and the lake's old spots were deleted, not retired: their fish
+  // leave the bucket, the escaped pools and the book, and a player at an old
+  // spot (or none) goes to the new game's spot.
+  5: (save) => {
+    const start = content.rules['new-game'];
+    const exists = (/** @type {{ species: string }} */ f) => Boolean(content.fish[f.species]);
+    const loc = content.locations[save.location];
+    const spotOk = loc?.spots?.some((/** @type {{ id: string }} */ s) => s.id === save.spot);
+    return {
+      ...save,
+      ...(spotOk ? {} : { location: start.location, spot: start.spot }),
+      bucket: save.bucket.filter((/** @type {{ fish: { species: string } }} */ b) => exists(b.fish)),
+      escaped: Object.fromEntries(Object.entries(save.escaped).map(([k, pool]) => [k, /** @type {any[]} */ (pool).filter(exists)])),
+      pendingCatch: save.pendingCatch && exists(save.pendingCatch) ? save.pendingCatch : null,
+      book: { ...save.book, fish: Object.fromEntries(Object.entries(save.book.fish).filter(([id]) => content.fish[id])) },
+      features: spotOk ? save.features : [],
+    };
+  },
 };
 
 /** @param {GameState} state */

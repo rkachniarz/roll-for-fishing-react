@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish-preferences.schema.json",
+  "id": "fish-preferences",
+  "factor": 2,
+  "baits": [
+    { "id": "maggot", "name": "Maggot" },
+    { "id": "bread", "name": "Bread" },
+    { "id": "worm", "name": "Worm" },
+    { "id": "fly", "name": "Fly" },
+    { "id": "corn", "name": "Corn" },
+    { "id": "frog", "name": "Frog" },
+    { "id": "crayfish", "name": "Crayfish" },
+    { "id": "shrimp", "name": "Shrimp" },
+    { "id": "mouse", "name": "Mouse" },
+    { "id": "lure", "name": "Lure" },
+    { "id": "small-fish", "name": "Small fish" }
+  ],
+  "weatherWords": [
+    { "id": "sunny", "name": "Sunny", "clouds": { "max": 1 }, "precipitation": { "max": 0 } },
+    { "id": "cloudy", "name": "Cloudy", "clouds": { "min": 2, "max": 3 } },
+    { "id": "overcast", "name": "Overcast", "clouds": { "min": 4 } },
+    { "id": "rain", "name": "Rain", "precipitation": { "min": 2 }, "without": "snow" },
+    { "id": "storm", "name": "Storm", "wind": { "min": 3 }, "precipitation": { "min": 3 } },
+    { "id": "windy", "name": "Windy", "wind": { "min": 3 } },
+    { "id": "fog", "name": "Fog", "tag": "fog" },
+    { "id": "snow", "name": "Snow", "tag": "snow" }
+  ]
+}

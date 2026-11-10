@@ -40,6 +40,12 @@
           "wind": { "$ref": "#/definitions/level", "description": "0 to 5." },
           "clouds": { "$ref": "#/definitions/level", "description": "0 to 4." },
           "precipitation": { "$ref": "#/definitions/level", "description": "0 to 4." },
+          "tags": {
+            "description": "What the levels can't tell, for the weather words in rules/fish-preferences.json: fog, snow (D101).",
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "$ref": "common.schema.json#/definitions/id" }
+          },
           "changeSet": {
             "description": "The neighbouring cell in each direction: n, ne, se, s, sw, nw. Its own index where an edge line holds the weather (D26).",
             "type": "array",

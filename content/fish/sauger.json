@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "sauger",
+  "name": "Sauger",
+  "icon": "fish/sauger",
+  "size": {
+    "min": 25,
+    "max": 65
+  },
+  "difficulty": 0,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "dawn",
+      "sunset"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

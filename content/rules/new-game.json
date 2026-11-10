@@ -2,6 +2,7 @@
   "$schema": "../../schemas/new-game.schema.json",
   "id": "new-game",
   "location": "lake",
+  "spot": "reedy-shore",
   "weather": {
     "season": "spring",
     "cell": 0

@@ -12,6 +12,12 @@ import { content } from '../generated/content.js';
 
 /** @typedef {ReturnType<import('../dice.js').diceFor>} Dice */
 /** @typedef {{ id: string | null, weight: number }} Entry  id null: an empty hook. */
+/**
+ * @typedef {Object} Moment  What a fish's preferences are checked against (D101).
+ * @property {import('./weather.js').Weather} weather  Its season too.
+ * @property {import('./time.js').PartOfDay} partOfDay
+ * @property {string | null} bait  The kind of bait on the hook, if any.
+ */
 
 /**
  * One entry, picked by weight. Null if the table is empty.
@@ -42,36 +48,36 @@ function expand(list) {
 /**
  * The table for one of a location's lists, with the spot's entries added.
  * Retired content is skipped (D44), and so is unique treasure already found
- * (R8.10). Fish get their weather bonuses (§C.4); the junk list gets the empty
- * hook.
+ * (R8.10). Fish are likelier when the moment suits them (D101); the junk list
+ * gets the empty hook.
  * @param {Object} where
  * @param {string} where.location
  * @param {string | null} where.spot
  * @param {'fish' | 'treasure' | 'junk'} list
  * @param {Object} [world]
- * @param {import('./weather.js').Weather} [world.weather]
+ * @param {Moment} [world.moment]
  * @param {Record<string, number>} [world.found]  Item id -> how many found so far.
  * @returns {Entry[]}
  */
-export function locationTable({ location, spot }, list, { weather, found = {} } = {}) {
+export function locationTable({ location, spot }, list, { moment, found = {} } = {}) {
   const loc = content.locations[location];
   const spotData = spot ? loc.spots.find((/** @type {{ id: string }} */ s) => s.id === spot) : null;
-  const table = listTable([...(loc[list] ?? []), ...(spotData?.[list] ?? [])], list, { weather, found });
+  const table = listTable([...(loc[list] ?? []), ...(spotData?.[list] ?? [])], list, { moment, found });
   if (list === 'junk' && loc.emptyHook > 0) table.push({ id: null, weight: loc.emptyHook });
   return table;
 }
 
 /**
  * A table from any list of entries: a location's, or a surface feature's that
- * replaces it (R14). The same skipping and weather bonuses as locationTable.
+ * replaces it (R14). The same skipping and preferences as locationTable.
  * @param {{ id?: string, table?: string, weight?: number }[]} list
  * @param {'fish' | 'treasure' | 'junk'} kind
  * @param {Object} [world]
- * @param {import('./weather.js').Weather} [world.weather]
+ * @param {Moment} [world.moment]
  * @param {Record<string, number>} [world.found]
  * @returns {Entry[]}
  */
-export function listTable(list, kind, { weather, found = {} } = {}) {
+export function listTable(list, kind, { moment, found = {} } = {}) {
   /** @type {Entry[]} */
   const table = [];
   for (const e of expand(list)) {
@@ -79,23 +85,60 @@ export function listTable(list, kind, { weather, found = {} } = {}) {
     if (thing.retired) continue;
     if (thing.unique && found[e.id]) continue;
     let weight = e.weight;
-    if (kind === 'fish' && weather) weight = Math.max(1, weight + weatherBonus(thing, weather));
+    if (kind === 'fish' && moment) weight = Math.round(weight * preferenceFactor(thing, moment));
     table.push({ id: e.id, weight });
   }
   return table;
 }
 
 /**
- * What the weather adds to a fish's weight: the sum of its matching
- * preferences (the prototype's applyWeatherMods).
- * @param {{ weather?: { param: string, min?: number, max?: number, bonus: number }[] }} fish
- * @param {import('./weather.js').Weather} weather
+ * How much likelier a fish is now (D101): the factor in
+ * rules/fish-preferences.json, once for each of its preferences the moment
+ * meets. A preference left out ("Any") never counts.
+ * @param {{ prefers?: { time?: string[], weather?: string[], season?: string[], bait?: string[] } }} fish
+ * @param {Moment} moment
  */
-export function weatherBonus(fish, weather) {
-  let bonus = 0;
-  for (const c of fish.weather ?? []) {
-    const v = weather[/** @type {'temperature' | 'wind' | 'clouds' | 'precipitation'} */ (c.param)];
-    if ((c.min === undefined || v >= c.min) && (c.max === undefined || v <= c.max)) bonus += c.bonus;
-  }
-  return bonus;
+export function preferenceFactor(fish, moment) {
+  return content.rules['fish-preferences'].factor ** preferencesMet(fish, moment).length;
+}
+
+/**
+ * Which of a fish's preferences the moment meets.
+ * @param {{ prefers?: { time?: string[], weather?: string[], season?: string[], bait?: string[] } }} fish
+ * @param {Moment} moment
+ * @returns {('time' | 'weather' | 'season' | 'bait')[]}
+ */
+export function preferencesMet(fish, moment) {
+  const p = fish.prefers ?? {};
+  const words = weatherWords(moment.weather);
+  /** @type {('time' | 'weather' | 'season' | 'bait')[]} */
+  const met = [];
+  if (p.time?.includes(moment.partOfDay)) met.push('time');
+  if (p.weather?.some((w) => words.includes(w))) met.push('weather');
+  if (p.season?.includes(moment.weather.season)) met.push('season');
+  if (moment.bait && p.bait?.includes(moment.bait)) met.push('bait');
+  return met;
+}
+
+/**
+ * The words that fit the weather (rules/fish-preferences.json): sunny,
+ * overcast, fog… read off its levels, and its cell's tags for what the levels
+ * can't tell.
+ * @param {import('./weather.js').Weather} weather
+ * @returns {string[]}
+ */
+export function weatherWords(weather) {
+  const tags = content.weather[weather.season]?.weathers[weather.cell]?.tags ?? [];
+  return content.rules['fish-preferences'].weatherWords
+    .filter((/** @type {any} */ w) => {
+      if (w.tag && !tags.includes(w.tag)) return false;
+      if (w.without && tags.includes(w.without)) return false;
+      return ['temperature', 'wind', 'clouds', 'precipitation'].every((level) => {
+        const range = w[level];
+        if (!range) return true;
+        const v = weather[/** @type {'temperature' | 'wind' | 'clouds' | 'precipitation'} */ (level)];
+        return (range.min === undefined || v >= range.min) && (range.max === undefined || v <= range.max);
+      });
+    })
+    .map((/** @type {{ id: string }} */ w) => w.id);
 }

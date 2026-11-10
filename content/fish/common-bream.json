@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "common-bream",
+  "name": "Common bream",
+  "icon": "fish/common-bream",
+  "size": {
+    "min": 25,
+    "max": 75
+  },
+  "difficulty": 0,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "evening",
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "maggot"
+    ]
+  }
+}

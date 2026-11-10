@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "common-carp",
+  "name": "Common carp",
+  "icon": "fish/carp",
+  "size": {
+    "min": 30,
+    "max": 110
+  },
+  "difficulty": 1,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "night",
+      "dawn"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "corn"
+    ]
+  }
+}

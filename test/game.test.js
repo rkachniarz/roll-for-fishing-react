@@ -5,12 +5,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { SAVE_VERSION, deserialize, levelFor, newGame, serialize } from '../src/engine/state.js';
-import { MISS_LIMIT, cancelBuff, castLine, fishInBucket, releaseFish, scatter, strikeLine, tick, tickBuffs, valuesFor } from '../src/engine/game.js';
+import { MISS_LIMIT, cancelBuff, castLine, fishInBucket, momentOf, releaseFish, scatter, strikeLine, tick, tickBuffs, travel, valuesFor } from '../src/engine/game.js';
 import { choose, openSlide } from '../src/engine/events.js';
 import { createRng } from '../src/rng.js';
 import { diceFor } from '../src/dice.js';
 import { TIME, clock } from '../src/engine/time.js';
 import { WATER } from '../src/engine/features.js';
+import { content } from '../src/generated/content.js';
 
 /** @typedef {import('../src/engine/state.js').GameState} GameState */
 /** @typedef {import('../src/engine/game.js').GameCast} GameCast */
@@ -22,6 +23,8 @@ const character = /** @type {const} */ ({
   stats: { fishingSkill: 3, fishFind: 5, treasureFind: 7 },
 });
 const game = (seed = 1) => newGame({ seed, character: { ...character, luck: 0, xp: 0 } });
+/** Where a new game starts: its escaped-fish pool (D59, D101). */
+const POOL = 'lake/reedy-shore';
 
 /**
  * Casts until the line holds something of `kind`, so a test can pick its case
@@ -204,8 +207,8 @@ test('a missed fish joins the pool; after the pause the line counts as cast agai
   const late = cast.biteAt + cast.timing.lateMs;
   const missed = tick(state, cast, late);
   assert.equal(missed.state.missStreak, 1);
-  assert.equal(missed.state.escaped.lake.length, 1);
-  assert.equal(missed.state.escaped.lake[0].tries, 1);
+  assert.equal(missed.state.escaped[POOL].length, 1);
+  assert.equal(missed.state.escaped[POOL][0].tries, 1);
 
   const waiting = tick(missed.state, missed.cast, late + cast.missPause - 1);
   assert.equal(waiting.cast, missed.cast, 'nothing happens during the pause');
@@ -240,7 +243,7 @@ test('a tap during the pause pulls the line out', () => {
 
 test('a fish that got away can come back, marked as seen before (R3.6)', () => {
   let state = game(8);
-  state.escaped.lake = Array.from({ length: 100 }, () => ({ species: 'pike', subname: 0, band: 2, size: 80, difficulty: 4, xp: 4, rarity: 'rare', tries: 2 }));
+  state.escaped[POOL] = Array.from({ length: 100 }, () => ({ species: 'northern-pike', subname: 0, band: 2, size: 80, difficulty: 4, xp: 4, rarity: 'rare', tries: 2 }));
   const { cast } = castUntil(state, (c) => c.line.kind === 'fish');
   assert.ok(cast.line.kind === 'fish' && cast.line.seenBefore && cast.line.fish.tries === 2);
 });
@@ -411,7 +414,7 @@ test('the save slots: a save from before them becomes slot 1', async () => {
 
 test('once every unique treasure here is found, a treasure roll brings up junk (D75)', async () => {
   const { content } = await import('../src/generated/content.js');
-  const found = Object.fromEntries(content.locations.lake.treasure.map((/** @type {{ id: string }} */ e) => [e.id, 1]));
+  const found = Object.fromEntries(content.tables['common-treasure'].entries.map((/** @type {{ id: string }} */ e) => [e.id, 1]));
   const { cast } = castUntil({ ...game(12), found }, (c) =>
     c.rolls.some((r) => r.kind === 'treasure' && r.total <= content.locations.lake.treasureThreshold),
   );
@@ -441,6 +444,57 @@ test('a save from version 2 gets the seven slots; equipped bait moves out of the
   const migrated = deserialize(JSON.stringify(v2));
   assert.deepEqual(migrated.equipped, { rod: { id: 'stick', count: 1 }, line: null, bobber: null, bait: { id: 'bread-crumbs', count: 4 }, hat: null, trinket1: null, trinket2: null });
   assert.deepEqual(migrated.bags, [{ id: 'bent-fork', count: 1 }]);
+});
+
+test('a save from version 5 loses the deleted fish and spots (D101)', () => {
+  const fish = (/** @type {string} */ species) => ({ species, subname: 0, band: 2, size: 30, difficulty: 2, xp: 2, rarity: 'common' });
+  const record = { size: 30, location: 'lake', spot: null, time: 0, weather: { season: 'spring', cell: 0 } };
+  const v5 = {
+    ...game(17),
+    version: 5,
+    spot: 'crossroads',
+    features: [{ id: 'roach-school', x: 120, y: 100, uses: 2, castsLeft: 10, born: 0 }],
+    bucket: [{ fish: fish('pike'), count: 1 }, { fish: fish('roach'), count: 2 }],
+    escaped: { lake: [{ ...fish('cod'), tries: 1 }, { ...fish('roach'), tries: 1 }] },
+    pendingCatch: fish('sturgeon'),
+    book: { casts: 9, catches: 4, fish: { pike: { caught: 2, totalSize: 60, smallest: record, largest: record, mostTries: 0 }, roach: { caught: 2, totalSize: 60, smallest: record, largest: record, mostTries: 0 } } },
+  };
+  const migrated = deserialize(JSON.stringify(v5));
+  assert.equal(migrated.version, SAVE_VERSION);
+  assert.deepEqual([migrated.location, migrated.spot], ['lake', 'reedy-shore'], 'off the deleted spot');
+  assert.deepEqual(migrated.features, [], 'the old water is left behind');
+  assert.deepEqual(migrated.bucket.map((b) => b.fish.species), ['roach'], 'the Roach kept its id');
+  assert.deepEqual(migrated.escaped.lake.map((f) => f.species), ['roach']);
+  assert.equal(migrated.pendingCatch, null);
+  assert.deepEqual(Object.keys(migrated.book.fish), ['roach']);
+  assert.equal(migrated.book.catches, 4, 'the totals stay');
+});
+
+test('a new game starts at the reedy shore; travel moves between spots, between casts (D101)', () => {
+  const start = game(18);
+  assert.deepEqual([start.location, start.spot], ['lake', 'reedy-shore']);
+  const withFeature = { ...start, features: [{ id: 'roach-school', x: 120, y: 100, uses: 2, castsLeft: 10, born: 0 }] };
+  const { state } = travel(withFeature, 'river', 'river-mouth');
+  assert.deepEqual([state.location, state.spot], ['river', 'river-mouth']);
+  assert.deepEqual(state.features, [], 'features stay with their water');
+  assert.equal(withFeature.spot, 'reedy-shore', 'the old state is untouched');
+  assert.equal(travel(start, 'lake', 'reedy-shore').state, start, 'staying put changes nothing');
+  // The river mouth's fish, never the reedy shore's.
+  const mouth = new Set(content.locations.river.spots[2].fish.map((/** @type {{ id: string }} */ f) => f.id));
+  let s = state;
+  for (let i = 0; i < 40; i++) {
+    const out = castLine(s, 0);
+    if (out.cast.line.kind === 'fish') assert.ok(mouth.has(out.cast.line.fish.species), out.cast.line.fish.species);
+    s = endEvent({ ...tick(out.state, out.cast, out.cast.biteAt + out.cast.timing.lateMs + 1).state, missStreak: 0, escaped: {} });
+  }
+});
+
+test("the bait on the hook is part of the moment fish prefer (D101)", () => {
+  const start = game(19);
+  assert.equal(momentOf(start).bait, null, 'no bait');
+  const baited = { ...start, equipped: { ...start.equipped, bait: { id: 'worms', count: 5 } } };
+  assert.equal(momentOf(baited).bait, 'worm');
+  assert.equal(momentOf(baited).partOfDay, clock(start.time).partOfDay);
 });
 
 test('no rod, no cast; the line and the bobber are optional (D83)', () => {
@@ -487,6 +541,21 @@ test('features appear on the water, drift, and go', () => {
   assert.ok(seen > 10 && gone > 5, `appeared ${seen}, gone ${gone}`);
 });
 
+test("a spot's own schools and big fish come up there, and the location's glint (D102)", () => {
+  const upper = content.locations.river.spots[0];
+  const allowed = new Set([...upper.features, ...content.locations.river.features].map((/** @type {{ id: string }} */ f) => f.id));
+  let state = travel(game(24), 'river', 'upper-river').state;
+  const seen = new Set();
+  for (let n = 0; n < 400; n++) {
+    const out = castLine(state, 0);
+    const done = tick(out.state, out.cast, out.cast.biteAt + out.cast.timing.lateMs + 1);
+    state = endEvent({ ...done.state, missStreak: 0 });
+    for (const e of done.events) if (e.type === 'feature-appeared') seen.add(e.feature);
+  }
+  assert.ok(seen.size >= 3, [...seen].join(', '));
+  for (const id of seen) assert.ok(allowed.has(id), id);
+});
+
 test('landing in a school brings up its fish, and fishes it out', () => {
   const state = { ...game(22), features: [{ id: 'roach-school', x: 120, y: 100, uses: 1, castsLeft: 10 }] };
   const out = castLine(state, 0, { aim: { x: 120, y: 100 }, bounds: water });
@@ -504,7 +573,7 @@ test('a big fish under the surface is at least Gigantic', () => {
     const state = { ...game(seed), features: [{ id: 'big-pike', x: 120, y: 100, uses: 1, castsLeft: 10 }] };
     const { cast } = castLine(state, 0, { aim: { x: 120, y: 100 }, bounds: water });
     if (cast.landing && Math.hypot(cast.landing.x - 120, cast.landing.y - 100) > 8) continue;
-    assert.ok(cast.line.kind === 'fish' && cast.line.fish.species === 'pike' && cast.line.fish.band >= 4);
+    assert.ok(cast.line.kind === 'fish' && cast.line.fish.species === 'northern-pike' && cast.line.fish.band >= 4);
   }
 });
 
@@ -548,7 +617,7 @@ test('letting the new fish go puts it back in the water here', () => {
   const { state, events } = releaseFish(out.state, 'new');
   assert.equal(state.pendingCatch, null);
   assert.equal(fishInBucket(state), 16);
-  assert.deepEqual(state.escaped.lake.at(-1), { ...fish, tries: 0 });
+  assert.deepEqual(state.escaped[POOL].at(-1), { ...fish, tries: 0 });
   assert.equal(events[0].type, 'released');
 });
 
@@ -559,5 +628,5 @@ test('letting a bucket fish go makes room for the new one', () => {
   assert.equal(fishInBucket(state), 16);
   assert.ok(state.bucket.some((b) => b.fish.size === fish?.size && b.fish.species === fish?.species));
   assert.ok(!state.bucket.some((b) => b.fish.size === 15 && b.fish.species === 'roach'), 'the first roach is gone');
-  assert.equal(state.escaped.lake.at(-1).size, 15);
+  assert.equal(state.escaped[POOL].at(-1).size, 15);
 });

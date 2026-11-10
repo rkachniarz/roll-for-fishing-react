@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "flies",
+  "category": "consumable",
+  "name": "Flies",
+  "rarity": "common",
+  "value": 1,
+  "slot": "bait",
+  "bait": "fly",
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 10
+    }
+  ],
+  "devOnly": true
+}

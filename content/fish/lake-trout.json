@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "lake-trout",
+  "name": "Lake trout",
+  "icon": "fish/lake-trout",
+  "size": {
+    "min": 40,
+    "max": 120
+  },
+  "difficulty": 1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "dawn",
+      "morning"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "autumn"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "golden-shiner",
+  "name": "Golden shiner",
+  "icon": "fish/golden-shiner",
+  "size": {
+    "min": 8,
+    "max": 25
+  },
+  "difficulty": -1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "morning"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "maggot"
+    ]
+  }
+}

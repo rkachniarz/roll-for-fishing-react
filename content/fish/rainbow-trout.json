@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "rainbow-trout",
+  "name": "Rainbow trout",
+  "icon": "fish/rainbow-trout",
+  "size": {
+    "min": 25,
+    "max": 90
+  },
+  "difficulty": 1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "fly"
+    ]
+  }
+}

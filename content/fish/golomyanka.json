@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "golomyanka",
+  "name": "Golomyanka",
+  "size": {
+    "min": 10,
+    "max": 21
+  },
+  "difficulty": -1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

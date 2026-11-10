@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "chain-pickerel",
+  "name": "Chain pickerel",
+  "icon": "fish/chain-pickerel",
+  "size": {
+    "min": 30,
+    "max": 75
+  },
+  "difficulty": 0,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "morning"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "lure"
+    ]
+  }
+}

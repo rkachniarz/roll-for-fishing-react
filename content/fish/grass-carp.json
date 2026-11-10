@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "grass-carp",
+  "name": "Grass carp",
+  "icon": "fish/grass-carp",
+  "size": {
+    "min": 50,
+    "max": 140
+  },
+  "difficulty": 2,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "noon",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "corn"
+    ]
+  }
+}

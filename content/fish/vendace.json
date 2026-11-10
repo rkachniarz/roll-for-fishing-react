@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "vendace",
+  "name": "Vendace",
+  "icon": "fish/vendace",
+  "size": {
+    "min": 10,
+    "max": 30
+  },
+  "difficulty": -1,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "evening",
+      "night"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "autumn"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

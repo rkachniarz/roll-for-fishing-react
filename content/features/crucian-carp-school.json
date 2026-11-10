@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "crucian-carp-school",
+  "name": "a school of crucian carp",
+  "kind": "school",
+  "radius": 14,
+  "uses": 4,
+  "lifetime": 24,
+  "drift": 4,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 40
+    }
+  ],
+  "fish": [
+    {
+      "id": "crucian-carp",
+      "weight": 1
+    }
+  ]
+}

@@ -18,6 +18,10 @@
       "description": "The equipment slot it goes in, if it can be equipped (R8.2, D83). Most items with effects are trinkets.",
       "enum": ["rod", "line", "bobber", "bait", "hat", "trinket"]
     },
+    "bait": {
+      "description": "A bait's kind, from rules/fish-preferences.json: the fish that prefer it are likelier (D101). Only for the bait slot.",
+      "$ref": "common.schema.json#/definitions/id"
+    },
     "bobber": {
       "description": "A bobber's looks (D83): colours in place of the red feather and the tan float. Bobbers are cosmetic.",
       "type": "object",

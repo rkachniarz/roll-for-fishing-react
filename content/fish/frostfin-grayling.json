@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "frostfin-grayling",
+  "name": "Frostfin grayling",
+  "icon": "fish/frostfin-grayling",
+  "size": {
+    "min": 20,
+    "max": 70
+  },
+  "difficulty": 0,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "fly"
+    ]
+  }
+}

@@ -14,7 +14,7 @@ import { diceFor } from './dice.js';
 import { content } from './generated/content.js';
 import { t, tParts } from './strings.js';
 import { newGame, levelFor } from './engine/state.js';
-import { MISS_LIMIT, cancelBuff, castLine, releaseFish, strikeLine, tick, tickBuffs, useAbility, valuesFor } from './engine/game.js';
+import { MISS_LIMIT, cancelBuff, castLine, releaseFish, strikeLine, tick, tickBuffs, travel, useAbility, valuesFor } from './engine/game.js';
 import { abilityStatus, activePerks } from './engine/abilities.js';
 import { createActionBar } from './ui/actionbar.js';
 import { className, classes, generateName, rollStats } from './engine/character.js';
@@ -724,7 +724,7 @@ function renderPane() {
       body.replaceChildren(...journalPane(s));
       break;
     case 'map':
-      body.replaceChildren(...mapPane(s));
+      body.replaceChildren(...mapPane(s, travelTo));
       break;
     case 'bucket':
       body.replaceChildren(...bucketPane(s, valuesFor(s, extraSources()).flat.bucketSize));
@@ -764,6 +764,29 @@ function renderBag() {
       renderBag();
     }),
   );
+}
+
+/**
+ * Going to another spot from the map pane (D101): only between casts, as
+ * with equipment, so a cast keeps its checkpoint (D74).
+ * @param {string} location
+ * @param {string} spot
+ */
+function travelTo(location, spot) {
+  if (!state) return;
+  if (lineOut()) {
+    showError($('errors'), t('error.busyTravel'));
+    return;
+  }
+  const out = travel(state, location, spot);
+  if (out.state === state) return;
+  state = out.state;
+  const where = content.locations[location].spots.find((/** @type {{ id: string }} */ s) => s.id === spot);
+  log.add(t('log.travel', { spot: t(where.name) }));
+  logEvents(out.events);
+  save(state);
+  render();
+  promptPlayer();
 }
 
 // ---------- Moving items: drag and drop, right-click (R8.1, R8.7; D83) ----------

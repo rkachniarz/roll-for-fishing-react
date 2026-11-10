@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "crayfish",
+  "category": "consumable",
+  "name": "Crayfish",
+  "rarity": "common",
+  "value": 1,
+  "slot": "bait",
+  "bait": "crayfish",
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 10
+    }
+  ],
+  "devOnly": true
+}

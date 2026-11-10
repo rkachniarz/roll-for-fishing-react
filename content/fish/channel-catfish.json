@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "channel-catfish",
+  "name": "Channel catfish",
+  "icon": "fish/channel-catfish",
+  "size": {
+    "min": 35,
+    "max": 120
+  },
+  "difficulty": 1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "rain"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

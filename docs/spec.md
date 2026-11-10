@@ -75,8 +75,8 @@ out; the splash only reveals the result. *(D63)*
 
 - **R3.1** **Bite or not:** whether a fish takes the bait at all. Fish Find (base plus modifiers) raises the chance. With no
   bite, the cast still resolves, via the non-fish table (R3.4). *(D20)*
-- **R3.2** **Which fish:** a weighted pick from the location and spot tables, with weights adjusted by the current weather
-  (§C.4).
+- **R3.2** **Which fish:** a weighted pick from the location and spot tables, each fish likelier when the time of day,
+  the weather, the season and the bait suit it (§C.4, D101).
 - **R3.3** **Size:** a size band (Tiny, Small, Medium, Large, Gigantic, Humongous), then a size in centimetres within that
   band's slice of the species' range. Bigger bands are harder to land.
 - **R3.4** **Something else:** when no fish is found, a roll on the location's non-fish table: nothing, trash, a quest item,
@@ -90,8 +90,8 @@ out; the splash only reveals the result. *(D63)*
 
 The game has no end goal; collecting is the long-term pull. *(D23)*
 
-- **R4.1** Each species has a name, subnames (Rainbow Trout, Northern Pike…), a size range in cm, a base difficulty, a
-  table weight, and weather preferences (§C.4).
+- **R4.1** Each species has a name, optional subnames, a size range in cm, a base difficulty, a rarity, and what it
+  prefers: parts of the day, weather, season, bait (§C.4, D101). Its weight is per spot.
 - **R4.2** The accomplishments book keeps, per species: number caught, smallest, largest and average size, with where,
   when and in what weather each record was set; per treasure: whether and where it was found, and how many; and overall
   casts and catch rate.
@@ -400,14 +400,16 @@ Levels 1, 3, 6 and 9 per class; even levels draw from the universal list. Cooldo
 | Fish and where to find them (compendium) | +30 Fish Find | Fish give 1 less XP |
 | Eight-leaf underwater clover | "Strong" advantage | +5 fish difficulty (and advantage doesn't stack yet: §C.2 Warrior L6) |
 
-### §C.4 The Lake
+### §C.4 The Lake and the River
 
-- **Fish:** Carp, Bass, Trout, Pike, Roach, Cod, Sturgeon, with sizes from 10–35 cm (Roach) to 50–300 cm (Sturgeon) and
-  weather preferences (e.g. Trout: +8 when the temperature is 9 or below, +5 when it's dry). The data is in
-  `content/fish/` and `content/locations/lake.json`; `dist/content-overview.html` (from `npm run content`) lists it.
-- **Spots:** by the crossroads, by the back of the inn, Old Man's Cove, the forest's edge, in deep reeds. Their tables are
-  still empty.
-- **Non-fish:** 38 junk items (Vendor trash, Soggy treasure map, Dwarven stein…) and the seven items in §C.3.
+- **Fish:** 80, from the owner's spawn table (D101), from the Central mudminnow (5–14 cm) to the Wels catfish
+  (80–270 cm), each with what it prefers. The data is in `content/fish/`; `dist/content-overview.html` (from
+  `npm run content`) lists it.
+- **Spots:** The Lake: the reedy shore (where a new game starts), the swamp, still water, the rocky shore, open water,
+  deep water. The River: the upper river, the lower river, the river mouth. Each holds its fish, rarer down the list:
+  `content/locations/`.
+- **Non-fish:** 38 junk items (Vendor trash, Soggy treasure map, Dwarven stein…) and the seven items in §C.3, shared by
+  both locations (`content/tables/`).
 
 ### §C.5 Weather
 

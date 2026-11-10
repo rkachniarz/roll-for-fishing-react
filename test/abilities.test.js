@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { content } from '../src/generated/content.js';
 import { newGame } from '../src/engine/state.js';
-import { castLine, strikeLine, tick, tickBuffs, useAbility, valuesFor } from '../src/engine/game.js';
+import { castLine, poolKey, strikeLine, tick, tickBuffs, useAbility, valuesFor } from '../src/engine/game.js';
 import { abilityStatus, activePerks, cooldownFor } from '../src/engine/abilities.js';
 
 /** @typedef {import('../src/engine/state.js').GameState} GameState */
@@ -121,11 +121,11 @@ test('Summon Fish makes a fish certain; Sleight of Hook rules one out', () => {
 
 test('Recall brings back a fish that got away', () => {
   let s = hero('fishing-wizard', { 1: 'summon-fish', 3: 'recall' });
-  const lost = { species: 'pike', subname: 0, band: 3, size: 60, difficulty: 9, xp: 9, rarity: 'common', tries: 1 };
-  s = { ...s, escaped: { [s.location]: [lost] } };
+  const lost = { species: 'northern-pike', subname: 0, band: 3, size: 60, difficulty: 9, xp: 9, rarity: 'common', tries: 1 };
+  s = { ...s, escaped: { [poolKey(s)]: [lost] } };
   s = useAbility(useAbility(s, 'summon-fish').state, 'recall').state;
   const { cast } = castLine(s, 0);
-  assert.equal(cast.line.kind === 'fish' && cast.line.fish.species, 'pike');
+  assert.equal(cast.line.kind === 'fish' && cast.line.fish.species, 'northern-pike');
 });
 
 test('Jump In lights up when a fish gets away, catches it, and goes dark with the next cast', () => {
@@ -137,11 +137,11 @@ test('Jump In lights up when a fish gets away, catches it, and goes dark with th
     if (resultOf(out) !== 'escaped') continue;
     assert.ok(out.events.some((e) => e.type === 'lit' && e.perk === 'jump-in'));
     const fish = s.lit['jump-in'].fish;
-    const pool = s.escaped[s.location].length;
+    const pool = s.escaped[poolKey(s)].length;
     const bucket = s.bucket.reduce((n, b) => n + b.count, 0);
     const used = useAbility(s, 'jump-in');
     assert.ok(used.events.some((e) => e.type === 'caught' && e.fish.species === fish?.species));
-    assert.equal(used.state.escaped[s.location].length, pool - 1);
+    assert.equal(used.state.escaped[poolKey(s)].length, pool - 1);
     assert.equal(used.state.bucket.reduce((n, b) => n + b.count, 0), bucket + 1);
     assert.deepEqual(used.state.cooldowns['jump-in'], { casts: 10 });
     assert.equal(used.state.lit['jump-in'], undefined);

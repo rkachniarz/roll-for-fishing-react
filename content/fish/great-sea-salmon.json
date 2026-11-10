@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "great-sea-salmon",
+  "name": "Great Sea salmon",
+  "icon": "fish/great-sea-salmon",
+  "size": {
+    "min": 50,
+    "max": 140
+  },
+  "difficulty": 2,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "dawn",
+      "morning"
+    ],
+    "weather": [
+      "rain"
+    ],
+    "season": [
+      "autumn"
+    ],
+    "bait": [
+      "fly"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "brown-bullhead",
+  "name": "Brown bullhead",
+  "icon": "fish/brown-bullhead",
+  "size": {
+    "min": 20,
+    "max": 50
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

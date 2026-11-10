@@ -110,9 +110,12 @@ export function updateFeatures(state, dice, { appear = true } = {}) {
 
   if (!appear) return events;
   const loc = content.locations[state.location];
-  if ((loc.features ?? []).length && state.features.length < (loc.maxFeatures ?? 0) && dice.roll100() <= (loc.featureChance ?? 0)) {
+  // The location's features and the spot's own: its schools and big fish (D102).
+  const spot = state.spot ? loc.spots?.find((/** @type {{ id: string }} */ s) => s.id === state.spot) : null;
+  const list = [...(loc.features ?? []), ...(spot?.features ?? [])];
+  if (list.length && state.features.length < (loc.maxFeatures ?? 0) && dice.roll100() <= (loc.featureChance ?? 0)) {
     const choice = pick(
-      loc.features.filter((/** @type {{ id: string }} */ e) => !content.features[e.id].retired),
+      list.filter((/** @type {{ id: string }} */ e) => !content.features[e.id].retired),
       dice,
     );
     if (choice) {

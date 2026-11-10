@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "bowfin",
+  "name": "Bowfin",
+  "icon": "fish/bowfin",
+  "size": {
+    "min": 40,
+    "max": 100
+  },
+  "difficulty": 1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "frog"
+    ]
+  }
+}

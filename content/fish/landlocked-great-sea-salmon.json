@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "landlocked-great-sea-salmon",
+  "name": "Landlocked Great Sea salmon",
+  "icon": "fish/great-sea-salmon",
+  "size": {
+    "min": 40,
+    "max": 90
+  },
+  "difficulty": 1,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "dawn",
+      "morning"
+    ],
+    "weather": [
+      "overcast",
+      "rain"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "lure"
+    ]
+  }
+}

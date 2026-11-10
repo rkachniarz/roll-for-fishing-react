@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "grayling",
+  "name": "Grayling",
+  "icon": "fish/grayling",
+  "size": {
+    "min": 20,
+    "max": 55
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "noon",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny",
+      "cloudy"
+    ],
+    "season": [
+      "autumn"
+    ],
+    "bait": [
+      "fly"
+    ]
+  }
+}

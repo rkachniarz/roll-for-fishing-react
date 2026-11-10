@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "perch",
+  "name": "Perch",
+  "icon": "fish/perch",
+  "size": {
+    "min": 10,
+    "max": 50
+  },
+  "difficulty": 0,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

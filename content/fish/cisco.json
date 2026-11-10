@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "cisco",
+  "name": "Cisco",
+  "icon": "fish/cisco",
+  "size": {
+    "min": 20,
+    "max": 55
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "dawn",
+      "evening"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "maggot"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "brook-trout",
+  "name": "Brook trout",
+  "icon": "fish/brook-trout",
+  "size": {
+    "min": 20,
+    "max": 60
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "dawn",
+      "evening"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "autumn"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

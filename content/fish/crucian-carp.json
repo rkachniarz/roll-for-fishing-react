@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "crucian-carp",
+  "name": "Crucian carp",
+  "icon": "fish/crucian-carp",
+  "size": {
+    "min": 10,
+    "max": 45
+  },
+  "difficulty": -1,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "morning",
+      "evening"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "bread"
+    ]
+  }
+}

@@ -4,175 +4,2010 @@
 
 export const content = {
   "fish": {
-    "bass": {
-      "id": "bass",
-      "name": "fish.bass.name",
-      "subnames": [
-        "fish.bass.subnames.0",
-        "fish.bass.subnames.1",
-        "fish.bass.subnames.2",
-        "fish.bass.subnames.3",
-        "fish.bass.subnames.4",
-        "fish.bass.subnames.5",
-        "fish.bass.subnames.6"
-      ],
+    "asp": {
+      "id": "asp",
+      "name": "fish.asp.name",
+      "icon": "fish/asp",
       "size": {
-        "min": 15,
-        "max": 60
+        "min": 40,
+        "max": 110
+      },
+      "difficulty": 1,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "lure"
+        ]
+      }
+    },
+    "barbel": {
+      "id": "barbel",
+      "name": "fish.barbel.name",
+      "icon": "fish/barbel",
+      "size": {
+        "min": 30,
+        "max": 100
       },
       "difficulty": 1,
       "rarity": "uncommon",
-      "weather": [
-        {
-          "param": "temperature",
-          "min": 9,
-          "bonus": 8
-        },
-        {
-          "param": "wind",
-          "max": 1,
-          "bonus": 5
-        }
-      ]
+      "prefers": {
+        "time": [
+          "evening",
+          "night"
+        ],
+        "weather": [
+          "rain"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "crayfish"
+        ]
+      }
     },
-    "carp": {
-      "id": "carp",
-      "name": "fish.carp.name",
-      "icon": "fish/carp",
-      "subnames": [
-        "fish.carp.subnames.0",
-        "fish.carp.subnames.1",
-        "fish.carp.subnames.2"
-      ],
+    "black-crappie": {
+      "id": "black-crappie",
+      "name": "fish.black-crappie.name",
+      "icon": "fish/black-crappie",
+      "size": {
+        "min": 15,
+        "max": 40
+      },
+      "difficulty": -1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "dawn",
+          "sunset"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "bleak": {
+      "id": "bleak",
+      "name": "fish.bleak.name",
+      "icon": "fish/bleak",
+      "size": {
+        "min": 8,
+        "max": 20
+      },
+      "difficulty": -2,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "noon",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
+    },
+    "bluegill": {
+      "id": "bluegill",
+      "name": "fish.bluegill.name",
+      "icon": "fish/bluegill",
+      "size": {
+        "min": 8,
+        "max": 30
+      },
+      "difficulty": -1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "fly"
+        ]
+      }
+    },
+    "bowfin": {
+      "id": "bowfin",
+      "name": "fish.bowfin.name",
+      "icon": "fish/bowfin",
+      "size": {
+        "min": 40,
+        "max": 100
+      },
+      "difficulty": 1,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "frog"
+        ]
+      }
+    },
+    "brook-trout": {
+      "id": "brook-trout",
+      "name": "fish.brook-trout.name",
+      "icon": "fish/brook-trout",
       "size": {
         "min": 20,
+        "max": 60
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "dawn",
+          "evening"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "brown-bullhead": {
+      "id": "brown-bullhead",
+      "name": "fish.brown-bullhead.name",
+      "icon": "fish/brown-bullhead",
+      "size": {
+        "min": 20,
+        "max": 50
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "brown-trout": {
+      "id": "brown-trout",
+      "name": "fish.brown-trout.name",
+      "icon": "fish/brown-trout",
+      "size": {
+        "min": 20,
+        "max": 80
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "dawn",
+          "sunset"
+        ],
+        "weather": [
+          "overcast",
+          "rain"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "fly"
+        ]
+      }
+    },
+    "burbot": {
+      "id": "burbot",
+      "name": "fish.burbot.name",
+      "icon": "fish/burbot",
+      "size": {
+        "min": 30,
+        "max": 100
+      },
+      "difficulty": 1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "weather": [
+          "snow"
+        ],
+        "season": [
+          "winter"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "cassalan-pike": {
+      "id": "cassalan-pike",
+      "name": "fish.cassalan-pike.name",
+      "icon": "fish/cassalan-pike",
+      "size": {
+        "min": 30,
+        "max": 110
+      },
+      "difficulty": 1,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "cassalan-sleeper": {
+      "id": "cassalan-sleeper",
+      "name": "fish.cassalan-sleeper.name",
+      "icon": "fish/cassalan-sleeper",
+      "size": {
+        "min": 8,
+        "max": 25
+      },
+      "difficulty": -1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "evening",
+          "night"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
+    },
+    "central-mudminnow": {
+      "id": "central-mudminnow",
+      "name": "fish.central-mudminnow.name",
+      "icon": "fish/central-mudminnow",
+      "size": {
+        "min": 5,
+        "max": 14
+      },
+      "difficulty": -2,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "evening",
+          "night"
+        ],
+        "season": [
+          "winter"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "chain-pickerel": {
+      "id": "chain-pickerel",
+      "name": "fish.chain-pickerel.name",
+      "icon": "fish/chain-pickerel",
+      "size": {
+        "min": 30,
+        "max": 75
+      },
+      "difficulty": 0,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "morning"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "lure"
+        ]
+      }
+    },
+    "channel-catfish": {
+      "id": "channel-catfish",
+      "name": "fish.channel-catfish.name",
+      "icon": "fish/channel-catfish",
+      "size": {
+        "min": 35,
         "max": 120
+      },
+      "difficulty": 1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "weather": [
+          "rain"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "chub": {
+      "id": "chub",
+      "name": "fish.chub.name",
+      "icon": "fish/chub",
+      "size": {
+        "min": 20,
+        "max": 70
       },
       "difficulty": 0,
       "rarity": "common",
-      "weather": [
-        {
-          "param": "temperature",
-          "min": 9,
-          "bonus": 10
-        }
-      ]
+      "prefers": {
+        "time": [
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "bread"
+        ]
+      }
     },
-    "cod": {
-      "id": "cod",
-      "name": "fish.cod.name",
-      "subnames": [
-        "fish.cod.subnames.0",
-        "fish.cod.subnames.1",
-        "fish.cod.subnames.2",
-        "fish.cod.subnames.3"
-      ],
+    "cisco": {
+      "id": "cisco",
+      "name": "fish.cisco.name",
+      "icon": "fish/cisco",
       "size": {
         "min": 20,
-        "max": 100
+        "max": 55
       },
-      "difficulty": 2,
-      "rarity": "uncommon"
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "dawn",
+          "evening"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "winter"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
     },
-    "pike": {
-      "id": "pike",
-      "name": "fish.pike.name",
-      "subnames": [
-        "fish.pike.subnames.0",
-        "fish.pike.subnames.1",
-        "fish.pike.subnames.2"
-      ],
+    "common-bream": {
+      "id": "common-bream",
+      "name": "fish.common-bream.name",
+      "icon": "fish/common-bream",
+      "size": {
+        "min": 25,
+        "max": 75
+      },
+      "difficulty": 0,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "evening",
+          "night"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
+    },
+    "common-carp": {
+      "id": "common-carp",
+      "name": "fish.common-carp.name",
+      "icon": "fish/carp",
       "size": {
         "min": 30,
-        "max": 150
+        "max": 110
+      },
+      "difficulty": 1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "night",
+          "dawn"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "corn"
+        ]
+      }
+    },
+    "crucian-carp": {
+      "id": "crucian-carp",
+      "name": "fish.crucian-carp.name",
+      "icon": "fish/crucian-carp",
+      "size": {
+        "min": 10,
+        "max": 45
+      },
+      "difficulty": -1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "morning",
+          "evening"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "bread"
+        ]
+      }
+    },
+    "dace": {
+      "id": "dace",
+      "name": "fish.dace.name",
+      "icon": "fish/dace",
+      "size": {
+        "min": 12,
+        "max": 30
+      },
+      "difficulty": -1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "morning"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
+    },
+    "deepwater-sculpin": {
+      "id": "deepwater-sculpin",
+      "name": "fish.deepwater-sculpin.name",
+      "icon": "fish/deepwater-sculpin",
+      "size": {
+        "min": 5,
+        "max": 23
+      },
+      "difficulty": -1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "bait": [
+          "shrimp"
+        ]
+      }
+    },
+    "ferrstad-carp": {
+      "id": "ferrstad-carp",
+      "name": "fish.ferrstad-carp.name",
+      "icon": "fish/ferrstad-carp",
+      "size": {
+        "min": 15,
+        "max": 45
+      },
+      "difficulty": -1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
+    },
+    "frostfin-char": {
+      "id": "frostfin-char",
+      "name": "fish.frostfin-char.name",
+      "icon": "fish/frostfin-char",
+      "size": {
+        "min": 25,
+        "max": 90
+      },
+      "difficulty": 1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "dawn",
+          "evening"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "shrimp"
+        ]
+      }
+    },
+    "frostfin-grayling": {
+      "id": "frostfin-grayling",
+      "name": "fish.frostfin-grayling.name",
+      "icon": "fish/frostfin-grayling",
+      "size": {
+        "min": 20,
+        "max": 70
+      },
+      "difficulty": 0,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "fly"
+        ]
+      }
+    },
+    "frostfin-sturgeon": {
+      "id": "frostfin-sturgeon",
+      "name": "fish.frostfin-sturgeon.name",
+      "icon": "fish/frostfin-sturgeon",
+      "size": {
+        "min": 80,
+        "max": 200
+      },
+      "difficulty": 2,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "golden-dorado": {
+      "id": "golden-dorado",
+      "name": "fish.golden-dorado.name",
+      "icon": "fish/golden-dorado",
+      "size": {
+        "min": 40,
+        "max": 100
+      },
+      "difficulty": 1,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "lure"
+        ]
+      }
+    },
+    "golden-shiner": {
+      "id": "golden-shiner",
+      "name": "fish.golden-shiner.name",
+      "icon": "fish/golden-shiner",
+      "size": {
+        "min": 8,
+        "max": 25
+      },
+      "difficulty": -1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "morning"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
+    },
+    "golomyanka": {
+      "id": "golomyanka",
+      "name": "fish.golomyanka.name",
+      "size": {
+        "min": 10,
+        "max": 21
+      },
+      "difficulty": -1,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "season": [
+          "winter"
+        ],
+        "bait": [
+          "shrimp"
+        ]
+      }
+    },
+    "grass-carp": {
+      "id": "grass-carp",
+      "name": "fish.grass-carp.name",
+      "icon": "fish/grass-carp",
+      "size": {
+        "min": 50,
+        "max": 140
+      },
+      "difficulty": 2,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "noon",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "corn"
+        ]
+      }
+    },
+    "grasslands-silverside": {
+      "id": "grasslands-silverside",
+      "name": "fish.grasslands-silverside.name",
+      "size": {
+        "min": 20,
+        "max": 50
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "winter"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "grayling": {
+      "id": "grayling",
+      "name": "fish.grayling.name",
+      "icon": "fish/grayling",
+      "size": {
+        "min": 20,
+        "max": 55
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "noon",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny",
+          "cloudy"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "fly"
+        ]
+      }
+    },
+    "great-sea-salmon": {
+      "id": "great-sea-salmon",
+      "name": "fish.great-sea-salmon.name",
+      "icon": "fish/great-sea-salmon",
+      "size": {
+        "min": 50,
+        "max": 140
       },
       "difficulty": 2,
       "rarity": "rare",
-      "weather": [
-        {
-          "param": "temperature",
-          "max": 7,
-          "bonus": 8
-        },
-        {
-          "param": "clouds",
-          "min": 2,
-          "bonus": 5
-        }
-      ]
+      "prefers": {
+        "time": [
+          "dawn",
+          "morning"
+        ],
+        "weather": [
+          "rain"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "fly"
+        ]
+      }
+    },
+    "gudgeon": {
+      "id": "gudgeon",
+      "name": "fish.gudgeon.name",
+      "icon": "fish/gudgeon",
+      "size": {
+        "min": 8,
+        "max": 20
+      },
+      "difficulty": -2,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "huchen": {
+      "id": "huchen",
+      "name": "fish.huchen.name",
+      "icon": "fish/huchen",
+      "size": {
+        "min": 60,
+        "max": 150
+      },
+      "difficulty": 2,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "dawn",
+          "sunset"
+        ],
+        "weather": [
+          "snow"
+        ],
+        "season": [
+          "winter"
+        ],
+        "bait": [
+          "lure"
+        ]
+      }
+    },
+    "ide": {
+      "id": "ide",
+      "name": "fish.ide.name",
+      "icon": "fish/ide",
+      "size": {
+        "min": 25,
+        "max": 80
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "fly"
+        ]
+      }
+    },
+    "lake-brown-trout": {
+      "id": "lake-brown-trout",
+      "name": "fish.lake-brown-trout.name",
+      "icon": "fish/brown-trout",
+      "size": {
+        "min": 35,
+        "max": 100
+      },
+      "difficulty": 1,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "dawn",
+          "sunset"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "lake-sturgeon": {
+      "id": "lake-sturgeon",
+      "name": "fish.lake-sturgeon.name",
+      "icon": "fish/lake-sturgeon",
+      "size": {
+        "min": 80,
+        "max": 220
+      },
+      "difficulty": 3,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "lake-trout": {
+      "id": "lake-trout",
+      "name": "fish.lake-trout.name",
+      "icon": "fish/lake-trout",
+      "size": {
+        "min": 40,
+        "max": 120
+      },
+      "difficulty": 1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "dawn",
+          "morning"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "lake-whitefish": {
+      "id": "lake-whitefish",
+      "name": "fish.lake-whitefish.name",
+      "icon": "fish/lake-whitefish",
+      "size": {
+        "min": 30,
+        "max": 80
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "winter"
+        ],
+        "bait": [
+          "shrimp"
+        ]
+      }
+    },
+    "landlocked-great-sea-salmon": {
+      "id": "landlocked-great-sea-salmon",
+      "name": "fish.landlocked-great-sea-salmon.name",
+      "icon": "fish/great-sea-salmon",
+      "size": {
+        "min": 40,
+        "max": 90
+      },
+      "difficulty": 1,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "dawn",
+          "morning"
+        ],
+        "weather": [
+          "overcast",
+          "rain"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "lure"
+        ]
+      }
+    },
+    "largemouth-bass": {
+      "id": "largemouth-bass",
+      "name": "fish.largemouth-bass.name",
+      "icon": "fish/largemouth-bass",
+      "size": {
+        "min": 25,
+        "max": 75
+      },
+      "difficulty": 0,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "dawn",
+          "sunset"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "frog"
+        ]
+      }
+    },
+    "lenok": {
+      "id": "lenok",
+      "name": "fish.lenok.name",
+      "icon": "fish/lenok",
+      "size": {
+        "min": 30,
+        "max": 75
+      },
+      "difficulty": 0,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "dawn",
+          "evening"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "fly"
+        ]
+      }
+    },
+    "mainland-bullhead": {
+      "id": "mainland-bullhead",
+      "name": "fish.mainland-bullhead.name",
+      "icon": "fish/mainland-bullhead",
+      "size": {
+        "min": 6,
+        "max": 18
+      },
+      "difficulty": -2,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "mainland-eel": {
+      "id": "mainland-eel",
+      "name": "fish.mainland-eel.name",
+      "size": {
+        "min": 40,
+        "max": 130
+      },
+      "difficulty": 1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "weather": [
+          "rain",
+          "storm"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "mainland-mudminnow": {
+      "id": "mainland-mudminnow",
+      "name": "fish.mainland-mudminnow.name",
+      "icon": "fish/mainland-mudminnow",
+      "size": {
+        "min": 5,
+        "max": 13
+      },
+      "difficulty": -2,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "evening"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
+    },
+    "mainland-whitefish": {
+      "id": "mainland-whitefish",
+      "name": "fish.mainland-whitefish.name",
+      "icon": "fish/mainland-whitefish",
+      "size": {
+        "min": 25,
+        "max": 70
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "morning"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "fly"
+        ]
+      }
+    },
+    "minnow": {
+      "id": "minnow",
+      "name": "fish.minnow.name",
+      "icon": "fish/minnow",
+      "size": {
+        "min": 5,
+        "max": 14
+      },
+      "difficulty": -2,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
+    },
+    "muskellunge": {
+      "id": "muskellunge",
+      "name": "fish.muskellunge.name",
+      "icon": "fish/muskellunge",
+      "size": {
+        "min": 70,
+        "max": 170
+      },
+      "difficulty": 2,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "sunset"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "lure"
+        ]
+      }
+    },
+    "nase": {
+      "id": "nase",
+      "name": "fish.nase.name",
+      "icon": "fish/nase",
+      "size": {
+        "min": 25,
+        "max": 55
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "noon",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "bread"
+        ]
+      }
+    },
+    "northern-pike": {
+      "id": "northern-pike",
+      "name": "fish.northern-pike.name",
+      "icon": "fish/northern-pike",
+      "size": {
+        "min": 40,
+        "max": 130
+      },
+      "difficulty": 1,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "northern-snakehead": {
+      "id": "northern-snakehead",
+      "name": "fish.northern-snakehead.name",
+      "icon": "fish/northern-snakehead",
+      "size": {
+        "min": 40,
+        "max": 100
+      },
+      "difficulty": 1,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "frog"
+        ]
+      }
+    },
+    "omul": {
+      "id": "omul",
+      "name": "fish.omul.name",
+      "icon": "fish/omul",
+      "size": {
+        "min": 25,
+        "max": 55
+      },
+      "difficulty": 0,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "evening",
+          "night"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "shrimp"
+        ]
+      }
+    },
+    "perch": {
+      "id": "perch",
+      "name": "fish.perch.name",
+      "icon": "fish/perch",
+      "size": {
+        "min": 10,
+        "max": 50
+      },
+      "difficulty": 0,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "pumpkinseed": {
+      "id": "pumpkinseed",
+      "name": "fish.pumpkinseed.name",
+      "icon": "fish/pumpkinseed",
+      "size": {
+        "min": 8,
+        "max": 25
+      },
+      "difficulty": -1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "noon",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "rainbow-trout": {
+      "id": "rainbow-trout",
+      "name": "fish.rainbow-trout.name",
+      "icon": "fish/rainbow-trout",
+      "size": {
+        "min": 25,
+        "max": 90
+      },
+      "difficulty": 1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "fly"
+        ]
+      }
     },
     "roach": {
       "id": "roach",
       "name": "fish.roach.name",
-      "subnames": [
-        "fish.roach.subnames.0",
-        "fish.roach.subnames.1",
-        "fish.roach.subnames.2"
-      ],
+      "icon": "fish/roach",
       "size": {
         "min": 10,
+        "max": 40
+      },
+      "difficulty": -1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
+    },
+    "rock-bass": {
+      "id": "rock-bass",
+      "name": "fish.rock-bass.name",
+      "icon": "fish/rock-bass",
+      "size": {
+        "min": 12,
+        "max": 30
+      },
+      "difficulty": -1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "evening"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "crayfish"
+        ]
+      }
+    },
+    "rudd": {
+      "id": "rudd",
+      "name": "fish.rudd.name",
+      "icon": "fish/rudd",
+      "size": {
+        "min": 10,
+        "max": 40
+      },
+      "difficulty": -1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "noon",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "bread"
+        ]
+      }
+    },
+    "ruffe": {
+      "id": "ruffe",
+      "name": "fish.ruffe.name",
+      "icon": "fish/ruffe",
+      "size": {
+        "min": 8,
+        "max": 25
+      },
+      "difficulty": -1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "evening",
+          "night"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "sauger": {
+      "id": "sauger",
+      "name": "fish.sauger.name",
+      "icon": "fish/sauger",
+      "size": {
+        "min": 25,
+        "max": 65
+      },
+      "difficulty": 0,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "dawn",
+          "sunset"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "winter"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "sea-lamprey": {
+      "id": "sea-lamprey",
+      "name": "fish.sea-lamprey.name",
+      "icon": "fish/sea-lamprey",
+      "size": {
+        "min": 40,
+        "max": 100
+      },
+      "difficulty": 1,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "silver-bream": {
+      "id": "silver-bream",
+      "name": "fish.silver-bream.name",
+      "icon": "fish/silver-bream",
+      "size": {
+        "min": 15,
         "max": 35
       },
       "difficulty": -1,
-      "rarity": "common"
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "maggot"
+        ]
+      }
     },
-    "sturgeon": {
-      "id": "sturgeon",
-      "name": "fish.sturgeon.name",
-      "subnames": [
-        "fish.sturgeon.subnames.0",
-        "fish.sturgeon.subnames.1",
-        "fish.sturgeon.subnames.2",
-        "fish.sturgeon.subnames.3",
-        "fish.sturgeon.subnames.4"
-      ],
+    "silver-carp": {
+      "id": "silver-carp",
+      "name": "fish.silver-carp.name",
+      "icon": "fish/silver-carp",
       "size": {
         "min": 50,
-        "max": 300
+        "max": 120
+      },
+      "difficulty": 1,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "noon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "bread"
+        ]
+      }
+    },
+    "smallmouth-bass": {
+      "id": "smallmouth-bass",
+      "name": "fish.smallmouth-bass.name",
+      "icon": "fish/smallmouth-bass",
+      "size": {
+        "min": 20,
+        "max": 65
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "sunny"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "crayfish"
+        ]
+      }
+    },
+    "smelt": {
+      "id": "smelt",
+      "name": "fish.smelt.name",
+      "icon": "fish/smelt",
+      "size": {
+        "min": 10,
+        "max": 30
+      },
+      "difficulty": -1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "shrimp"
+        ]
+      }
+    },
+    "sterlet": {
+      "id": "sterlet",
+      "name": "fish.sterlet.name",
+      "icon": "fish/sterlet",
+      "size": {
+        "min": 30,
+        "max": 100
+      },
+      "difficulty": 1,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "stone-loach": {
+      "id": "stone-loach",
+      "name": "fish.stone-loach.name",
+      "icon": "fish/stone-loach",
+      "size": {
+        "min": 6,
+        "max": 16
+      },
+      "difficulty": -2,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "taimen": {
+      "id": "taimen",
+      "name": "fish.taimen.name",
+      "icon": "fish/taimen",
+      "size": {
+        "min": 70,
+        "max": 180
+      },
+      "difficulty": 2,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "sunset",
+          "night"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "mouse"
+        ]
+      }
+    },
+    "tench": {
+      "id": "tench",
+      "name": "fish.tench.name",
+      "icon": "fish/tench",
+      "size": {
+        "min": 20,
+        "max": 65
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "dawn",
+          "evening"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "trahira": {
+      "id": "trahira",
+      "name": "fish.trahira.name",
+      "icon": "fish/trahira",
+      "size": {
+        "min": 30,
+        "max": 75
+      },
+      "difficulty": 0,
+      "rarity": "epic",
+      "prefers": {
+        "time": [
+          "evening",
+          "night"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "vendace": {
+      "id": "vendace",
+      "name": "fish.vendace.name",
+      "icon": "fish/vendace",
+      "size": {
+        "min": 10,
+        "max": 30
+      },
+      "difficulty": -1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "evening",
+          "night"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "shrimp"
+        ]
+      }
+    },
+    "walleye": {
+      "id": "walleye",
+      "name": "fish.walleye.name",
+      "icon": "fish/walleye",
+      "size": {
+        "min": 30,
+        "max": 80
+      },
+      "difficulty": 0,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "dawn",
+          "sunset"
+        ],
+        "weather": [
+          "overcast"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "weatherfish": {
+      "id": "weatherfish",
+      "name": "fish.weatherfish.name",
+      "icon": "fish/weatherfish",
+      "size": {
+        "min": 15,
+        "max": 30
+      },
+      "difficulty": -1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "weather": [
+          "storm"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "wels-catfish": {
+      "id": "wels-catfish",
+      "name": "fish.wels-catfish.name",
+      "icon": "fish/wels-catfish",
+      "size": {
+        "min": 80,
+        "max": 270
       },
       "difficulty": 3,
       "rarity": "rare",
-      "weather": [
-        {
-          "param": "temperature",
-          "max": 6,
-          "bonus": 8
-        },
-        {
-          "param": "precipitation",
-          "min": 2,
-          "bonus": 5
-        }
-      ]
+      "prefers": {
+        "time": [
+          "night"
+        ],
+        "weather": [
+          "storm"
+        ],
+        "season": [
+          "summer"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
     },
-    "trout": {
-      "id": "trout",
-      "name": "fish.trout.name",
-      "subnames": [
-        "fish.trout.subnames.0",
-        "fish.trout.subnames.1",
-        "fish.trout.subnames.2",
-        "fish.trout.subnames.3",
-        "fish.trout.subnames.4"
-      ],
+    "white-sucker": {
+      "id": "white-sucker",
+      "name": "fish.white-sucker.name",
+      "icon": "fish/white-sucker",
       "size": {
-        "min": 15,
-        "max": 80
+        "min": 25,
+        "max": 60
       },
-      "difficulty": 2,
+      "difficulty": 0,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "rain"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "wildlands-pejerrey": {
+      "id": "wildlands-pejerrey",
+      "name": "fish.wildlands-pejerrey.name",
+      "size": {
+        "min": 20,
+        "max": 45
+      },
+      "difficulty": -1,
       "rarity": "uncommon",
-      "weather": [
-        {
-          "param": "temperature",
-          "max": 9,
-          "bonus": 8
-        },
-        {
-          "param": "precipitation",
-          "max": 1,
-          "bonus": 5
-        }
-      ]
+      "prefers": {
+        "time": [
+          "afternoon"
+        ],
+        "weather": [
+          "windy"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
+    },
+    "wildlands-perch": {
+      "id": "wildlands-perch",
+      "name": "fish.wildlands-perch.name",
+      "icon": "fish/wildlands-perch",
+      "size": {
+        "min": 20,
+        "max": 45
+      },
+      "difficulty": -1,
+      "rarity": "rare",
+      "prefers": {
+        "time": [
+          "dawn",
+          "evening"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "season": [
+          "spring"
+        ],
+        "bait": [
+          "crayfish"
+        ]
+      }
+    },
+    "yellow-perch": {
+      "id": "yellow-perch",
+      "name": "fish.yellow-perch.name",
+      "icon": "fish/yellow-perch",
+      "size": {
+        "min": 10,
+        "max": 40
+      },
+      "difficulty": -1,
+      "rarity": "common",
+      "prefers": {
+        "time": [
+          "morning",
+          "afternoon"
+        ],
+        "weather": [
+          "cloudy"
+        ],
+        "bait": [
+          "worm"
+        ]
+      }
+    },
+    "zander": {
+      "id": "zander",
+      "name": "fish.zander.name",
+      "icon": "fish/zander",
+      "size": {
+        "min": 35,
+        "max": 100
+      },
+      "difficulty": 1,
+      "rarity": "uncommon",
+      "prefers": {
+        "time": [
+          "sunset",
+          "night"
+        ],
+        "weather": [
+          "overcast",
+          "fog"
+        ],
+        "season": [
+          "autumn"
+        ],
+        "bait": [
+          "small-fish"
+        ]
+      }
     }
   },
   "items": {
@@ -246,6 +2081,7 @@ export const content = {
       "rarity": "common",
       "value": 1,
       "slot": "bait",
+      "bait": "bread",
       "effects": [
         {
           "value": "fishFind",
@@ -281,6 +2117,22 @@ export const content = {
       "flavor": "item.clump-of-hair.flavor",
       "rarity": "poor",
       "value": 1
+    },
+    "crayfish": {
+      "id": "crayfish",
+      "category": "consumable",
+      "name": "item.crayfish.name",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bait",
+      "bait": "crayfish",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
+        }
+      ],
+      "devOnly": true
     },
     "crows-feather": {
       "id": "crows-feather",
@@ -373,6 +2225,22 @@ export const content = {
           "add": -2
         }
       ]
+    },
+    "flies": {
+      "id": "flies",
+      "category": "consumable",
+      "name": "item.flies.name",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bait",
+      "bait": "fly",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
+        }
+      ],
+      "devOnly": true
     },
     "four-leaf-underwater-clover": {
       "id": "four-leaf-underwater-clover",
@@ -518,6 +2386,38 @@ export const content = {
       "rarity": "poor",
       "value": 1
     },
+    "live-frog": {
+      "id": "live-frog",
+      "category": "consumable",
+      "name": "item.live-frog.name",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bait",
+      "bait": "frog",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
+        }
+      ],
+      "devOnly": true
+    },
+    "maggots": {
+      "id": "maggots",
+      "category": "consumable",
+      "name": "item.maggots.name",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bait",
+      "bait": "maggot",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
+        }
+      ],
+      "devOnly": true
+    },
     "mega-mass-fish-chum": {
       "id": "mega-mass-fish-chum",
       "category": "treasure",
@@ -541,6 +2441,22 @@ export const content = {
       "flavor": "item.moldy-piece-of-bread.flavor",
       "rarity": "poor",
       "value": 0
+    },
+    "mouse-fly": {
+      "id": "mouse-fly",
+      "category": "consumable",
+      "name": "item.mouse-fly.name",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bait",
+      "bait": "mouse",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
+        }
+      ],
+      "devOnly": true
     },
     "old-compass": {
       "id": "old-compass",
@@ -590,6 +2506,22 @@ export const content = {
       "rarity": "poor",
       "value": 2
     },
+    "shrimp": {
+      "id": "shrimp",
+      "category": "consumable",
+      "name": "item.shrimp.name",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bait",
+      "bait": "shrimp",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
+        }
+      ],
+      "devOnly": true
+    },
     "single-ball-bearing": {
       "id": "single-ball-bearing",
       "category": "junk",
@@ -630,6 +2562,22 @@ export const content = {
       "rarity": "poor",
       "value": 1
     },
+    "spinner-lure": {
+      "id": "spinner-lure",
+      "category": "consumable",
+      "name": "item.spinner-lure.name",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bait",
+      "bait": "lure",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
+        }
+      ],
+      "devOnly": true
+    },
     "stick": {
       "id": "stick",
       "category": "treasure",
@@ -655,6 +2603,22 @@ export const content = {
         {
           "value": "fishingSkill",
           "add": -1
+        }
+      ],
+      "devOnly": true
+    },
+    "sweetcorn": {
+      "id": "sweetcorn",
+      "category": "consumable",
+      "name": "item.sweetcorn.name",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bait",
+      "bait": "corn",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
         }
       ],
       "devOnly": true
@@ -718,6 +2682,22 @@ export const content = {
       "flavor": "item.wooden-figurine.flavor",
       "rarity": "poor",
       "value": 1
+    },
+    "worms": {
+      "id": "worms",
+      "category": "consumable",
+      "name": "item.worms.name",
+      "rarity": "common",
+      "value": 1,
+      "slot": "bait",
+      "bait": "worm",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
+        }
+      ],
+      "devOnly": true
     }
   },
   "locations": {
@@ -728,67 +2708,833 @@ export const content = {
       "treasureThreshold": 5,
       "featureChance": 12,
       "maxFeatures": 2,
-      "fish": [
-        {
-          "id": "carp",
-          "weight": 20
-        },
-        {
-          "id": "bass",
-          "weight": 10
-        },
-        {
-          "id": "trout",
-          "weight": 10
-        },
-        {
-          "id": "pike",
-          "weight": 10
-        },
-        {
-          "id": "roach",
-          "weight": 35
-        },
-        {
-          "id": "cod",
-          "weight": 10
-        },
-        {
-          "id": "sturgeon",
-          "weight": 5
-        }
-      ],
+      "fish": [],
       "treasure": [
         {
-          "id": "mega-mass-fish-chum",
-          "weight": 1
-        },
-        {
-          "id": "fishing-pole-laser-sight",
-          "weight": 1
-        },
-        {
-          "id": "heavy-bait",
-          "weight": 1
-        },
-        {
-          "id": "industrial-strength-gelatin",
-          "weight": 1
-        },
-        {
-          "id": "four-leaf-underwater-clover",
-          "weight": 1
-        },
-        {
-          "id": "fish-compendium",
-          "weight": 1
-        },
-        {
-          "id": "eight-leaf-underwater-clover",
-          "weight": 1
+          "table": "common-treasure"
         }
       ],
       "junk": [
+        {
+          "table": "common-junk"
+        }
+      ],
+      "emptyHook": 45,
+      "features": [
+        {
+          "id": "glint",
+          "weight": 2
+        }
+      ],
+      "events": [
+        {
+          "id": "frog",
+          "weight": 1
+        }
+      ],
+      "spots": [
+        {
+          "id": "reedy-shore",
+          "name": "location.lake.spots.reedy-shore.name",
+          "fish": [
+            {
+              "id": "roach",
+              "weight": 100
+            },
+            {
+              "id": "rudd",
+              "weight": 75
+            },
+            {
+              "id": "perch",
+              "weight": 56
+            },
+            {
+              "id": "yellow-perch",
+              "weight": 42
+            },
+            {
+              "id": "pumpkinseed",
+              "weight": 32
+            },
+            {
+              "id": "bluegill",
+              "weight": 24
+            },
+            {
+              "id": "golden-shiner",
+              "weight": 18
+            },
+            {
+              "id": "tench",
+              "weight": 13
+            },
+            {
+              "id": "northern-pike",
+              "weight": 10
+            },
+            {
+              "id": "largemouth-bass",
+              "weight": 8
+            },
+            {
+              "id": "common-carp",
+              "weight": 6
+            },
+            {
+              "id": "chain-pickerel",
+              "weight": 4
+            },
+            {
+              "id": "cassalan-pike",
+              "weight": 3
+            },
+            {
+              "id": "muskellunge",
+              "weight": 2
+            }
+          ],
+          "features": [
+            {
+              "id": "roach-school",
+              "weight": 5
+            },
+            {
+              "id": "rudd-school",
+              "weight": 4
+            },
+            {
+              "id": "perch-school",
+              "weight": 3
+            },
+            {
+              "id": "big-pike",
+              "weight": 1
+            },
+            {
+              "id": "big-largemouth-bass",
+              "weight": 1
+            },
+            {
+              "id": "big-chain-pickerel",
+              "weight": 1
+            },
+            {
+              "id": "big-cassalan-pike",
+              "weight": 1
+            },
+            {
+              "id": "big-muskellunge",
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "id": "swamp",
+          "name": "location.lake.spots.swamp.name",
+          "fish": [
+            {
+              "id": "crucian-carp",
+              "weight": 100
+            },
+            {
+              "id": "ferrstad-carp",
+              "weight": 75
+            },
+            {
+              "id": "central-mudminnow",
+              "weight": 56
+            },
+            {
+              "id": "weatherfish",
+              "weight": 42
+            },
+            {
+              "id": "brown-bullhead",
+              "weight": 32
+            },
+            {
+              "id": "tench",
+              "weight": 24
+            },
+            {
+              "id": "cassalan-sleeper",
+              "weight": 18
+            },
+            {
+              "id": "mainland-eel",
+              "weight": 13
+            },
+            {
+              "id": "bowfin",
+              "weight": 10
+            },
+            {
+              "id": "northern-snakehead",
+              "weight": 8
+            },
+            {
+              "id": "trahira",
+              "weight": 6
+            },
+            {
+              "id": "mainland-mudminnow",
+              "weight": 4
+            }
+          ],
+          "features": [
+            {
+              "id": "crucian-carp-school",
+              "weight": 5
+            },
+            {
+              "id": "ferrstad-carp-school",
+              "weight": 4
+            },
+            {
+              "id": "central-mudminnow-school",
+              "weight": 3
+            },
+            {
+              "id": "big-mainland-eel",
+              "weight": 1
+            },
+            {
+              "id": "big-bowfin",
+              "weight": 1
+            },
+            {
+              "id": "big-northern-snakehead",
+              "weight": 1
+            },
+            {
+              "id": "big-trahira",
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "id": "still-water",
+          "name": "location.lake.spots.still-water.name",
+          "fish": [
+            {
+              "id": "common-bream",
+              "weight": 100
+            },
+            {
+              "id": "silver-bream",
+              "weight": 75
+            },
+            {
+              "id": "common-carp",
+              "weight": 56
+            },
+            {
+              "id": "black-crappie",
+              "weight": 42
+            },
+            {
+              "id": "bluegill",
+              "weight": 32
+            },
+            {
+              "id": "ide",
+              "weight": 24
+            },
+            {
+              "id": "grasslands-silverside",
+              "weight": 18
+            },
+            {
+              "id": "largemouth-bass",
+              "weight": 13
+            },
+            {
+              "id": "zander",
+              "weight": 10
+            },
+            {
+              "id": "walleye",
+              "weight": 8
+            },
+            {
+              "id": "grass-carp",
+              "weight": 6
+            },
+            {
+              "id": "wels-catfish",
+              "weight": 4
+            }
+          ],
+          "features": [
+            {
+              "id": "common-bream-school",
+              "weight": 5
+            },
+            {
+              "id": "silver-bream-school",
+              "weight": 4
+            },
+            {
+              "id": "carp-school",
+              "weight": 3
+            },
+            {
+              "id": "big-black-crappie",
+              "weight": 4
+            },
+            {
+              "id": "big-grasslands-silverside",
+              "weight": 2
+            },
+            {
+              "id": "big-largemouth-bass",
+              "weight": 1
+            },
+            {
+              "id": "big-zander",
+              "weight": 1
+            },
+            {
+              "id": "big-walleye",
+              "weight": 1
+            },
+            {
+              "id": "big-wels-catfish",
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "id": "rocky-shore",
+          "name": "location.lake.spots.rocky-shore.name",
+          "fish": [
+            {
+              "id": "perch",
+              "weight": 100
+            },
+            {
+              "id": "yellow-perch",
+              "weight": 75
+            },
+            {
+              "id": "rock-bass",
+              "weight": 56
+            },
+            {
+              "id": "mainland-bullhead",
+              "weight": 42
+            },
+            {
+              "id": "smallmouth-bass",
+              "weight": 32
+            },
+            {
+              "id": "wildlands-perch",
+              "weight": 24
+            },
+            {
+              "id": "lake-brown-trout",
+              "weight": 18
+            },
+            {
+              "id": "burbot",
+              "weight": 13
+            },
+            {
+              "id": "frostfin-char",
+              "weight": 10
+            }
+          ],
+          "features": [
+            {
+              "id": "perch-school",
+              "weight": 5
+            },
+            {
+              "id": "yellow-perch-school",
+              "weight": 4
+            },
+            {
+              "id": "rock-bass-school",
+              "weight": 3
+            },
+            {
+              "id": "big-lake-brown-trout",
+              "weight": 2
+            },
+            {
+              "id": "big-burbot",
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "id": "open-water",
+          "name": "location.lake.spots.open-water.name",
+          "fish": [
+            {
+              "id": "bleak",
+              "weight": 100
+            },
+            {
+              "id": "smelt",
+              "weight": 75
+            },
+            {
+              "id": "vendace",
+              "weight": 56
+            },
+            {
+              "id": "cisco",
+              "weight": 42
+            },
+            {
+              "id": "mainland-whitefish",
+              "weight": 32
+            },
+            {
+              "id": "lake-whitefish",
+              "weight": 24
+            },
+            {
+              "id": "wildlands-pejerrey",
+              "weight": 18
+            },
+            {
+              "id": "omul",
+              "weight": 13
+            },
+            {
+              "id": "zander",
+              "weight": 10
+            },
+            {
+              "id": "walleye",
+              "weight": 8
+            },
+            {
+              "id": "silver-carp",
+              "weight": 6
+            },
+            {
+              "id": "landlocked-great-sea-salmon",
+              "weight": 4
+            },
+            {
+              "id": "lake-trout",
+              "weight": 3
+            }
+          ],
+          "features": [
+            {
+              "id": "bleak-school",
+              "weight": 5
+            },
+            {
+              "id": "smelt-school",
+              "weight": 4
+            },
+            {
+              "id": "vendace-school",
+              "weight": 3
+            },
+            {
+              "id": "big-wildlands-pejerrey",
+              "weight": 2
+            },
+            {
+              "id": "big-zander",
+              "weight": 1
+            },
+            {
+              "id": "big-walleye",
+              "weight": 1
+            },
+            {
+              "id": "big-landlocked-great-sea-salmon",
+              "weight": 1
+            },
+            {
+              "id": "big-lake-trout",
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "id": "deep-water",
+          "name": "location.lake.spots.deep-water.name",
+          "fish": [
+            {
+              "id": "ruffe",
+              "weight": 100
+            },
+            {
+              "id": "burbot",
+              "weight": 75
+            },
+            {
+              "id": "deepwater-sculpin",
+              "weight": 56
+            },
+            {
+              "id": "lake-trout",
+              "weight": 42
+            },
+            {
+              "id": "frostfin-char",
+              "weight": 32
+            },
+            {
+              "id": "wels-catfish",
+              "weight": 24
+            },
+            {
+              "id": "golomyanka",
+              "weight": 18
+            },
+            {
+              "id": "lake-sturgeon",
+              "weight": 13
+            },
+            {
+              "id": "frostfin-sturgeon",
+              "weight": 10
+            }
+          ],
+          "features": [
+            {
+              "id": "ruffe-school",
+              "weight": 5
+            },
+            {
+              "id": "big-burbot",
+              "weight": 4
+            },
+            {
+              "id": "deepwater-sculpin-school",
+              "weight": 3
+            },
+            {
+              "id": "big-lake-trout",
+              "weight": 4
+            },
+            {
+              "id": "big-wels-catfish",
+              "weight": 2
+            }
+          ]
+        }
+      ]
+    },
+    "river": {
+      "id": "river",
+      "name": "location.river.name",
+      "biteThreshold": 50,
+      "treasureThreshold": 5,
+      "featureChance": 12,
+      "maxFeatures": 2,
+      "fish": [],
+      "treasure": [
+        {
+          "table": "common-treasure"
+        }
+      ],
+      "junk": [
+        {
+          "table": "common-junk"
+        }
+      ],
+      "emptyHook": 45,
+      "features": [
+        {
+          "id": "glint",
+          "weight": 2
+        }
+      ],
+      "events": [
+        {
+          "id": "frog",
+          "weight": 1
+        }
+      ],
+      "spots": [
+        {
+          "id": "upper-river",
+          "name": "location.river.spots.upper-river.name",
+          "fish": [
+            {
+              "id": "minnow",
+              "weight": 100
+            },
+            {
+              "id": "mainland-bullhead",
+              "weight": 75
+            },
+            {
+              "id": "stone-loach",
+              "weight": 56
+            },
+            {
+              "id": "brown-trout",
+              "weight": 42
+            },
+            {
+              "id": "rainbow-trout",
+              "weight": 32
+            },
+            {
+              "id": "brook-trout",
+              "weight": 24
+            },
+            {
+              "id": "grayling",
+              "weight": 18
+            },
+            {
+              "id": "frostfin-grayling",
+              "weight": 13
+            },
+            {
+              "id": "lenok",
+              "weight": 10
+            },
+            {
+              "id": "great-sea-salmon",
+              "weight": 8
+            },
+            {
+              "id": "huchen",
+              "weight": 6
+            },
+            {
+              "id": "taimen",
+              "weight": 4
+            }
+          ],
+          "features": [
+            {
+              "id": "minnow-school",
+              "weight": 5
+            },
+            {
+              "id": "mainland-bullhead-school",
+              "weight": 4
+            },
+            {
+              "id": "stone-loach-school",
+              "weight": 3
+            },
+            {
+              "id": "big-huchen",
+              "weight": 1
+            },
+            {
+              "id": "big-taimen",
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "id": "lower-river",
+          "name": "location.river.spots.lower-river.name",
+          "fish": [
+            {
+              "id": "chub",
+              "weight": 100
+            },
+            {
+              "id": "dace",
+              "weight": 75
+            },
+            {
+              "id": "gudgeon",
+              "weight": 56
+            },
+            {
+              "id": "roach",
+              "weight": 42
+            },
+            {
+              "id": "barbel",
+              "weight": 32
+            },
+            {
+              "id": "nase",
+              "weight": 24
+            },
+            {
+              "id": "ide",
+              "weight": 18
+            },
+            {
+              "id": "common-bream",
+              "weight": 13
+            },
+            {
+              "id": "channel-catfish",
+              "weight": 10
+            },
+            {
+              "id": "asp",
+              "weight": 8
+            },
+            {
+              "id": "zander",
+              "weight": 6
+            },
+            {
+              "id": "sauger",
+              "weight": 4
+            },
+            {
+              "id": "golden-dorado",
+              "weight": 3
+            },
+            {
+              "id": "sterlet",
+              "weight": 2
+            },
+            {
+              "id": "lake-sturgeon",
+              "weight": 2
+            }
+          ],
+          "features": [
+            {
+              "id": "chub-school",
+              "weight": 5
+            },
+            {
+              "id": "dace-school",
+              "weight": 4
+            },
+            {
+              "id": "gudgeon-school",
+              "weight": 3
+            },
+            {
+              "id": "big-channel-catfish",
+              "weight": 1
+            },
+            {
+              "id": "big-asp",
+              "weight": 1
+            },
+            {
+              "id": "big-zander",
+              "weight": 1
+            },
+            {
+              "id": "big-sauger",
+              "weight": 1
+            },
+            {
+              "id": "big-golden-dorado",
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "id": "river-mouth",
+          "name": "location.river.spots.river-mouth.name",
+          "fish": [
+            {
+              "id": "bleak",
+              "weight": 100
+            },
+            {
+              "id": "smelt",
+              "weight": 75
+            },
+            {
+              "id": "white-sucker",
+              "weight": 56
+            },
+            {
+              "id": "ide",
+              "weight": 42
+            },
+            {
+              "id": "walleye",
+              "weight": 32
+            },
+            {
+              "id": "zander",
+              "weight": 24
+            },
+            {
+              "id": "mainland-eel",
+              "weight": 18
+            },
+            {
+              "id": "lake-brown-trout",
+              "weight": 13
+            },
+            {
+              "id": "great-sea-salmon",
+              "weight": 10
+            },
+            {
+              "id": "sea-lamprey",
+              "weight": 8
+            },
+            {
+              "id": "sterlet",
+              "weight": 6
+            },
+            {
+              "id": "lake-sturgeon",
+              "weight": 4
+            },
+            {
+              "id": "frostfin-sturgeon",
+              "weight": 3
+            }
+          ],
+          "features": [
+            {
+              "id": "bleak-school",
+              "weight": 5
+            },
+            {
+              "id": "smelt-school",
+              "weight": 4
+            },
+            {
+              "id": "white-sucker-school",
+              "weight": 3
+            },
+            {
+              "id": "big-walleye",
+              "weight": 3
+            },
+            {
+              "id": "big-zander",
+              "weight": 2
+            },
+            {
+              "id": "big-mainland-eel",
+              "weight": 2
+            },
+            {
+              "id": "big-lake-brown-trout",
+              "weight": 1
+            },
+            {
+              "id": "big-sea-lamprey",
+              "weight": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "tables": {
+    "common-junk": {
+      "id": "common-junk",
+      "kind": "items",
+      "entries": [
         {
           "id": "vendor-trash",
           "weight": 2
@@ -941,72 +3687,43 @@ export const content = {
           "id": "old-compass",
           "weight": 1
         }
-      ],
-      "emptyHook": 45,
-      "features": [
+      ]
+    },
+    "common-treasure": {
+      "id": "common-treasure",
+      "kind": "items",
+      "entries": [
         {
-          "id": "roach-school",
-          "weight": 5
-        },
-        {
-          "id": "carp-school",
-          "weight": 3
-        },
-        {
-          "id": "big-pike",
+          "id": "mega-mass-fish-chum",
           "weight": 1
         },
         {
-          "id": "glint",
-          "weight": 2
-        }
-      ],
-      "events": [
-        {
-          "id": "frog",
+          "id": "fishing-pole-laser-sight",
           "weight": 1
-        }
-      ],
-      "spots": [
-        {
-          "id": "crossroads",
-          "name": "location.lake.spots.crossroads.name",
-          "fish": [],
-          "treasure": [],
-          "junk": []
         },
         {
-          "id": "back-of-the-inn",
-          "name": "location.lake.spots.back-of-the-inn.name",
-          "fish": [],
-          "treasure": [],
-          "junk": []
+          "id": "heavy-bait",
+          "weight": 1
         },
         {
-          "id": "old-mans-cove",
-          "name": "location.lake.spots.old-mans-cove.name",
-          "fish": [],
-          "treasure": [],
-          "junk": []
+          "id": "industrial-strength-gelatin",
+          "weight": 1
         },
         {
-          "id": "forest-edge",
-          "name": "location.lake.spots.forest-edge.name",
-          "fish": [],
-          "treasure": [],
-          "junk": []
+          "id": "four-leaf-underwater-clover",
+          "weight": 1
         },
         {
-          "id": "deep-reeds",
-          "name": "location.lake.spots.deep-reeds.name",
-          "fish": [],
-          "treasure": [],
-          "junk": []
+          "id": "fish-compendium",
+          "weight": 1
+        },
+        {
+          "id": "eight-leaf-underwater-clover",
+          "weight": 1
         }
       ]
     }
   },
-  "tables": {},
   "weather": {
     "autumn": {
       "id": "autumn",
@@ -1071,6 +3788,9 @@ export const content = {
             3,
             0,
             1
+          ],
+          "tags": [
+            "fog"
           ]
         },
         {
@@ -1089,6 +3809,9 @@ export const content = {
             13,
             4,
             0
+          ],
+          "tags": [
+            "fog"
           ]
         },
         {
@@ -1110,6 +3833,9 @@ export const content = {
             14,
             15,
             5
+          ],
+          "tags": [
+            "fog"
           ]
         },
         {
@@ -1458,6 +4184,9 @@ export const content = {
             13,
             4,
             0
+          ],
+          "tags": [
+            "fog"
           ]
         },
         {
@@ -1577,6 +4306,9 @@ export const content = {
             2,
             1,
             8
+          ],
+          "tags": [
+            "snow"
           ]
         },
         {
@@ -1595,6 +4327,9 @@ export const content = {
             11,
             2,
             9
+          ],
+          "tags": [
+            "snow"
           ]
         },
         {
@@ -1613,6 +4348,9 @@ export const content = {
             12,
             3,
             2
+          ],
+          "tags": [
+            "snow"
           ]
         },
         {
@@ -1634,6 +4372,9 @@ export const content = {
             10,
             13,
             3
+          ],
+          "tags": [
+            "snow"
           ]
         },
         {
@@ -2152,6 +4893,9 @@ export const content = {
             0,
             6,
             7
+          ],
+          "tags": [
+            "fog"
           ]
         },
         {
@@ -2212,6 +4956,9 @@ export const content = {
             14,
             15,
             5
+          ],
+          "tags": [
+            "snow"
           ]
         },
         {
@@ -2230,6 +4977,9 @@ export const content = {
             15,
             16,
             17
+          ],
+          "tags": [
+            "snow"
           ]
         },
         {
@@ -2398,6 +5148,9 @@ export const content = {
             14,
             12,
             15
+          ],
+          "tags": [
+            "snow"
           ]
         },
         {
@@ -2416,6 +5169,9 @@ export const content = {
             15,
             11,
             16
+          ],
+          "tags": [
+            "snow"
           ]
         },
         {
@@ -2434,6 +5190,9 @@ export const content = {
             18,
             16,
             14
+          ],
+          "tags": [
+            "snow"
           ]
         },
         {
@@ -2553,6 +5312,397 @@ export const content = {
     }
   },
   "features": {
+    "big-asp": {
+      "id": "big-asp",
+      "name": "feature.big-asp.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "asp",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-black-crappie": {
+      "id": "big-black-crappie",
+      "name": "feature.big-black-crappie.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "black-crappie",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-bowfin": {
+      "id": "big-bowfin",
+      "name": "feature.big-bowfin.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "bowfin",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-burbot": {
+      "id": "big-burbot",
+      "name": "feature.big-burbot.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "burbot",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-cassalan-pike": {
+      "id": "big-cassalan-pike",
+      "name": "feature.big-cassalan-pike.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "cassalan-pike",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-chain-pickerel": {
+      "id": "big-chain-pickerel",
+      "name": "feature.big-chain-pickerel.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "chain-pickerel",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-channel-catfish": {
+      "id": "big-channel-catfish",
+      "name": "feature.big-channel-catfish.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "channel-catfish",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-golden-dorado": {
+      "id": "big-golden-dorado",
+      "name": "feature.big-golden-dorado.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "golden-dorado",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-grasslands-silverside": {
+      "id": "big-grasslands-silverside",
+      "name": "feature.big-grasslands-silverside.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "grasslands-silverside",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-huchen": {
+      "id": "big-huchen",
+      "name": "feature.big-huchen.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "huchen",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-lake-brown-trout": {
+      "id": "big-lake-brown-trout",
+      "name": "feature.big-lake-brown-trout.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "lake-brown-trout",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-lake-trout": {
+      "id": "big-lake-trout",
+      "name": "feature.big-lake-trout.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "lake-trout",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-landlocked-great-sea-salmon": {
+      "id": "big-landlocked-great-sea-salmon",
+      "name": "feature.big-landlocked-great-sea-salmon.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "landlocked-great-sea-salmon",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-largemouth-bass": {
+      "id": "big-largemouth-bass",
+      "name": "feature.big-largemouth-bass.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "largemouth-bass",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-mainland-eel": {
+      "id": "big-mainland-eel",
+      "name": "feature.big-mainland-eel.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "mainland-eel",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-muskellunge": {
+      "id": "big-muskellunge",
+      "name": "feature.big-muskellunge.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "muskellunge",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-northern-snakehead": {
+      "id": "big-northern-snakehead",
+      "name": "feature.big-northern-snakehead.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "northern-snakehead",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
     "big-pike": {
       "id": "big-pike",
       "name": "feature.big-pike.name",
@@ -2570,11 +5720,216 @@ export const content = {
       ],
       "fish": [
         {
-          "id": "pike",
+          "id": "northern-pike",
           "weight": 1
         }
       ],
       "minBand": "gigantic"
+    },
+    "big-sauger": {
+      "id": "big-sauger",
+      "name": "feature.big-sauger.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "sauger",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-sea-lamprey": {
+      "id": "big-sea-lamprey",
+      "name": "feature.big-sea-lamprey.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "sea-lamprey",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-taimen": {
+      "id": "big-taimen",
+      "name": "feature.big-taimen.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "taimen",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-trahira": {
+      "id": "big-trahira",
+      "name": "feature.big-trahira.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "trahira",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-walleye": {
+      "id": "big-walleye",
+      "name": "feature.big-walleye.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "walleye",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-wels-catfish": {
+      "id": "big-wels-catfish",
+      "name": "feature.big-wels-catfish.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "wels-catfish",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-wildlands-pejerrey": {
+      "id": "big-wildlands-pejerrey",
+      "name": "feature.big-wildlands-pejerrey.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "wildlands-pejerrey",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "big-zander": {
+      "id": "big-zander",
+      "name": "feature.big-zander.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "zander",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic"
+    },
+    "bleak-school": {
+      "id": "bleak-school",
+      "name": "feature.bleak-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "bleak",
+          "weight": 1
+        }
+      ]
     },
     "carp-school": {
       "id": "carp-school",
@@ -2592,7 +5947,154 @@ export const content = {
       ],
       "fish": [
         {
-          "id": "carp",
+          "id": "common-carp",
+          "weight": 1
+        }
+      ]
+    },
+    "central-mudminnow-school": {
+      "id": "central-mudminnow-school",
+      "name": "feature.central-mudminnow-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "central-mudminnow",
+          "weight": 1
+        }
+      ]
+    },
+    "chub-school": {
+      "id": "chub-school",
+      "name": "feature.chub-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "chub",
+          "weight": 1
+        }
+      ]
+    },
+    "common-bream-school": {
+      "id": "common-bream-school",
+      "name": "feature.common-bream-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "common-bream",
+          "weight": 1
+        }
+      ]
+    },
+    "crucian-carp-school": {
+      "id": "crucian-carp-school",
+      "name": "feature.crucian-carp-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "crucian-carp",
+          "weight": 1
+        }
+      ]
+    },
+    "dace-school": {
+      "id": "dace-school",
+      "name": "feature.dace-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "dace",
+          "weight": 1
+        }
+      ]
+    },
+    "deepwater-sculpin-school": {
+      "id": "deepwater-sculpin-school",
+      "name": "feature.deepwater-sculpin-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "deepwater-sculpin",
+          "weight": 1
+        }
+      ]
+    },
+    "ferrstad-carp-school": {
+      "id": "ferrstad-carp-school",
+      "name": "feature.ferrstad-carp-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "ferrstad-carp",
           "weight": 1
         }
       ]
@@ -2616,6 +6118,90 @@ export const content = {
         }
       ]
     },
+    "gudgeon-school": {
+      "id": "gudgeon-school",
+      "name": "feature.gudgeon-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "gudgeon",
+          "weight": 1
+        }
+      ]
+    },
+    "mainland-bullhead-school": {
+      "id": "mainland-bullhead-school",
+      "name": "feature.mainland-bullhead-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "mainland-bullhead",
+          "weight": 1
+        }
+      ]
+    },
+    "minnow-school": {
+      "id": "minnow-school",
+      "name": "feature.minnow-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "minnow",
+          "weight": 1
+        }
+      ]
+    },
+    "perch-school": {
+      "id": "perch-school",
+      "name": "feature.perch-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "perch",
+          "weight": 1
+        }
+      ]
+    },
     "roach-school": {
       "id": "roach-school",
       "name": "feature.roach-school.name",
@@ -2633,6 +6219,195 @@ export const content = {
       "fish": [
         {
           "id": "roach",
+          "weight": 1
+        }
+      ]
+    },
+    "rock-bass-school": {
+      "id": "rock-bass-school",
+      "name": "feature.rock-bass-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "rock-bass",
+          "weight": 1
+        }
+      ]
+    },
+    "rudd-school": {
+      "id": "rudd-school",
+      "name": "feature.rudd-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "rudd",
+          "weight": 1
+        }
+      ]
+    },
+    "ruffe-school": {
+      "id": "ruffe-school",
+      "name": "feature.ruffe-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "ruffe",
+          "weight": 1
+        }
+      ]
+    },
+    "silver-bream-school": {
+      "id": "silver-bream-school",
+      "name": "feature.silver-bream-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "silver-bream",
+          "weight": 1
+        }
+      ]
+    },
+    "smelt-school": {
+      "id": "smelt-school",
+      "name": "feature.smelt-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "smelt",
+          "weight": 1
+        }
+      ]
+    },
+    "stone-loach-school": {
+      "id": "stone-loach-school",
+      "name": "feature.stone-loach-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "stone-loach",
+          "weight": 1
+        }
+      ]
+    },
+    "vendace-school": {
+      "id": "vendace-school",
+      "name": "feature.vendace-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "vendace",
+          "weight": 1
+        }
+      ]
+    },
+    "white-sucker-school": {
+      "id": "white-sucker-school",
+      "name": "feature.white-sucker-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "white-sucker",
+          "weight": 1
+        }
+      ]
+    },
+    "yellow-perch-school": {
+      "id": "yellow-perch-school",
+      "name": "feature.yellow-perch-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "yellow-perch",
           "weight": 1
         }
       ]
@@ -2874,6 +6649,118 @@ export const content = {
     }
   },
   "rules": {
+    "fish-preferences": {
+      "id": "fish-preferences",
+      "factor": 2,
+      "baits": [
+        {
+          "id": "maggot",
+          "name": "rules.fish-preferences.baits.maggot.name"
+        },
+        {
+          "id": "bread",
+          "name": "rules.fish-preferences.baits.bread.name"
+        },
+        {
+          "id": "worm",
+          "name": "rules.fish-preferences.baits.worm.name"
+        },
+        {
+          "id": "fly",
+          "name": "rules.fish-preferences.baits.fly.name"
+        },
+        {
+          "id": "corn",
+          "name": "rules.fish-preferences.baits.corn.name"
+        },
+        {
+          "id": "frog",
+          "name": "rules.fish-preferences.baits.frog.name"
+        },
+        {
+          "id": "crayfish",
+          "name": "rules.fish-preferences.baits.crayfish.name"
+        },
+        {
+          "id": "shrimp",
+          "name": "rules.fish-preferences.baits.shrimp.name"
+        },
+        {
+          "id": "mouse",
+          "name": "rules.fish-preferences.baits.mouse.name"
+        },
+        {
+          "id": "lure",
+          "name": "rules.fish-preferences.baits.lure.name"
+        },
+        {
+          "id": "small-fish",
+          "name": "rules.fish-preferences.baits.small-fish.name"
+        }
+      ],
+      "weatherWords": [
+        {
+          "id": "sunny",
+          "name": "rules.fish-preferences.weatherWords.sunny.name",
+          "clouds": {
+            "max": 1
+          },
+          "precipitation": {
+            "max": 0
+          }
+        },
+        {
+          "id": "cloudy",
+          "name": "rules.fish-preferences.weatherWords.cloudy.name",
+          "clouds": {
+            "min": 2,
+            "max": 3
+          }
+        },
+        {
+          "id": "overcast",
+          "name": "rules.fish-preferences.weatherWords.overcast.name",
+          "clouds": {
+            "min": 4
+          }
+        },
+        {
+          "id": "rain",
+          "name": "rules.fish-preferences.weatherWords.rain.name",
+          "precipitation": {
+            "min": 2
+          },
+          "without": "snow"
+        },
+        {
+          "id": "storm",
+          "name": "rules.fish-preferences.weatherWords.storm.name",
+          "wind": {
+            "min": 3
+          },
+          "precipitation": {
+            "min": 3
+          }
+        },
+        {
+          "id": "windy",
+          "name": "rules.fish-preferences.weatherWords.windy.name",
+          "wind": {
+            "min": 3
+          }
+        },
+        {
+          "id": "fog",
+          "name": "rules.fish-preferences.weatherWords.fog.name",
+          "tag": "fog"
+        },
+        {
+          "id": "snow",
+          "name": "rules.fish-preferences.weatherWords.snow.name",
+          "tag": "snow"
+        }
+      ]
+    },
     "levels": {
       "id": "levels",
       "xp": [
@@ -2945,6 +6832,7 @@ export const content = {
     "new-game": {
       "id": "new-game",
       "location": "lake",
+      "spot": "reedy-shore",
       "weather": {
         "season": "spring",
         "cell": 0
@@ -3154,43 +7042,86 @@ export const content = {
 /** @type {Record<string, Record<string, string>>} */
 export const strings = {
   "en": {
-    "fish.bass.name": "Bass",
-    "fish.bass.subnames.0": "Largemouth",
-    "fish.bass.subnames.1": "Smallmouth",
-    "fish.bass.subnames.2": "Rock",
-    "fish.bass.subnames.3": "Striped",
-    "fish.bass.subnames.4": "Spotted",
-    "fish.bass.subnames.5": "White",
-    "fish.bass.subnames.6": "Yellow",
-    "fish.carp.name": "Carp",
-    "fish.carp.subnames.0": "Black",
-    "fish.carp.subnames.1": "Predatory",
-    "fish.carp.subnames.2": "Common",
-    "fish.cod.name": "Cod",
-    "fish.cod.subnames.0": "Murray",
-    "fish.cod.subnames.1": "Sleepy",
-    "fish.cod.subnames.2": "Trout",
-    "fish.cod.subnames.3": "Black",
-    "fish.pike.name": "Pike",
-    "fish.pike.subnames.0": "Northern",
-    "fish.pike.subnames.1": "Amur",
-    "fish.pike.subnames.2": "Killer",
+    "fish.asp.name": "Asp",
+    "fish.barbel.name": "Barbel",
+    "fish.black-crappie.name": "Black crappie",
+    "fish.bleak.name": "Bleak",
+    "fish.bluegill.name": "Bluegill",
+    "fish.bowfin.name": "Bowfin",
+    "fish.brook-trout.name": "Brook trout",
+    "fish.brown-bullhead.name": "Brown bullhead",
+    "fish.brown-trout.name": "Brown trout",
+    "fish.burbot.name": "Burbot",
+    "fish.cassalan-pike.name": "Cassalan pike",
+    "fish.cassalan-sleeper.name": "Cassalan sleeper",
+    "fish.central-mudminnow.name": "Central mudminnow",
+    "fish.chain-pickerel.name": "Chain pickerel",
+    "fish.channel-catfish.name": "Channel catfish",
+    "fish.chub.name": "Chub",
+    "fish.cisco.name": "Cisco",
+    "fish.common-bream.name": "Common bream",
+    "fish.common-carp.name": "Common carp",
+    "fish.crucian-carp.name": "Crucian carp",
+    "fish.dace.name": "Dace",
+    "fish.deepwater-sculpin.name": "Deepwater sculpin",
+    "fish.ferrstad-carp.name": "Ferrstad carp",
+    "fish.frostfin-char.name": "Frostfin char",
+    "fish.frostfin-grayling.name": "Frostfin grayling",
+    "fish.frostfin-sturgeon.name": "Frostfin sturgeon",
+    "fish.golden-dorado.name": "Golden dorado",
+    "fish.golden-shiner.name": "Golden shiner",
+    "fish.golomyanka.name": "Golomyanka",
+    "fish.grass-carp.name": "Grass carp",
+    "fish.grasslands-silverside.name": "Grasslands silverside",
+    "fish.grayling.name": "Grayling",
+    "fish.great-sea-salmon.name": "Great Sea salmon",
+    "fish.gudgeon.name": "Gudgeon",
+    "fish.huchen.name": "Huchen",
+    "fish.ide.name": "Ide",
+    "fish.lake-brown-trout.name": "Lake brown trout",
+    "fish.lake-sturgeon.name": "Lake sturgeon",
+    "fish.lake-trout.name": "Lake trout",
+    "fish.lake-whitefish.name": "Lake whitefish",
+    "fish.landlocked-great-sea-salmon.name": "Landlocked Great Sea salmon",
+    "fish.largemouth-bass.name": "Largemouth bass",
+    "fish.lenok.name": "Lenok",
+    "fish.mainland-bullhead.name": "Mainland bullhead",
+    "fish.mainland-eel.name": "Mainland eel",
+    "fish.mainland-mudminnow.name": "Mainland mudminnow",
+    "fish.mainland-whitefish.name": "Mainland whitefish",
+    "fish.minnow.name": "Minnow",
+    "fish.muskellunge.name": "Muskellunge",
+    "fish.nase.name": "Nase",
+    "fish.northern-pike.name": "Northern pike",
+    "fish.northern-snakehead.name": "Northern snakehead",
+    "fish.omul.name": "Omul",
+    "fish.perch.name": "Perch",
+    "fish.pumpkinseed.name": "Pumpkinseed",
+    "fish.rainbow-trout.name": "Rainbow trout",
     "fish.roach.name": "Roach",
-    "fish.roach.subnames.0": "Common",
-    "fish.roach.subnames.1": "White",
-    "fish.roach.subnames.2": "Pigo",
-    "fish.sturgeon.name": "Sturgeon",
-    "fish.sturgeon.subnames.0": "Beluga",
-    "fish.sturgeon.subnames.1": "Starry",
-    "fish.sturgeon.subnames.2": "Dwarf",
-    "fish.sturgeon.subnames.3": "Shovelnose",
-    "fish.sturgeon.subnames.4": "Shortnose",
-    "fish.trout.name": "Trout",
-    "fish.trout.subnames.0": "Brook",
-    "fish.trout.subnames.1": "Brown",
-    "fish.trout.subnames.2": "Bull",
-    "fish.trout.subnames.3": "Cutthroat",
-    "fish.trout.subnames.4": "Rainbow",
+    "fish.rock-bass.name": "Rock bass",
+    "fish.rudd.name": "Rudd",
+    "fish.ruffe.name": "Ruffe",
+    "fish.sauger.name": "Sauger",
+    "fish.sea-lamprey.name": "Sea lamprey",
+    "fish.silver-bream.name": "Silver bream",
+    "fish.silver-carp.name": "Silver carp",
+    "fish.smallmouth-bass.name": "Smallmouth bass",
+    "fish.smelt.name": "Smelt",
+    "fish.sterlet.name": "Sterlet",
+    "fish.stone-loach.name": "Stone loach",
+    "fish.taimen.name": "Taimen",
+    "fish.tench.name": "Tench",
+    "fish.trahira.name": "Trahira",
+    "fish.vendace.name": "Vendace",
+    "fish.walleye.name": "Walleye",
+    "fish.weatherfish.name": "Weatherfish",
+    "fish.wels-catfish.name": "Wels catfish",
+    "fish.white-sucker.name": "White sucker",
+    "fish.wildlands-pejerrey.name": "Wildlands pejerrey",
+    "fish.wildlands-perch.name": "Wildlands perch",
+    "fish.yellow-perch.name": "Yellow perch",
+    "fish.zander.name": "Zander",
     "item.back-cover-of-a-spellbook.name": "Back cover of a spellbook",
     "item.back-cover-of-a-spellbook.flavor": "Looks like the thing exploded.",
     "item.beaten-up-spectacles.name": "Beaten up spectacles",
@@ -3213,6 +7144,7 @@ export const strings = {
     "item.candle-stump.flavor": "Waxy.",
     "item.clump-of-hair.name": "A clump of hair",
     "item.clump-of-hair.flavor": "You hope this was a wig.",
+    "item.crayfish.name": "Crayfish",
     "item.crows-feather.name": "A crow's feather",
     "item.crows-feather.flavor": "Chewed and ink-stained.",
     "item.decomposed-boot.name": "Decomposed boot",
@@ -3227,6 +7159,7 @@ export const strings = {
     "item.fish-compendium.flavor": "You now know so much about fish, there's not much else to learn.",
     "item.fishing-pole-laser-sight.name": "Fishing pole laser sight",
     "item.fishing-pole-laser-sight.flavor": "Now if only you could shoot at them...",
+    "item.flies.name": "Flies",
     "item.four-leaf-underwater-clover.name": "Four-leaf underwater clover",
     "item.four-leaf-underwater-clover.flavor": "You are so lucky, you only find the GOOD fish.",
     "item.freshwater-seaweed.name": "Freshwater seaweed",
@@ -3251,10 +7184,13 @@ export const strings = {
     "item.iron-key.flavor": "Surprisingly not rusted.",
     "item.leaky-waterskin.name": "Leaky waterskin",
     "item.leaky-waterskin.flavor": "Still holds some water!",
+    "item.live-frog.name": "Live frog",
+    "item.maggots.name": "Maggots",
     "item.mega-mass-fish-chum.name": "Mega Mass Fish Chum",
     "item.mega-mass-fish-chum.flavor": "Dad, should trout have biceps this huge?",
     "item.moldy-piece-of-bread.name": "Moldy piece of bread",
     "item.moldy-piece-of-bread.flavor": "A whole ecosystem in this one.",
+    "item.mouse-fly.name": "Mouse fly",
     "item.old-compass.name": "An old compass",
     "item.old-compass.flavor": "The needle won't stop spinning.",
     "item.old-skull.name": "Old skull",
@@ -3267,6 +7203,7 @@ export const strings = {
     "item.rusted-chain.flavor": "Three links long.",
     "item.rusted-saucepan.name": "Rusted saucepan",
     "item.rusted-saucepan.flavor": "Contains mud sauce.",
+    "item.shrimp.name": "Shrimp",
     "item.single-ball-bearing.name": "A single ball bearing",
     "item.single-ball-bearing.flavor": "How did you even get it on a hook?",
     "item.small-bag-of-tiny-rocks.name": "A small bag of tiny rocks",
@@ -3277,10 +7214,12 @@ export const strings = {
     "item.snail-shell.flavor": "Pretty.",
     "item.soggy-treasure-map.name": "Soggy treasure map",
     "item.soggy-treasure-map.flavor": "If you look really closely, you can make out a fading X.",
+    "item.spinner-lure.name": "Spinner lure",
     "item.stick.name": "A stick with some string tied to it",
     "item.stick.flavor": "Everyone starts somewhere.",
     "item.straw-hat.name": "Straw hat",
     "item.straw-hat.flavor": "Keeps the sun off, and most of the view.",
+    "item.sweetcorn.name": "Sweetcorn",
     "item.tangled-fishing-line.name": "Tangled fishing line",
     "item.tangled-fishing-line.flavor": "Impressively knotted.",
     "item.vendor-trash.name": "Vendor trash",
@@ -3293,12 +7232,18 @@ export const strings = {
     "item.willow-rod.flavor": "Bends without breaking. Mostly.",
     "item.wooden-figurine.name": "Wooden figurine",
     "item.wooden-figurine.flavor": "Half rotten remnants of a lesser deity.",
+    "item.worms.name": "Worms",
     "location.lake.name": "The Lake",
-    "location.lake.spots.crossroads.name": "by the crossroads",
-    "location.lake.spots.back-of-the-inn.name": "by the back of the inn",
-    "location.lake.spots.old-mans-cove.name": "Old Man's Cove",
-    "location.lake.spots.forest-edge.name": "forest's edge",
-    "location.lake.spots.deep-reeds.name": "in deep reeds",
+    "location.lake.spots.reedy-shore.name": "the reedy shore",
+    "location.lake.spots.swamp.name": "the swamp",
+    "location.lake.spots.still-water.name": "still water",
+    "location.lake.spots.rocky-shore.name": "the rocky shore",
+    "location.lake.spots.open-water.name": "open water",
+    "location.lake.spots.deep-water.name": "deep water",
+    "location.river.name": "The River",
+    "location.river.spots.upper-river.name": "the upper river",
+    "location.river.spots.lower-river.name": "the lower river",
+    "location.river.spots.river-mouth.name": "the river mouth",
     "weather.autumn.name": "Autumn",
     "weather.autumn.weathers.0.name": "Humid and cloudy",
     "weather.autumn.weathers.1.name": "Sunny and clear",
@@ -3468,10 +7413,56 @@ export const strings = {
     "class.rogue-fisher.name.m": "Rogue Fisherman",
     "class.rogue-fisher.name.f": "Rogue Fisherwoman",
     "class.rogue-fisher.description": "Has an eye for anything that glints: the most Treasure Find.",
+    "feature.big-asp.name": "a big asp just under the surface",
+    "feature.big-black-crappie.name": "a big black crappie just under the surface",
+    "feature.big-bowfin.name": "a big bowfin just under the surface",
+    "feature.big-burbot.name": "a big burbot just under the surface",
+    "feature.big-cassalan-pike.name": "a big Cassalan pike just under the surface",
+    "feature.big-chain-pickerel.name": "a big chain pickerel just under the surface",
+    "feature.big-channel-catfish.name": "a big channel catfish just under the surface",
+    "feature.big-golden-dorado.name": "a big golden dorado just under the surface",
+    "feature.big-grasslands-silverside.name": "a big Grasslands silverside just under the surface",
+    "feature.big-huchen.name": "a big huchen just under the surface",
+    "feature.big-lake-brown-trout.name": "a big lake brown trout just under the surface",
+    "feature.big-lake-trout.name": "a big lake trout just under the surface",
+    "feature.big-landlocked-great-sea-salmon.name": "a big landlocked Great Sea salmon just under the surface",
+    "feature.big-largemouth-bass.name": "a big largemouth bass just under the surface",
+    "feature.big-mainland-eel.name": "a big Mainland eel just under the surface",
+    "feature.big-muskellunge.name": "a big muskellunge just under the surface",
+    "feature.big-northern-snakehead.name": "a big northern snakehead just under the surface",
     "feature.big-pike.name": "a big pike just under the surface",
+    "feature.big-sauger.name": "a big sauger just under the surface",
+    "feature.big-sea-lamprey.name": "a big sea lamprey just under the surface",
+    "feature.big-taimen.name": "a big taimen just under the surface",
+    "feature.big-trahira.name": "a big trahira just under the surface",
+    "feature.big-walleye.name": "a big walleye just under the surface",
+    "feature.big-wels-catfish.name": "a big wels catfish just under the surface",
+    "feature.big-wildlands-pejerrey.name": "a big Wildlands pejerrey just under the surface",
+    "feature.big-zander.name": "a big zander just under the surface",
+    "feature.bleak-school.name": "a school of bleak",
     "feature.carp-school.name": "a school of carp",
+    "feature.central-mudminnow-school.name": "a school of central mudminnow",
+    "feature.chub-school.name": "a school of chub",
+    "feature.common-bream-school.name": "a school of common bream",
+    "feature.crucian-carp-school.name": "a school of crucian carp",
+    "feature.dace-school.name": "a school of dace",
+    "feature.deepwater-sculpin-school.name": "a school of deepwater sculpin",
+    "feature.ferrstad-carp-school.name": "a school of Ferrstad carp",
     "feature.glint.name": "something glinting in the water",
+    "feature.gudgeon-school.name": "a school of gudgeon",
+    "feature.mainland-bullhead-school.name": "a school of Mainland bullhead",
+    "feature.minnow-school.name": "a school of minnow",
+    "feature.perch-school.name": "a school of perch",
     "feature.roach-school.name": "a school of roach",
+    "feature.rock-bass-school.name": "a school of rock bass",
+    "feature.rudd-school.name": "a school of rudd",
+    "feature.ruffe-school.name": "a school of ruffe",
+    "feature.silver-bream-school.name": "a school of silver bream",
+    "feature.smelt-school.name": "a school of smelt",
+    "feature.stone-loach-school.name": "a school of stone loach",
+    "feature.vendace-school.name": "a school of vendace",
+    "feature.white-sucker-school.name": "a school of white sucker",
+    "feature.yellow-perch-school.name": "a school of yellow perch",
     "perk.battle-focus.name": "Battle Focus",
     "perk.battle-focus.description": "Add your level to your Fishing Skill for the next cast.",
     "perk.bend-reality.name": "Bend Reality",
@@ -3512,6 +7503,25 @@ export const strings = {
     "perk.summon-fish.description": "A fish bites on your next cast, for certain.",
     "perk.trouble-magnet.name": "Trouble Magnet",
     "perk.trouble-magnet.description": "Things happen to you twice as often.",
+    "rules.fish-preferences.baits.maggot.name": "Maggot",
+    "rules.fish-preferences.baits.bread.name": "Bread",
+    "rules.fish-preferences.baits.worm.name": "Worm",
+    "rules.fish-preferences.baits.fly.name": "Fly",
+    "rules.fish-preferences.baits.corn.name": "Corn",
+    "rules.fish-preferences.baits.frog.name": "Frog",
+    "rules.fish-preferences.baits.crayfish.name": "Crayfish",
+    "rules.fish-preferences.baits.shrimp.name": "Shrimp",
+    "rules.fish-preferences.baits.mouse.name": "Mouse",
+    "rules.fish-preferences.baits.lure.name": "Lure",
+    "rules.fish-preferences.baits.small-fish.name": "Small fish",
+    "rules.fish-preferences.weatherWords.sunny.name": "Sunny",
+    "rules.fish-preferences.weatherWords.cloudy.name": "Cloudy",
+    "rules.fish-preferences.weatherWords.overcast.name": "Overcast",
+    "rules.fish-preferences.weatherWords.rain.name": "Rain",
+    "rules.fish-preferences.weatherWords.storm.name": "Storm",
+    "rules.fish-preferences.weatherWords.windy.name": "Windy",
+    "rules.fish-preferences.weatherWords.fog.name": "Fog",
+    "rules.fish-preferences.weatherWords.snow.name": "Snow",
     "rules.size-bands.bands.tiny.name": "Tiny",
     "rules.size-bands.bands.small.name": "Small",
     "rules.size-bands.bands.medium.name": "Medium",

@@ -18,6 +18,9 @@ a random morning, there's no money, and a few numbers and screens changed. Claud
 sheet at `art.html` and a way to draw sprites in MS Paint; its first trial asks how dense the reeds should be.
 **Phase 6 has begun (D96):** perks at levels 1–8, chosen in the character pane, and an action bar of abilities
 with cooldowns, two of which light up (Jump In, Gut). Some class perks still need new fish or more work (6.3).
+**The fish are the owner's (D101):** 80 species from the spawn table over nine spots, six at the Lake and three at a
+new River, each fish likelier in its own time of day, weather, season and bait, and with schools of each spot's commonest fish
+and its predators as big single fish (D102). The map pane lists the spots to go to.
 
 ## Where things are
 
@@ -146,7 +149,8 @@ Requirements R8.
   and the released fish joins the spot's escaped-fish pool (R8.3, R3.6, D24, D50, D57, D59).
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI.
 - [ ] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38).
-- [ ] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41, D61).
+- [ ] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41, D61). *Bait kinds
+  and placeholder baits are in (D101); still to do: a Tiny fish from the bucket on the hook, as "small fish".*
 
 ## Phase 6: Classes, levels, abilities, knowledge
 
@@ -165,6 +169,9 @@ attempt at a catch, the action bar under the button row, abilities that light up
   level-1 actives, Heavy Hand, Overwhelm, Battle Focus, Full Force, Recall, Sleight of Hook. Still to do: Rift Fishing
   and Greedy Fish (need new fish), Ever-Summoning, Bend Reality, Fence, Polish.
 - [ ] **6.4** Hidden rolls revealed by levels, perks and items (R5.2, Q-40): the number a fish needed from level 1.
+- [ ] **6.8** The fish's dice on the desk (D99), once 6.4 reveals its roll: its d20s thrown in from the top right,
+  as the player's come in from the bottom right, in the fish's own colour, `#31899F`, a deep-water teal. A roll
+  still hidden throws no fish dice.
 - [ ] **6.5** Class-flavoured texts (R6.5).
 
 ## Phase 7: Events
@@ -195,7 +202,8 @@ Requirements R10.
 Requirements R5.3, R11.
 
 - [ ] **8.1** Location switcher; each location's spot map, switching spots at any time, spots learned about before
-  they show; spot tables filled in (R11.8, D58).
+  they show; spot tables filled in (R11.8, D58). *The spot tables are filled in, and the map pane is a plain list of
+  every spot to go to (D101); the map itself and learning about spots are still to do.*
 - [ ] **8.2** Unlocks through map fragments and quests; the discovery meter.
 - [ ] **8.3** The town: inn and scrap dealer, copper; fish put into the inn's perpetual stew for a buff, stronger for
   rarer fish and longer for more fish (R11.5, R12.6, D24, D28, D37).
@@ -210,6 +218,10 @@ Requirements R5.3, R11.
 - [ ] **8.8** Raid supply orders in town: 10, 25 or 40 of one fish over several hand-ins, the progress shown, consumables
   and gear as the reward (needs 7.7, 7.8).
 - [ ] **8.9** Companions at the fishing spot: the cat, once it trusts the player.
+- [ ] **8.10** Fishing spots painted from the owner's photos (D97, D100), working from the pond trial on the art
+  sheet (`src/scene/pond.js`): a version per season for each spot, and the casting area (`WATER`) fitted to each.
+- [ ] **8.11** Weather on the spots (D100): clouds per weather (summer's heaped clouds, autumn's overcast so far), rain,
+  wind, light; each spot kept alive with moving plants and water.
 
 ## Phase 9: Content, balance, polish
 
@@ -219,6 +231,10 @@ Requirements R5.3, R11.
 - [ ] **9.2** Audio: water, splash, catch.
 - [ ] **9.3** More settings (sound, once there is any), save export/import. *(Settings and the theme landed with 3.8.)*
 - [ ] **9.4** Collection view, fish and treasure (R4.3).
+- [ ] **9.6** The dice's feel (D99): timing, where they land, the floating total; the open items on
+  `docs/REVIEW.md`. The ivory colour is settled.
+- [ ] **9.7** Fish icon polish: the eyes, one by one. They were placed by script (a 2×2 a tenth of the way in from the
+  snout), and some look comedic or out of place; then the weak icons on `docs/design/fish-image-hunt.md` (D97, D98).
 - [ ] **9.5** Installable and offline: web app manifest and service worker (R9.8, D55).
 
 ---

@@ -53,7 +53,7 @@ and the art sheet at `/art.html` there.
 | `src/dice.js` | The dice: `roll20`, `roll2d6`, `roll100`… |
 | `src/engine/cast.js` | One cast: waiting, bite, strike, reaction grade, the d20 roll |
 | `src/engine/values.js` | Game values and the effect vocabulary |
-| `src/engine/tables.js` | Weighted tables from a location's lists, with weather bonuses |
+| `src/engine/tables.js` | Weighted tables from a location's and spot's lists; what fish prefer (D101) |
 | `src/engine/fish.js` | One fish: species, subname, size band, size, difficulty, rarity |
 | `src/engine/state.js` | The game state: new game, saves and their migrations, the random streams |
 | `src/engine/game.js` | One cast from the game's side: the line, the strike, what it changes; buffs |

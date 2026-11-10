@@ -6,234 +6,19 @@
   "treasureThreshold": 5,
   "featureChance": 12,
   "maxFeatures": 2,
-  "fish": [
-    {
-      "id": "carp",
-      "weight": 20
-    },
-    {
-      "id": "bass",
-      "weight": 10
-    },
-    {
-      "id": "trout",
-      "weight": 10
-    },
-    {
-      "id": "pike",
-      "weight": 10
-    },
-    {
-      "id": "roach",
-      "weight": 35
-    },
-    {
-      "id": "cod",
-      "weight": 10
-    },
-    {
-      "id": "sturgeon",
-      "weight": 5
-    }
-  ],
+  "fish": [],
   "treasure": [
     {
-      "id": "mega-mass-fish-chum",
-      "weight": 1
-    },
-    {
-      "id": "fishing-pole-laser-sight",
-      "weight": 1
-    },
-    {
-      "id": "heavy-bait",
-      "weight": 1
-    },
-    {
-      "id": "industrial-strength-gelatin",
-      "weight": 1
-    },
-    {
-      "id": "four-leaf-underwater-clover",
-      "weight": 1
-    },
-    {
-      "id": "fish-compendium",
-      "weight": 1
-    },
-    {
-      "id": "eight-leaf-underwater-clover",
-      "weight": 1
+      "table": "common-treasure"
     }
   ],
   "junk": [
     {
-      "id": "vendor-trash",
-      "weight": 2
-    },
-    {
-      "id": "iron-dagger",
-      "weight": 2
-    },
-    {
-      "id": "soggy-treasure-map",
-      "weight": 2
-    },
-    {
-      "id": "bent-fork",
-      "weight": 2
-    },
-    {
-      "id": "leaky-waterskin",
-      "weight": 2
-    },
-    {
-      "id": "hempen-tangles",
-      "weight": 2
-    },
-    {
-      "id": "freshwater-seaweed",
-      "weight": 2
-    },
-    {
-      "id": "single-ball-bearing",
-      "weight": 2
-    },
-    {
-      "id": "candle-stump",
-      "weight": 2
-    },
-    {
-      "id": "empty-glass-flask",
-      "weight": 2
-    },
-    {
-      "id": "very-wet-jerky",
-      "weight": 2
-    },
-    {
-      "id": "ruined-playing-card",
-      "weight": 2
-    },
-    {
-      "id": "bit-of-oily-leather",
-      "weight": 1
-    },
-    {
-      "id": "crows-feather",
-      "weight": 2
-    },
-    {
-      "id": "clump-of-hair",
-      "weight": 2
-    },
-    {
-      "id": "back-cover-of-a-spellbook",
-      "weight": 1
-    },
-    {
-      "id": "snail-shell",
-      "weight": 1
-    },
-    {
-      "id": "decomposed-boot",
-      "weight": 2
-    },
-    {
-      "id": "rusted-saucepan",
-      "weight": 2
-    },
-    {
-      "id": "inch-sized-piece-of-a-ten-foot-pole",
-      "weight": 1
-    },
-    {
-      "id": "bit-of-scroll-parchment",
-      "weight": 1
-    },
-    {
-      "id": "waterlogged-stick",
-      "weight": 2
-    },
-    {
-      "id": "ruined-hat",
-      "weight": 1
-    },
-    {
-      "id": "old-skull",
-      "weight": 1
-    },
-    {
-      "id": "intact-fish-skeleton",
-      "weight": 1
-    },
-    {
-      "id": "iron-key",
-      "weight": 1
-    },
-    {
-      "id": "small-wheel",
-      "weight": 1
-    },
-    {
-      "id": "rusted-chain",
-      "weight": 1
-    },
-    {
-      "id": "humanoid-molar",
-      "weight": 1
-    },
-    {
-      "id": "brass-doorknob",
-      "weight": 1
-    },
-    {
-      "id": "small-bag-of-tiny-rocks",
-      "weight": 1
-    },
-    {
-      "id": "wooden-figurine",
-      "weight": 1
-    },
-    {
-      "id": "beaten-up-spectacles",
-      "weight": 1
-    },
-    {
-      "id": "dwarven-stein",
-      "weight": 1
-    },
-    {
-      "id": "broken-off-fishing-pole-tip",
-      "weight": 1
-    },
-    {
-      "id": "tangled-fishing-line",
-      "weight": 1
-    },
-    {
-      "id": "moldy-piece-of-bread",
-      "weight": 1
-    },
-    {
-      "id": "old-compass",
-      "weight": 1
+      "table": "common-junk"
     }
   ],
   "emptyHook": 45,
   "features": [
-    {
-      "id": "roach-school",
-      "weight": 5
-    },
-    {
-      "id": "carp-school",
-      "weight": 3
-    },
-    {
-      "id": "big-pike",
-      "weight": 1
-    },
     {
       "id": "glint",
       "weight": 2
@@ -247,39 +32,496 @@
   ],
   "spots": [
     {
-      "id": "crossroads",
-      "name": "by the crossroads",
-      "fish": [],
-      "treasure": [],
-      "junk": []
+      "id": "reedy-shore",
+      "name": "the reedy shore",
+      "fish": [
+        {
+          "id": "roach",
+          "weight": 100
+        },
+        {
+          "id": "rudd",
+          "weight": 75
+        },
+        {
+          "id": "perch",
+          "weight": 56
+        },
+        {
+          "id": "yellow-perch",
+          "weight": 42
+        },
+        {
+          "id": "pumpkinseed",
+          "weight": 32
+        },
+        {
+          "id": "bluegill",
+          "weight": 24
+        },
+        {
+          "id": "golden-shiner",
+          "weight": 18
+        },
+        {
+          "id": "tench",
+          "weight": 13
+        },
+        {
+          "id": "northern-pike",
+          "weight": 10
+        },
+        {
+          "id": "largemouth-bass",
+          "weight": 8
+        },
+        {
+          "id": "common-carp",
+          "weight": 6
+        },
+        {
+          "id": "chain-pickerel",
+          "weight": 4
+        },
+        {
+          "id": "cassalan-pike",
+          "weight": 3
+        },
+        {
+          "id": "muskellunge",
+          "weight": 2
+        }
+      ],
+      "features": [
+        {
+          "id": "roach-school",
+          "weight": 5
+        },
+        {
+          "id": "rudd-school",
+          "weight": 4
+        },
+        {
+          "id": "perch-school",
+          "weight": 3
+        },
+        {
+          "id": "big-pike",
+          "weight": 1
+        },
+        {
+          "id": "big-largemouth-bass",
+          "weight": 1
+        },
+        {
+          "id": "big-chain-pickerel",
+          "weight": 1
+        },
+        {
+          "id": "big-cassalan-pike",
+          "weight": 1
+        },
+        {
+          "id": "big-muskellunge",
+          "weight": 1
+        }
+      ]
     },
     {
-      "id": "back-of-the-inn",
-      "name": "by the back of the inn",
-      "fish": [],
-      "treasure": [],
-      "junk": []
+      "id": "swamp",
+      "name": "the swamp",
+      "fish": [
+        {
+          "id": "crucian-carp",
+          "weight": 100
+        },
+        {
+          "id": "ferrstad-carp",
+          "weight": 75
+        },
+        {
+          "id": "central-mudminnow",
+          "weight": 56
+        },
+        {
+          "id": "weatherfish",
+          "weight": 42
+        },
+        {
+          "id": "brown-bullhead",
+          "weight": 32
+        },
+        {
+          "id": "tench",
+          "weight": 24
+        },
+        {
+          "id": "cassalan-sleeper",
+          "weight": 18
+        },
+        {
+          "id": "mainland-eel",
+          "weight": 13
+        },
+        {
+          "id": "bowfin",
+          "weight": 10
+        },
+        {
+          "id": "northern-snakehead",
+          "weight": 8
+        },
+        {
+          "id": "trahira",
+          "weight": 6
+        },
+        {
+          "id": "mainland-mudminnow",
+          "weight": 4
+        }
+      ],
+      "features": [
+        {
+          "id": "crucian-carp-school",
+          "weight": 5
+        },
+        {
+          "id": "ferrstad-carp-school",
+          "weight": 4
+        },
+        {
+          "id": "central-mudminnow-school",
+          "weight": 3
+        },
+        {
+          "id": "big-mainland-eel",
+          "weight": 1
+        },
+        {
+          "id": "big-bowfin",
+          "weight": 1
+        },
+        {
+          "id": "big-northern-snakehead",
+          "weight": 1
+        },
+        {
+          "id": "big-trahira",
+          "weight": 1
+        }
+      ]
     },
     {
-      "id": "old-mans-cove",
-      "name": "Old Man's Cove",
-      "fish": [],
-      "treasure": [],
-      "junk": []
+      "id": "still-water",
+      "name": "still water",
+      "fish": [
+        {
+          "id": "common-bream",
+          "weight": 100
+        },
+        {
+          "id": "silver-bream",
+          "weight": 75
+        },
+        {
+          "id": "common-carp",
+          "weight": 56
+        },
+        {
+          "id": "black-crappie",
+          "weight": 42
+        },
+        {
+          "id": "bluegill",
+          "weight": 32
+        },
+        {
+          "id": "ide",
+          "weight": 24
+        },
+        {
+          "id": "grasslands-silverside",
+          "weight": 18
+        },
+        {
+          "id": "largemouth-bass",
+          "weight": 13
+        },
+        {
+          "id": "zander",
+          "weight": 10
+        },
+        {
+          "id": "walleye",
+          "weight": 8
+        },
+        {
+          "id": "grass-carp",
+          "weight": 6
+        },
+        {
+          "id": "wels-catfish",
+          "weight": 4
+        }
+      ],
+      "features": [
+        {
+          "id": "common-bream-school",
+          "weight": 5
+        },
+        {
+          "id": "silver-bream-school",
+          "weight": 4
+        },
+        {
+          "id": "carp-school",
+          "weight": 3
+        },
+        {
+          "id": "big-black-crappie",
+          "weight": 4
+        },
+        {
+          "id": "big-grasslands-silverside",
+          "weight": 2
+        },
+        {
+          "id": "big-largemouth-bass",
+          "weight": 1
+        },
+        {
+          "id": "big-zander",
+          "weight": 1
+        },
+        {
+          "id": "big-walleye",
+          "weight": 1
+        },
+        {
+          "id": "big-wels-catfish",
+          "weight": 1
+        }
+      ]
     },
     {
-      "id": "forest-edge",
-      "name": "forest's edge",
-      "fish": [],
-      "treasure": [],
-      "junk": []
+      "id": "rocky-shore",
+      "name": "the rocky shore",
+      "fish": [
+        {
+          "id": "perch",
+          "weight": 100
+        },
+        {
+          "id": "yellow-perch",
+          "weight": 75
+        },
+        {
+          "id": "rock-bass",
+          "weight": 56
+        },
+        {
+          "id": "mainland-bullhead",
+          "weight": 42
+        },
+        {
+          "id": "smallmouth-bass",
+          "weight": 32
+        },
+        {
+          "id": "wildlands-perch",
+          "weight": 24
+        },
+        {
+          "id": "lake-brown-trout",
+          "weight": 18
+        },
+        {
+          "id": "burbot",
+          "weight": 13
+        },
+        {
+          "id": "frostfin-char",
+          "weight": 10
+        }
+      ],
+      "features": [
+        {
+          "id": "perch-school",
+          "weight": 5
+        },
+        {
+          "id": "yellow-perch-school",
+          "weight": 4
+        },
+        {
+          "id": "rock-bass-school",
+          "weight": 3
+        },
+        {
+          "id": "big-lake-brown-trout",
+          "weight": 2
+        },
+        {
+          "id": "big-burbot",
+          "weight": 1
+        }
+      ]
     },
     {
-      "id": "deep-reeds",
-      "name": "in deep reeds",
-      "fish": [],
-      "treasure": [],
-      "junk": []
+      "id": "open-water",
+      "name": "open water",
+      "fish": [
+        {
+          "id": "bleak",
+          "weight": 100
+        },
+        {
+          "id": "smelt",
+          "weight": 75
+        },
+        {
+          "id": "vendace",
+          "weight": 56
+        },
+        {
+          "id": "cisco",
+          "weight": 42
+        },
+        {
+          "id": "mainland-whitefish",
+          "weight": 32
+        },
+        {
+          "id": "lake-whitefish",
+          "weight": 24
+        },
+        {
+          "id": "wildlands-pejerrey",
+          "weight": 18
+        },
+        {
+          "id": "omul",
+          "weight": 13
+        },
+        {
+          "id": "zander",
+          "weight": 10
+        },
+        {
+          "id": "walleye",
+          "weight": 8
+        },
+        {
+          "id": "silver-carp",
+          "weight": 6
+        },
+        {
+          "id": "landlocked-great-sea-salmon",
+          "weight": 4
+        },
+        {
+          "id": "lake-trout",
+          "weight": 3
+        }
+      ],
+      "features": [
+        {
+          "id": "bleak-school",
+          "weight": 5
+        },
+        {
+          "id": "smelt-school",
+          "weight": 4
+        },
+        {
+          "id": "vendace-school",
+          "weight": 3
+        },
+        {
+          "id": "big-wildlands-pejerrey",
+          "weight": 2
+        },
+        {
+          "id": "big-zander",
+          "weight": 1
+        },
+        {
+          "id": "big-walleye",
+          "weight": 1
+        },
+        {
+          "id": "big-landlocked-great-sea-salmon",
+          "weight": 1
+        },
+        {
+          "id": "big-lake-trout",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "deep-water",
+      "name": "deep water",
+      "fish": [
+        {
+          "id": "ruffe",
+          "weight": 100
+        },
+        {
+          "id": "burbot",
+          "weight": 75
+        },
+        {
+          "id": "deepwater-sculpin",
+          "weight": 56
+        },
+        {
+          "id": "lake-trout",
+          "weight": 42
+        },
+        {
+          "id": "frostfin-char",
+          "weight": 32
+        },
+        {
+          "id": "wels-catfish",
+          "weight": 24
+        },
+        {
+          "id": "golomyanka",
+          "weight": 18
+        },
+        {
+          "id": "lake-sturgeon",
+          "weight": 13
+        },
+        {
+          "id": "frostfin-sturgeon",
+          "weight": 10
+        }
+      ],
+      "features": [
+        {
+          "id": "ruffe-school",
+          "weight": 5
+        },
+        {
+          "id": "big-burbot",
+          "weight": 4
+        },
+        {
+          "id": "deepwater-sculpin-school",
+          "weight": 3
+        },
+        {
+          "id": "big-lake-trout",
+          "weight": 4
+        },
+        {
+          "id": "big-wels-catfish",
+          "weight": 2
+        }
+      ]
     }
   ]
 }

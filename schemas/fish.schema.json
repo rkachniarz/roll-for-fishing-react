@@ -23,24 +23,29 @@
       "description": "The species' rarity; the size band shifts it (D49, D63).",
       "$ref": "common.schema.json#/definitions/rarity"
     },
-    "weather": {
-      "description": "Added to the fish's weight in a table when the weather matches (§C.4).",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "param": { "enum": ["temperature", "wind", "clouds", "precipitation"] },
-          "min": { "type": "integer" },
-          "max": { "type": "integer" },
-          "bonus": { "type": "integer" }
+    "prefers": {
+      "description": "When the fish is likelier (D101): each preference the moment meets multiplies its weight in a table by the factor in rules/fish-preferences.json. Leave one out for no preference (\"Any\").",
+      "type": "object",
+      "properties": {
+        "time": {
+          "description": "Parts of the day (src/engine/time.js).",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["dawn", "morning", "noon", "afternoon", "sunset", "evening", "night"] }
         },
-        "required": ["param", "bonus"],
-        "additionalProperties": false
-      }
+        "weather": { "description": "Weather words from rules/fish-preferences.json.", "$ref": "#/definitions/ids" },
+        "season": { "description": "Season ids.", "$ref": "#/definitions/ids" },
+        "bait": { "description": "Bait kinds from rules/fish-preferences.json.", "$ref": "#/definitions/ids" }
+      },
+      "additionalProperties": false
     },
     "icon": { "$ref": "common.schema.json#/definitions/icon" },
     "retired": { "$ref": "common.schema.json#/definitions/retired" }
   },
   "required": ["id", "name", "size", "difficulty", "rarity"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "definitions": {
+    "ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "common.schema.json#/definitions/id" } }
+  }
 }

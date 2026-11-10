@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "black-crappie",
+  "name": "Black crappie",
+  "icon": "fish/black-crappie",
+  "size": {
+    "min": 15,
+    "max": 40
+  },
+  "difficulty": -1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "dawn",
+      "sunset"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

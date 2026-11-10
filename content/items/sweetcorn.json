@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "sweetcorn",
+  "category": "consumable",
+  "name": "Sweetcorn",
+  "rarity": "common",
+  "value": 1,
+  "slot": "bait",
+  "bait": "corn",
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 10
+    }
+  ],
+  "devOnly": true
+}

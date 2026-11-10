@@ -173,6 +173,15 @@ await check('panes over the scene', PHONE, '?seed=1', async (page) => {
   report('panes: the bag closes on its own', !(await page.isVisible('#bagPane')) && (await page.isVisible('#pane')));
 });
 
+await check('the map: going to another spot (D101)', PHONE, '?seed=1', async (page) => {
+  await page.click('#map');
+  report('map: the reedy shore is where a new game starts', (await page.textContent('.map-spot[aria-pressed="true"]')) === 'the reedy shore');
+  await page.click('.map-spot:has-text("the river mouth")');
+  report('map: a tap moves there', (await logText(page)).includes('You move to the river mouth.'));
+  report('map: and the pane shows it', (await page.textContent('.map-spot[aria-pressed="true"]')) === 'the river mouth');
+  await page.screenshot({ path: 'dist/verify/map.png' });
+});
+
 await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, tap) => {
   await tap();
   await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });

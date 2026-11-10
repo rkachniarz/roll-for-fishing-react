@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "zander",
+  "name": "Zander",
+  "icon": "fish/zander",
+  "size": {
+    "min": 35,
+    "max": 100
+  },
+  "difficulty": 1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "sunset",
+      "night"
+    ],
+    "weather": [
+      "overcast",
+      "fog"
+    ],
+    "season": [
+      "autumn"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

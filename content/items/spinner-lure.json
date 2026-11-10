@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "spinner-lure",
+  "category": "consumable",
+  "name": "Spinner lure",
+  "rarity": "common",
+  "value": 1,
+  "slot": "bait",
+  "bait": "lure",
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 10
+    }
+  ],
+  "devOnly": true
+}

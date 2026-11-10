@@ -24,13 +24,92 @@ Items with no note are left alone.
 
 Newest first.
 
+## 48 fish icons from Wikimedia Commons
+
+- **Picked by Claude from Commons**, the best of up to 12 candidates per fish, mostly old atlas plates and studio
+  shots; then cut out, drafted and given eyes as below. Licence, author and source of each are in
+  `docs/design/fish_refs_commons/credits.csv` (local only).
+- **Redone from better pictures:** the Roach, Perch, Yellow perch and Ferrstad carp, replacing their earlier icons.
+- **Turned by hand:** the Barbel (photo already slanted, so turned less) and the Wels catfish (it dives steeply in the
+  photo: mirrored and turned 58°, which leaves it thin).
+- **Still without an icon:** Mainland eel, Golomyanka, Grasslands silverside, Wildlands pejerrey. They and the weakest
+  icons are on the checklist `docs/design/fish-image-hunt.md` (local only).
+- The game build grew from 386 kB to 532 kB with the icons.
+
+## 28 more fish icons from Wikipedia photos
+
+- **Which photos:** of the 69 downloaded, only those showing the whole fish side-on: Cassalan pike, Frostfin char, Frostfin
+  grayling, Great Sea salmon, Black crappie, Bowfin, Brook trout, Brown bullhead, Brown trout, Central mudminnow,
+  Channel catfish, Cisco, Common bream, Mainland whitefish, Golden shiner, Grayling, Lake whitefish, Largemouth bass,
+  Ferrstad carp, Rudd, Sauger, Silver carp, Smallmouth bass, Walleye, White sucker, Yellow perch. Cut out with rembg
+  (a background remover), then the photo-to-icon tool. Fish facing right were mirrored.
+- **Two pairs share an icon,** since each pair shares a photo: Brown trout with Lake brown trout, Great Sea salmon with
+  Landlocked Great Sea salmon.
+- **The hand pass was a script, not by eye:** an eye on every fish, about a tenth of the length in from the snout. On a
+  light head it's dark with a light glint pixel; on a dark head, a light ring round a dark pupil. Speckles added to the
+  Black crappie and the Cassalan pike, whose drafts lost them. Colours aren't merged, and their comments ("upper flank",
+  "fin colour") come from how dark and how strong each one is, not from looking.
+- **Weakest:** the Ferrstad carp's eye is lost in its bright head; the Brown bullhead's is faint; the Black crappie,
+  Smallmouth bass and Walleye have lost most of their pattern; the Yellow perch is murky.
+- **Left out:** the Asp (the hands holding it survived the cut), the Ide (its photo crops the tail), and the Northern
+  pike, Pumpkinseed and Sterlet, whose drafts were muddy. 48 fish still have the default icon.
+
+## Three fish icons from Wikipedia photos (trial)
+
+- **Perch, zander, roach** are first drafts: the photos cut out with rembg (a background remover), then the
+  photo-to-icon tool and one hand pass. Drawn at 30 and padded, so nothing touches the edge.
+- **Guessed by hand:** every eye; the perch's bars and its red-orange fins (the draft's brown, made brighter); the
+  zander's saddles along the back; the roach's red iris.
+- **The zander photo faces right**, so it's mirrored: every icon has its head up and left (D98).
+- **The roach's tail is ragged** because the photo's is; the perch's photo is dark and underwater, so its icon is murky.
+
+## Schools and big fish per spot (D102)
+
+- **Who is a predator:** a fish that prefers small fish, frog, lure or mouse as bait. So the Perch, Rock bass and
+  Smallmouth bass (worm and crayfish) get schools, and the Burbot, second in deep water, is a single big fish instead.
+  The Black crappie, fourth in still water, surfaces as often as the third school there.
+- **Schools** copy the roach school: 4 casts into one, gone after 24 casts, +40 Fish Find. **Big fish** copy the big
+  pike: one cast, gone after 10, +100 Fish Find, at least Gigantic, swims off once if it gets away.
+- **How often:** the same 12% chance per cast as before, at most 2 on the water. A spot's schools weigh 5, 4 and 3;
+  each predator 1 to 4 by how common it is; the glint 2.
+
+## Fish and spots from your spawn table (D101)
+
+- **How rare down the list:** each rank is three quarters as likely as the one above: rank 1 is 100, rank 5 is 32,
+  rank 10 is 8, rank 14 is 2. So a spot's first fish is about 50 times as common as its 14th.
+- **How strong a preference is:** each one met doubles the fish's chances (`factor` in
+  `content/rules/fish-preferences.json`). A fish whose four preferences are all met is 16 times likelier. So the
+  Muskellunge, last at the reedy shore, outweighs a Bluegill (rank 6) at an overcast autumn sunset with a lure on.
+  Nothing makes a fish *less* likely out of its conditions.
+- **The weather words**, read off the four levels: *sunny* is clouds 0–1 with no rain; *cloudy* clouds 2–3;
+  *overcast* clouds 4 or more; *rain* precipitation 2 or more, but not snow; *storm* wind 3+ and precipitation 3+;
+  *windy* wind 3 or more. *Fog* and *snow* are marked on the weathers by name: fog on the mists, "Thick fog soup",
+  "Rain and fog" and "Cold fog wafts"; snow on the snowfalls, snowy rains and the Blizzard. Sleet and hail count as
+  rain. One weather can be several words: a Warm storm is overcast, rain, storm and windy.
+- **Sizes** in cm are Claude's figures for what an angler meets, not record sizes: e.g. Roach 10–40, Northern pike
+  40–130, Wels catfish 80–270, Lake sturgeon 80–220. All in the overview (`npm run content`, then
+  `dist/content-overview.html`).
+- **Difficulty** comes from the largest size: up to 20 cm is −2, 45 is −1, 80 is 0, 130 is 1, 200 is 2, above that 3.
+- **Rarity** comes from how far down its best spot's list a fish is: the top 30% common, to 60% uncommon, to 85% rare,
+  the rest epic. Your order decides it, so the Mainland mudminnow, last in the swamp, is epic, and the Burbot, second
+  in deep water, is common.
+- **Spot names** are placeholders: "the reedy shore", "the swamp", "still water", "the rocky shore", "open water",
+  "deep water", "the upper river", "the lower river", "the river mouth".
+- **The River has the lake's junk and treasure,** the same unique treasures (found once in either place), the glint,
+  and the frog.
+- **Placeholder baits**, dev-only: Maggots, Worms, Flies, Sweetcorn, Live frog, Crayfish, Shrimp, Mouse fly, Spinner
+  lure, each +10 Fish Find; Bread crumbs are now bread. They warn "an upside with no downside" (R8.5): is being used
+  up enough of a downside for bait?
+- **The map pane** lists every spot of both places, and a tap moves there, between casts only. Moving leaves the surface
+  features behind, and escaped fish stay in the spot they got away in.
+
 ## Dice over the scene (D99, branch `dice-on-the-desk`)
 
 - **Timing**: 0.7 s rolling, 0.55 s at rest, 0.2 s dithering away, so the catch flies about 1.45 s after the strike
   (`ROLL_MS`, `HOLD_MS`, `FADE_MS` in `src/scene/dice.js`). First guesses.
 - **The log waits for the dice**, so it doesn't give the result away before they land. The bucket's count and the XP
   bar don't wait; they change at the strike.
-- **The die**: ivory with dark ink, 35 pixels across, numbers in a 3×5 pixel font, upright on the page whichever way
+- **The die**: dark ink on ivory (the colour is settled), 35 pixels across, numbers in a 3×5 pixel font, upright on the page whichever way
   the face is turned. A natural 20's number is red, and its total floats up gold. The colours are `DICE_COLOURS`.
 - **Where**: thrown in from below the scene, a little from the right, to rest side by side in the lower middle of the
   play area, over the shore line. They never cover the bobber's usual spots, but they can cover the reeds' tips on a
@@ -57,8 +136,13 @@ Newest first.
 - **Eye level, or slightly from above?** `docs/art.md` says the view is "from the shore, looking out, slightly from
   above", and the game's scene is drawn that way: water filling most of the view, no sky. You said you always meant
   eye level. If so, that rule changes (a decision), and the game's scene with it. The pond is drawn at eye level.
-- **The sky is squeezed** compared with the photo (the horizon sits about a quarter of the way down, not 40%), so the
-  water gets more of the height. Water starts at row 122 of 256.
+- **The far shore is further off** (you asked): everything on it is drawn at 0.6 of its first size (`FAR`), with
+  smaller trees and more of them, and the water now starts at row 110 of 256, not 122. The sky gets the rows the
+  shore gave up.
+- **The reflection is toned down** (you asked): what's mirrored is mixed 45/55 with the water's own grey
+  (`REFLECTION`), then darkened towards the viewer, as in the photo. The water's colours are now the photo's soft
+  mauve-grey instead of the dark blue-grey, the shore's reflection a dull olive band. Glints and rings are lighter
+  to stand out on the lighter water.
 - **Fifty named colours,** far more than the game's scene uses, to get close to the photo. A real spot would want them
   cut down.
 - **Drawn in autumn colours,** against the rule that the art is drawn for a clear spring noon. The seasons' tints then
@@ -66,6 +150,23 @@ Newest first.
 - **A bobber at 150, 172** to show the scale. Casting doesn't work there: the engine's open water (`WATER`) belongs
   to the game's own view.
 - **The photo is kept in the repo** (`docs/design/photo-autumn-pond.jpg`, 1.3 MB) as the reference.
+- **Reeds in front, from a second photo** (`docs/design/photo-reeds.png`, placed by `sketch-pond-reeds.png`; both
+  local only): a clump of common reeds in the bottom-left corner, over the birch's foot and the log's end, and a lone
+  lighter reed at the bottom right. Leaves are drawn as curves that arch out and hang at the tip: a dark layer behind,
+  then mid, then a few lit ones in front, about one leaf in ten yellowing, a few thin brown plumes. The clump's leaves
+  lean right, the lone reed's left. Both sway one pixel per gust step. The colours (`reedLeaf*`, `reedPlume`,
+  `reedLime*` in `POND`) are picked by eye from the photo. They aren't mirrored in the water: their reflections would
+  fall below the frame.
+- **The pond in summer** (`POND_SUMMER`, `POND_SEASONS` in `src/scene/pond.js`; from
+  `docs/design/photo-summer-pond.png`, local only): the same painting and the same layout, with summer's own
+  colours and a few shape changes. The sky is blue with heaped clouds, greyer to the right. The birch is in full leaf,
+  a dense dark crown with lit leaves. The beech sprays reach further along the top and down the right. The hill and
+  bushes are fresh green, the reed bed is mostly green, and the water is dark slate blue. Only a few leaves float on
+  it, and there are twice as many glints for the wind. Colours are picked by eye from the photo. Left as they were:
+  the logs and sticks (the summer photo has a different floating log), the reed clump in front, and the lone reed.
+  Not tried: the photo's choppy ripples all over the water, and a weed patch on it.
+- **The lone reed sits almost all in the right strip** (x 284–320), as sketched, so a square screen doesn't show it;
+  so does about a quarter of the clump.
 
 ## Your ideas (`docs/ideas.md`)
 

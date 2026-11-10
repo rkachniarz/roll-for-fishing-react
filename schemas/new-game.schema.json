@@ -13,6 +13,10 @@
       "description": "Where the player starts (R11.1).",
       "$ref": "common.schema.json#/definitions/id"
     },
+    "spot": {
+      "description": "Where at the location the player starts: one of its spots.",
+      "$ref": "common.schema.json#/definitions/id"
+    },
     "weather": {
       "type": "object",
       "description": "The first weather: a season's id and a cell.",
@@ -67,6 +71,7 @@
   "required": [
     "id",
     "location",
+    "spot",
     "weather",
     "equipped"
   ],

@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "bleak",
+  "name": "Bleak",
+  "icon": "fish/bleak",
+  "size": {
+    "min": 8,
+    "max": 20
+  },
+  "difficulty": -2,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "noon",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "maggot"
+    ]
+  }
+}

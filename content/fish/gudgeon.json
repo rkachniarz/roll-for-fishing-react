@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "gudgeon",
+  "name": "Gudgeon",
+  "icon": "fish/gudgeon",
+  "size": {
+    "min": 8,
+    "max": 20
+  },
+  "difficulty": -2,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

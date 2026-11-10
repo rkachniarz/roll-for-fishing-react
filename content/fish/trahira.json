@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "trahira",
+  "name": "Trahira",
+  "icon": "fish/trahira",
+  "size": {
+    "min": 30,
+    "max": 75
+  },
+  "difficulty": 0,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "evening",
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

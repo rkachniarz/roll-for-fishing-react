@@ -64,7 +64,11 @@
           "fish": { "$ref": "common.schema.json#/definitions/entries" },
           "treasure": { "$ref": "common.schema.json#/definitions/entries" },
           "junk": { "$ref": "common.schema.json#/definitions/entries" },
-          "events": { "$ref": "#/properties/events" }
+          "events": { "$ref": "#/properties/events" },
+          "features": {
+            "description": "Surface features that appear only here, alongside the location's (D102): its schools and big fish.",
+            "$ref": "#/properties/features"
+          }
         },
         "required": ["id", "name"],
         "additionalProperties": false

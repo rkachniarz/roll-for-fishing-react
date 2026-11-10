@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "dace",
+  "name": "Dace",
+  "icon": "fish/dace",
+  "size": {
+    "min": 12,
+    "max": 30
+  },
+  "difficulty": -1,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "morning"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "bait": [
+      "maggot"
+    ]
+  }
+}

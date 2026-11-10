@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "smallmouth-bass",
+  "name": "Smallmouth bass",
+  "icon": "fish/smallmouth-bass",
+  "size": {
+    "min": 20,
+    "max": 65
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "crayfish"
+    ]
+  }
+}

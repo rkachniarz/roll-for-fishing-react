@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "rudd-school",
+  "name": "a school of rudd",
+  "kind": "school",
+  "radius": 14,
+  "uses": 4,
+  "lifetime": 24,
+  "drift": 4,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 40
+    }
+  ],
+  "fish": [
+    {
+      "id": "rudd",
+      "weight": 1
+    }
+  ]
+}

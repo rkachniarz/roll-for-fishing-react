@@ -1,0 +1,159 @@
+{
+  "$schema": "../../schemas/table.schema.json",
+  "id": "common-junk",
+  "kind": "items",
+  "entries": [
+    {
+      "id": "vendor-trash",
+      "weight": 2
+    },
+    {
+      "id": "iron-dagger",
+      "weight": 2
+    },
+    {
+      "id": "soggy-treasure-map",
+      "weight": 2
+    },
+    {
+      "id": "bent-fork",
+      "weight": 2
+    },
+    {
+      "id": "leaky-waterskin",
+      "weight": 2
+    },
+    {
+      "id": "hempen-tangles",
+      "weight": 2
+    },
+    {
+      "id": "freshwater-seaweed",
+      "weight": 2
+    },
+    {
+      "id": "single-ball-bearing",
+      "weight": 2
+    },
+    {
+      "id": "candle-stump",
+      "weight": 2
+    },
+    {
+      "id": "empty-glass-flask",
+      "weight": 2
+    },
+    {
+      "id": "very-wet-jerky",
+      "weight": 2
+    },
+    {
+      "id": "ruined-playing-card",
+      "weight": 2
+    },
+    {
+      "id": "bit-of-oily-leather",
+      "weight": 1
+    },
+    {
+      "id": "crows-feather",
+      "weight": 2
+    },
+    {
+      "id": "clump-of-hair",
+      "weight": 2
+    },
+    {
+      "id": "back-cover-of-a-spellbook",
+      "weight": 1
+    },
+    {
+      "id": "snail-shell",
+      "weight": 1
+    },
+    {
+      "id": "decomposed-boot",
+      "weight": 2
+    },
+    {
+      "id": "rusted-saucepan",
+      "weight": 2
+    },
+    {
+      "id": "inch-sized-piece-of-a-ten-foot-pole",
+      "weight": 1
+    },
+    {
+      "id": "bit-of-scroll-parchment",
+      "weight": 1
+    },
+    {
+      "id": "waterlogged-stick",
+      "weight": 2
+    },
+    {
+      "id": "ruined-hat",
+      "weight": 1
+    },
+    {
+      "id": "old-skull",
+      "weight": 1
+    },
+    {
+      "id": "intact-fish-skeleton",
+      "weight": 1
+    },
+    {
+      "id": "iron-key",
+      "weight": 1
+    },
+    {
+      "id": "small-wheel",
+      "weight": 1
+    },
+    {
+      "id": "rusted-chain",
+      "weight": 1
+    },
+    {
+      "id": "humanoid-molar",
+      "weight": 1
+    },
+    {
+      "id": "brass-doorknob",
+      "weight": 1
+    },
+    {
+      "id": "small-bag-of-tiny-rocks",
+      "weight": 1
+    },
+    {
+      "id": "wooden-figurine",
+      "weight": 1
+    },
+    {
+      "id": "beaten-up-spectacles",
+      "weight": 1
+    },
+    {
+      "id": "dwarven-stein",
+      "weight": 1
+    },
+    {
+      "id": "broken-off-fishing-pole-tip",
+      "weight": 1
+    },
+    {
+      "id": "tangled-fishing-line",
+      "weight": 1
+    },
+    {
+      "id": "moldy-piece-of-bread",
+      "weight": 1
+    },
+    {
+      "id": "old-compass",
+      "weight": 1
+    }
+  ]
+}

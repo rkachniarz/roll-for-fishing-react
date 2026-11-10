@@ -1241,3 +1241,29 @@ button.perk[aria-pressed='true'] {
     box-shadow: 0 0 8px 3px var(--accent);
   }
 }
+
+/* The map pane's spots (D101): a plain list until the real map (8.1). */
+.map-spots {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.map-spot {
+  min-height: 36px;
+  padding: 4px 8px;
+  text-align: left;
+  font: inherit;
+  font-variant-ligatures: none;
+  color: var(--text);
+  background: var(--slot-bg);
+  border: 2px solid var(--panel-edge);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.map-spot[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--accent);
+  cursor: default;
+}

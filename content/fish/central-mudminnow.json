@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "central-mudminnow",
+  "name": "Central mudminnow",
+  "icon": "fish/central-mudminnow",
+  "size": {
+    "min": 5,
+    "max": 14
+  },
+  "difficulty": -2,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "evening",
+      "night"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

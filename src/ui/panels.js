@@ -190,18 +190,29 @@ export function journalPane(state) {
 }
 
 /**
- * Where the player is. Changing spots and locations and going to town come
- * with Phase 8 (R11.8).
+ * Every location's spots to go to, the one the player is at pressed (D101): a
+ * plain list until the real map, with spots learned about before they show
+ * (8.1).
  * @param {GameState} state
+ * @param {(location: string, spot: string) => void} onTravel
  */
-export function mapPane(state) {
-  const loc = content.locations[state.location];
-  const spot = state.spot ? loc.spots.find((/** @type {{ id: string }} */ s) => s.id === state.spot) : null;
-  return [
-    el('p', { className: 'name', textContent: t(loc.name) }),
-    el('p', { textContent: spot ? t(spot.name) : t('map.shore') }),
-    el('p', { className: 'muted', textContent: t('map.later') }),
-  ];
+export function mapPane(state, onTravel) {
+  /** @type {HTMLElement[]} */
+  const out = [];
+  for (const loc of Object.values(content.locations)) {
+    if (loc.retired) continue;
+    out.push(el('p', { className: 'name', textContent: t(loc.name) }));
+    const spots = (loc.spots ?? []).map((/** @type {{ id: string, name: string }} */ spot) => {
+      const here = state.location === loc.id && state.spot === spot.id;
+      const b = el('button', { type: 'button', className: 'map-spot', textContent: t(spot.name), disabled: here });
+      b.setAttribute('aria-pressed', String(here));
+      b.addEventListener('click', () => onTravel(loc.id, spot.id));
+      return b;
+    });
+    out.push(el('div', { className: 'map-spots' }, spots));
+  }
+  out.push(el('p', { className: 'muted', textContent: t('map.later') }));
+  return out;
 }
 
 /**

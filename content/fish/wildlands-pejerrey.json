@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "wildlands-pejerrey",
+  "name": "Wildlands pejerrey",
+  "size": {
+    "min": 20,
+    "max": 45
+  },
+  "difficulty": -1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "afternoon"
+    ],
+    "weather": [
+      "windy"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

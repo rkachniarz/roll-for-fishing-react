@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "mainland-bullhead-school",
+  "name": "a school of Mainland bullhead",
+  "kind": "school",
+  "radius": 14,
+  "uses": 4,
+  "lifetime": 24,
+  "drift": 4,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 40
+    }
+  ],
+  "fish": [
+    {
+      "id": "mainland-bullhead",
+      "weight": 1
+    }
+  ]
+}

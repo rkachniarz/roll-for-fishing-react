@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schemas/table.schema.json",
+  "id": "common-treasure",
+  "kind": "items",
+  "entries": [
+    {
+      "id": "mega-mass-fish-chum",
+      "weight": 1
+    },
+    {
+      "id": "fishing-pole-laser-sight",
+      "weight": 1
+    },
+    {
+      "id": "heavy-bait",
+      "weight": 1
+    },
+    {
+      "id": "industrial-strength-gelatin",
+      "weight": 1
+    },
+    {
+      "id": "four-leaf-underwater-clover",
+      "weight": 1
+    },
+    {
+      "id": "fish-compendium",
+      "weight": 1
+    },
+    {
+      "id": "eight-leaf-underwater-clover",
+      "weight": 1
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "lake-sturgeon",
+  "name": "Lake sturgeon",
+  "icon": "fish/lake-sturgeon",
+  "size": {
+    "min": 80,
+    "max": 220
+  },
+  "difficulty": 3,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

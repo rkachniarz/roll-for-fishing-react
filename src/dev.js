@@ -9,12 +9,13 @@
 import { content } from './generated/content.js';
 import { t } from './strings.js';
 import { GAME_VALUES } from './engine/values.js';
-import { valuesFor } from './engine/game.js';
+import { travel, valuesFor } from './engine/game.js';
+import { weatherWords } from './engine/tables.js';
 import { diceFrom, levelFor } from './engine/state.js';
 import { weatherAt } from './engine/weather.js';
 import { clock, TIME } from './engine/time.js';
 import { EQUIPMENT_SLOTS, quickEquip } from './engine/equipment.js';
-import { METER_FIRES, arrive, startEvent } from './engine/events.js';
+import { METER_FIRES, startEvent } from './engine/events.js';
 import { owedLevels } from './engine/perks.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
@@ -85,10 +86,12 @@ export function createBench(root, { getState, setState, overrides, extraSources,
   const locationSelect = el('select');
   for (const loc of Object.values(content.locations)) locationSelect.append(el('option', { value: loc.id, textContent: t(loc.name) }));
   const spotSelect = el('select');
-  // Moving counts as arriving, for `trigger: arrive` events (D89).
-  const moveTo = (/** @type {GameState} */ s) => (arrive(s), s);
-  locationSelect.addEventListener('change', () => edit((s) => moveTo({ ...s, location: locationSelect.value, spot: null })));
-  spotSelect.addEventListener('change', () => edit((s) => moveTo({ ...s, spot: spotSelect.value || null })));
+  // Moving counts as arriving, for `trigger: arrive` events (D89); a new
+  // location starts at its first spot (D101).
+  locationSelect.addEventListener('change', () =>
+    edit((s) => travel(s, locationSelect.value, content.locations[locationSelect.value].spots[0].id).state),
+  );
+  spotSelect.addEventListener('change', () => edit((s) => travel(s, s.location, spotSelect.value).state));
 
   const seasonSelect = el('select');
   for (const season of Object.values(content.weather).sort((a, b) => a.order - b.order)) {
@@ -239,7 +242,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
         button('Fill bucket', () =>
           edit((s) => {
             const room = valuesFor(s, extraSources()).flat.bucketSize - s.bucket.reduce((n, b) => n + b.count, 0);
-            for (let i = 0; i < room; i++) s.bucket.push({ fish: { species: 'roach', subname: 0, band: 2, size: 15 + (i % 10), difficulty: 1, xp: 1, rarity: 'common' }, count: 1 });
+            for (let i = 0; i < room; i++) s.bucket.push({ fish: { species: 'roach', subname: -1, band: 2, size: 15 + (i % 10), difficulty: 1, xp: 1, rarity: 'common' }, count: 1 });
             return s;
           }),
         ),
@@ -273,7 +276,6 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       locationSelect.value = s.location;
       const spots = content.locations[s.location].spots ?? [];
       spotSelect.replaceChildren(
-        el('option', { value: '', textContent: '(no spot)' }),
         ...spots.map((/** @type {{ id: string, name: string }} */ sp) => el('option', { value: sp.id, textContent: t(sp.name) })),
       );
       spotSelect.value = s.spot ?? '';
@@ -285,7 +287,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       clockLine.textContent =
         `Year ${c.year}, ${c.season} day ${c.day}, ${String(c.hour).padStart(2, '0')}:${String(c.minute).padStart(2, '0')} (${c.partOfDay}). ` +
         `Weather: ${s.weather.season} #${s.weather.cell}, temperature ${s.weather.temperature}, wind ${s.weather.wind}, ` +
-        `clouds ${s.weather.clouds}, precipitation ${s.weather.precipitation}.`;
+        `clouds ${s.weather.clouds}, precipitation ${s.weather.precipitation} (${weatherWords(s.weather).join(', ') || 'no weather words'}).`;
 
       featuresLine.textContent = s.features.length
         ? s.features.map((f) => `${f.id} at ${f.x},${f.y}: ${f.uses} uses, ${f.castsLeft} casts left`).join('; ')

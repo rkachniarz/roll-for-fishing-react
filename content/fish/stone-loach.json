@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "stone-loach",
+  "name": "Stone loach",
+  "icon": "fish/stone-loach",
+  "size": {
+    "min": 6,
+    "max": 16
+  },
+  "difficulty": -2,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

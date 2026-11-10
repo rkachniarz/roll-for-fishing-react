@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "chub-school",
+  "name": "a school of chub",
+  "kind": "school",
+  "radius": 14,
+  "uses": 4,
+  "lifetime": 24,
+  "drift": 4,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 40
+    }
+  ],
+  "fish": [
+    {
+      "id": "chub",
+      "weight": 1
+    }
+  ]
+}

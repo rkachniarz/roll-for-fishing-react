@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "mainland-bullhead",
+  "name": "Mainland bullhead",
+  "icon": "fish/mainland-bullhead",
+  "size": {
+    "min": 6,
+    "max": 18
+  },
+  "difficulty": -2,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

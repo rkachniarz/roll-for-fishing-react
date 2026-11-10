@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "What fish prefer (D101): the bait keywords, the weather words, and how much a preference counts",
+  "definitions": {
+    "range": {
+      "type": "object",
+      "properties": { "min": { "type": "integer" }, "max": { "type": "integer" } },
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "const": "fish-preferences" },
+    "factor": {
+      "description": "A fish's weight in a table is multiplied by this once for each of its preferences the moment meets: time of day, weather, season, bait.",
+      "type": "number",
+      "exclusiveMinimum": 1
+    },
+    "baits": {
+      "description": "The kinds of bait. A bait item names one (its `bait`); a fish lists those it prefers.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/id" },
+          "name": { "$ref": "common.schema.json#/definitions/text" }
+        },
+        "required": ["id", "name"],
+        "additionalProperties": false
+      }
+    },
+    "weatherWords": {
+      "description": "Words for the weather, read off its levels (src/engine/weather.js). Every condition given must hold. `tag` and `without` look at the weather cell's tags in content/weather/, for what the levels can't tell: fog, snow.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/id" },
+          "name": { "$ref": "common.schema.json#/definitions/text" },
+          "temperature": { "$ref": "#/definitions/range" },
+          "wind": { "$ref": "#/definitions/range" },
+          "clouds": { "$ref": "#/definitions/range" },
+          "precipitation": { "$ref": "#/definitions/range" },
+          "tag": { "$ref": "common.schema.json#/definitions/id" },
+          "without": { "$ref": "common.schema.json#/definitions/id" }
+        },
+        "required": ["id", "name"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "factor", "baits", "weatherWords"],
+  "additionalProperties": false
+}

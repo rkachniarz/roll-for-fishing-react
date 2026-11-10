@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "omul",
+  "name": "Omul",
+  "icon": "fish/omul",
+  "size": {
+    "min": 25,
+    "max": 55
+  },
+  "difficulty": 0,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "evening",
+      "night"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "autumn"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "mainland-whitefish",
+  "name": "Mainland whitefish",
+  "icon": "fish/mainland-whitefish",
+  "size": {
+    "min": 25,
+    "max": 70
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "morning"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "autumn"
+    ],
+    "bait": [
+      "fly"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "mainland-eel",
+  "name": "Mainland eel",
+  "size": {
+    "min": 40,
+    "max": 130
+  },
+  "difficulty": 1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "rain",
+      "storm"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

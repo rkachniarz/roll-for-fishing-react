@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "pumpkinseed",
+  "name": "Pumpkinseed",
+  "icon": "fish/pumpkinseed",
+  "size": {
+    "min": 8,
+    "max": 25
+  },
+  "difficulty": -1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "noon",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

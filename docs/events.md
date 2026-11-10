@@ -70,7 +70,7 @@ or a player could be stuck (`npm run content` warns about that).
 | `needs: no-flag met-the-frog` | the flag is not set |
 | `needs: season winter` | it is that season (`content/weather/`) |
 | `needs: time dawn` | night, dawn, morning, noon, afternoon, sunset or evening (the words on the HUD) |
-| `needs: caught pike 10` | at least 10 pike caught, ever (the accomplishments book) |
+| `needs: caught northern-pike 10` | at least 10 northern pike caught, ever (the accomplishments book) |
 | `needs: wind 3+` | the weather now: `temperature`, `wind`, `clouds` or `precipitation`, with an amount |
 
 **Weather amounts:** `3` exactly, `3+` at least, `3-` at most, `2..4` between (both included). Wind, clouds and
@@ -150,7 +150,7 @@ Flags are free-form names; use them to link events into quests (R10.7).
 
   with `"event": "doodad"` in both halves' item files.
 - **`trigger: needs`**: as soon as its `needs` are met, checked after every cast, anywhere. For hidden objectives:
-  `needs: caught pike 10` and the minor deity who loves pike turns up (D51). Leave `once` at its default: with
+  `needs: caught northern-pike 10` and the minor deity who loves pike turns up (D51). Leave `once` at its default: with
   `once: false` it starts again after every cast.
 
 One event is open at a time, and no cast goes out until it ends. A reload comes back to the same slide.

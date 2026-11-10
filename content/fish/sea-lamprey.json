@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "sea-lamprey",
+  "name": "Sea lamprey",
+  "icon": "fish/sea-lamprey",
+  "size": {
+    "min": 40,
+    "max": 100
+  },
+  "difficulty": 1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

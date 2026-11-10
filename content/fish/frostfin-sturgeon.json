@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "frostfin-sturgeon",
+  "name": "Frostfin sturgeon",
+  "icon": "fish/frostfin-sturgeon",
+  "size": {
+    "min": 80,
+    "max": 200
+  },
+  "difficulty": 2,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

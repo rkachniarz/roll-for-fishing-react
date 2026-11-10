@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "barbel",
+  "name": "Barbel",
+  "icon": "fish/barbel",
+  "size": {
+    "min": 30,
+    "max": 100
+  },
+  "difficulty": 1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "evening",
+      "night"
+    ],
+    "weather": [
+      "rain"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "crayfish"
+    ]
+  }
+}

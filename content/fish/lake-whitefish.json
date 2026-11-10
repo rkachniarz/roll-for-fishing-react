@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "lake-whitefish",
+  "name": "Lake whitefish",
+  "icon": "fish/lake-whitefish",
+  "size": {
+    "min": 30,
+    "max": 80
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

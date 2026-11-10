@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "huchen",
+  "name": "Huchen",
+  "icon": "fish/huchen",
+  "size": {
+    "min": 60,
+    "max": 150
+  },
+  "difficulty": 2,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "dawn",
+      "sunset"
+    ],
+    "weather": [
+      "snow"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "lure"
+    ]
+  }
+}

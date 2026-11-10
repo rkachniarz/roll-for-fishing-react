@@ -19,10 +19,10 @@ import { featureAt, swimOff, updateFeatures } from './features.js';
 import { startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
 import { equippedIds } from './equipment.js';
-import { afterCast } from './events.js';
+import { afterCast, arrive } from './events.js';
 import { owedLevels, perkSources, settlePerks } from './perks.js';
 import { LIGHTS, abilityStatus, spendCooldownCasts, startCooldown, tickCooldowns } from './abilities.js';
-import { advanceTime } from './time.js';
+import { advanceTime, clock } from './time.js';
 import { changeSeason, stepWeather } from './weather.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
@@ -103,7 +103,7 @@ export function timingFrom(v) {
 }
 
 /** @param {GameState} state  The escaped-fish pool for where the player is (R3.6, D59). */
-function poolKey(state) {
+export function poolKey(state) {
   return state.spot ? `${state.location}/${state.spot}` : state.location;
 }
 
@@ -263,8 +263,8 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
       fromPool = true;
     } else {
       const table = feature?.fish
-        ? listTable(feature.fish, 'fish', { weather: state.weather })
-        : locationTable(where, 'fish', { weather: state.weather });
+        ? listTable(feature.fish, 'fish', { moment: momentOf(state) })
+        : locationTable(where, 'fish', { moment: momentOf(state) });
       const species = pick(table, dice.line);
       const minBand = feature?.minBand ? sizeBands().findIndex((/** @type {{ id: string }} */ b) => b.id === feature.minBand) : 0;
       if (species) {
@@ -313,6 +313,31 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
   }
 
   return rollLoot(state, values, dice.line, dice.effects, feature, rolls);
+}
+
+/**
+ * Going to another spot, or another location (R11.8, D101). Only between
+ * casts. The surface features stay behind with the water they were on, and
+ * an event that starts on arriving may start.
+ * @param {GameState} state
+ * @param {string} location
+ * @param {string} spot
+ * @returns {{ state: GameState, events: GameEvent[] }}
+ */
+export function travel(state, location, spot) {
+  if (state.location === location && state.spot === spot) return { state, events: [] };
+  const next = { ...structuredClone(state), location, spot, features: [] };
+  return { state: next, events: arrive(next) };
+}
+
+/**
+ * What the fish's preferences are checked against as the line goes out (D101).
+ * @param {GameState} state
+ * @returns {import('./tables.js').Moment}
+ */
+export function momentOf(state) {
+  const bait = state.equipped.bait ? content.items[state.equipped.bait.id]?.bait ?? null : null;
+  return { weather: state.weather, partOfDay: clock(state.time).partOfDay, bait };
 }
 
 /**

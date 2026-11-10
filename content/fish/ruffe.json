@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "ruffe",
+  "name": "Ruffe",
+  "icon": "fish/ruffe",
+  "size": {
+    "min": 8,
+    "max": 25
+  },
+  "difficulty": -1,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "evening",
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

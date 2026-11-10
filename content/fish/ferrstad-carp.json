@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "ferrstad-carp",
+  "name": "Ferrstad carp",
+  "icon": "fish/ferrstad-carp",
+  "size": {
+    "min": 15,
+    "max": 45
+  },
+  "difficulty": -1,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "maggot"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "smelt",
+  "name": "Smelt",
+  "icon": "fish/smelt",
+  "size": {
+    "min": 10,
+    "max": 30
+  },
+  "difficulty": -1,
+  "rarity": "common",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

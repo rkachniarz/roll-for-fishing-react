@@ -1,0 +1,303 @@
+{
+  "$schema": "../../schemas/location.schema.json",
+  "id": "river",
+  "name": "The River",
+  "biteThreshold": 50,
+  "treasureThreshold": 5,
+  "featureChance": 12,
+  "maxFeatures": 2,
+  "fish": [],
+  "treasure": [
+    {
+      "table": "common-treasure"
+    }
+  ],
+  "junk": [
+    {
+      "table": "common-junk"
+    }
+  ],
+  "emptyHook": 45,
+  "features": [
+    {
+      "id": "glint",
+      "weight": 2
+    }
+  ],
+  "events": [
+    {
+      "id": "frog",
+      "weight": 1
+    }
+  ],
+  "spots": [
+    {
+      "id": "upper-river",
+      "name": "the upper river",
+      "fish": [
+        {
+          "id": "minnow",
+          "weight": 100
+        },
+        {
+          "id": "mainland-bullhead",
+          "weight": 75
+        },
+        {
+          "id": "stone-loach",
+          "weight": 56
+        },
+        {
+          "id": "brown-trout",
+          "weight": 42
+        },
+        {
+          "id": "rainbow-trout",
+          "weight": 32
+        },
+        {
+          "id": "brook-trout",
+          "weight": 24
+        },
+        {
+          "id": "grayling",
+          "weight": 18
+        },
+        {
+          "id": "frostfin-grayling",
+          "weight": 13
+        },
+        {
+          "id": "lenok",
+          "weight": 10
+        },
+        {
+          "id": "great-sea-salmon",
+          "weight": 8
+        },
+        {
+          "id": "huchen",
+          "weight": 6
+        },
+        {
+          "id": "taimen",
+          "weight": 4
+        }
+      ],
+      "features": [
+        {
+          "id": "minnow-school",
+          "weight": 5
+        },
+        {
+          "id": "mainland-bullhead-school",
+          "weight": 4
+        },
+        {
+          "id": "stone-loach-school",
+          "weight": 3
+        },
+        {
+          "id": "big-huchen",
+          "weight": 1
+        },
+        {
+          "id": "big-taimen",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "lower-river",
+      "name": "the lower river",
+      "fish": [
+        {
+          "id": "chub",
+          "weight": 100
+        },
+        {
+          "id": "dace",
+          "weight": 75
+        },
+        {
+          "id": "gudgeon",
+          "weight": 56
+        },
+        {
+          "id": "roach",
+          "weight": 42
+        },
+        {
+          "id": "barbel",
+          "weight": 32
+        },
+        {
+          "id": "nase",
+          "weight": 24
+        },
+        {
+          "id": "ide",
+          "weight": 18
+        },
+        {
+          "id": "common-bream",
+          "weight": 13
+        },
+        {
+          "id": "channel-catfish",
+          "weight": 10
+        },
+        {
+          "id": "asp",
+          "weight": 8
+        },
+        {
+          "id": "zander",
+          "weight": 6
+        },
+        {
+          "id": "sauger",
+          "weight": 4
+        },
+        {
+          "id": "golden-dorado",
+          "weight": 3
+        },
+        {
+          "id": "sterlet",
+          "weight": 2
+        },
+        {
+          "id": "lake-sturgeon",
+          "weight": 2
+        }
+      ],
+      "features": [
+        {
+          "id": "chub-school",
+          "weight": 5
+        },
+        {
+          "id": "dace-school",
+          "weight": 4
+        },
+        {
+          "id": "gudgeon-school",
+          "weight": 3
+        },
+        {
+          "id": "big-channel-catfish",
+          "weight": 1
+        },
+        {
+          "id": "big-asp",
+          "weight": 1
+        },
+        {
+          "id": "big-zander",
+          "weight": 1
+        },
+        {
+          "id": "big-sauger",
+          "weight": 1
+        },
+        {
+          "id": "big-golden-dorado",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "river-mouth",
+      "name": "the river mouth",
+      "fish": [
+        {
+          "id": "bleak",
+          "weight": 100
+        },
+        {
+          "id": "smelt",
+          "weight": 75
+        },
+        {
+          "id": "white-sucker",
+          "weight": 56
+        },
+        {
+          "id": "ide",
+          "weight": 42
+        },
+        {
+          "id": "walleye",
+          "weight": 32
+        },
+        {
+          "id": "zander",
+          "weight": 24
+        },
+        {
+          "id": "mainland-eel",
+          "weight": 18
+        },
+        {
+          "id": "lake-brown-trout",
+          "weight": 13
+        },
+        {
+          "id": "great-sea-salmon",
+          "weight": 10
+        },
+        {
+          "id": "sea-lamprey",
+          "weight": 8
+        },
+        {
+          "id": "sterlet",
+          "weight": 6
+        },
+        {
+          "id": "lake-sturgeon",
+          "weight": 4
+        },
+        {
+          "id": "frostfin-sturgeon",
+          "weight": 3
+        }
+      ],
+      "features": [
+        {
+          "id": "bleak-school",
+          "weight": 5
+        },
+        {
+          "id": "smelt-school",
+          "weight": 4
+        },
+        {
+          "id": "white-sucker-school",
+          "weight": 3
+        },
+        {
+          "id": "big-walleye",
+          "weight": 3
+        },
+        {
+          "id": "big-zander",
+          "weight": 2
+        },
+        {
+          "id": "big-mainland-eel",
+          "weight": 2
+        },
+        {
+          "id": "big-lake-brown-trout",
+          "weight": 1
+        },
+        {
+          "id": "big-sea-lamprey",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

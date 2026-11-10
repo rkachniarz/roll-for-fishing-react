@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "sterlet",
+  "name": "Sterlet",
+  "icon": "fish/sterlet",
+  "size": {
+    "min": 30,
+    "max": 100
+  },
+  "difficulty": 1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "maggots",
+  "category": "consumable",
+  "name": "Maggots",
+  "rarity": "common",
+  "value": 1,
+  "slot": "bait",
+  "bait": "maggot",
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 10
+    }
+  ],
+  "devOnly": true
+}

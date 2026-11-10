@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "northern-snakehead",
+  "name": "Northern snakehead",
+  "icon": "fish/northern-snakehead",
+  "size": {
+    "min": 40,
+    "max": 100
+  },
+  "difficulty": 1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "frog"
+    ]
+  }
+}

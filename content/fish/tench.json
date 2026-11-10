@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "tench",
+  "name": "Tench",
+  "icon": "fish/tench",
+  "size": {
+    "min": 20,
+    "max": 65
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "dawn",
+      "evening"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}
