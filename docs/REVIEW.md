@@ -24,6 +24,12 @@ Items with no note are left alone.
 
 Newest first.
 
+## Two tracks, and stand-in perk rules (D105)
+
+- **The plan's split** (DEV_PLAN.md): what went to the creative track (`CR-1`–`CR-14`) and what stayed as development
+  with placeholders. Spot paintings, fish icon polish, the town's art, events and names are creative; everything with
+  an engine behind it stayed in development.
+
 ## Rift fish (D104)
 
 - **One tier rarer** than their rank alone: the top of a spot's rift table is uncommon, the bottom epic. They come

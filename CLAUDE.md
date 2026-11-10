@@ -7,7 +7,10 @@ file map.
 ## Development plan
 
 **Read `DEV_PLAN.md` before starting work.** It holds the open questions and the remaining phases, with tickboxes. Tick
-tasks off as they land. The rest is in `docs/`, read when a citation calls for it, since code comments cite all of these
+tasks off as they land. It has two tracks (D105): development, and creative work (art, writing, sound, `CR-n`).
+**Creative work never blocks development:** when a task needs art or text that isn't there, build it with a
+placeholder (squares and triangles, a plain sentence, a stand-in rule in REVIEW.md) and list the placeholder under the
+`CR-n` task that will replace it. The rest is in `docs/`, read when a citation calls for it, since code comments cite all of these
 by number:
 
 - `docs/decisions.md`: the decision log, `D1` onwards. Record new decisions there rather than silently changing
