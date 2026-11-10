@@ -7,8 +7,9 @@ import { content } from '../generated/content.js';
 import { t } from '../strings.js';
 import { levelFor } from '../engine/state.js';
 import { className } from '../engine/character.js';
-import { paintIcon } from '../scene/icons.js';
-import { bagTab, fishName, slot } from './links.js';
+import { iconName, paintIcon } from '../scene/icons.js';
+import { bagTab, fishName, rarityColour, slot } from './links.js';
+import { showTip } from './tooltip.js';
 import { EQUIPMENT_SLOTS, isTiny } from '../engine/equipment.js';
 import { offers, owedLevels } from '../engine/perks.js';
 
@@ -168,7 +169,14 @@ function perksSection(state, onTakePerk) {
  * @param {GameState} state
  */
 export function journalPane(state) {
-  const species = Object.entries(state.book.fish).sort(([a], [b]) => t(content.fish[a].name).localeCompare(t(content.fish[b].name)));
+  const byName = (/** @type {string} */ a, /** @type {string} */ b) => t(content.fish[a].name).localeCompare(t(content.fish[b].name));
+  const caught = Object.keys(state.book.fish).sort(byName);
+  // Known of but not landed yet: a fish that got away (R4.3). Learning of
+  // fish in other ways comes with 8.5.
+  const seen = [...new Set(Object.values(state.escaped).flat().map((f) => f.species))].filter((id) => !state.book.fish[id] && content.fish[id]).sort(byName);
+  const treasure = Object.keys(state.found)
+    .filter((id) => content.items[id]?.category === 'treasure')
+    .sort((a, b) => t(content.items[a].name).localeCompare(t(content.items[b].name)));
   return [
     el('dl', { className: 'stats' }, [
       el('dt', { textContent: t('journal.casts') }),
@@ -177,16 +185,40 @@ export function journalPane(state) {
       el('dd', { textContent: String(state.book.catches) }),
     ]),
     el('h3', { textContent: t('journal.fish') }),
-    ...(species.length
-      ? species.map(([id, e]) =>
-          el('p', { className: 'species' }, [
-            el('strong', { textContent: t(content.fish[id].name) }),
-            ' ',
-            t('journal.entry', { caught: e.caught, smallest: e.smallest.size, largest: e.largest.size, average: Math.round(e.totalSize / e.caught) }),
-          ]),
-        )
-      : [el('p', { className: 'muted', textContent: t('journal.none') })]),
+    caught.length || seen.length
+      ? el('div', { className: 'grid collection' }, [...caught.map((id) => speciesSlot(state, id)), ...seen.map((id) => speciesSlot(state, id))])
+      : el('p', { className: 'muted', textContent: t('journal.none') }),
+    el('h3', { textContent: t('journal.treasure') }),
+    treasure.length
+      ? el('div', { className: 'grid collection' }, treasure.map((id) => slot({ kind: 'item', id }, state.found[id])))
+      : el('p', { className: 'muted', textContent: t('journal.noTreasure') }),
   ];
+}
+
+/**
+ * A species in the collection (R4.3): its icon and its records on a tap, or,
+ * if it has only been seen, its silhouette and no name.
+ * @param {GameState} state
+ * @param {string} id
+ */
+function speciesSlot(state, id) {
+  const fish = content.fish[id];
+  const e = state.book.fish[id];
+  const art = paintIcon(iconName({ kind: 'fish', id }));
+  art.className = 'icon';
+  const b = el('button', { type: 'button', className: e ? 'slot' : 'slot unknown' }, [art]);
+  /** @type {import('./tooltip.js').Tip} */
+  const tip = e
+    ? {
+        title: t(fish.name),
+        colour: rarityColour(fish.rarity),
+        lines: [{ text: t('journal.entry', { caught: e.caught, smallest: e.smallest.size, largest: e.largest.size, average: Math.round(e.totalSize / e.caught) }) }],
+      }
+    : { title: t('journal.unknown'), lines: [{ text: t('journal.gotAway') }] };
+  b.style.borderColor = tip.colour ?? '';
+  b.setAttribute('aria-label', tip.title);
+  b.addEventListener('click', () => showTip(b, tip));
+  return b;
 }
 
 /**

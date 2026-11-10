@@ -256,7 +256,8 @@ Requirements R5.3, R11.
 - [ ] **9.3** More settings (sound, once there is any), save export/import. *(Settings and the theme landed with 3.8.
   Saving to a file is in the menu, loading from one on the title screen, into a slot the player picks; the sound
   setting waits for 9.2.)*
-- [ ] **9.4** Collection view, fish and treasure (R4.3).
+- [x] **9.4** Collection view, fish and treasure (R4.3): grids in the journal, the records on a tap; a fish that got
+  away before one was caught shows as a silhouette. Knowing of fish and treasure in other ways comes with 8.5.
 - [ ] **9.6** The dice's feel (D99): timing, where they land, the floating total; the open items on
   `docs/REVIEW.md`. The ivory colour is settled.
 - [ ] **9.5** Installable and offline: web app manifest and service worker (R9.8, D55).

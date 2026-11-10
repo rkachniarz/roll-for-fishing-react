@@ -761,6 +761,12 @@ body {
   cursor: default;
 }
 
+/* A fish known of but not caught (R4.3): its silhouette. */
+.slot.unknown .icon {
+  filter: brightness(0);
+  opacity: 0.55;
+}
+
 .slot .count {
   position: absolute;
   right: 2px;

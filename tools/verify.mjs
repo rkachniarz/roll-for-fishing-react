@@ -493,6 +493,25 @@ await check('new game', DESKTOP, '?seed=5', async (page) => {
   report('new game: in its own slot, the first game kept', filled.join() === 'false,false,true', filled.join());
 });
 
+await check('the collection (9.4)', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+  await openBench(page);
+  await page.fill('#dev-fishFind', '100');
+  await page.press('#dev-fishFind', 'Enter');
+  await closePane(page);
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
+  const caught = /You caught: \[([^\]]+)\]/.exec(await logText(page));
+  await page.click('#journal');
+  const shown = await page.locator('#paneBody .collection .slot').count();
+  report('the collection: the fish caught is in it', !caught || shown === 1, `${caught?.[1] ?? 'nothing caught'}, ${shown} shown`);
+  if (shown) await page.click('#paneBody .collection .slot');
+  report('the collection: a tap shows its records', !shown || /caught,/.test((await page.textContent('.tip')) ?? ''), (await page.textContent('.tip')) ?? '');
+  await page.screenshot({ path: 'dist/verify/collection.png' });
+});
+
 await check('a save to a file and back (9.3)', DESKTOP, '?seed=7', async (page) => {
   page.on('dialog', (d) => d.accept());
   await page.click('#menu');

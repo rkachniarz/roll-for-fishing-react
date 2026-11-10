@@ -24,6 +24,13 @@ Items with no note are left alone.
 
 Newest first.
 
+## The collection (9.4)
+
+- **It's in the journal,** in place of the list of records: a grid of every species caught, the records on a tap,
+  then the treasure found. WoW keeps collections in their own window; one more button didn't seem worth it yet.
+- **A silhouette means a fish that got away** before one of its kind was caught: the only way to know of a fish so far.
+  The tooltip says "An unknown fish". Knowledge from books and tips comes with 8.5.
+
 ## A save to a file (9.3)
 
 - **"Save to a file" is in the in-game menu,** downloading `roll-for-fishing-<name>-<date>.json`, the slot's own text.
