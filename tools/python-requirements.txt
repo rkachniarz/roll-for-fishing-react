@@ -1,0 +1,2 @@
+# The Python tools (tools/py.mjs): cutting things out of photos, and Commons contact sheets.
+rembg[cpu]==2.0.87

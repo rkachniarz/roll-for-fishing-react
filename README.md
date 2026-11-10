@@ -23,6 +23,9 @@ npm run sprite list                    # the sprites that can go out to MS Paint
 npm run sprite export bobber           # -> art/bobber.png, to draw on
 npm run sprite import art/bobber.png   # a drawing back into code (PNG or 24-bit BMP)
 npm run photo-icon docs/design/photo-carp.jpg name=icon-fish-carp   # a photo to a first-draft 32×32 icon
+npm run cutout setup                         # once: the Python tools' environment (.venv-cutout/)
+npm run cutout docs/design/refs/Ruffe.jpg    # cut the subject out of a busy photo, onto magenta
+npm run commons search ruffe "Category:Gymnocephalus cernua" shape=wide   # Commons pictures to pick from
 ```
 
 How the art is made, and drawing for the game in MS Paint: [docs/art.md](docs/art.md).
@@ -86,5 +89,9 @@ and the art sheet at `/art.html` there.
 | `tools/event-text.mjs` | Reads the event text format (`content/events/*.md`) and holds its vocabulary |
 | `tools/verify.mjs` | Browser checks (Playwright) |
 | `tools/sprite-png.mjs` | Sprites out to PNG for drawing in MS Paint, and PNG or BMP drawings back into the code's grids |
+| `tools/photo-icon.mjs` | A photo to a first-draft 32×32 icon, a fish's eye included (`eye=1`); the photo-to-icon skill |
+| `tools/cutout.py` | Cuts the subject out of a photo (rembg), onto magenta or transparent; run by `tools/py.mjs` |
+| `tools/commons.py` | Wikimedia Commons pictures: search to a contact sheet, fetch a pick with its licence |
+| `tools/py.mjs` | Runs the Python tools in their own environment, `.venv-cutout/` (`npm run cutout setup`) |
 | `tools/build-artifact.mjs` | Builds `dist/artifact.html` |
 | `docs/` | Spec, decisions, history, porting notes, design sketches; `docs/events.md` is how to write an event, `docs/art.md` how the art is made, `docs/ideas.md` the owner's ideas for events and the story |

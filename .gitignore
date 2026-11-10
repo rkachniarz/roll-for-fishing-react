@@ -15,3 +15,7 @@ drafts/
 
 # The owner's reference photos and sketches (D97): local only, too big to track.
 docs/design/
+
+# The Python tools' environment (tools/py.mjs, npm run cutout setup).
+.venv-cutout/
+__pycache__/

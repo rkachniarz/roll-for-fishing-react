@@ -3,7 +3,9 @@
 // fixes, not on the cutting out. See .claude/skills/photo-to-icon/SKILL.md.
 //
 //   npm run photo-icon docs/design/photo-carp.jpg name=fish-carp
-//   npm run photo-icon <photo> name=<file name> [angle=30] [size=32] [colours=12] [detail=90] [bg=a49e9e] [cut=36]
+//   npm run photo-icon <photo> name=<file name> [angle=30] [size=32] [margin=1] [colours=12] [detail=90] [bg=a49e9e] [cut=36] [eye=1]
+//
+// A busy photo: cut it out first (npm run cutout, onto magenta), then bg=ff00ff.
 //
 // The photo should show the thing on a plain background (a cut-out, or a
 // studio shot). What it does:
@@ -16,7 +18,11 @@
 //   4. Darkens a pixel a shade where the photo under it hides something much
 //      darker than its average (detail=, 0 for none): scale rims, fin rays,
 //      the eye, which averaging would wash out.
-//   5. Outlines it with the icons' `k`.
+//   5. Outlines it with the icons' `k`, inside a margin= of empty pixels.
+//   6. With eye=1, a fish's eye (D98): a 2×2 about a tenth of the length in from
+//      the snout, a little towards the back. The head is at the left before the
+//      turn. On a light head the eye is dark with a light glint (`e` over `x`);
+//      on a dark head, a light ring round a dark pupil.
 // Writes art/<name>.png at real size on magenta (to mark up, or to import),
 // and art/<name>-big.png enlarged with a grid, to look at. Prints the grid and
 // its palette as code, ready for OWN_KEYS and ICONS in src/scene/icons.js.
@@ -35,12 +41,14 @@ const photo = args.find((a) => !a.includes('='));
 /** @param {string} name @param {string} fallback */
 const option = (name, fallback) => args.find((a) => a.startsWith(`${name}=`))?.slice(name.length + 1) ?? fallback;
 if (!photo) {
-  console.log('Usage: npm run photo-icon <photo> name=<file name> [angle=30] [size=32] [colours=12] [detail=90] [bg=rrggbb] [cut=36]');
+  console.log('Usage: npm run photo-icon <photo> name=<file name> [angle=30] [size=32] [margin=1] [colours=12] [detail=90] [bg=rrggbb] [cut=36] [eye=1]');
   process.exit(1);
 }
 const name = option('name', 'photo-icon');
 const angle = Number(option('angle', '30'));
 const size = Number(option('size', '32'));
+const margin = Number(option('margin', '1'));
+const eye = option('eye', '0') === '1';
 const colours = Number(option('colours', '12'));
 const cut = Number(option('cut', '36'));
 const detail = Number(option('detail', '90'));
@@ -191,13 +199,83 @@ const result = await page.evaluate(
     const hex = (/** @type {number[]} */ p) => '#' + p.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
     return { grid: grid.map((r) => r.join('')), palette: order.map((ci) => hex(centres[ci])), bg };
   },
-  { src, size, angle, colours, cut, bgOption, detail },
+  { src, size: size - 2 * margin, angle, colours, cut, bgOption, detail },
 );
 await browser.close();
 
 /** @type {Record<string, string>} */
 const keys = { k: KEYS.k };
 result.palette.forEach((colour, i) => (keys['ABCDEFGHIJLMNOPQRSTUVWXYZ'[i]] = colour));
+
+// The margin: nothing touches the square's edge.
+const blank = '.'.repeat(size);
+result.grid = [
+  ...Array(margin).fill(blank),
+  ...result.grid.map((r) => '.'.repeat(margin) + r + '.'.repeat(margin)),
+  ...Array(margin).fill(blank),
+];
+
+/** @param {string} hex */
+const lum = (hex) => [1, 3, 5].reduce((s, i, j) => s + parseInt(hex.slice(i, i + 2), 16) * [0.299, 0.587, 0.114][j], 0);
+/** @param {string} hex */
+const sat = (hex) => {
+  const v = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  return (Math.max(...v) - Math.min(...v)) / 255;
+};
+/** @type {Record<string, string>} */
+const notes = {};
+if (eye) placeEye();
+
+/**
+ * The eye (6. above), in result.grid; adds its colours to keys.
+ */
+function placeEye() {
+  const rows = result.grid.map((r) => r.split(''));
+  const a = (angle * Math.PI) / 180;
+  const D = [Math.cos(a), Math.sin(a)]; // along the fish, head to tail (x, y)
+  const N = [D[1], -D[0]]; // across it, towards the back
+  /** @type {number[][]} */
+  const body = [];
+  rows.forEach((row, r) => row.forEach((ch, c) => { if (ch !== '.' && ch !== 'k') body.push([r, c]); }));
+  if (!body.length) return;
+  const along = (/** @type {number[]} */ [r, c]) => c * D[0] + r * D[1];
+  const across = (/** @type {number[]} */ [r, c]) => c * N[0] + r * N[1];
+  const tip = Math.min(...body.map(along));
+  const t = tip + Math.max(2.5, 0.09 * (Math.max(...body.map(along)) - tip));
+  const slice = body.filter((p) => Math.abs(along(p) - t) < 0.8);
+  const lo = Math.min(...slice.map(across)), hi = Math.max(...slice.map(across));
+  const want = lo + 0.55 * (hi - lo);
+  const isBody = (/** @type {number} */ r, /** @type {number} */ c) => !['.', 'k', undefined].includes(rows[r]?.[c]);
+  const inner = (/** @type {number[]} */ [r, c]) => [[-1, 0], [1, 0], [0, -1], [0, 1]].every(([dr, dc]) => isBody(r + dr, c + dc));
+  // The 2×2, the ring above and left of the pupil, all of it inside the body.
+  const fits = (/** @type {number[]} */ [r, c]) => inner([r, c]) && inner([r - 1, c - 1]) && inner([r - 1, c]) && inner([r, c - 1]);
+  const pool = body.filter(fits).length ? body.filter(fits) : body;
+  const [er, ec] = pool.reduce((best, p) => (Math.hypot(along(p) - t, across(p) - want) < Math.hypot(along(best) - t, across(best) - want) ? p : best));
+  /** @type {number[]} */
+  const around = [];
+  for (let r = er - 2; r <= er + 1; r++) for (let c = ec - 2; c <= ec + 1; c++) {
+    if (!(r >= er - 1 && c >= ec - 1) && isBody(r, c)) around.push(lum(keys[rows[r][c]]));
+  }
+  const light = around.length > 0 && around.reduce((x, y) => x + y, 0) / around.length >= 95;
+  const look = light ? ['e', 'x', 'x', 'x'] : ['e', 'e', 'e', 'x'];
+  [[er - 1, ec - 1], [er - 1, ec], [er, ec - 1], [er, ec]].forEach(([r, c], i) => { if (isBody(r, c)) rows[r][c] = look[i]; });
+  keys.x = '#141414';
+  keys.e = '#e9e6de';
+  notes.x = 'eye';
+  notes.e = light ? 'eye glint' : 'eye ring';
+  result.grid = rows.map((r) => r.join(''));
+}
+
+// A first guess at what each colour is for, from how dark and how strong it is:
+// in a fish's words with eye=1, plain words otherwise. A starting point for the
+// comments in OWN_KEYS, to correct by eye.
+const ranked = Object.keys(keys).filter((k) => k !== 'k' && !notes[k]).sort((p, q) => lum(keys[p]) - lum(keys[q]));
+const WORDS = eye ? ['back, dark shading', 'upper flank', 'lower flank', 'belly, highlights'] : ['darkest', 'dark', 'light', 'lightest'];
+ranked.forEach((k, i) => {
+  const f = i / Math.max(1, ranked.length - 1);
+  const base = WORDS[f < 0.25 ? 0 : f < 0.55 ? 1 : f < 0.8 ? 2 : 3];
+  notes[k] = sat(keys[k]) > 0.35 ? `${base}; ${eye ? 'fin colour' : 'strong colour'}` : base;
+});
 
 await mkdir('art', { recursive: true });
 await writeFile(join('art', `${name}.png`), encodePng(imageFromGrid(result.grid, keys)));
@@ -215,11 +293,11 @@ for (let y = 0; y < big.height; y++) for (let x = 0; x < big.width; x++) {
 }
 await writeFile(join('art', `${name}-big.png`), encodePng(big));
 
-console.log(`// ${photo}: ${size}×${size}, turned ${angle}°, ${result.palette.length} colours; background #${result.bg.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('')}`);
+console.log(`// ${photo}: ${size}×${size} (margin ${margin}), turned ${angle}°, ${result.palette.length} colours; background #${result.bg.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('')}`);
 console.log(`// wrote art/${name}.png (real size) and art/${name}-big.png (enlarged)`);
 console.log('// OWN_KEYS:');
 console.log('{');
-for (const [key, colour] of Object.entries(keys)) if (key !== 'k') console.log(`  ${key}: '${colour}',`);
+for (const [key, colour] of Object.entries(keys)) if (key !== 'k') console.log(`  ${key}: '${colour}', // ${notes[key]}`);
 console.log('}');
 console.log('// ICONS:');
 console.log('[');

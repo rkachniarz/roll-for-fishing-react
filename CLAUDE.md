@@ -49,6 +49,8 @@ npm run build   # -> dist/artifact.html, the single-file copy for claude.ai
 npm run check   # test, verify, build in turn, stopping at the first failure
 npm run sprite export bobber   # a sprite as art/bobber.png to draw on; `import <file> [keys=icons] [bg=ffffff]` reads one back
 npm run photo-icon <photo> name=icon-fish-<id>   # a first-draft 32×32 icon from a photo; follow the photo-to-icon skill
+npm run cutout <photo> [flip=Name]   # cut the subject out of a busy photo, onto magenta (first: npm run cutout setup)
+npm run commons search <slug> "<query>"   # Wikimedia Commons pictures on a contact sheet; then commons fetch <slug> <n> name=<Name>
 # http://localhost:8001/art.html   the art sheet: trials, every sprite enlarged, the scene in five lights
 # http://localhost:8001/?dev       dev bench; ?seed=N seeds a new game (a save wins); ?wait=MS fixes the bite delay
 ```
