@@ -171,7 +171,8 @@ export async function buildContent(root = ROOT) {
         if (!all.fish[entry.id]) errors.push(`${where}: no fish "${entry.id}"`);
       } else {
         const item = all.items[entry.id];
-        const fits = list === 'treasure' ? ['treasure'] : ['junk', 'consumable'];
+        // The junk list is everything that isn't fish or treasure: junk, stuff (D112), consumables.
+        const fits = list === 'treasure' ? ['treasure'] : ['junk', 'stuff', 'consumable'];
         if (!item) errors.push(`${where}: no item "${entry.id}"`);
         else if (!fits.includes(item.category)) errors.push(`${where}: "${entry.id}" is ${item.category}, not ${list}`);
       }
@@ -285,6 +286,12 @@ export async function buildContent(root = ROOT) {
     if (item.bobber && item.slot !== 'bobber') errors.push(`${where}: only a bobber has a bobber's looks`);
     if (item.bait && item.slot !== 'bait') errors.push(`${where}: only bait has a bait kind`);
     if (item.set && !all.sets?.[item.set]) errors.push(`${where}: no set "${item.set}"`);
+    // Complete junk is gray; anything used for something is stuff, in white (D112).
+    if (item.category === 'junk' && item.rarity !== 'poor') errors.push(`${where}: junk is gray (poor); something used for something is "stuff"`);
+    if (item.category === 'junk' && (item.event || item.set || item.fragmentOf || item.page || item.slot || item.effects)) {
+      errors.push(`${where}: junk is good for nothing; an item with a use is "stuff"`);
+    }
+    if (item.category === 'stuff' && item.rarity !== 'common') warnings.push(`${where}: stuff is white (common), as WoW's quest items are`);
     if (item.set && !item.unique) warnings.push(`${where}: a set's piece should be unique, found once (8.7)`);
     if (item.bait && !baits.has(item.bait)) errors.push(`${where}: no bait "${item.bait}"`);
   }

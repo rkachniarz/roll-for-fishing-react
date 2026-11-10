@@ -6,8 +6,8 @@
     "$schema": { "type": "string" },
     "id": { "$ref": "common.schema.json#/definitions/id" },
     "category": {
-      "description": "Junk is the catch-all for everything that isn't treasure or a consumable (D65).",
-      "enum": ["treasure", "consumable", "junk"]
+      "description": "Junk is complete junk, gray (poor) and good for nothing but trading away; stuff is used for something (a quest, the Alchemist, a set), white (common), even before the player knows what for (D65, D112).",
+      "enum": ["treasure", "consumable", "stuff", "junk"]
     },
     "name": { "$ref": "common.schema.json#/definitions/text" },
     "flavor": { "$ref": "common.schema.json#/definitions/text" },
@@ -45,7 +45,6 @@
     "set": { "description": "The set it's a piece of (content/sets/, 8.7).", "$ref": "common.schema.json#/definitions/id" },
     "page": { "description": "Text the player can read in its tooltip: a page of a book, a letter (8.7).", "$ref": "common.schema.json#/definitions/text" },
     "fragmentOf": { "description": "A piece of a hidden location's map (8.2): enough of them found opens it.", "$ref": "common.schema.json#/definitions/id" },
-    "useful": { "description": "Junk with a use (the Alchemist, a quest): never traded away as useless (trade: junk, 7.9).", "type": "boolean" },
     "devOnly": { "description": "A test item, had only through the ?dev bench, so no location needs to list it (D83).", "type": "boolean" }
   },
   "required": ["id", "category", "name", "rarity", "value"],

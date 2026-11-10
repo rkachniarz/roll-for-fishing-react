@@ -172,7 +172,7 @@ await check('panes over the scene', PHONE, '?seed=1', async (page) => {
   report('panes: the bag button shows it is open', (await page.getAttribute('#bag', 'aria-pressed')) === 'true');
   await page.screenshot({ path: 'dist/verify/pane-bag.png' });
   const names = await page.locator('#bagPane .tab').allTextContents();
-  report('panes: the bag has its three tabs', names.join(',') === 'Equipment,Consumables,Stuff', names.join(','));
+  report('panes: the bag has its four tabs', names.join(',') === 'Equipment,Consumables,Stuff,Junk', names.join(','));
   await page.click('#bagClose');
   report('panes: the bag closes on its own', !(await page.isVisible('#bagPane')) && (await page.isVisible('#pane')));
 });
@@ -463,9 +463,9 @@ await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (p
   const tip = (await page.textContent('.tip')) ?? '';
   report('junk: a tap on the link shows its tooltip', junk !== '' && tip.startsWith(junk), tip);
   await page.click('#bag');
-  await page.click('#tab-stuff');
+  await page.click('#tab-junk');
   const slots = await page.locator('#bagBody .slot:not(.empty)').evaluateAll((els) => els.map((e) => e.getAttribute('aria-label')));
-  report('junk: in the bag, under Stuff', slots.includes(junk), slots.join(', '));
+  report('junk: in the bag, under Junk', slots.includes(junk), slots.join(', '));
   await page.screenshot({ path: 'dist/verify/bag.png' });
   await page.click('#player');
   const rod = await page.getAttribute('[data-slot="rod"]', 'aria-label');

@@ -52,7 +52,7 @@ Newest first.
 
 ## Sets and the old lorebook (8.7, D111)
 
-- **The old lorebook is a placeholder,** three "sodden pages" (rare junk, unique, weight 1 in their spot's junk): deep
+- **The old lorebook is a placeholder,** three "sodden pages" (stuff, white, unique, weight 1 in their spot's junk): deep
   water at the Lake, the river mouth, the Mage Tower's first pool. Their text is your story from `docs/ideas.md`, cut
   down to three sentences by Claude: rewrite freely (CR-10).
 - **The scholar** turns up whenever the player holds a page, at most every 100 casts, and takes all three for 100 XP and
@@ -66,7 +66,7 @@ Newest first.
   picked for looking ornamental (golden shiner, pumpkinseed, bluegill, rainbow trout, golden dorado, golomyanka). It
   waits for your list, and for art.
 - **Three map fragments open it,** "Map fragment (1 of 3)" and so on, weight 1 each in the junk: two at the Lake, one
-  at the River. They're unique, so each comes up once, and `useful`, so the junk collector leaves them.
+  at the River. They're unique, so each comes up once, and stuff (D112), so the junk collector leaves them.
 - **The River is open from the start,** as you've been playing it. Say if it should be found too.
 
 ## What the player knows of each place (8.1, 8.5, D109)
@@ -125,7 +125,7 @@ ability used when it can be. Things worth a look, none changed:
 
 ## The placeholder quest chain (7.4)
 
-- **A message in a bottle,** uncommon junk in the Lake's junk list (weight 1 among the shared list's), unique. Its note
+- **A message in a bottle,** stuff (white) in the Lake's junk list (weight 1 among the shared list's), unique. Its note
   sends the player to the lower river with three roach; a hooded stranger takes them; on the next cast a package on
   the line holds the horsehair line and 25 XP. All the words are Claude's placeholders, for CR-10 to replace or keep.
 
@@ -135,8 +135,7 @@ ability used when it can be. Things worth a look, none changed:
   `again:`, `go:`, `lock:`, `unlock:`, `trade: junk`. They're in `docs/events.md`; rename any you'd write differently.
 - **"Any fish" means the least valuable** (lowest rarity, then smallest), so feeding the cat never costs the best
   fish by accident; a species hands in its smallest first.
-- **Junk counts as useful** if it starts an event, can be equipped, does something, or has `"useful": true`. Junk
-  worth 0 still goes in a trade, adding nothing.
+- **Junk worth 0 still goes in a trade,** adding nothing. (What counts as junk is settled: D112.)
 - **The junk collector's rewards are a placeholder** (`content/tables/junk-collector.json`): worms or maggots for
   junk worth under 5, more bait from 5, the straw hat or horsehair line from 15, the willow rod from 30.
 - **Being moved by an event doesn't count as arriving,** so a `trigger: arrive` event there waits for the next

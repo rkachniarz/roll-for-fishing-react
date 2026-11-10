@@ -378,13 +378,12 @@ function takeFish(state, what) {
 }
 
 /**
- * Is this junk useless (7.9)? Junk with a use is kept: one that starts an
- * event, can be equipped or does something, or is marked `useful`.
+ * Is this complete junk (7.9, D112)? Gray, good for nothing; stuff, used for
+ * something, is never traded away.
  * @param {string} id
  */
 export function uselessJunk(id) {
-  const item = content.items[id];
-  return item?.category === 'junk' && !item.useful && !item.event && !item.slot && !item.effects;
+  return content.items[id]?.category === 'junk';
 }
 
 /**

@@ -577,14 +577,15 @@ test('an event can move the player and hold them there until another lets them g
 
 test('trading junk: every useless piece goes, the reward by their total value (7.9)', () => {
   withEvent(eventFrom(`---\nid: test-collector\ntitle: x\nonce: false\n---\n\n## a\nx\n\n- Trade -> end\n  trade: junk junk-collector\n`), () => {
-    const s = { ...startEvent(game(), 'test-collector'), bags: [{ id: 'bent-fork', count: 2 }, { id: 'dwarven-stein', count: 3 }, { id: 'willow-rod', count: 1 }, { id: 'worms', count: 1 }] };
+    const s = { ...startEvent(game(), 'test-collector'), bags: [{ id: 'bent-fork', count: 2 }, { id: 'dwarven-stein', count: 3 }, { id: 'willow-rod', count: 1 }, { id: 'worms', count: 1 }, { id: 'mage-tower-map-1', count: 1 }] };
     assert.ok(uselessJunk('bent-fork') && !uselessJunk('willow-rod') && !uselessJunk('worms'));
+    assert.ok(!uselessJunk('mage-tower-map-1'), 'stuff, used for something, stays (D112)');
     const out = choose(s, 0);
     // 2 × 1 + 3 × 5 = 17: the 15 tier, a straw hat or a horsehair line.
     const gained = out.events.find((e) => e.type === 'event-gained');
     assert.ok(['straw-hat', 'horsehair-line'].includes(gained?.item), gained?.item);
     assert.ok(!out.state.bags.some((b) => b.id === 'bent-fork' || b.id === 'dwarven-stein'));
-    assert.ok(out.state.bags.some((b) => b.id === 'willow-rod') && out.state.bags.some((b) => b.id === 'worms'), 'the rest stays');
+    assert.ok(['willow-rod', 'worms', 'mage-tower-map-1'].every((id) => out.state.bags.some((b) => b.id === id)), 'the rest stays');
     assert.notEqual(out.state.streams.events, s.streams.events, 'the reward from the events stream');
     const nothing = choose({ ...s, bags: [{ id: 'worms', count: 1 }] }, 0);
     assert.deepEqual(nothing.events.filter((e) => e.type !== 'event-ended'), [], 'no junk, no trade');

@@ -25,15 +25,17 @@ export const itemName = (id) => t(content.items[id].name);
 export const rarityColour = (rarity) => `var(--rarity-${rarity in RARITY_COLOURS ? rarity : 'common'})`;
 
 /**
- * The bag tab an item goes in (R8.1): anything with a slot is equipment,
- * consumables are consumables, and everything else is stuff.
+ * The bag tab an item goes in (R8.1, D112): anything with a slot is
+ * equipment, consumables are consumables, complete junk is junk, and
+ * everything else is stuff.
  * @param {string} id
- * @returns {'equipment' | 'consumables' | 'stuff'}
+ * @returns {'equipment' | 'consumables' | 'stuff' | 'junk'}
  */
 export function bagTab(id) {
   const item = content.items[id];
   if (item.slot) return 'equipment';
   if (item.category === 'consumable') return 'consumables';
+  if (item.category === 'junk') return 'junk';
   return 'stuff';
 }
 

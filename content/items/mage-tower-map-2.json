@@ -1,12 +1,11 @@
 {
   "$schema": "../../schemas/item.schema.json",
   "id": "mage-tower-map-2",
-  "category": "junk",
+  "category": "stuff",
   "name": "Map fragment (2 of 3)",
   "flavor": "Part of a map. The ink shows towers and pools, and a path between them.",
-  "rarity": "uncommon",
+  "rarity": "common",
   "value": 0,
   "unique": true,
-  "useful": true,
   "fragmentOf": "mage-tower"
 }

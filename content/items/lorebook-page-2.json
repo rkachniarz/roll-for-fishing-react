@@ -1,13 +1,12 @@
 {
   "$schema": "../../schemas/item.schema.json",
   "id": "lorebook-page-2",
-  "category": "junk",
+  "category": "stuff",
   "name": "A sodden page (2 of 3)",
   "flavor": "The ink has run, but most of it can still be read.",
-  "rarity": "rare",
+  "rarity": "common",
   "value": 0,
   "unique": true,
-  "useful": true,
   "set": "old-lorebook",
   "page": "The treasures drew dragons, and their fire. So the elves' mages made the valley's water proof against dragonfire, and shot the confused dragons down."
 }

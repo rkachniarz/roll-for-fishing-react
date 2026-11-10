@@ -1,13 +1,12 @@
 {
   "$schema": "../../schemas/item.schema.json",
   "id": "lorebook-page-3",
-  "category": "junk",
+  "category": "stuff",
   "name": "A sodden page (3 of 3)",
   "flavor": "The ink has run, but most of it can still be read.",
-  "rarity": "rare",
+  "rarity": "common",
   "value": 0,
   "unique": true,
-  "useful": true,
   "set": "old-lorebook",
   "page": "A hundred years later the dragons came back, breathing water, ice and steam, and a great storm with them. When they were done, the valley was gone. A lake took its place."
 }

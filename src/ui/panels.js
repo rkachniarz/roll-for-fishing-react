@@ -323,8 +323,8 @@ export function bucketPane(state, size, onHook = () => {}) {
   ];
 }
 
-/** @typedef {'equipment' | 'consumables' | 'stuff'} BagTab */
-export const BAG_TABS = /** @type {BagTab[]} */ (['equipment', 'consumables', 'stuff']);
+/** @typedef {'equipment' | 'consumables' | 'stuff' | 'junk'} BagTab */
+export const BAG_TABS = /** @type {BagTab[]} */ (['equipment', 'consumables', 'stuff', 'junk']);
 
 /**
  * The bag, in tabs (R8.1): a grid of slots. Each stack can be dragged by its

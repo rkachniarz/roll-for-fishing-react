@@ -229,6 +229,7 @@ const UI_STRINGS = {
   'bag.equipment': 'Equipment',
   'bag.consumables': 'Consumables',
   'bag.stuff': 'Stuff',
+  'bag.junk': 'Junk',
   'menu.mainMenu': 'Main menu',
   'menu.settings': 'Settings',
   'menu.dev': 'Dev bench',

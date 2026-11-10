@@ -145,8 +145,8 @@ many as there are, up to the amount, so give the choice a `needs:` if it should 
 **Showing a counter:** write `{#cat-trust}` in the text, and it becomes the number: `The raid has {#raid-perch} of 25
 perch.`
 
-**Trading junk:** junk counts as useless unless it starts an event, can be equipped, does something, or has
-`"useful": true` in its file (for the Alchemist's ingredients, quest pieces). The reward table is a
+**Trading junk:** only complete junk goes, the gray items (`"category": "junk"`). Anything used for something, a
+quest piece, an Alchemist's ingredient, a set's piece, is `"category": "stuff"`, in white, and stays (D112). The reward table is a
 `content/tables/` file of kind `rewards`: each reward has a `min`, the total value its tier needs, a `weight` and a
 `count`. The trade picks among the richest tier the total reaches, by weight. See
 `content/tables/junk-collector.json`, a placeholder.

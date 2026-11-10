@@ -1,13 +1,12 @@
 {
   "$schema": "../../schemas/item.schema.json",
   "id": "lorebook-page-1",
-  "category": "junk",
+  "category": "stuff",
   "name": "A sodden page (1 of 3)",
   "flavor": "The ink has run, but most of it can still be read.",
-  "rarity": "rare",
+  "rarity": "common",
   "value": 0,
   "unique": true,
-  "useful": true,
   "set": "old-lorebook",
   "page": "Long ago, before the lake, a great valley lay here: a land of plenty, and home to the elves, proud makers of great treasures."
 }
