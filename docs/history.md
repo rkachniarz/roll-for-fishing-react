@@ -225,3 +225,21 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
 - **3.5 GitHub Pages (D91)** `.github/workflows/pages.yml` publishes on a push to `fresh-start` or `master` once
   `npm test` passes, copying only what the page loads. The art sheet fits a phone's width (a verify check), so the owner
   can look at it away from home.
+
+## Phase 7: Events (done 2026-11-10)
+
+7.1–7.3 are above, under Phase 5, where they were written up as they landed.
+
+- **7.6–7.10** Event words for the owner's ideas (D108, `docs/events.md`): counters among the flags (`add:`,
+  `needs: count`, `{#name}` in text), fish taken from the bucket (`lose: fish`, the least valuable first; of a species,
+  the smallest first; `lose: rarest fish`; `needs: fish`), visitors who come back after so many casts or days
+  (`again:`, with the save keeping when each event last started), the player moved and held at a location (`go:`,
+  `lock:`, `unlock:`; travel and the map refuse the rest), and every useless piece of junk traded at once for a reward
+  picked by their total value from a `rewards` table (`trade: junk`). Save versions 8.
+- **7.4** A placeholder quest chain, the message in a bottle: an item starts it, a stranger at the lower river takes
+  three roach, a package on the line brings the reward. Item, arrive, hand-in and needs triggers, linked by flags; a
+  test plays it through. Adding the bottle to the Lake's junk changed which junk a seeded cast brings up, so the
+  browser check now reads the item's name from the log rather than expecting one.
+- **7.5** The content editor (`editor.html`, D47): forms drawn from the schemas, saving into `content/` through the
+  browser's File System Access API (Chrome, Edge), events as text. Its browser check stands the private file system
+  in for the folder picker; the first run read the file back before the save had finished.

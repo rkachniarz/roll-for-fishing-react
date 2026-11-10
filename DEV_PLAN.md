@@ -11,15 +11,15 @@ a plain generic sentence, a stand-in rule. A town of placeholder squares is bett
 listed under the creative task that will replace it, so nothing is forgotten; a placeholder that fits no task gets a
 new one.
 
-**Where things stand (2026-11-10):** Phases 1–3 are done: the game is playable on the real engine, on GitHub Pages
-(D91), with character creation, saves, the buff bar and the `?dev` bench in the owner's phone layout (D79–D81).
-Phases 4–8 are under way. The bag and the seven equipment slots work (D83); events are text (`docs/events.md`, D84)
-and the frog encounter is the first; perks at levels 1–8 and an action bar of abilities (D96), every class perk
-working (D106). The fish are the
-owner's (D101): 80 species over nine spots, six at the Lake and three at the River, each likelier in its own time,
-weather, season and bait, with schools and big single predators per spot (D102), and 42 rift fish waiting for the
-wizard's Rift Fishing (D104). The art has a process (D90, D97, `docs/art.md`), and most fish have icons drawn from
-photos. Claude's guesses and calls are listed in [docs/REVIEW.md](docs/REVIEW.md) for the owner to check.
+**Where things stand (2026-11-10):** Phases 1–3 and 7 are done: the game is playable on GitHub Pages (D91), and
+events have every word the owner's ideas need so far (D108), with a placeholder quest chain and a content editor.
+The fish are the owner's (D101–D104): 80 over nine spots and 42 rift fish. Every class perk works (D106), the number
+a fish needed shows from level 1 with its own dice (D107), and gear, rods and Tiny-fish bait are in (5.3, 5.7, 5.8).
+Places are learned (D109): spots are noticed by fishing, each place has its list and a hidden completion, and the
+Mage Tower pools open from map fragments (D110). Sets and readable pages (D111), sound, saves to a file, the
+collection and a balance simulation are in. What's left in development mostly waits on the town's barter (D86) or on
+the owner; the creative track holds the art, writing and sound. Claude's guesses are on
+[docs/REVIEW.md](docs/REVIEW.md).
 
 ## Where things are
 
@@ -196,7 +196,7 @@ icon and any new look it brings (a Greedy fish, a bent fish) are creative work (
 - [ ] **6.5** Class-flavoured texts (R6.5): a string can have a version per class, falling back to the plain one;
   the prototype's lists ported. New writing is CR-11.
 
-## Phase 7: Events
+## Phase 7: Events (done)
 
 Requirements R10. Each new piece of the engine is tried with a placeholder event, short and plain, that the owner's
 writing replaces or joins (CR-10).
