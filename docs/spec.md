@@ -388,16 +388,16 @@ Levels 1, 3, 6 and 9 per class; even levels draw from the universal list. Cooldo
 - Level 10: reset to level 0, empty your inventory, and start levelling a second class, keeping your abilities. Or:
   level cap raised to 99, with some events only after level 10.
 
-### §C.3 Items (prototype treasure, to be given real downsides in Phase 5)
+### §C.3 Items (prototype treasure, with their downsides; 5.3)
 
 | Item | Effect in the prototype | Downside |
 |---|---|---|
-| Mega Mass Fish Chum | Fish size band +2 | (bigger fish should also be harder: PORTING-NOTES §1.3) |
+| Mega Mass Fish Chum | Fish size band +2 | −5 Treasure Find (Claude's; bigger fish are harder too, PORTING-NOTES §1.3) |
 | Fishing pole laser sight | +2 Fishing Skill | −2 Treasure Find (promised in text, missing in data) |
 | Heavy bait | +5 Fishing Skill | Disadvantage on the fishing roll |
 | Industrial-strength gelatin | Fish roll with disadvantage | −10 Fish Find |
 | Four-leaf underwater clover | Advantage on the fishing roll | +3 fish difficulty |
-| Fish and where to find them (compendium) | +30 Fish Find | Fish give 1 less XP |
+| Fish and where to find them (compendium) | +30 Fish Find, and what each fish needs shows (R5.2) | Fish give 1 less XP |
 | Eight-leaf underwater clover | "Strong" advantage | +5 fish difficulty (and advantage doesn't stack yet: §C.2 Warrior L6) |
 
 ### §C.4 The Lake and the River

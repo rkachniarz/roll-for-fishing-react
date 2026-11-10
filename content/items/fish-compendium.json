@@ -16,6 +16,10 @@
     {
       "value": "fishXp",
       "add": -1
+    },
+    {
+      "value": "revealResistance",
+      "add": 1
     }
   ]
 }

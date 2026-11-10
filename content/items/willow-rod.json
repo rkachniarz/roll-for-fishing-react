@@ -17,5 +17,5 @@
       "add": 500
     }
   ],
-  "devOnly": true
+  "unique": true
 }

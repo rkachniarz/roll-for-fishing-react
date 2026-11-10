@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "magpie-feather",
+  "category": "treasure",
+  "name": "Magpie feather",
+  "flavor": "Fish with an eye for shiny things find you. The others less so.",
+  "rarity": "uncommon",
+  "value": 3,
+  "unique": true,
+  "slot": "trinket",
+  "effects": [
+    {
+      "value": "greedyChance",
+      "add": 5
+    },
+    {
+      "value": "fishFind",
+      "add": -3
+    }
+  ]
+}

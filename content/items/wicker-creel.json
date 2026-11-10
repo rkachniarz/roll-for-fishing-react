@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "wicker-creel",
+  "category": "treasure",
+  "name": "Wicker creel",
+  "flavor": "Room for plenty more fish. Awkward to cast with on your back.",
+  "rarity": "uncommon",
+  "value": 4,
+  "unique": true,
+  "slot": "trinket",
+  "effects": [
+    {
+      "value": "bucketSize",
+      "add": 8
+    },
+    {
+      "value": "castScatter",
+      "add": 4
+    }
+  ]
+}

@@ -24,6 +24,20 @@ Items with no note are left alone.
 
 Newest first.
 
+## Placeholder gear (5.3, 5.7)
+
+- **Sixteen pieces of gear, all Claude's,** unique, weight 1 each in the shared treasure list beside the prototype's
+  seven: rods (willow rod, ash rod, reed pole, dwarven steel rod), a silk line and the horsehair line, a cork bobber,
+  the straw hat and a wide-brimmed hat, and trinkets (lucky hook, bait pouch, wicker creel, tide charm, stopwatch,
+  rift shard, magpie feather). Each has one upside and one downside; the numbers are guesses for 9.1 to tune.
+- **The willow rod, straw hat and horsehair line** were bench-only; now they're found like the rest.
+- **The chum's downside is −5 Treasure Find** (it clouds the water). The compendium also shows what each fish needs,
+  as R5.2's own example has it.
+- **Bait has no downside but being used up,** so the data test lets it be. The rest must have one: `npm run content`
+  now stops on it.
+- **The rift shard and the magpie feather** give anyone a little of the wizard's rift fish and the rogue's Greedy fish.
+  If those should stay the classes' own, they go.
+
 ## The placeholder quest chain (7.4)
 
 - **A message in a bottle,** uncommon junk in the Lake's junk list (weight 1 among the shared list's), unique. Its note

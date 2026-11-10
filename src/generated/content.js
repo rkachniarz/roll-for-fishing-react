@@ -3105,6 +3105,26 @@ export const content = {
     }
   },
   "items": {
+    "ash-rod": {
+      "id": "ash-rod",
+      "category": "treasure",
+      "name": "item.ash-rod.name",
+      "flavor": "item.ash-rod.flavor",
+      "rarity": "uncommon",
+      "value": 4,
+      "unique": true,
+      "slot": "rod",
+      "effects": [
+        {
+          "value": "reactionOk",
+          "add": 200
+        },
+        {
+          "value": "castScatter",
+          "add": 4
+        }
+      ]
+    },
     "back-cover-of-a-spellbook": {
       "id": "back-cover-of-a-spellbook",
       "category": "junk",
@@ -3112,6 +3132,26 @@ export const content = {
       "flavor": "item.back-cover-of-a-spellbook.flavor",
       "rarity": "poor",
       "value": 5
+    },
+    "bait-pouch": {
+      "id": "bait-pouch",
+      "category": "treasure",
+      "name": "item.bait-pouch.name",
+      "flavor": "item.bait-pouch.flavor",
+      "rarity": "uncommon",
+      "value": 3,
+      "unique": true,
+      "slot": "trinket",
+      "effects": [
+        {
+          "value": "baitRecovery",
+          "add": 15
+        },
+        {
+          "value": "bucketSize",
+          "add": -2
+        }
+      ]
     },
     "beaten-up-spectacles": {
       "id": "beaten-up-spectacles",
@@ -3212,6 +3252,26 @@ export const content = {
       "rarity": "poor",
       "value": 1
     },
+    "cork-bobber": {
+      "id": "cork-bobber",
+      "category": "treasure",
+      "name": "item.cork-bobber.name",
+      "flavor": "item.cork-bobber.flavor",
+      "rarity": "uncommon",
+      "value": 2,
+      "unique": true,
+      "slot": "bobber",
+      "effects": [
+        {
+          "value": "missPause",
+          "add": -2000
+        },
+        {
+          "value": "castScatter",
+          "add": 3
+        }
+      ]
+    },
     "crayfish": {
       "id": "crayfish",
       "category": "consumable",
@@ -3243,6 +3303,26 @@ export const content = {
       "flavor": "item.decomposed-boot.flavor",
       "rarity": "poor",
       "value": 0
+    },
+    "dwarven-steel-rod": {
+      "id": "dwarven-steel-rod",
+      "category": "treasure",
+      "name": "item.dwarven-steel-rod.name",
+      "flavor": "item.dwarven-steel-rod.flavor",
+      "rarity": "rare",
+      "value": 8,
+      "unique": true,
+      "slot": "rod",
+      "effects": [
+        {
+          "value": "fishingSkill",
+          "add": 2
+        },
+        {
+          "value": "biteDelayMax",
+          "add": 2000
+        }
+      ]
     },
     "dwarven-stein": {
       "id": "dwarven-stein",
@@ -3297,6 +3377,10 @@ export const content = {
         {
           "value": "fishXp",
           "add": -1
+        },
+        {
+          "value": "revealResistance",
+          "add": 1
         }
       ]
     },
@@ -3410,7 +3494,7 @@ export const content = {
           "add": -50
         }
       ],
-      "devOnly": true
+      "unique": true
     },
     "humanoid-molar": {
       "id": "humanoid-molar",
@@ -3496,6 +3580,26 @@ export const content = {
       ],
       "devOnly": true
     },
+    "lucky-hook": {
+      "id": "lucky-hook",
+      "category": "treasure",
+      "name": "item.lucky-hook.name",
+      "flavor": "item.lucky-hook.flavor",
+      "rarity": "rare",
+      "value": 5,
+      "unique": true,
+      "slot": "trinket",
+      "effects": [
+        {
+          "value": "naturalCatch",
+          "add": -1
+        },
+        {
+          "value": "fishDifficulty",
+          "add": 1
+        }
+      ]
+    },
     "maggots": {
       "id": "maggots",
       "category": "consumable",
@@ -3512,6 +3616,26 @@ export const content = {
       ],
       "devOnly": true
     },
+    "magpie-feather": {
+      "id": "magpie-feather",
+      "category": "treasure",
+      "name": "item.magpie-feather.name",
+      "flavor": "item.magpie-feather.flavor",
+      "rarity": "uncommon",
+      "value": 3,
+      "unique": true,
+      "slot": "trinket",
+      "effects": [
+        {
+          "value": "greedyChance",
+          "add": 5
+        },
+        {
+          "value": "fishFind",
+          "add": -3
+        }
+      ]
+    },
     "mega-mass-fish-chum": {
       "id": "mega-mass-fish-chum",
       "category": "treasure",
@@ -3525,6 +3649,10 @@ export const content = {
         {
           "value": "fishSizeBand",
           "add": 2
+        },
+        {
+          "value": "treasureFind",
+          "add": -5
         }
       ]
     },
@@ -3578,6 +3706,46 @@ export const content = {
       "rarity": "poor",
       "value": 0
     },
+    "reed-pole": {
+      "id": "reed-pole",
+      "category": "treasure",
+      "name": "item.reed-pole.name",
+      "flavor": "item.reed-pole.flavor",
+      "rarity": "uncommon",
+      "value": 3,
+      "unique": true,
+      "slot": "rod",
+      "effects": [
+        {
+          "value": "castScatter",
+          "add": -10
+        },
+        {
+          "value": "strikeLimit",
+          "add": -500
+        }
+      ]
+    },
+    "rift-shard": {
+      "id": "rift-shard",
+      "category": "treasure",
+      "name": "item.rift-shard.name",
+      "flavor": "item.rift-shard.flavor",
+      "rarity": "rare",
+      "value": 6,
+      "unique": true,
+      "slot": "trinket",
+      "effects": [
+        {
+          "value": "riftChance",
+          "add": 5
+        },
+        {
+          "value": "fishDifficulty",
+          "add": 1
+        }
+      ]
+    },
     "ruined-hat": {
       "id": "ruined-hat",
       "category": "junk",
@@ -3625,6 +3793,26 @@ export const content = {
         }
       ],
       "devOnly": true
+    },
+    "silk-line": {
+      "id": "silk-line",
+      "category": "treasure",
+      "name": "item.silk-line.name",
+      "flavor": "item.silk-line.flavor",
+      "rarity": "uncommon",
+      "value": 3,
+      "unique": true,
+      "slot": "line",
+      "effects": [
+        {
+          "value": "baitEscapeLoss",
+          "add": -4
+        },
+        {
+          "value": "reactionOk",
+          "add": -100
+        }
+      ]
     },
     "single-ball-bearing": {
       "id": "single-ball-bearing",
@@ -3707,6 +3895,26 @@ export const content = {
       "value": 0,
       "slot": "rod"
     },
+    "stopwatch": {
+      "id": "stopwatch",
+      "category": "treasure",
+      "name": "item.stopwatch.name",
+      "flavor": "item.stopwatch.flavor",
+      "rarity": "uncommon",
+      "value": 4,
+      "unique": true,
+      "slot": "trinket",
+      "effects": [
+        {
+          "value": "reactionFast",
+          "add": 100
+        },
+        {
+          "value": "reactionOk",
+          "add": -200
+        }
+      ]
+    },
     "straw-hat": {
       "id": "straw-hat",
       "category": "treasure",
@@ -3725,7 +3933,7 @@ export const content = {
           "add": -1
         }
       ],
-      "devOnly": true
+      "unique": true
     },
     "sweetcorn": {
       "id": "sweetcorn",
@@ -3751,6 +3959,26 @@ export const content = {
       "rarity": "poor",
       "value": 0
     },
+    "tide-charm": {
+      "id": "tide-charm",
+      "category": "treasure",
+      "name": "item.tide-charm.name",
+      "flavor": "item.tide-charm.flavor",
+      "rarity": "uncommon",
+      "value": 3,
+      "unique": true,
+      "slot": "trinket",
+      "effects": [
+        {
+          "value": "biteDelayMax",
+          "add": -2000
+        },
+        {
+          "value": "treasureFind",
+          "add": -3
+        }
+      ]
+    },
     "vendor-trash": {
       "id": "vendor-trash",
       "category": "junk",
@@ -3775,6 +4003,46 @@ export const content = {
       "rarity": "poor",
       "value": 0
     },
+    "wicker-creel": {
+      "id": "wicker-creel",
+      "category": "treasure",
+      "name": "item.wicker-creel.name",
+      "flavor": "item.wicker-creel.flavor",
+      "rarity": "uncommon",
+      "value": 4,
+      "unique": true,
+      "slot": "trinket",
+      "effects": [
+        {
+          "value": "bucketSize",
+          "add": 8
+        },
+        {
+          "value": "castScatter",
+          "add": 4
+        }
+      ]
+    },
+    "wide-brimmed-hat": {
+      "id": "wide-brimmed-hat",
+      "category": "treasure",
+      "name": "item.wide-brimmed-hat.name",
+      "flavor": "item.wide-brimmed-hat.flavor",
+      "rarity": "uncommon",
+      "value": 3,
+      "unique": true,
+      "slot": "hat",
+      "effects": [
+        {
+          "value": "reactionFast",
+          "add": 50
+        },
+        {
+          "value": "fishFind",
+          "add": -3
+        }
+      ]
+    },
     "willow-rod": {
       "id": "willow-rod",
       "category": "treasure",
@@ -3793,7 +4061,7 @@ export const content = {
           "add": 500
         }
       ],
-      "devOnly": true
+      "unique": true
     },
     "wooden-figurine": {
       "id": "wooden-figurine",
@@ -5029,6 +5297,70 @@ export const content = {
         },
         {
           "id": "eight-leaf-underwater-clover",
+          "weight": 1
+        },
+        {
+          "id": "ash-rod",
+          "weight": 1
+        },
+        {
+          "id": "reed-pole",
+          "weight": 1
+        },
+        {
+          "id": "dwarven-steel-rod",
+          "weight": 1
+        },
+        {
+          "id": "silk-line",
+          "weight": 1
+        },
+        {
+          "id": "cork-bobber",
+          "weight": 1
+        },
+        {
+          "id": "wide-brimmed-hat",
+          "weight": 1
+        },
+        {
+          "id": "lucky-hook",
+          "weight": 1
+        },
+        {
+          "id": "bait-pouch",
+          "weight": 1
+        },
+        {
+          "id": "wicker-creel",
+          "weight": 1
+        },
+        {
+          "id": "tide-charm",
+          "weight": 1
+        },
+        {
+          "id": "stopwatch",
+          "weight": 1
+        },
+        {
+          "id": "rift-shard",
+          "weight": 1
+        },
+        {
+          "id": "magpie-feather",
+          "weight": 1
+        },
+        {
+          "id": "willow-rod",
+          "weight": 1
+        },
+        {
+          "id": "straw-hat",
+          "weight": 1
+        },
+        {
+          "id": "horsehair-line",
           "weight": 1
         }
       ]
@@ -8718,8 +9050,12 @@ export const strings = {
     "fish.wolffish.name": "Wolffish",
     "fish.yellow-perch.name": "Yellow perch",
     "fish.zander.name": "Zander",
+    "item.ash-rod.name": "Ash rod",
+    "item.ash-rod.flavor": "Springy. Forgiving, if not precise.",
     "item.back-cover-of-a-spellbook.name": "Back cover of a spellbook",
     "item.back-cover-of-a-spellbook.flavor": "Looks like the thing exploded.",
+    "item.bait-pouch.name": "Bait pouch",
+    "item.bait-pouch.flavor": "Keeps bait fresh. Takes up room the fish could use.",
     "item.beaten-up-spectacles.name": "Beaten up spectacles",
     "item.beaten-up-spectacles.flavor": "Or rather, just the frame.",
     "item.bent-fork.name": "Bent fork",
@@ -8740,11 +9076,15 @@ export const strings = {
     "item.candle-stump.flavor": "Waxy.",
     "item.clump-of-hair.name": "A clump of hair",
     "item.clump-of-hair.flavor": "You hope this was a wig.",
+    "item.cork-bobber.name": "Cork bobber",
+    "item.cork-bobber.flavor": "Pops back up in no time. Drifts a bit.",
     "item.crayfish.name": "Crayfish",
     "item.crows-feather.name": "A crow's feather",
     "item.crows-feather.flavor": "Chewed and ink-stained.",
     "item.decomposed-boot.name": "Decomposed boot",
     "item.decomposed-boot.flavor": "A frog's palace.",
+    "item.dwarven-steel-rod.name": "Dwarven steel rod",
+    "item.dwarven-steel-rod.flavor": "Made in Ferrstad. Heavy, sure, and the fish can feel it coming.",
     "item.dwarven-stein.name": "Dwarven stein",
     "item.dwarven-stein.flavor": "Somehow, still smells of beer.",
     "item.eight-leaf-underwater-clover.name": "Eight-leaf underwater clover",
@@ -8781,7 +9121,11 @@ export const strings = {
     "item.leaky-waterskin.name": "Leaky waterskin",
     "item.leaky-waterskin.flavor": "Still holds some water!",
     "item.live-frog.name": "Live frog",
+    "item.lucky-hook.name": "Lucky hook",
+    "item.lucky-hook.flavor": "Bent just so. Fish seem to resent it.",
     "item.maggots.name": "Maggots",
+    "item.magpie-feather.name": "Magpie feather",
+    "item.magpie-feather.flavor": "Fish with an eye for shiny things find you. The others less so.",
     "item.mega-mass-fish-chum.name": "Mega Mass Fish Chum",
     "item.mega-mass-fish-chum.flavor": "Dad, should trout have biceps this huge?",
     "item.message-in-a-bottle.name": "Message in a bottle",
@@ -8793,6 +9137,10 @@ export const strings = {
     "item.old-compass.flavor": "The needle won't stop spinning.",
     "item.old-skull.name": "Old skull",
     "item.old-skull.flavor": "Humanoid.",
+    "item.reed-pole.name": "Reed pole",
+    "item.reed-pole.flavor": "Light enough to point exactly where you mean. Snaps if you dawdle.",
+    "item.rift-shard.name": "Rift shard",
+    "item.rift-shard.flavor": "A sliver of somewhere else. Things come through it, and they fight.",
     "item.ruined-hat.name": "Ruined hat",
     "item.ruined-hat.flavor": "Possibly used to be a fedora.",
     "item.ruined-playing-card.name": "Ruined playing card",
@@ -8802,6 +9150,8 @@ export const strings = {
     "item.rusted-saucepan.name": "Rusted saucepan",
     "item.rusted-saucepan.flavor": "Contains mud sauce.",
     "item.shrimp.name": "Shrimp",
+    "item.silk-line.name": "Silk line",
+    "item.silk-line.flavor": "Fine and strong. A fish that slips it rarely takes the bait.",
     "item.single-ball-bearing.name": "A single ball bearing",
     "item.single-ball-bearing.flavor": "How did you even get it on a hook?",
     "item.small-bag-of-tiny-rocks.name": "A small bag of tiny rocks",
@@ -8817,17 +9167,25 @@ export const strings = {
     "item.spinner-lure.name": "Spinner lure",
     "item.stick.name": "A stick with some string tied to it",
     "item.stick.flavor": "Everyone starts somewhere.",
+    "item.stopwatch.name": "Stopwatch",
+    "item.stopwatch.flavor": "Tick, tick, strike. You rush the ordinary ones.",
     "item.straw-hat.name": "Straw hat",
     "item.straw-hat.flavor": "Keeps the sun off, and most of the view.",
     "item.sweetcorn.name": "Sweetcorn",
     "item.tangled-fishing-line.name": "Tangled fishing line",
     "item.tangled-fishing-line.flavor": "Impressively knotted.",
+    "item.tide-charm.name": "Tide charm",
+    "item.tide-charm.flavor": "The fish come sooner. Whatever else is down there stays put.",
     "item.vendor-trash.name": "Vendor trash",
     "item.vendor-trash.flavor": "Literally trash that the vendor tossed out.",
     "item.very-wet-jerky.name": "Very wet jerky",
     "item.very-wet-jerky.flavor": "Chewy.",
     "item.waterlogged-stick.name": "Waterlogged stick",
     "item.waterlogged-stick.flavor": "Sticky.",
+    "item.wicker-creel.name": "Wicker creel",
+    "item.wicker-creel.flavor": "Room for plenty more fish. Awkward to cast with on your back.",
+    "item.wide-brimmed-hat.name": "Wide-brimmed hat",
+    "item.wide-brimmed-hat.flavor": "No glare off the water. No view of it either.",
     "item.willow-rod.name": "Willow rod",
     "item.willow-rod.flavor": "Bends without breaking. Mostly.",
     "item.wooden-figurine.name": "Wooden figurine",

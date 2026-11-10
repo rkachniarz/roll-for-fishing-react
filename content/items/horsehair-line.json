@@ -17,5 +17,5 @@
       "add": -50
     }
   ],
-  "devOnly": true
+  "unique": true
 }

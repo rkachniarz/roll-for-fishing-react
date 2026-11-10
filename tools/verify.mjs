@@ -679,6 +679,8 @@ await check('a Tiny fish on the hook', PHONE, '?dev&seed=1', async (page) => {
 
 /** The middle of an element, on the page. */
 const centre = async (page, selector) => {
+  // A long bag scrolls: bring the slot into view first.
+  await page.locator(selector).scrollIntoViewIfNeeded();
   const box = await page.locator(selector).boundingBox();
   if (!box) throw new Error(`${selector} not visible`);
   return { x: box.x + box.width / 2, y: box.y + box.height / 2 };

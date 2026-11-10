@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "silk-line",
+  "category": "treasure",
+  "name": "Silk line",
+  "flavor": "Fine and strong. A fish that slips it rarely takes the bait.",
+  "rarity": "uncommon",
+  "value": 3,
+  "unique": true,
+  "slot": "line",
+  "effects": [
+    {
+      "value": "baitEscapeLoss",
+      "add": -4
+    },
+    {
+      "value": "reactionOk",
+      "add": -100
+    }
+  ]
+}

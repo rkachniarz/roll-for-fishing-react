@@ -30,6 +30,70 @@
     {
       "id": "eight-leaf-underwater-clover",
       "weight": 1
+    },
+    {
+      "id": "ash-rod",
+      "weight": 1
+    },
+    {
+      "id": "reed-pole",
+      "weight": 1
+    },
+    {
+      "id": "dwarven-steel-rod",
+      "weight": 1
+    },
+    {
+      "id": "silk-line",
+      "weight": 1
+    },
+    {
+      "id": "cork-bobber",
+      "weight": 1
+    },
+    {
+      "id": "wide-brimmed-hat",
+      "weight": 1
+    },
+    {
+      "id": "lucky-hook",
+      "weight": 1
+    },
+    {
+      "id": "bait-pouch",
+      "weight": 1
+    },
+    {
+      "id": "wicker-creel",
+      "weight": 1
+    },
+    {
+      "id": "tide-charm",
+      "weight": 1
+    },
+    {
+      "id": "stopwatch",
+      "weight": 1
+    },
+    {
+      "id": "rift-shard",
+      "weight": 1
+    },
+    {
+      "id": "magpie-feather",
+      "weight": 1
+    },
+    {
+      "id": "willow-rod",
+      "weight": 1
+    },
+    {
+      "id": "straw-hat",
+      "weight": 1
+    },
+    {
+      "id": "horsehair-line",
+      "weight": 1
     }
   ]
 }

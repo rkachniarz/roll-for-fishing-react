@@ -8,7 +8,7 @@ import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { buildContent, generatedFiles } from '../tools/content.mjs';
-import { GAME_VALUES } from '../src/engine/values.js';
+import { GAME_VALUES, effectSign } from '../src/engine/values.js';
 import { t } from '../src/strings.js';
 
 const root = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
@@ -38,10 +38,10 @@ test("the spots hold the owner's spawn table (D101)", () => {
   // And a rift table for every spot (D104).
   assert.equal(fish.filter((f) => f.rift).length, 42);
   assert.ok([...lake.spots, ...river.spots].every((/** @type {{ rift?: unknown[] }} */ s) => (s.rift ?? []).length >= 3));
-  // The prototype's junk and treasure, shared by both locations.
+  // The prototype's junk and treasure, shared by both locations, with the placeholder gear (5.3, 5.7).
   const junk = result.all.tables['common-junk'].entries;
   assert.equal(junk.length, 38);
-  assert.equal(result.all.tables['common-treasure'].entries.length, 7);
+  assert.equal(result.all.tables['common-treasure'].entries.length, 7 + 16);
   assert.equal(junk.reduce((/** @type {number} */ t, /** @type {{ weight: number }} */ j) => t + j.weight, 0) + lake.emptyHook, 100);
 });
 
@@ -107,4 +107,19 @@ test('mistakes in content are caught', async () => {
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
+});
+
+test('every upside has a downside, bait aside, which is used up (R8.5, 5.3)', async () => {
+  const result = await buildContent(root);
+  for (const item of Object.values(result.all.items)) {
+    const signs = (item.effects ?? []).map(effectSign);
+    if (item.slot === 'bait' || !signs.includes(1)) continue;
+    assert.ok(signs.includes(-1), `${item.id}: an upside with no downside`);
+  }
+  // Placeholder gear for every slot, findable, not only on the bench (5.3, 5.7).
+  for (const slot of ['rod', 'line', 'bobber', 'hat', 'trinket']) {
+    const found = Object.values(result.all.items).filter((i) => i.slot === slot && !i.devOnly && i.effects);
+    assert.ok(found.length >= 1, `nothing findable for the ${slot} slot`);
+  }
+  assert.ok(Object.values(result.all.items).filter((i) => i.slot === 'rod' && !i.devOnly).length >= 4, 'the stick and three better rods (5.7)');
 });

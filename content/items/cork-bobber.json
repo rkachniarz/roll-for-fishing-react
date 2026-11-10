@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "cork-bobber",
+  "category": "treasure",
+  "name": "Cork bobber",
+  "flavor": "Pops back up in no time. Drifts a bit.",
+  "rarity": "uncommon",
+  "value": 2,
+  "unique": true,
+  "slot": "bobber",
+  "effects": [
+    {
+      "value": "missPause",
+      "add": -2000
+    },
+    {
+      "value": "castScatter",
+      "add": 3
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "rift-shard",
+  "category": "treasure",
+  "name": "Rift shard",
+  "flavor": "A sliver of somewhere else. Things come through it, and they fight.",
+  "rarity": "rare",
+  "value": 6,
+  "unique": true,
+  "slot": "trinket",
+  "effects": [
+    {
+      "value": "riftChance",
+      "add": 5
+    },
+    {
+      "value": "fishDifficulty",
+      "add": 1
+    }
+  ]
+}

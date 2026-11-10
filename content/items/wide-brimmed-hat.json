@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "wide-brimmed-hat",
+  "category": "treasure",
+  "name": "Wide-brimmed hat",
+  "flavor": "No glare off the water. No view of it either.",
+  "rarity": "uncommon",
+  "value": 3,
+  "unique": true,
+  "slot": "hat",
+  "effects": [
+    {
+      "value": "reactionFast",
+      "add": 50
+    },
+    {
+      "value": "fishFind",
+      "add": -3
+    }
+  ]
+}

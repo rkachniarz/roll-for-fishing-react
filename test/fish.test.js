@@ -57,8 +57,8 @@ test("the Lake's junk table has its 38 items, the message in a bottle (7.4) and 
 test('unique treasure, once found, stops coming up', () => {
   const all = locationTable({ location: 'lake', spot: null }, 'treasure');
   const after = locationTable({ location: 'lake', spot: null }, 'treasure', { found: { 'heavy-bait': 1 } });
-  assert.equal(all.length, 7);
-  assert.equal(after.length, 6);
+  assert.equal(all.length, 23);
+  assert.equal(after.length, 22);
   assert.ok(!after.some((e) => e.id === 'heavy-bait'));
 });
 

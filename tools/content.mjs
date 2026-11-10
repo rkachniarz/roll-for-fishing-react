@@ -272,8 +272,8 @@ export async function buildContent(root = ROOT) {
   for (const item of Object.values(all.items)) {
     const where = `content/items/${item.id}.json`;
     const signs = (item.effects ?? []).map(effectSign);
-    // R8.5. A warning until Phase 5 gives the prototype's treasure real downsides (5.3).
-    if (signs.includes(1) && !signs.includes(-1)) warnings.push(`${where}: an upside with no downside (R8.5)`);
+    // R8.5: every upside has a downside. Bait's is being used up (D39, 5.3).
+    if (signs.includes(1) && !signs.includes(-1) && item.slot !== 'bait') errors.push(`${where}: an upside with no downside (R8.5)`);
     if (!foundAt.has(item.id) && !item.retired && !item.devOnly) warnings.push(`${where}: no location lists it`);
     if (item.bobber && item.slot !== 'bobber') errors.push(`${where}: only a bobber has a bobber's looks`);
     if (item.bait && item.slot !== 'bait') errors.push(`${where}: only bait has a bait kind`);

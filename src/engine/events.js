@@ -359,7 +359,8 @@ export function uselessJunk(id) {
 /**
  * Every useless junk item in the bags goes (equipped items are safe, D83);
  * their values are added up, and the reward is picked from the table's
- * richest tier the total reaches (7.9).
+ * richest tier the total reaches (7.9). A unique reward already found is
+ * left out (R8.10).
  * @param {GameState} state  Changed in place.
  * @param {string} tableId
  * @param {Dice} dice
@@ -373,7 +374,7 @@ function tradeJunk(state, tableId, dice) {
   /** @type {GameEvent[]} */
   const events = given.map((b) => ({ type: 'event-lost', item: b.id, count: b.count }));
   /** @type {{ id: string, weight: number, min: number, count?: number }[]} */
-  const rewards = content.tables[tableId]?.rewards ?? [];
+  const rewards = (content.tables[tableId]?.rewards ?? []).filter((/** @type {{ id: string }} */ r) => !(content.items[r.id]?.unique && state.found[r.id]));
   const tier = Math.max(-1, ...rewards.filter((r) => r.min <= total).map((r) => r.min));
   const reward = pick(rewards.filter((r) => r.min === tier), dice);
   if (reward) {

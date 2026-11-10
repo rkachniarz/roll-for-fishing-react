@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "stopwatch",
+  "category": "treasure",
+  "name": "Stopwatch",
+  "flavor": "Tick, tick, strike. You rush the ordinary ones.",
+  "rarity": "uncommon",
+  "value": 4,
+  "unique": true,
+  "slot": "trinket",
+  "effects": [
+    {
+      "value": "reactionFast",
+      "add": 100
+    },
+    {
+      "value": "reactionOk",
+      "add": -200
+    }
+  ]
+}

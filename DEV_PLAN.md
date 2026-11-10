@@ -154,15 +154,16 @@ Requirements R8.
 - [x] **5.1** Bag grid, stacking, drag and drop by touch and mouse, tap-to-inspect tooltips, names in rarity colours
   (R8.1, R8.7, R8.8).
 - [x] **5.2** Equipment slots; effects on the engine's hooks (R8.2, D83).
-- [ ] **5.3** Port the seven items with real downsides (§C.3), and about 15 more as placeholders, enough to use every
-  effect in the vocabulary and every slot; the "every upside has a downside" data test (R8.5). Placeholder names,
-  texts and icons until CR-4.
+- [x] **5.3** Port the seven items with real downsides (§C.3), and about 15 more as placeholders, enough to use every
+  effect in the vocabulary and every slot; the "every upside has a downside" data test (R8.5), bait aside. Sixteen
+  pieces of placeholder gear in the shared treasure list; names, texts and icons are CR-4.
 - [x] **5.4** Tooltips generated from effects (R8.6).
 - [x] **5.5** Fish bucket: fish only, identical twins stack, 16 fish to start; a full bucket asks which fish to release,
   and the released fish joins the spot's escaped-fish pool (R8.3, R3.6, D24, D50, D57, D59).
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI.
-- [ ] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38). Placeholder rods (stats,
-  plain names, the stick's icon recoloured) until CR-4.
+- [x] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38): the willow rod, ash rod,
+  reed pole and dwarven steel rod, each with a downside, as treasure; the junk collector's trade can give the willow
+  rod. Default icons until CR-4.
 - [x] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41, D61). Bait kinds
   and placeholder baits (D101); a Tiny fish goes from the bucket onto the hook as Small fish bait.
 

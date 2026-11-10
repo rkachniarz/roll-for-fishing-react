@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "lucky-hook",
+  "category": "treasure",
+  "name": "Lucky hook",
+  "flavor": "Bent just so. Fish seem to resent it.",
+  "rarity": "rare",
+  "value": 5,
+  "unique": true,
+  "slot": "trinket",
+  "effects": [
+    {
+      "value": "naturalCatch",
+      "add": -1
+    },
+    {
+      "value": "fishDifficulty",
+      "add": 1
+    }
+  ]
+}

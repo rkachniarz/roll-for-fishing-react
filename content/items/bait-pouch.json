@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "bait-pouch",
+  "category": "treasure",
+  "name": "Bait pouch",
+  "flavor": "Keeps bait fresh. Takes up room the fish could use.",
+  "rarity": "uncommon",
+  "value": 3,
+  "unique": true,
+  "slot": "trinket",
+  "effects": [
+    {
+      "value": "baitRecovery",
+      "add": 15
+    },
+    {
+      "value": "bucketSize",
+      "add": -2
+    }
+  ]
+}

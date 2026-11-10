@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "dwarven-steel-rod",
+  "category": "treasure",
+  "name": "Dwarven steel rod",
+  "flavor": "Made in Ferrstad. Heavy, sure, and the fish can feel it coming.",
+  "rarity": "rare",
+  "value": 8,
+  "unique": true,
+  "slot": "rod",
+  "effects": [
+    {
+      "value": "fishingSkill",
+      "add": 2
+    },
+    {
+      "value": "biteDelayMax",
+      "add": 2000
+    }
+  ]
+}

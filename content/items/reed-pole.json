@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "reed-pole",
+  "category": "treasure",
+  "name": "Reed pole",
+  "flavor": "Light enough to point exactly where you mean. Snaps if you dawdle.",
+  "rarity": "uncommon",
+  "value": 3,
+  "unique": true,
+  "slot": "rod",
+  "effects": [
+    {
+      "value": "castScatter",
+      "add": -10
+    },
+    {
+      "value": "strikeLimit",
+      "add": -500
+    }
+  ]
+}

@@ -12,6 +12,10 @@
     {
       "value": "fishSizeBand",
       "add": 2
+    },
+    {
+      "value": "treasureFind",
+      "add": -5
     }
   ]
 }

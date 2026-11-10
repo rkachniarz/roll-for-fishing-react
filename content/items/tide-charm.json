@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "tide-charm",
+  "category": "treasure",
+  "name": "Tide charm",
+  "flavor": "The fish come sooner. Whatever else is down there stays put.",
+  "rarity": "uncommon",
+  "value": 3,
+  "unique": true,
+  "slot": "trinket",
+  "effects": [
+    {
+      "value": "biteDelayMax",
+      "add": -2000
+    },
+    {
+      "value": "treasureFind",
+      "add": -3
+    }
+  ]
+}

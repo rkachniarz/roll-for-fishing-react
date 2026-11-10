@@ -17,5 +17,5 @@
       "add": -1
     }
   ],
-  "devOnly": true
+  "unique": true
 }
