@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "strange-cod",
+  "name": "Strange cod",
+  "icon": "fish/strange-cod",
+  "rift": true,
+  "size": {
+    "min": 40,
+    "max": 180
+  },
+  "difficulty": 2,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "dawn",
+      "sunset"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "crayfish"
+    ]
+  }
+}

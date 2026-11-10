@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "strange-giant-catfish",
+  "name": "Strange giant catfish",
+  "icon": "fish/strange-giant-catfish",
+  "rift": true,
+  "size": {
+    "min": 100,
+    "max": 300
+  },
+  "difficulty": 3,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "rain"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "bread"
+    ]
+  }
+}

@@ -167,7 +167,7 @@ attempt at a catch, the action bar under the button row, abilities that light up
   mage's bend reality to come with 6.3.
 - [ ] **6.3** Each class's level 1, 3 and 5 perks working (the notes' level 6 moved to 5, D96). Working: all three
   level-1 actives, Heavy Hand, Overwhelm, Battle Focus, Full Force, Recall, Sleight of Hook. Still to do: Rift Fishing
-  and Greedy Fish (need new fish), Ever-Summoning, Bend Reality, Fence, Polish.
+  (its fish are in: each spot's rift table, D104; the perk still needs the engine) and Greedy Fish (needs new fish), Ever-Summoning, Bend Reality, Fence, Polish.
 - [ ] **6.4** Hidden rolls revealed by levels, perks and items (R5.2, Q-40): the number a fish needed from level 1.
 - [ ] **6.8** The fish's dice on the desk (D99), once 6.4 reveals its roll: its d20s thrown in from the top right,
   as the player's come in from the bottom right, in the fish's own colour, `#31899F`, a deep-water teal. A roll

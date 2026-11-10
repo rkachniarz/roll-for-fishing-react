@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "strange-shark",
+  "name": "Strange shark",
+  "icon": "fish/strange-shark",
+  "rift": true,
+  "size": {
+    "min": 200,
+    "max": 640
+  },
+  "difficulty": 3,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "snow"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

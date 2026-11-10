@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "marbled-lungfish",
+  "name": "Marbled lungfish",
+  "icon": "fish/marbled-lungfish",
+  "rift": true,
+  "size": {
+    "min": 60,
+    "max": 200
+  },
+  "difficulty": 2,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "rain"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "frog"
+    ]
+  }
+}

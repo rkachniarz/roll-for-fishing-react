@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "peacock-bass",
+  "name": "Peacock bass",
+  "icon": "fish/peacock-bass",
+  "rift": true,
+  "size": {
+    "min": 30,
+    "max": 75
+  },
+  "difficulty": 0,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "lure"
+    ]
+  }
+}

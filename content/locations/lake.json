@@ -125,6 +125,24 @@
           "id": "big-muskellunge",
           "weight": 1
         }
+      ],
+      "rift": [
+        {
+          "id": "giant-gourami",
+          "weight": 100
+        },
+        {
+          "id": "peacock-bass",
+          "weight": 75
+        },
+        {
+          "id": "silver-arowana",
+          "weight": 56
+        },
+        {
+          "id": "clown-knifefish",
+          "weight": 42
+        }
       ]
     },
     {
@@ -208,6 +226,32 @@
         {
           "id": "big-trahira",
           "weight": 1
+        }
+      ],
+      "rift": [
+        {
+          "id": "mudskipper",
+          "weight": 100
+        },
+        {
+          "id": "ornate-bichir",
+          "weight": 75
+        },
+        {
+          "id": "blackfish",
+          "weight": 56
+        },
+        {
+          "id": "marbled-lungfish",
+          "weight": 42
+        },
+        {
+          "id": "electric-eel",
+          "weight": 32
+        },
+        {
+          "id": "arapaima",
+          "weight": 24
         }
       ]
     },
@@ -301,6 +345,28 @@
           "id": "big-wels-catfish",
           "weight": 1
         }
+      ],
+      "rift": [
+        {
+          "id": "strange-tilapia",
+          "weight": 100
+        },
+        {
+          "id": "oscar",
+          "weight": 75
+        },
+        {
+          "id": "red-bellied-piranha",
+          "weight": 56
+        },
+        {
+          "id": "pacu",
+          "weight": 42
+        },
+        {
+          "id": "discus",
+          "weight": 32
+        }
       ]
     },
     {
@@ -364,6 +430,28 @@
         {
           "id": "big-burbot",
           "weight": 1
+        }
+      ],
+      "rift": [
+        {
+          "id": "electric-yellow-cichlid",
+          "weight": 100
+        },
+        {
+          "id": "lumpfish",
+          "weight": 75
+        },
+        {
+          "id": "frontosa",
+          "weight": 56
+        },
+        {
+          "id": "wolffish",
+          "weight": 42
+        },
+        {
+          "id": "strange-cod",
+          "weight": 32
         }
       ]
     },
@@ -457,6 +545,24 @@
           "id": "big-lake-trout",
           "weight": 1
         }
+      ],
+      "rift": [
+        {
+          "id": "barramundi",
+          "weight": 100
+        },
+        {
+          "id": "polar-cod",
+          "weight": 75
+        },
+        {
+          "id": "strange-perch",
+          "weight": 56
+        },
+        {
+          "id": "goliath-tigerfish",
+          "weight": 42
+        }
       ]
     },
     {
@@ -520,6 +626,32 @@
         {
           "id": "big-wels-catfish",
           "weight": 2
+        }
+      ],
+      "rift": [
+        {
+          "id": "goonch-catfish",
+          "weight": 100
+        },
+        {
+          "id": "snailfish",
+          "weight": 75
+        },
+        {
+          "id": "giant-freshwater-stingray",
+          "weight": 56
+        },
+        {
+          "id": "icefish",
+          "weight": 42
+        },
+        {
+          "id": "coelacanth",
+          "weight": 32
+        },
+        {
+          "id": "strange-shark",
+          "weight": 24
         }
       ]
     }

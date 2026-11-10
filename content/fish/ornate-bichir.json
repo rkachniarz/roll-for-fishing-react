@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "ornate-bichir",
+  "name": "Ornate bichir",
+  "icon": "fish/ornate-bichir",
+  "rift": true,
+  "size": {
+    "min": 25,
+    "max": 60
+  },
+  "difficulty": 0,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

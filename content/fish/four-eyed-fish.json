@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "four-eyed-fish",
+  "name": "Four-eyed fish",
+  "icon": "fish/four-eyed-fish",
+  "rift": true,
+  "size": {
+    "min": 15,
+    "max": 32
+  },
+  "difficulty": -1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

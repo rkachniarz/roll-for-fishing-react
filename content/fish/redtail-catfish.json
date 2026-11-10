@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "redtail-catfish",
+  "name": "Redtail catfish",
+  "icon": "fish/redtail-catfish",
+  "rift": true,
+  "size": {
+    "min": 50,
+    "max": 180
+  },
+  "difficulty": 2,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

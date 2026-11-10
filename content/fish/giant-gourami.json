@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "giant-gourami",
+  "name": "Giant gourami",
+  "icon": "fish/giant-gourami",
+  "rift": true,
+  "size": {
+    "min": 30,
+    "max": 70
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "bread"
+    ]
+  }
+}

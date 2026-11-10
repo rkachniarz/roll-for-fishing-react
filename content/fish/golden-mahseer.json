@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "golden-mahseer",
+  "name": "Golden mahseer",
+  "icon": "fish/golden-mahseer",
+  "rift": true,
+  "size": {
+    "min": 40,
+    "max": 150
+  },
+  "difficulty": 2,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "dawn",
+      "sunset"
+    ],
+    "weather": [
+      "rain"
+    ],
+    "season": [
+      "spring"
+    ],
+    "bait": [
+      "bread"
+    ]
+  }
+}

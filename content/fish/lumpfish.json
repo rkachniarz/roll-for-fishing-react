@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "lumpfish",
+  "name": "Lumpfish",
+  "icon": "fish/lumpfish",
+  "rift": true,
+  "size": {
+    "min": 20,
+    "max": 60
+  },
+  "difficulty": 0,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "fog"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

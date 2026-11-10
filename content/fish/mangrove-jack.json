@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "mangrove-jack",
+  "name": "Mangrove jack",
+  "icon": "fish/mangrove-jack",
+  "rift": true,
+  "size": {
+    "min": 30,
+    "max": 120
+  },
+  "difficulty": 1,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "sunset",
+      "night"
+    ],
+    "weather": [
+      "rain"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "crayfish"
+    ]
+  }
+}

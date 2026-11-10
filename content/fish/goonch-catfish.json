@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "goonch-catfish",
+  "name": "Goonch catfish",
+  "icon": "fish/goonch-catfish",
+  "rift": true,
+  "size": {
+    "min": 60,
+    "max": 200
+  },
+  "difficulty": 2,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "wolffish",
+  "name": "Wolffish",
+  "icon": "fish/wolffish",
+  "rift": true,
+  "size": {
+    "min": 40,
+    "max": 150
+  },
+  "difficulty": 2,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "dawn",
+      "evening"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "crayfish"
+    ]
+  }
+}

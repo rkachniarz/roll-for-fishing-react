@@ -129,6 +129,6 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
 - **The spots hold the fish, not the locations (D101).** A location's `fish` list is empty; each spot's weights come
   from the owner's encounter ranks. A fish's `prefers` multiply its weight (`src/engine/tables.js`); the weather words
   are in `content/rules/fish-preferences.json`, and fog and snow are `tags` on the weather cells. Schools and big
-  fish are listed per spot too (D102).
+  fish are listed per spot too (D102), and so are rift fish, `rift: true`, in each spot's `rift` table (D104).
 - **`src/main.js`: a tap within 500 ms of the last action is ignored after a cast ends,** so a double tap on the splash
   strikes once instead of striking and instantly recasting.

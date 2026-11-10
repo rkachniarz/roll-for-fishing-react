@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "oscar",
+  "name": "Oscar",
+  "icon": "fish/oscar",
+  "rift": true,
+  "size": {
+    "min": 15,
+    "max": 35
+  },
+  "difficulty": -1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "afternoon"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

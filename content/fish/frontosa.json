@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "frontosa",
+  "name": "Frontosa",
+  "icon": "fish/frontosa",
+  "rift": true,
+  "size": {
+    "min": 15,
+    "max": 35
+  },
+  "difficulty": -1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "dawn",
+      "evening"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

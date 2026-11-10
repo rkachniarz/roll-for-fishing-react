@@ -105,6 +105,20 @@
           "id": "big-taimen",
           "weight": 1
         }
+      ],
+      "rift": [
+        {
+          "id": "hillstream-loach",
+          "weight": 100
+        },
+        {
+          "id": "snow-trout",
+          "weight": 75
+        },
+        {
+          "id": "golden-mahseer",
+          "weight": 56
+        }
       ]
     },
     {
@@ -205,6 +219,24 @@
           "id": "big-golden-dorado",
           "weight": 1
         }
+      ],
+      "rift": [
+        {
+          "id": "redtail-catfish",
+          "weight": 100
+        },
+        {
+          "id": "tiger-shovelnose-catfish",
+          "weight": 75
+        },
+        {
+          "id": "payara",
+          "weight": 56
+        },
+        {
+          "id": "strange-giant-catfish",
+          "weight": 42
+        }
       ]
     },
     {
@@ -296,6 +328,28 @@
         {
           "id": "big-sea-lamprey",
           "weight": 1
+        }
+      ],
+      "rift": [
+        {
+          "id": "archerfish",
+          "weight": 100
+        },
+        {
+          "id": "capelin",
+          "weight": 75
+        },
+        {
+          "id": "four-eyed-fish",
+          "weight": 56
+        },
+        {
+          "id": "mangrove-jack",
+          "weight": 42
+        },
+        {
+          "id": "bull-shark",
+          "weight": 32
         }
       ]
     }

@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "archerfish",
+  "name": "Archerfish",
+  "icon": "fish/archerfish",
+  "rift": true,
+  "size": {
+    "min": 10,
+    "max": 30
+  },
+  "difficulty": -1,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "noon",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "fly"
+    ]
+  }
+}

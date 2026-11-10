@@ -18,6 +18,10 @@
       "required": ["min", "max"],
       "additionalProperties": false
     },
+    "rift": {
+      "description": "A fish from another world, found only in the spots' rift tables, through the wizard's Rift Fishing (D104).",
+      "type": "boolean"
+    },
     "difficulty": { "description": "Added to the size band's difficulty.", "type": "integer" },
     "rarity": {
       "description": "The species' rarity; the size band shifts it (D49, D63).",

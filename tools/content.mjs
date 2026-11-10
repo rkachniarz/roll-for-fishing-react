@@ -199,6 +199,14 @@ export async function buildContent(root = ROOT) {
       for (const list of /** @type {const} */ (['fish', 'treasure', 'junk'])) {
         checkEntries(`${where} (${spot.id})`, spot[list], list, `${loc.id}/${spot.id}`);
       }
+      // Rift fish only in rift tables, and only rift fish there (D104).
+      checkEntries(`${where} (${spot.id}) rift`, spot.rift, 'fish', `${loc.id}/${spot.id} (rift)`);
+      for (const e of spot.rift ?? []) {
+        if (e.id && all.fish[e.id] && !all.fish[e.id].rift) errors.push(`${where} (${spot.id}): "${e.id}" in the rift table isn't a rift fish`);
+      }
+      for (const e of [...(loc.fish ?? []), ...(spot.fish ?? [])]) {
+        if (e.id && all.fish[e.id]?.rift) errors.push(`${where} (${spot.id}): rift fish "${e.id}" only belongs in the rift table`);
+      }
       // A spot's schools and big fish hold fish that live there (D102).
       const lives = new Set([...(loc.fish ?? []), ...(spot.fish ?? [])].map((/** @type {{ id: string }} */ e) => e.id));
       for (const f of spot.features ?? []) {

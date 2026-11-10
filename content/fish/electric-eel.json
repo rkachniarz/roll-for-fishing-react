@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "electric-eel",
+  "name": "Electric eel",
+  "icon": "fish/electric-eel",
+  "rift": true,
+  "size": {
+    "min": 80,
+    "max": 250
+  },
+  "difficulty": 3,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "storm"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

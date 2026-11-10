@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "snailfish",
+  "name": "Snailfish",
+  "icon": "fish/snailfish",
+  "rift": true,
+  "size": {
+    "min": 8,
+    "max": 30
+  },
+  "difficulty": -1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

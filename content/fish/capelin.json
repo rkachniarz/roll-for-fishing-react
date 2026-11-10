@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "capelin",
+  "name": "Capelin",
+  "icon": "fish/capelin",
+  "rift": true,
+  "size": {
+    "min": 10,
+    "max": 25
+  },
+  "difficulty": -1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "evening",
+      "night"
+    ],
+    "weather": [
+      "windy"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

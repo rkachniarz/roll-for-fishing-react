@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "barramundi",
+  "name": "Barramundi",
+  "icon": "fish/barramundi",
+  "rift": true,
+  "size": {
+    "min": 40,
+    "max": 150
+  },
+  "difficulty": 2,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "dawn",
+      "sunset"
+    ],
+    "weather": [
+      "rain"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "lure"
+    ]
+  }
+}

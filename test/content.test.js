@@ -33,7 +33,11 @@ test("the spots hold the owner's spawn table (D101)", () => {
   assert.equal(reeds.length, 14);
   assert.deepEqual(reeds[0], { id: 'roach', weight: 100 }, 'rank 1');
   assert.ok(reeds.every((/** @type {{ weight: number }} */ f, /** @type {number} */ i) => i === 0 || f.weight <= reeds[i - 1].weight), 'rarer down the list');
-  assert.equal(Object.keys(result.all.fish).length, 80);
+  const fish = Object.values(result.all.fish);
+  assert.equal(fish.filter((f) => !f.rift).length, 80);
+  // And a rift table for every spot (D104).
+  assert.equal(fish.filter((f) => f.rift).length, 42);
+  assert.ok([...lake.spots, ...river.spots].every((/** @type {{ rift?: unknown[] }} */ s) => (s.rift ?? []).length >= 3));
   // The prototype's junk and treasure, shared by both locations.
   const junk = result.all.tables['common-junk'].entries;
   assert.equal(junk.length, 38);
@@ -79,6 +83,9 @@ test('mistakes in content are caught', async () => {
     const riverPath = join(dir, 'content/locations/river.json');
     const river = JSON.parse(await readFile(riverPath, 'utf8'));
     river.spots[0].features.push({ id: 'carp-school', weight: 1 });
+    // A rift fish among the ordinary fish, and an ordinary one in the rift (D104).
+    river.spots[0].fish.push({ id: 'arapaima', weight: 1 });
+    river.spots[0].rift.push({ id: 'roach', weight: 1 });
     await writeFile(riverPath, JSON.stringify(river));
     const wormsPath = join(dir, 'content/items/worms.json');
     await writeFile(wormsPath, JSON.stringify({ ...JSON.parse(await readFile(wormsPath, 'utf8')), slot: 'trinket' }));
@@ -95,6 +102,8 @@ test('mistakes in content are caught', async () => {
     assert.ok(has('zander.json: no bait "caviar"'), 'bait kind');
     assert.ok(has('worms.json: only bait has a bait kind'), 'bait kind off the bait slot');
     assert.ok(has(`(upper-river): "carp-school" holds common-carp, which doesn't live here`), 'a school out of place');
+    assert.ok(has('(upper-river): rift fish "arapaima" only belongs in the rift table'), 'a rift fish out of the rift');
+    assert.ok(has(`(upper-river): "roach" in the rift table isn't a rift fish`), 'an ordinary fish in the rift');
   } finally {
     await rm(dir, { recursive: true, force: true });
   }

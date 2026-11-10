@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "payara",
+  "name": "Payara",
+  "icon": "fish/payara",
+  "rift": true,
+  "size": {
+    "min": 30,
+    "max": 117
+  },
+  "difficulty": 1,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "lure"
+    ]
+  }
+}

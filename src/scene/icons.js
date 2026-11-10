@@ -2853,6 +2853,1476 @@ Object.assign(ICONS, {
     '................................',
     '................................',
   ],
+  // The giant gourami, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Giant gourami.jpg, cut out with rembg, D97).
+  'fish/giant-gourami': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '.......kkk......................',
+    '..kkkkkAAAkkkk..................',
+    '.kHHEDCCDBAAAAkkkk..............',
+    '.kJFexGGEEECCBABCEk.............',
+    '..kLxxGGEFDDDECBACEkk...........',
+    '..kLMLFHDFDEDEDDCBAEEk..........',
+    '..kJIMHGEGEDCECECECABDk.........',
+    '...kIIIHFFEEEFDEDECDABBk........',
+    '...kIHJIEHILFEEEDDDFBAAAk.......',
+    '....kIJJHJIIIIEIDEDFCCBBBk......',
+    '....kHIJHHIJJIHJFGDEEFBBDAk.....',
+    '.....kGIJILHHHGFHGEFDFECCkkk....',
+    '......kELIIHIEIGHFHEFGEDCBBBkk..',
+    '.......kGJHIHFHGHFGHGEGCDBABBBk.',
+    '........kFHGHJIGJGMHGFECDBBBBBk.',
+    '.........kHHIIIHILJIGGEEDBBBBBk.',
+    '..........kHFGIIHFJHGCBFCDCBBk..',
+    '...........kkEDFFDDBBACDGEEFEk..',
+    '.............kkkDEEDEFFEEEGEk...',
+    '................kGGEFDGGFkkk....',
+    '.................kkkGFkkk.......',
+    '....................kk..........',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The peacock bass, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Peacock bass.jpg, cut out with rembg, D97).
+  'fish/peacock-bass': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '..kkkkkkkkk.....................',
+    '.kHHFFCBAAAkk...................',
+    '.kGEexDDDCCAAkk.................',
+    '..kExxDEDEFBAACk................',
+    '..kGEGFGDCFBBBCBkk..............',
+    '...kGHHHEIEDBGEEBAk.............',
+    '....kEEEGECEEIGECAAk............',
+    '.....kGFEGHIIGELCBCAk...........',
+    '......kkFGIIGILGBFECk...........',
+    '........kFHLMMIEGLHEEkkk........',
+    '.........kkHLLJGMLHGCABCk.......',
+    '...........kJIIMLLIFCBCCkk......',
+    '............kkLIMMLIEEEEECk.....',
+    '..............kGHLLILGFEBkkkk...',
+    '...............kkkGFFHEHEBDDDk..',
+    '..................kkkkFFECDECEk.',
+    '......................kkCDBCCEk.',
+    '........................kEEDCEk.',
+    '........................kFEFEk..',
+    '.........................kkkk...',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The silver arowana, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Silver arowana.jpg, cut out with rembg, D97).
+  'fish/silver-arowana': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kkkk.........................',
+    '..kMLLJkkk......................',
+    '.kJMexLJJIkk....................',
+    '.kLLxxJIIIIGkk..................',
+    '..kkLJIGFFGIIGk.................',
+    '...kJJGFEEEGJJJkk...............',
+    '....kGGEDEFGIJJJJkk.............',
+    '.....kFFEEFGIIJJJJEk............',
+    '......kEEEFGGGIIIIIJk...........',
+    '.......kkEEFGGGGGGGGFkk.........',
+    '.........kEFFGGFFEEEEFIk........',
+    '..........kCEFGFEEDDDDDIkk......',
+    '...........kkEEFEEDDCCCCEDk.....',
+    '.............kCCDDDCCCCBGLMk....',
+    '..............kkkBBBBBBCHHEIk...',
+    '.................kkBBBBCHDABFk..',
+    '...................kkkBBAAAAABk.',
+    '......................kkAAAAAk..',
+    '........................kkAAk...',
+    '..........................kk....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The clown knifefish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Clown knifefish.jpg, cut out with rembg, D97).
+  'fish/clown-knifefish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kkkkkkkkk....................',
+    '..kAAAACDEFFkk..................',
+    '.kCBeeACDEEEEHkk................',
+    '.kDAexBDCDDDEFFJk...............',
+    '.kHGEEBEEEEEEEEFMk..............',
+    '..kHIIEGGGEDEFFFHMkk............',
+    '...kJEGIIIGGEDEHHJCBk...........',
+    '...kMLBGLIIIIHFFHHJCk...........',
+    '....kkLGLLLLLLHFFFJMk...........',
+    '......kEGLLLLLIIGEFMMk..........',
+    '.......kCLLLLLLLIEFFMk..........',
+    '........kJLIILILIIGFHMk.........',
+    '.........kGDGGELLLIFFMk.........',
+    '..........kkCIIIBLLIDFMk........',
+    '............kDEILILIDDJk........',
+    '.............kDEIELIHDDJk.......',
+    '..............kEEIICIGDFk.......',
+    '...............kCDHIGAECFk......',
+    '................kEEDEDEBBFk.....',
+    '.................kkDBBBBBBFkk...',
+    '...................kBBAAAAADDk..',
+    '....................kkBBAABCCHk.',
+    '......................kkkBDEDk..',
+    '.........................kkkk...',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The mudskipper, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Mudskipper.jpg, cut out with rembg, D97).
+  'fish/mudskipper': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kkk..........................',
+    '..kGDFk......k..................',
+    '.kFBeeGk.kkkkFkkk...............',
+    '.kFDexIEkDEBDDDEDk....kkkk......',
+    '..kEGIFECGDFDDBEDDk..kAAAAk.....',
+    '...kHGEGEEBDGGFFFDFkkAAAAAAk....',
+    '....kkkFIGFCBBDGGFFkAAAAAAAk....',
+    '.......kkGGGGFCBCGkkDDDBBAAEk...',
+    '.......kFGLHLIGFCBBEFFEEDBADk...',
+    '........kGLIHLGGGECBDFGGEDDk....',
+    '.........kILLIILHHFBBBFGGFk.....',
+    '..........kkIIGLIIDFGFBCBkk.....',
+    '............kkkkLIDGHHHFCBDk....',
+    '................kLFHGFCFHHCBk...',
+    '.................kHHGGCGLLHHCk..',
+    '..................kILIGFIIIIHHk.',
+    '..................kGIHHEEFLHHIk.',
+    '..................kIHGHkIFHIHHk.',
+    '..................kLHLk.kkLLIHk.',
+    '...................kkk....kkkk..',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The ornate bichir, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Ornate bichir.jpg, cut out with rembg, D97).
+  'fish/ornate-bichir': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '....kkkkkk......................',
+    '...kBBFEEJkk....................',
+    '...kkBBCexFJkkk.................',
+    '..kBAkkBxxFEJMJk................',
+    '...kAABBBBCDFFJMkk..............',
+    '....kkAACBCFHFJJFJkkk...........',
+    '......kkABBFLLHJHHJEBk..........',
+    '........kBCJLLLJHCFEJCkk........',
+    '.........kCBFJLLJHFGFFCCk.......',
+    '..........kkkCCGJMJGFFGECk......',
+    '.............kkkCEGIIFFFFDk.....',
+    '................kkkDEEGFJCCk....',
+    '...................kkCCGFFCBk...',
+    '.....................kCDGHFBk...',
+    '......................kkDFHGk...',
+    '........................kFHICk..',
+    '.........................kEIIk..',
+    '..........................kEJEk.',
+    '...........................kECk.',
+    '............................kk..',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The blackfish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Blackfish.jpg, cut out with rembg, D97).
+  'fish/blackfish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '....k...........................',
+    '...kBkkk........................',
+    '..kHHAAAkk......................',
+    '..kJFexBBAkkk...................',
+    '...kFxxBCAABAk..................',
+    '....kDFFJCEBBAkk................',
+    '.....kkFJFFCECAAkk....k.........',
+    '.......kCHJDCBDAAAk.kkIkk.......',
+    '.......kADFFJFCBEBBkFHFDFk......',
+    '........kkBFFFCCBCBABHJEEk......',
+    '..........kkHMHHBEBDAFHFFk......',
+    '............kkMHCEFFECBkkk......',
+    '..............kBCCHFCJHEBBkkk...',
+    '...............kkBEBDFFFBCBABk..',
+    '................kDHFCACEDCDFBBk.',
+    '................kCHDFkkFCEFHECk.',
+    '.................kIDCBkkBBCHBBk.',
+    '..................kCCk..kBCBCk..',
+    '...................kk....kCAk...',
+    '..........................kk....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The marbled lungfish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Marbled lungfish.jpg, cut out with rembg, D97).
+  'fish/marbled-lungfish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...k............................',
+    '..kEk...........................',
+    '.kBBHk..........................',
+    '..kAFIk.........................',
+    '..kBAGJk........................',
+    '...kABHLkk......................',
+    '....kDCGLLkk....................',
+    '.....kACexMLkk..................',
+    '......kAxxHLMMkkk...............',
+    '.......kAABFHJMLGkkk............',
+    '........kkBBCDHJLLHEkk..........',
+    '..........kkkDDEFHHMJEkk........',
+    '.............kkkCEFFGHGBkk......',
+    '................kkkDDEFGEEk.....',
+    '...................kkkkEGEEk....',
+    '.......................kkkkGk...',
+    '...........................k....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The electric eel, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Electric eel.jpg, cut out with rembg, D97).
+  'fish/electric-eel': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '......kk........................',
+    '...kkkGGkkkk....................',
+    '..kFGHexIHHHkk..................',
+    '..kELMxxHHGHHFkk................',
+    '.kEJIFAABBEEGILLk...............',
+    '..kkEkkCkkAABEFJMkk.............',
+    '....k..k..kAAABEHMGk............',
+    '...........kkkBBDFLMkk..........',
+    '..............kBBCELMGk.........',
+    '...............kBBCEHMMkk.......',
+    '................kkCCDFIMLkk.....',
+    '..................kCCCEHJLGk....',
+    '...................kkkCDFHJLk...',
+    '......................kkDDEFJk..',
+    '........................kkkkDk..',
+    '............................k...',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The arapaima, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Arapaima.jpg, cut out with rembg, D97).
+  'fish/arapaima': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '..kk............................',
+    '.kGHkkkkkkkk....................',
+    '.kEGHIIIILJLkkk.................',
+    '..kCEEexHIJLMMLkk...............',
+    '...kkCxxGHHJJJJMMkk.............',
+    '.....kCHDDGIHGJLMMLkk...........',
+    '......kIICCCFEHJJLMMLk..........',
+    '.......kLGCCACFHIIJLLMkkk.......',
+    '........kIkkBABDGGHIJLLMIk......',
+    '.........k..kBBADDGHJJJJLIk.....',
+    '.............kkAADDFHIIIIJFk....',
+    '...............kABBDEFHIHHHEk...',
+    '................kAABDEFHHGIEEk..',
+    '................kBAABEEFGFFFDk..',
+    '.................kkAABDEFEFBBDk.',
+    '...................kAAADEDDBBDk.',
+    '....................kAEDEDBBBk..',
+    '.....................kBEFDEkk...',
+    '......................kkEEk.....',
+    '........................kk......',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The strange tilapia, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Strange tilapia.jpg, cut out with rembg, D97).
+  'fish/strange-tilapia': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kkkkkkkkkkkk.................',
+    '..kCDEGJMMLLFGIkk...............',
+    '.kBDexBCDJMMMIEFIkk.............',
+    '.kAAxxAABDJLLMJHDGHk............',
+    '..kAABCBADHJJLLMJEFHk...........',
+    '...kABCIBDGIILJLLJFEFkk.........',
+    '....kAEAAEDFIJJJLIIEEEIk........',
+    '....kAACFEDDEHHHIIJIFEEIkk......',
+    '.....kECLIHFDCFHIIIJHHFFIHk.....',
+    '......kBCEFEBCDEGHJJLHFFFk......',
+    '.......kBBBBCBCCDFFHIJkkkkkkk...',
+    '........kDCBBCCCCDCDHGLMGMJIGk..',
+    '.........kkBDBBABBABCEFJHMJIHFk.',
+    '...........kkDCAABBCCBCEILIHHk..',
+    '.............kkIHMILJEADLJHHGk..',
+    '...............kLMMLLHkLJHFHk...',
+    '................kMLLLkkIIGHk....',
+    '.................kJJIk.kHGGk....',
+    '..................kkk..kEGk.....',
+    '........................kk......',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The oscar, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Oscar.jpg, cut out with rembg, D97).
+  'fish/oscar': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '....kkkk.kkk....................',
+    '...kJJJJkGCCkkkkkkk.............',
+    '..kJGEEGGCAAAACCCCGkkk..........',
+    '.kJGeeEEGCAAAAACCCCCGGkkk.......',
+    '.kGGexEBEGAABBEEECAACCGJJk......',
+    '.kGEBBFDDDBDBADDDAAAAAACGJk.....',
+    '..kEBBBFFFFDFAHHHBABAAAAACJk....',
+    '..kGBBBFIFFFFDIIIAAAABACCCGk....',
+    '...kEBBHHIILFFILHEBHFFBCCBAGk...',
+    '....kkHDDDFIILLLJGGHBFHEGGGGGk..',
+    '......kDDDFIILFHLHEBHIHHGGGGJJk.',
+    '.......kDDDDIMIILLHDIILLHJJJJJk.',
+    '........kkkDHLMMMMLIILLMMMMMkk..',
+    '...........kkkkkkHDHLMMkkkkk....',
+    '...............kABEkkkk.........',
+    '................kkk.............',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The red-bellied piranha, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Red-bellied piranha.jpg, cut out with rembg, D97).
+  'fish/red-bellied-piranha': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '.....kkkkkkkk...................',
+    '..kkkDHHHDDDDkk.................',
+    '.kDBDDGIGDGHDBBkk...............',
+    '.kGeeGEEGIGLIGDDDk..............',
+    '.kJexGECEIGGLLLHHHkkkkk.........',
+    '..kJIIIIEIGLGLLLHHHBAAAk........',
+    '..kJIIIIEEEIIILMLLMHAAAk........',
+    '...kFIEEEEEEEILMLLMMBAAk........',
+    '...kFCIEEEEEEELLLLLMHAAk........',
+    '....kFCCEEEEEEGLLLLMMDAk........',
+    '....kFGCCEEEEEEIIILLMMk.........',
+    '.....kFGCEEEEEEEIIGLLMk.........',
+    '......kFFFEEIEEIIIILILMk........',
+    '.......kFFFFIJIIIIIILLLMkkkkk...',
+    '........kkCFJJJJIIIIIIGLMHDBBk..',
+    '..........kkFJJJJJJJIGGGGDBAAAk.',
+    '............kkFFFFCCCCkGDBAAkk..',
+    '..............kCCCAkkkkBBBAk....',
+    '..............kCCkk...kABBk.....',
+    '...............kk......kBBk.....',
+    '.......................kBAk.....',
+    '........................kk......',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The pacu, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Pacu.jpg, cut out with rembg, D97).
+  'fish/pacu': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '.....kkkkkkkk...................',
+    '...kkIJMMMJJJkk.................',
+    '..kJJMJJMIMMJJIkkk..............',
+    '.kJDexIJMJMMMJJIIFk.............',
+    '.kLLxxDLJJIJMJJJJJDk............',
+    '..kHGDBLJIIIMMMMJIFBk...........',
+    '..kHHGFLLIDJFIJMMMIBBk..........',
+    '...kLHHCGDIIFFIJMMJBk...........',
+    '...kHHACCCDFFDIIJJJMJk..........',
+    '....kHACHCFFFFFDFIDJJEk.........',
+    '.....kCACHGGFDIDFDBIIJk.........',
+    '......kCAHHGGFFFFFFIIIIkkkkk....',
+    '.......kLLHHGGFJIFDJFFIIDEEBk...',
+    '........kkCHHGIJIDDFDBFIFDEBBk..',
+    '..........kkCGFFIFDDAAFFDBAAAk..',
+    '............kkkkDDCBAkkFEAAkk...',
+    '...............kCCAAk.kBEAk.....',
+    '................kAAk..kEIBk.....',
+    '.................kAk...kEAk.....',
+    '..................k....kEAk.....',
+    '........................kBk.....',
+    '.........................k......',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The discus, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Discus.jpg, cut out with rembg, D97).
+  'fish/discus': [
+    '................................',
+    '................................',
+    '................................',
+    '..........kkkkkkkkkk............',
+    '........kkMMMMLLLLLLkkk.........',
+    '......kkMMMMLLLLIIHHILLk........',
+    '....kkMMJJJLLLLIIIHHHHHIk.......',
+    '...kMMMJJIIIIIIIIIIIHHHIIk......',
+    '..kMexJIHHHGHHHIIIIIIHHIJJk.....',
+    '.kIJxxBIGGGFGGGHHIIIJIIIJJk.....',
+    '.kJHGCBCDHGFFFFGHHIIJIIHIJJk....',
+    '.kCDDCBBCDDDDFFGGHIIIJIIIIIk....',
+    '.kBCCBBBCDDDDDFFGHHIIJIIIJJIk...',
+    '.kBBBBBBBCDDDDEFGGHHIIIIIJJJk...',
+    '.kBBBBBCBCCDDDDFFGGHHHIIIJJJk...',
+    '.kBBBBLCBCCDDDDDFFGGHHIIIJJJJk..',
+    '..kBBBBLBBCDDDDDEFFGHHIIJJJJJk..',
+    '..kABBBBBBCDDDDDEEFGHHHIJJJJJk..',
+    '...kBBBBBCDDDFFFFFFFHHIIIJICLk..',
+    '....kBBCCCDDFFGGGFFFGHJCBLkkk...',
+    '.....kBBCCDDFGGGGGGGGHJCBAAAAk..',
+    '.....kBBCCDDDFGGGGGGGHHBAAAAAAk.',
+    '.....kBCDDDDFFFGGGGGHCBAAAAAkk..',
+    '......kCEEEFFGGGGGGGGAAAAAAk....',
+    '......kBDEEFFFFFFFGGCkAAAAk.....',
+    '.......kBDDEEEFFFGGDBkAAAk......',
+    '........kBBCDEEEDCCBBBAAAk......',
+    '.........kkAAAAAAAAkkLkkk.......',
+    '...........kkkkkkkk..k..........',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The electric yellow cichlid, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Electric yellow cichlid.jpg, cut out with rembg, D97).
+  'fish/electric-yellow-cichlid': [
+    '................................',
+    '................................',
+    '....k...........................',
+    '..kkAkkkkk......................',
+    '.kHLLLLMCCkk....................',
+    '.kBexJAAJLMCkk..................',
+    '.kBxxIBBGJJLMAkk................',
+    '.kAEBBBBEGJJLMLCk...............',
+    '..kABBBBBEGJJJMHBk..............',
+    '..kABBBBBBEGJJJMHAk.............',
+    '...kABBBBBBEGJJJMHAk............',
+    '....kABBBBBEGGJJJMEAk...........',
+    '.....kFBBIBBEGGJJJMEAk..........',
+    '.....kAEBBFFEEGGJJJMBAk.........',
+    '......kkBBBCBEGGGJJLLAAk........',
+    '.......kBEBBBEEGGGJJLHAk........',
+    '........kBFBBBEEGGGJJLBAkk......',
+    '........kACMEEEEGGGJJJJFACk.....',
+    '.........kCADFEEEGGHJJHCAAk.....',
+    '.........kDkkkBEHHGGGJLDAkkkk...',
+    '..........k...kAEHHGGGJLEELCAk..',
+    '...............kACFCGGGJJJIIFCk.',
+    '................kADDAGJJJIFFCk..',
+    '.................kDDDkGJIFFCAk..',
+    '..................kDkkEJIFFAk...',
+    '...................k..kJLECk....',
+    '......................kBFFAk....',
+    '......................kACAk.....',
+    '.......................kkk......',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The lumpfish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Lumpfish.jpg, cut out with rembg, D97).
+  'fish/lumpfish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '.....kk.........................',
+    '....kLJk........................',
+    '...kLJJk...kk...................',
+    '..kMLJHGk.kMJkk.................',
+    '..kLexHFkkLJHFDkkkkkkk..........',
+    '.kMJxxGDDkJHEDCCFGEBBCkkk.......',
+    '.kJIIGGGDGGECCCDDFECCBCFCk......',
+    '.kIIIGHHGGGFFEDCDFDCBBBFCEk.....',
+    '..kkkkkJIHGGGFEECBDCBBACAABk....',
+    '.......kLJHHHGGDFDCDCCBAABBk....',
+    '......kMJJLIGGEDDDDDDDDCAAAAk...',
+    '......kLIJLJHHFFDCCCEDDFBAAAk...',
+    '......kJHIJLJJHGGGDBCCDDCAAAk...',
+    '.......kkkkJLJJJIIHFCBBCCDBADk..',
+    '..........kJMLLMMMJHFDBBCEDCDk..',
+    '...........kLMLMMMMJIGEBCFECDDk.',
+    '............kLMMMMMLIHFGEDCBDCk.',
+    '.............kkLLLMMJIGGHECBAEk.',
+    '...............kkLLLJIHIIECBADk.',
+    '.................kLJIIHIIGECCk..',
+    '..................kkkkHIIHFEk...',
+    '......................kkkkkk....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The frontosa, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Frontosa.jpg, cut out with rembg, D97).
+  'fish/frontosa': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '........k.....kkkkk.............',
+    '......kkLkkkkkEHHEFkk...........',
+    '.....kLIILLMIHDDDEFFHk..........',
+    '....kIexHILLLLHLIEDEEHk.........',
+    '...kkFxxFIIIIIILIEDCEEFk........',
+    '..kMLHFEHHHHFFHLLHFCBCDFk.......',
+    '.kLIIIFABFHHEEDLLHHHDIDEHk......',
+    '.kLLILHBBDFHCCCMIFHHHLEBDEkk....',
+    '..kIIIIBBDFDCCDLDEFFHLEBACEEk...',
+    '...kJIDBCHFDBBEHDDFFLLEDBACFEk..',
+    '....kJDBDLFBCDIHEFFFLIEDCCBDFIk.',
+    '.....kCCIIDBBFIFDDDCLHDDEIBBCk..',
+    '......kJJFBABIIDDCBIICCCIHAACk..',
+    '.......kJJGAALLCBACMIBBBICEBk...',
+    '........kkkkkJFAABILEBBCCABIk...',
+    '.............kkAAELHCAAHAAAk....',
+    '...............kAGGAAAEEAAk.....',
+    '................kkGBAABBAAk.....',
+    '..................kkGEDDCk......',
+    '....................kJIHDk......',
+    '.....................kkIk.......',
+    '.......................k........',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The wolffish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Wolffish.jpg, cut out with rembg, D97).
+  'fish/wolffish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kkkkk........................',
+    '..kBCECCkkk.....................',
+    '.kAAeeGFFFBkk...................',
+    '.kAAexGHGCABEkk.................',
+    '..kADFHHDDACCCDk................',
+    '..kABCFHBCDGAABCkkkkkk..........',
+    '...kABDDBAHCDACABBBFGFk.........',
+    '....kkABCDCAAHCADBCABECkk.......',
+    '......kkACBAGBBHDGEGCDGGHk......',
+    '........kADDDBCDGEFFFGGFFGk.....',
+    '.........kCCDEFFGGFEFFGFFEDk....',
+    '..........kGIIIJIIJIFGFFFFEDk...',
+    '..........kHJJJJLLLMMMHDDFECkk..',
+    '...........kIMLMMMMMMMMLHDBBAAk.',
+    '............kkHIIMMMMMMMMIkkkk..',
+    '..............kGJLMMMMMMMIk.....',
+    '...............kkLLMMMMMMIk.....',
+    '.................kLMMMMMMIk.....',
+    '..................kkMMMMMMk.....',
+    '....................kkMMMMIk....',
+    '......................kkIJLk....',
+    '........................kkk.....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The strange cod, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Strange cod.jpeg, cut out with rembg, D97).
+  'fish/strange-cod': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '..kkkk..........................',
+    '.kDAECkkkkk.....................',
+    '.kAAexBAAAAkk...................',
+    '..kCxxBDABBAAkk.................',
+    '...kABADGBBAAABkk...............',
+    '...kBEDADCDBBAEADk..............',
+    '....kDEGDDAAAGEABBk.............',
+    '.....kBADDAABEEBBABkkkk.........',
+    '......kAAAABBBEDDEBDCDMk........',
+    '......kBDABBBEBGBBIICAGGk.......',
+    '......kEkABDDEGLEJDIBDGMk.......',
+    '.......k.kkDDGGEJGMEDEGIIk......',
+    '...........kkkkIIIIDDHABkkkk....',
+    '...............kkIIEJDBEBBAAkk..',
+    '................kJDJACDBDAAADAk.',
+    '.................kEGDBkBDCAGEFk.',
+    '..................kEkk.kACGFBk..',
+    '...................k....kDEEDk..',
+    '.........................kDDk...',
+    '..........................kk....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The barramundi, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Barramundi.jpg, cut out with rembg, D97).
+  'fish/barramundi': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '......kkkkkk....................',
+    '.....kAAAAAAkkk.................',
+    '....kAAAAAAAAAAkk...............',
+    '...kAeeBDDDDCCBBBkk.............',
+    '..kDCexEEEFEEEDDCCBkkk..........',
+    '..kFFGIFFGHGGGGEEDECBCk.........',
+    '...kIJJJIHHHHIHGHFFDDDDk........',
+    '....kkHJJLIIIJLHHHGGDDCDk..k....',
+    '......kkHHLLLLLLLGLLGFDDkkkDk...',
+    '........kkkIIIJLLLMMMMLGFFEDCk..',
+    '...........kkkkkLHLMMMMMLECCCCk.',
+    '................kkIHGEEIGDDDDDk.',
+    '..................kkkkkkkECCCk..',
+    '.........................kkkk...',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The polar cod, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Polar cod.jpg, cut out with rembg, D97).
+  'fish/polar-cod': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kkk..........................',
+    '..kBBDkkkk...kk.................',
+    '..kDeeCAABkkkHMk................',
+    '.kFDexFDBBBBFHHk................',
+    '..kkFFCFHFCAAGLk................',
+    '....kGGGIBABCAEk.kk.............',
+    '.....kJJJFBACFBCkMHk............',
+    '......kIIIDBADHDCFMk............',
+    '.......kkJIBBDHLGBGk............',
+    '.........kJGEIGFHHCk............',
+    '..........kkJJJIGELFkkk.........',
+    '............kkIJIGJLFCCk........',
+    '..............kHHGkGLHBDk.kkkk..',
+    '...............kkkkLGELGkkDDDEk.',
+    '...................kJHGkHDEEEk..',
+    '....................kkk.kCEGk...',
+    '........................kBDEk...',
+    '.........................kEEk...',
+    '..........................kk....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The strange perch, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Strange perch.jpeg, cut out with rembg, D97).
+  'fish/strange-perch': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '.........kkkk...................',
+    '.....kkkkAAAAkkkk...............',
+    '..kkkFCDDCDBBBBAAk..............',
+    '.kHMLexLHGGEEEDDAAkkkkk.........',
+    '..kMMxxLMMLCGGEEEBAACCAk........',
+    '...kkJMMMLLDEJJEEECAACCDk.......',
+    '.....kHLLLLGGGJJGGEDBACCBk......',
+    '......kkFJLHJLLMLGGEEBBCk.......',
+    '........kkBHJLLLLLJGEGBAkkkkk...',
+    '.........kHBBCHHHJJHGGEECCEIIk..',
+    '..........kBBkkkkFDHHHGGGGEFFLk.',
+    '...........kk....kBBEBABJJFIFFk.',
+    '..................kBDGAkkFCIIFk.',
+    '...................kkkk..kCIFk..',
+    '..........................kIk...',
+    '...........................k....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The goliath tigerfish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Goliath tigerfish.jpg, cut out with rembg, D97).
+  'fish/goliath-tigerfish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '......kkkkkkkkkkk...............',
+    '..kkkkLJLLLMMMMMLkkk............',
+    '.kGGLLMLJJLLLLMMMMMMkk..........',
+    '..kHDexLJGGJJJJJLLLLLMkk........',
+    '...kIxxHGDFDGGGJJJJJLMMLk.......',
+    '....kIHHHGFHFBDDGGJGJJLLLkkk....',
+    '.....kkIEFFFHFFBBBDDDGJJLLLJk...',
+    '.......kkkIHFFHHHCBBBBDGGJLGkk..',
+    '..........kIHFEFFHECCCBBBDDJLGk.',
+    '...........kkkHFHHFEFFFEEECBDBk.',
+    '..............kEHACEFEEFFHICkk..',
+    '..............kIICAACEEFHCCCAk..',
+    '...............kIIAACIFFCCACCk..',
+    '................kIFHAIHHFFCCCk..',
+    '.................kkkACCCIIIHAk..',
+    '....................kkkAACAAk...',
+    '.......................kkAAk....',
+    '.........................kk.....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The goonch catfish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Goonch catfish.jpg, cut out with rembg, D97).
+  'fish/goonch-catfish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...k............................',
+    '..kBkkkkk.......................',
+    '.kCDBBAFBkkkkk..................',
+    '..kBBBeeBBBDLCk.................',
+    '..kCBBexADEBGLk.................',
+    '...kLkBBBCBBAkk.................',
+    '....k.kFCBBAABHk................',
+    '.......kLCADIDFGkk..............',
+    '........kBkGFMGFBGk.............',
+    '.........k.kDkMBAAk.............',
+    '...........kBkkEFIGkkkk.........',
+    '............k..kGCIIDBLkk.......',
+    '...............kBkkHIAFIIk......',
+    '................k..kkCBkk.......',
+    '.....................kBk........',
+    '......................k.........',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The snailfish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Snailfish.jpg, cut out with rembg, D97).
+  'fish/snailfish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '..kkk...........................',
+    '.kCEEkkkkkkk....................',
+    '..kACCEEEECCkkkk................',
+    '...kkBCCexEIEIEIkk..............',
+    '.....kkCxxCCELMMLEk.............',
+    '.......kBBBCCCGMMLCkk...........',
+    '........kBBBCCFFJMMLEkk.........',
+    '.........kBBAADFFFJMMLCkk.......',
+    '..........kkDAADFFFGLMMJDk......',
+    '............kAADDDFFHJLMLGk.....',
+    '.............kkAADFFHHHLMMJk....',
+    '...............kkkAFHHHHHJMGk...',
+    '..................kkAHHHHJFJCk..',
+    '....................kkAFFFFJCk..',
+    '......................kkADDDCk..',
+    '........................kADFDEk.',
+    '.........................kkDFCk.',
+    '...........................kkk..',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The giant freshwater stingray, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Giant freshwater stingray.jpg, cut out with rembg, D97).
+  'fish/giant-freshwater-stingray': [
+    '................................',
+    '................................',
+    '.......kk...kkkkkkkkkkkkk.......',
+    '.....kkIJkkkLMMMMMMMMMLMLkk.....',
+    '....kHHHLMMMMMMMMMMMMMMLMJJk....',
+    '...kIFJLLJLMMMMMMIJMMMMMLLIIk...',
+    '..kFFHHJJJMMHJLLLIILMMLJLJIIJk..',
+    '..kHGFJJLLMMLJLLLJLJLLJJJIJIGk..',
+    '..kGHHJLLLLJIIJJIIJJJJIHIJFILJk.',
+    '..kEGIIIJJJGEHHHGGFHIIHGHHGGIFk.',
+    '.kEeeHIIGJIHGFHGFFGHIHGEEGEDGDk.',
+    '.kIexEHIHJJIHHHHGFFIHHGEGDDDGGk.',
+    '.kFECDHGFIJHHGGHGFHHGGFEDEDCIk..',
+    '.kEFCCEEFHIJHGFEGFHFGFEECCCBIk..',
+    '.kGFDBCDEFFHIGFFGGHFEFEDCBBEk...',
+    '..kFCBBCCDFFEFFGGGFDEEDCBBBGk...',
+    '..kFCAABBDEDCDFGGFGGFDBBBABHk...',
+    '..kEDAAACCDBDGGGGEDDECAAAADk....',
+    '...kDAAABDBDGFFGFEEBABAAABGk....',
+    '....kBAAABDFDDEFFFFBAAAAAEk.....',
+    '....kDBAACDBBDFFFEFBAAAACFk.....',
+    '.....kCBBBAAACDEDDCBAAAAGk......',
+    '.....kCCAAABBBBDDCBBAAADk.......',
+    '......kECABBCABCDCBBAADDk.......',
+    '.......kEDAAAAACEDBAkCDk........',
+    '........kkCBAAACECABkkk.........',
+    '..........kkkkkDEBkk............',
+    '..............kEFk..............',
+    '..............kDDk..............',
+    '...............kk...............',
+    '................................',
+    '................................',
+  ],
+  // The icefish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Icefish.jpg, cut out with rembg, D97).
+  'fish/icefish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '..kk............................',
+    '.kCEkkk.........................',
+    '..kEFELkkkkkk......kkk..........',
+    '...kDFJMIDBCJkk...kBAAk.........',
+    '....kGCexLCFGJGkkkBDBCAk........',
+    '.....kIxxIHJFIJFCBBBBBk.........',
+    '......kJFBBCDGLCFEBBBk..........',
+    '.......kMIDBAGJEBEDFkkkkk.......',
+    '........kIMIEJGCBJMLGBCCCk......',
+    '.........kFIGLMEJDEFDBACBDk.....',
+    '..........kGEMMDBEEDBBCEDHCk....',
+    '..........kDEIDDFDFGBBBMEGGFk...',
+    '..........kBBkBBDDDBGBAJFLJEGk..',
+    '..........kBBkkkABBDBBBLLIADDk..',
+    '...........kBk..kkkCDFLJLBACDDk.',
+    '...........kAk.....kkCDGLDGCCFk.',
+    '............k.......kBDBDIGFCk..',
+    '.....................kCBDCJFAk..',
+    '......................kkBBBAk...',
+    '.......................kCCAAk...',
+    '.......................kDCAAk...',
+    '........................kBAk....',
+    '.......................kBAk.....',
+    '........................kk......',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The coelacanth, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Coelacanth.jpg, cut out with rembg, D97).
+  'fish/coelacanth': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '....kkkkk.......................',
+    '..kkGGFFHk.kk...................',
+    '.kIGexFHIHkIHk..................',
+    '.kGFxxHHFHJJJJk....k............',
+    '..kFBDDHHHGJJHLkk.kGk...........',
+    '..kDFDFDDFFHIHLJJkkGHk..........',
+    '..kIHFDBDDDDFHIJLLJGHk..........',
+    '...kkFBBBBBBDFGIHJJLJFk.........',
+    '.....kkBAAABBBEGGIJJLJkk........',
+    '......kDAAABBBADEEIIJJMLk.......',
+    '.......kkkkkBBBBDEEEGIJLMk......',
+    '...........kFDBBBDDEDEILMMkk....',
+    '............kBDFGFFFFFCIJLLLk...',
+    '.............kkkkFFFFGECIIJMMk..',
+    '.................kkBBBBCEDJJJk..',
+    '...................kkBBDDEILHJk.',
+    '.....................kkFFDGJLk..',
+    '.......................kkkkFk...',
+    '...........................k....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The strange shark, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Strange shark.jpg, cut out with rembg, D97).
+  'fish/strange-shark': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '....k...........................',
+    '...kAk..........................',
+    '...kAk..........................',
+    '...kCBk.........................',
+    '..kBCEkk........................',
+    '.kABBDDCkkkk....................',
+    '..kkkkCEGCAAkkk.................',
+    '......kkDJexFBAkkkkk............',
+    '........kDxxJJJCBAAAk...........',
+    '........kAHJJJJJJHBAk...........',
+    '.........kCDJJJJJJJGBkk.........',
+    '..........kkCJJJJJJJFDAk........',
+    '............kCJJJJJJJJFBk.......',
+    '.............kCHJJJJJJJGCkk.....',
+    '..............kBFGJJJJJJHEAk....',
+    '...............kkCFHJJJJJHCAk...',
+    '.................kACFEIIJJJBAk..',
+    '..................kCFCCBBJJBAAk.',
+    '...................kkkkCCCBCkk..',
+    '.......................kkkkk....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The hillstream loach, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Hillstream loach.jpg, cut out with rembg, D97).
+  'fish/hillstream-loach': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '.....kkkk.......................',
+    '....kIJJJkkkk...................',
+    '..kkIIHIJJJJLkk.................',
+    '.kGFeeHEGFHIJJMkk...............',
+    '.kGDexCBBDDFHHJJJkk.............',
+    '..kBBAABDBDDFHHIJLIk............',
+    '..kAAAACBBBDDDFFIJIIkk..........',
+    '...kACAAABBDDBBDEHIIIJk.........',
+    '....kBAAAABFHHFDBEGIIIIk........',
+    '.....kAAAAACFHHFDBEGIJJkk.......',
+    '......kAACAACGHDDBBEEGIJMk......',
+    '.......kACAAACEDFDBCCEEHLMk.....',
+    '........kECCACCDFHICCCCEGILkk...',
+    '.........kkEEBDBFHIHEECEEEGLJk..',
+    '...........kkkkFFHHIIkkGGEGLLJk.',
+    '...............kGFHHk..kkIILMMk.',
+    '................kkkk.....kkLLMk.',
+    '...........................kkk..',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The snow trout, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Snow trout.jpg, cut out with rembg, D97).
+  'fish/snow-trout': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kk...........................',
+    '..kCAkkkk.......................',
+    '.kADBEBAAkk.....................',
+    '..kBGHexAAAkk...................',
+    '...kFDxxBAAAAkkkkk..............',
+    '....kkGFGBBAAAADDCk.............',
+    '......kEHFFCBBABFEk.............',
+    '.......kAFIGDFDACEk.............',
+    '........kkEIGHBEAAk.............',
+    '..........kCEHIHECBkk...........',
+    '...........kBIMIGCABAk..........',
+    '...........kBEkHCHHDECkk........',
+    '............kDkkkFEEEDDCkkk.....',
+    '.............k...kEEDFDGCCDkk...',
+    '..................kIkkDFBCGIHk..',
+    '..................kLMkkCCCHkk...',
+    '...................kk..kkDFk....',
+    '.........................kFk....',
+    '..........................k.....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The golden mahseer, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Golden mahseer.jpg, cut out with rembg, D97).
+  'fish/golden-mahseer': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '....kk..........................',
+    '..kkAAkkkk......................',
+    '.kCEexDBABkkk...................',
+    '.kEFxxIDDEJCBkk.................',
+    '..kBFLHHHEEGJEBkk...............',
+    '...kkEILFCFFEJFCBk..............',
+    '.....kFGCEFGGFLGCBk.............',
+    '......kEEDFEGIJJFDBk............',
+    '.......kFEDFJJMMIIDBk...........',
+    '........kCEJMMMJMLHDBk..........',
+    '.........kkkJLMMJLMLDCk.........',
+    '............kkFGJJJMLICkkkkkk...',
+    '..............kCEGIJMLDCBCCCCk..',
+    '...............kkkCCBELJDCBBBk..',
+    '..................kCBkkFFBBkk...',
+    '..................kBAk.kkBAk....',
+    '..................kABk...kBk....',
+    '...................kk....kABk...',
+    '..........................kBk...',
+    '...........................k....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The redtail catfish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Redtail catfish.jpg, cut out with rembg, D97).
+  'fish/redtail-catfish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '..kkkkkkk.......................',
+    '.kHGJHHHGkkk....................',
+    '..kkHGexGHJHkkkkkk..............',
+    '....kHxxDDGHJHCCGMk.............',
+    '....kLLFFHFFHHDBCHk.............',
+    '.....kCCFJLJDFHBBGk.............',
+    '.....kDBBBHMLDDCBDk.............',
+    '......kHBBDJLLFCCGkk............',
+    '.......kkkkCDHMJCDFDkk..........',
+    '..........kAAADLLHDDBCk.........',
+    '..........kAAAkFJMLGCBk.........',
+    '..........kBAAkkkCHLHGkkk.......',
+    '...........kAk..kAADJLHDIkkkk...',
+    '............k....kAACHJHEEIIIk..',
+    '.................kAkkDDEIILLIk..',
+    '..................k..kEEIIkkk...',
+    '......................kEkk......',
+    '.......................k........',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The tiger shovelnose catfish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Tiger shovelnose catfish.jpg, cut out with rembg, D97).
+  'fish/tiger-shovelnose-catfish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kk...........................',
+    '..kABkkk........................',
+    '.kADDBBAkk......................',
+    '..kDFEeeBBkk.kkk................',
+    '...kCCexHFAAkGGMk...............',
+    '....kkCEEFEACEIJJk..............',
+    '......kBBFHFCCAIk...............',
+    '.......kkIMMHECAk...............',
+    '.........kJLLJFCDk..............',
+    '..........kkILLIEDk.............',
+    '...........kGIILIGDkkk..........',
+    '...........kMIkLLLIEEEkkkk......',
+    '............kk.kkJLJIFFDDEkkk...',
+    '.................kGGJkJGGIGGJk..',
+    '..................kMk.kDFkkkk...',
+    '...................k...kFk......',
+    '........................kIk.....',
+    '.........................kLk....',
+    '..........................k.....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The payara, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Payara.jpg, cut out with rembg, D97).
+  'fish/payara': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...k............................',
+    '..kIkk..........................',
+    '.kFLFEkk........................',
+    '.kGeeFCAkk......................',
+    '.kCexLFDBCkk....................',
+    '.kCMIIFAFDBBkk..................',
+    '.kBIFIDDIFFDCCkk..kkk...........',
+    '..kGFFFIFJIFFCCCkkAAAk..........',
+    '..kCFGDCHHFIFFGCCCAAk...........',
+    '...kFCBBFFHHFJFLGDCAk...........',
+    '....kFABDDHFHHFILFDDkk..........',
+    '.....kDBkFFDHHHJIILGDEk.........',
+    '......kAkkkDDJHJJIFIIFCk........',
+    '.......k...kkkFFFJJFFIDCk.......',
+    '..............kkkDFGJIEFCk.kkk..',
+    '.................kkDDIJFFEkECFk.',
+    '...................kEEFFGFIEEEk.',
+    '....................kkkEkFIEBCk.',
+    '.......................kkFEACk..',
+    '.........................kBAk...',
+    '.........................kAk....',
+    '..........................k.....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The strange giant catfish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Strange giant catfish.jpg, cut out with rembg, D97).
+  'fish/strange-giant-catfish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kkk..........................',
+    '..kECBkkkkk.....................',
+    '..kHexDBBCBkkkkkkk..............',
+    '..kGxxMECCCBAAAAABk.............',
+    '...kLMMIFEDDCBAABCk.............',
+    '....kMMIGEHGDCCBBk..............',
+    '.....kHGDEEFFGDDCBk.............',
+    '......kHEDDDELFFCDCkk...........',
+    '.......kGMMIHMJHHFDBBk..........',
+    '........kIJILLJJJEGCDk..........',
+    '.........kLGMLHLJJJGECkk.kkkk...',
+    '..........kDGLMMLILGFEDBkACBBk..',
+    '..........kDkFFGGHDGFGFDCCCBk...',
+    '...........k.kDEDCCkkkkDDCkk....',
+    '..............kABkk...kCDk......',
+    '...............kk.....kCCAk.....',
+    '.......................kBAk.....',
+    '........................kBk.....',
+    '.........................k......',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The archerfish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Archerfish.jpg, cut out with rembg, D97).
+  'fish/archerfish': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kkk..........................',
+    '..kEEHkkkkkk....................',
+    '.kBBEHELHJJLkkk.................',
+    '..kBeeEEEHJMMLMkkk..............',
+    '..kCexAABHJHHJLMMLkkk...........',
+    '..kCCBAABDBABEMMMMMMJk..........',
+    '...kCCBBDDDDBEJLHEJMLGk.........',
+    '...kCCFFDDJLLHHHBBELMJDk........',
+    '....kFFGGFHLLLHDAAHLLHJHk.......',
+    '.....kGGGFFHHEDDCDDEEDJDk.......',
+    '......kFFGFGGIGGFDDCBBMJkkkkk...',
+    '.......kkFGGGIIGFFDCDDHJJLLLHk..',
+    '.........kGIIGIIGFDDDDDELJJIk...',
+    '..........kkIIIIIIGGGFGDDDIk....',
+    '............kkkFFDDDDBHCAAAk....',
+    '...............kkAAAAADkAACk....',
+    '.................kkkkkk.kAAk....',
+    '.........................kAAk...',
+    '..........................kACk..',
+    '...........................kCCk.',
+    '............................kk..',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The capelin, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Capelin.jpeg, cut out with rembg, D97).
+  'fish/capelin': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '..kkkkk.........................',
+    '.kECCBCkkk......................',
+    '..kDCCMBAAkk....................',
+    '...kCGMexGCAkk..................',
+    '....kkBxxCBAAAk...kk............',
+    '......kILLEJIBAkkkBFk...........',
+    '.......kBDIGJFBAABCEk...........',
+    '........kkBEMDJGAAACk...........',
+    '..........kkILJMCEBAk...........',
+    '............kCCDCBGBAkk.........',
+    '.............kJHCCJDBAAk........',
+    '.............kCCkCBDECAAk.......',
+    '.............kCBEkkGJBHCAkkkkk..',
+    '..............kkk..kDJGADDEABAk.',
+    '....................kkkkkCHCkk..',
+    '.........................kBCk...',
+    '.........................kABk...',
+    '..........................kk....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The four-eyed fish, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Four-eyed fish.jpg, cut out with rembg, D97).
+  'fish/four-eyed-fish': [
+    '................................',
+    '................................',
+    '................................',
+    '.......kk.......................',
+    '......kACk......................',
+    '.....kkABBkk....................',
+    '....kCAABBBBkk..................',
+    '....kEeeBAABBCkk................',
+    '..kkkFexAABBCCCDk...............',
+    '.kGIHGCBAAABBBCCCkk.............',
+    '.kIMMMGCABAAAABBCCDkk...........',
+    '..kJIMJECBBBBABBCEFFFkk.........',
+    '...kIMLMHECCBBCCDEFFFGGk........',
+    '....kIILLLIGCDDCDDEEEGHHkk......',
+    '.....kIHILLLGEDDDEEEEGHHIHk.....',
+    '......kMIILLMJGDDDEEFGHGHHHk....',
+    '.......kMJHILLLIEDDEEGGGGGGHk...',
+    '........kMJIHILLIFEEEGGGGFGHk...',
+    '.........kJkkHHILMIEFGFFFFGHk...',
+    '..........k..kkHHILLHGFGFFHk....',
+    '...............kkIIJMJGFEFHk....',
+    '.................kkJJJJGFGHk....',
+    '...................kkIIJIGk.....',
+    '.....................kkIJIkk....',
+    '.......................kIIJJk...',
+    '........................kIIJMk..',
+    '.........................kIJMMk.',
+    '..........................kMMk..',
+    '...........................kk...',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The mangrove jack, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Mangrove jack.jpg, cut out with rembg, D97).
+  'fish/mangrove-jack': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '...kkkkkkkkkkkkkkk..............',
+    '..kCFCDAABBAACGFGFk.............',
+    '.kEIexDILIGBCCCFFGk.............',
+    '.kBGxxDDDDDBDFDEDEEk............',
+    '..kFCEEBBBDDFCDCCCECk...........',
+    '...kDDCDAACFDDBBFABDk...........',
+    '....kJCDDBBDDFBCCCBDGkk.........',
+    '.....kFIDEGILLBCCCGECCDk........',
+    '......kFGDILLLLDCBGCAEDDk.......',
+    '.......kEFFFILLGDEEDBAAGk.......',
+    '.......kDGGDDELFFDCBFAEDGk......',
+    '........kDDkGIIIIGDCDEkkkkk.....',
+    '........kDAkkIIFIBGDCELFCIIkk...',
+    '.........kAk.kFBFBGBCCDDFDGLIk..',
+    '..........k...kDDBFEDGDDFGGIIGk.',
+    '..............kEBADDkkDJIFILIk..',
+    '...............kkBBCk.kFDGDFk...',
+    '.................kBAk..kIDBk....',
+    '..................kk....kGBk....',
+    '.........................kCk....',
+    '..........................k.....',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+  ],
+  // The bull shark, a rift fish (D104), from a picture on Wikimedia Commons (docs/design/refs_rift/Bull shark.jpg, cut out with rembg, D97).
+  'fish/bull-shark': [
+    '................................',
+    '................................',
+    '................................',
+    '....k...........................',
+    '...kCk..........................',
+    '...kCk..........................',
+    '...kCk..........................',
+    '...kCCk.........................',
+    '...kGCk.........................',
+    '...kFGCk...........k............',
+    '...kGICkkk........kFk...........',
+    '...kGLIIGIkkk....kFGk...........',
+    '...kFLLeeGGIIkkkkDFFDk..........',
+    '..kFFkMexFFFFFGFADDFDk..........',
+    '...kkkGMLJGDDDDDBBDDAk..........',
+    '......kJLJIFFDDDBAABBk..........',
+    '.....kGFJLJGFFEDBBABDk..........',
+    '......kkkMLJFFFEEEBABDk.........',
+    '........kMMLJFEEEEBBABFk........',
+    '.........kLMLJHEBBBAABDGk.......',
+    '..........kMMLJHEBAAAABEGk......',
+    '...........kILLJHBBBABBEDGk.....',
+    '............kkJFJBHHEBBEEFk.....',
+    '.............kDAEBBEHHBBEEGk....',
+    '............kIGFEHHBHHHHBEFIk...',
+    '...........kIGGFEDHJLLLJIHEIk...',
+    '............kkkkkkkkLMMMLJIFJk..',
+    '....................kkMMMMLIIk..',
+    '......................kkMMMMLLk.',
+    '........................kkkkkk..',
+    '................................',
+    '................................',
+  ],
 });
 
 /**
@@ -4034,6 +5504,676 @@ export const OWN_KEYS = {
     M: '#f0e5c9', // belly, highlights
     x: '#141414', // eye
     e: '#d8c050', // eye glint
+  },
+  'fish/giant-gourami': {
+    A: '#3f3009', // back, dark shading
+    B: '#563e14', // back, dark shading
+    C: '#60501e', // back, dark shading
+    D: '#6c5b27', // upper flank
+    E: '#79672f', // upper flank
+    F: '#88723c', // upper flank
+    G: '#987f48', // upper flank
+    H: '#a28e58', // lower flank
+    I: '#ac9a65', // lower flank
+    J: '#bca770', // belly, highlights
+    L: '#ccb77d', // belly, highlights
+    M: '#dfc78b', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/peacock-bass': {
+    A: '#100601', // back, dark shading
+    B: '#3d1c0a', // back, dark shading
+    C: '#523c1f', // back, dark shading
+    D: '#893211', // upper flank; fin colour
+    E: '#70542b', // upper flank
+    F: '#94682f', // upper flank; fin colour
+    G: '#8b7b47', // upper flank
+    H: '#a88844', // lower flank; fin colour
+    I: '#af9a5a', // lower flank
+    J: '#bea765', // belly, highlights
+    L: '#c0b77e', // belly, highlights
+    M: '#dacf95', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/silver-arowana': {
+    A: '#2b312d', // back, dark shading
+    B: '#464d47', // back, dark shading
+    C: '#5d5b50', // back, dark shading
+    D: '#67675b', // upper flank
+    E: '#746f63', // upper flank
+    F: '#7b766b', // upper flank
+    G: '#7e7c72', // upper flank
+    H: '#598f86', // lower flank
+    I: '#8b8275', // lower flank
+    J: '#918a82', // belly, highlights
+    L: '#9d9a99', // belly, highlights
+    M: '#b4abab', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/clown-knifefish': {
+    A: '#17181c', // back, dark shading
+    B: '#212225', // back, dark shading
+    C: '#2b2b2e', // back, dark shading
+    D: '#333435', // upper flank
+    E: '#3b3c39', // upper flank
+    F: '#404346', // upper flank
+    G: '#4b483d', // upper flank
+    H: '#4a4d4c', // lower flank
+    I: '#5b5748', // lower flank
+    J: '#565c60', // belly, highlights
+    L: '#6e6651', // belly, highlights
+    M: '#70787a', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/mudskipper': {
+    A: '#1a0a07', // back, dark shading
+    B: '#360c04', // back, dark shading
+    C: '#511a0a', // back, dark shading
+    D: '#422314', // upper flank
+    E: '#5a2f1c', // upper flank
+    F: '#693f24', // upper flank
+    G: '#815532', // upper flank
+    H: '#8a5921', // lower flank; fin colour
+    I: '#966b3d', // lower flank
+    J: '#ac8049', // belly, highlights; fin colour
+    L: '#b9935a', // belly, highlights; fin colour
+    M: '#cda96b', // belly, highlights; fin colour
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/ornate-bichir': {
+    A: '#0f0d0b', // back, dark shading
+    B: '#38342d', // back, dark shading
+    C: '#665d4b', // back, dark shading
+    D: '#7e7051', // upper flank
+    E: '#868169', // upper flank
+    F: '#868980', // upper flank
+    G: '#939382', // upper flank
+    H: '#909795', // lower flank
+    I: '#a09f86', // lower flank
+    J: '#a9a9a0', // belly, highlights
+    L: '#aebcc6', // belly, highlights
+    M: '#c8bfb8', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/blackfish': {
+    A: '#363636', // back, dark shading
+    B: '#5e5e5e', // back, dark shading
+    C: '#737373', // back, dark shading
+    D: '#808080', // upper flank
+    E: '#8b8b8b', // upper flank
+    F: '#969696', // upper flank
+    G: '#9e9e9e', // upper flank
+    H: '#a6a6a6', // lower flank
+    I: '#afafaf', // lower flank
+    J: '#b6b6b6', // belly, highlights
+    L: '#c3c3c3', // belly, highlights
+    M: '#d3d3d3', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/marbled-lungfish': {
+    A: '#260b01', // back, dark shading
+    B: '#37190a', // back, dark shading
+    C: '#4c280f', // back, dark shading
+    D: '#5a361b', // upper flank
+    E: '#614230', // upper flank
+    F: '#784c28', // upper flank
+    G: '#865e40', // upper flank
+    H: '#ac784d', // lower flank; fin colour
+    I: '#9c7c6a', // lower flank
+    J: '#cb9f79', // belly, highlights
+    L: '#e6bd97', // belly, highlights
+    M: '#f5cfac', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/electric-eel': {
+    A: '#15224a', // back, dark shading
+    B: '#202f5c', // back, dark shading
+    C: '#22346e', // back, dark shading
+    D: '#374275', // upper flank
+    E: '#53587c', // upper flank
+    F: '#767798', // upper flank
+    G: '#8485ab', // upper flank
+    H: '#8b8db1', // lower flank
+    I: '#9193ba', // lower flank
+    J: '#9a98b5', // belly, highlights
+    L: '#9c9dc1', // belly, highlights
+    M: '#a5a5cb', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/arapaima': {
+    A: '#160d14', // back, dark shading
+    B: '#29151c', // back, dark shading
+    C: '#302d1b', // back, dark shading
+    D: '#3d2b30', // upper flank
+    E: '#46373c', // upper flank
+    F: '#4c434b', // upper flank
+    G: '#52524e', // upper flank
+    H: '#646563', // lower flank
+    I: '#757970', // lower flank
+    J: '#95a08b', // belly, highlights
+    L: '#c5d1b3', // belly, highlights
+    M: '#ecede5', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/strange-tilapia': {
+    A: '#4d3d47', // back, dark shading
+    B: '#62535f', // back, dark shading
+    C: '#70626c', // back, dark shading
+    D: '#7a6f76', // upper flank
+    E: '#857a81', // upper flank
+    F: '#8d848c', // upper flank
+    G: '#8f8c94', // upper flank
+    H: '#96929a', // lower flank
+    I: '#9f9aa1', // lower flank
+    J: '#a4a1a8', // belly, highlights
+    L: '#aba8ae', // belly, highlights
+    M: '#b4b2b5', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/oscar': {
+    A: '#2e292f', // back, dark shading
+    B: '#4b3428', // back, dark shading
+    C: '#3b3b49', // back, dark shading
+    D: '#5c3b1c', // upper flank
+    E: '#53423b', // upper flank
+    F: '#793d14', // upper flank; fin colour
+    G: '#524e57', // upper flank
+    H: '#7e512b', // lower flank
+    I: '#9c580a', // lower flank; fin colour
+    J: '#7c7371', // belly, highlights
+    L: '#c06f12', // belly, highlights; fin colour
+    M: '#cd9b1b', // belly, highlights; fin colour
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/red-bellied-piranha': {
+    A: '#33322d', // back, dark shading
+    B: '#4a473a', // back, dark shading
+    C: '#6b3c23', // back, dark shading
+    D: '#5b5843', // upper flank
+    E: '#765f27', // upper flank
+    F: '#915234', // upper flank; fin colour
+    G: '#76663f', // upper flank
+    H: '#6c6c55', // lower flank
+    I: '#826f37', // lower flank
+    J: '#9a6f41', // belly, highlights
+    L: '#828053', // belly, highlights
+    M: '#8d8d6b', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/pacu': {
+    A: '#5e1c1a', // back, dark shading
+    B: '#526175', // back, dark shading
+    C: '#bc634b', // back, dark shading; fin colour
+    D: '#968784', // upper flank
+    E: '#8899ae', // upper flank
+    F: '#ac9f9b', // upper flank
+    G: '#c59784', // upper flank
+    H: '#f39373', // lower flank; fin colour
+    I: '#afadb4', // lower flank
+    J: '#b8bec8', // belly, highlights
+    L: '#eabfab', // belly, highlights
+    M: '#c6d4df', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/discus': {
+    A: '#2c1d24', // back, dark shading
+    B: '#6d2b1d', // back, dark shading
+    C: '#972d18', // back, dark shading; fin colour
+    D: '#c42316', // upper flank; fin colour
+    E: '#e11611', // upper flank; fin colour
+    F: '#f62619', // upper flank; fin colour
+    G: '#fe361c', // upper flank; fin colour
+    H: '#fd492b', // lower flank; fin colour
+    I: '#fc6134', // lower flank; fin colour
+    J: '#fc7b20', // belly, highlights; fin colour
+    L: '#e68d61', // belly, highlights; fin colour
+    M: '#fee039', // belly, highlights; fin colour
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/electric-yellow-cichlid': {
+    A: '#88ae49', // back, dark shading; fin colour
+    B: '#aed902', // back, dark shading; fin colour
+    C: '#b2d957', // back, dark shading; fin colour
+    D: '#a7d1ae', // upper flank
+    E: '#d2dd01', // upper flank; fin colour
+    F: '#c6ec25', // upper flank; fin colour
+    G: '#f3dc01', // upper flank; fin colour
+    H: '#e9e319', // lower flank; fin colour
+    I: '#e3fc08', // lower flank; fin colour
+    J: '#fefc00', // belly, highlights; fin colour
+    L: '#f7fe32', // belly, highlights; fin colour
+    M: '#f7fc75', // belly, highlights; fin colour
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/lumpfish': {
+    A: '#0a0908', // back, dark shading
+    B: '#131313', // back, dark shading
+    C: '#1b1a1d', // back, dark shading
+    D: '#232427', // upper flank
+    E: '#2e2d30', // upper flank
+    F: '#36363b', // upper flank
+    G: '#43444d', // upper flank
+    H: '#5e606d', // lower flank
+    I: '#7f7f83', // lower flank
+    J: '#92949e', // belly, highlights
+    L: '#a2a7b4', // belly, highlights
+    M: '#b9bdc6', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/frontosa': {
+    A: '#1d1815', // back, dark shading
+    B: '#272221', // back, dark shading
+    C: '#322b28', // back, dark shading
+    D: '#3a3335', // upper flank
+    E: '#453a37', // upper flank
+    F: '#4a4246', // upper flank
+    G: '#554b29', // upper flank
+    H: '#594f54', // lower flank
+    I: '#6c6870', // lower flank
+    J: '#79723a', // belly, highlights
+    L: '#938c92', // belly, highlights
+    M: '#c8c2c9', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/wolffish': {
+    A: '#433a2f', // back, dark shading
+    B: '#60564a', // back, dark shading
+    C: '#75695b', // back, dark shading
+    D: '#807667', // upper flank
+    E: '#8a8071', // upper flank
+    F: '#968c7d', // upper flank
+    G: '#a29584', // upper flank
+    H: '#b4a597', // lower flank
+    I: '#dad9cb', // lower flank
+    J: '#edeee7', // belly, highlights
+    L: '#f1faf5', // belly, highlights
+    M: '#fcffff', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/strange-cod': {
+    A: '#767060', // back, dark shading
+    B: '#88816e', // back, dark shading
+    C: '#908875', // back, dark shading
+    D: '#98907a', // upper flank
+    E: '#9f9681', // upper flank
+    F: '#a79d86', // upper flank
+    G: '#aba28b', // upper flank
+    H: '#b3a890', // lower flank
+    I: '#b9ae96', // lower flank
+    J: '#bfb49c', // belly, highlights
+    L: '#c9bea4', // belly, highlights
+    M: '#d7ccb0', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/barramundi': {
+    A: '#000700', // back, dark shading
+    B: '#261f0f', // back, dark shading
+    C: '#413b1c', // back, dark shading
+    D: '#5a4c2f', // upper flank
+    E: '#8a6b48', // upper flank
+    F: '#ab927b', // upper flank
+    G: '#c9ad8f', // upper flank
+    H: '#dfcbb2', // lower flank
+    I: '#f2e2cc', // lower flank
+    J: '#f7ebe0', // belly, highlights
+    L: '#fef5e6', // belly, highlights
+    M: '#fffff9', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/polar-cod': {
+    A: '#3a2e27', // back, dark shading
+    B: '#4c4239', // back, dark shading
+    C: '#5c4d44', // back, dark shading
+    D: '#665b54', // upper flank
+    E: '#696768', // upper flank
+    F: '#78675a', // upper flank
+    G: '#867e79', // upper flank
+    H: '#9a8d7d', // lower flank
+    I: '#929597', // lower flank
+    J: '#9fa1a1', // belly, highlights
+    L: '#bbb1a1', // belly, highlights
+    M: '#d6d1c3', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/strange-perch': {
+    A: '#64695c', // back, dark shading
+    B: '#7c8573', // back, dark shading
+    C: '#949874', // back, dark shading
+    D: '#979e89', // upper flank
+    E: '#98ac92', // upper flank
+    F: '#b8ac82', // upper flank
+    G: '#a9b7a0', // upper flank
+    H: '#bab199', // lower flank
+    I: '#cebf85', // lower flank
+    J: '#c4c2a5', // belly, highlights
+    L: '#d6cbad', // belly, highlights
+    M: '#e9d8b7', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/goliath-tigerfish': {
+    A: '#0d0a0c', // back, dark shading
+    B: '#092635', // back, dark shading
+    C: '#272c28', // back, dark shading
+    D: '#10395f', // upper flank
+    E: '#38431a', // upper flank
+    F: '#39502b', // upper flank
+    G: '#245785', // upper flank; fin colour
+    H: '#455e36', // lower flank
+    I: '#646f50', // lower flank
+    J: '#4071bd', // belly, highlights; fin colour
+    L: '#6d99df', // belly, highlights; fin colour
+    M: '#9fc0f9', // belly, highlights; fin colour
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/goonch-catfish': {
+    A: '#46402c', // back, dark shading
+    B: '#545140', // back, dark shading
+    C: '#666457', // back, dark shading
+    D: '#6d6b5e', // upper flank
+    E: '#727062', // upper flank
+    F: '#777668', // upper flank
+    G: '#7e7c70', // upper flank
+    H: '#89877a', // lower flank
+    I: '#979587', // lower flank
+    J: '#a1a195', // belly, highlights
+    L: '#aeaea4', // belly, highlights
+    M: '#c7c7bf', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/snailfish': {
+    A: '#b16b00', // back, dark shading; fin colour
+    B: '#9c7519', // back, dark shading; fin colour
+    C: '#a37b2b', // back, dark shading; fin colour
+    D: '#c98601', // upper flank; fin colour
+    E: '#aa966d', // upper flank
+    F: '#d89e11', // upper flank; fin colour
+    G: '#cfae57', // upper flank; fin colour
+    H: '#efc306', // lower flank; fin colour
+    I: '#c8c0ad', // lower flank
+    J: '#e4c976', // belly, highlights; fin colour
+    L: '#e5e2d3', // belly, highlights
+    M: '#f1f4fa', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/giant-freshwater-stingray': {
+    A: '#010505', // back, dark shading
+    B: '#0a0e0b', // back, dark shading
+    C: '#151610', // back, dark shading
+    D: '#1f1e16', // upper flank
+    E: '#2e2518', // upper flank
+    F: '#3e2e1e', // upper flank
+    G: '#4e3825', // upper flank
+    H: '#66472c', // lower flank
+    I: '#845936', // lower flank
+    J: '#aa7649', // belly, highlights; fin colour
+    L: '#d8a172', // belly, highlights; fin colour
+    M: '#edd4af', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/icefish': {
+    A: '#505050', // back, dark shading
+    B: '#6a6a6a', // back, dark shading
+    C: '#838383', // back, dark shading
+    D: '#939393', // upper flank
+    E: '#a0a0a0', // upper flank
+    F: '#ababab', // upper flank
+    G: '#b7b7b7', // upper flank
+    H: '#c1c1c1', // lower flank
+    I: '#c8c8c8', // lower flank
+    J: '#d4d4d4', // belly, highlights
+    L: '#e4e4e4', // belly, highlights
+    M: '#f5f5f5', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/coelacanth': {
+    A: '#264800', // back, dark shading
+    B: '#396000', // back, dark shading; fin colour
+    C: '#12840b', // back, dark shading; fin colour
+    D: '#467502', // upper flank; fin colour
+    E: '#358f15', // upper flank; fin colour
+    F: '#60890d', // upper flank; fin colour
+    G: '#64a128', // upper flank; fin colour
+    H: '#81a12b', // lower flank; fin colour
+    I: '#80b545', // lower flank; fin colour
+    J: '#a8c458', // belly, highlights; fin colour
+    L: '#c4db78', // belly, highlights; fin colour
+    M: '#e4f69d', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/strange-shark': {
+    A: '#555555', // back, dark shading
+    B: '#898989', // back, dark shading
+    C: '#b5b5b5', // back, dark shading
+    D: '#cacaca', // upper flank
+    E: '#d7d7d7', // upper flank
+    F: '#e8e8e8', // lower flank
+    G: '#f3f3f3', // lower flank
+    H: '#fbfbfb', // lower flank
+    I: '#fefefe', // belly, highlights
+    J: '#ffffff', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/hillstream-loach': {
+    A: '#050403', // back, dark shading
+    B: '#090c17', // back, dark shading
+    C: '#0f0e0b', // back, dark shading
+    D: '#111826', // upper flank
+    E: '#1f1e16', // upper flank
+    F: '#1f2836', // upper flank
+    G: '#373a2e', // upper flank
+    H: '#394655', // lower flank
+    I: '#596c6b', // lower flank
+    J: '#68889f', // belly, highlights
+    L: '#899d77', // belly, highlights
+    M: '#a4c2bf', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/snow-trout': {
+    A: '#454642', // back, dark shading
+    B: '#6b6c68', // back, dark shading
+    C: '#81817c', // back, dark shading
+    D: '#91918b', // upper flank
+    E: '#9e9e97', // upper flank
+    F: '#a8a9a2', // upper flank
+    G: '#b3b2ab', // upper flank
+    H: '#bebeb8', // lower flank
+    I: '#c5c5be', // lower flank
+    J: '#cecec9', // belly, highlights
+    L: '#d6d6d1', // belly, highlights
+    M: '#e5e4dd', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/golden-mahseer': {
+    A: '#4b3f41', // back, dark shading
+    B: '#6a5f63', // back, dark shading
+    C: '#8a7b7d', // back, dark shading
+    D: '#9e8774', // upper flank
+    E: '#9d8f8b', // upper flank
+    F: '#a89d9f', // upper flank
+    G: '#b8afae', // upper flank
+    H: '#cdb59f', // lower flank
+    I: '#d3c2b7', // lower flank
+    J: '#d6d0d0', // belly, highlights
+    L: '#e6e0dc', // belly, highlights
+    M: '#f3f2f3', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/redtail-catfish': {
+    A: '#09040e', // back, dark shading
+    B: '#181223', // back, dark shading
+    C: '#3b2c3f', // back, dark shading
+    D: '#564256', // upper flank
+    E: '#a5392e', // upper flank; fin colour
+    F: '#63546d', // upper flank
+    G: '#785d73', // upper flank
+    H: '#826e84', // lower flank
+    I: '#dc7568', // lower flank; fin colour
+    J: '#9f8ca0', // belly, highlights
+    L: '#c4a7b2', // belly, highlights
+    M: '#ddd6e3', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/tiger-shovelnose-catfish': {
+    A: '#130e16', // back, dark shading
+    B: '#2a1411', // back, dark shading
+    C: '#35211c', // back, dark shading
+    D: '#322c2f', // upper flank
+    E: '#4a352c', // upper flank
+    F: '#58473a', // upper flank
+    G: '#645954', // upper flank
+    H: '#845f46', // lower flank
+    I: '#736762', // lower flank
+    J: '#7e7673', // belly, highlights
+    L: '#888287', // belly, highlights
+    M: '#a4907f', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/payara': {
+    A: '#1a1619', // back, dark shading
+    B: '#2c2522', // back, dark shading
+    C: '#363331', // back, dark shading
+    D: '#424237', // upper flank
+    E: '#4e3e44', // upper flank
+    F: '#595443', // upper flank
+    G: '#5c5d52', // upper flank
+    H: '#72674a', // lower flank
+    I: '#726861', // lower flank
+    J: '#817764', // belly, highlights
+    L: '#928a7b', // belly, highlights
+    M: '#aea494', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/strange-giant-catfish': {
+    A: '#111111', // back, dark shading
+    B: '#28282a', // back, dark shading
+    C: '#444345', // back, dark shading
+    D: '#64646a', // upper flank
+    E: '#7d7c7f', // upper flank
+    F: '#888990', // upper flank
+    G: '#999a9e', // upper flank
+    H: '#ababad', // lower flank
+    I: '#b9b9b9', // lower flank
+    J: '#c5c4c3', // belly, highlights
+    L: '#d1d1d0', // belly, highlights
+    M: '#e4e4e2', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/archerfish': {
+    A: '#231b09', // back, dark shading
+    B: '#302b1b', // back, dark shading
+    C: '#3e300c', // back, dark shading
+    D: '#453f1f', // upper flank
+    E: '#4e4542', // upper flank
+    F: '#5c500e', // upper flank
+    G: '#716112', // upper flank; fin colour
+    H: '#6e6254', // lower flank
+    I: '#8b7616', // lower flank; fin colour
+    J: '#98866f', // belly, highlights
+    L: '#ab9e95', // belly, highlights
+    M: '#d5c5c0', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/capelin': {
+    A: '#898989', // back, dark shading
+    B: '#a0a0a0', // back, dark shading
+    C: '#ababab', // back, dark shading
+    D: '#b5b5b5', // upper flank
+    E: '#bcbcbc', // upper flank
+    F: '#c1c1c1', // upper flank
+    G: '#c5c5c5', // upper flank
+    H: '#c9c9c9', // lower flank
+    I: '#cdcdcd', // lower flank
+    J: '#d2d2d2', // belly, highlights
+    L: '#d9d9d9', // belly, highlights
+    M: '#e5e5e5', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/four-eyed-fish': {
+    A: '#151515', // back, dark shading
+    B: '#1b1b1b', // back, dark shading
+    C: '#262526', // back, dark shading
+    D: '#323231', // upper flank
+    E: '#413f3e', // upper flank
+    F: '#4d4c4b', // upper flank
+    G: '#5c5b5b', // upper flank
+    H: '#78706f', // lower flank
+    I: '#90807b', // lower flank
+    J: '#a0938d', // belly, highlights
+    L: '#c19e88', // belly, highlights
+    M: '#c3b3ac', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
+  },
+  'fish/mangrove-jack': {
+    A: '#36362f', // back, dark shading
+    B: '#464741', // back, dark shading
+    C: '#50524c', // back, dark shading
+    D: '#5a5c58', // upper flank
+    E: '#626460', // upper flank
+    F: '#6a6d68', // upper flank
+    G: '#717572', // upper flank
+    H: '#7a7e7b', // lower flank
+    I: '#838886', // lower flank
+    J: '#919592', // belly, highlights
+    L: '#a3a8a6', // belly, highlights
+    M: '#bac2c1', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye glint
+  },
+  'fish/bull-shark': {
+    A: '#091a16', // back, dark shading
+    B: '#0f2620', // back, dark shading
+    C: '#032a49', // back, dark shading
+    D: '#0d2b34', // upper flank
+    E: '#16332f', // upper flank
+    F: '#153b46', // upper flank
+    G: '#154254', // upper flank
+    H: '#214434', // lower flank
+    I: '#1d4e5b', // lower flank
+    J: '#2c6365', // belly, highlights
+    L: '#408382', // belly, highlights
+    M: '#5da79e', // belly, highlights
+    x: '#141414', // eye
+    e: '#e9e6de', // eye ring
   },
 };
 

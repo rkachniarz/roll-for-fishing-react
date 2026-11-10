@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "pacu",
+  "name": "Pacu",
+  "icon": "fish/pacu",
+  "rift": true,
+  "size": {
+    "min": 30,
+    "max": 88
+  },
+  "difficulty": 1,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "rain"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "corn"
+    ]
+  }
+}

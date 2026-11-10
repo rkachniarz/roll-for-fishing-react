@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "discus",
+  "name": "Discus",
+  "icon": "fish/discus",
+  "rift": true,
+  "size": {
+    "min": 10,
+    "max": 20
+  },
+  "difficulty": -2,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "dawn",
+      "evening"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

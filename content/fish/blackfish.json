@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "blackfish",
+  "name": "Blackfish",
+  "icon": "fish/blackfish",
+  "rift": true,
+  "size": {
+    "min": 8,
+    "max": 33
+  },
+  "difficulty": -1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "snow"
+    ],
+    "season": [
+      "winter"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

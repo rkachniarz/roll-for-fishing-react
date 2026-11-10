@@ -65,6 +65,10 @@
           "treasure": { "$ref": "common.schema.json#/definitions/entries" },
           "junk": { "$ref": "common.schema.json#/definitions/entries" },
           "events": { "$ref": "#/properties/events" },
+          "rift": {
+            "description": "Fish from another world that echo this spot, for Rift Fishing (D104); only fish with rift: true.",
+            "$ref": "common.schema.json#/definitions/entries"
+          },
           "features": {
             "description": "Surface features that appear only here, alongside the location's (D102): its schools and big fish.",
             "$ref": "#/properties/features"

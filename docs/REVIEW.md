@@ -24,6 +24,22 @@ Items with no note are left alone.
 
 Newest first.
 
+## Rift fish (D104)
+
+- **One tier rarer** than their rank alone: the top of a spot's rift table is uncommon, the bottom epic. They come
+  through only now and then, so even a common one should feel like a find.
+- **Sizes** are Claude's figures for adults, as for the grounded fish; some are huge (Strange shark 200–640 cm,
+  Arapaima and Giant freshwater stingray to 300), so their difficulty is the top, 3.
+- **The species behind the names:** Snailfish is the sea snail *Liparis liparis*; Icefish the blackfin icefish
+  *Chaenocephalus aceratus*; Hillstream loach *Sewellia lineolata*; Snow trout *Schizothorax richardsonii*; Pacu the
+  red-bellied pacu *Piaractus brachypomus*; Strange cod the Murray cod.
+- **Not in a cast yet:** the rift tables wait for Rift Fishing (6.3), which decides how often the rift opens.
+- **Their icons** come from Commons pictures Claude picked (credits in `docs/design/refs_rift/credits.csv`, local
+  only), cut out and given eyes by the tools. Odd ones: the Coelacanth is green, from an aquarium's light (the other
+  picture brought part of its museum case along); the Strange shark comes from a line drawing, so it's mostly white;
+  the Giant freshwater stingray is seen from above, a disc with an eye; the Goonch catfish is small, its long fins
+  taking the room.
+
 ## 48 fish icons from Wikimedia Commons
 
 - **Picked by Claude from Commons**, the best of up to 12 candidates per fish, mostly old atlas plates and studio

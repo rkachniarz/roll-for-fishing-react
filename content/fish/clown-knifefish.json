@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "clown-knifefish",
+  "name": "Clown knifefish",
+  "icon": "fish/clown-knifefish",
+  "rift": true,
+  "size": {
+    "min": 40,
+    "max": 100
+  },
+  "difficulty": 1,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "overcast"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

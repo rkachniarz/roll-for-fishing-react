@@ -410,6 +410,7 @@ Levels 1, 3, 6 and 9 per class; even levels draw from the universal list. Cooldo
   `content/locations/`.
 - **Non-fish:** 38 junk items (Vendor trash, Soggy treasure map, Dwarven stein…) and the seven items in §C.3, shared by
   both locations (`content/tables/`).
+- **Rift fish:** 42 fish from another world, 3 to 6 in each spot's `rift` table, for the wizard's Rift Fishing (D104).
 
 ### §C.5 Weather
 

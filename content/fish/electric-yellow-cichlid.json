@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "electric-yellow-cichlid",
+  "name": "Electric yellow cichlid",
+  "icon": "fish/electric-yellow-cichlid",
+  "rift": true,
+  "size": {
+    "min": 6,
+    "max": 12
+  },
+  "difficulty": -2,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

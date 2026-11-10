@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "hillstream-loach",
+  "name": "Hillstream loach",
+  "icon": "fish/hillstream-loach",
+  "rift": true,
+  "size": {
+    "min": 4,
+    "max": 8
+  },
+  "difficulty": -2,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "bait": [
+      "maggot"
+    ]
+  }
+}

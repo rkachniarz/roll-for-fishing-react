@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "strange-tilapia",
+  "name": "Strange tilapia",
+  "icon": "fish/strange-tilapia",
+  "rift": true,
+  "size": {
+    "min": 15,
+    "max": 60
+  },
+  "difficulty": 0,
+  "rarity": "uncommon",
+  "prefers": {
+    "time": [
+      "morning",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "corn"
+    ]
+  }
+}

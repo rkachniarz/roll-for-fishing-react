@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "goliath-tigerfish",
+  "name": "Goliath tigerfish",
+  "icon": "fish/goliath-tigerfish",
+  "rift": true,
+  "size": {
+    "min": 50,
+    "max": 150
+  },
+  "difficulty": 2,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "noon",
+      "afternoon"
+    ],
+    "weather": [
+      "storm"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

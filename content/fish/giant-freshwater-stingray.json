@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "giant-freshwater-stingray",
+  "name": "Giant freshwater stingray",
+  "icon": "fish/giant-freshwater-stingray",
+  "rift": true,
+  "size": {
+    "min": 60,
+    "max": 300
+  },
+  "difficulty": 3,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "rain"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "shrimp"
+    ]
+  }
+}

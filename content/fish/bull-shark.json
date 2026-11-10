@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "bull-shark",
+  "name": "Bull shark",
+  "icon": "fish/bull-shark",
+  "rift": true,
+  "size": {
+    "min": 150,
+    "max": 350
+  },
+  "difficulty": 3,
+  "rarity": "epic",
+  "prefers": {
+    "time": [
+      "night"
+    ],
+    "weather": [
+      "storm"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

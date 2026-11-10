@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "red-bellied-piranha",
+  "name": "Red-bellied piranha",
+  "icon": "fish/red-bellied-piranha",
+  "rift": true,
+  "size": {
+    "min": 15,
+    "max": 33
+  },
+  "difficulty": -1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "noon",
+      "afternoon"
+    ],
+    "weather": [
+      "sunny"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "small-fish"
+    ]
+  }
+}

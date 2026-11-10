@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fish.schema.json",
+  "id": "tiger-shovelnose-catfish",
+  "name": "Tiger shovelnose catfish",
+  "icon": "fish/tiger-shovelnose-catfish",
+  "rift": true,
+  "size": {
+    "min": 40,
+    "max": 100
+  },
+  "difficulty": 1,
+  "rarity": "rare",
+  "prefers": {
+    "time": [
+      "evening",
+      "night"
+    ],
+    "weather": [
+      "cloudy"
+    ],
+    "season": [
+      "summer"
+    ],
+    "bait": [
+      "worm"
+    ]
+  }
+}

@@ -98,8 +98,14 @@ const result = await page.evaluate(
     /** @type {number[][]} */
     const turned = [];
     for (let y = 0; y < H; y += step) for (let x = 0; x < W; x += step) if (solid(x, y)) turned.push([x * ca - y * sa, x * sa + y * ca]);
-    const minU = Math.min(...turned.map((q) => q[0])), maxU = Math.max(...turned.map((q) => q[0]));
-    const minV = Math.min(...turned.map((q) => q[1])), maxV = Math.max(...turned.map((q) => q[1]));
+    // A loop, not Math.min(...points): a big, solid subject has too many points to spread.
+    let minU = Infinity, maxU = -Infinity, minV = Infinity, maxV = -Infinity;
+    for (const [u, v] of turned) {
+      if (u < minU) minU = u;
+      if (u > maxU) maxU = u;
+      if (v < minV) minV = v;
+      if (v > maxV) maxV = v;
+    }
     const per = Math.max(maxU - minU, maxV - minV) / (size - 2.2);
     const mu = (minU + maxU) / 2, mv = (minV + maxV) / 2;
     const toPhoto = (/** @type {number} */ tx, /** @type {number} */ ty) => {
@@ -206,6 +212,16 @@ await browser.close();
 /** @type {Record<string, string>} */
 const keys = { k: KEYS.k };
 result.palette.forEach((colour, i) => (keys['ABCDEFGHIJLMNOPQRSTUVWXYZ'[i]] = colour));
+
+// Two letters for one colour (a plain drawing can boil down to fewer colours than
+// asked for): the later one becomes the earlier, or a drawing exported and read
+// back couldn't tell them apart.
+for (const [key, colour] of Object.entries(keys)) {
+  const same = Object.keys(keys).find((k) => k !== key && keys[k] === colour && k < key);
+  if (!same || key === 'k') continue;
+  result.grid = result.grid.map((r) => r.split(key).join(same));
+  delete keys[key];
+}
 
 // The margin: nothing touches the square's edge.
 const blank = '.'.repeat(size);
