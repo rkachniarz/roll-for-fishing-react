@@ -493,6 +493,26 @@ await check('new game', DESKTOP, '?seed=5', async (page) => {
   report('new game: in its own slot, the first game kept', filled.join() === 'false,false,true', filled.join());
 });
 
+await check('a save to a file and back (9.3)', DESKTOP, '?seed=7', async (page) => {
+  page.on('dialog', (d) => d.accept());
+  await page.click('#menu');
+  const [download] = await Promise.all([page.waitForEvent('download'), page.click('#exportSave')]);
+  const file = await download.path();
+  report('save to a file: downloaded, named for the character', /^roll-for-fishing-.+-\d{4}-\d\d-\d\d\.json$/.test(download.suggestedFilename()), download.suggestedFilename());
+  await page.click('#mainMenu');
+  await page.waitForSelector('#title[open]', { timeout: 2000 });
+  const [chooser] = await Promise.all([page.waitForEvent('filechooser'), page.click('#titleImport')]);
+  await chooser.setFiles(file);
+  await page.waitForSelector('#slot-3', { timeout: 2000 });
+  report('load from a file: asks which slot', /Which slot for/.test((await page.textContent('#titlePrompt')) ?? ''));
+  await page.click('#slot-3');
+  await page.click('#menu');
+  await page.click('#mainMenu');
+  await page.click('#titleLoad');
+  const filled = [await page.isDisabled('#slot-1'), await page.isDisabled('#slot-3')];
+  report('load from a file: the game is in slot 3 too', filled.join() === 'false,false', filled.join());
+});
+
 await check('settings: the light theme', PHONE, '?seed=6', async (page) => {
   await page.click('#menu');
   await page.click('#openSettings');

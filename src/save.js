@@ -85,6 +85,34 @@ export function listSlots(storage) {
 }
 
 /**
+ * A game as a file to keep (9.3): its name from the character and the day,
+ * and the save's own text, the same as in a slot.
+ * @param {import('./engine/state.js').GameState} state
+ * @param {Date} today  From the page (the engine never reads a clock, D7).
+ */
+export function exportGame(state, today) {
+  const who = state.character.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'game';
+  const day = today.toISOString().slice(0, 10);
+  return { name: `roll-for-fishing-${who}-${day}.json`, text: serialize(state) };
+}
+
+/**
+ * A game from a file (9.3), migrated to the current version, or why it can't
+ * be read.
+ * @param {string} text
+ * @returns {Loaded}
+ */
+export function importGame(text) {
+  try {
+    const state = deserialize(text);
+    if (!state?.character?.name || !state.streams) return { state: null, error: 'Not a saved game' };
+    return { state };
+  } catch (e) {
+    return { state: null, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+/**
  * Emptied when a new game starts in it (R1.4); the page asks first.
  * @param {Storage} storage
  * @param {number} slot

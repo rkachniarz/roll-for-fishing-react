@@ -253,7 +253,9 @@ Requirements R5.3, R11.
   hits a school whenever it's aimed at (D85).*
 - [ ] **9.2** Audio: the engine for sound, a volume setting, sounds for water, splash and catch. Placeholder
   sounds made in code until CR-14.
-- [ ] **9.3** More settings (sound, once there is any), save export/import. *(Settings and the theme landed with 3.8.)*
+- [ ] **9.3** More settings (sound, once there is any), save export/import. *(Settings and the theme landed with 3.8.
+  Saving to a file is in the menu, loading from one on the title screen, into a slot the player picks; the sound
+  setting waits for 9.2.)*
 - [ ] **9.4** Collection view, fish and treasure (R4.3).
 - [ ] **9.6** The dice's feel (D99): timing, where they land, the floating total; the open items on
   `docs/REVIEW.md`. The ivory colour is settled.

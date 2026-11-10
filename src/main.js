@@ -21,7 +21,7 @@ import { className, classes, generateName, rollStats } from './engine/character.
 import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
 import { GAME_VALUES } from './engine/values.js';
-import { deleteSave, lastSlot, listSlots, saveGame } from './save.js';
+import { deleteSave, exportGame, importGame, lastSlot, listSlots, saveGame } from './save.js';
 import { applySettings, loadSettings, saveSettings, showDice } from './settings.js';
 import { WATER, createScene } from './scene/scene.js';
 import { createBench } from './dev.js';
@@ -791,7 +791,7 @@ function renderPane() {
       break;
     case 'menu':
       body.replaceChildren(
-        ...menuPane({ onMainMenu: toTitle, onSettings: () => togglePane('settings'), onDev: bench ? () => togglePane('dev') : null }),
+        ...menuPane({ onMainMenu: toTitle, onSettings: () => togglePane('settings'), onDev: bench ? () => togglePane('dev') : null, onExport: exportSave }),
       );
       break;
     case 'settings':
@@ -1105,8 +1105,37 @@ function openCreation(chosen) {
 
 // ---------- The title screen: new game, load game (D80) ----------
 
-/** @param {'main' | 'new' | 'load'} view */
-function openTitle(view = 'main') {
+/**
+ * The game as a file to keep (9.3): the same text as its slot, downloaded.
+ */
+function exportSave() {
+  if (!state) return;
+  const file = exportGame(state, new Date());
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([file.text], { type: 'application/json' })), download: file.name });
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+/**
+ * Picks a save file (9.3) and, if it reads, asks which slot it goes in.
+ */
+function pickSaveFile() {
+  const input = Object.assign(document.createElement('input'), { type: 'file', accept: '.json,application/json' });
+  input.addEventListener('change', async () => {
+    const file = input.files?.[0];
+    if (!file) return;
+    const loaded = importGame(await file.text());
+    if (!loaded.state) alert(t('title.importBroken', { error: loaded.error ?? '' }));
+    else openTitle('import', loaded.state);
+  });
+  input.click();
+}
+
+/**
+ * @param {'main' | 'new' | 'load' | 'import'} view
+ * @param {GameState} [imported]  For 'import': the game from a file, to put in a slot.
+ */
+function openTitle(view = 'main', imported) {
   const dialog = /** @type {HTMLDialogElement} */ ($('title'));
   $('titleName').textContent = t('title.name');
   /** @param {string} text @param {() => void} onclick @param {string} [id] */
@@ -1142,9 +1171,11 @@ function openTitle(view = 'main') {
       ...(last ? [button(t('title.continue'), () => play(last), 'titleContinue')] : []),
       button(t('title.new'), () => openTitle('new'), 'titleNew'),
       button(t('title.load'), () => openTitle('load'), 'titleLoad'),
+      button(t('title.import'), pickSaveFile, 'titleImport'),
     );
   } else {
-    $('titlePrompt').textContent = t(view === 'new' ? 'title.pickNew' : 'title.pickLoad');
+    $('titlePrompt').textContent =
+      view === 'import' ? t('title.pickImport', { name: imported?.character.name ?? '' }) : t(view === 'new' ? 'title.pickNew' : 'title.pickLoad');
     const slots = listSlots(storage).map((saved) => {
       const b = button('', () => {}, `slot-${saved.slot}`);
       b.className = 'slot-choice';
@@ -1166,6 +1197,17 @@ function openTitle(view = 'main') {
       if (view === 'load') {
         b.disabled = !saved.state;
         b.onclick = () => play(saved);
+      } else if (view === 'import' && imported) {
+        b.onclick = () => {
+          const taken = saved.state
+            ? t('title.importOverwrite', { slot: saved.slot, name: saved.state.character.name, imported: imported.character.name })
+            : saved.error
+              ? t('title.importOverwriteBroken', { slot: saved.slot, imported: imported.character.name })
+              : null;
+          if (taken && !confirm(taken)) return;
+          saveGame(storage, saved.slot, imported);
+          play({ slot: saved.slot, state: imported });
+        };
       } else {
         b.onclick = () => {
           const taken = saved.state

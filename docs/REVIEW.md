@@ -24,6 +24,12 @@ Items with no note are left alone.
 
 Newest first.
 
+## A save to a file (9.3)
+
+- **"Save to a file" is in the in-game menu,** downloading `roll-for-fishing-<name>-<date>.json`, the slot's own text.
+  **"Load from a file" is on the title screen,** then asks which slot, as New game does. WoW has nothing like it, so
+  the places are Claude's.
+
 ## Placeholder gear (5.3, 5.7)
 
 - **Sixteen pieces of gear, all Claude's,** unique, weight 1 each in the shared treasure list beside the prototype's

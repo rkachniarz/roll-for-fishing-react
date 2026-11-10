@@ -285,11 +285,12 @@ export function bagPane(state, tab, onTab) {
  * The menu: back to the title screen, settings, and the dev bench with ?dev.
  * @param {{ onMainMenu: () => void, onSettings: () => void, onDev: (() => void) | null }} actions
  */
-export function menuPane({ onMainMenu, onSettings, onDev }) {
+export function menuPane({ onMainMenu, onSettings, onDev, onExport }) {
   return [
     el('div', { className: 'menu-list' }, [
       el('button', { type: 'button', id: 'mainMenu', textContent: t('menu.mainMenu'), onclick: onMainMenu }),
       el('button', { type: 'button', id: 'openSettings', textContent: t('menu.settings'), onclick: onSettings }),
+      el('button', { type: 'button', id: 'exportSave', textContent: t('menu.export'), onclick: onExport }),
       ...(onDev ? [el('button', { type: 'button', id: 'openBench', textContent: t('menu.dev'), onclick: onDev })] : []),
     ]),
   ];

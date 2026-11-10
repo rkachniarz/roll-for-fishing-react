@@ -630,3 +630,15 @@ test('letting a bucket fish go makes room for the new one', () => {
   assert.ok(!state.bucket.some((b) => b.fish.size === 15 && b.fish.species === 'roach'), 'the first roach is gone');
   assert.equal(state.escaped[POOL].at(-1).size, 15);
 });
+
+test('a game saved to a file reads back, migrated; anything else is refused (9.3)', async () => {
+  const { exportGame, importGame } = await import('../src/save.js');
+  const state = game(12);
+  const file = exportGame({ ...state, character: { ...state.character, name: 'Øla the Bold' } }, new Date('2026-11-10T12:00:00Z'));
+  assert.equal(file.name, 'roll-for-fishing-la-the-bold-2026-11-10.json');
+  assert.equal(importGame(file.text).state?.character.name, 'Øla the Bold');
+  assert.deepEqual(importGame(exportGame(state, new Date()).text).state, state);
+  assert.match(importGame('not json').error ?? '', /JSON|Unexpected/);
+  assert.match(importGame('{"version": 99}').error ?? '', /newer version/);
+  assert.equal(importGame('{"version": 8}').error, 'Not a saved game');
+});
