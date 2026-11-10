@@ -81,6 +81,7 @@ and the art sheet at `/art.html` there.
 | `src/ui/tooltip.js` | The one tooltip, for links and slots |
 | `src/ui/drag.js` | Dragging items between the bag and the slots, by mouse and long-press |
 | `src/audio.js` | Sound: placeholder sounds made with the Web Audio API, and the volume (9.2) |
+| `editor.html`, `tools/editor/editor.js` | The content editor (7.5): opens `content/` in Chrome or Edge, a form per file from its schema; not published |
 | `tools/sim.mjs` | `npm run sim`: seeded games played headless per class, for balance (9.1) |
 | `src/ui/event-words.js` | The placeholders in event text (`{name}`, `{class}`…), and putting a slide's text together |
 | `src/ui/effects.js` | An item's effects as tooltip lines, green or red |

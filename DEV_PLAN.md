@@ -220,7 +220,9 @@ writing replaces or joins (CR-10).
 - [x] **7.10** Visitors who come back now and then: an event with a gap of so many casts (or days) between visits.
   For the junk collector and the Alchemist (8.6). *7.6–7.10 are event words (D108, `docs/events.md`): `go:`,
   `lock:`, `add:`, `needs: count`, `{#counter}`, `lose: fish`, `needs: fish`, `trade: junk`, `again:`.*
-- [ ] **7.5** The content editor app: forms generated from the schemas, saving into `content/` (D47).
+- [x] **7.5** The content editor app: forms generated from the schemas, saving into `content/` (D47).
+  `editor.html` under `npm run dev`, in Chrome or Edge: it opens the content folder, a form per file, events as text;
+  `npm run content` checks and rebuilds after.
 
 ## Phase 8: World and town
 

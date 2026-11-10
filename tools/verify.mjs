@@ -62,7 +62,8 @@ await mkdir('dist/verify', { recursive: true });
 
 /**
  * A fresh page at `query`, with page errors collected. `fn` gets the page and
- * a tap helper that taps the middle of the water.
+ * a tap helper that taps the middle of the water. With `query` null, `fn`
+ * opens its own page.
  */
 async function check(label, device, query, fn) {
   if (ONLY && !label.includes(ONLY)) return;
@@ -72,10 +73,13 @@ async function check(label, device, query, fn) {
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   try {
-    await page.goto(BASE + query);
-    await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
-    // A fresh browser has no save: a new game in slot 1, with character creation's defaults.
-    await newGameIn(page, 1);
+    // A null query: a page other than the game (the content editor), which `fn` opens.
+    if (query !== null) {
+      await page.goto(BASE + query);
+      await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+      // A fresh browser has no save: a new game in slot 1, with character creation's defaults.
+      await newGameIn(page, 1);
+    }
     const tap = async () => {
       const box = await page.locator('#scene').boundingBox();
       const x = box.x + box.width / 2;
@@ -183,6 +187,49 @@ await check('the map: going to another spot (D101)', PHONE, '?seed=1', async (pa
   report('map: a tap moves there', (await logText(page)).includes('You move to the upper river.'));
   report('map: and the pane shows it', (await page.textContent('.map-spot[aria-pressed="true"]')) === 'the upper river');
   await page.screenshot({ path: 'dist/verify/map.png' });
+});
+
+await check('the content editor (7.5)', DESKTOP, null, async (page) => {
+  const fork = await readFile('content/items/bent-fork.json', 'utf8');
+  const frog = await readFile('content/events/frog.md', 'utf8');
+  // The browser's own private folder stands in for the picker: a content folder with two files.
+  await page.goto(`http://localhost:${PORT}/editor.html`);
+  await page.evaluate(async ({ fork, frog }) => {
+    const opfs = await navigator.storage.getDirectory();
+    const content = await opfs.getDirectoryHandle('content', { create: true });
+    const put = async (/** @type {string} */ dir, /** @type {string} */ name, /** @type {string} */ text) => {
+      const w = await (await (await content.getDirectoryHandle(dir, { create: true })).getFileHandle(name, { create: true })).createWritable();
+      await w.write(text);
+      await w.close();
+    };
+    await put('items', 'bent-fork.json', fork);
+    await put('events', 'frog.md', frog);
+    /** @type {any} */ (window).showDirectoryPicker = async () => opfs;
+  }, { fork, frog });
+  await page.click('#openFolder');
+  await page.click('nav button:has-text("items")');
+  await page.click('#files button:has-text("bent-fork")');
+  // The form draws once the schemas have loaded.
+  await page.waitForSelector('.field > label', { timeout: 5000 });
+  await page.screenshot({ path: 'dist/verify/editor-item.png' });
+  const label = await page.locator('.field > label').allTextContents();
+  report('editor: a form from the item schema', label.includes('name') && label.includes('rarity'), label.join(', '));
+  await page.fill('.field:has(> label:text-is("name")) input', 'Bent fork, edited');
+  await page.dispatchEvent('.field:has(> label:text-is("name")) input', 'change');
+  await page.click('#save');
+  await page.waitForSelector('#status:has-text("saved")', { timeout: 3000 });
+  const saved = await page.evaluate(async () => {
+    const opfs = await navigator.storage.getDirectory();
+    const file = await (await (await (await opfs.getDirectoryHandle('content')).getDirectoryHandle('items')).getFileHandle('bent-fork.json')).getFile();
+    return file.text();
+  });
+  const data = JSON.parse(saved);
+  report('editor: saved into the file, the rest kept', data.name === 'Bent fork, edited' && data.id === 'bent-fork' && saved.endsWith('}\n'), JSON.stringify([data.name, data.id, saved.slice(-3)]));
+  report('editor: its keys in their order', Object.keys(data).join() === Object.keys(JSON.parse(fork)).join());
+  await page.click('nav button:has-text("events")');
+  await page.click('#files button:has-text("frog")');
+  report('editor: an event as text', ((await page.inputValue('textarea.event')) ?? '').startsWith('---\nid: frog'));
+  await page.screenshot({ path: 'dist/verify/editor.png' });
 });
 
 await check('each spot looks different until painted (4.2)', PHONE, '?dev&seed=1', async (page) => {

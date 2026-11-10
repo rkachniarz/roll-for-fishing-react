@@ -24,6 +24,16 @@ Items with no note are left alone.
 
 Newest first.
 
+## The content editor (7.5)
+
+- **`http://localhost:8001/editor.html`** under `npm run dev`, in Chrome or Edge: "Open the content folder", pick a
+  kind and a file, change it, Save. It writes the file in place, keeping its key order; run `npm run content` after to
+  check it and rebuild what the game loads. Firefox and Safari can't open a folder.
+- **Fields the file has show first;** the ones it could have are "+" buttons, and "×" takes an optional one away.
+  An id field suggests every id there is. Anything the form can't show is a raw JSON box. Events are a plain text box.
+- **It doesn't check content itself** (that's still `npm run content`), and nothing stops two windows saving the same
+  file.
+
 ## A placeholder look per spot (4.2)
 
 - **Each spot gets a tint and a few flat shapes,** only so they can be told apart: green-brown water and lily pads in

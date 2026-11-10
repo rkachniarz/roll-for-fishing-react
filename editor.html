@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roll for Fishing: content editor</title>
+  <!-- The content editor (DEV_PLAN 7.5, D47): for `npm run dev`, not published. -->
+  <style>
+    :root { color-scheme: dark; --bg: #14232b; --panel: #1b2f38; --edge: #2d4a57; --text: #e6efe9; --muted: #8fa8a8; --accent: #ffd36e; --bad: #ff7070; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.4 system-ui, sans-serif; height: 100vh; display: grid; grid-template-rows: auto 1fr; }
+    header { display: flex; gap: 8px; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--edge); flex-wrap: wrap; }
+    header h1 { font-size: 16px; margin: 0 12px 0 0; color: var(--accent); }
+    #status { color: var(--muted); }
+    main { display: grid; grid-template-columns: 140px 220px 1fr; min-height: 0; }
+    nav, #files, #form { overflow: auto; padding: 8px; border-right: 1px solid var(--edge); }
+    nav button, #files button { display: block; width: 100%; text-align: left; margin-bottom: 2px; }
+    #files .new { color: var(--accent); }
+    #kind { color: var(--accent); margin: 0 0 6px; font-weight: 600; }
+    button { background: var(--panel); color: var(--text); border: 1px solid var(--edge); border-radius: 4px; padding: 3px 8px; cursor: pointer; font: inherit; }
+    button:hover { border-color: var(--accent); }
+    input, select, textarea { background: #0e1a20; color: var(--text); border: 1px solid var(--edge); border-radius: 3px; padding: 3px 5px; font: inherit; }
+    input:invalid { border-color: var(--bad); }
+    textarea { width: 100%; }
+    textarea.raw, textarea.event { font-family: ui-monospace, monospace; font-size: 13px; }
+    textarea.event { height: calc(100vh - 80px); }
+    textarea.bad { border-color: var(--bad); }
+    .object { border-left: 2px solid var(--edge); padding-left: 10px; margin: 2px 0; }
+    .field { display: grid; grid-template-columns: 130px 1fr auto; gap: 6px; align-items: start; margin: 3px 0; }
+    .field > label { color: var(--muted); padding-top: 4px; overflow-wrap: anywhere; }
+    .list .item { display: flex; gap: 4px; align-items: flex-start; margin: 3px 0; }
+    .list .item > :first-child { flex: 1; }
+    .adds { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+    .adds button { color: var(--muted); }
+    .variant { display: grid; gap: 3px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Content editor</h1>
+    <button type="button" id="openFolder">Open the content folder</button>
+    <button type="button" id="save">Save</button>
+    <span id="status">Open the repository's content folder to start (Chrome or Edge).</span>
+  </header>
+  <main>
+    <nav id="kinds"></nav>
+    <div><p id="kind"></p><div id="files"></div></div>
+    <div id="form"></div>
+  </main>
+  <datalist id="all-ids"></datalist>
+  <script type="module" src="./tools/editor/editor.js"></script>
+</body>
+</html>

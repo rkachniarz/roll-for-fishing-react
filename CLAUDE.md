@@ -57,6 +57,7 @@ npm run commons search <slug> "<query>"   # Wikimedia Commons pictures on a cont
 npm run sim [casts=500 games=20 class=rogue-fisher strike=250..900 perks=first|passive|active]   # balance: seeded games per class (9.1)
 # http://localhost:8001/art.html   the art sheet: trials, every sprite enlarged, the scene in five lights
 # http://localhost:8001/?dev       dev bench; ?seed=N seeds a new game (a save wins); ?wait=MS fixes the bite delay
+# http://localhost:8001/editor.html   the content editor (7.5): forms from the schemas, saving into content/ (Chrome, Edge)
 ```
 
 Screenshots from `verify` land in `dist/verify/` (untracked).
