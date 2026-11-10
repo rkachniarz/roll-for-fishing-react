@@ -19,6 +19,14 @@
     {
       "id": "message-in-a-bottle",
       "weight": 1
+    },
+    {
+      "id": "mage-tower-map-1",
+      "weight": 1
+    },
+    {
+      "id": "mage-tower-map-2",
+      "weight": 1
     }
   ],
   "emptyHook": 45,

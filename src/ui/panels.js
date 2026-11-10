@@ -12,7 +12,7 @@ import { bagTab, fishName, rarityColour, slot } from './links.js';
 import { showTip } from './tooltip.js';
 import { EQUIPMENT_SLOTS, isTiny } from '../engine/equipment.js';
 import { offers, owedLevels } from '../engine/perks.js';
-import { completion, knownKey, locationList, spotKnown } from '../engine/knowledge.js';
+import { completion, knownKey, locationList, placeOpen, spotKnown } from '../engine/knowledge.js';
 
 /** @typedef {import('../engine/state.js').GameState} GameState */
 
@@ -269,7 +269,8 @@ export function mapPane(state, onTravel, showCompletion = false) {
   /** @type {HTMLElement[]} */
   const out = [];
   for (const loc of Object.values(content.locations)) {
-    if (loc.retired) continue;
+    // Only the places on the map (8.2).
+    if (!placeOpen(state, loc.id)) continue;
     out.push(el('p', { className: 'name', textContent: placeName(state, loc.id, showCompletion) }));
     // Somewhere an event holds the player: no other location (R10.8, 7.6).
     const held = Boolean(state.locked) && state.locked !== loc.id;

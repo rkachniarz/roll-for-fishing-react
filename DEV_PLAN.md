@@ -229,7 +229,9 @@ Requirements R5.3, R11.
   they show; spot tables filled in (R11.8, D58). *The spot tables are filled in, and the map pane is a plain list of
   every spot known of to go to (D101); spots are learned by fishing at a location or from an event (D109); still to
   do: a map of placeholder shapes (CR-7).*
-- [ ] **8.2** Unlocks through map fragments and quests; the discovery meter.
+- [x] **8.2** Unlocks through map fragments and quests; the discovery meter. A hidden location opens once its
+  fragments are found, or by an event's `open:`; `close:` takes a quest's place away (D110). The discovery meter is
+  each place's completion (D109).
 - [ ] **8.3** The town: inn and scrap dealer, barter (D86); fish put into the inn's perpetual stew for a buff,
   stronger for rarer fish and longer for more fish (R11.5, R12.6, D24, D28, D37). Squares and triangles for the
   buildings and people, and plain lines for what they say, until CR-5 and CR-13.
@@ -237,8 +239,9 @@ Requirements R5.3, R11.
   added to the junk tables (R10.6, R11.7, D30). Placeholder potions, ingredients and lines.
 - [x] **8.5** Location lists and completion percentages; knowledge (found, bought) that reveals missing entries (R4.4,
   R4.5, R5.3). In the journal per location; `learn:` in events (D109). Bought knowledge comes with the town.
-- [ ] **8.4** The Mage Tower pool (the River is in, D101): the location and its spots, with a placeholder table of
-  existing fish until the owner's list.
+- [x] **8.4** The Mage Tower pool (the River is in, D101): the location and its spots, with a placeholder table of
+  existing fish until the owner's list. `content/locations/mage-tower.json`: one pool, six fish, hidden until its
+  three map fragments are found (two in the Lake's junk, one in the River's).
 - [ ] **8.7** Item sets and the strange people who collect them: a set id on each piece, progress per set, a reward
   for the whole set; the pieces unique and spread over the spots; a visitor who turns up once the player holds a
   piece; pages that can be read, for the story (`docs/ideas.md`). One placeholder set of three pieces, with

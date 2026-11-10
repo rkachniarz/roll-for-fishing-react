@@ -685,3 +685,34 @@ test('a catch is found where it was caught; a version 8 save keeps its spots and
   assert.equal(migrated.known[`lake:fish:${species}`], 'found');
   assert.equal(migrated.castsAt.lake, s.book.casts);
 });
+
+test('a hidden place opens once its map fragments are found, and a quest can close it (8.2, 8.4)', async () => {
+  const { placeOpen } = await import('../src/engine/knowledge.js');
+  const { startEvent } = await import('../src/engine/events.js');
+  let s = game(22);
+  assert.ok(placeOpen(s, 'lake') && placeOpen(s, 'river'));
+  assert.ok(!placeOpen(s, 'mage-tower'), 'hidden at first');
+  assert.equal(travel(s, 'mage-tower', 'the-first-pool').error, 'unknownPlace');
+  // Two pieces found: not yet. The third comes up with the next cast's end.
+  s = { ...s, found: { 'mage-tower-map-1': 1, 'mage-tower-map-2': 1 } };
+  let out = castLine(s, 0);
+  let done = tick(out.state, out.cast, out.cast.biteAt + out.cast.timing.lateMs + 1);
+  assert.ok(!done.events.some((e) => e.type === 'place-opened'));
+  s = endEvent({ ...done.state, missStreak: 0, found: { ...done.state.found, 'mage-tower-map-3': 1 } });
+  out = castLine(s, 0);
+  done = tick(out.state, out.cast, out.cast.biteAt + out.cast.timing.lateMs + 1);
+  assert.deepEqual(done.events.find((e) => e.type === 'place-opened'), { type: 'place-opened', location: 'mage-tower', by: 'fragments' });
+  s = endEvent({ ...done.state, missStreak: 0 });
+  s = travel(s, 'mage-tower', 'the-first-pool').state;
+  assert.equal(s.location, 'mage-tower');
+  // A quest closes it with the player there: back to the start.
+  content.events['test-close'] = { id: 'test-close', title: ['x'], once: false, trigger: 'meter', needs: [], first: 'a',
+    slides: { a: { text: ['x'], choices: [{ text: ['x'], to: 'end', needs: [], effects: [{ kind: 'place', location: 'mage-tower', open: false }] }] } } };
+  try {
+    const closed = choose(startEvent(s, 'test-close'), 0);
+    assert.ok(!placeOpen(closed.state, 'mage-tower'));
+    assert.deepEqual([closed.state.location, closed.state.spot], ['lake', 'reedy-shore']);
+  } finally {
+    delete content.events['test-close'];
+  }
+});

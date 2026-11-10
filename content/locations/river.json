@@ -15,6 +15,10 @@
   "junk": [
     {
       "table": "common-junk"
+    },
+    {
+      "id": "mage-tower-map-3",
+      "weight": 1
     }
   ],
   "emptyHook": 45,

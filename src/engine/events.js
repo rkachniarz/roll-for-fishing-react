@@ -317,6 +317,21 @@ function applyEffect(state, effect, dice) {
       return [];
     case 'trade':
       return tradeJunk(state, effect.table, dice);
+    case 'place': {
+      state.places = { ...state.places, [effect.location]: effect.open ? 'open' : 'closed' };
+      /** @type {GameEvent[]} */
+      const out = [{ type: effect.open ? 'place-opened' : 'place-closed', location: effect.location }];
+      // Closed with the player in it: back to where a new game starts.
+      if (!effect.open && state.location === effect.location) {
+        const start = content.rules['new-game'];
+        if (state.locked === effect.location) state.locked = null;
+        state.location = start.location;
+        state.spot = start.spot;
+        state.features = [];
+        out.push({ type: 'moved', location: start.location, spot: start.spot });
+      }
+      return out;
+    }
     case 'learn':
       // Told of it, not found (R4.5): a spot shows on the map, a fish or item in the journal.
       return learn(state, effect.location, effect.what, effect.id, 'heard') && effect.what === 'spot'

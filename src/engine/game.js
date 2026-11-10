@@ -23,7 +23,7 @@ import { afterCast, arrive } from './events.js';
 import { hasPerk, owedLevels, perkSources, settlePerks } from './perks.js';
 import { LIGHTS, abilityStatus, spendCooldownCasts, startCooldown, tickCooldowns } from './abilities.js';
 import { advanceTime, clock } from './time.js';
-import { learn, noticeSpots, spotKnown } from './knowledge.js';
+import { learn, noticeSpots, openByFragments, placeOpen, spotKnown } from './knowledge.js';
 import { changeSeason, stepWeather } from './weather.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
@@ -378,6 +378,8 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
 export function travel(state, location, spot, { force = false } = {}) {
   if (state.location === location && state.spot === spot) return { state, events: [] };
   if (state.locked && location !== state.locked && !force) return { state, events: [], error: 'locked' };
+  // Only to a location on the map (8.2).
+  if (!placeOpen(state, location) && !force) return { state, events: [], error: 'unknownPlace' };
   // Only to a spot the player knows of (R11.8); the bench goes anywhere.
   if (!spotKnown(state, location, spot) && !force) return { state, events: [], error: 'unknownSpot' };
   const next = { ...structuredClone(state), location, spot, features: [] };
@@ -614,8 +616,10 @@ function resolveCast(state, cast) {
 
   levelUp(next, levelBefore, events);
 
-  // Casts here count towards noticing another spot (R11.8).
+  // Casts here count towards noticing another spot (R11.8); the last map
+  // fragment found opens its place (8.2).
   events.push(...noticeSpots(next));
+  events.push(...openByFragments(next));
   events.push(...updateFeatures(next, dice.features));
 
   // Time and weather move on with every cast that went out and ended.

@@ -3600,6 +3600,39 @@ export const content = {
         }
       ]
     },
+    "mage-tower-map-1": {
+      "id": "mage-tower-map-1",
+      "category": "junk",
+      "name": "item.mage-tower-map-1.name",
+      "flavor": "item.mage-tower-map-1.flavor",
+      "rarity": "uncommon",
+      "value": 0,
+      "unique": true,
+      "useful": true,
+      "fragmentOf": "mage-tower"
+    },
+    "mage-tower-map-2": {
+      "id": "mage-tower-map-2",
+      "category": "junk",
+      "name": "item.mage-tower-map-2.name",
+      "flavor": "item.mage-tower-map-2.flavor",
+      "rarity": "uncommon",
+      "value": 0,
+      "unique": true,
+      "useful": true,
+      "fragmentOf": "mage-tower"
+    },
+    "mage-tower-map-3": {
+      "id": "mage-tower-map-3",
+      "category": "junk",
+      "name": "item.mage-tower-map-3.name",
+      "flavor": "item.mage-tower-map-3.flavor",
+      "rarity": "uncommon",
+      "value": 0,
+      "unique": true,
+      "useful": true,
+      "fragmentOf": "mage-tower"
+    },
     "maggots": {
       "id": "maggots",
       "category": "consumable",
@@ -4108,6 +4141,14 @@ export const content = {
         },
         {
           "id": "message-in-a-bottle",
+          "weight": 1
+        },
+        {
+          "id": "mage-tower-map-1",
+          "weight": 1
+        },
+        {
+          "id": "mage-tower-map-2",
           "weight": 1
         }
       ],
@@ -4756,6 +4797,66 @@ export const content = {
         }
       ]
     },
+    "mage-tower": {
+      "id": "mage-tower",
+      "name": "location.mage-tower.name",
+      "hidden": true,
+      "fragments": 3,
+      "biteThreshold": 50,
+      "treasureThreshold": 5,
+      "featureChance": 12,
+      "maxFeatures": 2,
+      "fish": [],
+      "treasure": [
+        {
+          "table": "common-treasure"
+        }
+      ],
+      "junk": [
+        {
+          "table": "common-junk"
+        }
+      ],
+      "emptyHook": 45,
+      "features": [
+        {
+          "id": "glint",
+          "weight": 2
+        }
+      ],
+      "spots": [
+        {
+          "id": "the-first-pool",
+          "name": "location.mage-tower.spots.the-first-pool.name",
+          "fish": [
+            {
+              "id": "golden-shiner",
+              "weight": 100
+            },
+            {
+              "id": "pumpkinseed",
+              "weight": 75
+            },
+            {
+              "id": "bluegill",
+              "weight": 56
+            },
+            {
+              "id": "rainbow-trout",
+              "weight": 42
+            },
+            {
+              "id": "golden-dorado",
+              "weight": 32
+            },
+            {
+              "id": "golomyanka",
+              "weight": 24
+            }
+          ]
+        }
+      ]
+    },
     "river": {
       "id": "river",
       "name": "location.river.name",
@@ -4772,6 +4873,10 @@ export const content = {
       "junk": [
         {
           "table": "common-junk"
+        },
+        {
+          "id": "mage-tower-map-3",
+          "weight": 1
         }
       ],
       "emptyHook": 45,
@@ -9137,6 +9242,12 @@ export const strings = {
     "item.live-frog.name": "Live frog",
     "item.lucky-hook.name": "Lucky hook",
     "item.lucky-hook.flavor": "Bent just so. Fish seem to resent it.",
+    "item.mage-tower-map-1.name": "Map fragment (1 of 3)",
+    "item.mage-tower-map-1.flavor": "Part of a map. The ink shows towers and pools, and a path between them.",
+    "item.mage-tower-map-2.name": "Map fragment (2 of 3)",
+    "item.mage-tower-map-2.flavor": "Part of a map. The ink shows towers and pools, and a path between them.",
+    "item.mage-tower-map-3.name": "Map fragment (3 of 3)",
+    "item.mage-tower-map-3.flavor": "Part of a map. The ink shows towers and pools, and a path between them.",
     "item.maggots.name": "Maggots",
     "item.magpie-feather.name": "Magpie feather",
     "item.magpie-feather.flavor": "Fish with an eye for shiny things find you. The others less so.",
@@ -9212,6 +9323,8 @@ export const strings = {
     "location.lake.spots.rocky-shore.name": "the rocky shore",
     "location.lake.spots.open-water.name": "open water",
     "location.lake.spots.deep-water.name": "deep water",
+    "location.mage-tower.name": "The Mage Tower pools",
+    "location.mage-tower.spots.the-first-pool.name": "the first pool",
     "location.river.name": "The River",
     "location.river.spots.upper-river.name": "the upper river",
     "location.river.spots.lower-river.name": "the lower river",

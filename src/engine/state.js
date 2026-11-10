@@ -18,7 +18,7 @@ import { emptyEquipment } from './equipment.js';
 import { knownKey, locationList } from './knowledge.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 9;
+export const SAVE_VERSION = 10;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -84,6 +84,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, 'found' | 'heard'>} known  What the player knows of each location
  *   (knowledge.js): "lake:fish:roach", "lake:item:bent-fork", "lake:spot:swamp".
  * @property {Record<string, number>} castsAt  Casts gone out per location, for noticing spots (R11.8).
+ * @property {Record<string, 'open' | 'closed'>} places  Locations opened (a hidden one, by its map fragments
+ *   or an event) or closed (a quest's place, done), 8.2.
  * @property {number} missStreak  Splashes missed in a row (D64).
  * @property {Record<string, { casts?: number, ms?: number }>} cooldowns  Ability -> what's left of its
  *   cooldown (abilities.js, D96).
@@ -152,6 +154,7 @@ export function newGame({ seed, character, month }) {
     locked: null,
     known: {},
     castsAt: {},
+    places: {},
     missStreak: 0,
     cooldowns: {},
     lit: {},
@@ -269,6 +272,8 @@ const MIGRATIONS = {
     }
     return { ...save, known, castsAt: { [save.location]: save.book?.casts ?? 0 } };
   },
+  // 9 -> 10: locations opened and closed (8.2).
+  9: (save) => ({ ...save, places: {} }),
 };
 
 /** @param {GameState} state */

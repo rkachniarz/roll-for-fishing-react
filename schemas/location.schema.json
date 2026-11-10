@@ -53,6 +53,15 @@
         "additionalProperties": false
       }
     },
+    "hidden": {
+      "description": "Not on the map until opened (R11.2, 8.2): by finding its map fragments, or an event's open:.",
+      "type": "boolean"
+    },
+    "fragments": {
+      "description": "How many of its map fragments (items with fragmentOf this location) open it once found (8.2).",
+      "type": "integer",
+      "minimum": 1
+    },
     "spots": {
       "description": "Parts of the location, each adding to its lists (R11.8).",
       "type": "array",

@@ -598,6 +598,9 @@ function describeEvent(e) {
       const parts = tParts('log.event-lost-fish', { fish: fishLink(e.fish) });
       return e.count > 1 ? [...parts, ` ×${e.count}`] : parts;
     }
+    case 'place-opened':
+    case 'place-closed':
+      return [t(`log.${e.type}${e.by ? '-' + e.by : ''}`, { place: t(content.locations[e.location].name) })];
     case 'spot-learned': {
       const where = content.locations[e.location].spots.find((/** @type {{ id: string }} */ s) => s.id === e.spot);
       return [t('log.spot-learned', { spot: t(where.name) })];

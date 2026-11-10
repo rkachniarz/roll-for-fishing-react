@@ -54,6 +54,38 @@ export function locationList(location) {
 }
 
 /**
+ * Is this location on the map (R11.2, 8.2)? Open unless it's hidden until
+ * opened, or a quest closed it.
+ * @param {GameState} state
+ * @param {string} location
+ */
+export function placeOpen(state, location) {
+  const data = content.locations[location];
+  if (!data || data.retired) return false;
+  const now = state.places?.[location];
+  return now === 'open' || (!data.hidden && now !== 'closed');
+}
+
+/**
+ * Hidden locations whose map fragments have all been found open (8.2).
+ * Changes `state` in place.
+ * @param {GameState} state
+ * @returns {import('./game.js').GameEvent[]}
+ */
+export function openByFragments(state) {
+  /** @type {import('./game.js').GameEvent[]} */
+  const events = [];
+  for (const loc of Object.values(content.locations)) {
+    if (!loc.fragments || placeOpen(state, loc.id) || state.places?.[loc.id] === 'closed') continue;
+    const pieces = Object.values(content.items).filter((i) => i.fragmentOf === loc.id && state.found[i.id]).length;
+    if (pieces < loc.fragments) continue;
+    state.places = { ...state.places, [loc.id]: 'open' };
+    events.push({ type: 'place-opened', location: loc.id, by: 'fragments' });
+  }
+  return events;
+}
+
+/**
  * Is this spot one the player knows of (R11.8, D58)?
  * @param {GameState} state
  * @param {string} location

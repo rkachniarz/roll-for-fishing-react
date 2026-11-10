@@ -24,6 +24,15 @@ Items with no note are left alone.
 
 Newest first.
 
+## Hidden places and the Mage Tower pools (8.2, 8.4, D110)
+
+- **The Mage Tower pools are all placeholder:** "The Mage Tower pools", one spot "the first pool", and six of your fish
+  picked for looking ornamental (golden shiner, pumpkinseed, bluegill, rainbow trout, golden dorado, golomyanka). It
+  waits for your list, and for art.
+- **Three map fragments open it,** "Map fragment (1 of 3)" and so on, weight 1 each in the junk: two at the Lake, one
+  at the River. They're unique, so each comes up once, and `useful`, so the junk collector leaves them.
+- **The River is open from the start,** as you've been playing it. Say if it should be found too.
+
 ## What the player knows of each place (8.1, 8.5, D109)
 
 - **When spots are noticed is Claude's guess:** at the Lake the swamp after 15 casts there, still water 30, the rocky

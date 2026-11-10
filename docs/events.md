@@ -134,6 +134,7 @@ They are checked when the slide opens. If a condition shows nothing, the spaces 
 | `go: river` / `go: river upper-river` | moves the player there, to the first spot if none is named; the log says so |
 | `lock:` / `unlock:` | the player can't leave the location they're at (other spots there are fine) until an event says `unlock:`. The event should say why (R10.8) |
 | `learn: spot river lower-river` / `learn: fish lake wels-catfish` / `learn: item lake iron-key` | the player learns it's there: a spot shows on the map (the log says so), a fish or item in the journal as not yet found |
+| `open: mage-tower` / `close: mage-tower` | a hidden location shows on the map, or a quest's location is gone from it (a player there goes back to where a new game starts); the log says so |
 | `trade: junk junk-collector` | every useless junk item in the bags goes, and their values, added up, pick the reward from the table (below) |
 
 Flags and counters are free-form names; use them to link events into quests (R10.7). Taking fish or items takes as

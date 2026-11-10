@@ -1,0 +1,61 @@
+{
+  "$schema": "../../schemas/location.schema.json",
+  "id": "mage-tower",
+  "name": "The Mage Tower pools",
+  "hidden": true,
+  "fragments": 3,
+  "biteThreshold": 50,
+  "treasureThreshold": 5,
+  "featureChance": 12,
+  "maxFeatures": 2,
+  "fish": [],
+  "treasure": [
+    {
+      "table": "common-treasure"
+    }
+  ],
+  "junk": [
+    {
+      "table": "common-junk"
+    }
+  ],
+  "emptyHook": 45,
+  "features": [
+    {
+      "id": "glint",
+      "weight": 2
+    }
+  ],
+  "spots": [
+    {
+      "id": "the-first-pool",
+      "name": "the first pool",
+      "fish": [
+        {
+          "id": "golden-shiner",
+          "weight": 100
+        },
+        {
+          "id": "pumpkinseed",
+          "weight": 75
+        },
+        {
+          "id": "bluegill",
+          "weight": 56
+        },
+        {
+          "id": "rainbow-trout",
+          "weight": 42
+        },
+        {
+          "id": "golden-dorado",
+          "weight": 32
+        },
+        {
+          "id": "golomyanka",
+          "weight": 24
+        }
+      ]
+    }
+  ]
+}

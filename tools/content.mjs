@@ -195,6 +195,10 @@ export async function buildContent(root = ROOT) {
   for (const loc of Object.values(all.locations)) {
     const where = `content/locations/${loc.id}.json`;
     for (const list of /** @type {const} */ (['fish', 'treasure', 'junk'])) checkEntries(where, loc[list], list, loc.id);
+    // Map fragments (8.2): enough of them to open it.
+    const pieces = Object.values(all.items).filter((i) => i.fragmentOf === loc.id && !i.retired).length;
+    if (loc.fragments && pieces < loc.fragments) errors.push(`${where}: needs ${loc.fragments} map fragments, but ${pieces} items are fragments of it`);
+    if (loc.fragments && !loc.hidden) warnings.push(`${where}: has map fragments but isn't hidden`);
     for (const f of loc.features ?? []) {
       if (!all.features[f.id]) errors.push(`${where}: no surface feature "${f.id}"`);
       else note(f.id, loc.id);
@@ -469,6 +473,7 @@ function checkEvents(all, errors, warnings) {
             }
           }
           if (effect.kind === 'trade' && all.tables[effect.table]?.kind !== 'rewards') errors.push(`${where} (${id}): no rewards table "${effect.table}"`);
+          if (effect.kind === 'place' && !all.locations[effect.location]) errors.push(`${where} (${id}): no location "${effect.location}"`);
           if (effect.kind === 'learn') {
             const loc = all.locations[effect.location];
             const there = !loc

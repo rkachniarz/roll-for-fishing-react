@@ -48,9 +48,10 @@ test('pick follows the weights', () => {
   assert.equal(pick([], d), null);
 });
 
-test("the Lake's junk table has its 38 items, the message in a bottle (7.4) and the empty hook", () => {
+test("the Lake's junk table: its 38 items, the bottle (7.4), two map fragments (8.2), the empty hook", () => {
   const junk = locationTable({ location: 'lake', spot: null }, 'junk');
-  assert.equal(junk.length, 40);
+  assert.equal(junk.length, 38 + 1 + 2 + 1);
+  assert.ok(['message-in-a-bottle', 'mage-tower-map-1', 'mage-tower-map-2'].every((id) => junk.some((e) => e.id === id)));
   assert.deepEqual(junk.at(-1), { id: null, weight: 45 });
 });
 
