@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A set of items a strange person collects (8.7): its pieces are items with \"set\": this id",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "$ref": "common.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "common.schema.json#/definitions/text"
+    },
+    "retired": {
+      "$ref": "common.schema.json#/definitions/retired"
+    }
+  },
+  "required": [
+    "id",
+    "name"
+  ],
+  "additionalProperties": false
+}

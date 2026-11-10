@@ -46,6 +46,7 @@ export const NEEDS = {
   caught: 'caught <fish id> <n>: at least n of that fish caught, ever (R4.2)',
   count: 'count <name> <amount>: a counter (add:) is at that amount; 5 exactly, 5+ at least, 5- at most, 3..8 between (7.7)',
   fish: 'fish [fish id] [n]: n fish (default 1) in the bucket, of that species if given (7.8)',
+  set: 'set <set id> <n> | all: n different pieces of the set (or all of them) in the bags (8.7)',
   temperature: 'temperature <amount>: the temperature now; 5 exactly, 5+ at least, 5- at most, 3..8 between',
   wind: 'wind <amount>: the wind now, 0 (none) to 5 (extreme), as temperature',
   clouds: 'clouds <amount>: the clouds now, 0 (clear) to 5 (black), as temperature',
@@ -76,7 +77,7 @@ export const PLACEHOLDERS = {
 /** Effect words (D84). `gain` and `lose` take an amount and what of. */
 export const EFFECTS = {
   gain: 'gain: [n] luck | xp | <item id>   (n defaults to 1)',
-  lose: 'lose: [n] luck | <item id> | fish [fish id] | rarest fish   (fish from the bucket: the least valuable first, 7.8)',
+  lose: 'lose: [n] luck | <item id> | fish [fish id] | rarest fish | set <set id>   (fish from the bucket: the least valuable first, 7.8; every piece of a set, 8.7)',
   set: 'set: <flag name>',
   clear: 'clear: <flag name>   (a counter too)',
   add: 'add: <counter name> <n>: the counter goes up by n, or down with -n (7.7)',
@@ -107,14 +108,15 @@ const INT = /^-?\d+$/;
  *   | { kind: 'gender', gender: 'm' | 'f' }
  *   | { kind: 'location' | 'spot', id: string }
  *   | { kind: 'count', name: string, min: number | null, max: number | null }
- *   | { kind: 'fish', species: string | null, count: number }} Need
+ *   | { kind: 'fish', species: string | null, count: number }
+ *   | { kind: 'set', set: string, count: number | 'all' }} Need
  * @typedef {{ kind: 'luck' | 'xp', add: number } | { kind: 'item', id: string, add: number }
  *   | { kind: 'flag', name: string, set: boolean } | { kind: 'count', name: string, add: number }
  *   | { kind: 'fish', which: 'any' | 'species' | 'rarest', species: string | null, count: number }
  *   | { kind: 'go', location: string, spot: string | null } | { kind: 'lock', set: boolean }
  *   | { kind: 'trade', what: 'junk', table: string }
  *   | { kind: 'learn', what: 'spot' | 'fish' | 'item', location: string, id: string }
- *   | { kind: 'place', location: string, open: boolean }} Effect
+ *   | { kind: 'place', location: string, open: boolean } | { kind: 'set', set: string }} Effect
  * @typedef {string | { needs: Need[], text: string, otherwise?: string }} Part  Plain text, or text
  *   shown only when its needs are met, with what to show otherwise (D88).
  * @typedef {Part[]} Text
@@ -168,6 +170,11 @@ function parseNeed(words) {
       const range = args.length === 2 ? parseAmount(args[1]) : null;
       if (!range || !ID.test(args[0])) return '"count" takes a counter name and an amount: count cat-trust 5+';
       return { kind: 'count', name: args[0], ...range };
+    }
+    case 'set': {
+      const count = args[1] === 'all' ? 'all' : n(args[1]);
+      if (args.length !== 2 || (count !== 'all' && (Number.isNaN(count) || count < 1))) return '"set" takes a set id and a number, or "all": set old-lorebook 2';
+      return { kind: 'set', set: args[0], count };
     }
     case 'fish': {
       // fish | fish 3 | fish roach | fish roach 3
@@ -309,6 +316,11 @@ function parseEffect(verb, words) {
   }
   const amount = args.length >= 2 && INT.test(args[0]) ? Number(args.shift()) : 1;
   if (amount < 1) return `"${verb}" takes an amount above 0`;
+  // Every piece of a set, handed in (8.7).
+  if (args[0] === 'set') {
+    if (verb === 'gain' || args.length !== 2) return '"set" can only be lost, as "lose: set <set id>"';
+    return { kind: 'set', set: args[1] };
+  }
   // Fish from the bucket (7.8): the least valuable, of a species, or the rarest.
   if (args[0] === 'fish' || (args[0] === 'rarest' && args[1] === 'fish')) {
     if (verb === 'gain') return 'fish can only be lost from the bucket, not gained';

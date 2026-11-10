@@ -944,6 +944,14 @@ body.is-dragging {
   color: var(--accent);
 }
 
+/* A page that can be read (8.7): set apart from the item's lines, in the plain text colour. */
+.tip-page {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--panel-edge);
+  color: var(--text);
+}
+
 .tip-good {
   color: var(--good);
 }

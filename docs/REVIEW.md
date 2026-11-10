@@ -24,6 +24,16 @@ Items with no note are left alone.
 
 Newest first.
 
+## Sets and the old lorebook (8.7, D111)
+
+- **The old lorebook is a placeholder,** three "sodden pages" (rare junk, unique, weight 1 in their spot's junk): deep
+  water at the Lake, the river mouth, the Mage Tower's first pool. Their text is your story from `docs/ideas.md`, cut
+  down to three sentences by Claude: rewrite freely (CR-10).
+- **The scholar** turns up whenever the player holds a page, at most every 100 casts, and takes all three for 100 XP and
+  ten worms. Placeholder words and reward.
+- **A page reads in its tooltip,** under a line, rather than in a dialog of its own. A longer text may want a reading
+  window.
+
 ## Hidden places and the Mage Tower pools (8.2, 8.4, D110)
 
 - **The Mage Tower pools are all placeholder:** "The Mage Tower pools", one spot "the first pool", and six of your fish

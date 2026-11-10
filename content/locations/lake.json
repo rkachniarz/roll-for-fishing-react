@@ -670,6 +670,12 @@
           "id": "strange-shark",
           "weight": 24
         }
+      ],
+      "junk": [
+        {
+          "id": "lorebook-page-1",
+          "weight": 1
+        }
       ]
     }
   ]

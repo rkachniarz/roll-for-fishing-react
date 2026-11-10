@@ -625,3 +625,23 @@ test('the placeholder quest chain: a bottle, a hand-in at the river, a package (
   assert.equal(s.flags['bottle-done'], true);
   assert.equal(travel(travel(s, 'lake', 'reedy-shore').state, 'river', 'lower-river').state.event, null, 'the stranger is gone');
 });
+
+test('sets: pieces in the bags are counted, all of them handed in at once (8.7)', async () => {
+  const { setPieces } = await import('../src/engine/events.js');
+  const pieces = setPieces('old-lorebook');
+  assert.deepEqual(pieces, ['lorebook-page-1', 'lorebook-page-2', 'lorebook-page-3']);
+  let s = { ...game(), bags: [{ id: 'lorebook-page-1', count: 1 }, { id: 'bent-fork', count: 1 }] };
+  assert.ok(meets(s, { kind: 'set', set: 'old-lorebook', count: 1 }));
+  assert.ok(!meets(s, { kind: 'set', set: 'old-lorebook', count: 'all' }));
+  assert.ok(canStart(s, 'the-scholar'), 'the scholar turns up once a page is held');
+  s = startEvent(s, 'the-scholar');
+  assert.equal(openSlide(s)?.choices.length, 1, 'only "Not yet" without every page');
+  s = choose(s, 0).state;
+  assert.ok(!canStart(s, 'the-scholar'), 'and comes back only after a while');
+  s = { ...s, bags: [...s.bags, { id: 'lorebook-page-2', count: 1 }, { id: 'lorebook-page-3', count: 1 }] };
+  s = startEvent(s, 'the-scholar');
+  const out = choose(s, 0);
+  assert.deepEqual(out.events.filter((e) => e.type === 'event-lost').map((e) => e.item), pieces);
+  assert.deepEqual(out.state.bags.map((b) => b.id).sort(), ['bent-fork', 'worms']);
+  assert.equal(out.state.flags['lorebook-given'], true);
+});

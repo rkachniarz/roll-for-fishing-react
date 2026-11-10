@@ -59,7 +59,10 @@ export function tipFor(thing) {
   else if (item.category === 'consumable') lines.push({ text: t('tip.consumable') });
   for (const effect of item.effects ?? []) lines.push(effectLine(effect));
   if (item.bobber) lines.push({ text: t('effect.cosmetic') });
+  if (item.set) lines.push({ text: t('tip.set', { set: t(content.sets[item.set].name) }) });
   if (item.flavor) lines.push({ text: `"${t(item.flavor)}"`, tone: 'flavor' });
+  // A page that can be read (8.7).
+  if (item.page) lines.push({ text: t(item.page), tone: 'page' });
   // No sell price: there's no money, only barter (D85).
   return { title: itemName(thing.id), colour: rarityColour(item.rarity), lines };
 }

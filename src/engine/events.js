@@ -72,6 +72,10 @@ export function meets(state, need) {
       const now = counter(state, need.name);
       return (need.min === null || now >= need.min) && (need.max === null || now <= need.max);
     }
+    case 'set': {
+      const have = setPieces(need.set).filter((id) => countInBags(state, id) > 0).length;
+      return need.count === 'all' ? have === setPieces(need.set).length : have >= need.count;
+    }
     case 'fish':
       return state.bucket.filter((b) => !need.species || b.fish.species === need.species).reduce((n, b) => n + b.count, 0) >= need.count;
     default:
@@ -317,6 +321,12 @@ function applyEffect(state, effect, dice) {
       return [];
     case 'trade':
       return tradeJunk(state, effect.table, dice);
+    case 'set':
+      // Every piece of the set in the bags, handed in (8.7).
+      return setPieces(effect.set).flatMap((id) => {
+        const lost = takeFromBags(state, id, countInBags(state, id));
+        return lost > 0 ? [{ type: 'event-lost', item: id, count: lost }] : [];
+      });
     case 'place': {
       state.places = { ...state.places, [effect.location]: effect.open ? 'open' : 'closed' };
       /** @type {GameEvent[]} */
@@ -407,6 +417,19 @@ function tradeJunk(state, tableId, dice) {
     events.push({ type: 'event-gained', item: reward.id, count });
   }
   return events;
+}
+
+/**
+ * A set's pieces (8.7): the items that say they belong to it, retired ones
+ * aside.
+ * @param {string} set
+ * @returns {string[]}
+ */
+export function setPieces(set) {
+  return Object.values(content.items)
+    .filter((i) => i.set === set && !i.retired)
+    .map((i) => i.id)
+    .sort();
 }
 
 /**

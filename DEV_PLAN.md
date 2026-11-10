@@ -242,10 +242,10 @@ Requirements R5.3, R11.
 - [x] **8.4** The Mage Tower pool (the River is in, D101): the location and its spots, with a placeholder table of
   existing fish until the owner's list. `content/locations/mage-tower.json`: one pool, six fish, hidden until its
   three map fragments are found (two in the Lake's junk, one in the River's).
-- [ ] **8.7** Item sets and the strange people who collect them: a set id on each piece, progress per set, a reward
+- [x] **8.7** Item sets and the strange people who collect them: a set id on each piece, progress per set, a reward
   for the whole set; the pieces unique and spread over the spots; a visitor who turns up once the player holds a
   piece; pages that can be read, for the story (`docs/ideas.md`). One placeholder set of three pieces, with
-  placeholder pages, until CR-4 and CR-10.
+  placeholder pages, until CR-4 and CR-10. *The old lorebook (`content/sets/`, D111) and the scholar who wants it.*
 - [ ] **8.8** Raid supply orders in town: 10, 25 or 40 of one fish over several hand-ins, the progress shown, consumables
   and gear as the reward (needs 7.7, 7.8).
 - [ ] **8.9** Companions at the fishing spot: the cat, once it trusts the player. A placeholder cat until CR-5.

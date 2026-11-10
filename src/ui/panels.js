@@ -13,6 +13,7 @@ import { showTip } from './tooltip.js';
 import { EQUIPMENT_SLOTS, isTiny } from '../engine/equipment.js';
 import { offers, owedLevels } from '../engine/perks.js';
 import { completion, knownKey, locationList, placeOpen, spotKnown } from '../engine/knowledge.js';
+import { setPieces } from '../engine/events.js';
 
 /** @typedef {import('../engine/state.js').GameState} GameState */
 
@@ -191,6 +192,14 @@ export function journalPane(state, showCompletion = false) {
       ]),
     );
   }
+  // Sets with a piece found (8.7): how many of their pieces.
+  const sets = Object.values(content.sets ?? {})
+    .filter((s) => !s.retired)
+    .map((s) => ({ s, pieces: setPieces(s.id) }))
+    .filter(({ pieces }) => pieces.some((id) => state.found[id]))
+    .map(({ s, pieces }) =>
+      el('p', { textContent: t('journal.set', { set: t(s.name), found: pieces.filter((id) => state.found[id]).length, total: pieces.length }) }),
+    );
   return [
     el('dl', { className: 'stats' }, [
       el('dt', { textContent: t('journal.casts') }),
@@ -199,6 +208,7 @@ export function journalPane(state, showCompletion = false) {
       el('dd', { textContent: String(state.book.catches) }),
     ]),
     ...(places.length ? places : [el('p', { className: 'muted', textContent: t('journal.none') })]),
+    ...(sets.length ? [el('h3', { textContent: t('journal.sets') }), ...sets] : []),
   ];
 }
 

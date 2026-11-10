@@ -36,6 +36,7 @@ const KINDS = {
   classes: { schema: 'class', prefix: 'class' },
   features: { schema: 'feature', prefix: 'feature' },
   perks: { schema: 'perk', prefix: 'perk' },
+  sets: { schema: 'set', prefix: 'set' },
   // One file per rule set; each has its own schema, named after its id.
   rules: { schema: null, prefix: 'rules' },
 };
@@ -47,13 +48,14 @@ const KINDS = {
  */
 const TEXT = {
   fish: [['name'], ['subnames', '#']],
-  items: [['name'], ['flavor']],
+  items: [['name'], ['flavor'], ['page']],
   locations: [['name'], ['spots', '@', 'name']],
   tables: [],
   weather: [['name'], ['weathers', '#', 'name'], ['weathers', '#', 'descriptions', '#']],
   classes: [['name', 'm'], ['name', 'f'], ['description']],
   features: [['name']],
   perks: [['name'], ['description']],
+  sets: [['name']],
   rules: [
     ['bands', '@', 'name'],
     ['temperature', '#', 'word'],
@@ -196,6 +198,7 @@ export async function buildContent(root = ROOT) {
     const where = `content/locations/${loc.id}.json`;
     for (const list of /** @type {const} */ (['fish', 'treasure', 'junk'])) checkEntries(where, loc[list], list, loc.id);
     // Map fragments (8.2): enough of them to open it.
+    // (Sets are checked with the items.)
     const pieces = Object.values(all.items).filter((i) => i.fragmentOf === loc.id && !i.retired).length;
     if (loc.fragments && pieces < loc.fragments) errors.push(`${where}: needs ${loc.fragments} map fragments, but ${pieces} items are fragments of it`);
     if (loc.fragments && !loc.hidden) warnings.push(`${where}: has map fragments but isn't hidden`);
@@ -281,6 +284,8 @@ export async function buildContent(root = ROOT) {
     if (!foundAt.has(item.id) && !item.retired && !item.devOnly) warnings.push(`${where}: no location lists it`);
     if (item.bobber && item.slot !== 'bobber') errors.push(`${where}: only a bobber has a bobber's looks`);
     if (item.bait && item.slot !== 'bait') errors.push(`${where}: only bait has a bait kind`);
+    if (item.set && !all.sets?.[item.set]) errors.push(`${where}: no set "${item.set}"`);
+    if (item.set && !item.unique) warnings.push(`${where}: a set's piece should be unique, found once (8.7)`);
     if (item.bait && !baits.has(item.bait)) errors.push(`${where}: no bait "${item.bait}"`);
   }
 
@@ -426,6 +431,7 @@ function checkEvents(all, errors, warnings) {
     }
     if (need.kind === 'item' && !all.items[need.id]) errors.push(`${where}: no item "${need.id}"`);
     if (need.kind === 'caught' && !all.fish[need.fish]) errors.push(`${where}: no fish "${need.fish}"`);
+    if (need.kind === 'set' && !all.sets?.[need.set]) errors.push(`${where}: no set "${need.set}"`);
     if (need.kind === 'fish' && need.species && !all.fish[need.species]) errors.push(`${where}: no fish "${need.species}"`);
     if (need.kind === 'weather' && need.level !== 'temperature') {
       for (const v of [need.min, need.max]) if (v !== null && (v < 0 || v > 5)) errors.push(`${where}: ${need.level} goes from 0 to 5, not ${v}`);
@@ -436,7 +442,7 @@ function checkEvents(all, errors, warnings) {
     const where = `content/events/${event.id}.md`;
     for (const need of event.needs) checkNeed(where, need);
     if (event.trigger === 'needs' && event.needs.length === 0) errors.push(`${where}: "trigger: needs" with no needs would start at once`);
-    if (event.trigger === 'needs' && !event.once) warnings.push(`${where}: "trigger: needs" with "once: false" starts again after every cast while its needs are met`);
+    if (event.trigger === 'needs' && !event.once && !event.again) warnings.push(`${where}: "trigger: needs" with "once: false" starts again after every cast while its needs are met`);
     if ((event.trigger === 'meter' || event.trigger === 'item') && !startedBy.has(event.id)) warnings.push(`${where}: nothing starts it`);
     if (event.trigger === 'arrive' && !event.needs.some((/** @type {any} */ n) => n.kind === 'location' || n.kind === 'spot')) {
       warnings.push(`${where}: "trigger: arrive" with no "needs: location" or "needs: spot" starts on arriving anywhere`);
@@ -474,6 +480,7 @@ function checkEvents(all, errors, warnings) {
           }
           if (effect.kind === 'trade' && all.tables[effect.table]?.kind !== 'rewards') errors.push(`${where} (${id}): no rewards table "${effect.table}"`);
           if (effect.kind === 'place' && !all.locations[effect.location]) errors.push(`${where} (${id}): no location "${effect.location}"`);
+          if (effect.kind === 'set' && !all.sets?.[effect.set]) errors.push(`${where} (${id}): no set "${effect.set}"`);
           if (effect.kind === 'learn') {
             const loc = all.locations[effect.location];
             const there = !loc

@@ -73,6 +73,7 @@ or a player could be stuck (`npm run content` warns about that).
 | `needs: time dawn` | night, dawn, morning, noon, afternoon, sunset or evening (the words on the HUD) |
 | `needs: caught northern-pike 10` | at least 10 northern pike caught, ever (the accomplishments book) |
 | `needs: fish` / `needs: fish 3` / `needs: fish roach 3` | that many fish in the bucket (default 1), of that species if named |
+| `needs: set old-lorebook 2` / `needs: set old-lorebook all` | that many different pieces of the set are in the bags, or every one |
 | `needs: count cat-trust 5+` | a counter (see `add:`) is at that amount: `5` exactly, `5+`, `5-`, `3..8`, as the weather |
 | `needs: wind 3+` | the weather now: `temperature`, `wind`, `clouds` or `precipitation`, with an amount |
 
@@ -130,6 +131,7 @@ They are checked when the slide opens. If a condition shows nothing, the spaces 
 | `add: cat-trust 1` / `add: cat-trust -2` | a counter goes up or down; it starts at 0, and `clear:` sets it back |
 | `lose: fish` / `lose: 3 fish` | takes fish from the bucket, the least valuable first (lowest rarity, then smallest); the log says so |
 | `lose: 10 fish roach` | that many of a species, the smallest first |
+| `lose: set old-lorebook` | every piece of the set in the bags, handed in; the log says so |
 | `lose: rarest fish` | the rarest fish in the bucket, the biggest if there's a tie (the cat's theft) |
 | `go: river` / `go: river upper-river` | moves the player there, to the first spot if none is named; the log says so |
 | `lock:` / `unlock:` | the player can't leave the location they're at (other spots there are fine) until an event says `unlock:`. The event should say why (R10.8) |

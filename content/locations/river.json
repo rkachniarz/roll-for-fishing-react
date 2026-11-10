@@ -357,6 +357,12 @@
           "id": "bull-shark",
           "weight": 32
         }
+      ],
+      "junk": [
+        {
+          "id": "lorebook-page-2",
+          "weight": 1
+        }
       ]
     }
   ]

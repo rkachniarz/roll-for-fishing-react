@@ -3580,6 +3580,42 @@ export const content = {
       ],
       "devOnly": true
     },
+    "lorebook-page-1": {
+      "id": "lorebook-page-1",
+      "category": "junk",
+      "name": "item.lorebook-page-1.name",
+      "flavor": "item.lorebook-page-1.flavor",
+      "rarity": "rare",
+      "value": 0,
+      "unique": true,
+      "useful": true,
+      "set": "old-lorebook",
+      "page": "item.lorebook-page-1.page"
+    },
+    "lorebook-page-2": {
+      "id": "lorebook-page-2",
+      "category": "junk",
+      "name": "item.lorebook-page-2.name",
+      "flavor": "item.lorebook-page-2.flavor",
+      "rarity": "rare",
+      "value": 0,
+      "unique": true,
+      "useful": true,
+      "set": "old-lorebook",
+      "page": "item.lorebook-page-2.page"
+    },
+    "lorebook-page-3": {
+      "id": "lorebook-page-3",
+      "category": "junk",
+      "name": "item.lorebook-page-3.name",
+      "flavor": "item.lorebook-page-3.flavor",
+      "rarity": "rare",
+      "value": 0,
+      "unique": true,
+      "useful": true,
+      "set": "old-lorebook",
+      "page": "item.lorebook-page-3.page"
+    },
     "lucky-hook": {
       "id": "lucky-hook",
       "category": "treasure",
@@ -4793,6 +4829,12 @@ export const content = {
               "id": "strange-shark",
               "weight": 24
             }
+          ],
+          "junk": [
+            {
+              "id": "lorebook-page-1",
+              "weight": 1
+            }
           ]
         }
       ]
@@ -4852,6 +4894,12 @@ export const content = {
             {
               "id": "golomyanka",
               "weight": 24
+            }
+          ],
+          "junk": [
+            {
+              "id": "lorebook-page-3",
+              "weight": 1
             }
           ]
         }
@@ -5214,6 +5262,12 @@ export const content = {
             {
               "id": "bull-shark",
               "weight": 32
+            }
+          ],
+          "junk": [
+            {
+              "id": "lorebook-page-2",
+              "weight": 1
             }
           ]
         }
@@ -8476,6 +8530,12 @@ export const content = {
       ]
     }
   },
+  "sets": {
+    "old-lorebook": {
+      "id": "old-lorebook",
+      "name": "set.old-lorebook.name"
+    }
+  },
   "rules": {
     "fish-preferences": {
       "id": "fish-preferences",
@@ -9040,6 +9100,90 @@ export const content = {
           ]
         }
       }
+    },
+    "the-scholar": {
+      "id": "the-scholar",
+      "title": [
+        "event.the-scholar.title"
+      ],
+      "once": false,
+      "trigger": "needs",
+      "needs": [
+        {
+          "kind": "set",
+          "set": "old-lorebook",
+          "count": 1
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.the-scholar.start.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.the-scholar.start.0"
+              ],
+              "to": "thanks",
+              "needs": [
+                {
+                  "kind": "set",
+                  "set": "old-lorebook",
+                  "count": "all"
+                }
+              ],
+              "effects": [
+                {
+                  "kind": "set",
+                  "set": "old-lorebook"
+                },
+                {
+                  "kind": "xp",
+                  "add": 100
+                },
+                {
+                  "kind": "item",
+                  "id": "worms",
+                  "add": 10
+                },
+                {
+                  "kind": "flag",
+                  "name": "lorebook-given",
+                  "set": true
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.the-scholar.start.1"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": []
+            }
+          ]
+        },
+        "thanks": {
+          "text": [
+            "event.the-scholar.thanks.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.the-scholar.thanks.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": []
+            }
+          ]
+        }
+      },
+      "again": {
+        "casts": 100
+      }
     }
   }
 };
@@ -9240,6 +9384,15 @@ export const strings = {
     "item.leaky-waterskin.name": "Leaky waterskin",
     "item.leaky-waterskin.flavor": "Still holds some water!",
     "item.live-frog.name": "Live frog",
+    "item.lorebook-page-1.name": "A sodden page (1 of 3)",
+    "item.lorebook-page-1.flavor": "The ink has run, but most of it can still be read.",
+    "item.lorebook-page-1.page": "Long ago, before the lake, a great valley lay here: a land of plenty, and home to the elves, proud makers of great treasures.",
+    "item.lorebook-page-2.name": "A sodden page (2 of 3)",
+    "item.lorebook-page-2.flavor": "The ink has run, but most of it can still be read.",
+    "item.lorebook-page-2.page": "The treasures drew dragons, and their fire. So the elves' mages made the valley's water proof against dragonfire, and shot the confused dragons down.",
+    "item.lorebook-page-3.name": "A sodden page (3 of 3)",
+    "item.lorebook-page-3.flavor": "The ink has run, but most of it can still be read.",
+    "item.lorebook-page-3.page": "A hundred years later the dragons came back, breathing water, ice and steam, and a great storm with them. When they were done, the valley was gone. A lake took its place.",
     "item.lucky-hook.name": "Lucky hook",
     "item.lucky-hook.flavor": "Bent just so. Fish seem to resent it.",
     "item.mage-tower-map-1.name": "Map fragment (1 of 3)",
@@ -9588,6 +9741,7 @@ export const strings = {
     "perk.summon-fish.description": "A fish bites on your next cast, for certain.",
     "perk.trouble-magnet.name": "Trouble Magnet",
     "perk.trouble-magnet.description": "Things happen to you twice as often.",
+    "set.old-lorebook.name": "An old lorebook",
     "rules.fish-preferences.baits.maggot.name": "Maggot",
     "rules.fish-preferences.baits.bread.name": "Bread",
     "rules.fish-preferences.baits.worm.name": "Worm",
@@ -9658,6 +9812,12 @@ export const strings = {
     "event.quest-bottle-river.thanks.0": "Wait and see",
     "event.quest-bottle.title": "A message in a bottle",
     "event.quest-bottle.start.text": "Inside the bottle is a note: \"Bring three roach to the lower river. Someone will be waiting.\"",
-    "event.quest-bottle.start.0": "Keep the note"
+    "event.quest-bottle.start.0": "Keep the note",
+    "event.the-scholar.title": "A scholar on the shore",
+    "event.the-scholar.start.text": "A thin figure in ink-stained robes is waiting by your things. \"You've found pages of the old lorebook. I'd give a great deal for the whole of it.\"",
+    "event.the-scholar.start.0": "Hand over all three pages",
+    "event.the-scholar.start.1": "Not yet",
+    "event.the-scholar.thanks.text": "\"At last. The valley, the dragons, the flood: it's all here.\" The scholar presses a purse of bait into your hands and hurries off.",
+    "event.the-scholar.thanks.0": "Farewell"
   }
 };

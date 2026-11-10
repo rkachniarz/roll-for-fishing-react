@@ -55,6 +55,12 @@
           "id": "golomyanka",
           "weight": 24
         }
+      ],
+      "junk": [
+        {
+          "id": "lorebook-page-3",
+          "weight": 1
+        }
       ]
     }
   ]

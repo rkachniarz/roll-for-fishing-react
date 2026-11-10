@@ -8,7 +8,7 @@
  * @typedef {Object} Tip
  * @property {string} title
  * @property {string} [colour]  The title's colour; plain text if missing.
- * @property {{ text: string, tone?: 'flavor' | 'good' | 'bad' }[]} lines
+ * @property {{ text: string, tone?: 'flavor' | 'good' | 'bad' | 'page' }[]} lines
  */
 
 /** @type {HTMLElement | null} */
