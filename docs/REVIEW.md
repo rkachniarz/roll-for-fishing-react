@@ -24,6 +24,14 @@ Items with no note are left alone.
 
 Newest first.
 
+## Sound (9.2)
+
+- **Every sound is made in code,** a placeholder until real ones (CR-14): a whoosh and a plop for the cast, a splash
+  for the bite, a rising two-note chime for a catch, a falling tone for an escape, a small chime for a find, clicks
+  for the dice, a four-note fanfare for a level. The best news of a cast plays, one sound.
+- **The volume starts at 60 of 100,** in steps of 10 in the settings; all the way left is silence.
+- **No sound of water in the background:** a loop made in code would grate. It waits for a recording.
+
 ## Sets and the old lorebook (8.7, D111)
 
 - **The old lorebook is a placeholder,** three "sodden pages" (rare junk, unique, weight 1 in their spot's junk): deep

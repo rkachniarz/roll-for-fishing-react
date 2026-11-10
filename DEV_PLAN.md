@@ -256,11 +256,12 @@ Requirements R5.3, R11.
   `npm run sim` (`tools/sim.mjs`); the tuning it's for is the owner's, with the numbers on REVIEW.md.
   *Notes for it: the stick's scatter is 20 px so a school isn't hit every time; a 12 px rod is the next tier up, and
   hits a school whenever it's aimed at (D85).*
-- [ ] **9.2** Audio: the engine for sound, a volume setting, sounds for water, splash and catch. Placeholder
-  sounds made in code until CR-14.
-- [ ] **9.3** More settings (sound, once there is any), save export/import. *(Settings and the theme landed with 3.8.
-  Saving to a file is in the menu, loading from one on the title screen, into a slot the player picks; the sound
-  setting waits for 9.2.)*
+- [x] **9.2** Audio: the engine for sound, a volume setting, sounds for water, splash and catch. Placeholder
+  sounds made in code until CR-14 (`src/audio.js`): the cast, the splash, a catch, an escape, a find, the dice, a
+  level. No water in the background yet: a loop wants a real recording.
+- [x] **9.3** More settings (sound, once there is any), save export/import. *(Settings and the theme landed with 3.8.)*
+  Saving to a file is in the menu, loading from one on the title screen, into a slot the player picks; the volume is
+  a setting.
 - [x] **9.4** Collection view, fish and treasure (R4.3): grids in the journal, the records on a tap; a fish that got
   away before one was caught shows as a silhouette. Knowing of fish and treasure in other ways comes with 8.5.
 - [ ] **9.6** The dice's feel (D99): timing, where they land, the floating total; the open items on

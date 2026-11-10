@@ -23,6 +23,7 @@ import { weatherWords } from './engine/weather.js';
 import { GAME_VALUES } from './engine/values.js';
 import { deleteSave, exportGame, importGame, lastSlot, listSlots, saveGame } from './save.js';
 import { completionShown } from './engine/knowledge.js';
+import { createAudio } from './audio.js';
 import { applySettings, loadSettings, saveSettings, showDice } from './settings.js';
 import { WATER, createScene } from './scene/scene.js';
 import { createBench } from './dev.js';
@@ -157,6 +158,8 @@ function apply(out) {
   finishDice();
   const changed = out.state !== state;
   const ended = out.cast.phase === 'done' && cast.phase !== 'done';
+  // The line whips out (9.2); not again for the recast after a missed splash.
+  if (out.events.some((e) => e.type === 'cast') && !out.events.some((e) => e.type === 'recast')) audio.play('cast');
   state = out.state;
   cast = out.cast;
   if (cast.landing && out.events.some((e) => e.type === 'cast')) scene.aimAt(cast.landing);
@@ -172,6 +175,7 @@ function apply(out) {
   const reveal = () => {
     if (roll) log.add(roll, 'roll');
     logEvents(out.events);
+    playOutcome(out.events);
   };
   const flights = () => {
     for (const e of out.events) {
@@ -197,6 +201,22 @@ function apply(out) {
     reveal();
     flights();
   }
+}
+
+// ---------- Sound (9.2) ----------
+
+const audio = createAudio(settings.sound);
+
+/**
+ * What came of a cast, heard as the log shows it: the best news wins.
+ * @param {GameEvent[]} events
+ */
+function playOutcome(events) {
+  const has = (/** @type {string} */ type) => events.some((e) => e.type === type);
+  if (has('level-up')) audio.play('level');
+  else if (has('caught')) audio.play('catch');
+  else if (has('found')) audio.play('found');
+  else if (has('escaped')) audio.play('escape');
 }
 
 // ---------- The dice on the desk (D99) ----------
@@ -227,6 +247,7 @@ function rollDice(roll, landed, after) {
     ? [...(theirs.dropped ?? []).map((value) => ({ value, kept: false, fish: true })), { value: theirs.result, kept: true, crit: theirs.result === 20, fish: true }]
     : [];
   const out = scene.rollDice([...values, ...fishValues], now);
+  audio.play('dice');
   const kept = out.points[values.length - 1];
   const fishKept = out.points[out.points.length - 1];
   diceShow = {
@@ -500,7 +521,10 @@ scene.app.ticker.add((ticker) => {
     const out = tick(state, cast, now);
     // The reaction is timed from when the splash is on screen, not from when
     // the engine scheduled it, which can be most of a frame earlier (D16).
-    if (cast.phase === 'waiting' && out.cast.phase === 'bite') out.cast = { ...out.cast, biteAt: now };
+    if (cast.phase === 'waiting' && out.cast.phase === 'bite') {
+      out.cast = { ...out.cast, biteAt: now };
+      audio.play('splash');
+    }
     if (out.cast !== cast || out.state !== state) apply(out);
 
     // Timed buffs run down while the game is open (D32). The ticker stops in a
@@ -808,6 +832,7 @@ function renderPane() {
           settings = next;
           saveSettings(storage, settings);
           applySettings(settings);
+          audio.setVolume(settings.sound);
           renderPane();
         }, showDice(settings, reducedMotion.matches)),
       );

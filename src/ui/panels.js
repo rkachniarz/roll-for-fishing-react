@@ -379,7 +379,8 @@ export function menuPane({ onMainMenu, onSettings, onDev, onExport }) {
 }
 
 /**
- * Settings (D81): the theme, and whether the dice are shown (D99).
+ * Settings (D81): the theme, whether the dice are shown (D99), the sound's
+ * volume (9.2).
  * @param {import('../settings.js').Settings} settings
  * @param {(next: import('../settings.js').Settings) => void} onChange
  * @param {boolean} diceShown  The box's tick: the setting, or what the device's "reduce motion" chose.
@@ -414,6 +415,21 @@ export function settingsPane(settings, onChange, diceShown) {
           onchange: (/** @type {Event} */ e) => onChange({ ...settings, dice: /** @type {HTMLInputElement} */ (e.target).checked }),
         }),
         el('span', { textContent: t('settings.showDice') }),
+      ]),
+    ]),
+    el('h3', { textContent: t('settings.sound') }),
+    el('div', { className: 'choices' }, [
+      el('label', {}, [
+        el('input', {
+          type: 'range',
+          id: 'sound-volume',
+          min: '0',
+          max: '100',
+          step: '10',
+          value: String(settings.sound),
+          onchange: (/** @type {Event} */ e) => onChange({ ...settings, sound: Number(/** @type {HTMLInputElement} */ (e.target).value) }),
+        }),
+        el('span', { textContent: t('settings.volume') }),
       ]),
     ]),
   ];

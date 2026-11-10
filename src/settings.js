@@ -1,7 +1,8 @@
 // @ts-check
 // Settings: kept per device, apart from the save slots, since they belong to
 // the player at this screen rather than to a game (D81): the theme (dark, or
-// light wooden planks), and whether the fight's dice are shown (D99).
+// light wooden planks), whether the fight's dice are shown (D99), and how loud
+// the sound is (9.2, 9.3).
 //
 // The theme is also read by a line in index.html's <head>, before the page
 // draws, so a light page doesn't flash dark first. That line uses the same key.
@@ -10,12 +11,12 @@ const KEY = 'roll-for-fishing:settings';
 
 /**
  * `dice` is left out until the player sets it: the dice then follow the
- * device's "reduce motion" (`showDice`).
- * @typedef {{ theme: 'dark' | 'light', dice?: boolean }} Settings
+ * device's "reduce motion" (`showDice`). `sound` is 0 (none) to 100.
+ * @typedef {{ theme: 'dark' | 'light', dice?: boolean, sound: number }} Settings
  */
 
 /** @type {Settings} */
-const DEFAULTS = { theme: 'dark' };
+const DEFAULTS = { theme: 'dark', sound: 60 };
 
 /**
  * @param {Pick<Storage, 'getItem'>} storage

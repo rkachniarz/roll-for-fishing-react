@@ -233,6 +233,8 @@ const UI_STRINGS = {
   'menu.settings': 'Settings',
   'menu.dev': 'Dev bench',
   'menu.export': 'Save to a file',
+  'settings.sound': 'Sound',
+  'settings.volume': 'Volume (all the way left for none)',
   'settings.theme': 'Theme',
   'settings.dark': 'Dark',
   'settings.light': 'Light',

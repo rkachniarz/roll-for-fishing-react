@@ -535,6 +535,23 @@ await check('a save to a file and back (9.3)', DESKTOP, '?seed=7', async (page) 
   report('load from a file: the game is in slot 3 too', filled.join() === 'false,false', filled.join());
 });
 
+await check('sound (9.2)', PHONE, '?seed=1&wait=600', async (page, tap) => {
+  await page.click('#menu');
+  await page.click('#openSettings');
+  report('sound: a volume in the settings, at 60', (await page.inputValue('#sound-volume')) === '60');
+  await page.fill('#sound-volume', '30');
+  await page.dispatchEvent('#sound-volume', 'change');
+  const kept = await page.evaluate(() => JSON.parse(localStorage.getItem('roll-for-fishing:settings') ?? '{}').sound);
+  report('sound: the volume is kept', kept === 30, String(kept));
+  await closePane(page);
+  // A whole cast with sound on: the cast, the splash, the dice, the outcome.
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
+});
+
 await check('settings: the light theme', PHONE, '?seed=6', async (page) => {
   await page.click('#menu');
   await page.click('#openSettings');
