@@ -24,6 +24,12 @@ Items with no note are left alone.
 
 Newest first.
 
+## The placeholder quest chain (7.4)
+
+- **A message in a bottle,** uncommon junk in the Lake's junk list (weight 1 among the shared list's), unique. Its note
+  sends the player to the lower river with three roach; a hooded stranger takes them; on the next cast a package on
+  the line holds the horsehair line and 25 XP. All the words are Claude's placeholders, for CR-10 to replace or keep.
+
 ## Event words for counters, fish, visitors, holding and trading (7.6–7.10, D108)
 
 - **The words are Claude's:** `add:`, `needs: count`, `{#name}`, `lose: fish`, `lose: rarest fish`, `needs: fish`,

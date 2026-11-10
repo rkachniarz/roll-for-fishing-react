@@ -1,0 +1,11 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "message-in-a-bottle",
+  "category": "junk",
+  "name": "Message in a bottle",
+  "flavor": "The cork is sealed with wax. Someone wanted this found.",
+  "rarity": "uncommon",
+  "value": 0,
+  "unique": true,
+  "event": "quest-bottle"
+}

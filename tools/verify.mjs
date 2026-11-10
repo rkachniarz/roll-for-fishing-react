@@ -385,7 +385,9 @@ await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (p
   await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
   const log = await logText(page);
   report('junk: no d20', !/d20/.test(log), log);
-  report('junk: in the log as a link', /You caught: \[Bit of scroll parchment\]/.test(log), log);
+  // Whichever junk this seed brings up: the check doesn't change when the junk list does.
+  const junk = /You caught: \[([^\]]+)\]/.exec(log)?.[1] ?? '';
+  report('junk: in the log as a link', junk !== '', log);
   report('junk: its icon flies to the bag', (await page.locator('.flying-icon').count()) === 1);
   await page.waitForTimeout(150);
   await page.screenshot({ path: 'dist/verify/catch-flight.png' });
@@ -393,11 +395,11 @@ await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (p
   report('junk: and disappears', (await page.locator('.flying-icon').count()) === 0);
   await page.click('#log .link');
   const tip = (await page.textContent('.tip')) ?? '';
-  report('junk: a tap on the link shows its tooltip', tip.startsWith('Bit of scroll parchment'), tip);
+  report('junk: a tap on the link shows its tooltip', junk !== '' && tip.startsWith(junk), tip);
   await page.click('#bag');
   await page.click('#tab-stuff');
   const slots = await page.locator('#bagBody .slot:not(.empty)').evaluateAll((els) => els.map((e) => e.getAttribute('aria-label')));
-  report('junk: in the bag, under Stuff', slots.includes('Bit of scroll parchment'), slots.join(', '));
+  report('junk: in the bag, under Stuff', slots.includes(junk), slots.join(', '));
   await page.screenshot({ path: 'dist/verify/bag.png' });
   await page.click('#player');
   const rod = await page.getAttribute('[data-slot="rod"]', 'aria-label');

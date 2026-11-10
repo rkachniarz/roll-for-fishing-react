@@ -3528,6 +3528,16 @@ export const content = {
         }
       ]
     },
+    "message-in-a-bottle": {
+      "id": "message-in-a-bottle",
+      "category": "junk",
+      "name": "item.message-in-a-bottle.name",
+      "flavor": "item.message-in-a-bottle.flavor",
+      "rarity": "uncommon",
+      "value": 0,
+      "unique": true,
+      "event": "quest-bottle"
+    },
     "moldy-piece-of-bread": {
       "id": "moldy-piece-of-bread",
       "category": "junk",
@@ -3827,6 +3837,10 @@ export const content = {
       "junk": [
         {
           "table": "common-junk"
+        },
+        {
+          "id": "message-in-a-bottle",
+          "weight": 1
         }
       ],
       "emptyHook": 45,
@@ -8408,6 +8422,173 @@ export const content = {
           ]
         }
       }
+    },
+    "quest-bottle-reward": {
+      "id": "quest-bottle-reward",
+      "title": [
+        "event.quest-bottle-reward.title"
+      ],
+      "once": true,
+      "trigger": "needs",
+      "needs": [
+        {
+          "kind": "flag",
+          "name": "bottle-paid"
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.quest-bottle-reward.start.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.quest-bottle-reward.start.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "bottle-paid",
+                  "set": false
+                },
+                {
+                  "kind": "flag",
+                  "name": "bottle-done",
+                  "set": true
+                },
+                {
+                  "kind": "item",
+                  "id": "horsehair-line",
+                  "add": 1
+                },
+                {
+                  "kind": "xp",
+                  "add": 25
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "quest-bottle-river": {
+      "id": "quest-bottle-river",
+      "title": [
+        "event.quest-bottle-river.title"
+      ],
+      "once": false,
+      "trigger": "arrive",
+      "needs": [
+        {
+          "kind": "spot",
+          "id": "lower-river"
+        },
+        {
+          "kind": "flag",
+          "name": "bottle-quest"
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.quest-bottle-river.start.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.quest-bottle-river.start.0"
+              ],
+              "to": "thanks",
+              "needs": [
+                {
+                  "kind": "fish",
+                  "species": "roach",
+                  "count": 3
+                }
+              ],
+              "effects": [
+                {
+                  "kind": "fish",
+                  "which": "species",
+                  "species": "roach",
+                  "count": 3
+                },
+                {
+                  "kind": "flag",
+                  "name": "bottle-quest",
+                  "set": false
+                },
+                {
+                  "kind": "flag",
+                  "name": "bottle-paid",
+                  "set": true
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.quest-bottle-river.start.1"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": []
+            }
+          ]
+        },
+        "thanks": {
+          "text": [
+            "event.quest-bottle-river.thanks.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.quest-bottle-river.thanks.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": []
+            }
+          ]
+        }
+      }
+    },
+    "quest-bottle": {
+      "id": "quest-bottle",
+      "title": [
+        "event.quest-bottle.title"
+      ],
+      "once": true,
+      "trigger": "item",
+      "needs": [],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.quest-bottle.start.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.quest-bottle.start.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "bottle-quest",
+                  "set": true
+                }
+              ]
+            }
+          ]
+        }
+      }
     }
   }
 };
@@ -8603,6 +8784,8 @@ export const strings = {
     "item.maggots.name": "Maggots",
     "item.mega-mass-fish-chum.name": "Mega Mass Fish Chum",
     "item.mega-mass-fish-chum.flavor": "Dad, should trout have biceps this huge?",
+    "item.message-in-a-bottle.name": "Message in a bottle",
+    "item.message-in-a-bottle.flavor": "The cork is sealed with wax. Someone wanted this found.",
     "item.moldy-piece-of-bread.name": "Moldy piece of bread",
     "item.moldy-piece-of-bread.flavor": "A whole ecosystem in this one.",
     "item.mouse-fly.name": "Mouse fly",
@@ -8978,6 +9161,18 @@ export const strings = {
     "event.frog.observe.text": "After a moment, a wave of calm washes over you. Everything is going to be alright.",
     "event.frog.observe.0": "Thank you, frog",
     "event.frog.lunge.text": "You lunge forward and get wet, and it's like it was never there.",
-    "event.frog.lunge.0": "Well, shit."
+    "event.frog.lunge.0": "Well, shit.",
+    "event.quest-bottle-reward.title": "A package on the line",
+    "event.quest-bottle-reward.start.text": "Something is tangled on your line: a small package, with your name on it.",
+    "event.quest-bottle-reward.start.0": "Open it",
+    "event.quest-bottle-river.title": "Someone waiting",
+    "event.quest-bottle-river.start.text": "A hooded stranger waits on the bank. \"Three roach, as the note said?\"",
+    "event.quest-bottle-river.start.0": "Hand over three roach",
+    "event.quest-bottle-river.start.1": "Not yet",
+    "event.quest-bottle-river.thanks.text": "The stranger nods and walks off. \"Look on your line next time you fish.\"",
+    "event.quest-bottle-river.thanks.0": "Wait and see",
+    "event.quest-bottle.title": "A message in a bottle",
+    "event.quest-bottle.start.text": "Inside the bottle is a note: \"Bring three roach to the lower river. Someone will be waiting.\"",
+    "event.quest-bottle.start.0": "Keep the note"
   }
 };

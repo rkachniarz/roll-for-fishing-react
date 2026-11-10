@@ -597,3 +597,31 @@ test('a version 7 save gets visitors and no hold', () => {
   assert.deepEqual(migrated.eventsLast, {});
   assert.equal(migrated.locked, null);
 });
+
+test('the placeholder quest chain: a bottle, a hand-in at the river, a package (7.4)', () => {
+  const roach = { species: 'roach', subname: -1, band: 2, size: 20, difficulty: 1, xp: 1, rarity: 'common' };
+  const dice = diceFor(createRng(1));
+  let s = game();
+  // Fishing up the bottle starts the first event.
+  s = { ...s, bags: [{ id: 'message-in-a-bottle', count: 1 }] };
+  assert.deepEqual(afterCast(s, dice, { found: 'message-in-a-bottle' }), [{ type: 'event-started', event: 'quest-bottle' }]);
+  s = choose(s, 0).state;
+  assert.equal(s.flags['bottle-quest'], true);
+  // At the lower river, the stranger; without three roach only "Not yet".
+  let there = travel(s, 'river', 'lower-river');
+  assert.equal(there.state.event?.id, 'quest-bottle-river');
+  assert.equal(openSlide(there.state)?.choices.length, 1);
+  s = choose(there.state, 1).state;
+  s = { ...travel(s, 'lake', 'reedy-shore').state, bucket: [{ fish: roach, count: 4 }] };
+  there = travel(s, 'river', 'lower-river');
+  s = choose(there.state, 0).state;
+  assert.equal(s.bucket[0].count, 1, 'three roach handed in');
+  s = choose(s, 0).state;
+  assert.equal(s.event, null);
+  // The next cast's end brings the package.
+  assert.deepEqual(afterCast(s, dice, {}), [{ type: 'event-started', event: 'quest-bottle-reward' }]);
+  s = choose(s, 0).state;
+  assert.ok(s.bags.some((b) => b.id === 'horsehair-line'));
+  assert.equal(s.flags['bottle-done'], true);
+  assert.equal(travel(travel(s, 'lake', 'reedy-shore').state, 'river', 'lower-river').state.event, null, 'the stranger is gone');
+});
