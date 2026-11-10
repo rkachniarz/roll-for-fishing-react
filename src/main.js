@@ -363,7 +363,7 @@ function openEvent() {
   // The key or tap that ended the cast mustn't also pick a choice.
   const openedAt = performance.now();
   const words = eventWords(state);
-  const say = (/** @type {string[]} */ keys) => sayEventText(keys, words);
+  const say = (/** @type {string[]} */ keys) => sayEventText(keys, words, state?.flags);
   $('eventTitle').textContent = say(slide.title);
   const art = $('eventArt');
   art.hidden = !slide.art;
@@ -593,6 +593,14 @@ function describeEvent(e) {
     }
     case 'event-xp':
       return [t('log.event-xp', { xp: e.xp })];
+    case 'event-lost-fish': {
+      const parts = tParts('log.event-lost-fish', { fish: fishLink(e.fish) });
+      return e.count > 1 ? [...parts, ` ×${e.count}`] : parts;
+    }
+    case 'moved': {
+      const where = content.locations[e.location].spots.find((/** @type {{ id: string }} */ s) => s.id === e.spot);
+      return [t('log.travel', { spot: t(where?.name ?? content.locations[e.location].name) })];
+    }
     case 'rift':
     case 'polished':
     case 'bucket-full':
@@ -831,6 +839,7 @@ function travelTo(location, spot) {
     return;
   }
   const out = travel(state, location, spot);
+  if (out.error) showError($('errors'), t(`error.${out.error}`));
   if (out.state === state) return;
   state = out.state;
   const where = content.locations[location].spots.find((/** @type {{ id: string }} */ s) => s.id === spot);

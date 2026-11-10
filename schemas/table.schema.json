@@ -5,9 +5,24 @@
   "properties": {
     "$schema": { "type": "string" },
     "id": { "$ref": "common.schema.json#/definitions/id" },
-    "kind": { "description": "What the entries are.", "enum": ["fish", "items"] },
-    "entries": { "$ref": "common.schema.json#/definitions/entries" }
+    "kind": { "description": "What the entries are: fish or items for a location to include, or rewards for a trade (7.9).", "enum": ["fish", "items", "rewards"] },
+    "entries": { "$ref": "common.schema.json#/definitions/entries" },
+    "rewards": {
+      "description": "A trade's rewards (trade: junk, 7.9): the richest tier whose min the traded junk's total value reaches, one picked by weight.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/id" },
+          "weight": { "$ref": "common.schema.json#/definitions/weight" },
+          "min": { "description": "The total value this tier needs.", "type": "integer", "minimum": 0 },
+          "count": { "description": "How many of the item; 1 if left out.", "type": "integer", "minimum": 1 }
+        },
+        "required": ["id", "weight", "min"],
+        "additionalProperties": false
+      }
+    }
   },
-  "required": ["id", "kind", "entries"],
+  "required": ["id", "kind"],
   "additionalProperties": false
 }

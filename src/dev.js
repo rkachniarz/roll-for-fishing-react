@@ -89,9 +89,9 @@ export function createBench(root, { getState, setState, overrides, extraSources,
   // Moving counts as arriving, for `trigger: arrive` events (D89); a new
   // location starts at its first spot (D101).
   locationSelect.addEventListener('change', () =>
-    edit((s) => travel(s, locationSelect.value, content.locations[locationSelect.value].spots[0].id).state),
+    edit((s) => travel(s, locationSelect.value, content.locations[locationSelect.value].spots[0].id, { force: true }).state),
   );
-  spotSelect.addEventListener('change', () => edit((s) => travel(s, s.location, spotSelect.value).state));
+  spotSelect.addEventListener('change', () => edit((s) => travel(s, s.location, spotSelect.value, { force: true }).state));
 
   const seasonSelect = el('select');
   for (const season of Object.values(content.weather).sort((a, b) => a.order - b.order)) {

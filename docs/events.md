@@ -42,6 +42,7 @@ You lunge forward and get wet, and it's like it was never there.
 | `id` | required | lowercase-with-dashes, the same as the file name. Permanent once released (D44). |
 | `title` | required | Shown at the top of the dialog. |
 | `once` | `true` / `false` | Default `true`: it happens only once per game. `false` lets it happen again. |
+| `again` | `50 casts` / `3 days` | A visitor who comes back: it can happen again, but not until that many casts or game days have passed since it last started. Leave `once` out. |
 | `trigger` | `meter` / `item` / `needs` / `arrive` | What starts it; one per event, see below. Default `meter`. |
 | `needs` | any number of lines | Requirements for it to start at all, in the words below. |
 | `art` | a file name | A picture for the top of the dialog, from `assets/events/<art>.png`. Optional. |
@@ -71,6 +72,8 @@ or a player could be stuck (`npm run content` warns about that).
 | `needs: season winter` | it is that season (`content/weather/`) |
 | `needs: time dawn` | night, dawn, morning, noon, afternoon, sunset or evening (the words on the HUD) |
 | `needs: caught northern-pike 10` | at least 10 northern pike caught, ever (the accomplishments book) |
+| `needs: fish` / `needs: fish 3` / `needs: fish roach 3` | that many fish in the bucket (default 1), of that species if named |
+| `needs: count cat-trust 5+` | a counter (see `add:`) is at that amount: `5` exactly, `5+`, `5-`, `3..8`, as the weather |
 | `needs: wind 3+` | the weather now: `temperature`, `wind`, `clouds` or `precipitation`, with an amount |
 
 **Weather amounts:** `3` exactly, `3+` at least, `3-` at most, `2..4` between (both included). Wind, clouds and
@@ -124,8 +127,25 @@ They are checked when the slide opens. If a condition shows nothing, the spaces 
 | `gain: iron-key` / `gain: 3 bread-crumbs` | puts items in the bags; the log says so |
 | `lose: bent-fork` / `lose: 2 bent-fork` | takes items out of the bags (equipped ones are safe); the log says so |
 | `set: met-the-frog` / `clear: met-the-frog` | sets or clears a flag, for later events and quests |
+| `add: cat-trust 1` / `add: cat-trust -2` | a counter goes up or down; it starts at 0, and `clear:` sets it back |
+| `lose: fish` / `lose: 3 fish` | takes fish from the bucket, the least valuable first (lowest rarity, then smallest); the log says so |
+| `lose: 10 fish roach` | that many of a species, the smallest first |
+| `lose: rarest fish` | the rarest fish in the bucket, the biggest if there's a tie (the cat's theft) |
+| `go: river` / `go: river upper-river` | moves the player there, to the first spot if none is named; the log says so |
+| `lock:` / `unlock:` | the player can't leave the location they're at (other spots there are fine) until an event says `unlock:`. The event should say why (R10.8) |
+| `trade: junk junk-collector` | every useless junk item in the bags goes, and their values, added up, pick the reward from the table (below) |
 
-Flags are free-form names; use them to link events into quests (R10.7).
+Flags and counters are free-form names; use them to link events into quests (R10.7). Taking fish or items takes as
+many as there are, up to the amount, so give the choice a `needs:` if it should only show when there are enough.
+
+**Showing a counter:** write `{#cat-trust}` in the text, and it becomes the number: `The raid has {#raid-perch} of 25
+perch.`
+
+**Trading junk:** junk counts as useless unless it starts an event, can be equipped, does something, or has
+`"useful": true` in its file (for the Alchemist's ingredients, quest pieces). The reward table is a
+`content/tables/` file of kind `rewards`: each reward has a `min`, the total value its tier needs, a `weight` and a
+`count`. The trade picks among the richest tier the total reaches, by weight. See
+`content/tables/junk-collector.json`, a placeholder.
 
 ## What starts an event
 
@@ -168,8 +188,8 @@ One event is open at a time, and no cast goes out until it ends. A reload comes 
   ```
 
   With `once` at its default it happens on the first arrival only; `once: false` makes it every time (a greeting
-  on each visit to town). For now only a new game arrives anywhere: moving between locations and spots comes with
-  the world (Phase 8). The bench's location and spot pickers count as arriving, for testing.
+  on each visit to town). A new game and going somewhere on the map count as arriving, and so do the bench's
+  location and spot pickers. Being moved by an event's `go:` doesn't, since an event is already open.
 
 ## Trying one out
 
@@ -180,4 +200,4 @@ class, for choices like the rogue's.
 ## Not there yet
 
 These are code work first (D42): a buff as an effect, starting another event as an
-effect, trading (barter comes with the town, D86), and moving the player to a location (7.6).
+effect, and barter (it comes with the town, D86).

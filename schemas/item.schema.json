@@ -42,6 +42,7 @@
     "icon": { "$ref": "common.schema.json#/definitions/icon" },
     "retired": { "$ref": "common.schema.json#/definitions/retired" },
     "event": { "description": "An event that starts when this item is fished up; the event has trigger: item (R10.2, D84).", "$ref": "common.schema.json#/definitions/id" },
+    "useful": { "description": "Junk with a use (the Alchemist, a quest): never traded away as useless (trade: junk, 7.9).", "type": "boolean" },
     "devOnly": { "description": "A test item, had only through the ?dev bench, so no location needs to list it (D83).", "type": "boolean" }
   },
   "required": ["id", "category", "name", "rarity", "value"],

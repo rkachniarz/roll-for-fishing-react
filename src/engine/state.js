@@ -17,7 +17,7 @@ import { clock, seasonOfMonth, startTime } from './time.js';
 import { emptyEquipment } from './equipment.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 7;
+export const SAVE_VERSION = 8;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -76,6 +76,10 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {{ id: string, slide: string } | null} event  The open event and its slide (D84).
  *   No cast goes out until it ends.
  * @property {Record<string, number>} eventsSeen  Event id -> how many times it has started.
+ * @property {Record<string, { cast: number, time: number }>} eventsLast  Event id -> the cast count and
+ *   game time it last started, for a visitor who comes back (7.10).
+ * @property {string | null} locked  A location an event holds the player at until another lets them
+ *   go (R10.8, 7.6).
  * @property {number} missStreak  Splashes missed in a row (D64).
  * @property {Record<string, { casts?: number, ms?: number }>} cooldowns  Ability -> what's left of its
  *   cooldown (abilities.js, D96).
@@ -140,6 +144,8 @@ export function newGame({ seed, character, month }) {
     eventMeter: 0,
     event: null,
     eventsSeen: {},
+    eventsLast: {},
+    locked: null,
     missStreak: 0,
     cooldowns: {},
     lit: {},
@@ -239,6 +245,8 @@ const MIGRATIONS = {
   },
   // 6 -> 7: two treasures to choose from (Fence, D106).
   6: (save) => ({ ...save, pendingTreasure: null }),
+  // 7 -> 8: visitors who come back (7.10) and locations that hold the player (7.6).
+  7: (save) => ({ ...save, eventsLast: {}, locked: null }),
 };
 
 /** @param {GameState} state */

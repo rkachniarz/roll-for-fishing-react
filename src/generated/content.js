@@ -5018,6 +5018,51 @@ export const content = {
           "weight": 1
         }
       ]
+    },
+    "junk-collector": {
+      "id": "junk-collector",
+      "kind": "rewards",
+      "rewards": [
+        {
+          "id": "worms",
+          "weight": 1,
+          "min": 0,
+          "count": 2
+        },
+        {
+          "id": "maggots",
+          "weight": 1,
+          "min": 0,
+          "count": 2
+        },
+        {
+          "id": "worms",
+          "weight": 1,
+          "min": 5,
+          "count": 6
+        },
+        {
+          "id": "spinner-lure",
+          "weight": 1,
+          "min": 5,
+          "count": 3
+        },
+        {
+          "id": "straw-hat",
+          "weight": 1,
+          "min": 15
+        },
+        {
+          "id": "horsehair-line",
+          "weight": 1,
+          "min": 15
+        },
+        {
+          "id": "willow-rod",
+          "weight": 1,
+          "min": 30
+        }
+      ]
     }
   },
   "weather": {

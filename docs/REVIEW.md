@@ -24,6 +24,21 @@ Items with no note are left alone.
 
 Newest first.
 
+## Event words for counters, fish, visitors, holding and trading (7.6–7.10, D108)
+
+- **The words are Claude's:** `add:`, `needs: count`, `{#name}`, `lose: fish`, `lose: rarest fish`, `needs: fish`,
+  `again:`, `go:`, `lock:`, `unlock:`, `trade: junk`. They're in `docs/events.md`; rename any you'd write differently.
+- **"Any fish" means the least valuable** (lowest rarity, then smallest), so feeding the cat never costs the best
+  fish by accident; a species hands in its smallest first.
+- **Junk counts as useful** if it starts an event, can be equipped, does something, or has `"useful": true`. Junk
+  worth 0 still goes in a trade, adding nothing.
+- **The junk collector's rewards are a placeholder** (`content/tables/junk-collector.json`): worms or maggots for
+  junk worth under 5, more bait from 5, the straw hat or horsehair line from 15, the willow rod from 30.
+- **Being moved by an event doesn't count as arriving,** so a `trigger: arrive` event there waits for the next
+  arrival.
+- **Locked, the map greys out the other locations** and says "Something keeps you here. You can't leave yet." The
+  event that locks should say why (R10.8).
+
 ## The fish's dice (6.8)
 
 - **The teal die's shading is Claude's,** four steps around `#31899F` (`#5fb3c4`, `#31899f`, `#256d80`, `#1a4f5e`),

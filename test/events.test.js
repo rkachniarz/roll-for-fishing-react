@@ -12,8 +12,8 @@ import { PLACEHOLDERS, parseEvent, parseText } from '../tools/event-text.mjs';
 import { eventWords, sayEventText } from '../src/ui/event-words.js';
 import { buildContent, eventText } from '../tools/content.mjs';
 import { content } from '../src/generated/content.js';
-import { METER_FIRES, afterCast, arrive, canStart, choose, meets, openSlide, startEvent, textNow } from '../src/engine/events.js';
-import { castLine, tick } from '../src/engine/game.js';
+import { METER_FIRES, afterCast, arrive, canStart, choose, meets, openSlide, startEvent, textNow, uselessJunk } from '../src/engine/events.js';
+import { castLine, tick, travel } from '../src/engine/game.js';
 import { deserialize, newGame } from '../src/engine/state.js';
 import { createRng } from '../src/rng.js';
 import { diceFor } from '../src/dice.js';
@@ -443,4 +443,157 @@ test('a version 3 save gets an event meter, no open event, and an events stream'
   assert.equal(migrated.event, null);
   assert.deepEqual(migrated.eventsSeen, {});
   assert.equal(typeof migrated.streams.events, 'number');
+});
+
+// ---------- Counters, fish, visitors, holding the player, trading junk (7.6-7.10) ----------
+
+/**
+ * An event from its text, for one test.
+ * @param {string} text
+ */
+function eventFrom(text) {
+  const { event, errors } = parseEvent(text);
+  assert.deepEqual(errors, []);
+  return /** @type {any} */ (event);
+}
+
+test('the new words read, and mistakes in them are reported', () => {
+  const event = eventFrom(`---
+id: test-words
+title: x
+again: 3 days
+needs: count cat-trust 5+
+needs: fish roach 3
+---
+
+## a
+x {#cat-trust}
+
+- x -> end
+  add: cat-trust -2
+  lose: 3 fish roach
+  lose: rarest fish
+  lose: fish
+  go: river upper-river
+  lock:
+  unlock:
+  trade: junk junk-collector
+`);
+  assert.deepEqual(event.again, { days: 3 });
+  assert.equal(event.once, false, '"again" brings it back');
+  assert.deepEqual(event.needs, [
+    { kind: 'count', name: 'cat-trust', min: 5, max: null },
+    { kind: 'fish', species: 'roach', count: 3 },
+  ]);
+  assert.deepEqual(event.slides.a.choices[0].effects, [
+    { kind: 'count', name: 'cat-trust', add: -2 },
+    { kind: 'fish', which: 'species', species: 'roach', count: 3 },
+    { kind: 'fish', which: 'rarest', species: null, count: 1 },
+    { kind: 'fish', which: 'any', species: null, count: 1 },
+    { kind: 'go', location: 'river', spot: 'upper-river' },
+    { kind: 'lock', set: true },
+    { kind: 'lock', set: false },
+    { kind: 'trade', what: 'junk', table: 'junk-collector' },
+  ]);
+  const bad = (/** @type {string} */ front, /** @type {string} */ line) =>
+    parseEvent(`---\nid: x\ntitle: x\n${front}---\n\n## a\nx\n\n- x -> end\n  ${line}\n`).errors.join(' ');
+  assert.match(bad('again: soon\n', 'set: a'), /"again" is a number of casts or days/);
+  assert.match(bad('again: 3 casts\nonce: true\n', 'set: a'), /can't be "once: true"/);
+  assert.match(bad('', 'add: cat-trust'), /"add" takes a counter name and a number/);
+  assert.match(bad('', 'gain: fish'), /only be lost/);
+  assert.match(bad('', 'lock: here'), /takes nothing/);
+  assert.match(bad('', 'trade: fish x'), /"trade" takes "junk"/);
+  assert.match(bad('', 'needs: count cat-trust'), /"count" takes a counter name and an amount/);
+});
+
+test('counters go up and down, are checked, and show in text (7.7)', () => {
+  withEvent(eventFrom(`---\nid: test-cat\ntitle: x\nonce: false\n---\n\n## a\nTrust: {#cat-trust} of 5.\n\n- Feed -> end\n  add: cat-trust 2\n- Shoo -> end\n  add: cat-trust -1\n- Pet -> end\n  needs: count cat-trust 3+\n`), () => {
+    let s = startEvent(game(), 'test-cat');
+    assert.equal(openSlide(s)?.choices.length, 2, 'Pet needs trust 3');
+    assert.equal(sayEventText(openSlide(s)?.text ?? [], eventWords(s), s.flags), 'Trust: 0 of 5.');
+    s = startEvent(choose(s, 0).state, 'test-cat');
+    s = startEvent(choose(s, 0).state, 'test-cat');
+    assert.equal(s.flags['cat-trust'], 4);
+    assert.equal(openSlide(s)?.choices.length, 3);
+    assert.equal(sayEventText(openSlide(s)?.text ?? [], eventWords(s), s.flags), 'Trust: 4 of 5.');
+    s = choose(s, 1).state;
+    assert.equal(s.flags['cat-trust'], 3);
+  });
+});
+
+test('events take fish from the bucket: the least valuable, a species, the rarest (7.8)', () => {
+  const fish = (/** @type {string} */ species, /** @type {number} */ size, /** @type {string} */ rarity) => ({ species, subname: -1, band: 2, size, difficulty: 1, xp: 1, rarity });
+  const roach = fish('roach', 20, 'common');
+  const smallRoach = fish('roach', 12, 'common');
+  const pike = fish('northern-pike', 80, 'rare');
+  const perch = fish('perch', 15, 'poor');
+  withEvent(eventFrom(`---\nid: test-take\ntitle: x\nonce: false\n---\n\n## a\nx\n\n- any -> end\n  lose: fish\n- roach -> end\n  needs: fish roach 3\n  lose: 3 fish roach\n- rarest -> end\n  lose: rarest fish\n`), () => {
+    const base = { ...startEvent(game(), 'test-take'), bucket: [{ fish: roach, count: 2 }, { fish: smallRoach, count: 1 }, { fish: pike, count: 1 }, { fish: perch, count: 1 }] };
+    const any = choose(base, 0);
+    assert.deepEqual(any.events[0], { type: 'event-lost-fish', fish: perch, count: 1 }, 'the poor one');
+    const species = choose(base, 1);
+    assert.deepEqual(species.events.filter((e) => e.type === 'event-lost-fish'), [
+      { type: 'event-lost-fish', fish: smallRoach, count: 1 },
+      { type: 'event-lost-fish', fish: roach, count: 2 },
+    ]);
+    assert.deepEqual(species.state.bucket.map((b) => b.fish.species), ['northern-pike', 'perch']);
+    assert.deepEqual(choose(base, 2).events[0], { type: 'event-lost-fish', fish: pike, count: 1 });
+    const fewer = { ...base, bucket: [{ fish: roach, count: 2 }] };
+    assert.equal(openSlide(fewer)?.choices.length, 2, 'not 3 roach: the hand-in is hidden');
+  });
+});
+
+test('a visitor comes back only after so many casts or days (7.10)', () => {
+  for (const again of ['again: 5 casts', 'again: 2 days']) {
+    withEvent(eventFrom(`---\nid: test-visitor\ntitle: x\n${again}\n---\n\n## a\nx\n\n- Bye -> end\n`), () => {
+      let s = game();
+      assert.ok(canStart(s, 'test-visitor'));
+      s = choose(startEvent(s, 'test-visitor'), 0).state;
+      assert.ok(!canStart(s, 'test-visitor'), 'not straight away');
+      const later = again.includes('casts') ? { ...s, book: { ...s.book, casts: s.book.casts + 5 } } : { ...s, time: s.time + 2 * 24 * 60 };
+      assert.ok(canStart(later, 'test-visitor'), `${again}: back`);
+    });
+  }
+});
+
+test('an event can move the player and hold them there until another lets them go (7.6, R10.8)', () => {
+  withEvent(eventFrom(`---\nid: test-portal\ntitle: x\nonce: false\n---\n\n## a\nx\n\n- In -> end\n  go: river lower-river\n  lock:\n- Out -> end\n  unlock:\n`), () => {
+    const s = game();
+    const moved = choose(startEvent(s, 'test-portal'), 0);
+    assert.equal(moved.state.location, 'river');
+    assert.equal(moved.state.spot, 'lower-river');
+    assert.equal(moved.state.locked, 'river');
+    assert.deepEqual(moved.events[0], { type: 'moved', location: 'river', spot: 'lower-river' });
+    const stuck = travel(moved.state, 'lake', 'reedy-shore');
+    assert.equal(stuck.error, 'locked');
+    assert.equal(stuck.state, moved.state);
+    assert.equal(travel(moved.state, 'river', 'upper-river').state.spot, 'upper-river', 'spots there are fine');
+    assert.equal(travel(moved.state, 'lake', 'reedy-shore', { force: true }).state.location, 'lake', 'the bench may');
+    const freed = choose(startEvent(moved.state, 'test-portal'), 1).state;
+    assert.equal(freed.locked, null);
+    assert.equal(travel(freed, 'lake', 'reedy-shore').state.location, 'lake');
+  });
+});
+
+test('trading junk: every useless piece goes, the reward by their total value (7.9)', () => {
+  withEvent(eventFrom(`---\nid: test-collector\ntitle: x\nonce: false\n---\n\n## a\nx\n\n- Trade -> end\n  trade: junk junk-collector\n`), () => {
+    const s = { ...startEvent(game(), 'test-collector'), bags: [{ id: 'bent-fork', count: 2 }, { id: 'dwarven-stein', count: 3 }, { id: 'willow-rod', count: 1 }, { id: 'worms', count: 1 }] };
+    assert.ok(uselessJunk('bent-fork') && !uselessJunk('willow-rod') && !uselessJunk('worms'));
+    const out = choose(s, 0);
+    // 2 × 1 + 3 × 5 = 17: the 15 tier, a straw hat or a horsehair line.
+    const gained = out.events.find((e) => e.type === 'event-gained');
+    assert.ok(['straw-hat', 'horsehair-line'].includes(gained?.item), gained?.item);
+    assert.ok(!out.state.bags.some((b) => b.id === 'bent-fork' || b.id === 'dwarven-stein'));
+    assert.ok(out.state.bags.some((b) => b.id === 'willow-rod') && out.state.bags.some((b) => b.id === 'worms'), 'the rest stays');
+    assert.notEqual(out.state.streams.events, s.streams.events, 'the reward from the events stream');
+    const nothing = choose({ ...s, bags: [{ id: 'worms', count: 1 }] }, 0);
+    assert.deepEqual(nothing.events.filter((e) => e.type !== 'event-ended'), [], 'no junk, no trade');
+  });
+});
+
+test('a version 7 save gets visitors and no hold', () => {
+  const { eventsLast, locked, ...v7 } = game();
+  const migrated = deserialize(JSON.stringify({ ...v7, version: 7 }));
+  assert.deepEqual(migrated.eventsLast, {});
+  assert.equal(migrated.locked, null);
 });

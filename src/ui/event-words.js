@@ -44,14 +44,16 @@ export function eventWords(state) {
 
 /**
  * Event text from its parts' string keys (events.js, textNow), with the
- * placeholders filled. A condition that shows nothing can leave two spaces or
- * a space at an end; those are tidied, and paragraph breaks kept.
+ * placeholders filled, counters too (`{#cat-trust}`, 7.7). A condition that
+ * shows nothing can leave two spaces or a space at an end; those are tidied,
+ * and paragraph breaks kept.
  * @param {string[]} keys
  * @param {Record<string, string | number>} words
+ * @param {Record<string, boolean | number | string>} [counters]  The state's flags.
  */
-export function sayEventText(keys, words) {
+export function sayEventText(keys, words, counters = {}) {
   return keys
-    .map((k) => t(k, words))
+    .map((k) => t(k, words).replace(/\{#([a-z0-9-]+)\}/g, (_, name) => String(Number(counters[name]) || 0)))
     .join('')
     .split('\n\n')
     .map((p) => p.replace(/\s+/g, ' ').replace(/ ([.,;:!?])/g, '$1').trim())

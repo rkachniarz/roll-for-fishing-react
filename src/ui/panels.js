@@ -202,15 +202,18 @@ export function mapPane(state, onTravel) {
   for (const loc of Object.values(content.locations)) {
     if (loc.retired) continue;
     out.push(el('p', { className: 'name', textContent: t(loc.name) }));
+    // Somewhere an event holds the player: no other location (R10.8, 7.6).
+    const held = Boolean(state.locked) && state.locked !== loc.id;
     const spots = (loc.spots ?? []).map((/** @type {{ id: string, name: string }} */ spot) => {
       const here = state.location === loc.id && state.spot === spot.id;
-      const b = el('button', { type: 'button', className: 'map-spot', textContent: t(spot.name), disabled: here });
+      const b = el('button', { type: 'button', className: 'map-spot', textContent: t(spot.name), disabled: here || held });
       b.setAttribute('aria-pressed', String(here));
       b.addEventListener('click', () => onTravel(loc.id, spot.id));
       return b;
     });
     out.push(el('div', { className: 'map-spots' }, spots));
   }
+  if (state.locked) out.push(el('p', { className: 'muted', textContent: t('map.locked') }));
   out.push(el('p', { className: 'muted', textContent: t('map.later') }));
   return out;
 }

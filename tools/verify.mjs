@@ -553,7 +553,8 @@ await check('the buff bar', DESKTOP, '?dev&seed=3', async (page) => {
   await page.click('text=+ debuff, 90 s');
   report('buff bar: two buffs, one debuff', (await page.locator('.buffs .buff').count()) === 2 && (await page.locator('.debuffs .buff').count()) === 1);
   const corners = await page.locator('.buff-left').allTextContents();
-  report('buff bar: casts and time in the corner', corners.join(' ') === '3 2m 2m', corners.join(' '));
+  // The 90 s debuff rounds to 2m, or to 1m once a slow run has ticked it below 90 s.
+  report('buff bar: casts and time in the corner', /^3 2m [12]m$/.test(corners.join(' ')), corners.join(' '));
   await page.hover('.buffs .buff >> nth=0');
   report('buff bar: hovering describes it', /\+20 Fish Find/.test((await page.textContent('.buff-tip')) ?? ''));
   await page.screenshot({ path: 'dist/verify/buff-bar.png' });

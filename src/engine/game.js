@@ -366,14 +366,17 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
 /**
  * Going to another spot, or another location (R11.8, D101). Only between
  * casts. The surface features stay behind with the water they were on, and
- * an event that starts on arriving may start.
+ * an event that starts on arriving may start. A location an event holds the
+ * player at can't be left (R10.8, 7.6), except from the ?dev bench.
  * @param {GameState} state
  * @param {string} location
  * @param {string} spot
- * @returns {{ state: GameState, events: GameEvent[] }}
+ * @param {{ force?: boolean }} [options]
+ * @returns {{ state: GameState, events: GameEvent[], error?: string }}
  */
-export function travel(state, location, spot) {
+export function travel(state, location, spot, { force = false } = {}) {
   if (state.location === location && state.spot === spot) return { state, events: [] };
+  if (state.locked && location !== state.locked && !force) return { state, events: [], error: 'locked' };
   const next = { ...structuredClone(state), location, spot, features: [] };
   return { state: next, events: arrive(next) };
 }

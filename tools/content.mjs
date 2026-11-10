@@ -179,7 +179,14 @@ export async function buildContent(root = ROOT) {
 
   for (const table of Object.values(all.tables)) {
     const where = `content/tables/${table.id}.json`;
-    for (const e of table.entries) {
+    // A trade's rewards (7.9): items, and nothing else in it.
+    if (table.kind === 'rewards') {
+      if (!table.rewards?.length || table.entries) errors.push(`${where}: a rewards table has "rewards" and no "entries"`);
+      for (const r of table.rewards ?? []) if (!all.items[r.id]) errors.push(`${where}: no item "${r.id}"`);
+      continue;
+    }
+    if (!table.entries || table.rewards) errors.push(`${where}: a ${table.kind} table has "entries" and no "rewards"`);
+    for (const e of table.entries ?? []) {
       if (e.table) errors.push(`${where}: a table can't include another table`);
       else if (table.kind === 'fish' ? !all.fish[e.id] : !all.items[e.id]) errors.push(`${where}: no ${table.kind} "${e.id}"`);
     }
@@ -415,6 +422,7 @@ function checkEvents(all, errors, warnings) {
     }
     if (need.kind === 'item' && !all.items[need.id]) errors.push(`${where}: no item "${need.id}"`);
     if (need.kind === 'caught' && !all.fish[need.fish]) errors.push(`${where}: no fish "${need.fish}"`);
+    if (need.kind === 'fish' && need.species && !all.fish[need.species]) errors.push(`${where}: no fish "${need.species}"`);
     if (need.kind === 'weather' && need.level !== 'temperature') {
       for (const v of [need.min, need.max]) if (v !== null && (v < 0 || v > 5)) errors.push(`${where}: ${need.level} goes from 0 to 5, not ${v}`);
     }
@@ -452,6 +460,15 @@ function checkEvents(all, errors, warnings) {
         for (const need of choice.needs) checkNeed(`${where} (${id})`, need);
         for (const effect of choice.effects) {
           if (effect.kind === 'item' && !all.items[effect.id]) errors.push(`${where} (${id}): no item "${effect.id}"`);
+          if (effect.kind === 'fish' && effect.species && !all.fish[effect.species]) errors.push(`${where} (${id}): no fish "${effect.species}"`);
+          if (effect.kind === 'go') {
+            const loc = all.locations[effect.location];
+            if (!loc) errors.push(`${where} (${id}): no location "${effect.location}"`);
+            else if (effect.spot && !(loc.spots ?? []).some((/** @type {{ id: string }} */ s) => s.id === effect.spot)) {
+              errors.push(`${where} (${id}): ${effect.location} has no spot "${effect.spot}"`);
+            }
+          }
+          if (effect.kind === 'trade' && all.tables[effect.table]?.kind !== 'rewards') errors.push(`${where} (${id}): no rewards table "${effect.table}"`);
         }
       }
       if (!s.choices.some((/** @type {any} */ c) => c.needs.length === 0)) {

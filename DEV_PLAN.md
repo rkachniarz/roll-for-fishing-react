@@ -207,15 +207,16 @@ writing replaces or joins (CR-10).
 - [x] **7.3** The event dialog (with room for an illustration).
 - [ ] **7.4** One short quest chain started by a quest item, as placeholders: the item, three events, a reward; it
   proves the engine can carry a chain. *The frog encounter is in; the owner's events and the real chain are CR-10.*
-- [ ] **7.6** Locations an event can lock the player into until an objective is met (R10.8, D51).
-- [ ] **7.7** Counters: numbers an event keeps, not just flags. `add: cat-trust 1`, `needs: cat-trust 5+`, and a
+- [x] **7.6** Locations an event can lock the player into until an objective is met (R10.8, D51).
+- [x] **7.7** Counters: numbers an event keeps, not just flags. `add: cat-trust 1`, `needs: cat-trust 5+`, and a
   placeholder to show one ("12 of 25"). For the cat and the raid supplies (`docs/ideas.md`).
-- [ ] **7.8** Events that take fish from the bucket: any fish, a species, a number of one species, the rarest one. For
+- [x] **7.8** Events that take fish from the bucket: any fish, a species, a number of one species, the rarest one. For
   feeding the cat, the cat stealing and handing in raid supplies.
-- [ ] **7.9** Giving up every item of a kind at once: their hidden values added up, the reward picked from a table by
+- [x] **7.9** Giving up every item of a kind at once: their hidden values added up, the reward picked from a table by
   the total. Junk needs telling apart, the useless from the kind with a use. For the junk collector.
-- [ ] **7.10** Visitors who come back now and then: an event with a gap of so many casts (or days) between visits.
-  For the junk collector and the Alchemist (8.6).
+- [x] **7.10** Visitors who come back now and then: an event with a gap of so many casts (or days) between visits.
+  For the junk collector and the Alchemist (8.6). *7.6–7.10 are event words (D108, `docs/events.md`): `go:`,
+  `lock:`, `add:`, `needs: count`, `{#counter}`, `lose: fish`, `needs: fish`, `trade: junk`, `again:`.*
 - [ ] **7.5** The content editor app: forms generated from the schemas, saving into `content/` (D47).
 
 ## Phase 8: World and town
