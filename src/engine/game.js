@@ -211,6 +211,7 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     events.push({ type: 'feature-hit', feature: feature.id });
   }
   const { line, rolls } = rollLine(next, lineValues, dice, feature, hit?.fish ?? null);
+  for (const roll of rolls) roll.visible = rollShown(state, lineValues, roll.kind);
 
   /** @type {GameCast} */
   const cast = {
@@ -229,6 +230,21 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   };
   next.streams = commit();
   return { state: next, cast, checkpoint, events };
+}
+
+/** The game value that reveals each kind of hidden roll (R5.2, D107). */
+const REVEALS = /** @type {Record<string, string>} */ ({ resistance: 'revealResistance', bite: 'revealBite', treasure: 'revealTreasure' });
+
+/**
+ * Does the player see this kind of roll? From the level in rules/levels.json,
+ * or a perk or item that reveals it (R5.2, D107). The fishing d20 always shows.
+ * @param {GameState} state
+ * @param {Values} values
+ * @param {string} kind
+ */
+export function rollShown(state, values, kind) {
+  const from = content.rules.levels.reveal?.[kind];
+  return (from !== undefined && levelFor(state.character.xp) >= from) || (values.flat[REVEALS[kind]] ?? 0) > 0;
 }
 
 /**

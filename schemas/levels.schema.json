@@ -18,6 +18,21 @@
       },
       "minItems": 1
     },
+    "reveal": {
+      "description": "Hidden rolls shown from a level on (R5.2, D107): the roll's kind (resistance, bite, treasure) -> the level. Items and perks reveal them with the reveal* game values.",
+      "type": "object",
+      "propertyNames": {
+        "enum": [
+          "resistance",
+          "bite",
+          "treasure"
+        ]
+      },
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
     "universal": {
       "description": "The levels that offer a choice of two universal perks (D96). Class perks say their own level.",
       "type": "array",

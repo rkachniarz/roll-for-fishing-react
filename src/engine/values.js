@@ -52,6 +52,12 @@ export const GAME_VALUES = {
   treasureChoice: { better: 'higher', base: 0 },
   /** Above 0: junk that comes up is treasure instead (Polish, D106). */
   junkToTreasure: { better: 'higher', base: 0 },
+  /** Above 0: the fish's own roll shows, so the log can say the number it needed (R5.2, D107). */
+  revealResistance: { better: 'higher', base: 0 },
+  /** Above 0: the bite roll shows (R5.2, D107). */
+  revealBite: { better: 'higher', base: 0 },
+  /** Above 0: the treasure roll shows (R5.2, D107). */
+  revealTreasure: { better: 'higher', base: 0 },
   /** The same for the fish's own d20 (R3.5). */
   fishVantage: { better: 'lower', base: 0 },
   /** Added to every fish's difficulty. */

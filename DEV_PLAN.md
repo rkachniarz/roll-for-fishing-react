@@ -43,9 +43,9 @@ Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, 
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
 Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66, Q-38 → D79, Q-39 → D70).
 
-- **Q-40 How are hidden numbers revealed?** Hidden rolls stay hidden until something reveals them (R5.2): the fish's
-  own d20 (the log's "needed ?"), the bite and treasure rolls, Luck. What reveals each: a level, a perk, an item, a
-  class? The owner's steer: the number a fish needed should be revealed early, perhaps from level 1.
+- **Q-40 How are hidden numbers revealed?** Hidden rolls stay hidden until something reveals them (R5.2). The number
+  a fish needed shows from level 1 (D107). Still open: what reveals the bite and treasure rolls and Luck (a perk, an
+  item, a class?), and where those rolls would show; the game values to reveal them are in.
 
 ---
 
@@ -186,7 +186,8 @@ icon and any new look it brings (a Greedy fish, a bent fish) are creative work (
 - [x] **6.3** Each class's level 1, 3 and 5 perks working (the notes' level 6 moved to 5, D96): Rift Fishing,
   Greedy Fish, Ever-Summoning, Bend Reality (which also doubles the rift chance), Fence and Polish were the last
   (D106). Their names, the "Greedy" and "Bent" marks and their icons are placeholders (CR-8, CR-12).
-- [ ] **6.4** Hidden rolls revealed by levels, perks and items (R5.2, Q-40): the number a fish needed from level 1.
+- [x] **6.4** Hidden rolls revealed by levels, perks and items (R5.2, D107): the number a fish needed from level 1;
+  `revealResistance`, `revealBite` and `revealTreasure` for perks and items. Which ones reveal the rest is Q-40.
 - [ ] **6.8** The fish's dice on the desk (D99), once 6.4 reveals its roll: its d20s thrown in from the top right,
   as the player's come in from the bottom right, in the fish's own colour, `#31899F`, a deep-water teal. A roll
   still hidden throws no fish dice.

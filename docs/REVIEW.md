@@ -24,6 +24,12 @@ Items with no note are left alone.
 
 Newest first.
 
+## The number a fish needed (6.4, D107)
+
+- **From level 1 means after the first level-up** (10 XP): a new character is level 0, so the first few casts still
+  say "needed ?". Level 0 instead would show it from the start.
+- **The log shows only the total,** "needed 9.", not the fish's d20 and its difficulty apart.
+
 ## A Tiny fish on the hook (5.8)
 
 - **A Tiny fish becomes a "Small fish" bait item** in the bait slot, so it stacks and is used up like any bait. It

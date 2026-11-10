@@ -332,3 +332,15 @@ test('Polish: the next junk is treasure, however many casts away', () => {
   }
   assert.fail('never found junk');
 });
+
+test("the fish's roll shows from level 1, or with something that reveals it (R5.2, D107)", () => {
+  /** @param {GameState} s @param {any[]} [extra] */
+  const shown = (s, extra = []) => castLine(s, 0, { extra: [FISH, ...extra] }).cast.rolls.find((r) => r.kind === 'resistance')?.visible;
+  const fresh = hero('fish-fighter', { 1: 'jump-in' });
+  const level0 = { ...fresh, character: { ...fresh.character, xp: 0 } };
+  assert.equal(shown(level0), false, 'hidden at level 0');
+  assert.equal(shown(fresh), true, 'shown at level 1');
+  assert.equal(shown(level0, [boost('revealResistance', 1)]), true, 'or revealed by an item');
+  const bite = castLine(level0, 0, { extra: [FISH] }).cast.rolls.find((r) => r.kind === 'bite');
+  assert.equal(bite?.visible, false, 'the bite roll stays hidden');
+});

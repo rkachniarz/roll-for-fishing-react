@@ -8105,7 +8105,10 @@ export const content = {
         4,
         6,
         8
-      ]
+      ],
+      "reveal": {
+        "resistance": 1
+      }
     },
     "names": {
       "id": "names",

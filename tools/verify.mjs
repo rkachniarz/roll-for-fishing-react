@@ -204,6 +204,22 @@ await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, t
   report("strike after the splash: the fish's roll stays hidden", /needed \?/.test(detail ?? ''), detail);
 });
 
+await check("the fish's roll from level 1", PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+  await openBench(page);
+  await page.fill('#dev-xp', '10');
+  await page.press('#dev-xp', 'Enter');
+  await page.fill('#dev-fishFind', '100');
+  await page.press('#dev-fishFind', 'Enter');
+  await closePane(page);
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('body[data-phase="done"]', { timeout: 2000 });
+  await page.waitForSelector('body:not([data-dice])', { timeout: 3000 });
+  const detail = (await page.textContent('#log .roll')) ?? '';
+  report("the fish's roll from level 1: the number it needed is shown", /needed \d+\./.test(detail), detail);
+});
+
 await check('advantage shows both dice', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
   await openBench(page);
   for (const [name, value] of [['fishFind', '100'], ['playerVantage', '1']]) {

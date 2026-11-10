@@ -619,8 +619,8 @@ function describeRoll() {
     roll: MARK,
     mods: roll.mods.map((m) => ` ${m.value < 0 ? '−' : '+'} ${Math.abs(m.value)} ${modName(m.label)}`).join(''),
     total: roll.total,
-    // The fish's own roll stays hidden until something reveals it (R5.2).
-    needed: '?',
+    // The fish's own roll stays hidden until something reveals it (R5.2, D107).
+    needed: cast.line.kind === 'fish' && cast.rolls.some((r) => r.kind === 'resistance' && r.visible) ? cast.line.required : '?',
   });
   const [before, after] = text.split(MARK);
   /** @type {(string | Node)[]} */
