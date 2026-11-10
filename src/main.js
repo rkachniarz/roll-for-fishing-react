@@ -25,7 +25,8 @@ import { deleteSave, exportGame, importGame, lastSlot, listSlots, saveGame } fro
 import { completionShown } from './engine/knowledge.js';
 import { createAudio } from './audio.js';
 import { applySettings, loadSettings, saveSettings, showDice } from './settings.js';
-import { WATER, createScene } from './scene/scene.js';
+import { createScene } from './scene/scene.js';
+import { waterAt } from './engine/features.js';
 import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
@@ -434,7 +435,7 @@ function act(now, point) {
     // No casting with the game menu open; a strike still lands, so opening
     // it mid-cast never costs a fish (D94).
     if (menuOpen()) return;
-    apply(castLine(state, now, { aim: point, bounds: WATER, extra: extraSources() }));
+    apply(castLine(state, now, { aim: point, bounds: waterAt(state.location, state.spot), extra: extraSources() }));
   } else {
     apply(strikeLine(state, cast, now));
   }
@@ -999,6 +1000,8 @@ function render() {
   const bobber = state.equipped.bobber;
   scene.setBobber(bobber ? (content.items[bobber.id]?.bobber ?? null) : null);
   const now = clock(state.time);
+  // The spot's placeholder look until it's painted (4.2).
+  scene.setSpot(content.locations[state.location].spots?.find((/** @type {{ id: string }} */ s) => s.id === state.spot)?.look ?? null);
   scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, sun: now.sun, weather: state.weather });
   renderHud();
   // A perk to choose: the character button glows, as WoW's does for a talent

@@ -185,6 +185,22 @@ await check('the map: going to another spot (D101)', PHONE, '?seed=1', async (pa
   await page.screenshot({ path: 'dist/verify/map.png' });
 });
 
+await check('each spot looks different until painted (4.2)', PHONE, '?dev&seed=1', async (page) => {
+  /** @type {string[]} */
+  const looks = [];
+  for (const [location, spot] of [['lake', 'reedy-shore'], ['lake', 'swamp'], ['lake', 'rocky-shore'], ['lake', 'deep-water'], ['river', 'upper-river'], ['river', 'river-mouth'], ['mage-tower', 'the-first-pool']]) {
+    await openBench(page);
+    await page.selectOption('#dev-location', location);
+    await page.selectOption('#dev-spot', spot);
+    await closePane(page);
+    await page.waitForTimeout(300);
+    // The scene alone, as a picture to compare.
+    const shot = await page.locator('canvas').first().screenshot({ path: `dist/verify/spot-${spot}.png` });
+    looks.push(shot.toString('base64'));
+  }
+  report('each spot looks different until painted: seven spots, seven pictures', new Set(looks).size === looks.length, `${new Set(looks).size} different`);
+});
+
 await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, tap) => {
   await tap();
   await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });

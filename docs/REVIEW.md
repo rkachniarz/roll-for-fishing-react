@@ -24,6 +24,14 @@ Items with no note are left alone.
 
 Newest first.
 
+## A placeholder look per spot (4.2)
+
+- **Each spot gets a tint and a few flat shapes,** only so they can be told apart: green-brown water and lily pads in
+  the swamp, grey rocks at the rocky shore, dark water out deep, a far bank and flow lines on the river, a sandbar at
+  the mouth, a violet tint and a grey tower at the Mage Tower. The reedy shore stays the scene as it was. All of it
+  goes when the spots are painted (CR-1).
+- **Every spot casts on the same water for now;** a spot can have its own (`water`), for when a painting needs it.
+
 ## Sound (9.2)
 
 - **Every sound is made in code,** a placeholder until real ones (CR-14): a whoosh and a plop for the cast, a splash

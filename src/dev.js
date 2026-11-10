@@ -83,9 +83,9 @@ export function createBench(root, { getState, setState, overrides, extraSources,
   }
 
   // ---------- World ----------
-  const locationSelect = el('select');
+  const locationSelect = el('select', { id: 'dev-location' });
   for (const loc of Object.values(content.locations)) locationSelect.append(el('option', { value: loc.id, textContent: t(loc.name) }));
-  const spotSelect = el('select');
+  const spotSelect = el('select', { id: 'dev-spot' });
   // Moving counts as arriving, for `trigger: arrive` events (D89); a new
   // location starts at its first spot (D101).
   locationSelect.addEventListener('change', () =>

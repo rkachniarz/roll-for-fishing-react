@@ -135,9 +135,10 @@ The machinery the art plugs into. The art itself is in the creative track.
 - [x] **4.6** How the art is made (D90): the style guide (`docs/art.md`), the art sheet with trials (`art.html`),
   sprites to PNG and back for drawing in MS Paint (`tools/sprite-png.mjs`), and any scene saved as a PNG to
   draw over.
-- [ ] **4.2** A backdrop per spot, chosen by the spot, in the sketch's layout, and each spot's casting area (`WATER`)
+- [x] **4.2** A backdrop per spot, chosen by the spot, in the sketch's layout, and each spot's casting area (`WATER`)
   as data. Placeholders until the paintings (CR-1): the current scene with a colour and a few plain shapes per spot
-  (reeds, rocks, a far bank, flowing water) so the nine spots can be told apart, and a version per season.
+  (reeds, rocks, a far bank, flowing water) so the nine spots can be told apart, and a version per season. *A spot's
+  `look` (a tint and plain shapes) and `water` in its data; the seasons' palettes and weather from 4.3 lie over it.*
 - [x] **4.3** Day/night and seasonal palettes; weather overlays: rain, snow, wind on the water, cloud shadows (R7.5).
 - [x] **4.4** Catch feedback: the catch's icon appears at the bobber, flies to the bucket and bags button and disappears;
   no reeling-in animation; the log line always (R16.2, D69, D70).
@@ -279,8 +280,8 @@ placeholder, it's added here.
 ## Art
 
 - [ ] **CR-1** The spots painted from the owner's photos (D97, D100; was 8.10), working from the pond trial on the art
-  sheet (`src/scene/pond.js`): a version per season for each of the nine spots. *Replaces 4.2's placeholder
-  backdrops.*
+  sheet (`src/scene/pond.js`): a version per season for each of the nine spots, and the Mage Tower's pool. *Replaces
+  4.2's placeholder looks (each spot's `look` in `content/locations/`).*
 - [ ] **CR-2** Weather and life on the painted spots (D100; the art half of 8.11): clouds per weather (summer's heaped
   clouds, autumn's overcast so far), rain, wind, light, moving plants and water. *Replaces 4.7's flat shapes.*
 - [ ] **CR-3** Fish icons (D97, D98; was 9.7): the eyes, one by one, since they were placed by script (a 2×2 a tenth of

@@ -4319,6 +4319,52 @@ export const content = {
         {
           "id": "swamp",
           "name": "location.lake.spots.swamp.name",
+          "look": {
+            "tint": "#2f4a2a",
+            "tintAlpha": 0.35,
+            "shapes": [
+              {
+                "shape": "ellipse",
+                "x": 60,
+                "y": 150,
+                "w": 14,
+                "h": 5,
+                "colour": "#3f6b35"
+              },
+              {
+                "shape": "ellipse",
+                "x": 90,
+                "y": 120,
+                "w": 10,
+                "h": 4,
+                "colour": "#3f6b35"
+              },
+              {
+                "shape": "ellipse",
+                "x": 170,
+                "y": 160,
+                "w": 16,
+                "h": 5,
+                "colour": "#3f6b35"
+              },
+              {
+                "shape": "ellipse",
+                "x": 200,
+                "y": 110,
+                "w": 9,
+                "h": 3,
+                "colour": "#3f6b35"
+              },
+              {
+                "shape": "ellipse",
+                "x": 130,
+                "y": 80,
+                "w": 8,
+                "h": 3,
+                "colour": "#3f6b35"
+              }
+            ]
+          },
           "learnAfter": 15,
           "fish": [
             {
@@ -4430,6 +4476,11 @@ export const content = {
         {
           "id": "still-water",
           "name": "location.lake.spots.still-water.name",
+          "look": {
+            "tint": "#9fd0dc",
+            "tintAlpha": 0.18,
+            "shapes": []
+          },
           "learnAfter": 30,
           "fish": [
             {
@@ -4545,6 +4596,52 @@ export const content = {
         {
           "id": "rocky-shore",
           "name": "location.lake.spots.rocky-shore.name",
+          "look": {
+            "tint": "#4b5a62",
+            "tintAlpha": 0.15,
+            "shapes": [
+              {
+                "shape": "triangle",
+                "x": 30,
+                "y": 196,
+                "w": 26,
+                "h": 18,
+                "colour": "#6d6a64"
+              },
+              {
+                "shape": "triangle",
+                "x": 150,
+                "y": 200,
+                "w": 34,
+                "h": 22,
+                "colour": "#7b7871"
+              },
+              {
+                "shape": "triangle",
+                "x": 210,
+                "y": 194,
+                "w": 22,
+                "h": 15,
+                "colour": "#66625c"
+              },
+              {
+                "shape": "ellipse",
+                "x": 100,
+                "y": 150,
+                "w": 9,
+                "h": 5,
+                "colour": "#5d5a55"
+              },
+              {
+                "shape": "ellipse",
+                "x": 190,
+                "y": 90,
+                "w": 7,
+                "h": 4,
+                "colour": "#5d5a55"
+              }
+            ]
+          },
           "learnAfter": 50,
           "fish": [
             {
@@ -4632,6 +4729,11 @@ export const content = {
         {
           "id": "open-water",
           "name": "location.lake.spots.open-water.name",
+          "look": {
+            "tint": "#2a5a7a",
+            "tintAlpha": 0.2,
+            "shapes": []
+          },
           "learnAfter": 80,
           "fish": [
             {
@@ -4743,6 +4845,11 @@ export const content = {
         {
           "id": "deep-water",
           "name": "location.lake.spots.deep-water.name",
+          "look": {
+            "tint": "#0d2638",
+            "tintAlpha": 0.4,
+            "shapes": []
+          },
           "learnAfter": 120,
           "fish": [
             {
@@ -4870,6 +4977,26 @@ export const content = {
         {
           "id": "the-first-pool",
           "name": "location.mage-tower.spots.the-first-pool.name",
+          "look": {
+            "tint": "#5a3f8a",
+            "tintAlpha": 0.25,
+            "shapes": [
+              {
+                "shape": "band",
+                "y": 0,
+                "h": 10,
+                "colour": "#8a8aa0"
+              },
+              {
+                "shape": "rect",
+                "x": 118,
+                "y": 0,
+                "w": 20,
+                "h": 26,
+                "colour": "#9a9ab4"
+              }
+            ]
+          },
           "fish": [
             {
               "id": "golden-shiner",
@@ -4944,6 +5071,42 @@ export const content = {
         {
           "id": "upper-river",
           "name": "location.river.spots.upper-river.name",
+          "look": {
+            "tint": "#6aa0a8",
+            "tintAlpha": 0.15,
+            "shapes": [
+              {
+                "shape": "band",
+                "y": 0,
+                "h": 14,
+                "colour": "#3e6a3a"
+              },
+              {
+                "shape": "rect",
+                "x": 50,
+                "y": 60,
+                "w": 30,
+                "h": 1,
+                "colour": "#cfe6ea"
+              },
+              {
+                "shape": "rect",
+                "x": 140,
+                "y": 100,
+                "w": 40,
+                "h": 1,
+                "colour": "#cfe6ea"
+              },
+              {
+                "shape": "rect",
+                "x": 80,
+                "y": 140,
+                "w": 36,
+                "h": 1,
+                "colour": "#cfe6ea"
+              }
+            ]
+          },
           "fish": [
             {
               "id": "minnow",
@@ -5034,6 +5197,34 @@ export const content = {
         {
           "id": "lower-river",
           "name": "location.river.spots.lower-river.name",
+          "look": {
+            "tint": "#5a5030",
+            "tintAlpha": 0.22,
+            "shapes": [
+              {
+                "shape": "band",
+                "y": 0,
+                "h": 18,
+                "colour": "#4a6a3a"
+              },
+              {
+                "shape": "rect",
+                "x": 60,
+                "y": 90,
+                "w": 40,
+                "h": 1,
+                "colour": "#b9c9b0"
+              },
+              {
+                "shape": "rect",
+                "x": 150,
+                "y": 130,
+                "w": 36,
+                "h": 1,
+                "colour": "#b9c9b0"
+              }
+            ]
+          },
           "learnAfter": 20,
           "fish": [
             {
@@ -5153,6 +5344,26 @@ export const content = {
         {
           "id": "river-mouth",
           "name": "location.river.spots.river-mouth.name",
+          "look": {
+            "tint": "#3a6f80",
+            "tintAlpha": 0.15,
+            "shapes": [
+              {
+                "shape": "band",
+                "y": 0,
+                "h": 8,
+                "colour": "#7a9a6a"
+              },
+              {
+                "shape": "ellipse",
+                "x": 190,
+                "y": 70,
+                "w": 30,
+                "h": 7,
+                "colour": "#d8c99a"
+              }
+            ]
+          },
           "learnAfter": 50,
           "fish": [
             {

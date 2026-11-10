@@ -30,6 +30,26 @@
     {
       "id": "the-first-pool",
       "name": "the first pool",
+      "look": {
+        "tint": "#5a3f8a",
+        "tintAlpha": 0.25,
+        "shapes": [
+          {
+            "shape": "band",
+            "y": 0,
+            "h": 10,
+            "colour": "#8a8aa0"
+          },
+          {
+            "shape": "rect",
+            "x": 118,
+            "y": 0,
+            "w": 20,
+            "h": 26,
+            "colour": "#9a9ab4"
+          }
+        ]
+      },
       "fish": [
         {
           "id": "golden-shiner",

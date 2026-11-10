@@ -56,6 +56,9 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
  * sheet (art.html, docs/art.md). The game passes none, so it gets the
  * defaults; a knob whose option the owner picks becomes the default and
  * leaves this list.
+ * @typedef {{ tint?: string, tintAlpha?: number, shapes?: { shape: 'rect' | 'ellipse' | 'triangle' | 'band', x?: number, y: number,
+ *   w?: number, h: number, colour: string }[] }} SpotLook  A spot's placeholder look (4.2).
+ *
  * @typedef {Object} SceneLook
  * (None at the moment.)
  */
@@ -125,6 +128,27 @@ export async function createScene(canvas, rand, look = {}) {
     }
   }
   paintWidth();
+
+  // A spot's placeholder look (4.2): a tint and plain shapes, over the water
+  // and under everything that floats, until the spot is painted (CR-1).
+  const spotLayer = new Graphics();
+  app.stage.addChild(spotLayer);
+  /** @type {SpotLook | null} */
+  let spotLook = null;
+  let spotKey = 'null';
+  function paintSpot() {
+    spotLayer.clear();
+    if (!spotLook) return;
+    const shore = shoreY(0, SIZE);
+    if (spotLook.tint) spotLayer.rect(0, 0, width, shore).fill({ color: spotLook.tint, alpha: spotLook.tintAlpha ?? 0.25 });
+    for (const s of spotLook.shapes ?? []) {
+      const x = offset + (s.x ?? 0);
+      if (s.shape === 'band') spotLayer.rect(0, s.y, width, s.h).fill(s.colour);
+      else if (s.shape === 'rect') spotLayer.rect(x, s.y, s.w ?? 1, s.h).fill(s.colour);
+      else if (s.shape === 'ellipse') spotLayer.ellipse(x, s.y, s.w ?? s.h, s.h).fill(s.colour);
+      else if (s.shape === 'triangle') spotLayer.poly([x - (s.w ?? s.h) / 2, s.y, x + (s.w ?? s.h) / 2, s.y, x, s.y - s.h]).fill(s.colour);
+    }
+  }
 
   // Cloud shadows lie on the water, under everything that floats.
   const shadowLayer = new Container();
@@ -217,6 +241,7 @@ export async function createScene(canvas, rand, look = {}) {
     sky.setWidth(width);
     dice.setSize(width, SIZE);
     paintWidth();
+    paintSpot();
   }
   let lastFrame = 0;
 
@@ -450,6 +475,17 @@ export async function createScene(canvas, rand, look = {}) {
     update,
     setFeatures,
     setWorld: sky.setWorld,
+    /**
+     * The spot's placeholder look (4.2), repainted only when it changes.
+     * @param {SpotLook | null} look
+     */
+    setSpot(look) {
+      const key = JSON.stringify(look);
+      if (key === spotKey) return;
+      spotKey = key;
+      spotLook = look;
+      paintSpot();
+    },
     /**
      * Rolls dice across the scene (D99), to rest in the play area's lower
      * middle on the numbers given; the fish's (6.8) in its upper middle.

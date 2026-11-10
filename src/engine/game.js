@@ -15,7 +15,7 @@ import { content } from '../generated/content.js';
 import { applyValue, deriveValues } from './values.js';
 import { listTable, locationTable, pick } from './tables.js';
 import { bendFish, rollFish, sameFish, sizeBands } from './fish.js';
-import { featureAt, swimOff, updateFeatures } from './features.js';
+import { featureAt, swimOff, updateFeatures, waterAt } from './features.js';
 import { startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
 import { equippedIds } from './equipment.js';
@@ -563,7 +563,7 @@ function resolveCast(state, cast) {
       if (hit && def?.swimsOff && (hit.swamOff ?? 0) < def.swimsOff) {
         // A big fish swims off somewhere else and can be tried again, the
         // same fish (D85). After its last escape it goes, into the pool.
-        swimOff(hit, def, escaped, dice.features);
+        swimOff(hit, def, escaped, dice.features, waterAt(next.location, next.spot));
         events.push({ type: 'feature-moved', feature: hit.id });
       } else {
         const key = poolKey(next);

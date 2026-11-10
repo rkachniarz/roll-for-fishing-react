@@ -160,6 +160,52 @@
     {
       "id": "swamp",
       "name": "the swamp",
+      "look": {
+        "tint": "#2f4a2a",
+        "tintAlpha": 0.35,
+        "shapes": [
+          {
+            "shape": "ellipse",
+            "x": 60,
+            "y": 150,
+            "w": 14,
+            "h": 5,
+            "colour": "#3f6b35"
+          },
+          {
+            "shape": "ellipse",
+            "x": 90,
+            "y": 120,
+            "w": 10,
+            "h": 4,
+            "colour": "#3f6b35"
+          },
+          {
+            "shape": "ellipse",
+            "x": 170,
+            "y": 160,
+            "w": 16,
+            "h": 5,
+            "colour": "#3f6b35"
+          },
+          {
+            "shape": "ellipse",
+            "x": 200,
+            "y": 110,
+            "w": 9,
+            "h": 3,
+            "colour": "#3f6b35"
+          },
+          {
+            "shape": "ellipse",
+            "x": 130,
+            "y": 80,
+            "w": 8,
+            "h": 3,
+            "colour": "#3f6b35"
+          }
+        ]
+      },
       "learnAfter": 15,
       "fish": [
         {
@@ -271,6 +317,11 @@
     {
       "id": "still-water",
       "name": "still water",
+      "look": {
+        "tint": "#9fd0dc",
+        "tintAlpha": 0.18,
+        "shapes": []
+      },
       "learnAfter": 30,
       "fish": [
         {
@@ -386,6 +437,52 @@
     {
       "id": "rocky-shore",
       "name": "the rocky shore",
+      "look": {
+        "tint": "#4b5a62",
+        "tintAlpha": 0.15,
+        "shapes": [
+          {
+            "shape": "triangle",
+            "x": 30,
+            "y": 196,
+            "w": 26,
+            "h": 18,
+            "colour": "#6d6a64"
+          },
+          {
+            "shape": "triangle",
+            "x": 150,
+            "y": 200,
+            "w": 34,
+            "h": 22,
+            "colour": "#7b7871"
+          },
+          {
+            "shape": "triangle",
+            "x": 210,
+            "y": 194,
+            "w": 22,
+            "h": 15,
+            "colour": "#66625c"
+          },
+          {
+            "shape": "ellipse",
+            "x": 100,
+            "y": 150,
+            "w": 9,
+            "h": 5,
+            "colour": "#5d5a55"
+          },
+          {
+            "shape": "ellipse",
+            "x": 190,
+            "y": 90,
+            "w": 7,
+            "h": 4,
+            "colour": "#5d5a55"
+          }
+        ]
+      },
       "learnAfter": 50,
       "fish": [
         {
@@ -473,6 +570,11 @@
     {
       "id": "open-water",
       "name": "open water",
+      "look": {
+        "tint": "#2a5a7a",
+        "tintAlpha": 0.2,
+        "shapes": []
+      },
       "learnAfter": 80,
       "fish": [
         {
@@ -584,6 +686,11 @@
     {
       "id": "deep-water",
       "name": "deep water",
+      "look": {
+        "tint": "#0d2638",
+        "tintAlpha": 0.4,
+        "shapes": []
+      },
       "learnAfter": 120,
       "fish": [
         {

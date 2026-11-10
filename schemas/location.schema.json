@@ -70,6 +70,40 @@
         "properties": {
           "id": { "$ref": "common.schema.json#/definitions/id" },
           "name": { "$ref": "common.schema.json#/definitions/text" },
+          "look": {
+            "description": "A placeholder look until the spot is painted (4.2, D105, CR-1): a tint over the water, and plain shapes. Shapes are in the play area's 256-pixel coordinates; a band spans the whole width.",
+            "type": "object",
+            "properties": {
+              "tint": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+              "tintAlpha": { "type": "number", "minimum": 0, "maximum": 1 },
+              "shapes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "shape": { "enum": ["rect", "ellipse", "triangle", "band"] },
+                    "x": { "type": "integer" },
+                    "y": { "type": "integer" },
+                    "w": { "type": "integer", "minimum": 1 },
+                    "h": { "type": "integer", "minimum": 1 },
+                    "colour": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+                  },
+                  "required": ["shape", "y", "h", "colour"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "water": {
+            "description": "Where a cast may land and features drift at this spot, in the play area's pixels (4.2). Left out: the usual open water (src/engine/features.js, WATER).",
+            "type": "object",
+            "properties": {
+              "x0": { "type": "integer" }, "y0": { "type": "integer" }, "x1": { "type": "integer" }, "y1": { "type": "integer" }
+            },
+            "required": ["x0", "y0", "x1", "y1"],
+            "additionalProperties": false
+          },
           "learnAfter": {
             "description": "A spot the player doesn't know of at first (R11.8, D58): noticed after this many casts at the location, or pointed out by an event (learn: spot). Left out, it's known from the start.",
             "type": "integer",

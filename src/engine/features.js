@@ -21,6 +21,16 @@ import { pick } from './tables.js';
 export const WATER = { x0: 40, y0: 30, x1: 216, y1: 185 };
 
 /**
+ * The open water at a spot (4.2): its own, if its data says, else WATER.
+ * @param {string} location
+ * @param {string | null} spot
+ * @returns {{ x0: number, y0: number, x1: number, y1: number }}
+ */
+export function waterAt(location, spot) {
+  return content.locations[location]?.spots?.find((/** @type {{ id: string }} */ s) => s.id === spot)?.water ?? WATER;
+}
+
+/**
  * @typedef {Object} Feature  One on the water.
  * @property {string} id         A feature id from content/features/.
  * @property {number} x
@@ -43,12 +53,12 @@ export const SWIM_OFF = 60;
  * @param {import('./state.js').PoolFish} fish
  * @param {Dice} dice  The `features` stream.
  */
-export function swimOff(feature, def, fish, dice) {
+export function swimOff(feature, def, fish, dice, water = WATER) {
   let x, y;
   let tries = 0;
   do {
-    x = dice.getRandomNumber(WATER.x0, WATER.x1);
-    y = dice.getRandomNumber(WATER.y0, WATER.y1);
+    x = dice.getRandomNumber(water.x0, water.x1);
+    y = dice.getRandomNumber(water.y0, water.y1);
     tries++;
   } while (Math.hypot(x - feature.x, y - feature.y) < SWIM_OFF && tries < 50);
   feature.x = x;
@@ -90,6 +100,7 @@ export function featureAt(features, landing) {
  * @returns {import('./game.js').GameEvent[]}
  */
 export function updateFeatures(state, dice, { appear = true } = {}) {
+  const water = waterAt(state.location, state.spot);
   /** @type {import('./game.js').GameEvent[]} */
   const events = [];
   const kept = [];
@@ -101,8 +112,8 @@ export function updateFeatures(state, dice, { appear = true } = {}) {
       continue;
     }
     if (def.drift > 0) {
-      next.x = clamp(next.x + dice.getRandomNumber(-def.drift, def.drift), WATER.x0, WATER.x1);
-      next.y = clamp(next.y + dice.getRandomNumber(-def.drift, def.drift), WATER.y0, WATER.y1);
+      next.x = clamp(next.x + dice.getRandomNumber(-def.drift, def.drift), water.x0, water.x1);
+      next.y = clamp(next.y + dice.getRandomNumber(-def.drift, def.drift), water.y0, water.y1);
     }
     kept.push(next);
   }
@@ -122,8 +133,8 @@ export function updateFeatures(state, dice, { appear = true } = {}) {
       const def = content.features[choice.id];
       const feature = {
         id: choice.id,
-        x: dice.getRandomNumber(WATER.x0, WATER.x1),
-        y: dice.getRandomNumber(WATER.y0, WATER.y1),
+        x: dice.getRandomNumber(water.x0, water.x1),
+        y: dice.getRandomNumber(water.y0, water.y1),
         uses: def.uses,
         castsLeft: def.lifetime,
         born: state.book.casts,
