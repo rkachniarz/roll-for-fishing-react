@@ -12,6 +12,7 @@ import { bagTab, fishName, rarityColour, slot } from './links.js';
 import { showTip } from './tooltip.js';
 import { EQUIPMENT_SLOTS, isTiny } from '../engine/equipment.js';
 import { offers, owedLevels } from '../engine/perks.js';
+import { completion, knownKey, locationList, spotKnown } from '../engine/knowledge.js';
 
 /** @typedef {import('../engine/state.js').GameState} GameState */
 
@@ -168,15 +169,28 @@ function perksSection(state, onTakePerk) {
  * Achievements join it later.
  * @param {GameState} state
  */
-export function journalPane(state) {
-  const byName = (/** @type {string} */ a, /** @type {string} */ b) => t(content.fish[a].name).localeCompare(t(content.fish[b].name));
-  const caught = Object.keys(state.book.fish).sort(byName);
-  // Known of but not landed yet: a fish that got away (R4.3). Learning of
-  // fish in other ways comes with 8.5.
-  const seen = [...new Set(Object.values(state.escaped).flat().map((f) => f.species))].filter((id) => !state.book.fish[id] && content.fish[id]).sort(byName);
-  const treasure = Object.keys(state.found)
-    .filter((id) => content.items[id]?.category === 'treasure')
-    .sort((a, b) => t(content.items[a].name).localeCompare(t(content.items[b].name)));
+export function journalPane(state, showCompletion = false) {
+  /** @type {HTMLElement[]} */
+  const places = [];
+  for (const loc of Object.values(content.locations)) {
+    if (loc.retired) continue;
+    // What the player knows of here, found first (R4.4, R4.5): the location's
+    // list, and anything else found here (a rift fish).
+    const list = locationList(loc.id);
+    const fish = [...new Set([...list.fish, ...Object.keys(state.book.fish)])].filter((id) => state.known[knownKey(loc.id, 'fish', id)]);
+    const items = [...new Set([...list.items, ...Object.keys(state.found)])].filter((id) => state.known[knownKey(loc.id, 'item', id)]);
+    if (!fish.length && !items.length) continue;
+    const found = (/** @type {'fish' | 'item'} */ kind, /** @type {string} */ id) => state.known[knownKey(loc.id, kind, id)] === 'found';
+    const byName = (/** @type {'fish' | 'item'} */ kind) => (/** @type {string} */ a, /** @type {string} */ b) =>
+      Number(found(kind, b)) - Number(found(kind, a)) || t((kind === 'fish' ? content.fish : content.items)[a].name).localeCompare(t((kind === 'fish' ? content.fish : content.items)[b].name));
+    places.push(
+      el('h3', { textContent: placeName(state, loc.id, showCompletion) }),
+      el('div', { className: 'grid collection' }, [
+        ...fish.sort(byName('fish')).map((id) => speciesSlot(state, id, found('fish', id))),
+        ...items.sort(byName('item')).map((id) => (found('item', id) ? slot({ kind: 'item', id }, state.found[id] ?? 1) : unknownItemSlot(id))),
+      ]),
+    );
+  }
   return [
     el('dl', { className: 'stats' }, [
       el('dt', { textContent: t('journal.casts') }),
@@ -184,26 +198,34 @@ export function journalPane(state) {
       el('dt', { textContent: t('journal.catches') }),
       el('dd', { textContent: String(state.book.catches) }),
     ]),
-    el('h3', { textContent: t('journal.fish') }),
-    caught.length || seen.length
-      ? el('div', { className: 'grid collection' }, [...caught.map((id) => speciesSlot(state, id)), ...seen.map((id) => speciesSlot(state, id))])
-      : el('p', { className: 'muted', textContent: t('journal.none') }),
-    el('h3', { textContent: t('journal.treasure') }),
-    treasure.length
-      ? el('div', { className: 'grid collection' }, treasure.map((id) => slot({ kind: 'item', id }, state.found[id])))
-      : el('p', { className: 'muted', textContent: t('journal.noTreasure') }),
+    ...(places.length ? places : [el('p', { className: 'muted', textContent: t('journal.none') })]),
   ];
 }
 
 /**
- * A species in the collection (R4.3): its icon and its records on a tap, or,
- * if it has only been seen, its silhouette and no name.
- * @param {GameState} state
+ * An item known to be somewhere but not found yet (R4.5): its silhouette.
  * @param {string} id
  */
-function speciesSlot(state, id) {
+function unknownItemSlot(id) {
+  const art = paintIcon(iconName({ kind: 'item', id }));
+  art.className = 'icon';
+  const b = el('button', { type: 'button', className: 'slot unknown' }, [art]);
+  const tip = { title: t('journal.unknownItem'), lines: [{ text: t('journal.heard') }] };
+  b.setAttribute('aria-label', tip.title);
+  b.addEventListener('click', () => showTip(b, tip));
+  return b;
+}
+
+/**
+ * A species in the collection (R4.3): its icon and its records on a tap, or,
+ * if it has only been seen or heard of here, its silhouette and no name.
+ * @param {GameState} state
+ * @param {string} id
+ * @param {boolean} foundHere
+ */
+function speciesSlot(state, id, foundHere) {
   const fish = content.fish[id];
-  const e = state.book.fish[id];
+  const e = foundHere ? state.book.fish[id] : undefined;
   const art = paintIcon(iconName({ kind: 'fish', id }));
   art.className = 'icon';
   const b = el('button', { type: 'button', className: e ? 'slot' : 'slot unknown' }, [art]);
@@ -214,7 +236,7 @@ function speciesSlot(state, id) {
         colour: rarityColour(fish.rarity),
         lines: [{ text: t('journal.entry', { caught: e.caught, smallest: e.smallest.size, largest: e.largest.size, average: Math.round(e.totalSize / e.caught) }) }],
       }
-    : { title: t('journal.unknown'), lines: [{ text: t('journal.gotAway') }] };
+    : { title: t('journal.unknown'), lines: [{ text: t(state.book.fish[id] ? 'journal.heard' : 'journal.gotAway') }] };
   b.style.borderColor = tip.colour ?? '';
   b.setAttribute('aria-label', tip.title);
   b.addEventListener('click', () => showTip(b, tip));
@@ -222,21 +244,38 @@ function speciesSlot(state, id) {
 }
 
 /**
- * Every location's spots to go to, the one the player is at pressed (D101): a
- * plain list until the real map, with spots learned about before they show
- * (8.1).
+ * A location's name, with how much of it has been found once that shows
+ * (R5.3).
+ * @param {GameState} state
+ * @param {string} location
+ * @param {boolean} showCompletion
+ */
+function placeName(state, location, showCompletion) {
+  const place = t(content.locations[location].name);
+  if (!showCompletion) return t('journal.place', { place });
+  const { found, total } = completion(state, location);
+  return t('journal.placeShown', { place, percent: total ? Math.floor((100 * found) / total) : 0 });
+}
+
+/**
+ * Every location's known spots to go to, the one the player is at pressed
+ * (D101): a plain list until the real map (CR-7). A spot shows once the player
+ * knows of it (R11.8).
  * @param {GameState} state
  * @param {(location: string, spot: string) => void} onTravel
+ * @param {boolean} [showCompletion]  Each location's completion shows (R5.3).
  */
-export function mapPane(state, onTravel) {
+export function mapPane(state, onTravel, showCompletion = false) {
   /** @type {HTMLElement[]} */
   const out = [];
   for (const loc of Object.values(content.locations)) {
     if (loc.retired) continue;
-    out.push(el('p', { className: 'name', textContent: t(loc.name) }));
+    out.push(el('p', { className: 'name', textContent: placeName(state, loc.id, showCompletion) }));
     // Somewhere an event holds the player: no other location (R10.8, 7.6).
     const held = Boolean(state.locked) && state.locked !== loc.id;
-    const spots = (loc.spots ?? []).map((/** @type {{ id: string, name: string }} */ spot) => {
+    // Only the spots the player knows of (R11.8, D58).
+    const known = (loc.spots ?? []).filter((/** @type {{ id: string }} */ spot) => spotKnown(state, loc.id, spot.id));
+    const spots = known.map((/** @type {{ id: string, name: string }} */ spot) => {
       const here = state.location === loc.id && state.spot === spot.id;
       const b = el('button', { type: 'button', className: 'map-spot', textContent: t(spot.name), disabled: here || held });
       b.setAttribute('aria-pressed', String(here));

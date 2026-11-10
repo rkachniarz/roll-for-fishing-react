@@ -24,6 +24,19 @@ Items with no note are left alone.
 
 Newest first.
 
+## What the player knows of each place (8.1, 8.5, D109)
+
+- **When spots are noticed is Claude's guess:** at the Lake the swamp after 15 casts there, still water 30, the rocky
+  shore 50, open water 80, deep water 120; at the River the lower river after 20, the river mouth 50. The reedy shore
+  and the upper river are known from the start. The bottle's note points out the lower river.
+- **Completion shows from level 3,** a placeholder (`levels.json`); before that, the map and journal say only the
+  place's name. Floored to a whole percent.
+- **The collection moved into per-place sections** of the journal: found things in colour, things only known of as
+  silhouettes. A fish found in two places shows in both.
+- **Rift fish don't count towards a place's completion,** since only a wizard with the perk can find them; one caught
+  still shows under the place.
+- **A fish that got away is "known of" there,** not found. A missed splash (never struck) doesn't count.
+
 ## The balance simulation's first numbers (9.1)
 
 `npm run sim`, 20 games of 500 casts per class, striking 250–900 ms after the splash, the first perk on offer, every

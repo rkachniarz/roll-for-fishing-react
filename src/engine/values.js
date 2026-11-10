@@ -58,6 +58,8 @@ export const GAME_VALUES = {
   revealBite: { better: 'higher', base: 0 },
   /** Above 0: the treasure roll shows (R5.2, D107). */
   revealTreasure: { better: 'higher', base: 0 },
+  /** Above 0: each location's completion shows (R5.3, 8.5). */
+  revealCompletion: { better: 'higher', base: 0 },
   /** The same for the fish's own d20 (R3.5). */
   fishVantage: { better: 'lower', base: 0 },
   /** Added to every fish's difficulty. */

@@ -23,6 +23,7 @@ import { afterCast, arrive } from './events.js';
 import { hasPerk, owedLevels, perkSources, settlePerks } from './perks.js';
 import { LIGHTS, abilityStatus, spendCooldownCasts, startCooldown, tickCooldowns } from './abilities.js';
 import { advanceTime, clock } from './time.js';
+import { learn, noticeSpots, spotKnown } from './knowledge.js';
 import { changeSeason, stepWeather } from './weather.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
@@ -377,6 +378,8 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
 export function travel(state, location, spot, { force = false } = {}) {
   if (state.location === location && state.spot === spot) return { state, events: [] };
   if (state.locked && location !== state.locked && !force) return { state, events: [], error: 'locked' };
+  // Only to a spot the player knows of (R11.8); the bench goes anywhere.
+  if (!spotKnown(state, location, spot) && !force) return { state, events: [], error: 'unknownSpot' };
   const next = { ...structuredClone(state), location, spot, features: [] };
   return { state: next, events: arrive(next) };
 }
@@ -567,6 +570,8 @@ function resolveCast(state, cast) {
         // off is somewhere else (D85).
         light(next, 'got-away', escaped, events);
       }
+      // Seen, if not landed: known of here (R4.5).
+      if (result === 'escaped') learn(next, next.location, 'fish', fish.species, 'heard');
       if (next.equipped.bait && dice.bait.roll100() <= cast.bait.escapeLoss) {
         events.push({ type: 'bait-lost', bait: useBait(next), fish });
       }
@@ -609,6 +614,8 @@ function resolveCast(state, cast) {
 
   levelUp(next, levelBefore, events);
 
+  // Casts here count towards noticing another spot (R11.8).
+  events.push(...noticeSpots(next));
   events.push(...updateFeatures(next, dice.features));
 
   // Time and weather move on with every cast that went out and ended.
@@ -795,6 +802,7 @@ function catchFish(state, fish, bucketSize) {
   else addToBucket(state, instance);
 
   state.book.catches++;
+  learn(state, state.location, 'fish', fish.species, 'found');
   const record = { size: fish.size, location: state.location, spot: state.spot, time: state.time, weather: { season: state.weather.season, cell: state.weather.cell } };
   const entry = state.book.fish[fish.species];
   if (!entry) {
@@ -870,6 +878,7 @@ function receive(state, line) {
  * @param {string} id
  */
 function takeItem(state, id) {
+  learn(state, state.location, 'item', id, 'found');
   addToBags(state, id);
   state.found[id] = (state.found[id] ?? 0) + 1;
   state.character.xp += content.items[id].xp ?? 0;

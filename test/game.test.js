@@ -473,7 +473,8 @@ test('a save from version 5 loses the deleted fish and spots (D101)', () => {
 test('a new game starts at the reedy shore; travel moves between spots, between casts (D101)', () => {
   const start = game(18);
   assert.deepEqual([start.location, start.spot], ['lake', 'reedy-shore']);
-  const withFeature = { ...start, features: [{ id: 'roach-school', x: 120, y: 100, uses: 2, castsLeft: 10, born: 0 }] };
+  // The river mouth is a spot found later (R11.8): known here, as if noticed.
+  const withFeature = { ...start, known: { 'river:spot:river-mouth': 'heard' }, features: [{ id: 'roach-school', x: 120, y: 100, uses: 2, castsLeft: 10, born: 0 }] };
   const { state } = travel(withFeature, 'river', 'river-mouth');
   assert.deepEqual([state.location, state.spot], ['river', 'river-mouth']);
   assert.deepEqual(state.features, [], 'features stay with their water');
@@ -641,4 +642,46 @@ test('a game saved to a file reads back, migrated; anything else is refused (9.3
   assert.match(importGame('not json').error ?? '', /JSON|Unexpected/);
   assert.match(importGame('{"version": 99}').error ?? '', /newer version/);
   assert.equal(importGame('{"version": 8}').error, 'Not a saved game');
+});
+
+test('spots are noticed by fishing there; a spot not known of is out of reach (R11.8, 8.1)', async () => {
+  const { spotKnown, completion, locationList } = await import('../src/engine/knowledge.js');
+  let s = game(20);
+  assert.ok(spotKnown(s, 'lake', 'reedy-shore') && spotKnown(s, 'river', 'upper-river'), 'the first spots');
+  assert.ok(!spotKnown(s, 'lake', 'swamp'));
+  assert.equal(travel(s, 'lake', 'swamp').error, 'unknownSpot');
+  assert.equal(travel(s, 'lake', 'swamp', { force: true }).state.spot, 'swamp', 'the bench goes anywhere');
+  const learnAfter = content.locations.lake.spots.find((/** @type {{ id: string }} */ x) => x.id === 'swamp').learnAfter;
+  /** @type {any[]} */
+  let noticed = [];
+  for (let i = 0; i < learnAfter; i++) {
+    const out = castLine(s, 0);
+    const done = tick(out.state, out.cast, out.cast.biteAt + out.cast.timing.lateMs + 1);
+    noticed = noticed.concat(done.events.filter((e) => e.type === 'spot-learned'));
+    s = endEvent({ ...done.state, missStreak: 0 });
+  }
+  assert.deepEqual(noticed, [{ type: 'spot-learned', location: 'lake', spot: 'swamp' }]);
+  assert.ok(spotKnown(s, 'lake', 'swamp'));
+  assert.equal(s.castsAt.lake, learnAfter);
+  // Completion counts the location's list: fish from every spot, its items.
+  const list = locationList('lake');
+  assert.ok(list.fish.includes('roach') && list.items.includes('bent-fork'));
+  assert.ok(!list.fish.some((id) => content.fish[id].rift), "rift fish are a perk's, not the lake's");
+  assert.deepEqual(completion(s, 'lake'), { found: 0, total: list.fish.length + list.items.length });
+});
+
+test('a catch is found where it was caught; a version 8 save keeps its spots and records (8.5)', () => {
+  let s = game(21);
+  for (let i = 0; i < 200 && !Object.keys(s.book.fish).length; i++) {
+    const out = castLine(s, 0, { extra: [{ label: 'x', effects: [{ value: 'fishFind', add: 100 }, { value: 'fishingSkill', add: 30 }] }] });
+    const bite = tick(out.state, out.cast, out.cast.biteAt);
+    s = endEvent({ ...strikeLine(bite.state, bite.cast, out.cast.biteAt + 100).state, missStreak: 0, pendingCatch: null });
+  }
+  const species = Object.keys(s.book.fish)[0];
+  assert.equal(s.known[`lake:fish:${species}`], 'found');
+  const { known, castsAt, ...v8 } = s;
+  const migrated = deserialize(JSON.stringify({ ...v8, version: 8 }));
+  assert.equal(migrated.known['lake:spot:deep-water'], 'heard', 'every spot an old game could go to');
+  assert.equal(migrated.known[`lake:fish:${species}`], 'found');
+  assert.equal(migrated.castsAt.lake, s.book.casts);
 });

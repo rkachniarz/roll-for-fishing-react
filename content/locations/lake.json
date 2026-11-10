@@ -152,6 +152,7 @@
     {
       "id": "swamp",
       "name": "the swamp",
+      "learnAfter": 15,
       "fish": [
         {
           "id": "crucian-carp",
@@ -262,6 +263,7 @@
     {
       "id": "still-water",
       "name": "still water",
+      "learnAfter": 30,
       "fish": [
         {
           "id": "common-bream",
@@ -376,6 +378,7 @@
     {
       "id": "rocky-shore",
       "name": "the rocky shore",
+      "learnAfter": 50,
       "fish": [
         {
           "id": "perch",
@@ -462,6 +465,7 @@
     {
       "id": "open-water",
       "name": "open water",
+      "learnAfter": 80,
       "fish": [
         {
           "id": "bleak",
@@ -572,6 +576,7 @@
     {
       "id": "deep-water",
       "name": "deep water",
+      "learnAfter": 120,
       "fish": [
         {
           "id": "ruffe",

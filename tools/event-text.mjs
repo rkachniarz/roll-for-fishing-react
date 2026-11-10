@@ -84,6 +84,7 @@ export const EFFECTS = {
   lock: "lock: the player can't leave the location they are at (R10.8, 7.6)",
   unlock: 'unlock: they can leave again',
   trade: 'trade: junk <table id>: every useless junk item in the bags for a reward from the table, by their value (7.9)',
+  learn: 'learn: spot | fish | item <location id> <id>: the player learns that it is there (R4.5, 8.5)',
 };
 
 /** Front matter `again:`: a visitor who comes back after so many casts or days (7.10). */
@@ -109,7 +110,8 @@ const INT = /^-?\d+$/;
  *   | { kind: 'flag', name: string, set: boolean } | { kind: 'count', name: string, add: number }
  *   | { kind: 'fish', which: 'any' | 'species' | 'rarest', species: string | null, count: number }
  *   | { kind: 'go', location: string, spot: string | null } | { kind: 'lock', set: boolean }
- *   | { kind: 'trade', what: 'junk', table: string }} Effect
+ *   | { kind: 'trade', what: 'junk', table: string }
+ *   | { kind: 'learn', what: 'spot' | 'fish' | 'item', location: string, id: string }} Effect
  * @typedef {string | { needs: Need[], text: string, otherwise?: string }} Part  Plain text, or text
  *   shown only when its needs are met, with what to show otherwise (D88).
  * @typedef {Part[]} Text
@@ -284,6 +286,10 @@ function parseEffect(verb, words) {
   if (verb === 'go') {
     if (args.length < 1 || args.length > 2 || !args[0]) return '"go" takes a location id and, if you like, a spot id';
     return { kind: 'go', location: args[0], spot: args[1] ?? null };
+  }
+  if (verb === 'learn') {
+    if (args.length !== 3 || !['spot', 'fish', 'item'].includes(args[0])) return '"learn" takes spot, fish or item, a location id and an id: learn: spot river lower-river';
+    return { kind: 'learn', what: /** @type {'spot' | 'fish' | 'item'} */ (args[0]), location: args[1], id: args[2] };
   }
   if (verb === 'trade') {
     if (args.length !== 2 || args[0] !== 'junk') return '"trade" takes "junk" and a table id: trade: junk junk-collector';

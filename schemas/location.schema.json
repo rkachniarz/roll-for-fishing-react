@@ -61,6 +61,11 @@
         "properties": {
           "id": { "$ref": "common.schema.json#/definitions/id" },
           "name": { "$ref": "common.schema.json#/definitions/text" },
+          "learnAfter": {
+            "description": "A spot the player doesn't know of at first (R11.8, D58): noticed after this many casts at the location, or pointed out by an event (learn: spot). Left out, it's known from the start.",
+            "type": "integer",
+            "minimum": 1
+          },
           "fish": { "$ref": "common.schema.json#/definitions/entries" },
           "treasure": { "$ref": "common.schema.json#/definitions/entries" },
           "junk": { "$ref": "common.schema.json#/definitions/entries" },

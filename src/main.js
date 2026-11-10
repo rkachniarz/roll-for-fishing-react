@@ -22,6 +22,7 @@ import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
 import { GAME_VALUES } from './engine/values.js';
 import { deleteSave, exportGame, importGame, lastSlot, listSlots, saveGame } from './save.js';
+import { completionShown } from './engine/knowledge.js';
 import { applySettings, loadSettings, saveSettings, showDice } from './settings.js';
 import { WATER, createScene } from './scene/scene.js';
 import { createBench } from './dev.js';
@@ -597,6 +598,10 @@ function describeEvent(e) {
       const parts = tParts('log.event-lost-fish', { fish: fishLink(e.fish) });
       return e.count > 1 ? [...parts, ` ×${e.count}`] : parts;
     }
+    case 'spot-learned': {
+      const where = content.locations[e.location].spots.find((/** @type {{ id: string }} */ s) => s.id === e.spot);
+      return [t('log.spot-learned', { spot: t(where.name) })];
+    }
     case 'moved': {
       const where = content.locations[e.location].spots.find((/** @type {{ id: string }} */ s) => s.id === e.spot);
       return [t('log.travel', { spot: t(where?.name ?? content.locations[e.location].name) })];
@@ -781,10 +786,10 @@ function renderPane() {
       body.replaceChildren(...playerPane(s, valuesFor(s, extraSources()).flat, learnPerk));
       break;
     case 'journal':
-      body.replaceChildren(...journalPane(s));
+      body.replaceChildren(...journalPane(s, completionShown(s, valuesFor(s, extraSources()))));
       break;
     case 'map':
-      body.replaceChildren(...mapPane(s, travelTo));
+      body.replaceChildren(...mapPane(s, travelTo, completionShown(s, valuesFor(s, extraSources()))));
       break;
     case 'bucket':
       body.replaceChildren(...bucketPane(s, valuesFor(s, extraSources()).flat.bucketSize, hookFromBucket));

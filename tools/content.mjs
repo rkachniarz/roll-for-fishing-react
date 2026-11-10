@@ -469,6 +469,17 @@ function checkEvents(all, errors, warnings) {
             }
           }
           if (effect.kind === 'trade' && all.tables[effect.table]?.kind !== 'rewards') errors.push(`${where} (${id}): no rewards table "${effect.table}"`);
+          if (effect.kind === 'learn') {
+            const loc = all.locations[effect.location];
+            const there = !loc
+              ? false
+              : effect.what === 'spot'
+                ? (loc.spots ?? []).some((/** @type {{ id: string }} */ s) => s.id === effect.id)
+                : effect.what === 'fish'
+                  ? Boolean(all.fish[effect.id])
+                  : Boolean(all.items[effect.id]);
+            if (!there) errors.push(`${where} (${id}): nothing to learn: ${effect.what} "${effect.id}" at "${effect.location}"`);
+          }
         }
       }
       if (!s.choices.some((/** @type {any} */ c) => c.needs.length === 0)) {

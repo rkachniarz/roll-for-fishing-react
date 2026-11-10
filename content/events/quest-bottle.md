@@ -9,3 +9,4 @@ Inside the bottle is a note: "Bring three roach to the lower river. Someone will
 
 - Keep the note -> end
   set: bottle-quest
+  learn: spot river lower-river

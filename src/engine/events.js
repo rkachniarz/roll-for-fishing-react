@@ -20,6 +20,7 @@ import { pick } from './tables.js';
 import { diceFrom, levelFor } from './state.js';
 import { clock } from './time.js';
 import { RARITIES } from './fish.js';
+import { learn } from './knowledge.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./game.js').GameEvent} GameEvent */
@@ -316,6 +317,11 @@ function applyEffect(state, effect, dice) {
       return [];
     case 'trade':
       return tradeJunk(state, effect.table, dice);
+    case 'learn':
+      // Told of it, not found (R4.5): a spot shows on the map, a fish or item in the journal.
+      return learn(state, effect.location, effect.what, effect.id, 'heard') && effect.what === 'spot'
+        ? [{ type: 'spot-learned', location: effect.location, spot: effect.id }]
+        : [];
     default:
       return [];
   }

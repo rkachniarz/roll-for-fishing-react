@@ -176,9 +176,12 @@ await check('panes over the scene', PHONE, '?seed=1', async (page) => {
 await check('the map: going to another spot (D101)', PHONE, '?seed=1', async (page) => {
   await page.click('#map');
   report('map: the reedy shore is where a new game starts', (await page.textContent('.map-spot[aria-pressed="true"]')) === 'the reedy shore');
-  await page.click('.map-spot:has-text("the river mouth")');
-  report('map: a tap moves there', (await logText(page)).includes('You move to the river mouth.'));
-  report('map: and the pane shows it', (await page.textContent('.map-spot[aria-pressed="true"]')) === 'the river mouth');
+  // A new game knows each location's first spot; the rest are noticed later (R11.8).
+  const shown = await page.locator('.map-spot').allTextContents();
+  report('map: only the spots known of', shown.join(', ') === 'the reedy shore, the upper river', shown.join(', '));
+  await page.click('.map-spot:has-text("the upper river")');
+  report('map: a tap moves there', (await logText(page)).includes('You move to the upper river.'));
+  report('map: and the pane shows it', (await page.textContent('.map-spot[aria-pressed="true"]')) === 'the upper river');
   await page.screenshot({ path: 'dist/verify/map.png' });
 });
 

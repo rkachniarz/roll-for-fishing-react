@@ -19,13 +19,14 @@
       "minItems": 1
     },
     "reveal": {
-      "description": "Hidden rolls shown from a level on (R5.2, D107): the roll's kind (resistance, bite, treasure) -> the level. Items and perks reveal them with the reveal* game values.",
+      "description": "Hidden numbers shown from a level on (R5.2, R5.3, D107): a roll's kind (resistance, bite, treasure), or a location's completion -> the level. Items and perks reveal them with the reveal* game values.",
       "type": "object",
       "propertyNames": {
         "enum": [
           "resistance",
           "bite",
-          "treasure"
+          "treasure",
+          "completion"
         ]
       },
       "additionalProperties": {

@@ -15,9 +15,10 @@ import { content } from '../generated/content.js';
 import { weatherAt } from './weather.js';
 import { clock, seasonOfMonth, startTime } from './time.js';
 import { emptyEquipment } from './equipment.js';
+import { knownKey, locationList } from './knowledge.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 8;
+export const SAVE_VERSION = 9;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -80,6 +81,9 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  *   game time it last started, for a visitor who comes back (7.10).
  * @property {string | null} locked  A location an event holds the player at until another lets them
  *   go (R10.8, 7.6).
+ * @property {Record<string, 'found' | 'heard'>} known  What the player knows of each location
+ *   (knowledge.js): "lake:fish:roach", "lake:item:bent-fork", "lake:spot:swamp".
+ * @property {Record<string, number>} castsAt  Casts gone out per location, for noticing spots (R11.8).
  * @property {number} missStreak  Splashes missed in a row (D64).
  * @property {Record<string, { casts?: number, ms?: number }>} cooldowns  Ability -> what's left of its
  *   cooldown (abilities.js, D96).
@@ -146,6 +150,8 @@ export function newGame({ seed, character, month }) {
     eventsSeen: {},
     eventsLast: {},
     locked: null,
+    known: {},
+    castsAt: {},
     missStreak: 0,
     cooldowns: {},
     lit: {},
@@ -247,6 +253,22 @@ const MIGRATIONS = {
   6: (save) => ({ ...save, pendingTreasure: null }),
   // 7 -> 8: visitors who come back (7.10) and locations that hold the player (7.6).
   7: (save) => ({ ...save, eventsLast: {}, locked: null }),
+  // 8 -> 9: what the player knows of each location (8.1, 8.5). An old game
+  // keeps every spot it could already go to; its fish are found where the book
+  // set their records, and its items wherever they can be found.
+  8: (save) => {
+    /** @type {Record<string, 'found' | 'heard'>} */
+    const known = {};
+    for (const [loc, data] of Object.entries(content.locations)) {
+      for (const s of data.spots ?? []) known[knownKey(loc, 'spot', s.id)] = 'heard';
+      const items = locationList(loc).items;
+      for (const id of Object.keys(save.found ?? {})) if (items.includes(id)) known[knownKey(loc, 'item', id)] = 'found';
+    }
+    for (const [id, e] of Object.entries(save.book?.fish ?? {})) {
+      for (const r of [/** @type {any} */ (e).smallest, /** @type {any} */ (e).largest]) if (r?.location) known[knownKey(r.location, 'fish', id)] = 'found';
+    }
+    return { ...save, known, castsAt: { [save.location]: save.book?.casts ?? 0 } };
+  },
 };
 
 /** @param {GameState} state */

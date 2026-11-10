@@ -4242,6 +4242,7 @@ export const content = {
         {
           "id": "swamp",
           "name": "location.lake.spots.swamp.name",
+          "learnAfter": 15,
           "fish": [
             {
               "id": "crucian-carp",
@@ -4352,6 +4353,7 @@ export const content = {
         {
           "id": "still-water",
           "name": "location.lake.spots.still-water.name",
+          "learnAfter": 30,
           "fish": [
             {
               "id": "common-bream",
@@ -4466,6 +4468,7 @@ export const content = {
         {
           "id": "rocky-shore",
           "name": "location.lake.spots.rocky-shore.name",
+          "learnAfter": 50,
           "fish": [
             {
               "id": "perch",
@@ -4552,6 +4555,7 @@ export const content = {
         {
           "id": "open-water",
           "name": "location.lake.spots.open-water.name",
+          "learnAfter": 80,
           "fish": [
             {
               "id": "bleak",
@@ -4662,6 +4666,7 @@ export const content = {
         {
           "id": "deep-water",
           "name": "location.lake.spots.deep-water.name",
+          "learnAfter": 120,
           "fish": [
             {
               "id": "ruffe",
@@ -4876,6 +4881,7 @@ export const content = {
         {
           "id": "lower-river",
           "name": "location.river.spots.lower-river.name",
+          "learnAfter": 20,
           "fish": [
             {
               "id": "chub",
@@ -4994,6 +5000,7 @@ export const content = {
         {
           "id": "river-mouth",
           "name": "location.river.spots.river-mouth.name",
+          "learnAfter": 50,
           "fish": [
             {
               "id": "bleak",
@@ -8498,7 +8505,8 @@ export const content = {
         8
       ],
       "reveal": {
-        "resistance": 1
+        "resistance": 1,
+        "completion": 3
       }
     },
     "names": {
@@ -8915,6 +8923,12 @@ export const content = {
                   "kind": "flag",
                   "name": "bottle-quest",
                   "set": true
+                },
+                {
+                  "kind": "learn",
+                  "what": "spot",
+                  "location": "river",
+                  "id": "lower-river"
                 }
               ]
             }

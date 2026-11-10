@@ -124,6 +124,7 @@
     {
       "id": "lower-river",
       "name": "the lower river",
+      "learnAfter": 20,
       "fish": [
         {
           "id": "chub",
@@ -242,6 +243,7 @@
     {
       "id": "river-mouth",
       "name": "the river mouth",
+      "learnAfter": 50,
       "fish": [
         {
           "id": "bleak",
