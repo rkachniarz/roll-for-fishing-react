@@ -286,8 +286,18 @@ function finishDice() {
   after?.();
 }
 
+/** Ends the show now without what it held back: the game it belonged to is gone. */
+function dropDice() {
+  if (!diceShow) return;
+  diceShow = null;
+  delete document.body.dataset.dice;
+  scene.clearDice();
+}
+
 /** Whatever waits for the player: a full bucket first, then two treasures, then an open event. */
 function promptPlayer() {
+  // While the dice roll, the show asks again when they go (D99).
+  if (diceShow) return;
   if (state?.pendingCatch) openRelease();
   else if (state?.pendingTreasure) openTreasure();
   else if (state?.event) openEvent();
@@ -299,6 +309,8 @@ function promptPlayer() {
 function openTreasure() {
   const dialog = /** @type {HTMLDialogElement} */ ($('release'));
   if (dialog.open || !state?.pendingTreasure) return;
+  // The choices as they stand now; a click acts on the state as it is then,
+  // since buffs and cooldowns run on while the dialog is open.
   const s = state;
   // As with the bucket: the tap that ended the cast mustn't also choose.
   const openedAt = performance.now();
@@ -311,8 +323,8 @@ function openTreasure() {
       b.textContent = t(content.items[id].name);
       b.style.color = rarityColour(content.items[id].rarity);
       b.addEventListener('click', () => {
-        if (performance.now() - openedAt < 400) return;
-        const out = chooseTreasure(s, id);
+        if (performance.now() - openedAt < 400 || !state?.pendingTreasure) return;
+        const out = chooseTreasure(state, id);
         state = out.state;
         logEvents(out.events);
         save(state);
@@ -324,7 +336,6 @@ function openTreasure() {
       return b;
     }),
   );
-  dialog.addEventListener('cancel', (e) => e.preventDefault());
   dialog.showModal();
 }
 
@@ -333,6 +344,7 @@ function openTreasure() {
 function openRelease() {
   const dialog = /** @type {HTMLDialogElement} */ ($('release'));
   if (dialog.open || !state?.pendingCatch) return;
+  // The choices as they stand now; a click acts on the state as it is then.
   const s = state;
   // The tap or key that struck the fish mustn't also let one go: on a phone,
   // the tap's click lands on the first choice as the dialog opens under it.
@@ -350,8 +362,8 @@ function openRelease() {
     b.textContent = t('release.fish', { fish: fishName(fish), size: fish.size }) + (note ? ` (${note})` : '');
     b.style.color = rarityColour(fish.rarity);
     b.addEventListener('click', () => {
-      if (performance.now() - openedAt < 400) return;
-      const out = releaseFish(s, choice);
+      if (performance.now() - openedAt < 400 || !state?.pendingCatch) return;
+      const out = releaseFish(state, choice);
       state = out.state;
       logEvents(out.events);
       save(state);
@@ -366,7 +378,6 @@ function openRelease() {
     option(/** @type {import('./engine/fish.js').FishInstance} */ (s.pendingCatch), 'new', t('release.new')),
     ...s.bucket.map((b, i) => option(b.fish, i, b.count > 1 ? `×${b.count}` : undefined)),
   );
-  dialog.addEventListener('cancel', (e) => e.preventDefault());
   dialog.showModal();
 }
 
@@ -416,8 +427,7 @@ function openEvent() {
     }),
   );
   if (!dialog.open) {
-    dialog.addEventListener('cancel', (e) => e.preventDefault());
-    dialog.showModal();
+      dialog.showModal();
   }
 }
 
@@ -455,7 +465,7 @@ window.addEventListener('keydown', (e) => {
   }
   const target = e.target;
   // 1, 2, 3…: the action bar, as in WoW (D96).
-  if (!e.repeat && /^[1-9]$/.test(e.key) && !(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) {
+  if (!e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey && /^[1-9]$/.test(e.key) && !(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) {
     const id = state ? activePerks(state)[Number(e.key) - 1] : undefined;
     if (id) {
       e.preventDefault();
@@ -491,7 +501,7 @@ function useFromBar(id) {
   if (!state) return;
   const status = abilityStatus(state, id);
   if (!status.usable) {
-    const why = !status.working ? 'notYet' : status.cooldown ? 'notReady' : status.armed ? 'armed' : 'notLit';
+    const why = !status.working ? 'notYet' : status.waiting ? 'waiting' : status.cooldown ? 'notReady' : status.armed ? 'armed' : 'notLit';
     showError($('errors'), t(`error.ability.${why}`));
     return;
   }
@@ -716,6 +726,7 @@ for (const [id, icon] of Object.entries(BAR_ICONS)) {
   });
 }
 $('weather').setAttribute('aria-label', t('hud.weather'));
+$('actions').setAttribute('aria-label', t('hud.actions'));
 $('weather').addEventListener('click', () => {
   if (state) showTip($('weather'), { title: t(weatherWords(state.weather).name), lines: [] });
 });
@@ -754,12 +765,12 @@ let bagOpen = false;
 /** @type {import('./ui/panels.js').BagTab} */
 let bagTabShown = 'equipment';
 
-/** @param {Pane} name */
 /** The game menu, or the settings opened from it, is over the scene. */
 function menuOpen() {
   return pane === 'menu' || pane === 'settings';
 }
 
+/** @param {Pane} name */
 function togglePane(name) {
   pane = pane === name ? null : name;
   hideTip();
@@ -804,7 +815,8 @@ function renderPane() {
   const s = state;
   const body = $('paneBody');
   // Another pane starts at its top, not where the last one was scrolled to.
-  if (body.dataset.shown !== pane) {
+  const fresh = body.dataset.shown !== pane;
+  if (fresh) {
     body.dataset.shown = pane;
     queueMicrotask(() => (body.scrollTop = 0));
   }
@@ -828,13 +840,16 @@ function renderPane() {
       );
       break;
     case 'settings':
+      // Built once when opened; a cast ending mustn't replace a slider being dragged.
+      if (!fresh && body.hasChildNodes()) break;
       body.replaceChildren(
-        ...settingsPane(settings, (next) => {
-          settings = next;
+        ...settingsPane(settings, (change) => {
+          settings = { ...settings, ...change };
           saveSettings(storage, settings);
           applySettings(settings);
           audio.setVolume(settings.sound);
-          renderPane();
+          // The inputs already show the change: rebuilding them would take
+          // the keyboard off the slider after one step.
         }, showDice(settings, reducedMotion.matches)),
       );
       break;
@@ -1000,8 +1015,11 @@ function render() {
   const bobber = state.equipped.bobber;
   scene.setBobber(bobber ? (content.items[bobber.id]?.bobber ?? null) : null);
   const now = clock(state.time);
-  // The spot's placeholder look until it's painted (4.2).
-  scene.setSpot(content.locations[state.location].spots?.find((/** @type {{ id: string }} */ s) => s.id === state.spot)?.look ?? null);
+  // The spot's placeholder look until it's painted (4.2). The page notes which
+  // it painted, for tools/verify.mjs: the scene moves, so pictures can't be compared.
+  const look = content.locations[state.location].spots?.find((/** @type {{ id: string }} */ s) => s.id === state.spot)?.look ?? null;
+  scene.setSpot(look);
+  document.body.dataset.spotLook = JSON.stringify(look);
   scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, sun: now.sun, weather: state.weather });
   renderHud();
   // A perk to choose: the character button glows, as WoW's does for a talent
@@ -1135,7 +1153,6 @@ function openCreation(chosen) {
     render();
     promptPlayer();
   };
-  dialog.addEventListener('cancel', (e) => e.preventDefault());
   dialog.showModal();
 }
 
@@ -1263,14 +1280,15 @@ function openTitle(view = 'main', imported) {
     $('titleMenu').replaceChildren(...slots, button(t('title.back'), () => openTitle('main'), 'titleBack'));
   }
   if (!dialog.open) {
-    dialog.addEventListener('cancel', (e) => e.preventDefault());
-    dialog.showModal();
+      dialog.showModal();
   }
 }
 
 /** Back to the title screen from the menu, between casts. The game is already saved. */
 function toTitle() {
   if (!state || cast.phase === 'waiting' || cast.phase === 'bite') return;
+  // Dice still rolling would land their lines in the next game's log.
+  dropDice();
   save(state);
   state = null;
   cast = /** @type {GameCast} */ ({ phase: 'idle' });
@@ -1307,6 +1325,10 @@ const bench = DEV
   : null;
 
 // ---------- Start ----------
+
+// Escape doesn't close these: each waits for a choice. Added once, here, not
+// each time one opens.
+for (const id of ['release', 'event', 'create', 'title']) $(id).addEventListener('cancel', (e) => e.preventDefault());
 
 render();
 openTitle();

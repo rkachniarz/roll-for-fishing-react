@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { content } from '../src/generated/content.js';
 import { newGame } from '../src/engine/state.js';
-import { castLine, chooseTreasure, poolKey, strikeLine, tick, tickBuffs, useAbility, valuesFor } from '../src/engine/game.js';
+import { castLine, chooseTreasure, poolKey, strikeLine, tick, tickBuffs, travel, useAbility, valuesFor } from '../src/engine/game.js';
 import { abilityStatus, activePerks, cooldownFor } from '../src/engine/abilities.js';
 
 /** @typedef {import('../src/engine/state.js').GameState} GameState */
@@ -63,8 +63,8 @@ test('a "next cast" ability: a buff for the next attempt, then a cooldown that c
   assert.deepEqual(used.events[0], { type: 'ability', perk: 'battle-focus' });
   const buff = s.buffs.find((b) => b.source === 'battle-focus');
   assert.deepEqual(buff?.effects, [{ value: 'fishingSkill', add: 3 }], 'skill + level');
-  // 10 casts less level 3.
-  assert.deepEqual(s.cooldowns['battle-focus'], { casts: 7 });
+  // 10 casts less level 3, counted from the next line out.
+  assert.deepEqual(s.cooldowns['battle-focus'], { casts: 7, pending: true });
   assert.equal(abilityStatus(s, 'battle-focus').usable, false);
   assert.equal(useAbility(s, 'battle-focus').state, s, 'not twice');
 
@@ -105,9 +105,15 @@ test('an ability used while the line is out waits for the next cast', () => {
   const bitten = tick(used, out.cast, out.cast.biteAt);
   const struck = strikeLine(bitten.state, bitten.cast, out.cast.biteAt + 100);
   assert.ok(struck.state.buffs.some((b) => b.source === 'battle-focus'), 'still there after the cast it was used in');
+  // Its cooldown waits with it: the cast it was used in doesn't count (Review 2).
+  assert.deepEqual(struck.state.cooldowns['battle-focus'], { casts: 7, pending: true });
   const next = castLine(struck.state, 0);
   if (next.cast.line.kind === 'fish') assert.ok(next.cast.line.player.mods.some((m) => m.label === 'battle-focus'));
   assert.ok(!next.state.buffs.some((b) => b.pending), 'counts from this cast');
+  assert.deepEqual(next.state.cooldowns['battle-focus'], { casts: 7 }, 'the cooldown too');
+  // So it comes back as many attempts after its buff as one used between casts.
+  const bit = tick(next.state, next.cast, next.cast.biteAt);
+  assert.deepEqual(strikeLine(bit.state, bit.cast, next.cast.biteAt + 100).state.cooldowns['battle-focus'], { casts: 6 });
 });
 
 test('Summon Fish makes a fish certain; Sleight of Hook rules one out', () => {
@@ -143,7 +149,7 @@ test('Jump In lights up when a fish gets away, catches it, and goes dark with th
     assert.ok(used.events.some((e) => e.type === 'caught' && e.fish.species === fish?.species));
     assert.equal(used.state.escaped[poolKey(s)].length, pool - 1);
     assert.equal(used.state.bucket.reduce((n, b) => n + b.count, 0), bucket + 1);
-    assert.deepEqual(used.state.cooldowns['jump-in'], { casts: 10 });
+    assert.deepEqual(used.state.cooldowns['jump-in'], { casts: 10, pending: true });
     assert.equal(used.state.lit['jump-in'], undefined);
     // Unused, it goes dark when the next line goes out.
     assert.deepEqual(castLine(s, 0).state.lit, {});
@@ -167,6 +173,7 @@ test('Gut lights up after a catch, and empties the fish into the bags', () => {
     assert.equal(used.state.bags.reduce((n, b) => n + b.count, 0), bags + (gutted.item ? 1 : 0));
     assert.notEqual(used.state.streams.abilities, s.streams.abilities, 'its own stream');
     assert.equal(used.state.streams.line, s.streams.line, "the line's stream untouched");
+    assert.equal(used.state.streams.effects, s.streams.effects, "nor the effects' (D4)");
     return;
   }
   assert.fail('never caught a fish');
@@ -278,7 +285,12 @@ test('Bend Reality lights up after a catch and makes the fish bigger and rarer',
     assert.equal(RARITIES.indexOf(bent.rarity), Math.min(RARITIES.indexOf(fish.rarity) + 1, 4));
     assert.ok(used.state.bucket.some((b) => b.fish.bent), 'in the bucket, bent');
     assert.equal(used.state.character.xp - s.character.xp, bent.xp - fish.xp);
-    assert.deepEqual(used.state.cooldowns['bend-reality'], { casts: 10 });
+    assert.deepEqual(used.state.cooldowns['bend-reality'], { casts: 10, pending: true });
+    // The book holds the bent fish: a record is the whole catch, here and now.
+    const entry = used.state.book.fish[bent.species];
+    assert.ok(entry.largest.size >= bent.size);
+    if (entry.largest.size === bent.size) assert.equal(entry.largest.location, s.location);
+    if (entry.caught === 1) assert.deepEqual(entry.smallest, entry.largest);
     return;
   }
   assert.fail('never caught a fish');
@@ -306,10 +318,34 @@ test('Fence: two treasures to choose from, no cast until one is kept; Gut ready 
   assert.equal(chooseTreasure(kept.state, 'anything').state, kept.state);
 });
 
+test('no ability while a full bucket or two treasures wait for a choice (D59, D106)', () => {
+  const fish = { species: 'roach', subname: -1, band: 2, size: 20, difficulty: 1, xp: 1, rarity: 'common' };
+  const base = hero('rogue-fisher', { 1: 'gut', 3: 'greedy-fish', 5: 'fence' });
+  const lit = { ...base, bucket: [{ fish, count: 1 }], lit: { gut: { fish } } };
+  assert.equal(abilityStatus(lit, 'gut').usable, true);
+  for (const waiting of [{ pendingTreasure: /** @type {[string, string]} */ (['iron-key', 'bent-fork']) }, { pendingCatch: fish }]) {
+    const s = { ...lit, ...waiting };
+    assert.equal(abilityStatus(s, 'gut').usable, false);
+    assert.equal(abilityStatus(s, 'gut').waiting, true);
+    assert.equal(useAbility(s, 'gut').state, s, 'the choice waiting is kept');
+    assert.equal(travel(s, s.location, 'somewhere').error, 'choiceWaiting');
+  }
+});
+
+test('travelling puts out a lit ability (D96)', () => {
+  const fish = { species: 'roach', subname: -1, band: 2, size: 20, difficulty: 1, xp: 1, rarity: 'common' };
+  const s = { ...hero('rogue-fisher', { 1: 'gut' }), lit: { gut: { fish } } };
+  const other = content.locations[s.location].spots.find((p) => p.id !== s.spot);
+  if (!other) return assert.fail('a second spot');
+  const moved = travel(s, s.location, other.id, { force: true });
+  assert.equal(moved.error, undefined);
+  assert.deepEqual(moved.state.lit, {});
+});
+
 test('Polish: the next junk is treasure, however many casts away', () => {
   let s = useAbility(hero('rogue-fisher', { 1: 'gut', 3: 'sleight-of-hook', 5: 'polish' }), 'polish').state;
   assert.ok(s.buffs.some((b) => b.source === 'polish'));
-  assert.deepEqual(s.cooldowns.polish, { casts: 10 });
+  assert.deepEqual(s.cooldowns.polish, { casts: 10, pending: true });
   const junkOnly = [NO_FISH, boost('treasureFind', -1000)];
   // Pulled out early: nothing found, Polish waits.
   let out = castLine(s, 0, { extra: junkOnly });

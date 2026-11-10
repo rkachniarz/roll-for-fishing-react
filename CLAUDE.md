@@ -15,7 +15,7 @@ by number:
 
 - `docs/decisions.md`: the decision log, `D1` onwards. Record new decisions there rather than silently changing
   requirements.
-- `docs/spec.md`: the vision, requirements (`R1.1`–`R16.5`) and catalogues (`§C.1`–`§C.6`).
+- `docs/spec.md`: the vision, requirements (`R1.1`–`R16.7`) and catalogues (`§C.1`–`§C.6`).
 - `docs/history.md`: finished phases, task by task, with what was measured.
 - `docs/events.md`: how to write an event, and every word of the format (D84).
 - `docs/art.md`: how the art is made with the owner (D90): style rules, sizes, trials, drawings in MS Paint. Read it
@@ -117,7 +117,8 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   (`src/engine/perks.js`), and only the lowest owed level can be chosen, so a later level's random offer never
   depends on a choice not yet made. Universal offers come from a stream keyed by the level, never stored.
 - **Cooldowns and an ability's "next cast" count attempts, not casts (D96):** a strike in time on a splash, the
-  empty hook included. Ability buffs last `attempts`; one used mid-cast is `pending` and isn't spent by that cast.
+  empty hook included. Ability buffs last `attempts`; one used mid-cast is `pending` and isn't spent by that cast,
+  and its cooldown is `pending` too, counting from the next line out (D113).
   Lit abilities (`state.lit`) go dark when the next line goes out (`castLine`).
 - **`src/ui/drag.js` reads `data-drag` / `data-drop` (`bag:3`, `bag:end`, `bag:pane`, `equip:rod`) off the elements;**
   `main.js` decides what a drop does. A `contextmenu` from a long-press on a phone is swallowed; only a mouse's

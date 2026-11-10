@@ -21,6 +21,7 @@ import { diceFrom, levelFor } from './state.js';
 import { clock } from './time.js';
 import { RARITIES } from './fish.js';
 import { learn } from './knowledge.js';
+import { levelUp } from './perks.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./game.js').GameEvent} GameEvent */
@@ -265,8 +266,7 @@ export function choose(state, index) {
   const { dice, commit } = diceFrom(next);
   for (const effect of choice.effects) events.push(...applyEffect(next, effect, dice.events));
   next.streams = commit();
-  const levelAfter = levelFor(next.character.xp);
-  if (levelAfter > levelBefore) events.push({ type: 'level-up', level: levelAfter });
+  levelUp(next, levelBefore, events);
 
   next.event = choice.to === 'end' ? null : { id: event.id, slide: choice.to };
   if (!next.event) events.push({ type: 'event-ended', event: event.id });

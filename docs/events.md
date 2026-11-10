@@ -47,11 +47,13 @@ You lunge forward and get wet, and it's like it was never there.
 | `needs` | any number of lines | Requirements for it to start at all, in the words below. |
 | `art` | a file name | A picture for the top of the dialog, from `assets/events/<art>.png`. Optional. |
 
+A line in the front matter starting with `#` is a note to yourself; the game ignores it.
+
 **Slides** start with `## slide-id`. The first slide is where the event begins. The text under the heading is what
 the player reads; a blank line starts a new paragraph. `end` is reserved.
 
 **Choices** are bullets after a slide's text: `- What the player says -> next-slide`, or `-> end` to close the
-event. The lines indented under a choice are its requirements and effects, one per line, in the order they apply.
+event. A `*` works as the bullet too. The lines indented under a choice are its requirements and effects, one per line, in the order they apply.
 
 A choice whose requirements aren't met is **hidden**, so give every slide at least one choice without requirements,
 or a player could be stuck (`npm run content` warns about that).
@@ -63,7 +65,7 @@ or a player could be stuck (`npm run content` warns about that).
 | `needs: class rogue-fisher` | the player is of that class (`content/classes/`) |
 | `needs: gender f` / `needs: gender m` | the player is female or male |
 | `needs: location lake` | the player is at that location (`content/locations/`) |
-| `needs: spot crossroads` | the player is at that spot of a location |
+| `needs: spot upper-river` | the player is at that spot of a location |
 | `needs: level 3` | the player is at least level 3 |
 | `needs: luck 2` | Luck is at least 2 (R6.7) |
 | `needs: item iron-key` / `needs: item bent-fork 3` | that many of the item are in the bags (default 1) |
@@ -132,7 +134,7 @@ They are checked when the slide opens. If a condition shows nothing, the spaces 
 | `lose: fish` / `lose: 3 fish` | takes fish from the bucket, the least valuable first (lowest rarity, then smallest); the log says so |
 | `lose: 10 fish roach` | that many of a species, the smallest first |
 | `lose: set old-lorebook` | every piece of the set in the bags, handed in; the log says so |
-| `lose: rarest fish` | the rarest fish in the bucket, the biggest if there's a tie (the cat's theft) |
+| `lose: rarest fish` / `lose: 2 rarest fish` | the rarest fish in the bucket, the biggest if there's a tie (the cat's theft) |
 | `go: river` / `go: river upper-river` | moves the player there, to the first spot if none is named; the log says so |
 | `lock:` / `unlock:` | the player can't leave the location they're at (other spots there are fine) until an event says `unlock:`. The event should say why (R10.8) |
 | `learn: spot river lower-river` / `learn: fish lake wels-catfish` / `learn: item lake iron-key` | the player learns it's there: a spot shows on the map (the log says so), a fish or item in the journal as not yet found |

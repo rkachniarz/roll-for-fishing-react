@@ -62,7 +62,8 @@ decides. *(D29)*
 - **R2.5** A strike before any bite pulls the line out: the cast ends with nothing, and no game time passes. *(D15,
   D85)*
 - **R2.6** A successful strike leads to the fishing roll: d20 + skill + modifiers against the fish's difficulty. A natural
-  20 always lands the fish. This roll is always shown to the player (R5).
+  20 lands the fish unless the fish's own hidden d20 is a 20 too; then the totals decide. A perk can make 19 a crit as
+  well (D96). This roll is always shown to the player (R5).
 - **R2.7** Reaction windows, bite delays and the 3-second limit are game values that items, perks and abilities can change.
 - **R2.8** Every cast ends in a splash, whatever is on the line: junk and treasure bite too. Only a fish fights back
   (the d20, R2.6); anything else is landed by any strike in time. A "nothing" result is reported as an empty hook. No animation shows a fish or item being reeled in.
@@ -121,8 +122,9 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   the d20), Fish Find (R3.1) and Treasure Find (R3.4). Stats are rolled within the class's ranges at creation, with
   unlimited rerolls (§C.1, D63). Class names follow the gender where they need to (Rogue Fisherman / Fisherwoman). *(D19, D20)*
 - **R6.2** Fish and treasure give XP; levels follow the XP curve (§C.1).
-- **R6.3** Each level-up offers a choice between two perks (§C.2): passive bonuses, and active abilities with cooldowns
-  counted in casts.
+- **R6.3** Levels bring perks (§C.2): level 1 gives the class's first active ability; levels 3 and 5 offer a choice
+  between the class's passive and active; levels 2, 4, 6 and 8 offer a choice of two universal perks; level 7 gives
+  nothing yet. Passive perks are bonuses; active abilities have cooldowns counted in attempts at a catch. *(D96)*
 - **R6.4** Abilities feel like the class: the Warrior overpowers fish, the Rogue goes after treasure, the Mage bends the
   odds.
 - **R6.5** Button and flavour texts vary by class (the prototype's lists are ported).
@@ -135,7 +137,7 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 ### R7: The fishing scene
 
 - **R7.1** The scene is the view from the shore, as in
-  [design/sketch-fishing-spot.png](design/sketch-fishing-spot.png): open water filling most of the frame, a sandy shore
+  [design/sketch-fishing-spot.png](design/sketch-fishing-spot.png) (local only, D97): open water filling most of the frame, a sandy shore
   along the bottom, reeds framing both sides, the bobber with its red feather out on the water, and the line running back
   to the player.
 - **R7.2** The scene is pixel art, drawn at **256×256** and scaled up by a **whole number of device pixels**, the largest
@@ -165,9 +167,10 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   player to town; the bags stay generous. Uses for fish (selling, eating for buffs, quests) unlock gradually as the
   player fishes more. Landing a fish with a full bucket asks the player to release one, the new one included; a
   released fish joins the spot's pool of fish that got away (R3.6). *(D24, D50, D57, D59)*
-- **R8.4** Four item categories: **fish**, **treasure** (gear and other items with effects), **consumables** (bait,
-  potions…) and **junk**, the catch-all for everything else. Much junk has a use: an event requirement, barter
-  currency, an alchemical ingredient (R11.7), a quest item, a collectible such as a map fragment. *(D65)*
+- **R8.4** Five item categories: **fish**, **treasure** (gear and other items with effects), **consumables** (bait,
+  potions…), **stuff**, the things used for something (an event requirement, an alchemical ingredient (R11.7), a quest
+  item, a collectible such as a map fragment or a set's piece), and **junk**, grey and of no use but its value in a
+  trade. *(D65, D112)*
 - **R8.5** **Every beneficial item has at least one downside.** The data is checked for this.
 - **R8.6** Tooltips are generated from an item's effects, so text and behaviour can't disagree.
 - **R8.7** Everything works by touch: long-press to drag, tap to inspect, slots at least 44 CSS px. Nothing depends on
@@ -176,8 +179,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   (orange). *(D49)*
 - **R8.9** Items are hand-made: each is defined once and is always the same. An effect may roll when it applies (+1d4
   to a roll), with a named die (D5). *(D48)*
-- **R8.10** An item marked unique can be found once per save. Most treasure is unique, as are some junk items (quest
-  items). A location whose unique items are all found stops offering them: a treasure roll there brings up junk. *(D65,
+- **R8.10** An item marked unique can be found once per save. Most treasure is unique, as are some pieces of stuff (quest
+  items, D112). A location whose unique items are all found stops offering them: a treasure roll there brings up junk. *(D65,
   D75)*
 
 ### R9: Non-functional
@@ -232,7 +235,7 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   putting them into the inn's perpetual stew for a buff (R12.6). *(D24, D28, D86)*
 - **R11.6** The game has no ending; it ends when the player stops. Collecting (R4) is the long-term goal. *(D23)*
 - **R11.7** **The Alchemist** visits town from time to time (R10.6). While in town, they sell buffing potions and buy
-  alchemical ingredients, which are fished up as junk and range from vials to rare magical goo. *(D30)*
+  alchemical ingredients, which are fished up as stuff (D112) and range from vials to rare magical goo. *(D30)*
 
 ### R12: Buffs and debuffs
 
@@ -314,7 +317,7 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   the bucket and bags button and disappears; escapes and empty hooks get only the log line. *(D70)*
 - **R16.4** The time is shown as a word (Night, Dawn, Morning, Noon, Afternoon, Sunset, Evening) with the season and
   day, never as a clock; the words follow the sun through the year (D85). The weather is an icon; a tap names it. The character pane shows the portrait (a default
-  until portraits exist), level, XP, stats and equipment; the bag has the tabs Equipment, Consumables and Stuff; the
+  until portraits exist), level, XP, stats and equipment; the bag has the tabs Equipment, Consumables, Stuff and Junk (D112); the
   menu holds the main menu (the title screen), settings, and the dev bench. *(D79, D80)*
 - **R16.5** The log scrolls, oldest line at the top, and isn't numbered. Fish and items in it are links: the name in
   brackets in its rarity colour, showing its tooltip when tapped. *(D79)*
@@ -344,7 +347,8 @@ names, with Rogue Fisherwoman for a female Rogue. *(D19)*
 
 ### §C.2 Perks (from the prototype's design notes)
 
-Levels 1, 3, 6 and 9 per class; even levels draw from the universal list. Cooldowns count casts.
+Levels 1, 3, 6 and 9 per class; even levels draw from the universal list. Cooldowns count casts. *(As built, D96:
+level 6 moved to 5, level 9 and later wait; cooldowns count attempts at a catch.)*
 
 **Warrior**
 - L1 active: jump in and beat up a fish that escaped, to catch it. Cooldown 10.
@@ -408,8 +412,9 @@ Levels 1, 3, 6 and 9 per class; even levels draw from the universal list. Cooldo
 - **Spots:** The Lake: the reedy shore (where a new game starts), the swamp, still water, the rocky shore, open water,
   deep water. The River: the upper river, the lower river, the river mouth. Each holds its fish, rarer down the list:
   `content/locations/`.
-- **Non-fish:** 38 junk items (Vendor trash, Soggy treasure map, Dwarven stein…) and the seven items in §C.3, shared by
-  both locations (`content/tables/`).
+- **Non-fish:** the prototype's junk (Vendor trash, Soggy treasure map, Dwarven stein…), the seven items in §C.3, and
+  since then placeholder gear, rods, baits, map fragments and set pieces: `content/items/`, shared by the locations
+  through `content/tables/`.
 - **Rift fish:** 42 fish from another world, 3 to 6 in each spot's `rift` table, for the wizard's Rift Fishing (D104).
 - **The Mage Tower pools,** a placeholder (8.4, D110): hidden until three map fragments are found, one pool holding six
   of the fish above until the owner's list.

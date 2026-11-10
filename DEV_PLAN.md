@@ -17,8 +17,10 @@ The fish are the owner's (D101–D104): 80 over nine spots and 42 rift fish. Eve
 a fish needed shows from level 1 with its own dice (D107), and gear, rods and Tiny-fish bait are in (5.3, 5.7, 5.8).
 Places are learned (D109): spots are noticed by fishing, each place has its list and a hidden completion, and the
 Mage Tower pools open from map fragments (D110). Sets and readable pages (D111), sound, saves to a file, the
-collection and a balance simulation are in. What's left in development mostly waits on the town's barter (D86) or on
-the owner; the creative track holds the art, writing and sound. Claude's guesses are on
+collection and a balance simulation are in. Junk is apart from stuff, the things used for something (D112). Still
+open in development: the town and what hangs on it (8.3, 8.6, 8.8, barter D86), the cat (8.9), the spot map (8.1),
+the atlas (4.1), weather and life on a spot (4.7), class-flavoured texts (6.5), the review of D8 (5.6), the dice's
+feel (9.6) and an installable game (9.5). The creative track holds the art, writing and sound. Claude's guesses are on
 [docs/REVIEW.md](docs/REVIEW.md).
 
 ## Where things are
@@ -161,7 +163,8 @@ Requirements R8.
 - [x] **5.4** Tooltips generated from effects (R8.6).
 - [x] **5.5** Fish bucket: fish only, identical twins stack, 16 fish to start; a full bucket asks which fish to release,
   and the released fish joins the spot's escaped-fish pool (R8.3, R3.6, D24, D50, D57, D59).
-- [ ] **5.6** Review D8: plain DOM or Preact for the UI.
+- [ ] **5.6** Review D8: plain DOM or Preact for the UI. *D8 put the review at the inventory, which is done (5.1,
+  5.2, 5.4, 5.5); the review itself hasn't happened yet.*
 - [x] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38): the willow rod, ash rod,
   reed pole and dwarven steel rod, each with a downside, as treasure; the junk collector's trade can give the willow
   rod. Default icons until CR-4.

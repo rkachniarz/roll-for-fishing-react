@@ -314,5 +314,5 @@ export function createDice(addTo, rand) {
     }
   }
 
-  return { roll, update, clear, setSize, busy: (/** @type {number} */ now) => dice.length > 0 && now < goneAt };
+  return { roll, update, clear, setSize };
 }

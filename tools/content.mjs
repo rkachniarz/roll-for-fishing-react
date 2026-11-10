@@ -211,6 +211,11 @@ export async function buildContent(root = ROOT) {
     for (const spot of loc.spots ?? []) {
       if (spotIds.has(spot.id)) errors.push(`${where}: two spots called "${spot.id}"`);
       spotIds.add(spot.id);
+      // The water is a box in the 256×256 play area, corners in order (4.2).
+      const w = spot.water;
+      if (w && !(0 <= w.x0 && w.x0 < w.x1 && w.x1 <= 256 && 0 <= w.y0 && w.y0 < w.y1 && w.y1 <= 256)) {
+        errors.push(`${where} (${spot.id}): the water box needs 0 <= x0 < x1 <= 256 and 0 <= y0 < y1 <= 256`);
+      }
       for (const list of /** @type {const} */ (['fish', 'treasure', 'junk'])) {
         checkEntries(`${where} (${spot.id})`, spot[list], list, `${loc.id}/${spot.id}`);
       }
@@ -286,6 +291,8 @@ export async function buildContent(root = ROOT) {
     if (item.bobber && item.slot !== 'bobber') errors.push(`${where}: only a bobber has a bobber's looks`);
     if (item.bait && item.slot !== 'bait') errors.push(`${where}: only bait has a bait kind`);
     if (item.set && !all.sets?.[item.set]) errors.push(`${where}: no set "${item.set}"`);
+    // A piece of a map to nowhere would never open anything (8.2).
+    if (item.fragmentOf && !all.locations[item.fragmentOf]) errors.push(`${where}: a map fragment of "${item.fragmentOf}", which isn't a location`);
     // Complete junk is gray; anything used for something is stuff, in white (D112).
     if (item.category === 'junk' && item.rarity !== 'poor') errors.push(`${where}: junk is gray (poor); something used for something is "stuff"`);
     if (item.category === 'junk' && (item.event || item.set || item.fragmentOf || item.page || item.slot || item.effects)) {
@@ -298,7 +305,7 @@ export async function buildContent(root = ROOT) {
 
   checkPerks(all, errors, warnings);
   checkSeasons(all.weather, errors);
-  checkEvents(all, errors, warnings);
+  checkEvents(all, errors, warnings, root);
 
   const bands = all.rules['size-bands']?.bands;
   if (!bands) errors.push('content/rules/size-bands.json: missing');
@@ -349,6 +356,12 @@ function checkPerks(all, errors, warnings) {
       if (!perk.retired) ((byClass[perk.class] ??= {})[perk.level] ??= []).push(perk);
     }
     if (perk.kind === 'active' && !perk.cooldown) errors.push(`${where}: an active perk needs a cooldown`);
+    // A cooldown counts casts, or time, or both; one with neither never runs (D96).
+    if (perk.cooldown && !perk.cooldown.casts && !perk.cooldown.ms) errors.push(`${where}: a cooldown needs "casts" or "ms"`);
+    for (const [id, cd] of Object.entries(perk.cooldowns ?? {})) {
+      if (all.perks[id]?.kind !== 'active') errors.push(`${where}: "cooldowns" names "${id}", which isn't an active perk`);
+      if (!cd.casts && !cd.ms) errors.push(`${where}: the cooldown for "${id}" needs "casts" or "ms"`);
+    }
     if (perk.kind === 'passive' && perk.cooldown) errors.push(`${where}: a passive perk has no cooldown`);
     // An active perk's `effects` hold while it is taken, used or not (Bend Reality's doubled rift chance, D106);
     // what using it does is its ability's, in game.js.
@@ -401,8 +414,9 @@ function checkSeasons(seasons, errors) {
  * @param {Record<string, Record<string, any>>} all
  * @param {string[]} errors
  * @param {string[]} warnings
+ * @param {string} root  The repo, for the slides' pictures.
  */
-function checkEvents(all, errors, warnings) {
+function checkEvents(all, errors, warnings, root) {
   /** Event id -> what can start it. */
   /** @type {Map<string, string[]>} */
   const startedBy = new Map();
@@ -471,6 +485,8 @@ function checkEvents(all, errors, warnings) {
     for (const [id, slide] of Object.entries(event.slides)) {
       const s = /** @type {any} */ (slide);
       checkText(`${where} (${id})`, s.text);
+      // The dialog shows assets/events/<art>.png (src/main.js).
+      if (s.art && !existsSync(join(root, 'assets', 'events', `${s.art}.png`))) warnings.push(`${where} (${id}): no picture assets/events/${s.art}.png`);
       for (const choice of s.choices) {
         checkText(`${where} (${id})`, choice.text);
         reached.add(choice.to);

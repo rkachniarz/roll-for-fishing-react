@@ -13,11 +13,13 @@ The game is in early development: see [DEV_PLAN.md](DEV_PLAN.md) for where thing
 npm install
 npm run dev      # then open http://localhost:8001 (add ?dev for the dev bench)
                  # and http://localhost:8001/art.html for the art sheet
+                 # and http://localhost:8001/editor.html for the content editor (Chrome, Edge)
 npm run content  # after editing content/: checks it and regenerates the game's copy
 npm test         # unit tests
 npm run verify   # browser checks (headless Chromium); `npm run verify strike` runs only those
 npm run build    # single-file copy in dist/artifact.html
 npm run check    # all three in turn: test, verify, build (what ends a phase)
+npm run sim      # balance: seeded games per class (casts=500 games=20 class=rogue-fisher …)
 
 npm run sprite list                    # the sprites that can go out to MS Paint
 npm run sprite export bobber           # -> art/bobber.png, to draw on
@@ -26,6 +28,7 @@ npm run photo-icon docs/design/photo-carp.jpg name=icon-fish-carp   # a photo to
 npm run cutout setup                         # once: the Python tools' environment (.venv-cutout/)
 npm run cutout docs/design/refs/Ruffe.jpg    # cut the subject out of a busy photo, onto magenta
 npm run commons search ruffe "Category:Gymnocephalus cernua" shape=wide   # Commons pictures to pick from
+npm run commons fetch ruffe 3 name=Ruffe   # one of them at 1280 px, with its licence
 ```
 
 How the art is made, and drawing for the game in MS Paint: [docs/art.md](docs/art.md).
@@ -42,12 +45,12 @@ and the art sheet at `/art.html` there.
 | `art.html` | The art sheet: trials, every sprite enlarged, the scene in five lights (`src/art.js`, `src/art-trials.js`; how we work: `docs/art.md`) |
 | `art/` | The owner's real-size drawings, and sprites exported to draw on |
 | `styles.css` | Layout: scene above the panel on phones, beside it on wide screens |
-| `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, weather, surface features, tables, rules; events are text (`.md`) |
+| `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, perks, sets, weather, surface features, tables, rules; events are text (`.md`) |
 | `schemas/` | A JSON Schema per kind of content; VS Code uses them to check and complete content files |
 | `src/generated/content.js` | Built from `content/` by `npm run content`; don't edit |
 | `src/strings.js` | `t()`: all player-facing text goes through it |
 | `src/save.js` | The three save slots in the browser's storage |
-| `src/settings.js` | Settings, kept per device: the theme |
+| `src/settings.js` | Settings, kept per device: the theme, Show dice, the volume |
 | `src/ui/buffbar.js` | The buff and debuff bar over the scene's top right |
 | `src/ui/actionbar.js` | The action bar under the button row: abilities, cooldowns, glows |
 | `src/dev.js` | The `?dev` bench: game values, world, character, inventory, buffs |
@@ -64,6 +67,7 @@ and the art sheet at `/art.html` there.
 | `src/engine/events.js` | Events: requirements, choices and their effects, the event meter and other triggers |
 | `src/engine/character.js` | Character creation: names, classes, stat rolls |
 | `src/engine/perks.js` | Perks: what each level offers, what is owed and taken, passive perks' effects |
+| `src/engine/knowledge.js` | What the player knows of each place: spots noticed, its list, completion, hidden places opened (D109, D110) |
 | `src/engine/abilities.js` | Active abilities: the action bar's contents, cooldowns, which are lit |
 | `src/engine/features.js` | Surface features: appearing, drifting, thinning out; the open water's bounds |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
@@ -95,6 +99,6 @@ and the art sheet at `/art.html` there.
 | `tools/photo-icon.mjs` | A photo to a first-draft 32×32 icon, a fish's eye included (`eye=1`); the photo-to-icon skill |
 | `tools/cutout.py` | Cuts the subject out of a photo (rembg), onto magenta or transparent; run by `tools/py.mjs` |
 | `tools/commons.py` | Wikimedia Commons pictures: search to a contact sheet, fetch a pick with its licence |
-| `tools/py.mjs` | Runs the Python tools in their own environment, `.venv-cutout/` (`npm run cutout setup`) |
+| `tools/py.mjs` | Runs the Python tools in their own environment, `.venv-cutout/` (`npm run cutout setup`); `tools/python-requirements.txt` lists what it installs |
 | `tools/build-artifact.mjs` | Builds `dist/artifact.html` |
-| `docs/` | Spec, decisions, history, porting notes, design sketches; `docs/events.md` is how to write an event, `docs/art.md` how the art is made, `docs/ideas.md` the owner's ideas for events and the story |
+| `docs/` | Spec, decisions, history, porting notes; `docs/design/` holds sketches and photos, local only (D97); `docs/events.md` is how to write an event, `docs/art.md` how the art is made, `docs/ideas.md` the owner's ideas for events and the story |

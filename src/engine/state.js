@@ -87,8 +87,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, 'open' | 'closed'>} places  Locations opened (a hidden one, by its map fragments
  *   or an event) or closed (a quest's place, done), 8.2.
  * @property {number} missStreak  Splashes missed in a row (D64).
- * @property {Record<string, { casts?: number, ms?: number }>} cooldowns  Ability -> what's left of its
- *   cooldown (abilities.js, D96).
+ * @property {Record<string, { casts?: number, ms?: number, pending?: boolean }>} cooldowns  Ability ->
+ *   what's left of its cooldown (abilities.js, D96); `pending` until the next line goes out.
  * @property {Record<string, { fish?: import('./fish.js').FishInstance }>} lit  Abilities lit up by what
  *   just happened, and what they would act on, until the next cast goes out (D96).
  */

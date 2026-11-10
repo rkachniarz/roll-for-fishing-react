@@ -455,7 +455,7 @@ export function parseEvent(text) {
     }
     if (/^\s/.test(raw) && choice) {
       const m = /^([a-z]+):\s*(.*)$/.exec(line);
-      if (!m) fail(i, `expected "needs:", "gain:", "lose:", "set:" or "clear:", got "${line}"`);
+      if (!m) fail(i, `expected a word and a colon (needs:, ${Object.keys(EFFECTS).map((w) => `${w}:`).join(', ')}), got "${line}"`);
       else if (m[1] === 'needs') {
         const need = parseNeed(m[2]);
         if (typeof need === 'string') fail(i, need);

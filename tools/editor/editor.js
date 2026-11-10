@@ -174,7 +174,8 @@ async function control(s0, base, value, set, label) {
       const input = el('input', { type: 'number', value: String(value ?? ''), title: hint, step: s.type === 'integer' ? '1' : 'any' });
       if (s.minimum !== undefined) input.min = String(s.minimum);
       if (s.maximum !== undefined) input.max = String(s.maximum);
-      input.addEventListener('change', () => set(Number(input.value)));
+      // An emptied box leaves the key out, rather than writing 0.
+      input.addEventListener('change', () => set(input.value === '' ? undefined : Number(input.value)));
       return input;
     }
     case 'boolean': {
@@ -314,8 +315,19 @@ async function openFile(kind, name) {
 
 /** @param {string} kind */
 async function newFile(kind) {
+  if (open?.dirty && !confirm(`${open.kind}/${open.name} has changes that aren't saved. Leave them?`)) return;
   const id = prompt(`The new ${kind} file's id (lowercase-with-dashes; permanent, D44):`);
   if (!id || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id) || !root) return;
+  // Saving over a file that's there would lose it (D44).
+  const name = `${id}.${kind === 'events' ? 'md' : 'json'}`;
+  const there = await (await root.getDirectoryHandle(kind)).getFileHandle(name).then(
+    () => true,
+    () => false,
+  );
+  if (there) {
+    $('status').textContent = `${kind}/${name} is already there: open it, or pick another id.`;
+    return;
+  }
   if (kind === 'events') {
     open = { kind, name: `${id}.md`, data: null, text: `---\nid: ${id}\ntitle: \n---\n\n## start\n\n\n- Leave -> end\n`, schema: null, base: '', dirty: true };
   } else {
@@ -329,6 +341,9 @@ async function newFile(kind) {
 
 async function saveFile() {
   if (!open || !root) return;
+  // A changed id would be a rename, and ids are permanent (D44).
+  const id = open.data?.id;
+  if (id !== undefined && `${id}.json` !== open.name && !confirm(`The id is ${id}, but the file is ${open.name}. Ids are permanent (D44). Save anyway?`)) return;
   const dir = await root.getDirectoryHandle(open.kind);
   const handle = await dir.getFileHandle(open.name, { create: true });
   const writable = await /** @type {any} */ (handle).createWritable();
@@ -367,6 +382,15 @@ async function openFolder() {
   $('all-ids').replaceChildren(...[...ids].sort().map((id) => el('option', { value: id })));
   $('kinds').replaceChildren(...Object.keys(KINDS).map((kind) => el('button', { type: 'button', textContent: kind, onclick: () => listKind(kind) })));
   $('status').textContent = 'Pick a kind, then a file.';
+}
+
+// Any field typed in marks the file changed; the buttons redraw, which does too.
+for (const type of ['input', 'change']) {
+  $('form').addEventListener(type, () => {
+    if (!open || open.dirty) return;
+    open.dirty = true;
+    $('status').textContent = `${open.kind}/${open.name}: changed, not saved`;
+  });
 }
 
 $('openFolder').addEventListener('click', openFolder);

@@ -7,11 +7,13 @@ import assert from 'node:assert/strict';
 import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { buildContent, generatedFiles } from '../tools/content.mjs';
 import { GAME_VALUES, effectSign } from '../src/engine/values.js';
 import { t } from '../src/strings.js';
 
-const root = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
+// fileURLToPath, not .pathname: a folder with a space in its name stays readable.
+const root = fileURLToPath(new URL('..', import.meta.url));
 const result = await buildContent(root);
 
 test('the content has no errors', () => {
@@ -104,6 +106,39 @@ test('mistakes in content are caught', async () => {
     assert.ok(has(`(upper-river): "carp-school" holds common-carp, which doesn't live here`), 'a school out of place');
     assert.ok(has('(upper-river): rift fish "arapaima" only belongs in the rift table'), 'a rift fish out of the rift');
     assert.ok(has(`(upper-river): "roach" in the rift table isn't a rift fish`), 'an ordinary fish in the rift');
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('mistakes in perks, items and spots are caught (D96, D106, D110-D112, 4.2)', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'rff-content-'));
+  /** @param {string} path @param {(json: any) => void} change */
+  const edit = async (path, change) => {
+    const json = JSON.parse(await readFile(join(dir, path), 'utf8'));
+    change(json);
+    await writeFile(join(dir, path), JSON.stringify(json));
+  };
+  try {
+    await cp(join(root, 'schemas'), join(dir, 'schemas'), { recursive: true });
+    await cp(join(root, 'content'), join(dir, 'content'), { recursive: true });
+    await edit('content/perks/battle-focus.json', (p) => (p.cooldown = { minusLevel: true }));
+    await edit('content/perks/fence.json', (p) => (p.cooldowns = { gutt: { casts: 3 }, gut: {} }));
+    await edit('content/items/mage-tower-map-1.json', (i) => (i.fragmentOf = 'mage-towr'));
+    await edit('content/locations/river.json', (l) => (l.spots[0].water = { x0: 200, y0: 100, x1: 40, y1: 180 }));
+    const junk = { id: 'shiny-junk', category: 'junk', name: 'Shiny junk', rarity: 'common', value: 1, set: 'no-such-set' };
+    await writeFile(join(dir, 'content/items/shiny-junk.json'), JSON.stringify(junk));
+
+    const broken = await buildContent(dir);
+    const has = (/** @type {string} */ text) => broken.errors.some((e) => e.includes(text));
+    assert.ok(has('battle-focus.json: a cooldown needs "casts" or "ms"'), 'a cooldown that never runs');
+    assert.ok(has(`fence.json: "cooldowns" names "gutt", which isn't an active perk`), 'a cooldown for nothing');
+    assert.ok(has('fence.json: the cooldown for "gut" needs "casts" or "ms"'), "another's cooldown that never runs");
+    assert.ok(has(`mage-tower-map-1.json: a map fragment of "mage-towr", which isn't a location`), 'a map to nowhere');
+    assert.ok(has('(upper-river): the water box needs'), 'water corners out of order');
+    assert.ok(has('shiny-junk.json: junk is gray'), "junk that isn't gray");
+    assert.ok(has('shiny-junk.json: junk is good for nothing'), 'junk with a use');
+    assert.ok(has('shiny-junk.json: no set "no-such-set"'), "a set that isn't there");
   } finally {
     await rm(dir, { recursive: true, force: true });
   }

@@ -100,7 +100,9 @@ export function createActionBar(root, onUse) {
     const endPress = () => window.clearTimeout(timer);
     el.addEventListener('pointerup', endPress);
     el.addEventListener('pointercancel', endPress);
-    el.addEventListener('click', () => {
+    el.addEventListener('click', (e) => {
+      // A click shouldn't leave the keyboard on the button: Space casts (R16.3).
+      if (e.detail > 0) el.blur();
       if (longPressed) {
         longPressed = false;
         return;

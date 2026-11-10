@@ -216,8 +216,10 @@ await check('the content editor (7.5)', DESKTOP, null, async (page) => {
   report('editor: a form from the item schema', label.includes('name') && label.includes('rarity'), label.join(', '));
   await page.fill('.field:has(> label:text-is("name")) input', 'Bent fork, edited');
   await page.dispatchEvent('.field:has(> label:text-is("name")) input', 'change');
+  report('editor: a field typed in marks the file changed', ((await page.textContent('#status')) ?? '').includes('changed, not saved'));
   await page.click('#save');
-  await page.waitForSelector('#status:has-text("saved")', { timeout: 3000 });
+  // ": saved." exactly: "changed, not saved" holds the word too.
+  await page.waitForSelector('#status:has-text(": saved.")', { timeout: 3000 });
   const saved = await page.evaluate(async () => {
     const opfs = await navigator.storage.getDirectory();
     const file = await (await (await (await opfs.getDirectoryHandle('content')).getDirectoryHandle('items')).getFileHandle('bent-fork.json')).getFile();
@@ -241,11 +243,17 @@ await check('each spot looks different until painted (4.2)', PHONE, '?dev&seed=1
     await page.selectOption('#dev-spot', spot);
     await closePane(page);
     await page.waitForTimeout(300);
-    // The scene alone, as a picture to compare.
-    const shot = await page.locator('canvas').first().screenshot({ path: `dist/verify/spot-${spot}.png` });
-    looks.push(shot.toString('base64'));
+    // The scene alone, to look at; the look painted, to compare (the water
+    // moves, so two pictures of one spot differ too).
+    await page.locator('canvas').first().screenshot({ path: `dist/verify/spot-${spot}.png` });
+    looks.push((await page.getAttribute('body', 'data-spot-look')) ?? 'null');
   }
-  report('each spot looks different until painted: seven spots, seven pictures', new Set(looks).size === looks.length, `${new Set(looks).size} different`);
+  report(
+    'each spot looks different until painted: seven spots, seven looks',
+    // Reedy Shore is the plain scene: no look is its look, so null may come once.
+    new Set(looks).size === looks.length,
+    `${new Set(looks).size} different`,
+  );
 });
 
 await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, tap) => {
@@ -265,8 +273,8 @@ await check('strike after the splash', PHONE, '?seed=1&wait=700', async (page, t
   report('strike after the splash: the d20 roll is shown', /d20: \d+/.test(detail ?? ''), detail);
   report('strike after the splash: "Fast strike!" floats over the bobber', floated === 'Fast strike!', floated);
   report('strike after the splash: no milliseconds anywhere', !/ ms\b/.test(log + floated), log);
-  await page.waitForTimeout(1300);
-  report('strike after the splash: the words fade and go', (await page.locator('.floater').count()) === 0);
+  const gone = await page.waitForFunction(() => document.querySelectorAll('.floater').length === 0, null, { timeout: 4000 }).then(() => true, () => false);
+  report('strike after the splash: the words fade and go', gone);
   report("strike after the splash: the fish's roll stays hidden", /needed \?/.test(detail ?? ''), detail);
 });
 
@@ -497,8 +505,11 @@ await check('a missed splash: pause, cast again, then reel in', DESKTOP, '?seed=
   await page.waitForSelector('body[data-phase="waiting"]', { timeout: 7000 });
   report('missed splash: the line counts as cast again after the pause', true);
   await page.waitForSelector('body[data-phase="done"]', { timeout: 5000 });
-  await page.waitForTimeout(5500);
-  report('missed splash: a second miss reels in', (await page.getAttribute('body', 'data-phase')) === 'done');
+  // Reeled in: the pause ends with the line out of the water, not cast again.
+  const ready = await page
+    .waitForFunction(() => document.getElementById('status')?.textContent === 'Tap to cast again.', null, { timeout: 9000 })
+    .then(() => true, () => false);
+  report('missed splash: a second miss reels in', ready && (await page.getAttribute('body', 'data-phase')) === 'done');
   report('missed splash: ready to cast', (await page.textContent('#status')) === 'Tap to cast again.');
 });
 

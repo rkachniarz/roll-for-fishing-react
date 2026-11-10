@@ -20,7 +20,7 @@ import { startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
 import { equippedIds } from './equipment.js';
 import { afterCast, arrive } from './events.js';
-import { hasPerk, owedLevels, perkSources, settlePerks } from './perks.js';
+import { hasPerk, levelUp, perkSources } from './perks.js';
 import { LIGHTS, abilityStatus, spendCooldownCasts, startCooldown, tickCooldowns } from './abilities.js';
 import { advanceTime, clock } from './time.js';
 import { learn, noticeSpots, openByFragments, placeOpen, spotKnown } from './knowledge.js';
@@ -177,6 +177,8 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     .filter((b) => b.casts === undefined || b.casts > 0)
     // An ability used while the last line was out counts from this cast (D96).
     .map(({ pending, ...b }) => b);
+  // Cooldowns started since the last line count from this one (D96).
+  for (const [id, { pending, ...cd }] of Object.entries(checkpoint.cooldowns)) checkpoint.cooldowns[id] = cd;
   // Lit abilities go dark when the next line goes out (D96).
   checkpoint.lit = {};
 
@@ -378,11 +380,15 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
 export function travel(state, location, spot, { force = false } = {}) {
   if (state.location === location && state.spot === spot) return { state, events: [] };
   if (state.locked && location !== state.locked && !force) return { state, events: [], error: 'locked' };
+  // A choice the player owes is made where it came up (D59, D106).
+  if (state.pendingCatch || state.pendingTreasure) return { state, events: [], error: 'choiceWaiting' };
   // Only to a location on the map (8.2).
   if (!placeOpen(state, location) && !force) return { state, events: [], error: 'unknownPlace' };
   // Only to a spot the player knows of (R11.8); the bench goes anywhere.
   if (!spotKnown(state, location, spot) && !force) return { state, events: [], error: 'unknownSpot' };
-  const next = { ...structuredClone(state), location, spot, features: [] };
+  // A lit ability acts on a fish at the spot it lit up; it goes dark here, as
+  // it does when the next line goes out (D96).
+  const next = { ...structuredClone(state), location, spot, features: [], lit: {} };
   return { state: next, events: arrive(next) };
 }
 
@@ -649,25 +655,6 @@ function resolveCast(state, cast) {
 }
 
 /**
- * A level-up, if the XP made one: the level-1 perk given, a choice to come
- * (D96). Changes `state` in place.
- * @param {GameState} state
- * @param {number} levelBefore
- * @param {GameEvent[]} events  Added to.
- */
-function levelUp(state, levelBefore, events) {
-  const levelAfter = levelFor(state.character.xp);
-  if (levelAfter <= levelBefore) return;
-  events.push({ type: 'level-up', level: levelAfter });
-  // A level with only one perk on offer gives it; one with a choice waits for
-  // the player, without stopping the game (D96).
-  const settled = settlePerks(state);
-  Object.assign(state, settled.state);
-  for (const id of settled.taken) events.push({ type: 'perk', perk: id });
-  if (owedLevels(state).length > 0) events.push({ type: 'perk-owed' });
-}
-
-/**
  * Lights every ready ability that `what` lights, for this fish (D96).
  * Changes `state` in place.
  * @param {GameState} state
@@ -741,10 +728,13 @@ export function useAbility(state, id, extra = []) {
       const bent = bendFish(before, dice.abilities);
       next.streams = commit();
       addToBucket(next, bent);
+      // The book holds the fish as it is now: a new record is this one, here
+      // and now, where it was just caught. The only one of its kind is both.
       const entry = next.book.fish[bent.species];
       if (entry) {
         entry.totalSize += bent.size - before.size;
-        if (bent.size > entry.largest.size) entry.largest = { ...entry.largest, size: bent.size };
+        if (bent.size > entry.largest.size) entry.largest = bookRecord(next, bent.size);
+        if (entry.caught === 1) entry.smallest = entry.largest;
       }
       next.character.xp += bent.xp - before.xp;
       events.push({ type: 'bent', from: before, fish: bent, xp: bent.xp - before.xp });
@@ -773,7 +763,8 @@ export function useAbility(state, id, extra = []) {
       stack.count--;
       next.bucket = next.bucket.filter((b) => b.count > 0);
       const { dice, commit } = diceFrom(next);
-      const { line } = rollLoot(next, valuesFor(next, extra), dice.abilities, dice.effects);
+      // Both from the abilities' stream: Gut mustn't move the casts' dice (D4).
+      const { line } = rollLoot(next, valuesFor(next, extra), dice.abilities, dice.abilities);
       next.streams = commit();
       if (line.kind === 'item') {
         receive(next, line);
@@ -807,7 +798,7 @@ function catchFish(state, fish, bucketSize) {
 
   state.book.catches++;
   learn(state, state.location, 'fish', fish.species, 'found');
-  const record = { size: fish.size, location: state.location, spot: state.spot, time: state.time, weather: { season: state.weather.season, cell: state.weather.cell } };
+  const record = bookRecord(state, fish.size);
   const entry = state.book.fish[fish.species];
   if (!entry) {
     state.book.fish[fish.species] = { caught: 1, totalSize: fish.size, smallest: record, largest: record, mostTries: tries ?? 0 };
@@ -819,6 +810,15 @@ function catchFish(state, fish, bucketSize) {
     entry.mostTries = Math.max(entry.mostTries, tries ?? 0);
   }
   state.character.xp += fish.xp;
+}
+
+/**
+ * A catch for the book: its size, where and when.
+ * @param {GameState} state
+ * @param {number} size
+ */
+function bookRecord(state, size) {
+  return { size, location: state.location, spot: state.spot, time: state.time, weather: { season: state.weather.season, cell: state.weather.cell } };
 }
 
 /** @param {GameState} state */

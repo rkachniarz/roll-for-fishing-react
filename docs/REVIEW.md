@@ -24,6 +24,17 @@ Items with no note are left alone.
 
 Newest first.
 
+## Review 2 (2026-11-10)
+
+- **No ability while a choice waits.** While a full bucket or two treasures wait (D59, D106), the action bar is dark
+  and says "Make your choice first."; travel waits too, with the same words. A choice is normally a dialog, so this
+  shows only when an ability key or the map is used just before it opens.
+- **Travelling puts out lit abilities**, as the next cast does: Jump In, Gut and Bend Reality act on a fish at the
+  spot that lit them.
+- **Bend Reality's record**: when the bent fish is the species' largest, the book shows it caught where it was bent;
+  when it's the only one of its kind, it's the smallest too. An earlier smallest that was this same fish, among
+  others caught, isn't revisited.
+
 ## The content editor (7.5)
 
 - **`http://localhost:8001/editor.html`** under `npm run dev`, in Chrome or Edge: "Open the content folder", pick a
@@ -102,6 +113,8 @@ ability used when it can be. Things worth a look, none changed:
   then the treasure found. WoW keeps collections in their own window; one more button didn't seem worth it yet.
 - **A silhouette means a fish that got away** before one of its kind was caught: the only way to know of a fish so far.
   The tooltip says "An unknown fish". Knowledge from books and tips comes with 8.5.
+  > **Claude:** Overtaken: the collection moved into per-place sections (see "The collection moved into per-place
+  > sections" above), and since 8.5 a fish can also be known of from an event's `learn:` (D109). Delete when settled.
 
 ## A save to a file (9.3)
 
@@ -204,6 +217,7 @@ ability used when it can be. Things worth a look, none changed:
   *Chaenocephalus aceratus*; Hillstream loach *Sewellia lineolata*; Snow trout *Schizothorax richardsonii*; Pacu the
   red-bellied pacu *Piaractus brachypomus*; Strange cod the Murray cod.
 - **Not in a cast yet:** the rift tables wait for Rift Fishing (6.3), which decides how often the rift opens.
+  > **Claude:** Overtaken: Rift Fishing is in, so the rift tables are used now (D106). Delete when settled.
 - **Their icons** come from Commons pictures Claude picked (credits in `docs/design/refs_rift/credits.csv`, local
   only), cut out and given eyes by the tools. Odd ones: the Coelacanth is green, from an aquarium's light (the other
   picture brought part of its museum case along); the Strange shark comes from a line drawing, so it's mostly white;
@@ -239,6 +253,8 @@ ability used when it can be. Things worth a look, none changed:
   Smallmouth bass and Walleye have lost most of their pattern; the Yellow perch is murky.
 - **Left out:** the Asp (the hands holding it survived the cut), the Ide (its photo crops the tail), and the Northern
   pike, Pumpkinseed and Sterlet, whose drafts were muddy. 48 fish still have the default icon.
+  > **Claude:** Overtaken: only four fish still have the default icon (see "Still without an icon" above). Delete when
+  > settled.
 
 ## Three fish icons from Wikipedia photos (trial)
 
@@ -286,10 +302,14 @@ ability used when it can be. Things worth a look, none changed:
 - **Placeholder baits**, dev-only: Maggots, Worms, Flies, Sweetcorn, Live frog, Crayfish, Shrimp, Mouse fly, Spinner
   lure, each +10 Fish Find; Bread crumbs are now bread. They warn "an upside with no downside" (R8.5): is being used
   up enough of a downside for bait?
+  > **Claude:** Overtaken: the data check now lets bait be, and stops on any other item with no downside (5.3; see
+  > "Bait has no downside but being used up" above). Delete when settled.
 - **The map pane** lists every spot of both places, and a tap moves there, between casts only. Moving leaves the surface
   features behind, and escaped fish stay in the spot they got away in.
+  > **Claude:** Overtaken: the map lists only the spots the player knows of (D109), and the hidden Mage Tower opens
+  > from map fragments (D110). Delete when settled.
 
-## Dice over the scene (D99, branch `dice-on-the-desk`)
+## Dice over the scene (D99)
 
 - **Timing**: 0.7 s rolling, 0.55 s at rest, 0.2 s dithering away, so the catch flies about 1.45 s after the strike
   (`ROLL_MS`, `HOLD_MS`, `FADE_MS` in `src/scene/dice.js`). First guesses.
@@ -336,6 +356,7 @@ ability used when it can be. Things worth a look, none changed:
 - **A bobber at 150, 172** to show the scale. Casting doesn't work there: the engine's open water (`WATER`) belongs
   to the game's own view.
 - **The photo is kept in the repo** (`docs/design/photo-autumn-pond.jpg`, 1.3 MB) as the reference.
+  > **Claude:** Overtaken: `docs/design/` is local only (D97), so the photo isn't in the repo. Delete when settled.
 - **Reeds in front, from a second photo** (`docs/design/photo-reeds.png`, placed by `sketch-pond-reeds.png`; both
   local only): a clump of common reeds in the bottom-left corner, over the birch's foot and the log's end, and a lone
   lighter reed at the bottom right. Leaves are drawn as curves that arch out and hang at the tip: a dark layer behind,
@@ -431,6 +452,8 @@ ability used when it can be. Things worth a look, none changed:
   of your own before writing ten; the words are easy to change now and harder later.
 - **The frog happens once per game** (`once: true`). Without it, +2 Luck could be farmed. It's at the Lake with weight
   1, the only event there.
+  > **Claude:** Overtaken: `once` is now the default, so `frog.md` no longer says it (D87), and the River lists the
+  > frog too. Delete when settled.
 - **A choice the player can't take is hidden**, as the prototype's comments said. WoW does the same with gossip
   options. The alternative is showing it greyed out with what it needs, which tells the player more.
 - **The event meter** is the prototype's: a d20 per cast, +5 when the hook comes up empty, fires above 100, so about

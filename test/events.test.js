@@ -345,9 +345,12 @@ test('effects: items in and out of the bags, XP with a level-up, flags', () => {
       assert.deepEqual(out.state.flags, { gifted: true });
       assert.deepEqual(
         out.events.map((e) => e.type),
-        ['event-lost', 'event-gained', 'event-xp', 'level-up', 'event-ended'],
+        ['event-lost', 'event-gained', 'event-xp', 'level-up', 'perk', 'perk-owed', 'event-ended'],
       );
       assert.equal(out.events[0].count, 2);
+      // A level-up from an event is a level-up like any other (D96): the
+      // class's level-1 ability given, the choices after it owed.
+      assert.ok(out.state.character.perks[1], 'the level-1 ability');
     },
   );
 });

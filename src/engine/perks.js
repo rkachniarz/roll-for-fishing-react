@@ -115,3 +115,23 @@ export function perkSources(state) {
     .filter((p) => p?.effects)
     .map((p) => ({ label: p.id, effects: p.effects }));
 }
+
+/**
+ * A level-up, if the XP made one: the level-1 perk given, a choice to come
+ * (D96). Changes `state` in place. A cast, an ability and an event's XP all
+ * come here.
+ * @param {GameState} state
+ * @param {number} levelBefore
+ * @param {{ type: string }[]} events  Added to: the game's events (game.js).
+ */
+export function levelUp(state, levelBefore, events) {
+  const levelAfter = levelFor(state.character.xp);
+  if (levelAfter <= levelBefore) return;
+  events.push({ type: 'level-up', level: levelAfter });
+  // A level with only one perk on offer gives it; one with a choice waits for
+  // the player, without stopping the game (D96).
+  const settled = settlePerks(state);
+  Object.assign(state, settled.state);
+  for (const id of settled.taken) events.push({ type: 'perk', perk: id });
+  if (owedLevels(state).length > 0) events.push({ type: 'perk-owed' });
+}

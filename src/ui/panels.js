@@ -113,8 +113,12 @@ function perkCard(id, tag = 'div') {
   ]);
 }
 
-/** The perk card picked but not yet learnt, kept while the pane is redrawn. */
+/**
+ * The perk card picked but not yet learnt, kept while the pane is redrawn;
+ * `for` is whose choice it was, so another game doesn't find it picked.
+ */
 let picked = '';
+let pickedFor = '';
 
 /**
  * The perks (D96): the choice for the lowest owed level, if there is one, as
@@ -129,7 +133,9 @@ function perksSection(state, onTakePerk) {
   const [owed] = owedLevels(state);
   if (owed !== undefined) {
     const choice = offers(state, owed);
-    if (!choice.includes(picked)) picked = '';
+    const whose = `${state.seed}/${state.character.name}/${owed}`;
+    if (pickedFor !== whose || !choice.includes(picked)) picked = '';
+    pickedFor = whose;
     const learn = el('button', { type: 'button', id: 'learnPerk', className: 'learn', textContent: t('perk.learn'), disabled: !picked });
     learn.addEventListener('click', () => {
       const id = picked;
@@ -382,7 +388,7 @@ export function menuPane({ onMainMenu, onSettings, onDev, onExport }) {
  * Settings (D81): the theme, whether the dice are shown (D99), the sound's
  * volume (9.2).
  * @param {import('../settings.js').Settings} settings
- * @param {(next: import('../settings.js').Settings) => void} onChange
+ * @param {(change: Partial<import('../settings.js').Settings>) => void} onChange  Only what changed.
  * @param {boolean} diceShown  The box's tick: the setting, or what the device's "reduce motion" chose.
  */
 export function settingsPane(settings, onChange, diceShown) {
@@ -399,7 +405,7 @@ export function settingsPane(settings, onChange, diceShown) {
             id: `theme-${theme}`,
             value: theme,
             checked: settings.theme === theme,
-            onchange: () => onChange({ ...settings, theme }),
+            onchange: () => onChange({ theme }),
           }),
           el('span', { textContent: t(`settings.${theme}`) }),
         ]),
@@ -412,7 +418,7 @@ export function settingsPane(settings, onChange, diceShown) {
           type: 'checkbox',
           id: 'show-dice',
           checked: diceShown,
-          onchange: (/** @type {Event} */ e) => onChange({ ...settings, dice: /** @type {HTMLInputElement} */ (e.target).checked }),
+          onchange: (/** @type {Event} */ e) => onChange({ dice: /** @type {HTMLInputElement} */ (e.target).checked }),
         }),
         el('span', { textContent: t('settings.showDice') }),
       ]),
@@ -427,7 +433,7 @@ export function settingsPane(settings, onChange, diceShown) {
           max: '100',
           step: '10',
           value: String(settings.sound),
-          onchange: (/** @type {Event} */ e) => onChange({ ...settings, sound: Number(/** @type {HTMLInputElement} */ (e.target).value) }),
+          onchange: (/** @type {Event} */ e) => onChange({ sound: Number(/** @type {HTMLInputElement} */ (e.target).value) }),
         }),
         el('span', { textContent: t('settings.volume') }),
       ]),

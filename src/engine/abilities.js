@@ -62,7 +62,10 @@ export function abilityStatus(state, id) {
   // A "next cast" ability already waiting on the buff bar.
   const armed = state.buffs.some((b) => b.source === id);
   const working = WORKING.has(id);
-  return { id, cooldown, needsLight, lit, armed, working, usable: working && !cooldown && (!needsLight || lit) && !armed };
+  // A choice the player owes comes first, as it does for a cast (D59, D106):
+  // Gut or Jump In would otherwise overwrite the treasures or fish waiting.
+  const waiting = Boolean(state.pendingCatch || state.pendingTreasure);
+  return { id, cooldown, needsLight, lit, armed, working, waiting, usable: working && !cooldown && (!needsLight || lit) && !armed && !waiting };
 }
 
 /**
@@ -72,7 +75,10 @@ export function abilityStatus(state, id) {
  */
 export function startCooldown(state, id) {
   const cd = cooldownFor(state, id);
-  if (cd.casts || cd.ms) state.cooldowns[id] = cd;
+  // Its casts count from the next line out, as its buff does: one used while
+  // the line is out isn't shortened by that cast (D96, Review 2).
+  if (cd.casts) state.cooldowns[id] = { ...cd, pending: true };
+  else if (cd.ms) state.cooldowns[id] = cd;
 }
 
 /**
@@ -82,7 +88,7 @@ export function startCooldown(state, id) {
  */
 export function spendCooldownCasts(state) {
   for (const [id, cd] of Object.entries(state.cooldowns)) {
-    if (cd.casts === undefined) continue;
+    if (cd.casts === undefined || cd.pending) continue;
     const casts = cd.casts - 1;
     if (casts > 0) state.cooldowns[id] = { ...cd, casts };
     else if (cd.ms) state.cooldowns[id] = { ms: cd.ms };
@@ -103,7 +109,7 @@ export function tickCooldowns(state, ms) {
   for (const [id, cd] of Object.entries(state.cooldowns)) {
     if (cd.ms === undefined) cooldowns[id] = cd;
     else if (cd.ms - ms > 0) cooldowns[id] = { ...cd, ms: cd.ms - ms };
-    else if (cd.casts) cooldowns[id] = { casts: cd.casts };
+    else if (cd.casts) cooldowns[id] = { casts: cd.casts, ...(cd.pending ? { pending: true } : {}) };
   }
   return { ...state, cooldowns };
 }

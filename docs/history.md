@@ -97,7 +97,7 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
 - Phase end: 75 unit tests and all browser checks pass; the artifact builds (26 kB). The page is still the Phase 1
   trial, unaffected.
 
-## Phase 3: Core loop, playable (in progress)
+## Phase 3: Core loop, playable (done 2026-11-06)
 
 - **3.1** The page runs on the Phase 2 engine. A tap aims; the engine scatters the landing and the scene throws the
   bobber there (the keyboard casts to a seeded random spot, since landings will matter for surface features). The
@@ -163,6 +163,9 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   shadows drifting with the wind, rain slanting with it, snow when it's 2 or colder, livelier waves and reeds in the
   wind. Tints rather than palette swaps for now, which works for generated art; hand-drawn art may want real palettes
   (4.1). The first night screenshot lost the blizzard under the night tint, so rain and snow are now drawn above it.
+- **4.2** A placeholder look per spot: a spot's `look` (a tint and flat shapes: lily pads, rocks, a far bank, a
+  sandbar) draws over the water until the spot is painted (CR-1). A spot may set its own casting area (`water`), and
+  surface features drift within it. The bench's pickers gained ids, and a browser check shows the spots differ.
 
 ## Phase 5: Items and inventory (in progress)
 
@@ -225,6 +228,68 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
 - **3.5 GitHub Pages (D91)** `.github/workflows/pages.yml` publishes on a push to `fresh-start` or `master` once
   `npm test` passes, copying only what the page loads. The art sheet fits a phone's width (a verify check), so the owner
   can look at it away from home.
+- **Notes from the phone (D92–D95)** The owner played on GitHub Pages. Every fish is worth at least 1 XP; the
+  weather changes half as often (a d12 at 1–3 instead of a d6), and the log shows only the new weather's description.
+  A fish that gets away after the strike reels the bobber in. On a phone the scene keeps its whole-device-pixel scale
+  and widens to fill the screen (D93): the 256×256 play area in the middle, strips of water, shore, waves and reeds
+  either side, up to 320 pixels, so nothing the engine places can be cut off; the browser checks gained the owner's
+  Pixel 9 Pro. The owner picked reeds C and bobber B from the art sheet's trials (D94); a spacer the height of the
+  button row sits above the scene on a phone; the game menu and settings open in the middle of the scene, and no line
+  can be cast while either is open. With advantage or disadvantage the log shows the dropped d20 struck through (D95).
+  The full-bucket dialog ignores clicks for 400 ms: on a phone the strike's own tap landed on "let the new fish go".
+- **Icons at 32×32 (D97, D98)** The older 16×16 grids are drawn doubled (`DRAWN_AT_16`); an icon can keep its own
+  colours (`OWN_KEYS`). `npm run photo-icon` makes a first-draft icon from a photo, and the photo-to-icon skill
+  describes the hand pass after it; the carp was the first. The art sheet gained a trial scene painted from a photo of
+  an autumn pond. `docs/design/` became local only.
+- **Dice over the scene (D99)** The fight's d20s are thrown across the scene, drawn pixel by pixel at its scale, and
+  come to rest on what the engine rolled; dice that didn't count turn grey. The total floats up when they land, the
+  log follows, and the catch flies when they go; the next action ends the show at once. The d20's geometry and
+  numbering are SuperRollies'. Settings gained Show dice, which follows the device's reduce-motion preference until
+  set.
+- **The owner's fish (D101–D104)** 80 fish over nine spots from the owner's spawn table: six at the Lake, three at a
+  new River, each fish's weight in a spot set by its rank. The old seven fish and the lake's old spots went; a save
+  from version 5 drops them. A fish's preferences (time of day, weather, season, bait) each double its weight when
+  met; fog and snow are tags on the weather cells, and bait items carry a bait kind. Each spot has schools of its
+  three commonest fish and its predators as big fish (D102). No places from our world in fish names (D103). 76 icons
+  were drawn from Wikipedia and Wikimedia Commons pictures, cut out and given eyes; four fish kept the default icon.
+  The build grew from 386 kB to 532 kB with them. Then 42 rift fish (D104), from the rest of the world, 3 to 6 in
+  each spot's `rift` table, with icons made the same way.
+- **Tools for reference pictures** `npm run cutout` cuts the subject out of a busy photo (rembg) in its own Python
+  environment, `.venv-cutout/`; `npm run commons` searches Wikimedia Commons into a numbered contact sheet and fetches
+  a pick with its licence and author; `photo-icon eye=1` places a fish's eye.
+- **Two tracks (D105)** The plan split into development and creative work (`CR-n`); development builds with
+  placeholders, each listed under the creative task that replaces it.
+- **5.8** A Tiny fish in the bucket has an "On the hook" button that puts it on the bait slot as a Small fish, the
+  bait predators prefer. Bait kinds and placeholder baits came with D101.
+- **5.3, 5.7** Sixteen unique pieces of placeholder gear in the shared treasure list: four rods (the willow rod, ash
+  rod, reed pole and dwarven steel rod), two lines, a bobber, two hats and seven trinkets, using the game values
+  nothing used yet. The chum got its downside, and "every upside has a downside" became an error, bait aside. Unique
+  rewards already found are left out of a junk trade. The equipment check scrolls a long bag.
+- **Junk and stuff (D112)** Junk is grey and of no use but its value; things used for something (the bottle, map
+  fragments, the lorebook's pages) became the category `stuff`, white. The bag gained a Junk tab, the `useful` flag
+  went, and the content check keeps junk grey and without a use.
+
+## Phase 6: Classes, levels, abilities, knowledge (in progress)
+
+How it works is D96.
+
+- **6.6** Perks as content (`content/perks/`, `src/engine/perks.js`); the save keeps only the perks taken, level by
+  level, and what is owed is worked out from the level. Passive perks feed the game values as items do. Crits as D96:
+  a natural 20 lands the fish unless the fish's own d20 is a 20 too. The bench grants perks.
+- **6.1** Choosing a perk: a badge on the character button, and the choice in the character pane; a level-up never
+  stops the game.
+- **6.2, 6.7** The action bar under the button row (`src/ui/actionbar.js`), keys 1–9: active abilities with cooldowns
+  that count attempts at a catch (`src/engine/abilities.js`). Jump In and Gut light up after something happens and
+  stay lit until the next line goes out.
+- **6.3** The last level 3 and 5 perks (D106): Rift Fishing brings fish from the spot's rift table now and then,
+  twice as often with Bend Reality held; a Greedy fish brings a loot roll with it; Ever-Summoning makes every other
+  cast a certain bite; Bend Reality makes the fish just caught one band and one rarity higher; Fence offers two
+  treasures to keep one of (save version 7, `pendingTreasure`) and shortens Gut's cooldown; Polish waits for junk and
+  turns it to treasure.
+- **6.4** The number a fish needed shows from level 1 (D107): each roll record says whether the player sees it, from
+  a level in `rules/levels.json` or a perk or item with `revealResistance`, `revealBite` or `revealTreasure`.
+- **6.8** The fish's dice on the desk (D99, D107): once its roll shows, its d20s come in from the top right in teal;
+  the resistance roll records its dropped dice from the same draws.
 
 ## Phase 7: Events (done 2026-11-10)
 
@@ -235,7 +300,7 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   the smallest first; `lose: rarest fish`; `needs: fish`), visitors who come back after so many casts or days
   (`again:`, with the save keeping when each event last started), the player moved and held at a location (`go:`,
   `lock:`, `unlock:`; travel and the map refuse the rest), and every useless piece of junk traded at once for a reward
-  picked by their total value from a `rewards` table (`trade: junk`). Save versions 8.
+  picked by their total value from a `rewards` table (`trade: junk`). Save version 8.
 - **7.4** A placeholder quest chain, the message in a bottle: an item starts it, a stranger at the lower river takes
   three roach, a package on the line brings the reward. Item, arrive, hand-in and needs triggers, linked by flags; a
   test plays it through. Adding the bottle to the Lake's junk changed which junk a seeded cast brings up, so the
@@ -243,3 +308,61 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
 - **7.5** The content editor (`editor.html`, D47): forms drawn from the schemas, saving into `content/` through the
   browser's File System Access API (Chrome, Edge), events as text. Its browser check stands the private file system
   in for the folder picker; the first run read the file back before the save had finished.
+- Phase end, measured at the review on 2026-11-10 (after D112): `npm run check` passes, with 197 unit tests and every
+  browser check; the artifact builds at 708.5 kB.
+
+## Phase 8: World and town (in progress)
+
+- **8.1, 8.5** What the player knows of each place (`src/engine/knowledge.js`, D109): spots with `learnAfter` are
+  noticed after that many casts at their location, or from an event's `learn:`; the map lists only known spots. Each
+  location has its list and a completion, hidden until revealed (level 3, or `revealCompletion`). The journal shows
+  each place's found entries and silhouettes of the rest. Save version 9; an old save keeps every spot. The spot map
+  of placeholder shapes (8.1) is still to do.
+- **8.2, 8.4** Hidden places (D110): a hidden location stays off the map until its map fragments are found or an event
+  opens it (`open:`); `close:` takes a quest's place away. The Mage Tower pools are a placeholder: one pool, six fish,
+  three fragments in the junk. Save version 10.
+- **8.7** Item sets and readable pages (D111): sets are content (`content/sets/`), their pieces unique items with
+  `set`, and an item's `page` reads in its tooltip. Events check `needs: set` and take pieces with `lose: set`; the
+  journal shows each set's progress. A placeholder three-page lorebook, from the owner's story notes, and a scholar
+  who comes by while the player holds a page.
+
+## Phase 9: Balance and finish (in progress)
+
+- **9.3** A save to a file: Save to a file in the in-game menu downloads the game as JSON; Load from a file on the
+  title screen reads one, migrated, into a slot the player picks, asking before overwriting.
+- **9.4** The collection in the journal (R4.3): every species caught, its records on a tap, silhouettes for fish that
+  got away before one was caught, then the treasure found. It later moved into per-place sections (8.5).
+- **9.1** `npm run sim` (`tools/sim.mjs`): seeded games per class on the real engine, the player striking within a
+  reaction range, taking perks, using abilities and answering every prompt. It reports outcomes, what came up, fish
+  rarity, XP per cast, casts to each level, abilities and events. A test checks it plays every cast and is repeatable.
+- **9.2, 9.3** Placeholder sounds made with the Web Audio API (`src/audio.js`): the cast, the splash of a bite, a
+  catch, an escape, a find, the dice and a level. The volume is a setting, 60 of 100 to start; the sound starts on the
+  first tap or key.
+
+## Review 2 (2026-11-10)
+
+A code and docs review of everything since Review 1, by four reviewers (engine, page, tools and tests, docs), each
+finding checked before it was fixed.
+
+- **Engine:** no ability can be used while a full bucket or two treasures wait for a choice: Gut could overwrite
+  Fence's pair, and Jump In a fish waiting for a full bucket. Travel waits for that choice too, and puts out lit
+  abilities. An event's XP levels up like a cast's (`levelUp`, now in `perks.js`): the level-1 ability given, a perk
+  owed logged. Bend Reality writes the bent fish's own record into the book. Gut draws only from the abilities'
+  stream (D4).
+- **Page:** the bucket and treasure dialogs act on the state as it is when clicked, not as it was when they opened;
+  leaving for the title screen drops dice still rolling; no dialog opens before the dice land; the action bar gives
+  the keyboard back after a click; Ctrl, Alt and Cmd with a number use no ability; the settings pane isn't rebuilt
+  under a slider being moved; the dialogs' Escape guards are added once.
+- **Editor:** typing in a field marks the file changed; "+ new" won't save over a file that is there; an emptied
+  number box leaves the key out; saving a file whose id differs from its name asks first.
+- **Content checks:** a map fragment of no location, a cooldown with neither casts nor time, a perk's `cooldowns` for
+  something that isn't an active perk, a spot's water box out of order, and an event picture that isn't there. A test
+  shows each newer check catching a mistake.
+- **Browser checks:** the spot check compares the looks painted (`body[data-spot-look]`), since the moving water made
+  two pictures of one spot differ and the check could never fail; two checks wait for what they test instead of a
+  fixed sleep.
+- **Cooldowns (D113, the owner's call):** an ability used while the line was out came back one cast early, since
+  that cast counted towards its cooldown. A cooldown now counts from the next line out, as the ability's buff does.
+- **Docs:** brought up to date with the code; decisions changed by later ones point at them; REVIEW.md items
+  overtaken by later work are marked for the owner.
+- Measured: `npm run check` passes, with 200 unit tests and every browser check; the artifact builds at 709.5 kB.
