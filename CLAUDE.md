@@ -54,6 +54,7 @@ npm run sprite export bobber   # a sprite as art/bobber.png to draw on; `import 
 npm run photo-icon <photo> name=icon-fish-<id>   # a first-draft 32×32 icon from a photo; follow the photo-to-icon skill
 npm run cutout <photo> [flip=Name]   # cut the subject out of a busy photo, onto magenta (first: npm run cutout setup)
 npm run commons search <slug> "<query>"   # Wikimedia Commons pictures on a contact sheet; then commons fetch <slug> <n> name=<Name>
+npm run sim [casts=500 games=20 class=rogue-fisher strike=250..900 perks=first|passive|active]   # balance: seeded games per class (9.1)
 # http://localhost:8001/art.html   the art sheet: trials, every sprite enlarged, the scene in five lights
 # http://localhost:8001/?dev       dev bench; ?seed=N seeds a new game (a save wins); ?wait=MS fixes the bite delay
 ```

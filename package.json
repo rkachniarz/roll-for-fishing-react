@@ -14,6 +14,7 @@
     "photo-icon": "node tools/photo-icon.mjs",
     "cutout": "node tools/py.mjs cutout",
     "commons": "node tools/py.mjs commons",
+    "sim": "node tools/sim.mjs",
     "check": "npm test && npm run verify && npm run build"
   },
   "devDependencies": {

@@ -24,6 +24,20 @@ Items with no note are left alone.
 
 Newest first.
 
+## The balance simulation's first numbers (9.1)
+
+`npm run sim`, 20 games of 500 casts per class, striking 250–900 ms after the splash, the first perk on offer, every
+ability used when it can be. Things worth a look, none changed:
+
+- **Levels come at about 16, 35–45, 65–90, 125–165 and 300–390 casts** (L1–L5). L6 needs 500 XP more than L5 and only a
+  few fighters reach it in 500 casts.
+- **The rogue levels slowest** (0.60 XP a cast against the fighter's 0.88 and the wizard's 0.77): Sleight of Hook and Gut
+  trade fish for loot, and loot gives little XP.
+- **A fish gets away 16–28% of the time,** most for the wizard, whose Summon Fish brings fish it then has to land.
+- **Treasure is 3–4% of casts,** junk about 20%, the empty hook 13–19%.
+- **Epic fish are 11–13% of catches,** more than rare is to uncommon: the size bands' rarity shift lifts big fish of
+  rarer species to Epic. Worth checking against how special Epic should feel.
+
 ## The collection (9.4)
 
 - **It's in the journal,** in place of the list of records: a grid of every species caught, the records on a tap,

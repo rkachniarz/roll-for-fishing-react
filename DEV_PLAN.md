@@ -248,7 +248,8 @@ Requirements R5.3, R11.
 
 ## Phase 9: Balance and finish
 
-- [ ] **9.1** Balance simulation over the seeded engine: catch rates, XP curve, loot rates per class and build.
+- [x] **9.1** Balance simulation over the seeded engine: catch rates, XP curve, loot rates per class and build.
+  `npm run sim` (`tools/sim.mjs`); the tuning it's for is the owner's, with the numbers on REVIEW.md.
   *Notes for it: the stick's scatter is 20 px so a school isn't hit every time; a 12 px rod is the next tier up, and
   hits a school whenever it's aimed at (D85).*
 - [ ] **9.2** Audio: the engine for sound, a volume setting, sounds for water, splash and catch. Placeholder
