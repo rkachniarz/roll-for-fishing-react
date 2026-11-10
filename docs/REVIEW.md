@@ -24,6 +24,17 @@ Items with no note are left alone.
 
 Newest first.
 
+## A Tiny fish on the hook (5.8)
+
+- **A Tiny fish becomes a "Small fish" bait item** in the bait slot, so it stacks and is used up like any bait. It
+  forgets its species: the log says "You put Tiny Roach on the hook.", but later "… has eaten Small fish". Taken off
+  the hook, it goes into the bags, not back into the bucket.
+- **Small fish gives +10 Fish Find,** as the placeholder baits do; its real pull is the predators that prefer
+  small-fish bait (D101). Its flavour line is Claude's.
+- **An "On the hook" button per Tiny fish under the bucket's grid,** rather than dragging it onto the bait slot: the
+  bucket and the character pane don't show together on a phone. Other bait in the slot goes back to the bags. WoW
+  would right-click it; that can come too.
+
 ## Two tracks, and stand-in perk rules (D105)
 
 - **The plan's split** (DEV_PLAN.md): what went to the creative track (`CR-1`–`CR-14`) and what stayed as development

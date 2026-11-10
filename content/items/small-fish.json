@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "small-fish",
+  "category": "consumable",
+  "name": "Small fish",
+  "flavor": "A Tiny catch, still wriggling. Something bigger will want it.",
+  "rarity": "common",
+  "value": 0,
+  "slot": "bait",
+  "bait": "small-fish",
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 10
+    }
+  ]
+}

@@ -33,7 +33,7 @@ import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settin
 import { floatText } from './ui/floater.js';
 import { hideTip, showTip } from './ui/tooltip.js';
 import { iconName, paintIcon, weatherIcon } from './scene/icons.js';
-import { equip, fits, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_SLOTS } from './engine/equipment.js';
+import { equip, fits, hookFish, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_SLOTS } from './engine/equipment.js';
 import { setupDrag } from './ui/drag.js';
 import { showError } from './ui/errors.js';
 import { arrive, choose, openSlide } from './engine/events.js';
@@ -772,7 +772,7 @@ function renderPane() {
       body.replaceChildren(...mapPane(s, travelTo));
       break;
     case 'bucket':
-      body.replaceChildren(...bucketPane(s, valuesFor(s, extraSources()).flat.bucketSize));
+      body.replaceChildren(...bucketPane(s, valuesFor(s, extraSources()).flat.bucketSize, hookFromBucket));
       break;
     case 'menu':
       body.replaceChildren(
@@ -832,6 +832,22 @@ function travelTo(location, spot) {
   save(state);
   render();
   promptPlayer();
+}
+
+/**
+ * A Tiny fish from the bucket onto the hook (R13.4, D41): only between casts,
+ * as with equipment.
+ * @param {number} index  Into the bucket.
+ */
+function hookFromBucket(index) {
+  if (!state) return;
+  if (lineOut()) {
+    showError($('errors'), t('error.busy'));
+    return;
+  }
+  const out = hookFish(state, index);
+  if (out.fish) log.add(tParts('log.hooked', { fish: fishLink(out.fish) }));
+  changeItems(out);
 }
 
 // ---------- Moving items: drag and drop, right-click (R8.1, R8.7; D83) ----------

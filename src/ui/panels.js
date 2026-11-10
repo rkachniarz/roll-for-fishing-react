@@ -8,8 +8,8 @@ import { t } from '../strings.js';
 import { levelFor } from '../engine/state.js';
 import { className } from '../engine/character.js';
 import { paintIcon } from '../scene/icons.js';
-import { bagTab, slot } from './links.js';
-import { EQUIPMENT_SLOTS } from '../engine/equipment.js';
+import { bagTab, fishName, slot } from './links.js';
+import { EQUIPMENT_SLOTS, isTiny } from '../engine/equipment.js';
 import { offers, owedLevels } from '../engine/perks.js';
 
 /** @typedef {import('../engine/state.js').GameState} GameState */
@@ -217,15 +217,24 @@ export function mapPane(state, onTravel) {
 
 /**
  * The bucket as a grid: a slot per stack, then an empty slot for each fish
- * there is still room for (D57). Identical twins share a slot (D50).
+ * there is still room for (D57). Identical twins share a slot (D50). Under
+ * it, a button for each Tiny fish to put it on the hook (R13.4, D41).
  * @param {GameState} state
  * @param {number} size  The bucket's size (the bucketSize value).
+ * @param {(index: number) => void} [onHook]
  */
-export function bucketPane(state, size) {
+export function bucketPane(state, size, onHook = () => {}) {
   const fish = state.bucket.reduce((n, b) => n + b.count, 0);
+  const hooks = state.bucket.flatMap((b, i) => {
+    if (!isTiny(b.fish)) return [];
+    const button = el('button', { type: 'button', className: 'map-spot', textContent: t('bucket.hook', { fish: fishName(b.fish) }) });
+    button.addEventListener('click', () => onHook(i));
+    return [button];
+  });
   return [
     el('p', { className: 'muted', textContent: t('bucket.count', { count: fish, size }) }),
     el('div', { className: 'grid' }, [...state.bucket.map((b) => slot({ kind: 'fish', fish: b.fish }, b.count)), ...empties(size - fish)]),
+    ...(hooks.length ? [el('div', { className: 'map-spots bucket-hooks' }, hooks)] : []),
   ];
 }
 

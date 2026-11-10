@@ -3632,6 +3632,22 @@ export const content = {
       "rarity": "poor",
       "value": 1
     },
+    "small-fish": {
+      "id": "small-fish",
+      "category": "consumable",
+      "name": "item.small-fish.name",
+      "flavor": "item.small-fish.flavor",
+      "rarity": "common",
+      "value": 0,
+      "slot": "bait",
+      "bait": "small-fish",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 10
+        }
+      ]
+    },
     "small-wheel": {
       "id": "small-wheel",
       "category": "junk",
@@ -8559,6 +8575,8 @@ export const strings = {
     "item.single-ball-bearing.flavor": "How did you even get it on a hook?",
     "item.small-bag-of-tiny-rocks.name": "A small bag of tiny rocks",
     "item.small-bag-of-tiny-rocks.flavor": "Looks like someone lost their collection.",
+    "item.small-fish.name": "Small fish",
+    "item.small-fish.flavor": "A Tiny catch, still wriggling. Something bigger will want it.",
     "item.small-wheel.name": "Small wheel",
     "item.small-wheel.flavor": "Hopefully it was a third.",
     "item.snail-shell.name": "Snail shell",

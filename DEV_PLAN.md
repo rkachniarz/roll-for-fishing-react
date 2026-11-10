@@ -163,8 +163,8 @@ Requirements R8.
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI.
 - [ ] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38). Placeholder rods (stats,
   plain names, the stick's icon recoloured) until CR-4.
-- [ ] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41, D61). *Bait kinds
-  and placeholder baits are in (D101); still to do: a Tiny fish from the bucket on the hook, as "small fish".*
+- [x] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41, D61). Bait kinds
+  and placeholder baits (D101); a Tiny fish goes from the bucket onto the hook as Small fish bait.
 
 ## Phase 6: Classes, levels, abilities, knowledge
 
@@ -275,7 +275,7 @@ placeholder, it's added here.
   `docs/design/fish-image-hunt.md`; and the four with no icon yet: Mainland eel, golomyanka, Grasslands silverside,
   Wildlands pejerrey.
 - [ ] **CR-4** Item icons, and the items' names and texts: the placeholder items and rods (5.3, 5.7), the bait items
-  (D101), the Alchemist's potions and ingredients (8.6), the set pieces (8.7).
+  (D101) and Small fish (5.8), the Alchemist's potions and ingredients (8.6), the set pieces (8.7).
 - [ ] **CR-5** The town and its people (8.3, 8.6, 8.9): the inn, the scrap dealer, the Alchemist, the cat, and the
   portraits. *Replaces the squares and triangles.*
 - [ ] **CR-6** Event illustrations: the dialog has room for one (7.3).

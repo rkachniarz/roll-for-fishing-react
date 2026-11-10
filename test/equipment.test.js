@@ -4,7 +4,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { newGame } from '../src/engine/state.js';
-import { EQUIPMENT_SLOTS, equip, fits, moveEquipped, moveInBags, quickEquip, unequip } from '../src/engine/equipment.js';
+import { EQUIPMENT_SLOTS, SMALL_FISH, equip, fits, hookFish, moveEquipped, moveInBags, quickEquip, unequip } from '../src/engine/equipment.js';
+import { castLine, momentOf } from '../src/engine/game.js';
 import { content } from '../src/generated/content.js';
 
 const character = {
@@ -102,4 +103,26 @@ test('rearranging the bags: two stacks swap; onto an empty slot, to the end', ()
   assert.deepEqual(moveInBags(state, 0, 2).state.bags.map((b) => b.id), ['c', 'b', 'a']);
   assert.deepEqual(moveInBags(state, 0, null).state.bags.map((b) => b.id), ['b', 'c', 'a']);
   assert.equal(moveInBags(state, 1, 1).state, state);
+});
+
+test('a Tiny fish goes on the hook as Small fish bait; nothing bigger does (R13.4, D41)', () => {
+  const tiny = { species: 'roach', subname: -1, band: 0, size: 6, difficulty: 1, xp: 1, rarity: 'poor' };
+  const big = { ...tiny, band: 2, size: 20 };
+  let s = { ...withBags([]), bucket: [{ fish: tiny, count: 2 }, { fish: big, count: 1 }] };
+  s.equipped = { ...s.equipped, bait: { id: 'worms', count: 3 } };
+
+  const refused = hookFish(s, 1);
+  assert.equal(refused.state, s);
+  assert.equal(refused.error, 'notTiny');
+
+  let out = hookFish(s, 0);
+  assert.deepEqual(out.fish, tiny);
+  assert.deepEqual(out.state.equipped.bait, { id: SMALL_FISH, count: 1 });
+  assert.deepEqual(out.state.bags, [{ id: 'worms', count: 3 }], 'the other bait back to the bags');
+  assert.deepEqual(out.state.bucket, [{ fish: tiny, count: 1 }, { fish: big, count: 1 }]);
+  out = hookFish(out.state, 0);
+  assert.deepEqual(out.state.equipped.bait, { id: SMALL_FISH, count: 2 }, 'joins the stack');
+  assert.deepEqual(out.state.bucket, [{ fish: big, count: 1 }]);
+  assert.equal(momentOf(out.state).bait, 'small-fish', "predators' bait");
+  assert.equal(castLine(out.state, 0).cast.phase, 'waiting', 'and a cast goes out with it');
 });

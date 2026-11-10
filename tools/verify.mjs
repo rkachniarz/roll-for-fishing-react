@@ -624,6 +624,19 @@ await check('two treasures (Fence)', PHONE, '?dev&seed=1&wait=600', async (page,
   report('two treasures: the log says which was kept', /You keep .*\. The other sinks back/.test(await logText(page)));
 });
 
+await check('a Tiny fish on the hook', PHONE, '?dev&seed=1', async (page) => {
+  await openBench(page);
+  await page.click('text=Tiny fish');
+  await closePane(page);
+  await page.click('#bucket');
+  const button = page.locator('.bucket-hooks button');
+  report('a Tiny fish on the hook: a button for it in the bucket', (await button.count()) === 1, (await button.textContent()) ?? '');
+  await page.screenshot({ path: 'dist/verify/tiny-fish.png' });
+  await button.click();
+  report('a Tiny fish on the hook: the log says so', /You put \[?Tiny Roach\]? on the hook\./.test(await logText(page)), await logText(page));
+  report('a Tiny fish on the hook: it left the bucket', (await page.locator('.bucket-hooks button').count()) === 0);
+});
+
 // ---------- Equipment and the bag (5.1, 5.2, D83) ----------
 
 /** The middle of an element, on the page. */

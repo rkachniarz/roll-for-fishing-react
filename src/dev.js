@@ -246,6 +246,13 @@ export function createBench(root, { getState, setState, overrides, extraSources,
             return s;
           }),
         ),
+        // Something to put on the hook (R13.4, D41).
+        button('Tiny fish', () =>
+          edit((s) => {
+            s.bucket.push({ fish: { species: 'roach', subname: -1, band: 0, size: 6, difficulty: 1, xp: 1, rarity: 'poor' }, count: 1 });
+            return s;
+          }),
+        ),
       ]),
     ]),
     section('Events', [

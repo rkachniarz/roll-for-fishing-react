@@ -159,6 +159,42 @@ export function quickEquip(state, index) {
   return equip(state, index, keys.find((k) => !state.equipped[k]) ?? keys[0]);
 }
 
+/** The bait a Tiny fish becomes on the hook (R13.4, D41). */
+export const SMALL_FISH = 'small-fish';
+
+/**
+ * Can this fish go on the hook? Any fish in the Tiny size band (D41).
+ * @param {import('./fish.js').FishInstance} fish
+ */
+export function isTiny(fish) {
+  return content.rules['size-bands'].bands[fish.band]?.id === 'tiny';
+}
+
+/**
+ * A Tiny fish from the bucket onto the hook, as live bait for predators
+ * (R13.4, D41): it leaves the bucket and joins the Small fish in the bait slot.
+ * Other bait in the slot goes back to the bags.
+ * @param {GameState} state
+ * @param {number} index  Into state.bucket.
+ * @returns {{ state: GameState, error?: string, fish?: import('./fish.js').FishInstance }}
+ */
+export function hookFish(state, index) {
+  const stack = state.bucket[index];
+  if (!stack) return { state };
+  if (!isTiny(stack.fish)) return { state, error: 'notTiny' };
+  const next = structuredClone(state);
+  const from = next.bucket[index];
+  from.count--;
+  if (from.count === 0) next.bucket.splice(index, 1);
+  const old = next.equipped.bait;
+  if (old?.id === SMALL_FISH) old.count++;
+  else {
+    if (old) putInBags(next.bags, old);
+    next.equipped.bait = { id: SMALL_FISH, count: 1 };
+  }
+  return { state: next, fish: stack.fish };
+}
+
 /**
  * The equipped items' ids, slot by slot, skipping empty slots.
  * @param {GameState} state
