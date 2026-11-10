@@ -452,13 +452,13 @@ export async function createScene(canvas, rand, look = {}) {
     setWorld: sky.setWorld,
     /**
      * Rolls dice across the scene (D99), to rest in the play area's lower
-     * middle on the numbers given.
-     * @param {{ value: number, kept: boolean, crit?: boolean }[]} values
+     * middle on the numbers given; the fish's (6.8) in its upper middle.
+     * @param {{ value: number, kept: boolean, crit?: boolean, fish?: boolean }[]} values
      * @param {number} now
      * @returns {{ settled: number, gone: number, points: { x: number, y: number }[] }}  Times, and where each die stops in the play area's pixels.
      */
     rollDice(values, now) {
-      const out = dice.roll(values, { x: offset + SIZE / 2, y: 196 }, now);
+      const out = dice.roll(values, { x: offset + SIZE / 2, y: 196 }, now, { x: offset + SIZE / 2, y: 64 });
       return { ...out, points: out.points.map((p) => ({ x: p.x - offset, y: p.y })) };
     },
     /** Takes any dice away at once. */

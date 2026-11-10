@@ -43,6 +43,7 @@ export const WILD_CAST = 100;
  * @property {string} kind
  * @property {string} die
  * @property {number} result
+ * @property {number[]} [dropped]  With advantage or disadvantage, the dice that didn't count (D95).
  * @property {{ label: string, value: number }[]} mods
  * @property {number} total
  * @property {boolean} visible
@@ -317,11 +318,14 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
     }
     if (fish) {
       // The fish's resistance: its own d20 on top of its difficulty (R3.5).
-      const resistance = dice.line.roll20(value('fishVantage').total);
+      // roll20Kept is roll20 from the same draws, saying which dice didn't count (D95).
+      const kept = dice.line.roll20Kept(value('fishVantage').total);
+      const resistance = kept.result;
       rolls.push({
         kind: 'resistance',
         die: 'd20',
         result: resistance,
+        ...(kept.dropped !== undefined ? { dropped: kept.dropped } : {}),
         mods: [{ label: 'difficulty', value: fish.difficulty }],
         total: fish.difficulty + resistance,
         visible: false,

@@ -11,7 +11,7 @@ const MS = 1100;
 /**
  * @param {Object} options
  * @param {string} options.text
- * @param {'fast' | 'ok' | 'bad' | 'early' | 'wild' | 'roll' | 'crit'} options.tone  Sets its colour.
+ * @param {'fast' | 'ok' | 'bad' | 'early' | 'wild' | 'roll' | 'crit' | 'fish'} options.tone  Sets its colour.
  * @param {{ x: number, y: number }} options.at  Page coordinates of the bobber (or the die).
  * @param {number} options.scale  CSS pixels per scene pixel.
  */

@@ -188,7 +188,7 @@ icon and any new look it brings (a Greedy fish, a bent fish) are creative work (
   (D106). Their names, the "Greedy" and "Bent" marks and their icons are placeholders (CR-8, CR-12).
 - [x] **6.4** Hidden rolls revealed by levels, perks and items (R5.2, D107): the number a fish needed from level 1;
   `revealResistance`, `revealBite` and `revealTreasure` for perks and items. Which ones reveal the rest is Q-40.
-- [ ] **6.8** The fish's dice on the desk (D99), once 6.4 reveals its roll: its d20s thrown in from the top right,
+- [x] **6.8** The fish's dice on the desk (D99), once 6.4 reveals its roll: its d20s thrown in from the top right,
   as the player's come in from the bottom right, in the fish's own colour, `#31899F`, a deep-water teal. A roll
   still hidden throws no fish dice.
 - [ ] **6.5** Class-flavoured texts (R6.5): a string can have a version per class, falling back to the plain one;

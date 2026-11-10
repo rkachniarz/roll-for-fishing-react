@@ -24,6 +24,15 @@ Items with no note are left alone.
 
 Newest first.
 
+## The fish's dice (6.8)
+
+- **The teal die's shading is Claude's,** four steps around `#31899F` (`#5fb3c4`, `#31899f`, `#256d80`, `#1a4f5e`),
+  with pale numbers, since dark ink didn't read on teal. A natural 20 is still red.
+- **They come to rest in the upper middle of the play area,** the player's in the lower middle, and the fish's total
+  floats over its die in a lighter teal, as the player's does in ivory.
+- **The fish's advantage or disadvantage throws every die too,** the one that didn't count greyed. The engine now
+  records which, from the same draws (D95), so no outcome changed.
+
 ## The number a fish needed (6.4, D107)
 
 - **From level 1 means after the first level-up** (10 XP): a new character is level 0, so the first few casts still

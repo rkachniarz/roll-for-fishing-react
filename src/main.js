@@ -211,7 +211,7 @@ let diceShow = null;
 
 /**
  * Rolls the fight's d20 over the scene, every die of it, each to rest on
- * what the engine rolled.
+ * what the engine rolled; and the fish's, once its roll shows (6.8, D107).
  * @param {import('./engine/cast.js').Roll} roll
  * @param {() => void} landed
  * @param {() => void} after
@@ -220,14 +220,21 @@ function rollDice(roll, landed, after) {
   const now = performance.now();
   const crit = roll.result === 20;
   const values = [...(roll.dropped ?? []).map((value) => ({ value, kept: false })), { value: roll.result, kept: true, crit }];
-  const out = scene.rollDice(values, now);
-  const kept = out.points[out.points.length - 1];
+  // A roll still hidden throws no fish dice.
+  const theirs = cast.line.kind === 'fish' ? cast.rolls.find((r) => r.kind === 'resistance' && r.visible) : undefined;
+  const fishValues = theirs
+    ? [...(theirs.dropped ?? []).map((value) => ({ value, kept: false, fish: true })), { value: theirs.result, kept: true, crit: theirs.result === 20, fish: true }]
+    : [];
+  const out = scene.rollDice([...values, ...fishValues], now);
+  const kept = out.points[values.length - 1];
+  const fishKept = out.points[out.points.length - 1];
   diceShow = {
     settled: out.settled,
     gone: out.gone,
     landed: () => {
       landed();
       floatText({ text: String(roll.total), tone: crit || roll.crit ? 'crit' : 'roll', at: scene.toClient(kept), scale: scene.pixelScale() });
+      if (theirs) floatText({ text: String(theirs.total), tone: 'fish', at: scene.toClient(fishKept), scale: scene.pixelScale() });
     },
     after,
   };

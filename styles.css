@@ -988,6 +988,11 @@ body.is-dragging {
   color: #ffd75e;
 }
 
+/* The fish's total over its die (6.8), in its teal, lightened to read. */
+.floater.fish {
+  color: #7fd3e3;
+}
+
 /* ---------- The title screen (D80) ---------- */
 
 .title h1 {

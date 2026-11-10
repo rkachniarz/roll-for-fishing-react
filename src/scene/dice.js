@@ -31,6 +31,12 @@ export const DICE_COLOURS = {
   ink: '#2a1a10',
   /** A natural 20's number. */
   crit: '#c4241b',
+  /** The fish's dice (6.8): its own colour, a deep-water teal, with pale numbers. */
+  fishLight: '#5fb3c4',
+  fishMid: '#31899f',
+  fishShade: '#256d80',
+  fishDark: '#1a4f5e',
+  fishInk: '#eef7f4',
   /** A die that didn't count (advantage, disadvantage): greyed once it lands. */
   dimLight: '#c9c4ba',
   dimMid: '#aca69b',
@@ -72,6 +78,7 @@ const LIGHT = (() => {
  * @property {number} value   The number it lands on.
  * @property {boolean} kept   False for a die that didn't count.
  * @property {boolean} crit   Its number in red: a natural 20.
+ * @property {boolean} fish   The fish's die (6.8): teal, thrown from the top right.
  * @property {{ x: number, y: number }} from  Where it comes in, in the scene's pixels.
  * @property {{ x: number, y: number }} to    Where it stops.
  * @property {number} start   When it's thrown.
@@ -117,30 +124,39 @@ export function createDice(addTo, rand) {
     old.destroy(true);
   }
   /**
-   * Throws dice that come to rest side by side around `at`.
-   * @param {{ value: number, kept: boolean, crit?: boolean }[]} values
-   * @param {{ x: number, y: number }} at  Where they gather, in the layer's pixels.
+   * Throws dice that come to rest side by side: the player's around `at`, the
+   * fish's (6.8) around `fishAt`, from the other side of the desk.
+   * @param {{ value: number, kept: boolean, crit?: boolean, fish?: boolean }[]} values
+   * @param {{ x: number, y: number }} at  Where the player's gather, in the layer's pixels.
    * @param {number} now
-   * @returns {{ settled: number, gone: number, points: { x: number, y: number }[] }}
+   * @param {{ x: number, y: number }} [fishAt]  Where the fish's gather.
+   * @returns {{ settled: number, gone: number, points: { x: number, y: number }[] }}  In the order given.
    */
-  function roll(values, at, now) {
+  function roll(values, at, now, fishAt = at) {
     const gap = RADIUS * 2 + 6;
-    // Thrown from below, from the player's side of the desk, a little from the right.
-    const from = { x: at.x + 50 + rand() * 50, y: height + RADIUS + 10 + rand() * 20 };
-    dice = values.map((v, i) => {
-      const to = { x: Math.round(at.x + (i - (values.length - 1) / 2) * gap + (rand() - 0.5) * 6), y: Math.round(at.y + (rand() - 0.5) * 8) };
-      const start = now + i * 40;
-      const f = { x: from.x + (i - (values.length - 1) / 2) * gap * 0.6, y: from.y + i * 6 };
+    // The player's thrown from below, from their side of the desk, a little from
+    // the right; the fish's from the top right, from across the desk.
+    const fromBelow = { x: at.x + 50 + rand() * 50, y: height + RADIUS + 10 + rand() * 20 };
+    const fromAbove = { x: fishAt.x + 50 + rand() * 50, y: -RADIUS - 10 - rand() * 20 };
+    dice = values.map((v, n) => {
+      const group = values.filter((w) => Boolean(w.fish) === Boolean(v.fish));
+      const i = group.indexOf(v);
+      const centre = v.fish ? fishAt : at;
+      const from = v.fish ? fromAbove : fromBelow;
+      const to = { x: Math.round(centre.x + (i - (group.length - 1) / 2) * gap + (rand() - 0.5) * 6), y: Math.round(centre.y + (rand() - 0.5) * 8) };
+      const start = now + n * 40;
+      const f = { x: from.x + (i - (group.length - 1) / 2) * gap * 0.6, y: from.y + (v.fish ? -i : i) * 6 };
       const dx = to.x - f.x, dy = to.y - f.y;
       const distance = Math.hypot(dx, dy);
       return {
         value: v.value,
         kept: v.kept,
         crit: v.crit ?? false,
+        fish: v.fish ?? false,
         from: f,
         to,
         start,
-        rollMs: ROLL_MS - i * 40 + Math.round((rand() - 0.5) * 80),
+        rollMs: ROLL_MS - n * 40 + Math.round((rand() - 0.5) * 80),
         // Rolling across a desk seen from above: about the line on the desk at
         // right angles to the way it goes (the die's y is up, the page's down).
         axis: /** @type {import('./d20.js').Vec} */ ([dy / distance, dx / distance, (rand() - 0.5) * 0.6]),
@@ -230,9 +246,12 @@ export function createDice(addTo, rand) {
   function drawDie(p, put, landed) {
     const dim = landed && !p.die.kept;
     const C = DICE_COLOURS;
-    const steps = (dim ? [C.dimLight, C.dimMid, C.dimShade, C.dimDark] : [C.light, C.mid, C.shade, C.dark]).map(rgb);
+    const fish = p.die.fish;
+    const steps = (
+      dim ? [C.dimLight, C.dimMid, C.dimShade, C.dimDark] : fish ? [C.fishLight, C.fishMid, C.fishShade, C.fishDark] : [C.light, C.mid, C.shade, C.dark]
+    ).map(rgb);
     const outline = rgb(C.outline);
-    const ink = rgb(dim ? C.dimInk : p.die.crit && landed ? C.crit : C.ink);
+    const ink = rgb(dim ? C.dimInk : p.die.crit && landed ? C.crit : fish ? C.fishInk : C.ink);
     const cx = p.x, cy = p.y - p.h;
 
     // The faces that face the viewer, as triangles on the page.

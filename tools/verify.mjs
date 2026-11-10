@@ -265,6 +265,25 @@ await check('dice roll over the scene, then the catch flies (D99)', PHONE, '?dev
   report('dice: then the catch flies', (await page.locator('.flying-icon').count()) === 1 || !/You caught/.test(await logText(page)));
 });
 
+await check("the fish's dice, once its roll shows (6.8)", PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+  await openBench(page);
+  for (const [name, value] of [['xp', '10'], ['fishFind', '100'], ['fishVantage', '1']]) {
+    await page.fill(`#dev-${name}`, value);
+    await page.press(`#dev-${name}`, 'Enter');
+  }
+  await closePane(page);
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('#log .roll', { timeout: 3000 });
+  await page.waitForTimeout(150);
+  await page.screenshot({ path: 'dist/verify/fish-dice.png' });
+  const detail = (await page.textContent('#log .roll')) ?? '';
+  const needed = /needed (\d+)/.exec(detail)?.[1];
+  const floated = await page.locator('.floater.fish').allTextContents();
+  report("the fish's dice: its total floats over its die", needed !== undefined && floated.includes(needed), `${floated} vs ${detail}`);
+});
+
 await check('perks: a badge, then a choice in the character pane', PHONE, '?dev&seed=1', async (page) => {
   await openBench(page);
   await page.selectOption('#dev-class', 'fish-fighter');
