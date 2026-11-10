@@ -5,5 +5,11 @@
   "level": 3,
   "kind": "passive",
   "name": "Rift Fishing",
-  "description": "Now and then, a fish from another dimension takes the bait."
+  "description": "Now and then, a fish from another dimension takes the bait.",
+  "effects": [
+    {
+      "value": "riftChance",
+      "add": 10
+    }
+  ]
 }

@@ -17,7 +17,7 @@ import { clock, seasonOfMonth, startTime } from './time.js';
 import { emptyEquipment } from './equipment.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 6;
+export const SAVE_VERSION = 7;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -67,6 +67,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {import('./fish.js').FishInstance | null} [pendingCatch]  A fish landed with
  *   the bucket full, waiting for the player to choose one to let go (D59). No
  *   cast goes out until then.
+ * @property {[string, string] | null} pendingTreasure  Two treasures that came up at once (Fence,
+ *   D106), waiting for the player to keep one. No cast goes out until then.
  * @property {{ casts: number, catches: number, fish: Record<string, BookEntry> }} book  The
  *   accomplishments book (R4.2).
  * @property {Record<string, boolean | number | string>} flags  For events (R10).
@@ -132,6 +134,7 @@ export function newGame({ seed, character, month }) {
     buffs: [],
     features: [],
     pendingCatch: null,
+    pendingTreasure: null,
     book: { casts: 0, catches: 0, fish: {} },
     flags: {},
     eventMeter: 0,
@@ -234,6 +237,8 @@ const MIGRATIONS = {
       features: spotOk ? save.features : [],
     };
   },
+  // 6 -> 7: two treasures to choose from (Fence, D106).
+  6: (save) => ({ ...save, pendingTreasure: null }),
 };
 
 /** @param {GameState} state */

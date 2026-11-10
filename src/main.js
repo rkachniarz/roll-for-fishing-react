@@ -14,7 +14,7 @@ import { diceFor } from './dice.js';
 import { content } from './generated/content.js';
 import { t, tParts } from './strings.js';
 import { newGame, levelFor } from './engine/state.js';
-import { MISS_LIMIT, cancelBuff, castLine, releaseFish, strikeLine, tick, tickBuffs, travel, useAbility, valuesFor } from './engine/game.js';
+import { MISS_LIMIT, cancelBuff, castLine, chooseTreasure, releaseFish, strikeLine, tick, tickBuffs, travel, useAbility, valuesFor } from './engine/game.js';
 import { abilityStatus, activePerks } from './engine/abilities.js';
 import { createActionBar } from './ui/actionbar.js';
 import { className, classes, generateName, rollStats } from './engine/character.js';
@@ -174,7 +174,7 @@ function apply(out) {
   };
   const flights = () => {
     for (const e of out.events) {
-      if ((e.type === 'caught' || e.type === 'found') && landing) {
+      if ((e.type === 'caught' || (e.type === 'found' && !e.alt)) && landing) {
         const thing = e.type === 'caught' ? { kind: /** @type {const} */ ('fish'), id: e.fish.species } : { kind: /** @type {const} */ ('item'), id: e.item };
         flyIcon({
           icon: iconName(thing),
@@ -256,10 +256,46 @@ function finishDice() {
   after?.();
 }
 
-/** Whatever waits for the player: a full bucket first, then an open event. */
+/** Whatever waits for the player: a full bucket first, then two treasures, then an open event. */
 function promptPlayer() {
   if (state?.pendingCatch) openRelease();
+  else if (state?.pendingTreasure) openTreasure();
   else if (state?.event) openEvent();
+}
+
+// ---------- Two treasures: keep one (Fence, D106) ----------
+
+/** The full bucket's dialog, with the two treasures as its choices. */
+function openTreasure() {
+  const dialog = /** @type {HTMLDialogElement} */ ($('release'));
+  if (dialog.open || !state?.pendingTreasure) return;
+  const s = state;
+  // As with the bucket: the tap that ended the cast mustn't also choose.
+  const openedAt = performance.now();
+  $('releaseTitle').textContent = t('treasure.title');
+  $('releaseText').textContent = t('treasure.text');
+  $('releaseList').replaceChildren(
+    ...s.pendingTreasure.map((id) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = t(content.items[id].name);
+      b.style.color = rarityColour(content.items[id].rarity);
+      b.addEventListener('click', () => {
+        if (performance.now() - openedAt < 400) return;
+        const out = chooseTreasure(s, id);
+        state = out.state;
+        logEvents(out.events);
+        save(state);
+        dialog.close();
+        if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+        render();
+        promptPlayer();
+      });
+      return b;
+    }),
+  );
+  dialog.addEventListener('cancel', (e) => e.preventDefault());
+  dialog.showModal();
 }
 
 // ---------- A full bucket: let one go (D59) ----------
@@ -435,8 +471,8 @@ function useFromBar(id) {
   // Mid-cast the checkpoint stays the save (D74); the cast saves it when it ends.
   if (cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
   logEvents(out.events);
-  if (out.events.some((e) => e.type === 'bucket-full')) openRelease();
   render();
+  promptPlayer();
 }
 
 /** The bar, from the state; the layout makes room when it comes or goes. */
@@ -503,7 +539,13 @@ function describeEvent(e) {
     case 'missed':
       return e.fish ? tParts('log.missed', { fish: fishLink(e.fish) }) : [t('log.missedSomething')];
     case 'found':
-      return tParts('log.found', { item: itemLink(e.item) });
+      return e.alt ? tParts('log.found-choice', { item: itemLink(e.item), alt: itemLink(e.alt) }) : tParts('log.found', { item: itemLink(e.item) });
+    case 'greedy':
+      return e.alt ? tParts('log.greedy-choice', { item: itemLink(e.item), alt: itemLink(e.alt) }) : tParts('log.greedy', { item: itemLink(e.item) });
+    case 'kept':
+      return tParts('log.kept', { item: itemLink(e.item) });
+    case 'bent':
+      return tParts('log.bent', { fish: fishLink(e.from), bent: fishLink(e.fish), size: e.fish.size, xp: e.xp });
     case 'bait-saved':
       return tParts('log.bait-saved', { bait: itemLink(e.bait) });
     case 'bait-eaten':
@@ -520,6 +562,7 @@ function describeEvent(e) {
     case 'lit':
       return [t('log.lit', { ability: t(content.perks[e.perk].name) })];
     case 'gutted':
+      if (e.alt) return tParts('log.gutted-choice', { fish: fishLink(e.fish), item: itemLink(e.item), alt: itemLink(e.alt) });
       return e.item ? tParts('log.gutted', { fish: fishLink(e.fish), item: itemLink(e.item) }) : tParts('log.gutted-empty', { fish: fishLink(e.fish) });
     case 'weather':
       return [t('log.weather', { description: t(e.weather.description) })];
@@ -543,6 +586,8 @@ function describeEvent(e) {
     }
     case 'event-xp':
       return [t('log.event-xp', { xp: e.xp })];
+    case 'rift':
+    case 'polished':
     case 'bucket-full':
     case 'too-early':
     case 'empty':

@@ -24,6 +24,15 @@ export function perk(id) {
 }
 
 /**
+ * Has the character taken this perk?
+ * @param {GameState} state
+ * @param {string} id
+ */
+export function hasPerk(state, id) {
+  return Object.values(state.character.perks).includes(id);
+}
+
+/**
  * The perk ids a level offers this character. A class level offers the
  * class's perks for it (one at level 1, a passive and an active later); a
  * universal level, two universal perks drawn from a stream keyed by the

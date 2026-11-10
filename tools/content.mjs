@@ -327,7 +327,8 @@ function checkPerks(all, errors, warnings) {
     }
     if (perk.kind === 'active' && !perk.cooldown) errors.push(`${where}: an active perk needs a cooldown`);
     if (perk.kind === 'passive' && perk.cooldown) errors.push(`${where}: a passive perk has no cooldown`);
-    if (perk.kind === 'active' && perk.effects) errors.push(`${where}: an active perk's effects come from its ability, not from effects`);
+    // An active perk's `effects` hold while it is taken, used or not (Bend Reality's doubled rift chance, D106);
+    // what using it does is its ability's, in game.js.
   }
   const universal = new Set(all.rules.levels?.universal ?? []);
   for (const [classId, levels] of Object.entries(byClass)) {

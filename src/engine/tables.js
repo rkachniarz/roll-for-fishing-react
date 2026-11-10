@@ -53,7 +53,7 @@ function expand(list) {
  * @param {Object} where
  * @param {string} where.location
  * @param {string | null} where.spot
- * @param {'fish' | 'treasure' | 'junk'} list
+ * @param {'fish' | 'treasure' | 'junk' | 'rift'} list  `rift`: the spot's rift fish (D104).
  * @param {Object} [world]
  * @param {Moment} [world.moment]
  * @param {Record<string, number>} [world.found]  Item id -> how many found so far.
@@ -62,7 +62,7 @@ function expand(list) {
 export function locationTable({ location, spot }, list, { moment, found = {} } = {}) {
   const loc = content.locations[location];
   const spotData = spot ? loc.spots.find((/** @type {{ id: string }} */ s) => s.id === spot) : null;
-  const table = listTable([...(loc[list] ?? []), ...(spotData?.[list] ?? [])], list, { moment, found });
+  const table = listTable([...(loc[list] ?? []), ...(spotData?.[list] ?? [])], list === 'rift' ? 'fish' : list, { moment, found });
   if (list === 'junk' && loc.emptyHook > 0) table.push({ id: null, weight: loc.emptyHook });
   return table;
 }

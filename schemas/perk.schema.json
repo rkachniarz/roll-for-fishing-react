@@ -32,7 +32,7 @@
       "$ref": "common.schema.json#/definitions/text"
     },
     "effects": {
-      "description": "A passive perk's game value changes, there for as long as the perk is.",
+      "description": "The game value changes a perk brings for as long as it is held: a passive's, or an active's that works without being used (Bend Reality's doubled rift chance, D106).",
       "type": "array",
       "items": {
         "$ref": "common.schema.json#/definitions/effect"
@@ -55,6 +55,27 @@
         }
       },
       "additionalProperties": false
+    },
+    "cooldowns": {
+      "description": "Other abilities' cooldowns, replaced while this perk is held (Fence's for Gut, D106): ability id -> the cooldown it has instead.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "casts": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "ms": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "minusLevel": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
     },
     "repeatable": {
       "description": "A universal perk that can be offered and taken again.",

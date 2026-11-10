@@ -30,6 +30,25 @@ Newest first.
   with placeholders. Spot paintings, fish icon polish, the town's art, events and names are creative; everything with
   an engine behind it stayed in development.
 
+## The last level 3 and 5 perks (6.3, D106)
+
+- **The chances are Claude's:** a rift fish one fish in ten with Rift Fishing (one in five with Bend Reality too), and
+  a Greedy fish one in ten. A Greedy fish's catch is rolled like a cast with no fish, so it can be the empty hook, and
+  then the fish isn't Greedy after all.
+- **The marks in the names are placeholders (CR-12):** "Greedy" before the fish's name in the log line that catches it
+  (the fish in the bucket is a plain one), and "Bent" for good, in the bucket too. A bent fish never stacks with a
+  plain twin.
+- **Bend Reality caps the rarity at Epic,** as fish are (D49), and a fish already in the top size band keeps its size.
+  The XP for the bigger band is added; the book's records take the new size.
+- **Ever-Summoning counts every line that goes out,** a recast after a missed splash included, and works on the even
+  ones. Summon Fish can still be used on the odd ones.
+- **Polish waits as long as it takes,** a buff with no count on the bar, and is used up only by junk that actually
+  comes up: pulling out early or an empty hook leaves it. It turns a Greedy fish's junk and a gutted fish's junk too.
+- **Fence:** the treasure not kept goes back into the water, not counted as found, so a unique one can come up again.
+  The choice reuses the full bucket's dialog, titled "Two treasures". A Greedy fish's or a gutted fish's treasure is a
+  choice of two as well. A treasure chosen this way starts no item event (none has one yet).
+- **A rift fish's log line,** "For a moment the water was somewhere else: this fish is not from here.", is Claude's.
+
 ## Rift fish (D104)
 
 - **One tier rarer** than their rank alone: the top of a spot's rift table is uncommon, the bottom epic. They come
@@ -215,8 +234,8 @@ Newest first.
 - **Full Force** adds your Fish Find to your Fishing Skill and the other way round, as they stand when you use it.
 - **The log says when an ability lights up** ("Jump In is ready!"), since a glow is easy to miss on a phone.
 - **The action bar is centred** under the button row, its buttons the same size. Until there's art, each shows the
-  ability's initials, with its key (1, 2, 3) in the corner. Abilities that don't work yet show greyed out:
-  Bend Reality, and the passives that need new fish are taken but do nothing yet.
+  ability's initials, with its key (1, 2, 3) in the corner. An ability that didn't work yet would show greyed out;
+  since D106 every one works.
 - **Choosing a perk** is two taps: pick a card, then Learn. The choice shows at the top of the character pane.
 
 ## Second notes from the phone (D94)

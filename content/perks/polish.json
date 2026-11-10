@@ -5,7 +5,7 @@
   "level": 5,
   "kind": "active",
   "name": "Polish",
-  "description": "The next junk you find turns out to be treasure.",
+  "description": "The next junk you find, however many casts away, turns out to be treasure.",
   "cooldown": {
     "casts": 10
   }

@@ -14,7 +14,8 @@ new one.
 **Where things stand (2026-11-10):** Phases 1–3 are done: the game is playable on the real engine, on GitHub Pages
 (D91), with character creation, saves, the buff bar and the `?dev` bench in the owner's phone layout (D79–D81).
 Phases 4–8 are under way. The bag and the seven equipment slots work (D83); events are text (`docs/events.md`, D84)
-and the frog encounter is the first; perks at levels 1–8 and an action bar of abilities (D96). The fish are the
+and the frog encounter is the first; perks at levels 1–8 and an action bar of abilities (D96), every class perk
+working (D106). The fish are the
 owner's (D101): 80 species over nine spots, six at the Lake and three at the River, each likelier in its own time,
 weather, season and bait, with schools and big single predators per spot (D102), and 42 rift fish waiting for the
 wizard's Rift Fishing (D104). The art has a process (D90, D97, `docs/art.md`), and most fish have icons drawn from
@@ -180,19 +181,11 @@ icon and any new look it brings (a Greedy fish, a bent fish) are creative work (
   values; crits as D96 (6); the bench grants perks.
 - [x] **6.1** Choosing a perk at level-up: the badge, and the choice in the character pane (D96).
 - [x] **6.2** Active abilities with cooldowns; the action bar under the button row, keys 1–9.
-- [ ] **6.7** Abilities that light up after something happens: the warrior's jump and the rogue's gut done; the
-  mage's bend reality to come with 6.3.
-- [ ] **6.3** Each class's level 1, 3 and 5 perks working (the notes' level 6 moved to 5, D96). Working: all three
-  level-1 actives, Heavy Hand, Overwhelm, Battle Focus, Full Force, Recall, Sleight of Hook. Still to do, none of them
-  waiting on art any more:
-  - **Rift Fishing**: now and then a fish comes from the spot's rift table instead (D104; the fish and icons are in).
-  - **Greedy Fish**: a Greedy fish is any fish with something on it, a treasure or junk roll caught with it; a mark
-    on its name for now, no new species needed.
-  - **Ever-Summoning**: Summon Fish by itself every other cast.
-  - **Bend Reality**: a stand-in for "bigger and special": the fish goes up a size band and a rarity, with a mark on
-    its name; what "special" should really be is the owner's (REVIEW.md).
-  - **Fence**: a choice between two treasures, and Gut's cooldown down to 3.
-  - **Polish**: the next junk is treasure.
+- [x] **6.7** Abilities that light up after something happens: the warrior's Jump In, the rogue's Gut, the mage's
+  Bend Reality.
+- [x] **6.3** Each class's level 1, 3 and 5 perks working (the notes' level 6 moved to 5, D96): Rift Fishing,
+  Greedy Fish, Ever-Summoning, Bend Reality (which also doubles the rift chance), Fence and Polish were the last
+  (D106). Their names, the "Greedy" and "Bent" marks and their icons are placeholders (CR-8, CR-12).
 - [ ] **6.4** Hidden rolls revealed by levels, perks and items (R5.2, Q-40): the number a fish needed from level 1.
 - [ ] **6.8** The fish's dice on the desk (D99), once 6.4 reveals its roll: its d20s thrown in from the top right,
   as the player's come in from the bottom right, in the fish's own colour, `#31899F`, a deep-water teal. A roll
@@ -296,7 +289,7 @@ placeholder, it's added here.
 - [ ] **CR-10** Events: about ten more after the frog, the real quest chain (in place of 7.4's placeholder), the set
   pages (8.7), and the story (`docs/ideas.md`).
 - [ ] **CR-11** Class-flavoured texts (R6.5): new lines for 6.5's mechanism, beyond the prototype's.
-- [ ] **CR-12** Names: the spots (placeholder names since D101), and the perks' names and texts (REVIEW.md lists them
+- [ ] **CR-12** Names: the spots (placeholder names since D101), the "Greedy" and "Bent" marks on fish (D106), and the perks' names and texts (REVIEW.md lists them
   as Claude's).
 - [ ] **CR-13** What the town's people say: the inn, the scrap dealer, the Alchemist, the raid orders (8.3, 8.6, 8.8).
 

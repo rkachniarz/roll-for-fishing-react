@@ -18,7 +18,7 @@ import { levelFor } from './state.js';
 export const LIGHTS = /** @type {const} */ ({ 'jump-in': 'got-away', gut: 'caught', 'bend-reality': 'caught' });
 
 /** The abilities that work so far; the rest show on the bar, greyed out (6.3). */
-export const WORKING = new Set(['jump-in', 'battle-focus', 'full-force', 'summon-fish', 'recall', 'gut', 'sleight-of-hook']);
+export const WORKING = new Set(['jump-in', 'battle-focus', 'full-force', 'summon-fish', 'recall', 'gut', 'sleight-of-hook', 'bend-reality', 'polish']);
 
 /**
  * The character's active perks, in the order they were taken: the action bar.
@@ -34,13 +34,15 @@ export function activePerks(state) {
 
 /**
  * An ability's full cooldown, as it would start now: some get shorter with
- * the character's level, never below one cast.
+ * the character's level, never below one cast, and a perk taken can replace
+ * it (Fence's for Gut, D106).
  * @param {GameState} state
  * @param {string} id
  * @returns {{ casts?: number, ms?: number }}
  */
 export function cooldownFor(state, id) {
-  const cd = content.perks[id].cooldown ?? {};
+  const replaced = Object.values(state.character.perks).map((p) => content.perks[p]?.cooldowns?.[id]).find(Boolean);
+  const cd = replaced ?? content.perks[id].cooldown ?? {};
   /** @type {{ casts?: number, ms?: number }} */
   const out = {};
   if (cd.casts) out.casts = Math.max(1, cd.casts - (cd.minusLevel ? levelFor(state.character.xp) : 0));

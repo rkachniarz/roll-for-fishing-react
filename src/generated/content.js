@@ -7713,6 +7713,12 @@ export const content = {
       "kind": "active",
       "name": "perk.bend-reality.name",
       "description": "perk.bend-reality.description",
+      "effects": [
+        {
+          "value": "riftDoubled",
+          "add": 1
+        }
+      ],
       "cooldown": {
         "casts": 10
       }
@@ -7744,7 +7750,18 @@ export const content = {
       "level": 5,
       "kind": "passive",
       "name": "perk.fence.name",
-      "description": "perk.fence.description"
+      "description": "perk.fence.description",
+      "effects": [
+        {
+          "value": "treasureChoice",
+          "add": 1
+        }
+      ],
+      "cooldowns": {
+        "gut": {
+          "casts": 3
+        }
+      }
     },
     "fish-sense": {
       "id": "fish-sense",
@@ -7778,7 +7795,13 @@ export const content = {
       "level": 3,
       "kind": "passive",
       "name": "perk.greedy-fish.name",
-      "description": "perk.greedy-fish.description"
+      "description": "perk.greedy-fish.description",
+      "effects": [
+        {
+          "value": "greedyChance",
+          "add": 10
+        }
+      ]
     },
     "gut": {
       "id": "gut",
@@ -7876,7 +7899,13 @@ export const content = {
       "level": 3,
       "kind": "passive",
       "name": "perk.rift-fishing.name",
-      "description": "perk.rift-fishing.description"
+      "description": "perk.rift-fishing.description",
+      "effects": [
+        {
+          "value": "riftChance",
+          "add": 10
+        }
+      ]
     },
     "sleight-of-hook": {
       "id": "sleight-of-hook",
@@ -8788,7 +8817,7 @@ export const strings = {
     "perk.battle-focus.name": "Battle Focus",
     "perk.battle-focus.description": "Add your level to your Fishing Skill for the next cast.",
     "perk.bend-reality.name": "Bend Reality",
-    "perk.bend-reality.description": "Right after a catch: bend reality around the fish, to make it bigger and special.",
+    "perk.bend-reality.description": "Right after a catch: bend reality around the fish, to make it bigger and rarer. With Rift Fishing, rift fish come twice as often.",
     "perk.bigger-bucket.name": "Bigger Bucket",
     "perk.bigger-bucket.description": "Your bucket holds 4 more fish.",
     "perk.ever-summoning.name": "Ever-Summoning",
@@ -8812,7 +8841,7 @@ export const strings = {
     "perk.overwhelm.name": "Overwhelm",
     "perk.overwhelm.description": "You fish with advantage, and advantage stacks: every source of it adds a die, and the best one counts.",
     "perk.polish.name": "Polish",
-    "perk.polish.description": "The next junk you find turns out to be treasure.",
+    "perk.polish.description": "The next junk you find, however many casts away, turns out to be treasure.",
     "perk.recall.name": "Recall",
     "perk.recall.description": "Your next fish is one that got away here before.",
     "perk.rift-fishing.name": "Rift Fishing",

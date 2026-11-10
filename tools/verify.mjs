@@ -603,6 +603,27 @@ await check('a full bucket', PHONE, '?dev&seed=1&wait=600', async (page, tap) =>
   await page.screenshot({ path: 'dist/verify/bucket.png' });
 });
 
+await check('two treasures (Fence)', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+  await openBench(page);
+  for (const [name, value] of [['biteCertain', '-1'], ['treasureFind', '1000'], ['treasureChoice', '1']]) {
+    await page.fill(`#dev-${name}`, value);
+    await page.press(`#dev-${name}`, 'Enter');
+  }
+  await closePane(page);
+  await tap();
+  await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
+  await tap();
+  await page.waitForSelector('#release[open]', { timeout: 4000 });
+  await page.screenshot({ path: 'dist/verify/two-treasures.png' });
+  const title = await page.textContent('#releaseTitle');
+  const options = await page.locator('#releaseList button').count();
+  report('two treasures: a dialog with both to choose from', title === 'Two treasures' && options === 2, `${title}, ${options} options`);
+  await page.waitForTimeout(450);
+  await page.click('#releaseList button >> nth=1');
+  report('two treasures: the choice closes it', !(await page.isVisible('#release')));
+  report('two treasures: the log says which was kept', /You keep .*\. The other sinks back/.test(await logText(page)));
+});
+
 // ---------- Equipment and the bag (5.1, 5.2, D83) ----------
 
 /** The middle of an element, on the page. */

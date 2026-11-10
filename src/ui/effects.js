@@ -48,7 +48,9 @@ export function effectLine(effect) {
     return { text: t(effect.add > 0 ? 'effect.biteCertain' : 'effect.noFish') };
   }
   if (effect.value === 'fromPool' && typeof effect.add === 'number' && effect.add > 0) return { text: t('effect.fromPool') };
-  if (effect.value === 'vantageStacks' && typeof effect.add === 'number' && effect.add > 0) return { text: t('effect.vantageStacks'), tone };
+  // Values that are either on or off read as a sentence.
+  const onOff = ['vantageStacks', 'riftDoubled', 'treasureChoice', 'junkToTreasure'];
+  if (onOff.includes(effect.value) && typeof effect.add === 'number' && effect.add > 0) return { text: t(`effect.${effect.value}`), tone };
   if (effect.value === 'naturalCatch' && typeof effect.add === 'number') {
     return { text: t('effect.naturalCatch', { from: (meta.base ?? 20) + effect.add }), tone };
   }

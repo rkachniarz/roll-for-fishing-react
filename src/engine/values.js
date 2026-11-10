@@ -42,6 +42,16 @@ export const GAME_VALUES = {
   biteCertain: { better: 'neither', base: 0 },
   /** Above 0: a fish that bites is one that got away here before, if there is one (D96). */
   fromPool: { better: 'neither', base: 0 },
+  /** The chance, in percent, that a fish comes from the spot's rift table instead (Rift Fishing, D104). */
+  riftChance: { better: 'higher', base: 0, unit: '%' },
+  /** Above 0: the rift chance is doubled (Bend Reality with Rift Fishing, D106). */
+  riftDoubled: { better: 'higher', base: 0 },
+  /** The chance, in percent, that a fish is Greedy: something caught on it, junk or treasure (Greedy Fish, D106). */
+  greedyChance: { better: 'higher', base: 0, unit: '%' },
+  /** Above 0: treasure comes up two at a time, and the player keeps one (Fence, D106). */
+  treasureChoice: { better: 'higher', base: 0 },
+  /** Above 0: junk that comes up is treasure instead (Polish, D106). */
+  junkToTreasure: { better: 'higher', base: 0 },
   /** The same for the fish's own d20 (R3.5). */
   fishVantage: { better: 'lower', base: 0 },
   /** Added to every fish's difficulty. */

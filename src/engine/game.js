@@ -14,13 +14,13 @@
 import { content } from '../generated/content.js';
 import { applyValue, deriveValues } from './values.js';
 import { listTable, locationTable, pick } from './tables.js';
-import { rollFish, sameFish, sizeBands } from './fish.js';
+import { bendFish, rollFish, sameFish, sizeBands } from './fish.js';
 import { featureAt, swimOff, updateFeatures } from './features.js';
 import { startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
 import { equippedIds } from './equipment.js';
 import { afterCast, arrive } from './events.js';
-import { owedLevels, perkSources, settlePerks } from './perks.js';
+import { hasPerk, owedLevels, perkSources, settlePerks } from './perks.js';
 import { LIGHTS, abilityStatus, spendCooldownCasts, startCooldown, tickCooldowns } from './abilities.js';
 import { advanceTime, clock } from './time.js';
 import { changeSeason, stepWeather } from './weather.js';
@@ -47,10 +47,15 @@ export const WILD_CAST = 100;
  * @property {number} total
  * @property {boolean} visible
  *
+ * @typedef {{ kind: 'item', id: string, alt?: string, polished?: boolean }} ItemLine  An item;
+ *   `alt`: a second treasure to choose from (Fence), `polished`: junk that Polish made treasure (D106).
+ *
  * @typedef {{ kind: 'fish', fish: PoolFish, required: number, fishNatural?: number, seenBefore: boolean, fromPool: boolean,
+ *     rift?: boolean, carried?: ItemLine,
  *     player: { mods: { label: string, value: number }[], vantage: number, stacks?: boolean, natural?: number } }
- *   | { kind: 'item', id: string }
- *   | { kind: 'empty', reason: 'nothing' }} Line
+ *   | ItemLine
+ *   | { kind: 'empty', reason: 'nothing' }} Line  `rift`: from the spot's rift table (D104); `carried`: a
+ *   Greedy fish's catch (D106).
  *
  * @typedef {import('./cast.js').Cast & {
  *   timing: typeof import('./cast.js').TIMING,
@@ -148,15 +153,22 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   if (state.pendingCatch) {
     return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'bucket-full' }] };
   }
+  // Nor while two treasures wait for the player to keep one (Fence, D106).
+  if (state.pendingTreasure) {
+    return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'treasure-choice' }] };
+  }
   // Nor while an event is open (D84).
   if (state.event) return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [] };
   // No rod, no cast (D83). The line and the bobber are optional.
   if (!state.equipped.rod) {
     return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'no-rod' }] };
   }
+  // Ever-Summoning: Summon Fish by itself, every other cast (D106).
+  const summoned = hasPerk(state, 'ever-summoning') && (state.book.casts + 1) % 2 === 0;
+  const lineExtra = summoned ? [...extra, { label: 'ever-summoning', effects: [{ value: 'biteCertain', add: 1 }] }] : extra;
   // The values for this cast are taken before its charges are spent, so a
   // "next 3 casts" buff covers this one (R1.5).
-  const values = valuesFor(state, extra);
+  const values = valuesFor(state, lineExtra);
   const checkpoint = structuredClone(state);
   checkpoint.buffs = checkpoint.buffs
     .map((b) => (b.casts !== undefined ? { ...b, casts: b.casts - 1 } : b))
@@ -195,7 +207,7 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   let lineValues = values;
   if (hit && feature) {
     hit.uses--;
-    lineValues = valuesFor(state, [...extra, { label: feature.id, effects: feature.effects ?? [] }]);
+    lineValues = valuesFor(state, [...lineExtra, { label: feature.id, effects: feature.effects ?? [] }]);
     events.push({ type: 'feature-hit', feature: feature.id });
   }
   const { line, rolls } = rollLine(next, lineValues, dice, feature, hit?.fish ?? null);
@@ -252,6 +264,7 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
     /** @type {PoolFish | null} */
     let fish = null;
     let fromPool = false;
+    let rift = false;
     // A feature with its own fish (a school, a big fish) brings up those, not the pool's.
     if (featureFish) {
       // Not from the pool: it stays with the feature if pulled out too early.
@@ -262,9 +275,15 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
       state.escaped[key] = pool.filter((_, j) => j !== i);
       fromPool = true;
     } else {
-      const table = feature?.fish
-        ? listTable(feature.fish, 'fish', { moment: momentOf(state) })
-        : locationTable(where, 'fish', { moment: momentOf(state) });
+      // Rift Fishing: now and then, the spot's rift table instead (D104, D106).
+      const riftChance = values.flat.riftChance * (values.flat.riftDoubled > 0 ? 2 : 1);
+      const riftTable = !feature?.fish && riftChance > 0 && dice.line.roll100() <= riftChance ? locationTable(where, 'rift', { moment: momentOf(state) }) : [];
+      rift = riftTable.length > 0;
+      const table = rift
+        ? riftTable
+        : feature?.fish
+          ? listTable(feature.fish, 'fish', { moment: momentOf(state) })
+          : locationTable(where, 'fish', { moment: momentOf(state) });
       const species = pick(table, dice.line);
       const minBand = feature?.minBand ? sizeBands().findIndex((/** @type {{ id: string }} */ b) => b.id === feature.minBand) : 0;
       if (species) {
@@ -291,6 +310,13 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
         total: fish.difficulty + resistance,
         visible: false,
       });
+      // Greedy Fish: something caught on it, rolled as a cast that brought up no fish (D106).
+      /** @type {ItemLine | null} */
+      let carried = null;
+      if (values.flat.greedyChance > 0 && dice.line.roll100() <= values.flat.greedyChance) {
+        const loot = rollLoot(state, values, dice.line, dice.effects, null, rolls).line;
+        if (loot.kind === 'item') carried = loot;
+      }
       const skill = value('fishingSkill');
       return {
         line: {
@@ -300,6 +326,8 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
           fishNatural: resistance,
           seenBefore: fromPool || Boolean(featureFish),
           fromPool,
+          ...(rift ? { rift } : {}),
+          ...(carried ? { carried } : {}),
           player: {
             mods: skill.mods.map((m) => (m.label === 'stat' ? { ...m, label: 'skill' } : m)),
             vantage: value('playerVantage').total,
@@ -365,13 +393,34 @@ function rollLoot(state, values, lootDice, effectDice, feature = null, rolls = [
     visible: false,
   });
   if (treasureRoll - treasureFind.total <= loc.treasureThreshold) {
-    const treasure = pick(locationTable(where, 'treasure', { found: state.found }), lootDice);
-    if (treasure) return { line: { kind: 'item', id: /** @type {string} */ (treasure.id) }, rolls };
+    const treasure = pickTreasure(state, values, lootDice);
+    if (treasure) return { line: treasure, rolls };
     // Every unique treasure here is found: junk instead (D75).
   }
   const junkTable = feature?.junk ? listTable(feature.junk, 'junk', { found: state.found }) : locationTable(where, 'junk', { found: state.found });
   const junk = pick(junkTable, lootDice);
+  if (junk?.id && values.flat.junkToTreasure > 0) {
+    // Polish: the junk turns out to be treasure, if any is left here (D106).
+    const treasure = pickTreasure(state, values, lootDice);
+    if (treasure) return { line: { ...treasure, polished: true }, rolls };
+  }
   return { line: junk?.id ? { kind: 'item', id: junk.id } : { kind: 'empty', reason: 'nothing' }, rolls };
+}
+
+/**
+ * A treasure from where the player is, and with Fence a second, different
+ * one to choose from, if there is one (D106).
+ * @param {GameState} state
+ * @param {Values} values
+ * @param {Dice} dice
+ * @returns {ItemLine | null}  Null when every unique treasure here is found.
+ */
+function pickTreasure(state, values, dice) {
+  const table = locationTable({ location: state.location, spot: state.spot }, 'treasure', { found: state.found });
+  const treasure = pick(table, dice);
+  if (!treasure?.id) return null;
+  const alt = values.flat.treasureChoice > 0 ? pick(table.filter((e) => e.id !== treasure.id), dice) : null;
+  return { kind: 'item', id: treasure.id, ...(alt?.id ? { alt: alt.id } : {}) };
 }
 
 /**
@@ -464,7 +513,15 @@ function resolveCast(state, cast) {
     const fish = line.fish;
     if (result === 'caught') {
       catchFish(next, fish, cast.bucketSize);
-      events.push({ type: 'caught', fish, roll: cast.outcome.rolls[0], required: line.required, seenBefore: line.seenBefore });
+      // A Greedy fish is named so in the log, not in the bucket (D106).
+      const shown = line.carried ? { ...fish, greedy: true } : fish;
+      events.push({ type: 'caught', fish: shown, roll: cast.outcome.rolls[0], required: line.required, seenBefore: line.seenBefore });
+      if (line.rift) events.push({ type: 'rift', fish });
+      if (line.carried) {
+        receive(next, line.carried);
+        events.push({ type: 'greedy', item: line.carried.id, alt: line.carried.alt });
+        if (line.carried.polished) events.push({ type: 'polished' });
+      }
       if (next.pendingCatch) events.push({ type: 'bucket-full' });
       else light(next, 'caught', fish, events);
       if (next.equipped.bait) {
@@ -500,11 +557,9 @@ function resolveCast(state, cast) {
     }
   } else if (result === 'landed') {
     if (line.kind === 'item') {
-      const item = content.items[line.id];
-      addToBags(next, line.id);
-      next.found[line.id] = (next.found[line.id] ?? 0) + 1;
-      next.character.xp += item.xp ?? 0;
-      events.push({ type: 'found', item: line.id });
+      receive(next, line);
+      events.push({ type: 'found', item: line.id, alt: line.alt });
+      if (line.polished) events.push({ type: 'polished' });
     } else {
       events.push({ type: 'empty', reason: line.reason });
     }
@@ -549,7 +604,8 @@ function resolveCast(state, cast) {
 
   // Last, so an event sees the cast's catch and the new time (D84).
   events.push(...afterCast(next, dice.events, {
-    found: result === 'landed' && line.kind === 'item' ? line.id : undefined,
+    // Two treasures to choose from start no item's event (no treasure has one yet).
+    found: result === 'landed' && line.kind === 'item' && !line.alt ? line.id : undefined,
     empty: result === 'landed' && line.kind === 'empty',
     fill: cast.meterFill ?? 100,
   }));
@@ -635,6 +691,31 @@ export function useAbility(state, id, extra = []) {
     case 'recall':
       nextCast([{ value: 'fromPool', add: 1 }]);
       break;
+    case 'polish':
+      // Until junk comes up, however many casts that takes (D106).
+      next.buffs.push({ id, source: id, effects: [{ value: 'junkToTreasure', add: 1 }] });
+      break;
+    case 'bend-reality': {
+      // The fish that was just caught, bigger and rarer, back into the bucket (D106).
+      const fish = next.lit[id]?.fish;
+      const stack = fish ? next.bucket.find((b) => sameFish(b.fish, fish)) : null;
+      if (!fish || !stack) return { state, events: [] };
+      const before = stack.fish;
+      stack.count--;
+      next.bucket = next.bucket.filter((b) => b.count > 0);
+      const { dice, commit } = diceFrom(next);
+      const bent = bendFish(before, dice.abilities);
+      next.streams = commit();
+      addToBucket(next, bent);
+      const entry = next.book.fish[bent.species];
+      if (entry) {
+        entry.totalSize += bent.size - before.size;
+        if (bent.size > entry.largest.size) entry.largest = { ...entry.largest, size: bent.size };
+      }
+      next.character.xp += bent.xp - before.xp;
+      events.push({ type: 'bent', from: before, fish: bent, xp: bent.xp - before.xp });
+      break;
+    }
     case 'jump-in': {
       // The fish that just got away, out of the pool and into the bucket.
       const fish = next.lit[id]?.fish;
@@ -661,10 +742,9 @@ export function useAbility(state, id, extra = []) {
       const { line } = rollLoot(next, valuesFor(next, extra), dice.abilities, dice.effects);
       next.streams = commit();
       if (line.kind === 'item') {
-        addToBags(next, line.id);
-        next.found[line.id] = (next.found[line.id] ?? 0) + 1;
-        next.character.xp += content.items[line.id].xp ?? 0;
-        events.push({ type: 'gutted', fish, item: line.id });
+        receive(next, line);
+        events.push({ type: 'gutted', fish, item: line.id, alt: line.alt });
+        if (line.polished) events.push({ type: 'polished' });
       } else events.push({ type: 'gutted', fish });
       break;
     }
@@ -746,6 +826,49 @@ export function releaseFish(state, choice) {
   const key = poolKey(next);
   next.escaped[key] = [...(next.escaped[key] ?? []), { ...released, tries: 0 }];
   return { state: next, events: [{ type: 'released', fish: released }] };
+}
+
+/**
+ * An item comes to the player: into the bags, or, with a second treasure to
+ * choose from (Fence), waiting for the player to keep one. Polish is used up
+ * by the junk it turned (D106). Changes `state` in place.
+ * @param {GameState} state
+ * @param {ItemLine} line
+ */
+function receive(state, line) {
+  if (line.polished) state.buffs = state.buffs.filter((b) => b.source !== 'polish');
+  if (line.alt) state.pendingTreasure = [line.id, line.alt];
+  else takeItem(state, line.id);
+}
+
+/**
+ * Into the bags, counted as found, with its XP. Changes `state` in place.
+ * @param {GameState} state
+ * @param {string} id
+ */
+function takeItem(state, id) {
+  addToBags(state, id);
+  state.found[id] = (state.found[id] ?? 0) + 1;
+  state.character.xp += content.items[id].xp ?? 0;
+}
+
+/**
+ * The player keeps one of two treasures (Fence, D106). The other goes back
+ * into the water, not found, so a unique one can come up again.
+ * @param {GameState} state
+ * @param {string} id
+ * @returns {{ state: GameState, events: GameEvent[] }}  The same state if `id` isn't on offer.
+ */
+export function chooseTreasure(state, id) {
+  if (!state.pendingTreasure?.includes(id)) return { state, events: [] };
+  const next = structuredClone(state);
+  const levelBefore = levelFor(next.character.xp);
+  next.pendingTreasure = null;
+  takeItem(next, id);
+  /** @type {GameEvent[]} */
+  const events = [{ type: 'kept', item: id }];
+  levelUp(next, levelBefore, events);
+  return { state: next, events };
 }
 
 /**

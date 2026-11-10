@@ -5,5 +5,11 @@
   "level": 3,
   "kind": "passive",
   "name": "Greedy Fish",
-  "description": "Now and then, you hook a Greedy fish, which has something shiny on it."
+  "description": "Now and then, you hook a Greedy fish, which has something shiny on it.",
+  "effects": [
+    {
+      "value": "greedyChance",
+      "add": 10
+    }
+  ]
 }

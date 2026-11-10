@@ -27,6 +27,8 @@ const EPIC = RARITIES.indexOf('epic');
  * @property {number} difficulty
  * @property {number} xp
  * @property {string} rarity
+ * @property {boolean} [bent]  Made bigger and rarer by Bend Reality (D106); never stacks with a plain twin.
+ * @property {boolean} [greedy]  Only on the fish in a log line: it had something caught on it (D106).
  */
 
 /** The size bands, smallest first. */
@@ -52,12 +54,7 @@ export function rollFish(species, values, dice, { minBand = 0 } = {}) {
   const rolled = bands.indexOf(pick(bands, dice));
   const band = Math.min(Math.max(rolled + values.fishSizeBand, minBand, 0), bands.length - 1);
 
-  // The species' range in equal slices, one per band; whole centimetres, and
-  // neighbouring slices don't share their edge.
-  const width = (s.size.max - s.size.min) / bands.length;
-  const lo = Math.round(s.size.min + band * width);
-  const top = band === bands.length - 1 ? s.size.max : Math.round(s.size.min + (band + 1) * width) - 1;
-  const size = dice.getRandomNumber(lo, Math.max(lo, top));
+  const size = sizeIn(species, band, dice);
 
   const difficulty = s.difficulty + bands[band].difficulty + values.fishDifficulty;
   return {
@@ -69,6 +66,40 @@ export function rollFish(species, values, dice, { minBand = 0 } = {}) {
     xp: Math.max(difficulty + values.fishXp, 1),
     rarity: fishRarity(s.rarity, bands[band].rarity),
   };
+}
+
+/**
+ * A size in whole centimetres within a band: the species' range in equal
+ * slices, one per band, neighbouring slices not sharing their edge.
+ * @param {string} species
+ * @param {number} band
+ * @param {Dice} dice
+ */
+function sizeIn(species, band, dice) {
+  const s = content.fish[species];
+  const bands = sizeBands();
+  const width = (s.size.max - s.size.min) / bands.length;
+  const lo = Math.round(s.size.min + band * width);
+  const top = band === bands.length - 1 ? s.size.max : Math.round(s.size.min + (band + 1) * width) - 1;
+  return dice.getRandomNumber(lo, Math.max(lo, top));
+}
+
+/**
+ * Bend Reality (D106): the fish one size band up, a new size in it, harder and
+ * worth more for the band, and one rarity up (Epic at most, D49). A fish in
+ * the top band keeps its size.
+ * @param {FishInstance} fish
+ * @param {Dice} dice  The `abilities` stream.
+ * @returns {FishInstance}
+ */
+export function bendFish(fish, dice) {
+  const bands = sizeBands();
+  const band = Math.min(fish.band + 1, bands.length - 1);
+  const size = band === fish.band ? fish.size : sizeIn(fish.species, band, dice);
+  const harder = bands[band].difficulty - bands[fish.band].difficulty;
+  const i = RARITIES.indexOf(fish.rarity);
+  const rarity = RARITIES[Math.max(i, Math.min(i + 1, EPIC))];
+  return { ...fish, band, size, difficulty: fish.difficulty + harder, xp: Math.max(fish.xp + harder, 1), rarity, bent: true };
 }
 
 /**
@@ -94,7 +125,13 @@ export function fishNameKeys(fish) {
   const s = content.fish[fish.species];
   const band = sizeBands()[fish.band];
   const subname = s.subnames?.[fish.subname];
-  return [...(band.plain ? [] : [band.name]), ...(subname ? [subname] : []), s.name];
+  return [
+    ...(fish.greedy ? ['fish.greedy'] : []),
+    ...(fish.bent ? ['fish.bent'] : []),
+    ...(band.plain ? [] : [band.name]),
+    ...(subname ? [subname] : []),
+    s.name,
+  ];
 }
 
 /**
@@ -103,5 +140,5 @@ export function fishNameKeys(fish) {
  * @param {FishInstance} b
  */
 export function sameFish(a, b) {
-  return a.species === b.species && a.subname === b.subname && a.size === b.size && a.band === b.band;
+  return a.species === b.species && a.subname === b.subname && a.size === b.size && a.band === b.band && Boolean(a.bent) === Boolean(b.bent);
 }
