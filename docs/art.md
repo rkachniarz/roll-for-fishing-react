@@ -124,6 +124,25 @@ The look so far, from the owner's sketches. A change to a rule is a decision (`d
 - **Random but repeatable.** Scattered things (waves, sand streaks, reed blades) are placed by the `scenery` stream
   (D4), so the same seed draws the same scene and screenshots can be compared.
 
+## Painting a spot from photos
+
+The pond trial (`src/scene/pond.js`, now still water's scene, D115, D116) is painted as code from the owner's photos,
+and it's the way the spots will be made (CR-1).
+
+- **A season can be worked out from another season's photo** (the blind test of D116). What changes, and how, comes
+  from knowing the plants: birch thins and yellows, pines stay dark, reed beds go tan from the tips, leaves lie on the
+  water. Aim for a season that reads clearly as that season rather than for one particular day: the guessed autumn
+  looked more like autumn than the one painted from the autumn photo, and the owner preferred that.
+- **Light and water are where a guess goes wrong.** The guessed water came out too dark and slate where the real
+  one was a light mauve-grey. When a season matters, one photo of it (even of another place) for the sky, the water
+  and how far the season has gone is worth more than any number of close-ups.
+- **Close-ups of single things** (a reed bed in winter, snow on a log) help with shapes, not colours. Take colours
+  from one photo per scene, so they agree.
+- **A photo of the same place in another season beats working it out:** the reedy shore's winter comes from the
+  owner's November photo (D118). Photos taken under heavy cloud come out darker than the place looks; lighten them.
+- **The art sheet keeps at most 16 live scenes:** the browser drops the oldest WebGL canvas after that, and the
+  "no page errors" check fails. A new card means taking one off, or drawing some as still images.
+
 ## For Claude: changing art
 
 - Read the owner's sketch or drawing first, and keep to it. Where it's silent, follow the style rules above, and put

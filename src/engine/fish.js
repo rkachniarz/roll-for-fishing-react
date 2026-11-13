@@ -29,6 +29,7 @@ const EPIC = RARITIES.indexOf('epic');
  * @property {string} rarity
  * @property {boolean} [bent]  Made bigger and rarer by Bend Reality (D106); never stacks with a plain twin.
  * @property {boolean} [greedy]  Only on the fish in a log line: it had something caught on it (D106).
+ * @property {string} [champion]  A class fish's class (D114), kept in the bucket; it goes when the fish is let go.
  */
 
 /** The size bands, smallest first. */
@@ -128,6 +129,7 @@ export function fishNameKeys(fish) {
   return [
     ...(fish.greedy ? ['fish.greedy'] : []),
     ...(fish.bent ? ['fish.bent'] : []),
+    ...(fish.champion ? [content.rules.champions.classes.find((/** @type {{ id: string }} */ c) => c.id === fish.champion)?.name ?? 'fish.champion'] : []),
     ...(band.plain ? [] : [band.name]),
     ...(subname ? [subname] : []),
     s.name,
@@ -140,5 +142,5 @@ export function fishNameKeys(fish) {
  * @param {FishInstance} b
  */
 export function sameFish(a, b) {
-  return a.species === b.species && a.subname === b.subname && a.size === b.size && a.band === b.band && Boolean(a.bent) === Boolean(b.bent);
+  return a.species === b.species && a.subname === b.subname && a.size === b.size && a.band === b.band && Boolean(a.bent) === Boolean(b.bent) && a.champion === b.champion;
 }

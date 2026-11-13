@@ -1,0 +1,77 @@
+{
+  "$schema": "../../schemas/champions.schema.json",
+  "id": "champions",
+  "chance": 10,
+  "max": 2,
+  "minBand": "large",
+  "radius": 10,
+  "xpFactor": 2,
+  "classes": [
+    {
+      "id": "witch",
+      "name": "Witch",
+      "aura": "#a050ff",
+      "spellCasts": { "min": 15, "max": 20 },
+      "spells": [
+        {
+          "id": "darkness",
+          "name": "Darkness",
+          "effects": [
+            { "value": "fishFind", "add": -10 },
+            { "value": "treasureFind", "add": -10 }
+          ]
+        },
+        {
+          "id": "gravitational-chaos",
+          "name": "Gravitational Chaos",
+          "effects": [{ "value": "wildCast", "add": 49 }]
+        },
+        {
+          "id": "slow",
+          "name": "Slow",
+          "effects": [{ "value": "cooldownFactor", "add": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "knight",
+      "name": "Knight",
+      "aura": "#d8dce8",
+      "effects": [{ "value": "fishAdvantageChance", "add": 50 }]
+    },
+    {
+      "id": "shaman",
+      "name": "Shaman",
+      "aura": "#40c8e0",
+      "note": "calls up wild weather",
+      "weatherCasts": { "min": 8, "max": 12 },
+      "weathers": [
+        { "season": "summer", "cell": 4 },
+        { "season": "summer", "cell": 8 },
+        { "season": "summer", "cell": 10 },
+        { "season": "summer", "cell": 14 },
+        { "season": "winter", "cell": 12 },
+        { "season": "winter", "cell": 15 },
+        { "season": "winter", "cell": 16 },
+        { "season": "autumn", "cell": 16 },
+        { "season": "spring", "cell": 2 },
+        { "season": "spring", "cell": 11 }
+      ]
+    },
+    {
+      "id": "rogue",
+      "name": "Rogue",
+      "aura": "#505868",
+      "note": "steals what you find, and slips away after every cast",
+      "resistance": 3,
+      "moves": true,
+      "effects": [{ "value": "stealChance", "add": 50 }]
+    },
+    {
+      "id": "cleric",
+      "name": "Cleric",
+      "aura": "#f0d860",
+      "effects": [{ "value": "fishResistance", "add": 3 }]
+    }
+  ]
+}

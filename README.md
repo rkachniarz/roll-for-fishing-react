@@ -20,6 +20,7 @@ npm run verify   # browser checks (headless Chromium); `npm run verify strike` r
 npm run build    # single-file copy in dist/artifact.html
 npm run check    # all three in turn: test, verify, build (what ends a phase)
 npm run sim      # balance: seeded games per class (casts=500 games=20 class=rogue-fisher …)
+npm run prompts  # how many prompts this project has taken, kept in docs/prompts.json
 
 npm run sprite list                    # the sprites that can go out to MS Paint
 npm run sprite export bobber           # -> art/bobber.png, to draw on
@@ -70,12 +71,14 @@ and the art sheet at `/art.html` there.
 | `src/engine/knowledge.js` | What the player knows of each place: spots noticed, its list, completion, hidden places opened (D109, D110) |
 | `src/engine/abilities.js` | Active abilities: the action bar's contents, cooldowns, which are lit |
 | `src/engine/features.js` | Surface features: appearing, drifting, thinning out; the open water's bounds |
+| `src/engine/champions.js` | Class fish (D114): appearing, their effects on the spot, spells, weather, the Rogue's loot |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
-| `src/scene/pond.js` | A trial for the art sheet only: a whole scene painted from a photo (`docs/design/photo-autumn-pond.jpg`) |
+| `src/scene/pond.js` | Still water's scene, painted as code from photos of a pond (D115, D116); also on the art sheet |
+| `src/scene/reedy.js` | The reedy shore's scene, painted as code from a sketch and a photo of dense reeds (D117) |
 | `src/scene/dice.js` | The fight's d20s thrown over the scene, coming to rest on the numbers rolled (D99; `d20.js`: the die's shape and numbering) |
 | `src/scene/icons.js` | 32×32 icons (D98): items and fish (a default for each kind), the button row, the weather; rarity colours |
 | `src/ui/flight.js` | A catch's icon flying from the bobber to the bucket or bag |
@@ -87,6 +90,7 @@ and the art sheet at `/art.html` there.
 | `src/audio.js` | Sound: placeholder sounds made with the Web Audio API, and the volume (9.2) |
 | `editor.html`, `tools/editor/editor.js` | The content editor (7.5): opens `content/` in Chrome or Edge, a form per file from its schema; not published |
 | `tools/sim.mjs` | `npm run sim`: seeded games played headless per class, for balance (9.1) |
+| `tools/prompts.mjs` | `npm run prompts`: the owner's prompts per Claude Code session, added to `docs/prompts.json` |
 | `src/ui/event-words.js` | The placeholders in event text (`{name}`, `{class}`…), and putting a slide's text together |
 | `src/ui/effects.js` | An item's effects as tooltip lines, green or red |
 | `src/ui/errors.js` | Red error text over the scene ("Must have a fishing pole equipped.") |

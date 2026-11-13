@@ -151,6 +151,11 @@ localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md]
   for every kind (R15.5); `iconName` picks an entity's own icon once its art exists. The button opens a plain list of
   what's equipped, in the bucket and in the bags, until Phase 5's inventory. The screenshot showed one cast's log lines
   upside down (the weather before the catch); a cast's lines now keep their order.
+- **4.8** Champions, class fish (D114; `src/engine/champions.js`, `content/rules/champions.json`): a Witch, Knight,
+  Shaman, Rogue and Cleric, Large or bigger, that come up now and then in place of a surface feature and stay on their
+  spot until caught. Their effects are five new game values, on casts at their spot only; the witch's spell and the
+  class effects show as debuffs; the Rogue's loot comes back with it. The save moved to version 11, with a
+  `champions` stream. The bench spawns any class. Eleven tests (`test/champions.test.js`) and a browser check.
 - **4.5** Surface features (`src/engine/features.js`, `content/features/`): a school of roach, a school of carp, a big
   pike under the surface and a glint, listed by the Lake with weights, a 12% chance per cast and at most two at once.
   They drift with each cast (not real time, so they replay from the seed), thin out as they are fished, and go when

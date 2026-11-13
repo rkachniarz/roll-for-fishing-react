@@ -17,6 +17,8 @@ import { clock, TIME } from './engine/time.js';
 import { EQUIPMENT_SLOTS, quickEquip } from './engine/equipment.js';
 import { METER_FIRES, startEvent } from './engine/events.js';
 import { owedLevels } from './engine/perks.js';
+import { championRules, maybeChampion, poolKey } from './engine/champions.js';
+import { waterAt } from './engine/features.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 
@@ -128,11 +130,33 @@ export function createBench(root, { getState, setState, overrides, extraSources,
   const spawnFeature = button('Spawn in the middle', () =>
     edit((s) => {
       const def = content.features[featureSelect.value];
-      s.features.push({ id: def.id, x: 128, y: 100, uses: def.uses, castsLeft: def.lifetime, born: s.book.casts });
+      // The middle of this spot's water: a painted spot's is lower down (D115, D117).
+      const water = waterAt(s.location, s.spot);
+      const x = Math.round((water.x0 + water.x1) / 2);
+      const y = Math.round((water.y0 + water.y1) / 2);
+      s.features.push({ id: def.id, x, y, uses: def.uses, castsLeft: def.lifetime, born: s.book.casts });
       return s;
     }),
   );
   const featuresLine = el('p');
+
+  // Class fish (D114): one of a class, for certain, wherever on the water.
+  const championSelect = el('select', { id: 'dev-champion' });
+  for (const c of championRules().classes) championSelect.append(el('option', { value: c.id, textContent: t(c.name) }));
+  const spawnChampion = Object.assign(button('Spawn', () =>
+    edit((s) => {
+      const { dice, commit } = diceFrom(s);
+      maybeChampion(s, dice.champions, waterAt(s.location, s.spot), { only: championSelect.value });
+      return { ...s, streams: commit() };
+    }),
+  ), { id: 'dev-champion-spawn' });
+  const clearChampions = button('Clear', () =>
+    edit((s) => {
+      const champions = { ...s.champions };
+      delete champions[poolKey(s)];
+      return { ...s, champions };
+    }),
+  );
 
   // ---------- Character ----------
   const xpInput = el('input', { type: 'number', min: '0', id: 'dev-xp' });
@@ -231,6 +255,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       clockLine,
       el('div', { className: 'dev-row' }, ['Surface feature ', featureSelect, spawnFeature, button('Clear', () => edit((s) => ({ ...s, features: [] })))]),
       featuresLine,
+      el('div', { className: 'dev-row' }, ['Class fish ', championSelect, spawnChampion, clearChampions]),
     ]),
     section('Character', [el('div', { className: 'dev-fields' }, [el('label', { htmlFor: 'dev-xp', textContent: 'XP' }), xpInput, el('label', { htmlFor: 'dev-luck', textContent: 'Luck' }), luckInput, el('label', { htmlFor: 'dev-class', textContent: 'Class' }), classSelect]), statsLine, el('div', { className: 'dev-row' }, [perkSelect, grantPerk, clearPerks, resetCooldowns])]),
     section('Inventory', [

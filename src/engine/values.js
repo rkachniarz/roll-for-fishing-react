@@ -62,6 +62,12 @@ export const GAME_VALUES = {
   revealCompletion: { better: 'higher', base: 0 },
   /** The same for the fish's own d20 (R3.5). */
   fishVantage: { better: 'lower', base: 0 },
+  /** The chance, in percent, that the fish's own d20 has advantage as well (a Knight champion, D114). */
+  fishAdvantageChance: { better: 'lower', base: 0, unit: '%' },
+  /** Added to every fish's roll, whatever fish it is, one from the pool included (a Cleric champion, D114). */
+  fishResistance: { better: 'lower', base: 0 },
+  /** The chance, in percent, that a find other than junk is stolen as it comes up (a Rogue champion, D114). */
+  stealChance: { better: 'lower', base: 0, unit: '%' },
   /** Added to every fish's difficulty. */
   fishDifficulty: { better: 'lower', base: 0 },
   /** Shifts the size band a fish is rolled in (R3.3). */
@@ -72,6 +78,10 @@ export const GAME_VALUES = {
   // ---- The cast (fed mostly by the rod, D35) ----
   /** How far from the aimed point the bobber may land, in scene pixels (D34). */
   castScatter: { better: 'lower', base: 20 },
+  /** The chance, in percent, that a cast flies off somewhere else entirely, wherever it was aimed (D85, D114). */
+  wildCast: { better: 'lower', base: 1, unit: '%' },
+  /** Ability cooldowns started now are this many times as long (Slow, D114). */
+  cooldownFactor: { better: 'lower', base: 1 },
   /** The shortest and longest wait from the cast to the bite, in ms (R2.2). */
   biteDelayMin: { better: 'lower', base: 2500, unit: 'ms' },
   biteDelayMax: { better: 'lower', base: 8000, unit: 'ms' },

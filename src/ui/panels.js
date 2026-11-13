@@ -206,12 +206,20 @@ export function journalPane(state, showCompletion = false) {
     .map(({ s, pieces }) =>
       el('p', { textContent: t('journal.set', { set: t(s.name), found: pieces.filter((id) => state.found[id]).length, total: pieces.length }) }),
     );
+  // Class fish caught (D114), by class.
+  const champions = Object.entries(state.book.champions ?? {})
+    .map(([id, n]) => {
+      const name = content.rules.champions.classes.find((/** @type {{ id: string }} */ c) => c.id === id)?.name;
+      return name ? `${t(name)}${n > 1 ? ` ×${n}` : ''}` : '';
+    })
+    .filter(Boolean);
   return [
     el('dl', { className: 'stats' }, [
       el('dt', { textContent: t('journal.casts') }),
       el('dd', { textContent: String(state.book.casts) }),
       el('dt', { textContent: t('journal.catches') }),
       el('dd', { textContent: String(state.book.catches) }),
+      ...(champions.length ? [el('dt', { textContent: t('journal.champions') }), el('dd', { textContent: champions.join(', ') })] : []),
     ]),
     ...(places.length ? places : [el('p', { className: 'muted', textContent: t('journal.none') })]),
     ...(sets.length ? [el('h3', { textContent: t('journal.sets') }), ...sets] : []),

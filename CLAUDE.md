@@ -31,7 +31,11 @@ Pushing `fresh-start` publishes the game to GitHub Pages once `npm test` passes 
 https://rkachniarz.github.io/roll-for-fishing-react/ (and `art.html`). Push only when the owner asks.
 
 A phase ends with `npm test` and `npm run verify` passing, then `npm run build` (`npm run check` does all three), then a docs refresh: DEV_PLAN.md
-(ticks, "Where things stand"), history.md, this file, README.md.
+(ticks, "Where things stand"), history.md, this file, README.md, and `npm run prompts`.
+
+**Prompt count:** `npm run prompts` records how many prompts the owner has given per session in `docs/prompts.json`
+(counts and dates, never the text), so the number survives Claude Code deleting old transcripts. Run it at the end of
+every phase, and whenever the owner asks how many prompts it has taken; it never drops a session already recorded.
 
 **UI: when in doubt, copy World of Warcraft (D29).** If you aren't sure how WoW does something, ask the owner instead
 of guessing.
@@ -55,6 +59,7 @@ npm run photo-icon <photo> name=icon-fish-<id>   # a first-draft 32×32 icon fro
 npm run cutout <photo> [flip=Name]   # cut the subject out of a busy photo, onto magenta (first: npm run cutout setup)
 npm run commons search <slug> "<query>"   # Wikimedia Commons pictures on a contact sheet; then commons fetch <slug> <n> name=<Name>
 npm run sim [casts=500 games=20 class=rogue-fisher strike=250..900 perks=first|passive|active]   # balance: seeded games per class (9.1)
+npm run prompts # record the owner's prompts per session in docs/prompts.json, and print the total
 # http://localhost:8001/art.html   the art sheet: trials, every sprite enlarged, the scene in five lights
 # http://localhost:8001/?dev       dev bench; ?seed=N seeds a new game (a save wins); ?wait=MS fixes the bite delay
 # http://localhost:8001/editor.html   the content editor (7.5): forms from the schemas, saving into content/ (Chrome, Edge)
@@ -140,5 +145,13 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   `treasureChoice`, `junkToTreasure`), read in `rollLine` / `rollLoot` in `src/engine/game.js`, and every item that
   comes to the player goes through `receive()` there: Fence's choice of two waits in `state.pendingTreasure`, and
   Polish's buff is spent by the junk it turned.
+- **Class fish (`src/engine/champions.js`, D114) live in `state.champions`, per spot,** not in `state.features`:
+  travel clears the features but never them. Their effects reach a cast through `valuesFor` (`championSources`), so
+  only at their own spot, and they draw only from the `champions` stream, so a game without them draws nothing more.
+  A fish's `champion` mark stays in the bucket and comes off when it's let go.
+- **Painted spots (D115-D118):** a spot's `look.painting` names a painting (`"pond"`: still water, `src/scene/pond.js`;
+  `"reedy"`: the reedy shore, `src/scene/reedy.js`), and `src/scene/scene.js` (`PAINTINGS`) hides its own water,
+  waves, cloud shadows and reeds there for the painting's back and front layers, repainted when the spot or the
+  painting's own season changes (the pond has two seasons, the reedy shore four). A painting is seen from eye level, so each such spot has its own open water (`water`).
 - **`src/main.js`: a tap within 500 ms of the last action is ignored after a cast ends,** so a double tap on the splash
   strikes once instead of striking and instantly recasting.

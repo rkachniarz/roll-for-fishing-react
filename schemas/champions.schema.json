@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Champions (D114): class fish that come up in place of a surface feature and stay on their spot until caught",
+  "definitions": {
+    "range": {
+      "type": "object",
+      "properties": { "min": { "type": "integer", "minimum": 1 }, "max": { "type": "integer", "minimum": 1 } },
+      "required": ["min", "max"],
+      "additionalProperties": false
+    },
+    "effects": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/definitions/effect" }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "const": "champions" },
+    "chance": {
+      "description": "When a surface feature would appear, the chance in percent that a champion appears in its place.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "max": {
+      "description": "The most champions on one spot at once; never two of the same class.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "minBand": {
+      "description": "A champion is at least this size band (an id from rules/size-bands.json).",
+      "$ref": "common.schema.json#/definitions/id"
+    },
+    "radius": {
+      "description": "How close to it the bobber must land, in scene pixels.",
+      "type": "integer",
+      "minimum": 2
+    },
+    "xpFactor": {
+      "description": "Its XP is the fish's times this.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "classes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/id" },
+          "name": { "description": "Before the fish's name: 'Witch'.", "$ref": "common.schema.json#/definitions/text" },
+          "aura": { "description": "The aura's colour on the water (a placeholder, CR-15).", "type": "string", "pattern": "^#[0-9a-f]{6}$" },
+          "note": { "description": "What it does, for its debuff's tooltip, where its effects don't say it.", "$ref": "common.schema.json#/definitions/text" },
+          "effects": { "description": "On every cast at its spot while it lives.", "$ref": "#/definitions/effects" },
+          "resistance": { "description": "Added to its own roll when it's on the line.", "type": "integer" },
+          "moves": { "description": "It moves somewhere else on the water after every cast.", "type": "boolean" },
+          "spellCasts": { "description": "How many casts each spell lasts before it casts another.", "$ref": "#/definitions/range" },
+          "spells": {
+            "description": "One at a time, its effects on every cast at its spot.",
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "$ref": "common.schema.json#/definitions/id" },
+                "name": { "$ref": "common.schema.json#/definitions/text" },
+                "effects": { "$ref": "#/definitions/effects" }
+              },
+              "required": ["id", "name", "effects"],
+              "additionalProperties": false
+            }
+          },
+          "weatherCasts": { "description": "How many casts between its weathers.", "$ref": "#/definitions/range" },
+          "weathers": {
+            "description": "The weathers it calls up, from any season.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": { "season": { "$ref": "common.schema.json#/definitions/id" }, "cell": { "type": "integer", "minimum": 0, "maximum": 18 } },
+              "required": ["season", "cell"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["id", "name", "aura"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "chance", "max", "minBand", "radius", "xpFactor", "classes"],
+  "additionalProperties": false
+}

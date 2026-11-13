@@ -4199,6 +4199,15 @@ export const content = {
         {
           "id": "reedy-shore",
           "name": "location.lake.spots.reedy-shore.name",
+          "look": {
+            "painting": "reedy"
+          },
+          "water": {
+            "x0": 40,
+            "y0": 118,
+            "x1": 216,
+            "y1": 180
+          },
           "fish": [
             {
               "id": "roach",
@@ -4471,9 +4480,13 @@ export const content = {
           "id": "still-water",
           "name": "location.lake.spots.still-water.name",
           "look": {
-            "tint": "#9fd0dc",
-            "tintAlpha": 0.18,
-            "shapes": []
+            "painting": "pond"
+          },
+          "water": {
+            "x0": 40,
+            "y0": 128,
+            "x1": 216,
+            "y1": 185
           },
           "learnAfter": 30,
           "fish": [
@@ -8742,6 +8755,149 @@ export const content = {
     }
   },
   "rules": {
+    "champions": {
+      "id": "champions",
+      "chance": 10,
+      "max": 2,
+      "minBand": "large",
+      "radius": 10,
+      "xpFactor": 2,
+      "classes": [
+        {
+          "id": "witch",
+          "name": "rules.champions.classes.witch.name",
+          "aura": "#a050ff",
+          "spellCasts": {
+            "min": 15,
+            "max": 20
+          },
+          "spells": [
+            {
+              "id": "darkness",
+              "name": "rules.champions.classes.witch.spells.darkness.name",
+              "effects": [
+                {
+                  "value": "fishFind",
+                  "add": -10
+                },
+                {
+                  "value": "treasureFind",
+                  "add": -10
+                }
+              ]
+            },
+            {
+              "id": "gravitational-chaos",
+              "name": "rules.champions.classes.witch.spells.gravitational-chaos.name",
+              "effects": [
+                {
+                  "value": "wildCast",
+                  "add": 49
+                }
+              ]
+            },
+            {
+              "id": "slow",
+              "name": "rules.champions.classes.witch.spells.slow.name",
+              "effects": [
+                {
+                  "value": "cooldownFactor",
+                  "add": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "knight",
+          "name": "rules.champions.classes.knight.name",
+          "aura": "#d8dce8",
+          "effects": [
+            {
+              "value": "fishAdvantageChance",
+              "add": 50
+            }
+          ]
+        },
+        {
+          "id": "shaman",
+          "name": "rules.champions.classes.shaman.name",
+          "aura": "#40c8e0",
+          "note": "rules.champions.classes.shaman.note",
+          "weatherCasts": {
+            "min": 8,
+            "max": 12
+          },
+          "weathers": [
+            {
+              "season": "summer",
+              "cell": 4
+            },
+            {
+              "season": "summer",
+              "cell": 8
+            },
+            {
+              "season": "summer",
+              "cell": 10
+            },
+            {
+              "season": "summer",
+              "cell": 14
+            },
+            {
+              "season": "winter",
+              "cell": 12
+            },
+            {
+              "season": "winter",
+              "cell": 15
+            },
+            {
+              "season": "winter",
+              "cell": 16
+            },
+            {
+              "season": "autumn",
+              "cell": 16
+            },
+            {
+              "season": "spring",
+              "cell": 2
+            },
+            {
+              "season": "spring",
+              "cell": 11
+            }
+          ]
+        },
+        {
+          "id": "rogue",
+          "name": "rules.champions.classes.rogue.name",
+          "aura": "#505868",
+          "note": "rules.champions.classes.rogue.note",
+          "resistance": 3,
+          "moves": true,
+          "effects": [
+            {
+              "value": "stealChance",
+              "add": 50
+            }
+          ]
+        },
+        {
+          "id": "cleric",
+          "name": "rules.champions.classes.cleric.name",
+          "aura": "#f0d860",
+          "effects": [
+            {
+              "value": "fishResistance",
+              "add": 3
+            }
+          ]
+        }
+      ]
+    },
     "fish-preferences": {
       "id": "fish-preferences",
       "factor": 2,
@@ -9947,6 +10103,16 @@ export const strings = {
     "perk.trouble-magnet.name": "Trouble Magnet",
     "perk.trouble-magnet.description": "Things happen to you twice as often.",
     "set.old-lorebook.name": "An old lorebook",
+    "rules.champions.classes.witch.name": "Witch",
+    "rules.champions.classes.knight.name": "Knight",
+    "rules.champions.classes.shaman.name": "Shaman",
+    "rules.champions.classes.rogue.name": "Rogue",
+    "rules.champions.classes.cleric.name": "Cleric",
+    "rules.champions.classes.shaman.note": "calls up wild weather",
+    "rules.champions.classes.rogue.note": "steals what you find, and slips away after every cast",
+    "rules.champions.classes.witch.spells.darkness.name": "Darkness",
+    "rules.champions.classes.witch.spells.gravitational-chaos.name": "Gravitational Chaos",
+    "rules.champions.classes.witch.spells.slow.name": "Slow",
     "rules.fish-preferences.baits.maggot.name": "Maggot",
     "rules.fish-preferences.baits.bread.name": "Bread",
     "rules.fish-preferences.baits.worm.name": "Worm",

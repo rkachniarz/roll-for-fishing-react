@@ -710,10 +710,25 @@ await check('surface features', PHONE, '?dev&seed=3&wait=600', async (page) => {
   await page.screenshot({ path: 'dist/verify/surface-feature.png' });
   // Cast at the middle of the scene (128, 100), where the school is.
   const box = await page.locator('#scene').boundingBox();
-  await page.touchscreen.tap(box.x + (box.width * 128) / 256, box.y + (box.height * 100) / 256);
+  // The middle of the reedy shore's water (x 40-216, y 118-180, D117), where the bench spawned it.
+  await page.touchscreen.tap(box.x + (box.width * 128) / 256, box.y + (box.height * 149) / 256);
   await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });
   const log = await logText(page);
   report('surface features: landing in a school says so', log.includes('Your bobber lands in a school of roach.'), log);
+});
+
+await check('class fish (D114)', PHONE, '?dev&seed=3', async (page) => {
+  await openBench(page);
+  await page.selectOption('#dev-champion', 'witch');
+  await page.click('#dev-champion-spawn');
+  await closePane(page);
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: 'dist/verify/class-fish.png' });
+  const debuff = page.locator('.debuffs .buff');
+  report('class fish: a debuff while the witch is on the spot', (await debuff.count()) === 1);
+  await debuff.first().click();
+  const tip = (await page.textContent('.buff-tip')) ?? '';
+  report('class fish: its tooltip names the witch and her spell', tip.startsWith('Witch: '), tip);
 });
 
 await check('the sky', PHONE, '?dev&seed=3', async (page) => {
@@ -1009,15 +1024,16 @@ if (!ONLY || 'art sheet'.includes(ONLY)) {
     // Save as PNG gives the owner the scene at its real size, to draw over.
     const [download] = await Promise.all([
       page.waitForEvent('download'),
-      page.click('text=Spring, noon, clear >> .. >> button.save'),
+      page.click('text=Pond, 256 wide >> .. >> button.save'),
     ]);
     await download.saveAs('dist/verify/art-scene.png');
     const png = decodePng(await readFile('dist/verify/art-scene.png'));
-    const topLeft = [...png.rgba.slice(0, 3)].map((v) => v.toString(16).padStart(2, '0')).join('');
+    // Painted, not blank: the top left pixel is opaque.
+    const opaque = png.rgba[3] === 255;
     report(
       'art sheet: Save as PNG gives the scene at 256×256',
-      png.width === 256 && png.height === 256 && topLeft === 'b4e6f2',
-      `${download.suggestedFilename()}, ${png.width}×${png.height}, top left #${topLeft}`,
+      png.width === 256 && png.height === 256 && opaque,
+      `${download.suggestedFilename()}, ${png.width}×${png.height}`,
     );
   } catch (e) {
     report('art sheet', false, e.message.split('\n')[0]);

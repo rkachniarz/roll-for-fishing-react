@@ -10,6 +10,7 @@
 
 import { content } from '../generated/content.js';
 import { pick } from './tables.js';
+import { maybeChampion } from './champions.js';
 
 /** @typedef {ReturnType<import('../dice.js').diceFor>} Dice */
 
@@ -95,11 +96,13 @@ export function featureAt(features, landing) {
  * Changes `state` (a copy the caller owns).
  * @param {import('./state.js').GameState} state
  * @param {Dice} dice  The `features` stream.
- * @param {{ appear?: boolean }} [options]  appear: false for a cast pulled out
+ * @param {{ appear?: boolean, champions?: Dice }} [options]  appear: false for a cast pulled out
  *   before a bite, which ages and moves what's there but brings nothing new (D85).
+ *   champions: the `champions` stream, for a class fish that may come up in
+ *   place of a feature (D114).
  * @returns {import('./game.js').GameEvent[]}
  */
-export function updateFeatures(state, dice, { appear = true } = {}) {
+export function updateFeatures(state, dice, { appear = true, champions } = {}) {
   const water = waterAt(state.location, state.spot);
   /** @type {import('./game.js').GameEvent[]} */
   const events = [];
@@ -125,6 +128,9 @@ export function updateFeatures(state, dice, { appear = true } = {}) {
   const spot = state.spot ? loc.spots?.find((/** @type {{ id: string }} */ s) => s.id === state.spot) : null;
   const list = [...(loc.features ?? []), ...(spot?.features ?? [])];
   if (list.length && state.features.length < (loc.maxFeatures ?? 0) && dice.roll100() <= (loc.featureChance ?? 0)) {
+    // Now and then a class fish instead (D114).
+    const champion = champions ? maybeChampion(state, champions, water) : [];
+    if (champion.length) return [...events, ...champion];
     const choice = pick(
       list.filter((/** @type {{ id: string }} */ e) => !content.features[e.id].retired),
       dice,

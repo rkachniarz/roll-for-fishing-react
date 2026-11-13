@@ -72,9 +72,14 @@ export function abilityStatus(state, id) {
  * Starts an ability's cooldown. Changes `state` in place (a copy the caller owns).
  * @param {GameState} state
  * @param {string} id
+ * @param {number} [factor]  Times as long (Slow, D114).
  */
-export function startCooldown(state, id) {
-  const cd = cooldownFor(state, id);
+export function startCooldown(state, id, factor = 1) {
+  const base = cooldownFor(state, id);
+  /** @type {{ casts?: number, ms?: number }} */
+  const cd = {};
+  if (base.casts) cd.casts = base.casts * factor;
+  if (base.ms) cd.ms = base.ms * factor;
   // Its casts count from the next line out, as its buff does: one used while
   // the line is out isn't shortened by that cast (D96, Review 2).
   if (cd.casts) state.cooldowns[id] = { ...cd, pending: true };

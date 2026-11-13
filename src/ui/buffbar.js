@@ -20,19 +20,25 @@ const LONG_PRESS_MS = 1200;
  */
 export function remaining(buff) {
   if (buff.casts !== undefined) return String(buff.casts);
+  // A class fish's debuff lasts until it's caught (D114).
+  if (buff.ms === undefined) return '';
   const ms = Math.max(0, buff.ms ?? 0);
   if (ms >= 60_000) return `${Math.round(ms / 60_000)}m`;
   return `${Math.ceil(ms / 1000)}s`;
 }
 
 /**
- * What a buff does, from its effects (R8.6): "+20 Fish Find".
- * @param {Buff} buff
+ * What a buff does, from its effects (R8.6): "+20 Fish Find". A class fish's
+ * debuff (D114) starts with its `label`: string keys, "Witch: Darkness".
+ * @param {Buff & { label?: string[] }} buff
  */
 export function describeBuff(buff) {
   /** @param {number | string} add */
   const amount = (add) => (typeof add === 'string' ? `+${add}` : `${add < 0 ? '−' : '+'}${Math.abs(add)}`);
-  return buff.effects.map((e) => `${amount(e.add)} ${t(`value.${e.value}`)}`).join(', ');
+  const effects = buff.effects.map((e) => `${amount(e.add)} ${t(`value.${e.value}`)}`).join(', ');
+  if (!buff.label?.length) return effects;
+  const label = buff.label.map((k) => t(k)).join(': ');
+  return effects ? `${label}. ${effects}` : label;
 }
 
 /**

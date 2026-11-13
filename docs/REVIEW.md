@@ -24,6 +24,33 @@ Items with no note are left alone.
 
 Newest first.
 
+## Class fish (2026-11-11, D114)
+
+Numbers and words Claude picked for the class fish; all in `content/rules/champions.json` unless said otherwise.
+
+- **How often:** when a surface feature would appear (12% of casts at every location), a class fish comes instead 10%
+  of the time: about one in 80 casts, until two are on the spot. With two features already on the water, neither comes.
+- **Large or bigger**, and **twice the XP**, as you said. A cast within 10 pixels of it hooks it for certain (the big
+  pike's feature works the same way).
+- **The Rogue adds 3 to its own roll**, the same as the Cleric's +3. It steals treasure, stuff and consumables, never
+  junk; with Fence's two treasures, it takes both.
+- **The Shaman's weathers**, from any season: summer's Hot and dry, Torrential rain, Fierce wind, Dry heat surges;
+  winter's Icy and cloudy, Windy and snowy, Blizzard; autumn's Rainy windstorm; spring's Hail and Heavy snowfall. It
+  calls one up when it comes, then every 8-12 casts. Caught, the weather drifts back to the season's own from there.
+- **Gravitational Chaos** makes 50% of casts fly way off (normally 1%). **Slow** doubles a cooldown when the ability
+  is used under it, not cooldowns already running.
+- **The witch's spells and the class fish's effects show as debuffs** on the buff bar, with no count (they last until
+  it's caught), except the witch's spell, which shows its casts left. Tapping one says what it does.
+- **Placeholder look:** a big fish's shadow in a ring of dots of its class's colour: Witch purple, Knight silver,
+  Shaman sky blue, Rogue dark grey, Cleric yellow (CR-15).
+- **Log lines** (`src/strings.js`, `log.champion-*`): "A Witch Gigantic Northern pike rises to the surface. It won't
+  leave until it's caught.", "The Knight … comes to the rescue: advantage on the fish's roll.", "The Rogue … snatches
+  {item} before you can reach it.", "It had stolen {item}. Yours again." The Rogue's moving isn't logged; the scene
+  shows it.
+- **The journal** lists "Champions caught: Witch, Knight ×2" under the casts and catches.
+- **The balance sim** never aims, so it never hooks one; they come up in its games and their debuffs count, but it
+  can't measure catching them yet.
+
 ## Review 2 (2026-11-10)
 
 - **No ability while a choice waits.** While a full bucket or two treasures wait (D59, D106), the action bar is dark
@@ -337,6 +364,45 @@ ability used when it can be. Things worth a look, none changed:
   100% zoom the button icons stay 32 px, but the weather icon grows from 16 to 32 px, since a 32-pixel icon can't go
   below ×1. Where the old size was an odd multiple of 16 (×5, ×7), the button icons are now one step smaller.
 
+## The reedy shore (D117, `src/scene/reedy.js`)
+
+- **The reeds' outline is your sketch's,** read off it column by column (`SKETCH_TOP`), with your red line over the
+  painting in place of it from x 24 to 123 and 180 to 268. Blade tips poke up to 7 pixels above it, so the edge is
+  ragged rather than a line.
+- **The mix of reeds:** about two in five are broad cattail leaves standing up, most of the rest fine sedge arching
+  over, pale where a sweep catches the sun, and one in 25 a dead brown stalk. Near the channel the sedge arches back
+  into its own bank, so the channel stays clear. There's a half-sunk log at the right bank's foot, as in the photo.
+- **Colours picked by eye from the photo** (`REEDY`), a little bluer and darker than a plain green. The water is
+  pale where it meets the sky and deep blue near you, dark green right beside the reeds where it mirrors them.
+- **Summer has heaped clouds sitting on the horizon;** autumn has a grey-blue overcast sky, greyer water, and reeds
+  turned tan and gold with three in ten still green (`REEDY_AUTUMN`, worked out from summer).
+- **Winter (D118), from your November photo, lightened:** dark brown cattails, a quarter of the stalks at the edge
+  with a brown head (one in five of those gone to fluff), one blade in ten dark green, big heavy clouds well up into
+  the sky, water silvery grey. The dry pale grass shows as sweeps through the lower reeds; it may be too much of
+  it next to the photo's dark mass.
+- **Spring (D118):** a vivid, yellower green than summer, a clear lighter sky, smaller clouds, and one blade in
+  eight a brown stalk left from last year. Worked out from summer and your word, no photo.
+- **The open water is x 40–216, y 118–180,** down to just above the lowest reed tips at its corners (the banks are
+  lowest towards the channel, so the middle has room to spare). The channel below isn't part of it. Casts above row 136 use the far sprites.
+- **The line comes up through the channel** and the reeds are drawn in front of it.
+- **Four cards on the art sheet,** one per season, in a mild day's light for each.
+
+## The pond as still water's scene (D115, D116)
+
+- **Still water's water is x 40–216, y 128–185** in the play area, chosen by eye: from just under the reed bed
+  (the water starts at row 110, the reeds hide the first rows) down to where the old shore's clamp stops a cast
+  (`aimAt` keeps casts 30 above the old sand line). The logs and the stick tangle in the front are inside it, so a
+  bobber can land on a log.
+- **Far sprites above row 145** (`POND_FAR_LINE` in `src/scene/scene.js`), about a quarter of the way down the
+  pond's water; the old view's line is 95.
+- **Spring looks like summer and winter like autumn** (`pondSeason` in `src/scene/pond.js`) until those seasons
+  are painted.
+- **Surface features are hard to see on the pond:** their shadows are the old scene's colour, drawn for pale blue
+  water. A school on the dark water barely shows. They need their own look for the painted spots (CR-1).
+- **Saves from before keep their features where they were,** some of them up in the pond's sky, until they drift
+  off or are fished out.
+- **No sand, no rod's shore:** the line still comes from below the bottom edge, as before.
+
 ## The pond from a photo (art sheet trial, `src/scene/pond.js`)
 
 - **Eye level, or slightly from above?** `docs/art.md` says the view is "from the shore, looking out, slightly from
@@ -355,6 +421,7 @@ ability used when it can be. Things worth a look, none changed:
   go on top of autumn; the drizzle card shows it.
 - **A bobber at 150, 172** to show the scale. Casting doesn't work there: the engine's open water (`WATER`) belongs
   to the game's own view.
+  > **Claude:** Overtaken on the reedy shore: the game now fishes there, with its own water (D115). Delete when settled.
 - **The photo is kept in the repo** (`docs/design/photo-autumn-pond.jpg`, 1.3 MB) as the reference.
   > **Claude:** Overtaken: `docs/design/` is local only (D97), so the photo isn't in the repo. Delete when settled.
 - **Reeds in front, from a second photo** (`docs/design/photo-reeds.png`, placed by `sketch-pond-reeds.png`; both

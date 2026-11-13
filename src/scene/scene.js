@@ -9,6 +9,8 @@
 import { Application, Container, Graphics, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { createSky } from './sky.js';
 import { createDice } from './dice.js';
+import { paintPond, pondSeason } from './pond.js';
+import { paintReedy, reedySeason } from './reedy.js';
 import {
   BOBBER,
   BOBBER_DIPPED,
@@ -35,6 +37,19 @@ export const MAX_WIDTH = 320;
 const FLIGHT_MS = 450;
 /** Casts landing above this line use the far-band sprites. */
 const FAR_LINE = 95;
+/**
+ * The painted spots (D115, D117): how each is painted, which of its own
+ * seasons shows in the game's (the pond has two, the reedy shore all four,
+ * D118), and where its casts turn to the far-band sprites (seen from eye
+ * level, the water starts at row 110).
+ * @type {Record<string, { paint: (rand: () => number, season: any) => import('./pond.js').Pond, season: (s: string) => string, farLine: number }>}
+ */
+const PAINTINGS = {
+  pond: { paint: paintPond, season: pondSeason, farLine: 145 },
+  reedy: { paint: paintReedy, season: reedySeason, farLine: 136 },
+};
+/** How far a painting (320 wide) reaches left of the play area. */
+const PAINTING_LEFT = 32;
 /** Where the line comes from: the rod, just below the bottom edge (in the play area, as is everything below). */
 const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
 
@@ -48,7 +63,8 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
 /**
  * A surface feature as the scene draws it (R14): where it is, what kind, and
  * how much is left of it.
- * @typedef {{ id: string, kind: string, x: number, y: number, uses: number, born: number }} SceneFeature
+ * @typedef {{ id: string, kind: string, x: number, y: number, uses: number, born: number, aura?: string }} SceneFeature
+ *   `aura`: a class fish's colour (D114).
  */
 
 /**
@@ -57,7 +73,8 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
  * defaults; a knob whose option the owner picks becomes the default and
  * leaves this list.
  * @typedef {{ tint?: string, tintAlpha?: number, shapes?: { shape: 'rect' | 'ellipse' | 'triangle' | 'band', x?: number, y: number,
- *   w?: number, h: number, colour: string }[] }} SpotLook  A spot's placeholder look (4.2).
+ *   w?: number, h: number, colour: string }[], painting?: 'pond' | 'reedy' }} SpotLook  A spot's placeholder look (4.2),
+ *   or a painting in its place (`painting`: src/scene/pond.js, D115; src/scene/reedy.js, D117).
  *
  * @typedef {Object} SceneLook
  * (None at the moment.)
@@ -150,6 +167,21 @@ export async function createScene(canvas, rand, look = {}) {
     }
   }
 
+  // A painted spot (D115, D117): its back layer under the play area in place
+  // of the water, the waves, the placeholder look, the cloud shadows and the
+  // reeds; its front layer (trees, reeds) over the bobber. Painted when the
+  // spot or the season changes.
+  const paintingBack = new Container();
+  app.stage.addChild(paintingBack);
+  /** @type {import('./pond.js').Pond | null} */
+  let painting = null;
+  let paintedKey = '';
+  /** @type {string | null} The game's season; null until the world is known, so nothing is painted twice. */
+  let paintingSeason = null;
+  let raining = false;
+  /** Where casts turn to the far-band sprites: a painting sees the water from lower down. */
+  let farLine = FAR_LINE;
+
   // Cloud shadows lie on the water, under everything that floats.
   const shadowLayer = new Container();
   app.stage.addChild(shadowLayer);
@@ -215,6 +247,8 @@ export async function createScene(canvas, rand, look = {}) {
   const reedsRight = new Sprite(reedFrames.right[0]);
   reedsRight.position.set(SIZE - 26, SIZE - reedHeight);
   app.stage.addChild(reedsLeft, reedsRight);
+  const paintingFront = new Container();
+  app.stage.addChild(paintingFront);
 
   // Rain, snow and the light of the hour, over everything (R7.5).
   const skyLayer = new Container();
@@ -242,6 +276,28 @@ export async function createScene(canvas, rand, look = {}) {
     dice.setSize(width, SIZE);
     paintWidth();
     paintSpot();
+    showPainting();
+  }
+
+  /** Shows the spot's painting, if it has one, painting it for this season first. */
+  function showPainting() {
+    const which = spotLook?.painting ? PAINTINGS[spotLook.painting] : null;
+    const painted = Boolean(which) && paintingSeason !== null;
+    const season = which && paintingSeason ? which.season(paintingSeason) : null;
+    const key = `${spotLook?.painting}:${season}`;
+    if (which && season && paintedKey !== key) {
+      for (const layer of [paintingBack, paintingFront]) {
+        for (const child of layer.removeChildren()) child.destroy({ children: true, texture: true, textureSource: true });
+      }
+      painting = which.paint(rand, season);
+      paintingBack.addChild(painting.back);
+      paintingFront.addChild(painting.front);
+      paintedKey = key;
+    }
+    paintingBack.visible = paintingFront.visible = painted;
+    for (const layer of [backdrop, waveLayer, spotLayer, shadowLayer, reedsLeft, reedsRight]) layer.visible = !painted;
+    paintingBack.x = paintingFront.x = offset - PAINTING_LEFT;
+    farLine = painted && which ? which.farLine : FAR_LINE;
   }
   let lastFrame = 0;
 
@@ -295,7 +351,7 @@ export async function createScene(canvas, rand, look = {}) {
       shownAt.set(key, at);
       const cx = Math.round(at.x);
       const cy = Math.round(at.y);
-      const far = cy < FAR_LINE;
+      const far = cy < farLine;
       const phase = i * 1.7;
       if (f.kind === 'school') {
         // Fish backs milling about; fewer as it is fished out.
@@ -307,6 +363,22 @@ export async function createScene(canvas, rand, look = {}) {
           const y = Math.round(cy + Math.sin(a) * r * 0.4);
           featureLayer.rect(x, y, far ? 2 : 3, 1).fill({ color: PALETTE.shadow, alpha: 0.7 });
         }
+      } else if (f.kind === 'champion') {
+        // A class fish (D114): a big fish's shadow in a glowing ring of its
+        // class's colour. A placeholder until it has art (CR-15).
+        const x = Math.round(cx + Math.sin(now / 2600 + phase) * 3);
+        const w = far ? 13 : 18;
+        const rx = far ? 9 : 13;
+        const pulse = 0.45 + 0.35 * Math.sin(now / 500 + phase);
+        for (let a = 0; a < 24; a++) {
+          const t = (a / 24) * Math.PI * 2 + now / 3000;
+          const px = Math.round(cx + Math.cos(t) * rx);
+          const py = Math.round(cy + Math.sin(t) * rx * 0.4);
+          featureLayer.rect(px, py, 1, 1).fill({ color: f.aura ?? PALETTE.foam, alpha: a % 3 === 0 ? pulse + 0.2 : pulse });
+        }
+        featureLayer.rect(x - w / 2, cy, w, 2).fill({ color: PALETTE.shadow, alpha: 0.8 });
+        featureLayer.rect(x - w / 2 + 2, cy - 1, w - 5, 1).fill({ color: PALETTE.shadow, alpha: 0.65 });
+        featureLayer.rect(x + w / 2, cy - 1, 2, 4).fill({ color: PALETTE.shadow, alpha: 0.65 });
       } else if (f.kind === 'big-fish') {
         // One long shadow, sliding to and fro just under the surface.
         const x = Math.round(cx + Math.sin(now / 2200 + phase) * 4);
@@ -344,7 +416,7 @@ export async function createScene(canvas, rand, look = {}) {
    * @param {number} now  Same clock as the cast's times (performance.now()).
    */
   function update(cast, now) {
-    const far = target.y < FAR_LINE;
+    const far = target.y < farLine;
     const phaseChanged = cast.phase !== lastPhase;
     lastPhase = cast.phase;
 
@@ -365,6 +437,7 @@ export async function createScene(canvas, rand, look = {}) {
     const sway = Math.floor((now * windy) / 900) % 2;
     reedsLeft.texture = reedFrames.left[sway];
     reedsRight.texture = reedFrames.right[sway];
+    if (painting && paintingBack.visible) painting.update(now, sky.wind(), PAINTING_LEFT - offset, raining);
 
     drawFeatures(now);
 
@@ -474,7 +547,13 @@ export async function createScene(canvas, rand, look = {}) {
     aimAt,
     update,
     setFeatures,
-    setWorld: sky.setWorld,
+    /** @param {import('./sky.js').World} world */
+    setWorld(world) {
+      sky.setWorld(world);
+      raining = world.weather.precipitation >= 2 && world.weather.temperature > 2;
+      paintingSeason = world.season;
+      showPainting();
+    },
     /**
      * The spot's placeholder look (4.2), repainted only when it changes.
      * @param {SpotLook | null} look
@@ -485,6 +564,7 @@ export async function createScene(canvas, rand, look = {}) {
       spotKey = key;
       spotLook = look;
       paintSpot();
+      showPainting();
     },
     /**
      * Rolls dice across the scene (D99), to rest in the play area's lower

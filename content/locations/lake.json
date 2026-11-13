@@ -46,6 +46,15 @@
     {
       "id": "reedy-shore",
       "name": "the reedy shore",
+      "look": {
+        "painting": "reedy"
+      },
+      "water": {
+        "x0": 40,
+        "y0": 118,
+        "x1": 216,
+        "y1": 180
+      },
       "fish": [
         {
           "id": "roach",
@@ -318,9 +327,13 @@
       "id": "still-water",
       "name": "still water",
       "look": {
-        "tint": "#9fd0dc",
-        "tintAlpha": 0.18,
-        "shapes": []
+        "painting": "pond"
+      },
+      "water": {
+        "x0": 40,
+        "y0": 128,
+        "x1": 216,
+        "y1": 185
       },
       "learnAfter": 30,
       "fish": [

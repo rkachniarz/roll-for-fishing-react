@@ -27,6 +27,7 @@ import { createAudio } from './audio.js';
 import { applySettings, loadSettings, saveSettings, showDice } from './settings.js';
 import { createScene } from './scene/scene.js';
 import { waterAt } from './engine/features.js';
+import { championClass, championDebuffs, championsHere } from './engine/champions.js';
 import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
@@ -552,7 +553,7 @@ scene.app.ticker.add((ticker) => {
     }
   }
   if (state) {
-    buffBar.update(state.buffs);
+    buffBar.update([...state.buffs, ...championDebuffs(state)]);
     renderActions();
   }
   scene.update(cast, now);
@@ -622,6 +623,23 @@ function describeEvent(e) {
     }
     case 'released':
       return tParts('log.released', { fish: fishLink(e.fish) });
+    case 'champion-appeared':
+    case 'champion-hit':
+    case 'champion-caught':
+    case 'champion-knight':
+      return tParts(`log.${e.type}`, { fish: fishLink(e.fish) });
+    case 'champion-spell': {
+      const spell = championClass(e.fish.champion).spells.find((/** @type {{ id: string }} */ s) => s.id === e.spell);
+      return tParts('log.champion-spell', { fish: fishLink(e.fish), spell: t(spell.name) });
+    }
+    case 'champion-weather':
+      return tParts('log.champion-weather', { fish: fishLink(e.fish), description: t(e.weather.description) });
+    case 'champion-stole':
+      return e.alt
+        ? tParts('log.champion-stole-choice', { fish: fishLink(e.fish), item: itemLink(e.item), alt: itemLink(e.alt) })
+        : tParts('log.champion-stole', { fish: fishLink(e.fish), item: itemLink(e.item) });
+    case 'champion-recovered':
+      return tParts('log.champion-recovered', { item: itemLink(e.item) });
     case 'event-gained':
     case 'event-lost': {
       const parts = tParts(`log.${e.type}`, { item: itemLink(e.item) });
@@ -1008,9 +1026,13 @@ function render() {
     renderPane();
     return;
   }
-  buffBar.update(state.buffs);
+  buffBar.update([...state.buffs, ...championDebuffs(state)]);
   renderActions();
-  scene.setFeatures(state.features.map((f) => ({ ...f, kind: content.features[f.id].kind })));
+  scene.setFeatures([
+    ...state.features.map((f) => ({ ...f, kind: content.features[f.id].kind })),
+    // Class fish (D114): a big fish with its class's aura.
+    ...championsHere(state).map((c) => ({ id: `champion-${c.class}`, kind: 'champion', aura: championClass(c.class).aura, x: c.x, y: c.y, uses: 1, born: c.born })),
+  ]);
   // The bobber slot is cosmetic: it only changes how the bobber looks (D83).
   const bobber = state.equipped.bobber;
   scene.setBobber(bobber ? (content.items[bobber.id]?.bobber ?? null) : null);

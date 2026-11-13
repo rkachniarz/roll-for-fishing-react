@@ -1,14 +1,15 @@
 // @ts-check
 // The art sheet (art.html, docs/art.md): every piece of the game's art on one
 // page, for the owner and Claude to look at together. Trials first (options
-// side by side), then the scene in several lights, then each sprite enlarged
-// with its pixel grid, then the palettes. Nothing here is part of the game.
+// side by side), then the painted spots, then each sprite enlarged with its
+// pixel grid, then the palettes. Nothing here is part of the game.
 //
 //   http://localhost:8001/art.html          ?seed=N for another layout of the scenery
 
 import { Rectangle } from 'pixi.js';
 import { SIZE, createScene } from './scene/scene.js';
-import { POND, createPondScene } from './scene/pond.js';
+import { POND, POND_SUMMER, createPondScene, paintPond } from './scene/pond.js';
+import { REEDY, REEDY_AUTUMN, REEDY_SPRING, REEDY_WINTER, paintReedy } from './scene/reedy.js';
 import { BOBBER, BOBBER_DIPPED, BOBBER_FAR, PALETTE, SPLASH, WAVES, bobberKeys, paintGrid } from './scene/sprites.js';
 import { ICONS, KEYS as ICON_KEYS, OWN_KEYS, paintIcon } from './scene/icons.js';
 import { TRIALS } from './art-trials.js';
@@ -114,13 +115,15 @@ for (const trial of TRIALS) {
  * @param {import('./scene/sky.js').World & { sun: { rise: number, set: number } }} world
  * @param {number} maxCss  The most CSS pixels across for the 256-pixel play area.
  * @param {number} width  How much of the 320-pixel painting shows.
+ * @param {string} [season]
+ * @param {(rand: () => number, season: any) => import('./scene/pond.js').Pond} [paint]  Which painting: the pond, or another drawn the same way.
  */
-async function pondCard(parent, caption, world, maxCss, width) {
+async function pondCard(parent, caption, world, maxCss, width, season = 'autumn', paint = paintPond) {
   const canvas = /** @type {HTMLCanvasElement} */ (el('canvas'));
   const save = /** @type {HTMLButtonElement} */ (el('button', { type: 'button', class: 'save' }, ['Save as PNG']));
   parent.append(el('figure', {}, [canvas, el('figcaption', {}, [caption, ' ', save])]));
   const rand = createRng(deriveSeed(seed, 'scenery'));
-  const scene = await createPondScene(canvas, () => rand.next());
+  const scene = await createPondScene(canvas, () => rand.next(), season, paint);
   const fit = Math.min(maxCss, ((document.documentElement.clientWidth - 32) * SIZE) / width);
   scene.fit((fit * width) / SIZE, fit, width);
   scene.setWorld(world);
@@ -135,7 +138,8 @@ const pond = section(
 );
 const pondBig = el('div', { class: 'row' });
 const pondLights = el('div', { class: 'row' });
-pond.append(pondBig, pondLights);
+const pondSummer = el('div', { class: 'row' });
+pond.append(pondBig, pondLights, el('h3', {}, ['The same spot in summer (docs/design/photo-summer-pond.png)']), pondSummer);
 await pondCard(pondBig, 'Pond, as drawn, breezy', AS_DRAWN, 640, 320);
 await pondCard(pondBig, 'Pond, 256 wide', AS_DRAWN, 384, 256);
 for (const [caption, world] of /** @type {const} */ ([
@@ -145,24 +149,26 @@ for (const [caption, world] of /** @type {const} */ ([
 ])) {
   await pondCard(pondLights, caption, world, 300, 320);
 }
+const SUMMER_DAY = { ...NOON, season: 'summer', hour: 13, weather: { temperature: 22, wind: 2, clouds: 0, precipitation: 0 } };
+await pondCard(pondSummer, 'Pond in summer, breezy', SUMMER_DAY, 640, 320, 'summer');
+await pondCard(pondSummer, 'Pond in summer, 256 wide', SUMMER_DAY, 384, 256, 'summer');
 
-const widths = el('div', { class: 'row' });
-section(
-  'The scene on a wider screen',
-  'On a phone the scene widens to fill the screen (D93): the 256×256 play area in the middle, strips of water, shore and reeds either side. 256 is a square screen; 314 is a Pixel 9 Pro.',
-).append(widths);
-for (const width of [256, 288, 314]) await sceneCard(widths, `${width} wide`, NOON, {}, 300, width);
-
-const lights = el('div', { class: 'row' });
-section('The scene in different lights', 'The art is drawn for a clear spring noon; the rest is tints and overlays laid over it by code.').append(lights);
-for (const [caption, world] of /** @type {const} */ ([
-  ['Spring, noon, clear', NOON],
-  ['Summer, sunset', { ...NOON, season: 'summer', hour: 20, minute: 30 }],
-  ['Autumn, rain', { ...NOON, season: 'autumn', hour: 15, weather: { temperature: 9, wind: 3, clouds: 4, precipitation: 3 } }],
-  ['Winter, snow', { ...NOON, season: 'winter', hour: 11, weather: { temperature: -3, wind: 1, clouds: 3, precipitation: 3 } }],
-  ['Night', { ...NOON, hour: 1 }],
+// The reedy shore (D117, D118), painted the same way from a sketch and photos
+// of the reeds, in all four seasons. The sheet keeps at most 16 live scenes
+// (docs/art.md).
+const reedy = section(
+  'The reedy shore',
+  'Painted as code from the owner’s sketch (docs/design/sketch-reedy-shore.png, markup-reedy-shore.png) and photos of the reeds in summer (photo-reeds-dense.jpg) and late November (photo-reedy-shore-november.jpg): open lake to a bare horizon, two banks of reeds close up with a channel between. Winter is the November photo; spring and autumn are worked out from summer and winter.',
+);
+const reedyRow = el('div', { class: 'row' });
+reedy.append(reedyRow);
+for (const [caption, world, season] of /** @type {const} */ ([
+  ['Spring', { ...NOON, season: 'spring', hour: 11, weather: { temperature: 14, wind: 2, clouds: 1, precipitation: 0 } }, 'spring'],
+  ['Summer', SUMMER_DAY, 'summer'],
+  ['Autumn', { ...NOON, season: 'autumn', hour: 13, weather: { temperature: 10, wind: 2, clouds: 2, precipitation: 0 } }, 'autumn'],
+  ['Winter', { ...NOON, season: 'winter', hour: 12, weather: { temperature: 1, wind: 2, clouds: 2, precipitation: 0 } }, 'winter'],
 ])) {
-  await sceneCard(lights, caption, world, {}, 384);
+  await pondCard(reedyRow, `Reedy shore in ${caption.toLowerCase()}`, world, 480, 320, season, paintReedy);
 }
 
 /** @param {number} now */
@@ -237,6 +243,11 @@ section('Palettes', 'Every colour the art uses. A new colour gets a name here be
   palette('Scene (PALETTE in src/scene/sprites.js)', PALETTE),
   palette('Scene sprite keys', bobberKeys(null)),
   palette('Trial: the pond from a photo (POND in src/scene/pond.js)', POND),
+  palette('Trial: the pond in summer (POND_SUMMER in src/scene/pond.js)', POND_SUMMER),
+  palette('The reedy shore in spring (REEDY_SPRING in src/scene/reedy.js)', REEDY_SPRING),
+  palette('The reedy shore in summer (REEDY in src/scene/reedy.js)', REEDY),
+  palette('The reedy shore in autumn (REEDY_AUTUMN in src/scene/reedy.js)', REEDY_AUTUMN),
+  palette('The reedy shore in winter (REEDY_WINTER in src/scene/reedy.js)', REEDY_WINTER),
   palette('Icon keys (src/scene/icons.js)', ICON_KEYS),
   ...Object.entries(OWN_KEYS).map(([name, keys]) => palette(`The ${name} icon's own colours (OWN_KEYS)`, keys)),
 );

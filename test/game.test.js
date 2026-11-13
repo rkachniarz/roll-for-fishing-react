@@ -70,7 +70,7 @@ test('a new game: the Lake, the stick, a morning in year 1, every stream seeded'
   assert.equal(s.weather.season, c.season, "the weather is the start's season");
   assert.deepEqual(game(), s, 'the same seed, the same start');
   assert.equal(s.character.luck, 0, 'Luck starts at 0 (R6.7)');
-  assert.equal(Object.keys(s.streams).length, 10);
+  assert.equal(Object.keys(s.streams).length, 11);
   assert.deepEqual(s.features, []);
 });
 

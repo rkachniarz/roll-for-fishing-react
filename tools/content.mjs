@@ -64,6 +64,9 @@ const TEXT = {
     ['precipitation', '#'],
     ['baits', '@', 'name'],
     ['weatherWords', '@', 'name'],
+    ['classes', '@', 'name'],
+    ['classes', '@', 'note'],
+    ['classes', '@', 'spells', '@', 'name'],
   ],
 };
 
@@ -306,6 +309,23 @@ export async function buildContent(root = ROOT) {
   checkPerks(all, errors, warnings);
   checkSeasons(all.weather, errors);
   checkEvents(all, errors, warnings, root);
+
+  // Champions (D114): their size band and the weathers the shaman calls up.
+  const champions = all.rules.champions;
+  if (!champions) errors.push('content/rules/champions.json: missing');
+  else {
+    const where = 'content/rules/champions.json';
+    if (!all.rules['size-bands']?.bands.some((/** @type {{ id: string }} */ b) => b.id === champions.minBand)) {
+      errors.push(`${where}: no size band "${champions.minBand}"`);
+    }
+    for (const c of champions.classes) {
+      for (const w of c.weathers ?? []) {
+        if (!all.weather[w.season]?.weathers?.[w.cell]) errors.push(`${where}: ${c.id}: no weather ${w.season} ${w.cell}`);
+      }
+      if (c.spells && !c.spellCasts) errors.push(`${where}: ${c.id}: spells need spellCasts`);
+      if (c.weathers && !c.weatherCasts) errors.push(`${where}: ${c.id}: weathers need weatherCasts`);
+    }
+  }
 
   const bands = all.rules['size-bands']?.bands;
   if (!bands) errors.push('content/rules/size-bands.json: missing');

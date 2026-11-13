@@ -76,6 +76,7 @@
             "properties": {
               "tint": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
               "tintAlpha": { "type": "number", "minimum": 0, "maximum": 1 },
+              "painting": { "description": "A painted scene in place of the game's water: \"pond\" (src/scene/pond.js, D115), \"reedy\" (src/scene/reedy.js, D117). The tint and shapes don't show under it.", "enum": ["pond", "reedy"] },
               "shapes": {
                 "type": "array",
                 "items": {

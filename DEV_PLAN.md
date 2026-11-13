@@ -11,13 +11,13 @@ a plain generic sentence, a stand-in rule. A town of placeholder squares is bett
 listed under the creative task that will replace it, so nothing is forgotten; a placeholder that fits no task gets a
 new one.
 
-**Where things stand (2026-11-10):** Phases 1–3 and 7 are done: the game is playable on GitHub Pages (D91), and
+**Where things stand (2026-11-11):** Phases 1–3 and 7 are done: the game is playable on GitHub Pages (D91), and
 events have every word the owner's ideas need so far (D108), with a placeholder quest chain and a content editor.
 The fish are the owner's (D101–D104): 80 over nine spots and 42 rift fish. Every class perk works (D106), the number
 a fish needed shows from level 1 with its own dice (D107), and gear, rods and Tiny-fish bait are in (5.3, 5.7, 5.8).
 Places are learned (D109): spots are noticed by fishing, each place has its list and a hidden completion, and the
 Mage Tower pools open from map fragments (D110). Sets and readable pages (D111), sound, saves to a file, the
-collection and a balance simulation are in. Junk is apart from stuff, the things used for something (D112). Still
+collection and a balance simulation are in. Junk is apart from stuff, the things used for something (D112). Class fish come up now and then and hold their spot until caught (D114). Still
 open in development: the town and what hangs on it (8.3, 8.6, 8.8, barter D86), the cat (8.9), the spot map (8.1),
 the atlas (4.1), weather and life on a spot (4.7), class-flavoured texts (6.5), the review of D8 (5.6), the dice's
 feel (9.6) and an installable game (9.5). The creative track holds the art, writing and sound. Claude's guesses are on
@@ -146,6 +146,9 @@ The machinery the art plugs into. The art itself is in the creative track.
   no reeling-in animation; the log line always (R16.2, D69, D70).
 - [x] **4.5** Surface features: schools, curious spots and disturbances on the water, with their own stream, and their
   effect on the odds when the bobber lands in one (R14, D33, D40, D62).
+- [x] **4.8** Champions, class fish (D114): a Witch, a Knight, a Shaman, a Rogue and a Cleric that come up in place
+  of a surface feature and stay on their spot until caught. Placeholder look (a big fish's shadow in a ring of its
+  class's colour) and placeholder log lines until CR-15.
 - [ ] **4.7** Weather and life on a spot (D100; was the engine half of 8.11): the scene picks each spot's sky from
   the weather (heaped clouds, overcast, rain, wind, light) and moves its plants and water. Placeholder clouds and
   plants (flat shapes) until CR-2.
@@ -240,7 +243,8 @@ Requirements R5.3, R11.
   each place's completion (D109).
 - [ ] **8.3** The town: inn and scrap dealer, barter (D86); fish put into the inn's perpetual stew for a buff,
   stronger for rarer fish and longer for more fish (R11.5, R12.6, D24, D28, D37). Squares and triangles for the
-  buildings and people, and plain lines for what they say, until CR-5 and CR-13.
+  buildings and people, and plain lines for what they say, until CR-5 and CR-13. *Waits for the owner's town
+  requirements; the questions are in [docs/town-questions.md](docs/town-questions.md).*
 - [ ] **8.6** The Alchemist's recurring visit: buffing potions for sale, alchemical ingredients bought; the ingredients
   added to the junk tables (R10.6, R11.7, D30). Placeholder potions, ingredients and lines.
 - [x] **8.5** Location lists and completion percentages; knowledge (found, bought) that reveals missing entries (R4.4,
@@ -286,7 +290,8 @@ placeholder, it's added here.
 
 - [ ] **CR-1** The spots painted from the owner's photos (D97, D100; was 8.10), working from the pond trial on the art
   sheet (`src/scene/pond.js`): a version per season for each of the nine spots, and the Mage Tower's pool. *Replaces
-  4.2's placeholder looks (each spot's `look` in `content/locations/`).*
+  4.2's placeholder looks (each spot's `look` in `content/locations/`).* Painted so far: still water (the pond, D115, D116;
+  autumn and summer) and the reedy shore (D117, D118; all four seasons).
 - [ ] **CR-2** Weather and life on the painted spots (D100; the art half of 8.11): clouds per weather (summer's heaped
   clouds, autumn's overcast so far), rain, wind, light, moving plants and water. *Replaces 4.7's flat shapes.*
 - [ ] **CR-3** Fish icons (D97, D98; was 9.7): the eyes, one by one, since they were placed by script (a 2×2 a tenth of
@@ -302,6 +307,9 @@ placeholder, it's added here.
 - [ ] **CR-8** Perk and ability icons (the action bar shows initials), and the look of a Greedy fish and a bent fish
   (6.3).
 - [ ] **CR-9** The fixed palette (4.1) and the art sheet's open trials (`art.html`).
+- [ ] **CR-15** Class fish (D114): how each looks on the water, its aura and the witch's spells, and their log lines.
+  *Replaces the shadow in a coloured ring of dots (`src/scene/scene.js`) and Claude's lines in `src/strings.js`
+  (`log.champion-*`).*
 
 ## Writing
 

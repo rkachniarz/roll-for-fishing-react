@@ -25,6 +25,9 @@ import { LIGHTS, abilityStatus, spendCooldownCasts, startCooldown, tickCooldowns
 import { advanceTime, clock } from './time.js';
 import { learn, noticeSpots, openByFragments, placeOpen, spotKnown } from './knowledge.js';
 import { changeSeason, stepWeather } from './weather.js';
+import { championAt, championClass, championSources, championsHere, findChampion, poolKey, removeChampion, updateChampions } from './champions.js';
+
+export { poolKey };
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./state.js').PoolFish} PoolFish */
@@ -36,9 +39,6 @@ import { changeSeason, stepWeather } from './weather.js';
 /** A second missed splash in a row reels the line in (D64). */
 export const MISS_LIMIT = 2;
 
-/** One cast in this many flies off somewhere else entirely (D85). */
-export const WILD_CAST = 100;
-
 /**
  * @typedef {Object} Roll  A hidden or visible roll, for the record (R5.1).
  * @property {string} kind
@@ -49,15 +49,16 @@ export const WILD_CAST = 100;
  * @property {number} total
  * @property {boolean} visible
  *
- * @typedef {{ kind: 'item', id: string, alt?: string, polished?: boolean }} ItemLine  An item;
- *   `alt`: a second treasure to choose from (Fence), `polished`: junk that Polish made treasure (D106).
+ * @typedef {{ kind: 'item', id: string, alt?: string, polished?: boolean, stolen?: boolean }} ItemLine  An item;
+ *   `alt`: a second treasure to choose from (Fence), `polished`: junk that Polish made treasure (D106),
+ *   `stolen`: a Rogue takes it as it comes up (D114).
  *
  * @typedef {{ kind: 'fish', fish: PoolFish, required: number, fishNatural?: number, seenBefore: boolean, fromPool: boolean,
- *     rift?: boolean, carried?: ItemLine,
+ *     rift?: boolean, carried?: ItemLine, knighted?: boolean,
  *     player: { mods: { label: string, value: number }[], vantage: number, stacks?: boolean, natural?: number } }
  *   | ItemLine
  *   | { kind: 'empty', reason: 'nothing' }} Line  `rift`: from the spot's rift table (D104); `carried`: a
- *   Greedy fish's catch (D106).
+ *   Greedy fish's catch (D106); `knighted`: a Knight gave the fish advantage (D114).
  *
  * @typedef {import('./cast.js').Cast & {
  *   timing: typeof import('./cast.js').TIMING,
@@ -71,6 +72,7 @@ export const WILD_CAST = 100;
  *   reeledIn?: boolean,
  *   recast?: boolean,
  *   feature?: { id: string, born: number } | null,
+ *   champion?: { class: string, born: number } | null,
  *   extra: import('./values.js').Source[],
  * }} GameCast
  *
@@ -92,6 +94,8 @@ export function valuesFor(state, extra = []) {
     if (effects) sources.push({ label: id, effects });
   }
   for (const buff of state.buffs) sources.push({ label: buff.id, effects: buff.effects });
+  // Class fish on this spot (D114).
+  sources.push(...championSources(state));
   return deriveValues(state.character.stats, [...sources, ...extra]);
 }
 
@@ -107,11 +111,6 @@ export function timingFrom(v) {
     okMs: v.flat.reactionOk,
     lateMs: v.flat.strikeLimit,
   };
-}
-
-/** @param {GameState} state  The escaped-fish pool for where the player is (R3.6, D59). */
-export function poolKey(state) {
-  return state.spot ? `${state.location}/${state.spot}` : state.location;
 }
 
 /**
@@ -193,8 +192,9 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
       x: dice.scatter.getRandomNumber(bounds.x0, bounds.x1),
       y: dice.scatter.getRandomNumber(bounds.y0, bounds.y1),
     });
-    if (dice.scatter.getRandomNumber(1, WILD_CAST) === 1) {
-      // Way off target, wherever it was aimed (D85).
+    if (dice.scatter.getRandomNumber(1, 100) <= values.flat.wildCast) {
+      // Way off target, wherever it was aimed (D85); more often under
+      // Gravitational Chaos (D114).
       landing = anywhere();
       events.push({ type: 'wild-cast' });
     } else {
@@ -206,15 +206,24 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   // Landing in a surface feature: its effects and tables for this cast, and
   // one use of it gone (R14).
   events.unshift({ type: 'cast', landing });
-  const hit = featureAt(next.features, landing);
+  // A class fish first (D114): cast by one, and it's on the line for certain.
+  const champion = championAt(championsHere(next), landing);
+  const hit = champion ? null : featureAt(next.features, landing);
   const feature = hit ? content.features[hit.id] : null;
   let lineValues = values;
-  if (hit && feature) {
+  if (champion) {
+    lineValues = valuesFor(state, [...lineExtra, { label: champion.class, effects: [{ value: 'biteCertain', add: 1 }] }]);
+    events.push({ type: 'champion-hit', fish: champion.fish });
+  } else if (hit && feature) {
     hit.uses--;
     lineValues = valuesFor(state, [...lineExtra, { label: feature.id, effects: feature.effects ?? [] }]);
     events.push({ type: 'feature-hit', feature: feature.id });
   }
-  const { line, rolls } = rollLine(next, lineValues, dice, feature, hit?.fish ?? null);
+  const { line, rolls } = rollLine(next, lineValues, dice, feature, champion?.fish ?? hit?.fish ?? null, champion);
+  // A Rogue on the spot may steal what comes up, anything but junk (D114).
+  if (line.kind === 'item' && content.items[line.id]?.category !== 'junk' && lineValues.flat.stealChance > 0) {
+    if (dice.champions.roll100() <= lineValues.flat.stealChance) line.stolen = true;
+  }
   for (const roll of rolls) roll.visible = rollShown(state, lineValues, roll.kind);
 
   /** @type {GameCast} */
@@ -230,6 +239,7 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     meterFill: values.flat.eventMeterFill,
     extra,
     feature: hit ? { id: hit.id, born: hit.born } : null,
+    champion: champion ? { class: champion.class, born: champion.born } : null,
     ...(recast ? { recast: true } : {}),
   };
   next.streams = commit();
@@ -259,10 +269,11 @@ export function rollShown(state, values, kind) {
  * @param {Record<string, Dice>} dice
  * @param {any} [feature]  The surface feature the cast landed in, from content.
  * @param {PoolFish | null} [featureFish]  The fish that feature holds, if one
- *   already got away from it once (a big fish that swam off, D85).
+ *   already got away from it once (a big fish that swam off, D85), or a class fish's.
+ * @param {import('./champions.js').Champion | null} [champion]  The class fish cast by (D114).
  * @returns {{ line: Line, rolls: Roll[] }}
  */
-function rollLine(state, values, dice, feature = null, featureFish = null) {
+function rollLine(state, values, dice, feature = null, featureFish = null, champion = null) {
   const loc = content.locations[state.location];
   const where = { location: state.location, spot: state.spot };
   /** @type {Roll[]} */
@@ -322,15 +333,23 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
     if (fish) {
       // The fish's resistance: its own d20 on top of its difficulty (R3.5).
       // roll20Kept is roll20 from the same draws, saying which dice didn't count (D95).
-      const kept = dice.line.roll20Kept(value('fishVantage').total);
-      const resistance = kept.result;
+      // A Knight on the spot comes to its aid, now and then: advantage (D114).
+      const chance = values.flat.fishAdvantageChance;
+      const knighted = chance > 0 && dice.champions.roll100() <= chance;
+      const kept = dice.line.roll20Kept(value('fishVantage').total + (knighted ? 1 : 0));
+      // A Cleric on the spot adds to every fish's roll; a Rogue to its own (D114).
+      const mods = [{ label: 'difficulty', value: fish.difficulty }];
+      if (values.flat.fishResistance) mods.push({ label: 'cleric', value: values.flat.fishResistance });
+      const own = champion ? championClass(champion.class).resistance ?? 0 : 0;
+      if (own) mods.push({ label: champion?.class ?? '', value: own });
+      const required = kept.result + mods.reduce((sum, m) => sum + m.value, 0);
       rolls.push({
         kind: 'resistance',
         die: 'd20',
-        result: resistance,
+        result: kept.result,
         ...(kept.dropped !== undefined ? { dropped: kept.dropped } : {}),
-        mods: [{ label: 'difficulty', value: fish.difficulty }],
-        total: fish.difficulty + resistance,
+        mods,
+        total: required,
         visible: false,
       });
       // Greedy Fish: something caught on it, rolled as a cast that brought up no fish (D106).
@@ -345,12 +364,13 @@ function rollLine(state, values, dice, feature = null, featureFish = null) {
         line: {
           kind: 'fish',
           fish,
-          required: fish.difficulty + resistance,
-          fishNatural: resistance,
+          required,
+          fishNatural: kept.result,
           seenBefore: fromPool || Boolean(featureFish),
           fromPool,
           ...(rift ? { rift } : {}),
           ...(carried ? { carried } : {}),
+          ...(knighted ? { knighted } : {}),
           player: {
             mods: skill.mods.map((m) => (m.label === 'stat' ? { ...m, label: 'skill' } : m)),
             vantage: value('playerVantage').total,
@@ -530,6 +550,9 @@ function resolveCast(state, cast) {
   const line = cast.line;
   // The surface feature it landed in, if it's still there.
   const hit = cast.feature ? next.features.find((f) => f.id === cast.feature?.id && f.born === cast.feature?.born) : null;
+  // The class fish it went out to (D114).
+  const champion = findChampion(next, cast.champion);
+  const water = waterAt(next.location, next.spot);
   const levelBefore = levelFor(next.character.xp);
 
   next.missStreak = result === 'missed' ? next.missStreak + 1 : 0;
@@ -545,6 +568,10 @@ function resolveCast(state, cast) {
 
   if (line.kind === 'fish') {
     const fish = line.fish;
+    if (line.knighted && (result === 'caught' || result === 'escaped')) {
+      const knight = championsHere(next).find((c) => c.class === 'knight');
+      if (knight) events.push({ type: 'champion-knight', fish: knight.fish });
+    }
     if (result === 'caught') {
       catchFish(next, fish, cast.bucketSize);
       // A Greedy fish is named so in the log, not in the bucket (D106).
@@ -556,6 +583,16 @@ function resolveCast(state, cast) {
         events.push({ type: 'greedy', item: line.carried.id, alt: line.carried.alt });
         if (line.carried.polished) events.push({ type: 'polished' });
       }
+      if (champion) {
+        // Its hold on the spot ends; a Rogue gives up what it stole (D114).
+        removeChampion(next, champion);
+        next.book.champions = { ...next.book.champions, [champion.class]: (next.book.champions?.[champion.class] ?? 0) + 1 };
+        events.push({ type: 'champion-caught', fish });
+        for (const id of champion.stolen ?? []) {
+          takeItem(next, id);
+          events.push({ type: 'champion-recovered', item: id });
+        }
+      }
       if (next.pendingCatch) events.push({ type: 'bucket-full' });
       else light(next, 'caught', fish, events);
       if (next.equipped.bait) {
@@ -566,7 +603,10 @@ function resolveCast(state, cast) {
       const escaped = { ...fish, tries: (fish.tries ?? 0) + 1 };
       events.push({ type: result, fish, roll: cast.outcome.rolls[0], required: line.required });
       const def = hit ? content.features[hit.id] : null;
-      if (hit && def?.swimsOff && (hit.swamOff ?? 0) < def.swimsOff) {
+      if (champion) {
+        // A class fish stays where it is, and is met again there (D114).
+        champion.fish = escaped;
+      } else if (hit && def?.swimsOff && (hit.swamOff ?? 0) < def.swimsOff) {
         // A big fish swims off somewhere else and can be tried again, the
         // same fish (D85). After its last escape it goes, into the pool.
         swimOff(hit, def, escaped, dice.features, waterAt(next.location, next.spot));
@@ -592,7 +632,12 @@ function resolveCast(state, cast) {
       events.push({ type: 'too-early' });
     }
   } else if (result === 'landed') {
-    if (line.kind === 'item') {
+    const rogue = line.kind === 'item' && line.stolen ? championsHere(next).find((c) => c.stolen) : null;
+    if (line.kind === 'item' && rogue) {
+      // The Rogue has it, and the player gets it back by catching it (D114).
+      rogue.stolen = [...(rogue.stolen ?? []), line.id, ...(line.alt ? [line.alt] : [])];
+      events.push({ type: 'champion-stole', fish: rogue.fish, item: line.id, alt: line.alt });
+    } else if (line.kind === 'item') {
       receive(next, line);
       events.push({ type: 'found', item: line.id, alt: line.alt });
       if (line.polished) events.push({ type: 'polished' });
@@ -611,6 +656,7 @@ function resolveCast(state, cast) {
   if (result === 'too-early') {
     if (hit) hit.uses++;
     events.push(...updateFeatures(next, dice.features, { appear: false }));
+    events.push(...updateChampions(next, dice.champions, water, { moveOnly: true }));
     next.streams = commit();
     return { state: next, cast, events };
   }
@@ -626,7 +672,7 @@ function resolveCast(state, cast) {
   // fragment found opens its place (8.2).
   events.push(...noticeSpots(next));
   events.push(...openByFragments(next));
-  events.push(...updateFeatures(next, dice.features));
+  events.push(...updateFeatures(next, dice.features, { champions: dice.champions }));
 
   // Time and weather move on with every cast that went out and ended.
   const time = advanceTime(next.time);
@@ -635,17 +681,22 @@ function resolveCast(state, cast) {
     next.weather = changeSeason(next.weather, time.newSeason, dice.weather);
     events.push({ type: 'season', season: time.newSeason, weather: next.weather });
   } else {
-    const step = stepWeather(next.weather, dice.weather);
+    // Weather a Shaman called up from another season drifts on this
+    // season's map, from the same cell (D114).
+    const season = clock(next.time).season;
+    const step = stepWeather(next.weather.season === season ? next.weather : { ...next.weather, season }, dice.weather);
     if (step.changed) {
       next.weather = step.weather;
       events.push({ type: 'weather', weather: next.weather });
     }
   }
+  // After the weather, so a Shaman's holds (D114).
+  events.push(...updateChampions(next, dice.champions, water));
 
   // Last, so an event sees the cast's catch and the new time (D84).
   events.push(...afterCast(next, dice.events, {
     // Two treasures to choose from start no item's event (no treasure has one yet).
-    found: result === 'landed' && line.kind === 'item' && !line.alt ? line.id : undefined,
+    found: result === 'landed' && line.kind === 'item' && !line.alt && !line.stolen ? line.id : undefined,
     empty: result === 'landed' && line.kind === 'empty',
     fill: cast.meterFill ?? 100,
   }));
@@ -777,7 +828,8 @@ export function useAbility(state, id, extra = []) {
       return { state, events: [] };
   }
   delete next.lit[id];
-  startCooldown(next, id);
+  // Slow makes it longer (D114).
+  startCooldown(next, id, values.cooldownFactor);
   levelUp(next, levelBefore, events);
   return { state: next, events };
 }
@@ -859,7 +911,9 @@ export function releaseFish(state, choice) {
   }
   next.pendingCatch = null;
   const key = poolKey(next);
-  next.escaped[key] = [...(next.escaped[key] ?? []), { ...released, tries: 0 }];
+  // A class fish let go is an ordinary fish now (D114).
+  const { champion, ...plain } = released;
+  next.escaped[key] = [...(next.escaped[key] ?? []), { ...plain, tries: 0 }];
   return { state: next, events: [{ type: 'released', fish: released }] };
 }
 

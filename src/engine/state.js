@@ -18,7 +18,7 @@ import { emptyEquipment } from './equipment.js';
 import { knownKey, locationList } from './knowledge.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 10;
+export const SAVE_VERSION = 11;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -26,9 +26,9 @@ export const SAVE_VERSION = 10;
  * line · effects: dice on effects · weather · scatter: where the bobber lands ·
  * bait: saving or losing bait · features: surface features appearing and drifting ·
  * events: the event meter and which event it picks · abilities: dice an
- * ability rolls when used (D96).
+ * ability rolls when used (D96) · champions: class fish appearing and acting (D114).
  */
-export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities'];
+export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions'];
 
 /**
  * @typedef {import('./fish.js').FishInstance & { tries?: number }} PoolFish  A fish
@@ -65,13 +65,15 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, PoolFish[]>} escaped  Per location or location/spot (R3.6, D59).
  * @property {Buff[]} buffs
  * @property {import('./features.js').Feature[]} features  On the water now (R14).
+ * @property {Record<string, import('./champions.js').Champion[]>} champions  Class fish, per location or
+ *   location/spot (D114): they stay where they are until caught.
  * @property {import('./fish.js').FishInstance | null} [pendingCatch]  A fish landed with
  *   the bucket full, waiting for the player to choose one to let go (D59). No
  *   cast goes out until then.
  * @property {[string, string] | null} pendingTreasure  Two treasures that came up at once (Fence,
  *   D106), waiting for the player to keep one. No cast goes out until then.
- * @property {{ casts: number, catches: number, fish: Record<string, BookEntry> }} book  The
- *   accomplishments book (R4.2).
+ * @property {{ casts: number, catches: number, fish: Record<string, BookEntry>, champions?: Record<string, number> }} book  The
+ *   accomplishments book (R4.2); `champions`: class -> how many caught (D114).
  * @property {Record<string, boolean | number | string>} flags  For events (R10).
  * @property {number} eventMeter  Fills with each cast; an event may start above 100 (events.js).
  * @property {{ id: string, slide: string } | null} event  The open event and its slide (D84).
@@ -143,9 +145,10 @@ export function newGame({ seed, character, month }) {
     escaped: {},
     buffs: [],
     features: [],
+    champions: {},
     pendingCatch: null,
     pendingTreasure: null,
-    book: { casts: 0, catches: 0, fish: {} },
+    book: { casts: 0, catches: 0, fish: {}, champions: {} },
     flags: {},
     eventMeter: 0,
     event: null,
@@ -274,6 +277,13 @@ const MIGRATIONS = {
   },
   // 9 -> 10: locations opened and closed (8.2).
   9: (save) => ({ ...save, places: {} }),
+  // 10 -> 11: champions, class fish (D114), with their own stream.
+  10: (save) => ({
+    ...save,
+    champions: {},
+    book: { ...save.book, champions: {} },
+    streams: { ...save.streams, champions: deriveSeed(save.seed, 'champions') },
+  }),
 };
 
 /** @param {GameState} state */
