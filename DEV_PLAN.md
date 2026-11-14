@@ -395,7 +395,10 @@ placeholder, it's added here.
 - [ ] **CR-5** The town and its people (8.3, 8.6, 8.9): the inn, the scrap dealer, the Alchemist, the cat, and the
   portraits. *Replaces the squares and triangles: the town's buildings, the room and the aquarium, the dive's water
   (`src/scene/views.js`), and the dive's dice as labels.*
-- [ ] **CR-6** Event illustrations: the dialog has room for one (7.3).
+- [ ] **CR-6** Event illustrations: the dialog has room for one (7.3). An event names its picture with `art:` in
+  its front matter (`docs/events.md`), read from `assets/events/<art>.png`; no event has one yet, and the folder
+  doesn't exist. The single-file build (`npm run build`) doesn't carry the pictures, so they show on GitHub Pages only
+  until it does.
 - [ ] **CR-7** The map, each location's spots drawn on it (8.1). *Replaces the placeholder shapes.*
 - [ ] **CR-8** Perk and ability icons (the action bar shows initials), and the look of a Greedy fish and a bent fish
   (6.3). *Also replaces the green eye around Look Underwater (D139), four flat rings in `src/scene/views.js`.*
@@ -439,5 +442,9 @@ Not scheduled.
 
 - **Consumables as a hand of cards** along the bottom of the screen, to make using them more tempting. A loose idea from
   the owner, not a decision.
+- **Full screen, with the UI drawn over the game, as in WoW** (the owner, 2026-11-14): the scene fills the whole
+  screen and the panes, the log, the buff bar and the action bar sit on top of it, instead of beside and below it as
+  now. Touches the layout (`styles.css`, `fit` in `src/main.js`), the scene's sizing (D10, D93) and every pane. To
+  look into later; nothing decided.
 - **Catching the same fish again and again**: a hidden event or achievement for catching one released fish several
   times (D60).
