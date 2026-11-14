@@ -10,6 +10,12 @@
   },
   "difficulty": 2,
   "rarity": "uncommon",
+  "stew": [
+    {
+      "value": "greedyChance",
+      "add": 6
+    }
+  ],
   "prefers": {
     "time": [
       "dawn",
@@ -24,5 +30,8 @@
     "bait": [
       "lure"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

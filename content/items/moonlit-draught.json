@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "moonlit-draught",
+  "placeholder": true,
+  "category": "consumable",
+  "name": "Moonlit draught",
+  "flavor": "Pale as moonlight. Your eyes adjust to the dark and your hands go still.",
+  "rarity": "uncommon",
+  "value": 8,
+  "use": {
+    "buff": "moonlit-draught"
+  }
+}

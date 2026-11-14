@@ -9,6 +9,12 @@
   },
   "difficulty": -1,
   "rarity": "common",
+  "stew": [
+    {
+      "value": "fishFind",
+      "add": 3
+    }
+  ],
   "prefers": {
     "time": [
       "morning",
@@ -20,5 +26,8 @@
     "bait": [
       "maggot"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

@@ -4,6 +4,7 @@ title: A scholar on the shore
 trigger: needs
 again: 100 casts
 needs: set old-lorebook 1
+placeholder: true
 ---
 
 ## start

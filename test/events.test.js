@@ -24,8 +24,11 @@ import { t } from '../src/strings.js';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /** @param {string} classId */
-const game = (classId = 'fish-fighter', seed = 1) =>
-  newGame({ seed, character: { name: 'Testek', gender: 'f', classId, stats: { fishingSkill: 3, fishFind: 5, treasureFind: 7 }, luck: 0, xp: 0 } });
+/** A new game whose welcome is behind it (R17.3), so arriving at the Lake starts nothing. */
+const game = (classId = 'fish-fighter', seed = 1) => ({
+  ...newGame({ seed, character: { name: 'Testek', gender: 'f', classId, stats: { fishingSkill: 3, fishFind: 5, treasureFind: 7 }, luck: 0, xp: 0 } }),
+  eventsSeen: { welcome: 1 },
+});
 
 /** The choice texts on the open slide, in English. */
 const choices = (/** @type {GameState} */ s) => openSlide(s)?.choices.map((c) => c.text.map((k) => t(k)).join(''));
@@ -358,20 +361,16 @@ test('effects: items in and out of the bags, XP with a level-up, flags', () => {
 // ---------- What starts an event ----------
 
 test('an event can start on arriving: a new game arrives at its location (D89)', () => {
-  const welcome = {
-    id: 'test-welcome', title: ['x'], once: true, trigger: 'arrive', needs: [{ kind: 'location', id: 'lake' }], first: 'a',
-    slides: { a: { text: ['x'], choices: [{ text: ['x'], to: 'end', needs: [], effects: [] }] } },
-  };
-  withEvent(welcome, () => {
-    const s = game();
-    assert.deepEqual(arrive(s), [{ type: 'event-started', event: 'test-welcome' }]);
-    assert.deepEqual(s.event, { id: 'test-welcome', slide: 'a' }, 'open from the start');
-    const after = choose(s, 0).state;
-    const again = structuredClone(after);
-    assert.deepEqual(arrive(again), [], 'once: the first arrival only');
-    const elsewhere = structuredClone({ ...game(), event: null, eventsSeen: {}, location: 'river' });
-    assert.deepEqual(arrive(elsewhere), [], 'not at another location');
-  });
+  // The welcome (R17.3): its background, then off to fish.
+  const s = { ...game(), eventsSeen: {} };
+  assert.deepEqual(arrive(s), [{ type: 'event-started', event: 'welcome' }]);
+  assert.deepEqual(s.event, { id: 'welcome', slide: 'start' }, 'open from the start');
+  const after = choose(choose(s, 0).state, 0).state;
+  assert.equal(after.flags['background-coast'], true);
+  const again = structuredClone(after);
+  assert.deepEqual(arrive(again), [], 'once: the first arrival only');
+  const elsewhere = structuredClone({ ...game(), event: null, eventsSeen: {}, location: 'river' });
+  assert.deepEqual(arrive(elsewhere), [], 'not at another location');
 });
 
 test('location and spot requirements, and an empty gain line', () => {
@@ -444,7 +443,7 @@ test('a version 3 save gets an event meter, no open event, and an events stream'
   const migrated = deserialize(JSON.stringify({ ...v3, version: 3, streams }));
   assert.equal(migrated.eventMeter, 0);
   assert.equal(migrated.event, null);
-  assert.deepEqual(migrated.eventsSeen, {});
+  assert.deepEqual(migrated.eventsSeen, { welcome: 1 }, 'none seen, and the welcome behind it (v12)');
   assert.equal(typeof migrated.streams.events, 'number');
 });
 

@@ -11,14 +11,20 @@ a plain generic sentence, a stand-in rule. A town of placeholder squares is bett
 listed under the creative task that will replace it, so nothing is forgotten; a placeholder that fits no task gets a
 new one.
 
-**Where things stand (2026-11-11):** Phases 1–3 and 7 are done: the game is playable on GitHub Pages (D91), and
+**Where things stand (2026-11-14):** Phase 10, the owner's brainstorm of the night, the town and the stew, was built
+overnight with placeholders (D123–D129; questions at the top of REVIEW.md): a town with an inn, a room and an
+Alchemist who keeps hours; barter; the perpetual stew and every fish's stew buff; cold and night fishing; white items
+as their own tier; a fish's options menu; fish that swim (the aquarium, the dive, shadows under the surface); the
+haunted swamp. Placeholders are listed in `docs/placeholders.md`.
+
+**Before that (2026-11-11):** Phases 1–3 and 7 are done: the game is playable on GitHub Pages (D91), and
 events have every word the owner's ideas need so far (D108), with a placeholder quest chain and a content editor.
 The fish are the owner's (D101–D104): 80 over nine spots and 42 rift fish. Every class perk works (D106), the number
 a fish needed shows from level 1 with its own dice (D107), and gear, rods and Tiny-fish bait are in (5.3, 5.7, 5.8).
 Places are learned (D109): spots are noticed by fishing, each place has its list and a hidden completion, and the
 Mage Tower pools open from map fragments (D110). Sets and readable pages (D111), sound, saves to a file, the
 collection and a balance simulation are in. Junk is apart from stuff, the things used for something (D112). Class fish come up now and then and hold their spot until caught (D114). Still
-open in development: the town and what hangs on it (8.3, 8.6, 8.8, barter D86), the cat (8.9), the spot map (8.1),
+open in development: the scrap dealer and the inn's upgrades (8.3), raid orders (8.8), the cat (8.9), the spot map (8.1),
 the atlas (4.1), weather and life on a spot (4.7), class-flavoured texts (6.5), the review of D8 (5.6), the dice's
 feel (9.6) and an installable game (9.5). The creative track holds the art, writing and sound. Claude's guesses are on
 [docs/REVIEW.md](docs/REVIEW.md).
@@ -243,10 +249,11 @@ Requirements R5.3, R11.
   each place's completion (D109).
 - [ ] **8.3** The town: inn and scrap dealer, barter (D86); fish put into the inn's perpetual stew for a buff,
   stronger for rarer fish and longer for more fish (R11.5, R12.6, D24, D28, D37). Squares and triangles for the
-  buildings and people, and plain lines for what they say, until CR-5 and CR-13. *Waits for the owner's town
-  requirements; the questions are in [docs/town-questions.md](docs/town-questions.md).*
-- [ ] **8.6** The Alchemist's recurring visit: buffing potions for sale, alchemical ingredients bought; the ingredients
-  added to the junk tables (R10.6, R11.7, D30). Placeholder potions, ingredients and lines.
+  buildings and people, and plain lines for what they say, until CR-5 and CR-13. *The town, the inn, barter and the
+  stew came with Phase 10 (D123); still to do: the scrap dealer, and the inn's upgrades (R10.4).*
+- [x] **8.6** The Alchemist's recurring visit: buffing potions for sale, alchemical ingredients bought; the ingredients
+  added to the junk tables (R10.6, R11.7, D30). Placeholder potions, ingredients and lines. *Came with Phase 10: a shop
+  in town with hours (R17.6) rather than a visit; the ingredients are stuff in the spots' own lists (D125).*
 - [x] **8.5** Location lists and completion percentages; knowledge (found, bought) that reveals missing entries (R4.4,
   R4.5, R5.3). In the journal per location; `learn:` in events (D109). Bought knowledge comes with the town.
 - [x] **8.4** The Mage Tower pool (the River is in, D101): the location and its spots, with a placeholder table of
@@ -259,6 +266,40 @@ Requirements R5.3, R11.
 - [ ] **8.8** Raid supply orders in town: 10, 25 or 40 of one fish over several hand-ins, the progress shown, consumables
   and gear as the reward (needs 7.7, 7.8).
 - [ ] **8.9** Companions at the fishing spot: the cat, once it trusts the player. A placeholder cat until CR-5.
+
+## Phase 10: The night, the town and the stew
+
+The owner's brainstorm of 2026-11-14 (`docs/brainstorm-2026-11-14.md`, D123; R17–R21), built overnight with
+placeholders everywhere, marked as D124 says. Takes in 8.3 and 8.6. In order:
+
+- [x] **10.1** Placeholders marked (D124): `"placeholder"` in content and events, `docs/placeholders.md` from
+  `npm run content`, `?ph` in the game.
+- [x] **10.2** The clock and time: a weekday; buffs lasting game minutes; `wait:` and `sleep:` in events (time jumps,
+  the weather steps, game-time buffs run down); an event's `go:` arrives when the event closes; event words for buffs
+  (`buff:`), vendors (`needs: vendor`, `shop:`), perks (`needs: perk`) and hours (`needs: hour`, `needs: weekday`).
+- [x] **10.3** White items (R19.1): junk, stuff and treasure as three tiers, Stuff Find, the Rogue's bonus; the
+  new stuff (Shiny pebble, Alchemist's vial, the eight plants from the owner's CSV, Shiny fish scales, Mysterious
+  resin, the Old torn doll) in per-spot stuff lists.
+- [x] **10.4** The town (R17): a location of places, no casting, a placeholder scene of squares and triangles where a
+  click goes to a place; the welcome event with backgrounds, the night's pointer to town, the innkeeper's first
+  dialogue, the inn's dialogue, sleep, the room.
+- [x] **10.5** Barter (R18): vendors as content with schedules and offers; the barter window; trades counted; potions
+  as consumables used from the bags; the Alchemist with placeholder recipes using every plant, and the pebble
+  question after enough brews.
+- [x] **10.6** Cold and night (R19.2, R19.3): `warmth`, three cold debuffs, night's rewards.
+- [x] **10.7** The perpetual stew (R19.4): the pot, its window, the buff by rarity, every fish's stew buff
+  (placeholders from what the fish is), new game values for them.
+- [x] **10.8** A fish's options (R21): the menu on right-click or long-press; Release, Hook as bait, Eat (Sushi
+  enjoyer, a new universal perk), Put in the stew, Put in the aquarium.
+- [x] **10.9** Fish that swim (R20.1): side-view sprites from the icons, the swimming motion.
+- [x] **10.10** The aquarium (R17.5, R20.2): the universal perk, the room's tank with its fish swimming.
+- [x] **10.11** The dive (R20.3) and the fish-hook pointer (R20.4).
+- [x] **10.12** The haunted swamp (owner's item 24): the ghost's event on every arrival, the Old torn doll at still
+  water, tuned with the simulation to turn up within about 200 casts with no Treasure Find.
+- [x] **10.13** Fish just under the surface (R20.2): schools and big fish shown as swimming shadows.
+- [x] **10.14** Tests, verify, build; docs; the morning's questions at the top of REVIEW.md.
+- [x] **10.15** The owner's answers (D130): the town hidden until nightfall, the cold from dark, no Release in town,
+  the Warm woolen hat at the inn (placeholder).
 
 ## Phase 9: Balance and finish
 
@@ -276,6 +317,7 @@ Requirements R5.3, R11.
   away before one was caught shows as a silhouette. Knowing of fish and treasure in other ways comes with 8.5.
 - [ ] **9.6** The dice's feel (D99): timing, where they land, the floating total; the open items on
   `docs/REVIEW.md`. The ivory colour is settled.
+- [x] **9.7** Pick the font from the trial (D122): Alegreya Sans by default, Pixelify Sans as a setting (D132).
 - [ ] **9.5** Installable and offline: web app manifest and service worker (R9.8, D55).
 
 ---
@@ -299,17 +341,20 @@ placeholder, it's added here.
   `docs/design/fish-image-hunt.md`; and the four with no icon yet: Mainland eel, golomyanka, Grasslands silverside,
   Wildlands pejerrey.
 - [ ] **CR-4** Item icons, and the items' names and texts: the placeholder items and rods (5.3, 5.7), the bait items
-  (D101) and Small fish (5.8), the Alchemist's potions and ingredients (8.6), the set pieces (8.7).
+  (D101) and Small fish (5.8), the Alchemist's potions and ingredients (8.6), the set pieces (8.7). *From Phase 10:
+  the nine potions, the eight plants (the owner's names, Claude's flavour), the Shiny pebble, Alchemist's vial, Shiny
+  fish scales, Mysterious resin and the Old torn doll, all on default icons.*
 - [ ] **CR-5** The town and its people (8.3, 8.6, 8.9): the inn, the scrap dealer, the Alchemist, the cat, and the
-  portraits. *Replaces the squares and triangles.*
+  portraits. *Replaces the squares and triangles: the town's buildings, the room and the aquarium, the dive's water
+  (`src/scene/views.js`), and the dive's dice as labels.*
 - [ ] **CR-6** Event illustrations: the dialog has room for one (7.3).
 - [ ] **CR-7** The map, each location's spots drawn on it (8.1). *Replaces the placeholder shapes.*
 - [ ] **CR-8** Perk and ability icons (the action bar shows initials), and the look of a Greedy fish and a bent fish
   (6.3).
 - [ ] **CR-9** The fixed palette (4.1) and the art sheet's open trials (`art.html`).
 - [ ] **CR-15** Class fish (D114): how each looks on the water, its aura and the witch's spells, and their log lines.
-  *Replaces the shadow in a coloured ring of dots (`src/scene/scene.js`) and Claude's lines in `src/strings.js`
-  (`log.champion-*`).*
+  *The fish itself now shows below the surface in its ring, seen from the bank (D131). Still Claude's: the ring of dots
+  (`src/scene/scene.js`) and the lines in `src/strings.js` (`log.champion-*`).*
 
 ## Writing
 
@@ -319,6 +364,14 @@ placeholder, it's added here.
 - [ ] **CR-12** Names: the spots (placeholder names since D101), the "Greedy" and "Bent" marks on fish (D106), and the perks' names and texts (REVIEW.md lists them
   as Claude's).
 - [ ] **CR-13** What the town's people say: the inn, the scrap dealer, the Alchemist, the raid orders (8.3, 8.6, 8.8).
+  *From Phase 10: Claude's events (`welcome`, `nightfall`, `innkeeper-first`, `the-inn`, `your-room`, `alchemist`,
+  `swamp-ghost`, all `placeholder: true`) and the new log lines (`PLACEHOLDER_UI` in `src/strings.js`); the
+  innkeeper's first words are the owner's, edited.*
+- [ ] **CR-16** Stew buffs and potions (R19.4): every fish's stew buff was set by rule (D127), the potions' by the
+  plants' rarity; the owner's own, fish by fish, where they matter. *Listed in `docs/placeholders.md`.*
+- [ ] **CR-17** Swimming fish drawn for swimming (R20.1): each fish its own side view, in its icon's colours, with a
+  real swim. *Done as code for all 122 after the owner liked the carp trial (D131); the owner's markup, fish by fish,
+  is what's left: `npm run sprite export swim-<fish>`. The stingray (a disc from above) is the roughest.*
 
 ## Sound
 

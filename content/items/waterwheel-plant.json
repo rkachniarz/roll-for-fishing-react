@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "waterwheel-plant",
+  "category": "stuff",
+  "name": "Waterwheel plant",
+  "flavor": "Rings of tiny snapping traps, with no roots. It just closed on your finger.",
+  "icon": "item/waterwheel-plant",
+  "rarity": "common",
+  "value": 15,
+  "placeholder": [
+    "flavor"
+  ]
+}

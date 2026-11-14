@@ -6,7 +6,7 @@
 //   t(fish.name)                          -> 'Pike'  (content holds the key, 'fish.pike.name')
 //   t('log.found', { item: 'Bent fork' }) -> 'You found: Bent fork.'
 
-import { strings } from './generated/content.js';
+import { placeholderKeys, strings } from './generated/content.js';
 
 /** The game's own text, outside content. */
 const UI_STRINGS = {
@@ -14,6 +14,13 @@ const UI_STRINGS = {
   'value.fishingSkill': 'Fishing Skill',
   'value.fishFind': 'Fish Find',
   'value.treasureFind': 'Treasure Find',
+  'value.stuffFind': 'Stuff Find',
+  'value.warmth': 'Warmth',
+  'value.twinChance': 'chance of a twin with every fish caught',
+  'value.timeSlip': 'chance that a cast takes no time',
+  'value.featureChance': 'chance of something on the water',
+  'value.diveSeconds': 'seconds under the water',
+  'value.diveFish': 'fish in a dive',
   'value.playerVantage': 'advantage on your roll',
   'value.vantageStacks': 'advantage that stacks',
   'value.naturalCatch': 'lowest natural roll that always lands a fish',
@@ -140,7 +147,6 @@ const UI_STRINGS = {
   'hud.close': 'Close',
   'hud.actions': 'Abilities',
   'hud.xp': '{xp} / {next} XP',
-  'hud.seasonDay': '{season}, day {day}',
   'time.night': 'Night',
   'time.dawn': 'Dawn',
   'time.morning': 'Morning',
@@ -258,6 +264,9 @@ const UI_STRINGS = {
   'settings.theme': 'Theme',
   'settings.dark': 'Dark',
   'settings.light': 'Light',
+  'settings.font': 'Font',
+  'settings.clear': 'Clear',
+  'settings.pixel': 'Pixel',
   'settings.dice': 'Dice',
   'settings.showDice': 'Show dice',
 
@@ -298,9 +307,106 @@ const UI_STRINGS = {
   'create.stats': 'Stats',
   'create.rerollStats': 'Roll again',
   'create.start': 'Go fishing',
+
+  // ---- The night, the town and the stew (R17-R21, D123) ----
+  'hud.seasonDay': '{weekday}, {season} {day}',
+  'weekday.0': 'Mon',
+  'weekday.1': 'Tue',
+  'weekday.2': 'Wed',
+  'weekday.3': 'Thu',
+  'weekday.4': 'Fri',
+  'weekday.5': 'Sat',
+  'weekday.6': 'Sun',
+  'error.noWater': "There's no water to fish here.",
+  'error.busyDive': "You're under the water.",
+  'status.town': 'Tap a place to go there.',
+  'log.waited': 'You wait. {hours}.',
+  'log.slept': 'You sleep until morning.',
+  'log.buff-gained': 'You feel the effect of {buff}.',
+  'log.used': 'You use {item}.',
+  'log.traded-away': 'You hand over {item}.',
+  'log.traded-fish': 'You hand over {fish}.',
+  'log.stewed': 'You put {fish} in the stew.',
+  'log.ate-stew': 'You eat a bowl of the perpetual stew. It will keep you going for {hours}.',
+  'log.ate-fish': 'You eat {fish} raw. Not bad.',
+  'log.to-aquarium': 'You put {fish} in the aquarium.',
+  'log.twin': 'It had a twin: another {fish}!',
+  'log.time-slip': 'Time slips. The cast took no time at all.',
+  'log.no-water': "There's no water here.",
+  'log.dive-started': 'You dive in after it! {seconds} seconds of breath.',
+  'log.dive-caught': 'Underwater: d20 {player}, {total} against {required}. You grab {fish}!',
+  'log.dive-escaped': 'Underwater: d20 {player}, {total} against {required}. {fish} slips away.',
+  'log.dive-ended': 'You come up for air.',
+  'hours.minutes': '{minutes} minutes',
+  'hours.one': 'an hour',
+  'hours.many': '{hours} hours',
+  'shop.trade': 'Trade',
+  'shop.gives': 'You get',
+  'shop.costs': 'It costs',
+  'shop.have': '{have}/{need}',
+  'shop.anyFish': 'any fish',
+  'shop.fishAtLeast': '{rarity} fish or better',
+  'shop.closed': 'Not here right now.',
+  'shop.none': 'Nothing on offer.',
+  'stew.title': 'The perpetual stew',
+  'stew.bucket': 'Your bucket: tap a fish to put it in',
+  'stew.pot': 'In the pot: tap one to take it back out',
+  'stew.empty': 'Nothing in the pot yet.',
+  'stew.bowl': 'A bowl now: {hours}, {effects}',
+  'stew.eat': 'Eat a bowl',
+  'aquarium.title': 'Your aquarium',
+  'aquarium.bucket': 'Your bucket: tap a fish to put it in',
+  'aquarium.tank': 'In the tank ({count} of {size}): tap one to take it out',
+  'fishMenu.release': 'Release fish',
+  'fishMenu.hook': 'Hook as bait',
+  'fishMenu.eat': 'Eat (Sushi enjoyer)',
+  'fishMenu.stew': 'Put in the stew',
+  'fishMenu.aquarium': 'Put in the aquarium',
+  'fishMenu.cancel': 'Cancel',
+  'tip.stew': 'Stew: {effects}',
+  'tip.options': 'Right-click or long-press for options',
+  'tip.use': 'Use: {buff}, {effects} ({duration})',
+  'tip.useHint': 'Right-click to use',
+  'duration.casts': '{n} casts',
+  'duration.attempts': '{n} attempts',
+  'duration.minutes': '{hours}',
+  'duration.ms': '{n} min',
+  'dive.time': '{seconds}s',
+  'rarity.poor': 'Poor',
+  'rarity.common': 'Common',
+  'rarity.uncommon': 'Uncommon',
+  'rarity.rare': 'Rare',
+  'rarity.epic': 'Epic',
+  'rarity.legendary': 'Legendary',
 };
 
+/**
+ * The game's own text that is a placeholder (D124), written by Claude until the
+ * owner's (CR-13 and the like). Content marks its own with "placeholder".
+ */
+export const PLACEHOLDER_UI = new Set([
+  'log.waited',
+  'log.slept',
+  'log.buff-gained',
+  'log.ate-stew',
+  'log.ate-fish',
+  'log.twin',
+  'log.time-slip',
+  'log.dive-started',
+  'log.dive-caught',
+  'log.dive-escaped',
+  'log.dive-ended',
+  'stew.title',
+  'aquarium.title',
+  'fishMenu.eat',
+]);
+
 const table = { ...strings.en, ...UI_STRINGS };
+
+// `?ph` in the address marks every placeholder's text with a ° (D124).
+if (typeof location !== 'undefined' && new URLSearchParams(location.search).has('ph')) {
+  for (const key of [...placeholderKeys, ...PLACEHOLDER_UI]) if (key in table) table[key] += '°';
+}
 
 /**
  * The text for a key, with `{name}` placeholders filled in. A missing key

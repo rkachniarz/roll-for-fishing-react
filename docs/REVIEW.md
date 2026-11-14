@@ -24,6 +24,124 @@ Items with no note are left alone.
 
 Newest first.
 
+## Every fish drawn to swim (2026-11-14, D131, CR-17)
+
+After the carp trial, all 122 fish are drawn the same way (`src/scene/fish-art.js`, shapes in
+`src/scene/fish-shapes.js`). The art sheet's "Fish that swim" shows two tanks, class fish on the scene's water, and
+every fish side on and below the surface. The calls:
+
+- **Outlined, like the icon (the trial's A).** You loved the carps without picking; A is what the game's swimmers
+  had already. `outline: false` in `fishFrames` gives B.
+- **Shapes are Claude's, from what each fish is known by:** 19 presets for kinds of body (carp, minnow, bream, pike,
+  perch, sunfish, cichlid, trout, whitefish, catfish, American catfish, eel, sturgeon, shark, loach, sculpin, cod,
+  characin, snakehead), each fish its own depth, fins, tail and pattern. Not from each fish's photo one by one.
+- **Colours come from the icons,** read automatically: five bands from the back down and the tail's colour for the
+  fins; an icon drawn the other way up has its bands turned over. Some fish come out darker or paler than you'd
+  expect because their icons are (the crucian carp dark, the brown bullhead pale, the wolffish white). Red and orange
+  fins (carp, roach, rudd, perch, redtail catfish…) are one shared red and orange, new colours.
+- **Sizes from the fish's own size:** 18 pixels long for the smallest up to 62 for the giants (wels, arapaima,
+  sturgeon), the carp 47 (the trial's was 50).
+- **Under the surface:** big fish, schools and class fish all show their view from the bank now, darkened towards
+  the water, in place of flat shadows; the class's ring stays round a class fish.
+- **The stingray** has its own model (`rayGrid`), from the owner's two photos of other rays (shape only): a sheet
+  shaped like a soft-cornered diamond, widest at the wing tips 0.4 of the way back, with pelvic lobes, a dome down the
+  middle, eyes and spiracles on top, and a whip tail as long as 0.8 of the disc. The wings ripple nose to tail rather
+  than flap. In the tank the camera is nearly level, so the far wing lifts into a brown sail over the cream underside;
+  from the bank it's seen from above. Guessed: the span (1.1 of the disc's length), the ripple's height, the camera
+  angles.
+- **The four fish with no icon of their own** (golomyanka, mainland eel, both silversides) have Claude's colours.
+
+## Icons for the eight plants (2026-11-14)
+
+Drawn from pictures on Wikimedia Commons (`docs/design/refs/<Name>.jpg`, licences and authors in `credits.csv` there,
+local only), as the fish icons were. Export one to mark up: `npm run sprite export icon-item-hornwort`.
+
+- **Drawn as code, not by the photo tool.** The tool's drafts blurred the thin plants into blobs (hornwort, lace plant)
+  or lost them (quillwort, lobelia), so each is drawn from what the plant is known by: the waterweed's whorls of three
+  leaves, the hornwort's forked needles bushier at the tip, the quillwort's quills from a pale corm with roots, the
+  lobelia's low rosette and nodding lilac flowers, the marimo's three velvet balls, the water-plantain's white
+  three-petalled flower on its floating leaf, the lace plant's two leaves of netted veins, the waterwheel plant's
+  shoot of whorled traps.
+- **The pictures:** the waterweed is a sprig on a hand (the hand cut away by drawing it by hand); the lobelia a
+  flowering stem in the water; the waterwheel plant a live shoot (tan in its photo's yellow water, drawn green as it
+  is in clear water); the lace plant an old engraving, coloured as live leaves are.
+- **The busiest at 32:** the waterweed, the hornwort and the waterwheel plant are fine, bristly things and read as a
+  bit of a tangle; they'd gain most from your markup.
+
+## The night, the town and the stew (2026-11-14, D123–D129)
+
+Built overnight from your brainstorm (`docs/brainstorm-2026-11-14.md`). Everything Claude made up is marked as a
+placeholder (D124): `docs/placeholders.md` lists them all, and `?ph` in the address puts a ° after placeholder text in
+the game.
+
+### From the owner's answers (D130)
+
+- **The Warm woolen hat** (placeholder): +1 warmth and −50 ms on the fast strike (the ear flaps; every item needs a
+  downside, R8.5). The innkeeper trades it for 2 rare fish and 3 Shiny fish scales ("Anything warm to wear?" at the
+  inn). With the stew's 2 warmth it brings a winter night from Freezing down to Cold.
+- **The cold starts at dark:** the evening's cold point is gone, so on a mild evening nothing is felt until night.
+  Dawn still gives 1, the tail end of the night. A cold day (6 degrees or under) still makes it Chilly in daylight.
+- **The town is opened by every nightfall choice,** "Stay out here and fish" too: the lights are seen either way.
+  A save from before this, made after the town was visited, loses the town from the map until the next nightfall.
+
+### Calls Claude made
+
+- **The innkeeper's first words are yours, edited** as you asked for your writing: "In case it slipped your mind,
+  friend, you already gave me every coin you had, for a room here that's yours for good. Go on up whenever you like.
+  And if you'd eat first, mind the rule of this house: give something to take something." Same meaning; "give
+  something to take something" kept as the hook. The event is otherwise Claude's.
+- **Placeholders everywhere** (D124): the town (one location, `content/locations/town.json`: the square, the inn,
+  your room, the Alchemist's shop), its seven events, the vendors, the potions, the buffs, the cold's numbers, the
+  stew's numbers, every fish's stew buff, the item flavour texts. The buildings are squares and triangles (CR-5).
+- **The plants** (D125) come from your CSV with their real traits as flavour. **Floating water-plantain** was in the
+  CSV but not your list; it's in. Their rarity stays white: a very rare plant is seldom found, not purple.
+  **Mysterios Resin** is spelled "Mysterious resin".
+- **White items** (D125): when no fish bites and it's not treasure, a second d100 minus Stuff Find at or under 20 is
+  stuff. The Rogue has +10 Stuff Find from the class. In the sim, white things are about 7% of casts for a fighter
+  and 15% for a rogue.
+- **The Old torn doll** is at still water, weight 12 in its stuff: with no Treasure Find, 83% of 400 simulated games
+  found it within 200 casts (median 73), counting every non-fish as landed.
+- **The Alchemist** (`content/vendors/alchemist.json`): Friday to Sunday, asleep 5 to 13, away 20% of working days
+  (drawn per day). Nine potions, one per plant (two plants each for the common ones, one for the rare) plus a Shiny
+  pebble and an Alchemist's vial each; the very rare plants also want Mysterious resin; Shiny fish scales make a
+  Glimmer draught (more surface features). Stronger the rarer the plant: +5 Fish Find for 10 casts from waterweed up
+  to a −3 natural catch from the waterwheel plant. He also gives 2 vials for any rare fish, and after 5 trades sells
+  "The Alchemist's secret" for 5 pebbles. The pebble question also shows after 5 trades; he never answers.
+- **Asleep, "I'll wait here"** waits 2 hours. Sleeping wakes you the first half hour of morning, with **Well rested**
+  (+1 warmth, +1 Fishing Skill, 6 hours).
+- **The cold** (D126, `content/rules/cold.json`): temperature 0 or below 3 points, 1–3 2, 4–6 1; night 2, evening and
+  dawn 1; minus warmth. Chilly −1 Fishing Skill; Cold −2 and a shorter fast strike; Freezing −4, −10 Fish Find and
+  shorter strikes. **Night fishing**: +1 size band and +2 XP per fish. No warm clothes exist yet; the Hornwort tonic
+  gives +1 warmth for 6 hours.
+- **The stew** (D127, `content/rules/stew.json`): 15/30/45/60/120/240 minutes per poor to legendary fish, at least 30;
+  +2 warmth; the stew buffs of the three rarest kinds put in. Eating takes everything in the pot. A new bowl replaces
+  the old one.
+- **Every fish's stew buff** is by rule: predators Fishing Skill, winter fish warmth, night fish quicker strikes,
+  bottom feeders Fish Find, rain fish keep bait, the rest Treasure Find; strength by rarity. Rift fish get the strange
+  ones: a chance that a cast takes no time, a twin with the catch, more surface features, rift fish, Greedy fish,
+  events, a lower natural catch, the fish's roll shown. New game values: `stuffFind`, `warmth`, `twinChance`,
+  `timeSlip`, `featureChance`, `diveSeconds`, `diveFish`.
+- **Sushi enjoyer** and **Aquarium** are universal perks (offered on even levels). The aquarium holds 6 fish.
+- **The dive** (D128): the fish's dice are the player's d20 over it (ivory) and the fish's under it (teal), for 1.6
+  s; caught fish swim off when their dice go. A full bucket holds one back for the usual choice; more get away.
+- **Fish that swim** (D129): made from the icons by turning them level in code. Some icons may come out odd; the
+  aquarium shows them best. The tail's beat is a pixel at most.
+- **Schools and big fish** under the surface are now swimming shadows of their species (small ones for a school).
+- **The date** on the button row is "Fri, Spring 5"; the first day of the first spring is a Monday.
+- **The swamp's ghost** greets every arrival there until the doll is given; "Back away" takes you to the reedy shore.
+- **A game from before** skips the welcome. A save mid-dive comes back out of the water.
+- **Nothing was committed or pushed.**
+
+## Notes from playing on a PC (2026-11-13, D119–D122, D132)
+
+- **Only fish show their icon in a tooltip,** as asked. Items could too, the same way (`icon` in `tipFor`).
+- **At 1080p, slot icons stay 32 px** while the text grows by 1.25: 40 px would smear, and 64 would make the bucket
+  very tall. On a screen with more device pixels (125% Windows scaling, a phone) they grow to the nearest sharp size.
+- **The action bar's tooltip and its buttons** are the button row's size; the initials on them didn't grow.
+- **Alegreya Sans is set at 1.05 times** Pixelify Sans's size (D132), by eye, so the two read about the same.
+- **The fallback font is still monospace** if Google Fonts doesn't load; with Alegreya Sans as the default, a plain
+  sans-serif might be the better stand-in.
+
 ## Class fish (2026-11-11, D114)
 
 Numbers and words Claude picked for the class fish; all in `content/rules/champions.json` unless said otherwise.

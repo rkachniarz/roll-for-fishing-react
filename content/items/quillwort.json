@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "quillwort",
+  "category": "stuff",
+  "name": "Quillwort",
+  "flavor": "A spiky little rosette that breathes in at night, when everything else is asleep.",
+  "icon": "item/quillwort",
+  "rarity": "common",
+  "value": 4,
+  "placeholder": [
+    "flavor"
+  ]
+}

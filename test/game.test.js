@@ -47,7 +47,8 @@ function castUntil(state, wanted) {
  * @param {GameState} state
  */
 function endEvent(state) {
-  while (state.event) state = choose(state, /** @type {NonNullable<ReturnType<typeof openSlide>>} */ (openSlide(state)).choices[0].index).state;
+  // The last choice: "stay out here", "leave", never a trip to town (R17.3).
+  while (state.event) state = choose(state, /** @type {NonNullable<ReturnType<typeof openSlide>>} */ (openSlide(state)).choices.at(-1)?.index ?? 0).state;
   return state;
 }
 

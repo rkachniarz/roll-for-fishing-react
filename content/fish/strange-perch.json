@@ -10,6 +10,12 @@
   },
   "difficulty": 2,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "timeSlip",
+      "add": 20
+    }
+  ],
   "prefers": {
     "time": [
       "morning",
@@ -24,5 +30,8 @@
     "bait": [
       "small-fish"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

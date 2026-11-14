@@ -4,6 +4,7 @@
   "type": "object",
   "properties": {
     "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
     "id": { "$ref": "common.schema.json#/definitions/id" },
     "name": { "$ref": "common.schema.json#/definitions/text" },
     "subnames": {
@@ -23,6 +24,11 @@
       "type": "boolean"
     },
     "difficulty": { "description": "Added to the size band's difficulty.", "type": "integer" },
+    "stew": {
+      "description": "What this fish adds to the perpetual stew's buff, and what eating it gives (R19.4, R21.1).",
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/definitions/effect" }
+    },
     "rarity": {
       "description": "The species' rarity; the size band shifts it (D49, D63).",
       "$ref": "common.schema.json#/definitions/rarity"

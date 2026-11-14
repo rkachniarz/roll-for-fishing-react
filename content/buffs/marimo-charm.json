@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "marimo-charm",
+  "placeholder": true,
+  "name": "Marimo luck draught",
+  "effects": [
+    {
+      "value": "treasureFind",
+      "add": 10
+    },
+    {
+      "value": "stuffFind",
+      "add": 10
+    }
+  ],
+  "duration": {
+    "casts": 15
+  }
+}

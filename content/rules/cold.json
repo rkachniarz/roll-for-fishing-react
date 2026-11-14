@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/cold.schema.json",
+  "id": "cold",
+  "placeholder": true,
+  "temperature": [
+    { "max": 0, "points": 3 },
+    { "max": 3, "points": 2 },
+    { "max": 6, "points": 1 }
+  ],
+  "times": {
+    "night": 2,
+    "dawn": 1
+  },
+  "seasons": {},
+  "coldLevels": [
+    {
+      "id": "chilly",
+      "name": "Chilly",
+      "effects": [{ "value": "fishingSkill", "add": -1 }]
+    },
+    {
+      "id": "cold",
+      "name": "Cold",
+      "effects": [
+        { "value": "fishingSkill", "add": -2 },
+        { "value": "reactionFast", "add": -100 }
+      ]
+    },
+    {
+      "id": "freezing",
+      "name": "Freezing",
+      "effects": [
+        { "value": "fishingSkill", "add": -4 },
+        { "value": "fishFind", "add": -10 },
+        { "value": "reactionFast", "add": -150 },
+        { "value": "reactionOk", "add": -200 }
+      ]
+    }
+  ],
+  "night": {
+    "name": "Night fishing",
+    "times": ["night"],
+    "effects": [
+      { "value": "fishSizeBand", "add": 1 },
+      { "value": "fishXp", "add": 2 }
+    ]
+  }
+}

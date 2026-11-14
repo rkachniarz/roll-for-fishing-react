@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "lobelia-antidote",
+  "placeholder": true,
+  "category": "consumable",
+  "name": "Lobelia antidote",
+  "flavor": "Clears the head, and whatever's in the water seems to fight less.",
+  "rarity": "uncommon",
+  "value": 8,
+  "use": {
+    "buff": "lobelia-antidote"
+  }
+}

@@ -60,6 +60,10 @@
       },
       "required": ["value", "add"],
       "additionalProperties": false
+    },
+    "placeholder": {
+      "description": "What here is a placeholder (D124): true for all of it, or the fields that are, by name. `npm run content` lists them in docs/placeholders.md; ?ph marks their text in the game.",
+      "oneOf": [{ "type": "boolean" }, { "type": "array", "items": { "type": "string" }, "minItems": 1 }]
     }
   }
 }

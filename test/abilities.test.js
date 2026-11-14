@@ -3,6 +3,7 @@
 // catch, "next cast" abilities as buffs, abilities that light up.
 
 import { test } from 'node:test';
+import { diveStrike, endDive } from '../src/engine/dive.js';
 import assert from 'node:assert/strict';
 import { content } from '../src/generated/content.js';
 import { newGame } from '../src/engine/state.js';
@@ -134,7 +135,7 @@ test('Recall brings back a fish that got away', () => {
   assert.equal(cast.line.kind === 'fish' && cast.line.fish.species, 'northern-pike');
 });
 
-test('Jump In lights up when a fish gets away, catches it, and goes dark with the next cast', () => {
+test('Jump In lights up when a fish gets away, dives after it among others, and goes dark with the next cast', () => {
   let s = hero('fish-fighter', { 1: 'jump-in' });
   // Strike late and badly until a fish gets away.
   for (let i = 0; i < 300; i++) {
@@ -146,9 +147,20 @@ test('Jump In lights up when a fish gets away, catches it, and goes dark with th
     const pool = s.escaped[poolKey(s)].length;
     const bucket = s.bucket.reduce((n, b) => n + b.count, 0);
     const used = useAbility(s, 'jump-in');
-    assert.ok(used.events.some((e) => e.type === 'caught' && e.fish.species === fish?.species));
-    assert.equal(used.state.escaped[poolKey(s)].length, pool - 1);
-    assert.equal(used.state.bucket.reduce((n, b) => n + b.count, 0), bucket + 1);
+    // The dive (R20.3): the fish that got away and three others, rolled now.
+    assert.ok(used.events.some((e) => e.type === 'dive-started'));
+    const dive = /** @type {any} */ (used.state.dive);
+    assert.equal(dive.fish.length, 4);
+    assert.equal(dive.fish[0].fish.species, fish?.species);
+    assert.equal(used.state.escaped[poolKey(s)].length, pool - 1, 'out of the pool while the dive lasts');
+    let after = used.state;
+    for (let n = 0; n < dive.fish.length; n++) after = diveStrike(after, n).state;
+    assert.equal(diveStrike(after, 0).state, after, 'struck once only');
+    const caught = dive.fish.filter((/** @type {any} */ f) => f.caught).length;
+    assert.equal(after.bucket.reduce((n, b) => n + b.count, 0), bucket + caught);
+    const ended = endDive(after).state;
+    assert.equal(ended.dive, null);
+    assert.equal(ended.escaped[poolKey(s)].length, pool - 1 + (dive.fish[0].caught ? 0 : 1), 'the one that got away again is back in the pool');
     assert.deepEqual(used.state.cooldowns['jump-in'], { casts: 10, pending: true });
     assert.equal(used.state.lit['jump-in'], undefined);
     // Unused, it goes dark when the next line goes out.

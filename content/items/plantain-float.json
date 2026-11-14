@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "plantain-float",
+  "placeholder": true,
+  "category": "consumable",
+  "name": "Floating draught",
+  "flavor": "You feel lighter. Your casts drift where you meant them to.",
+  "rarity": "rare",
+  "value": 16,
+  "use": {
+    "buff": "plantain-float"
+  }
+}

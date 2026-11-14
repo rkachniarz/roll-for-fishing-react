@@ -10,6 +10,12 @@
   },
   "difficulty": 0,
   "rarity": "uncommon",
+  "stew": [
+    {
+      "value": "featureChance",
+      "add": 6
+    }
+  ],
   "prefers": {
     "time": [
       "morning",
@@ -24,5 +30,8 @@
     "bait": [
       "corn"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

@@ -11,6 +11,21 @@ Claude will pick a placeholder for those and list it on REVIEW.md (D76, D105).
    > **Owner:** A location, one spot: the inn's porch.
 ```
 
+## Answered by the brainstorm of 2026-11-14
+
+The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123) settled several of these, and Claude built the rest of
+what it needed with placeholders (REVIEW.md):
+
+- **1–2, 4:** a location of places (the inn, the room, the Alchemist's shop), a scene of buildings to tap; open from
+  the start, and at night an event points the way (R17.1, R17.3).
+- **5:** time doesn't pass in town unless a choice says so: sleeping, waiting (R17.2).
+- **6–9:** Claude's call: fixed costs per offer, the counts shown, no hidden values to judge, no haggling (R18).
+- **12, 15–18:** the inn gives the stew and the room; fish go in, a bowl comes out, longer for more and rarer fish,
+  its buffs from the fish themselves (R19.4).
+- **22–25:** the Alchemist keeps hours (Friday to Sunday, asleep 5 to 13, sometimes away), brews potions from plants
+  fished up plus a Shiny pebble (R17.6).
+- **34:** the aquarium in the room (R17.5), and Release in a fish's options (R21.1).
+
 ## The town itself
 
 1. Is the town a location on the map like the Lake and the River, or a screen of its own? Does it have spots? R11.2

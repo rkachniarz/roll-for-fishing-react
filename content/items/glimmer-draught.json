@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "glimmer-draught",
+  "placeholder": true,
+  "category": "consumable",
+  "name": "Glimmer draught",
+  "flavor": "Shimmers like a shoal. Things on the water come to look.",
+  "rarity": "uncommon",
+  "value": 8,
+  "use": {
+    "buff": "glimmer-draught"
+  }
+}

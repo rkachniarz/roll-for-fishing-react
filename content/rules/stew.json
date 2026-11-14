@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schemas/stew.schema.json",
+  "id": "stew",
+  "placeholder": true,
+  "name": "Perpetual stew",
+  "minutes": {
+    "poor": 15,
+    "common": 30,
+    "uncommon": 45,
+    "rare": 60,
+    "epic": 120,
+    "legendary": 240
+  },
+  "effects": [{ "value": "warmth", "add": 2 }],
+  "flavours": 3,
+  "eatCasts": 5,
+  "aquarium": 6
+}

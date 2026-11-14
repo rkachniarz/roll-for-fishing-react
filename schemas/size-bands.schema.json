@@ -4,6 +4,7 @@
   "type": "object",
   "properties": {
     "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
     "id": { "const": "size-bands" },
     "bands": {
       "type": "array",

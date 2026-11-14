@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "old-torn-doll",
+  "category": "stuff",
+  "name": "Old torn doll",
+  "flavor": "A rag doll with one button eye. It's soaked through, and someone loved it once.",
+  "rarity": "common",
+  "value": 0,
+  "unique": true,
+  "placeholder": [
+    "flavor"
+  ]
+}

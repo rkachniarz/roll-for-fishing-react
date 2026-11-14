@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "canadian-waterweed",
+  "category": "stuff",
+  "name": "Waterweed",
+  "flavor": "Grows fast enough to choke a lake, and breathes out bubbles in the sun.",
+  "icon": "item/canadian-waterweed",
+  "rarity": "common",
+  "value": 2,
+  "placeholder": [
+    "flavor"
+  ]
+}

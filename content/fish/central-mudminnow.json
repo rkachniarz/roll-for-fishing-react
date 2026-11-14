@@ -9,6 +9,12 @@
   },
   "difficulty": -2,
   "rarity": "common",
+  "stew": [
+    {
+      "value": "warmth",
+      "add": 1
+    }
+  ],
   "prefers": {
     "time": [
       "evening",
@@ -20,5 +26,8 @@
     "bait": [
       "worm"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

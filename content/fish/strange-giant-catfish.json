@@ -10,6 +10,12 @@
   },
   "difficulty": 3,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "twinChance",
+      "add": 12
+    }
+  ],
   "prefers": {
     "time": [
       "night"
@@ -23,5 +29,8 @@
     "bait": [
       "bread"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

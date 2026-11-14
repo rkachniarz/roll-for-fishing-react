@@ -10,6 +10,16 @@
   },
   "difficulty": -2,
   "rarity": "rare",
+  "stew": [
+    {
+      "value": "wildCast",
+      "add": -1
+    },
+    {
+      "value": "castScatter",
+      "add": -6
+    }
+  ],
   "prefers": {
     "time": [
       "morning",
@@ -21,5 +31,8 @@
     "bait": [
       "maggot"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

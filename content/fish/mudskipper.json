@@ -10,6 +10,12 @@
   },
   "difficulty": -1,
   "rarity": "uncommon",
+  "stew": [
+    {
+      "value": "twinChance",
+      "add": 6
+    }
+  ],
   "prefers": {
     "time": [
       "noon",
@@ -24,5 +30,8 @@
     "bait": [
       "worm"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

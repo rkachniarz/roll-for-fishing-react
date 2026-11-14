@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "hornwort-tonic",
+  "placeholder": true,
+  "category": "consumable",
+  "name": "Hornwort tonic",
+  "flavor": "Bitter, bristly and warming all the way down.",
+  "rarity": "common",
+  "value": 4,
+  "use": {
+    "buff": "hornwort-tonic"
+  }
+}

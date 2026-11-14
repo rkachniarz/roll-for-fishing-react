@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "shiny-fish-scales",
+  "category": "stuff",
+  "name": "Shiny fish scales",
+  "flavor": "A pinch of scales that catch the light like coins.",
+  "rarity": "common",
+  "value": 2,
+  "placeholder": [
+    "flavor"
+  ]
+}

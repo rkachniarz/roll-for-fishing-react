@@ -9,6 +9,16 @@
   },
   "difficulty": -1,
   "rarity": "uncommon",
+  "stew": [
+    {
+      "value": "reactionFast",
+      "add": 200
+    },
+    {
+      "value": "reactionOk",
+      "add": 200
+    }
+  ],
   "prefers": {
     "time": [
       "evening",
@@ -23,5 +33,8 @@
     "bait": [
       "maggot"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

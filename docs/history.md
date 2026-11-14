@@ -371,3 +371,37 @@ finding checked before it was fixed.
 - **Docs:** brought up to date with the code; decisions changed by later ones point at them; REVIEW.md items
   overtaken by later work are marked for the owner.
 - Measured: `npm run check` passes, with 200 unit tests and every browser check; the artifact builds at 709.5 kB.
+
+## Phase 10: The night, the town and the stew (built 2026-11-14, overnight)
+
+The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with placeholders while the owner slept.
+
+- **10.1** Placeholders marked where they live (D124): `"placeholder"` in content, `placeholder: true` in events,
+  `PLACEHOLDER_UI` for the game's own text; `npm run content` writes `docs/placeholders.md` and the bundle carries
+  the keys, so `?ph` marks them with a °. The schemas got the field by inserting one line each: rewriting them with
+  `JSON.stringify` had reflowed every file.
+- **10.2** The clock's weekday (day 0 a Monday); buffs that last game minutes (`until`); time passing in half-hour
+  steps (`src/engine/passage.js`), shared by casts and by `wait:` and `sleep:`; `buff:`, `shop:`, `needs: vendor`,
+  `needs: perk`, `needs: weekday`. An event's `go:` arrives when the event closes, which is how the night's "straight
+  to the inn" reaches the innkeeper.
+- **10.3** White items as a tier (D125): a second d100 against `stuffThreshold`, Stuff Find, the Rogue's +10 as a
+  class effect; the CSV's plants and the other white things in per-spot `stuff` lists. The extra roll shifted the
+  dice of a seeded test that waited for the Rogue champion to steal something; it settled once the stuff lists existed.
+- **10.4** The town: a location with `town: true`, no casting, its places drawn as squares and triangles
+  (`src/scene/views.js`), a click going to a place or opening its dialogue again; the welcome, nightfall, the
+  innkeeper (the owner's words), the inn, the room. The welcome made every new game open with a dialog, so the
+  browser checks, the balance sim and the unit tests' helpers now take an event's last choice (staying, leaving).
+- **10.5** Barter (R18): vendors in `content/vendors/` with schedules and offers; `src/engine/barter.js`; the barter
+  window as a pane; trades counted as `trades-<vendor>` counters; potions used from the bag by right-click.
+- **10.6** Cold and night (D126): worked out from the state like the class fish's effects; shown on the buff bar.
+  A perk test that read a raw Fishing Skill caught a chilly morning and now compares against the same moment.
+- **10.7** The stew (D127) and every fish's stew buff, by rule; new game values. Save version 12.
+- **10.8** A fish's options on right-click or long-press (`src/ui/menu.js`); Tiny fish hooking moved there from the
+  bucket's buttons.
+- **10.9–10.11, 10.13** Fish that swim (D129, `src/scene/swim.js`): side views turned level from the icons (a check on
+  a synthetic diagonal showed the turn's direction, 29×5 one way, 17×27 the other), the aquarium, the dive (D128),
+  shadows under the surface, the hook pointer.
+- **10.12** The haunted swamp and the Old torn doll; at weight 12 the doll turns up within 200 casts in 83% of
+  simulated games with no Treasure Find (weight 9 gave 77%).
+- **10.14** Measured at the end: `npm run check` passes, with 226 unit tests and every browser check (a new one walks
+  the town: the map, the innkeeper, the room, the inn, the stew); the artifact builds at 915.4 kB.

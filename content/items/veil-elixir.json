@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "veil-elixir",
+  "placeholder": true,
+  "category": "consumable",
+  "name": "Veil elixir",
+  "flavor": "Thin as lace. The fish don't quite see you coming.",
+  "rarity": "epic",
+  "value": 30,
+  "use": {
+    "buff": "veil-elixir"
+  }
+}

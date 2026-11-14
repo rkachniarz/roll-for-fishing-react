@@ -24,6 +24,9 @@
     "$schema": {
       "type": "string"
     },
+    "placeholder": {
+      "$ref": "common.schema.json#/definitions/placeholder"
+    },
     "id": {
       "$ref": "common.schema.json#/definitions/id"
     },
@@ -81,6 +84,13 @@
         "treasureFind"
       ],
       "additionalProperties": false
+    },
+    "effects": {
+      "description": "What the class always brings, as game values: the Rogue's Stuff Find (R19.1).",
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/definitions/effect"
+      }
     },
     "icon": {
       "$ref": "common.schema.json#/definitions/icon"

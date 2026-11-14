@@ -9,6 +9,8 @@
 import { Application, Container, Graphics, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { createSky } from './sky.js';
 import { createDice } from './dice.js';
+import { createViews } from './views.js';
+import { createShoal } from './swim.js';
 import { paintPond, pondSeason } from './pond.js';
 import { paintReedy, reedySeason } from './reedy.js';
 import {
@@ -63,8 +65,8 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
 /**
  * A surface feature as the scene draws it (R14): where it is, what kind, and
  * how much is left of it.
- * @typedef {{ id: string, kind: string, x: number, y: number, uses: number, born: number, aura?: string }} SceneFeature
- *   `aura`: a class fish's colour (D114).
+ * @typedef {{ id: string, kind: string, x: number, y: number, uses: number, born: number, aura?: string, species?: string }} SceneFeature
+ *   `aura`: a class fish's colour (D114); `species`: a school's or big fish's, for its shadows (R20.2).
  */
 
 /**
@@ -191,6 +193,9 @@ export async function createScene(canvas, rand, look = {}) {
   const play = new Container();
   app.stage.addChild(play);
 
+  // Fish just under the surface (R20.2): schools and big fish, as swimming shadows.
+  const surfaceFish = createShoal(play, rand);
+
   const ripples = new Container();
   play.addChild(ripples);
   /** @type {Map<string, Texture>} */
@@ -255,6 +260,9 @@ export async function createScene(canvas, rand, look = {}) {
   app.stage.addChild(skyLayer);
   const sky = createSky(shadowLayer, skyLayer, SIZE, rand);
 
+  // The town, the room, the dive: in the water's place when there is one (R17.1, R20.3).
+  const views = createViews(app.stage, rand);
+
   // Dice, over everything: they're on the desk, not in the picture, so the
   // light of the hour doesn't tint them (D99).
   const dice = createDice((s) => app.stage.addChild(s), rand);
@@ -274,6 +282,7 @@ export async function createScene(canvas, rand, look = {}) {
     reedsRight.position.x = width - 26;
     sky.setWidth(width);
     dice.setSize(width, SIZE);
+    views.setSize(width, offset);
     paintWidth();
     paintSpot();
     showPainting();
@@ -341,6 +350,8 @@ export async function createScene(canvas, rand, look = {}) {
   function drawFeatures(now) {
     featureLayer.clear();
     const live = new Set();
+    /** @type {{ key: string, species: string, look: 'shadow' | 'small', box: { x0: number, y0: number, x1: number, y1: number } }[]} */
+    const shadows = [];
     features.forEach((f, i) => {
       // Known by when it appeared, so it glides between casts instead of jumping.
       const key = `${f.id}@${f.born}`;
@@ -353,7 +364,13 @@ export async function createScene(canvas, rand, look = {}) {
       const cy = Math.round(at.y);
       const far = cy < farLine;
       const phase = i * 1.7;
-      if (f.kind === 'school') {
+      if (f.kind === 'school' && f.species) {
+        // Small fish milling about under the surface (R20.2); fewer as it is fished out.
+        const r = far ? 12 : 18;
+        for (let n = 0; n < 1 + f.uses; n++) {
+          shadows.push({ key: `${key}-${n}`, species: f.species, look: 'small', box: { x0: cx - r, y0: cy - r * 0.5, x1: cx + r, y1: cy + r * 0.5 } });
+        }
+      } else if (f.kind === 'school') {
         // Fish backs milling about; fewer as it is fished out.
         const count = 2 + f.uses * 2;
         for (let n = 0; n < count; n++) {
@@ -364,8 +381,8 @@ export async function createScene(canvas, rand, look = {}) {
           featureLayer.rect(x, y, far ? 2 : 3, 1).fill({ color: PALETTE.shadow, alpha: 0.7 });
         }
       } else if (f.kind === 'champion') {
-        // A class fish (D114): a big fish's shadow in a glowing ring of its
-        // class's colour. A placeholder until it has art (CR-15).
+        // A class fish (D114): the fish below the surface in a glowing ring of
+        // its class's colour.
         const x = Math.round(cx + Math.sin(now / 2600 + phase) * 3);
         const w = far ? 13 : 18;
         const rx = far ? 9 : 13;
@@ -376,9 +393,17 @@ export async function createScene(canvas, rand, look = {}) {
           const py = Math.round(cy + Math.sin(t) * rx * 0.4);
           featureLayer.rect(px, py, 1, 1).fill({ color: f.aura ?? PALETTE.foam, alpha: a % 3 === 0 ? pulse + 0.2 : pulse });
         }
-        featureLayer.rect(x - w / 2, cy, w, 2).fill({ color: PALETTE.shadow, alpha: 0.8 });
-        featureLayer.rect(x - w / 2 + 2, cy - 1, w - 5, 1).fill({ color: PALETTE.shadow, alpha: 0.65 });
-        featureLayer.rect(x + w / 2, cy - 1, 2, 4).fill({ color: PALETTE.shadow, alpha: 0.65 });
+        if (f.species) {
+          // The fish itself below the surface, seen from the bank (D131), in its ring.
+          shadows.push({ key, species: f.species, look: far ? 'small' : 'shadow', box: { x0: cx - 5, y0: cy - 1, x1: cx + 5, y1: cy + 1 } });
+        } else {
+          featureLayer.rect(x - w / 2, cy, w, 2).fill({ color: PALETTE.shadow, alpha: 0.8 });
+          featureLayer.rect(x - w / 2 + 2, cy - 1, w - 5, 1).fill({ color: PALETTE.shadow, alpha: 0.65 });
+          featureLayer.rect(x + w / 2, cy - 1, 2, 4).fill({ color: PALETTE.shadow, alpha: 0.65 });
+        }
+      } else if (f.kind === 'big-fish' && f.species) {
+        // One big fish's shadow, sliding to and fro just under the surface (R20.2).
+        shadows.push({ key, species: f.species, look: far ? 'small' : 'shadow', box: { x0: cx - 6, y0: cy - 2, x1: cx + 6, y1: cy + 2 } });
       } else if (f.kind === 'big-fish') {
         // One long shadow, sliding to and fro just under the surface.
         const x = Math.round(cx + Math.sin(now / 2200 + phase) * 4);
@@ -403,6 +428,8 @@ export async function createScene(canvas, rand, look = {}) {
       }
     });
     for (const key of shownAt.keys()) if (!live.has(key)) shownAt.delete(key);
+    surfaceFish.set(shadows, { x0: 0, y0: 0, x1: SIZE, y1: SIZE });
+    surfaceFish.update(now);
   }
 
   /** @param {number} x @param {number} y @param {number} now @param {number} maxRx */
@@ -423,6 +450,7 @@ export async function createScene(canvas, rand, look = {}) {
     sky.update(now, lastFrame ? now - lastFrame : 16);
     lastFrame = now;
     dice.update(now);
+    views.update(now);
 
     // Waves shimmer by flipping frames now and then, faster in the wind; reeds
     // sway together, faster in the wind too.
@@ -579,6 +607,15 @@ export async function createScene(canvas, rand, look = {}) {
     },
     /** Takes any dice away at once. */
     clearDice: dice.clear,
+    /**
+     * What shows in the water's place: the town, the room, the dive; null for the water.
+     * @param {import('./views.js').View | null} view
+     */
+    setView: views.set,
+    /** What's at a point in the play area in the view: a building, or a fish. */
+    viewHit: views.hit,
+    /** Where a fish swimming in the view is now, in the play area's pixels. */
+    viewFishAt: views.fishAt,
     /**
      * How the bobber looks: the equipped bobber item's colours, or the
      * sketch's red feather (D83). Repainted only when it changes.

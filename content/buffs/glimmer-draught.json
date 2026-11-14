@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "glimmer-draught",
+  "placeholder": true,
+  "name": "Glimmer draught",
+  "effects": [
+    {
+      "value": "featureChance",
+      "add": 10
+    }
+  ],
+  "duration": {
+    "minutes": 120
+  }
+}

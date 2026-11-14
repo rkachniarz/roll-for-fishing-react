@@ -53,7 +53,12 @@ export function sunAt(yearFraction) {
  * @property {number} minute
  * @property {{ rise: number, set: number }} sun  Today's sunrise and sunset, in hours.
  * @property {PartOfDay} partOfDay  Shown instead of the clock (R16.4).
+ * @property {number} weekday     0 for Monday to 6 for Sunday (R17.6); the first day of the first spring is a Monday.
+ * @property {number} dayIndex    Days since the start of the first spring.
  */
+
+/** The days of the week, as event words and string keys use them (R17.6). */
+export const WEEKDAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
 /**
  * The words the player sees for the time (R16.4), following the sun (D85)
@@ -96,7 +101,28 @@ export function clock(minutes, time = TIME) {
     minute: inDay % 60,
     sun,
     partOfDay: partOfDay(inDay / 60, sun),
+    weekday: dayIndex % 7,
+    dayIndex,
   };
+}
+
+/**
+ * How many game minutes from `minutes` until the next morning (R17.2): the
+ * first half-hour step whose part of the day is morning, after some part of
+ * the day that isn't. Sleeping at the inn wakes the player then.
+ * @param {number} minutes
+ * @param {typeof TIME} [time]
+ */
+export function minutesToMorning(minutes, time = TIME) {
+  // From the morning itself, the next day's.
+  let past = clock(minutes, time).partOfDay !== 'morning';
+  let m = minutes + time.castMinutes;
+  for (let i = 0; i < 96; i++, m += time.castMinutes) {
+    const morning = clock(m, time).partOfDay === 'morning';
+    if (morning && past) return m - minutes;
+    if (!morning) past = true;
+  }
+  return 12 * 60;
 }
 
 /**

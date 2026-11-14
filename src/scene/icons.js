@@ -263,6 +263,286 @@ const DRAWN_AT_16 = new Set(Object.keys(ICONS));
 
 /** Icons drawn at 32×32 (D98). Fish are tilted to fill the square. */
 Object.assign(ICONS, {
+  // The canadian waterweed, drawn as code from a picture on Wikimedia Commons (docs/design/refs/Canadian-waterweed.jpg, D97).
+  'item/canadian-waterweed': [
+    '................................',
+    '.................k..............',
+    '................kLk.............',
+    '................kMkk..k.k.......',
+    '...............kLkDLkkLkLk......',
+    '...............kMkSSDMk.kk......',
+    '...............kkDLkkkk.kMk.....',
+    '..............kLkkSDMLLkkDLkkk..',
+    '..............kMkLkkkkkMkSDkMLk.',
+    '.............k.kDSkMLkkDLkk.kk..',
+    '............kLkkSSDkkMkSDkMk....',
+    '.............kMkLkkk.kLSk.kLk...',
+    '............kkDSSkMLkDSkkk.k....',
+    '...........kLkkSDLkkkSDkMLk.....',
+    '...........kMkkSkMkkSkk.kk......',
+    '............kkLkkDLSk...........',
+    '............kDSDMSSk............',
+    '..........k.kSSSSkDMk...........',
+    '.........kLkkSSSk.kkLk..........',
+    '..........kMkSkkk...k...........',
+    '..........kDSSkMLk..............',
+    '.........k.kSDkkk...............',
+    '........kLkkSk..................',
+    '.........kMkSk.k................',
+    '.........kDSLMkLk...............',
+    '..........kSDk.k................',
+    '........k.kSk...................',
+    '.......kLkkSk.k.................',
+    '........kMSLkkLk................',
+    '........kDSDMkk.................',
+    '.........kSkk...................',
+    '..........k.....................',
+  ],
+  // The hornwort, drawn as code from a picture on Wikimedia Commons (docs/design/refs/Hornwort.jpg, D97).
+  'item/hornwort': [
+    '.....................kk.k.......',
+    '....................kLLkLk......',
+    '....................kkkLLkk.....',
+    '...................kLLkDMkLkk...',
+    '..................kkkLLkDMLkLk..',
+    '.................kLLkMLSkDMLLk..',
+    '.................kkLkLDMLLLkk...',
+    '...............kkLkMLkSDMLkk....',
+    '..............kLkkkkMSkLkkkLk...',
+    '.............k.kkLLLDDLLkLkk....',
+    '............kLkLkMLSSkMkLLk.....',
+    '.............kLkLkMSkLkkkk......',
+    '...........kk.kLLkSDMLkLk.......',
+    '..........kLLkkMMSSkkkLLk.......',
+    '...........kLkkkMSkLkkkk........',
+    '.........k.kMLLkDDMLkLk.........',
+    '........kLk.kMLSSkkMkLLk........',
+    '.......kLk.k.kMSkLkk.kk.........',
+    '........kLkLkDDMLLkLk...........',
+    '.....kk..kMLkSSDMMLkk...........',
+    '....kLLk.kMMkSkLkkkkLk..........',
+    '.....kLkkkkMSkLLkk..k...........',
+    '.....kMkLLkSDMkkkLk.............',
+    '......kMLkSSkkkMLkLk............',
+    '......kMMkSkkLkkk.k.............',
+    '.......kMSkMLk.k................',
+    '.......kSDMMMkkLk...............',
+    '.......kSkkkkMLLk...............',
+    '......kSk....kkk................',
+    '.......k........................',
+    '................................',
+    '................................',
+  ],
+  // The quillwort, drawn as code from a picture on Wikimedia Commons (docs/design/refs/Quillwort.jpg, D97).
+  'item/quillwort': [
+    '................................',
+    '...........k..k..k..............',
+    '........k.kLkkLkkLk.k...........',
+    '.......kLkkMkkDkkMkkLk..........',
+    '.......kMMkMMLDkkMkkMk.k........',
+    '.....k..kMkkMMDkkMkLMkkLk.......',
+    '....kLk.kMkkMMDkkMkMkkDDk.......',
+    '.....kDk.kMkMMDkkMMMkkDk..k.....',
+    '.....kDDkkMkMkMDkMMMkDDk.kLk....',
+    '...k..kDkkMMkMMDMkMMkDk.kMk.....',
+    '..kLk..kDkkMkMMDMkMkkDkkMk......',
+    '...kMkkkDDkMkMMDMkMkDkkMMk..k...',
+    '....kMMkkDkkMMMDMMMkDkkMk.kkLk..',
+    '.....kMMkkDkMMMDMMMDkkMk.kDDk...',
+    '......kMMkDDMMMDMMkDkMkkkDDk....',
+    '.......kMMkDkMMMMMDDMMkDDkk.....',
+    '........kkMkDMMMMMDMMkDDk.......',
+    '..........kMDDMMMMDMDDkk........',
+    '...........kMMMMMDMDDk..........',
+    '............kMMMMDDkk...........',
+    '............kwwMMMDwk...........',
+    '...........kwwwwwwwwck..........',
+    '..........kwwwwwwwwwcck.........',
+    '..........kcwwwwwwwccck.........',
+    '...........kccwwwcccck..........',
+    '............kkrrrrrkk...........',
+    '............krrrrkrrk...........',
+    '...........krkrrrkkkrk..........',
+    '..........krkkrrrrk.krk.........',
+    '.........krkkrrrkrk..k..........',
+    '..........k.krkkkrk.............',
+    '.............k...k..............',
+  ],
+  // The water lobelia, drawn as code from a picture on Wikimedia Commons (docs/design/refs/Water-lobelia.jpg, D97).
+  'item/water-lobelia': [
+    '................................',
+    '.................k..............',
+    '................kpk.............',
+    '................kPk.............',
+    '................ksk.............',
+    '................ksk.............',
+    '................kssk............',
+    '................kskskk..........',
+    '................kskkPPk.........',
+    '................kskWWPWk........',
+    '...............ksskPWpPk........',
+    '..............kskskkpkk.........',
+    '............kkskksk.k...........',
+    '...........kPPk.ksk.............',
+    '..........kWPWWkkssk............',
+    '..........kPpWPkssksk...........',
+    '...........kkpkksk.kskk.........',
+    '.............k.ksk..kPPk........',
+    '...............ksk.kWWPWk.......',
+    '...............ksk.kPWpPk.......',
+    '...............ksk..kpkk........',
+    '...............ksk...k..........',
+    '...............ksk..............',
+    '...............ksk..............',
+    '............k..ksk..k...........',
+    '.......k...kDk.ksk.kDk..k.......',
+    '......kDkkkkMkkkskkkMkkkDk......',
+    '......kMMMMkkMMkDkMMkkMMMk......',
+    '.......kkkDMMMMMDMMMMDkkk.......',
+    '.........kMMMMMMMMMMMMk.........',
+    '..........kkkkkkkkkkkk..........',
+    '................................',
+  ],
+  // The marimo, drawn as code from a picture on Wikimedia Commons (docs/design/refs/Marimo.jpg, D97).
+  'item/marimo': [
+    '................................',
+    '................................',
+    '................................',
+    '.....................kkkk.......',
+    '........k..k........kHHHLk......',
+    '.....kkkHkkLkk...kkkHLHHLLk.....',
+    '....kHHHHHLLLMk.kHHHLLLLLLMk....',
+    '...kHHHHLLLLMLk.kHHLLLLLLLMkk...',
+    '...kHHHHLLLMLLMkkHHHLLLLMMMMMk..',
+    '..kHHHLHLLLMLMMMHHHLLMLMMMMMk...',
+    '..kHLHLLLLMMMMMMLLHLLMMMMMMMDk..',
+    '..kHHLLLLMMMMMMDDHLLMMMMMDDDDk..',
+    '..kLLLLLMMMMDDDDDDLLLMMMMMDDDk..',
+    '..kLLLMMMMDDHHLLLLLDLDMMMDDDDk..',
+    '...kLMLMDDDHHHHLLLLMDDMDMDDDk...',
+    '...kLLMMDDHHHLLLLLLLMDDDDDDk....',
+    '...kMMMMDLLHLHLLLLLLMMDMDDk.....',
+    '....kkkMHHHHLLLLLMLMMMMDkk......',
+    '......kDLLLLLMMLLMMMMMMDk.......',
+    '.....kDDHLLLLLLMMLMMMMMDk.......',
+    '......kHLHLMMMMLMMMMDMDDDk......',
+    '......kLLLLLLLMMMMMMDDDDk.......',
+    '......kLLLLLMLLMMMMMDDDDk.......',
+    '......kLLLLMLMMMMDMMMDDDk.......',
+    '.......kLLMLMMMMMMMDDDDDk.......',
+    '.......kLLMMMMDMDMDDDDDk........',
+    '........kMMMMDMMMDDDDDk.........',
+    '.........kMMMMDMDMDDDk..........',
+    '..........kDDMMMDDDDk...........',
+    '...........kkkkDkkDk............',
+    '...............k..k.............',
+    '................................',
+  ],
+  // The floating water plantain, drawn as code from a picture on Wikimedia Commons (docs/design/refs/Floating-water-plantain.jpg, D97).
+  'item/floating-water-plantain': [
+    '................................',
+    '.............kk.................',
+    '...........kkwwkk...............',
+    '..........kwwwwwwk..............',
+    '.........kwwwwwwwwk.............',
+    '........kWWWWWWWWWWk............',
+    '........kWWWWWWWWWWk............',
+    '........kWWWWWWWWWWk............',
+    '........kWWWWWWWWWWk............',
+    '........kWWWWWWWWWWk............',
+    '........kWWWWWWWWWWk............',
+    '......kkwwwwWWWWWWWWkk..........',
+    '.....kwwwwwWWWYWWWWWWWk.........',
+    '....kwwwwWWWWYYYWWWWWWWk........',
+    '...kwwwWWWWWYYyYYWWWWWWWk.......',
+    '...kwWWWWWWWWYYYWWWWWWWWk.......',
+    '..kwwWWWWWWWWWWWWWWWWWWwwk......',
+    '..kwwwWWWWWWWWWWWWWWWWwwwkk.....',
+    '..kwwwWWWWWWWWWwWWWWWWwwwGGkk...',
+    '...kwwwWWWWWWWwwwwWWWwwwgGGGGk..',
+    '...kwwwWWWWWWGGwwwwWWwwwgggGGGk.',
+    '....kwwwWWWWkGGgwwwwwwwgggggGGk.',
+    '.....kkkkkkkGGggggggGggggggGgGGk',
+    '...........kGGGGGGGGGGGGGGGGGGGk',
+    '...........kGGggggGggggggGgggGGk',
+    '............kGGggGggggggGgggGGk.',
+    '............kGGGGggggggGgggGGGk.',
+    '.............kGGGGggggGggGGGGk..',
+    '..............kkGGGGGGGGGGGkk...',
+    '................kkkkkGkkkkk.....',
+    '.....................k..........',
+    '................................',
+  ],
+  // The lace plant, drawn as code from a picture on Wikimedia Commons (docs/design/refs/Lace-plant.jpg, D97).
+  'item/lace-plant': [
+    '................................',
+    '................................',
+    '.......k........................',
+    '......kVk.......................',
+    '.....kvVvk......................',
+    '.....kvVvvk.....................',
+    '.....kvVVvvk....................',
+    '....kvvhVhvvk...................',
+    '....kvvvVvvhvk............k.....',
+    '....kvvhVVvvvvk.........kkVk....',
+    '....kvhvvVhvhvk........kvvVk....',
+    '....kvvvhVhvvvvk......kvvVvvk...',
+    '....kvhvvVvhvhvk.....kvvhVvvk...',
+    '....kvvvhVVvvvhk....kvhvVVvvk...',
+    '....kvhvvvVhhhhvk..kvhvvVhvvk...',
+    '.....kvvvhVvvvvvk..kvvhVVvhk....',
+    '.....kvhvvVVhvhvk.kvhvvVhvvk....',
+    '.....kvvvhhVvvvvk.kvvhVVvvvk....',
+    '......khvvvVhvhvkkvhvvVhvvvk....',
+    '......kvhvhVVvvvkkvvvVVvvhk.....',
+    '.......kvvvvVhvvkkhvvVvvhvk.....',
+    '.......kvhvhVvvvkkvvVVvvvk......',
+    '........kvvvVhvvkkhhVvvhvk......',
+    '.........kvvVVvk.kvVVvvvk.......',
+    '..........kvvVvk.kvVvvvk........',
+    '...........kvVvk.kVVvvk.........',
+    '............kVpk.kVvkk..........',
+    '.............kpk.kpk............',
+    '.............kpk.kpk............',
+    '..............kpkppk............',
+    '..............kpkpk.............',
+    '...............k.k..............',
+  ],
+  // The waterwheel plant, drawn as code from a picture on Wikimedia Commons (docs/design/refs/Waterwheel-plant.jpg, D97).
+  'item/waterwheel-plant': [
+    '................................',
+    '................................',
+    '................................',
+    '................................',
+    '........................kk.k....',
+    '.......................kLtkSk...',
+    '.....................kkktDLk....',
+    '....................kLtkkDDtk...',
+    '...................kktDMLktLk...',
+    '..................kLtkLDMtkk....',
+    '.................kktDkLDtk......',
+    '................kLtkDDMkkLk.....',
+    '..............kkktMLLDMtkk......',
+    '.............kLtkDDMkktLk.......',
+    '............kktMMSLDtkkk........',
+    '...........kLkkDDLktLk..........',
+    '.........k.ktMkLDDtkk...........',
+    '........kLkkkDMLktLk............',
+    '.........kMtkLDMkkk.............',
+    '.......kkktDLSDMtk..............',
+    '......kLtkkLDMktLk..............',
+    '.....kktDMLkDMtkk...............',
+    '....kLtkkDDkktLk................',
+    '..kkktDMLLDtkkk.................',
+    '.kLtkkDDkktkLk..................',
+    '.ktMMkLDDtk.k...................',
+    '..kDDDkktk......................',
+    '...kLDMkkLk.....................',
+    '....kDMtkk......................',
+    '.....ktLk.......................',
+    '......kk........................',
+    '................................',
+  ],
   // The common carp, from a photo (docs/design/photo-carp.jpg, D97).
   'fish/carp': [
     '................................',
@@ -4332,6 +4612,61 @@ Object.assign(ICONS, {
  * @type {Record<string, Record<string, string>>}
  */
 export const OWN_KEYS = {
+  'item/canadian-waterweed': {
+    D: '#2f6a24', // dark
+    M: '#4f9a30', // mid
+    L: '#8ccf50', // light
+    S: '#3f7a2a', // stem
+  },
+  'item/hornwort': {
+    D: '#2c4419', // dark
+    M: '#4c6a26', // mid
+    L: '#7d9440', // light
+    S: '#5a6a30', // stem
+  },
+  'item/quillwort': {
+    D: '#24572a', // dark
+    M: '#3f8a34', // mid
+    L: '#7fc24a', // light
+    w: '#d8cfa4', // corm
+    c: '#ada07a', // corm, shaded
+    r: '#6b4a2a', // roots
+  },
+  'item/water-lobelia': {
+    D: '#2f6a2c', // dark
+    M: '#5a9a3c', // mid
+    s: '#9ab060', // stem
+    W: '#f2eef8', // white
+    P: '#c9b4e6', // lilac
+    p: '#8f6fb8', // lilac, shaded
+  },
+  'item/marimo': {
+    D: '#2a4a16', // dark
+    M: '#4a7424', // mid
+    L: '#73a038', // light
+    H: '#a2c856', // highlight
+  },
+  'item/floating-water-plantain': {
+    W: '#f6f6f0', // white
+    w: '#cdd2c8', // corm
+    Y: '#ecd23c', // yellow
+    y: '#b39a1c', // yellow, shaded
+    G: '#3f6e30', // leaf
+    g: '#6e9a44', // leaf, lit
+  },
+  'item/lace-plant': {
+    V: '#9cbc52', // midrib
+    v: '#5f8a30', // vein
+    h: '#1e3a1a', // window in the net
+    p: '#6f8a3a', // stalk
+  },
+  'item/waterwheel-plant': {
+    D: '#3c6428', // dark
+    M: '#6a9838', // mid
+    L: '#a8c860', // light
+    t: '#dbe8a6', // trap
+    S: '#7a8a3a', // stem
+  },
   'fish/carp': {
     D: '#3f4426', // back, scale rims
     O: '#6e7043', // back

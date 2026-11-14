@@ -18,7 +18,7 @@ import { emptyEquipment } from './equipment.js';
 import { knownKey, locationList } from './knowledge.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 11;
+export const SAVE_VERSION = 12;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -44,6 +44,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {number} [attempts]
  * @property {boolean} [pending]  Added while a line was out: that cast doesn't use it up.
  * @property {number} [ms]
+ * @property {number} [until]  Lasts until this game minute (R19.5): the stew, a potion, a night's rest.
+ * @property {string[]} [label]  String keys naming it on the bar, when its id isn't a perk's.
  *
  * @typedef {Object} GameState
  * @property {number} version
@@ -93,6 +95,10 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  *   what's left of its cooldown (abilities.js, D96); `pending` until the next line goes out.
  * @property {Record<string, { fish?: import('./fish.js').FishInstance }>} lit  Abilities lit up by what
  *   just happened, and what they would act on, until the next cast goes out (D96).
+ * @property {string | null} shop  The vendor whose barter window is open (R18.2), or the stew's.
+ * @property {import('./fish.js').FishInstance[]} stewPot  Fish put in the stew since the last bowl (R19.4).
+ * @property {import('./fish.js').FishInstance[]} aquarium  Fish in the room's aquarium (R17.5).
+ * @property {import('./dive.js').Dive | null} dive  The Fighter's dive under way (R20.3).
  */
 
 /**
@@ -161,6 +167,10 @@ export function newGame({ seed, character, month }) {
     missStreak: 0,
     cooldowns: {},
     lit: {},
+    shop: null,
+    stewPot: [],
+    aquarium: [],
+    dive: null,
   };
 }
 
@@ -284,6 +294,9 @@ const MIGRATIONS = {
     book: { ...save.book, champions: {} },
     streams: { ...save.streams, champions: deriveSeed(save.seed, 'champions') },
   }),
+  // 11 -> 12: the town (D123): a barter window, the stew's pot, the aquarium, the dive.
+  // A game already under way has had its welcome (R17.3).
+  11: (save) => ({ ...save, shop: null, stewPot: [], aquarium: [], dive: null, eventsSeen: { ...save.eventsSeen, welcome: 1 } }),
 };
 
 /** @param {GameState} state */

@@ -4,6 +4,7 @@
   "type": "object",
   "properties": {
     "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
     "id": { "$ref": "common.schema.json#/definitions/id" },
     "kind": { "description": "What the entries are: fish or items for a location to include, or rewards for a trade (7.9).", "enum": ["fish", "items", "rewards"] },
     "entries": { "$ref": "common.schema.json#/definitions/entries" },

@@ -1,13 +1,13 @@
 // @ts-check
 // Names of fish and items, and links to them: the name in brackets in its
 // rarity colour, as in WoW's chat frame (docs/spec.md, R16.5; D49). A tap on a
-// link shows its tooltip.
+// link shows its tooltip; so does a mouse over it (D119).
 
 import { content } from '../generated/content.js';
 import { t } from '../strings.js';
 import { fishNameKeys } from '../engine/fish.js';
 import { RARITY_COLOURS, iconName, paintIcon } from '../scene/icons.js';
-import { showTip } from './tooltip.js';
+import { bindTip } from './tooltip.js';
 import { effectLine } from './effects.js';
 
 /** @typedef {import('../engine/fish.js').FishInstance} FishInstance */
@@ -50,7 +50,14 @@ export function tipFor(thing) {
     return {
       title: fishName(thing.fish),
       colour: rarityColour(thing.fish.rarity),
-      lines: [{ text: t('tip.fish') }, { text: t('tip.size', { size: thing.fish.size }) }],
+      // "I want to see what we caught" (D119).
+      icon: iconName({ kind: 'fish', id: thing.fish.species }),
+      lines: [
+        { text: t('tip.fish') },
+        { text: t('tip.size', { size: thing.fish.size }) },
+        // What it adds to the stew, and gives eaten raw (R19.4, R21.1).
+        ...(content.fish[thing.fish.species]?.stew?.length ? [{ text: t('tip.stew', { effects: effectsText(content.fish[thing.fish.species].stew) }), tone: /** @type {const} */ ('good') }] : []),
+      ],
     };
   }
   const item = content.items[thing.id];
@@ -65,6 +72,12 @@ export function tipFor(thing) {
   if (item.flavor) lines.push({ text: `"${t(item.flavor)}"`, tone: 'flavor' });
   // A page that can be read (8.7).
   if (item.page) lines.push({ text: t(item.page), tone: 'page' });
+  // A potion (R18.8): what it gives when used.
+  const buff = item.use ? content.buffs?.[item.use.buff] : null;
+  if (buff) {
+    lines.push({ text: t('tip.use', { buff: t(buff.name), effects: effectsText(buff.effects), duration: durationText(buff.duration) }), tone: 'good' });
+    lines.push({ text: t('tip.useHint') });
+  }
   // No sell price: there's no money, only barter (D85).
   return { title: itemName(thing.id), colour: rarityColour(item.rarity), lines };
 }
@@ -80,7 +93,7 @@ export function link(thing) {
   b.className = 'link';
   b.textContent = `[${tip.title}]`;
   b.style.color = tip.colour ?? '';
-  b.addEventListener('click', () => showTip(b, tip));
+  bindTip(b, tip);
   return b;
 }
 
@@ -89,9 +102,11 @@ export function link(thing) {
  * tooltip: the bag and bucket's slots.
  * @param {Thing} thing
  * @param {number} [count]  Shown in the corner when more than one.
+ * @param {string} [hint]  A last line for its tooltip: "Right-click for options".
  */
-export function slot(thing, count = 1) {
-  const tip = tipFor(thing);
+export function slot(thing, count = 1, hint) {
+  const base = tipFor(thing);
+  const tip = hint ? { ...base, lines: [...base.lines, { text: hint }] } : base;
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'slot';
@@ -106,6 +121,35 @@ export function slot(thing, count = 1) {
     n.textContent = String(count);
     b.append(n);
   }
-  b.addEventListener('click', () => showTip(b, tip));
+  bindTip(b, tip);
   return b;
+}
+
+/**
+ * Effects as one line of text: "+5 Fish Find, +1 Warmth" (R8.6).
+ * @param {import('../engine/values.js').Effect[]} effects
+ */
+export function effectsText(effects) {
+  return effects.map((e) => effectLine(e).text).join(', ');
+}
+
+/**
+ * Game minutes as words: "30 minutes", "an hour", "6 hours" (R19.5).
+ * @param {number} minutes
+ */
+export function hoursText(minutes) {
+  if (minutes < 60) return t('hours.minutes', { minutes });
+  const hours = Math.round((minutes / 60) * 2) / 2;
+  return hours === 1 ? t('hours.one') : t('hours.many', { hours });
+}
+
+/**
+ * A buff's duration as words.
+ * @param {{ casts?: number, attempts?: number, minutes?: number, ms?: number }} d
+ */
+export function durationText(d) {
+  if (d.casts !== undefined) return t('duration.casts', { n: d.casts });
+  if (d.attempts !== undefined) return t('duration.attempts', { n: d.attempts });
+  if (d.minutes !== undefined) return t('duration.minutes', { hours: hoursText(d.minutes) });
+  return t('duration.ms', { n: Math.round((d.ms ?? 0) / 60000) });
 }

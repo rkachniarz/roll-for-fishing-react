@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cold and night (R19.2, R19.3, D126): how cold it is out, the three levels of cold, and what night brings",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
+    "id": { "const": "cold" },
+    "temperature": {
+      "description": "Cold from the temperature: the first entry whose max the temperature is at or under gives its points; above them all, none.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "max": { "type": "integer" }, "points": { "type": "integer", "minimum": 0 } },
+        "required": ["max", "points"],
+        "additionalProperties": false
+      }
+    },
+    "times": {
+      "description": "Cold from the part of the day: night, dawn, morning, noon, afternoon, sunset, evening.",
+      "type": "object",
+      "additionalProperties": { "type": "integer" }
+    },
+    "seasons": { "description": "Cold from the season, by season id.", "type": "object", "additionalProperties": { "type": "integer" } },
+    "coldLevels": {
+      "description": "The levels of cold, mildest first: cold points minus warmth reaching level n's place (1, 2, 3) gives its debuff.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/id" },
+          "name": { "$ref": "common.schema.json#/definitions/text" },
+          "effects": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/effect" } }
+        },
+        "required": ["id", "name", "effects"],
+        "additionalProperties": false
+      }
+    },
+    "night": {
+      "description": "What fishing at night brings (R19.3), shown as a buff.",
+      "type": "object",
+      "properties": {
+        "name": { "$ref": "common.schema.json#/definitions/text" },
+        "times": { "type": "array", "items": { "type": "string" } },
+        "effects": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/effect" } }
+      },
+      "required": ["name", "times", "effects"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["id", "temperature", "times", "coldLevels", "night"],
+  "additionalProperties": false
+}

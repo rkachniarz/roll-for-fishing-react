@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "marimo",
+  "category": "stuff",
+  "name": "Marimo",
+  "flavor": "A soft green ball of weed that rolls along the bottom. Some people keep them for luck.",
+  "icon": "item/marimo",
+  "rarity": "common",
+  "value": 8,
+  "placeholder": [
+    "flavor"
+  ]
+}

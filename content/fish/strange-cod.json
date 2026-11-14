@@ -10,6 +10,16 @@
   },
   "difficulty": 2,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "wildCast",
+      "add": -1
+    },
+    {
+      "value": "castScatter",
+      "add": -8
+    }
+  ],
   "prefers": {
     "time": [
       "dawn",
@@ -24,5 +34,8 @@
     "bait": [
       "crayfish"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

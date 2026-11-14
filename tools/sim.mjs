@@ -7,7 +7,7 @@
 // The simulated player strikes `strike` ms after each splash (a range, drawn
 // from its own stream), takes the first perk on offer (or the one named with
 // perks=passive|active), uses every ability as soon as it can, takes the
-// first choice an event offers, keeps the newer fish when the bucket is full
+// last choice an event offers (staying out, never a trip to town), keeps the newer fish when the bucket is full
 // and the first of two treasures. Nothing here changes the game; it reads what
 // the engine does, so the numbers move when content or rules do.
 
@@ -18,6 +18,7 @@ import { castLine, chooseTreasure, releaseFish, strikeLine, tick, useAbility } f
 import { activePerks, abilityStatus } from '../src/engine/abilities.js';
 import { offers, owedLevels, takePerk } from '../src/engine/perks.js';
 import { choose, openSlide } from '../src/engine/events.js';
+import { diveStrike, endDive } from '../src/engine/dive.js';
 import { rollStats } from '../src/engine/character.js';
 import { createRng, deriveSeed } from '../src/rng.js';
 import { diceFor } from '../src/dice.js';
@@ -110,10 +111,15 @@ function settle(state, options, tally) {
       const want = options.perks === 'first' ? offer[0] : offer.find((id) => content.perks[id].kind === options.perks) ?? offer[0];
       state = takePerk(state, want);
     } else if (state.pendingCatch) state = releaseFish(state, 'new').state;
+    else if (state.dive) {
+      // The dive (R20.3): every fish struck at, as a quick player would.
+      const struck = state.dive.fish.findIndex((f) => !f.struck);
+      state = struck >= 0 && !state.pendingCatch ? diveStrike(state, struck).state : endDive(state).state;
+    }
     else if (state.pendingTreasure) state = chooseTreasure(state, state.pendingTreasure[0]).state;
     else if (state.event) {
       const slide = openSlide(state);
-      state = slide?.choices.length ? choose(state, slide.choices[0].index).state : { ...state, event: null };
+      state = slide?.choices.length ? choose(state, /** @type {any} */ (slide.choices.at(-1)).index).state : { ...state, event: null };
     } else {
       // An ability, then round again: Jump In can fill the bucket.
       const id = activePerks(state).find((a) => abilityStatus(state, a).usable);

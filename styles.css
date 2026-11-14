@@ -17,6 +17,19 @@
   --scene-height: 360px;
   --icon: 32px;
   --icon-small: 24px;
+  /* Set by main.js too (D119, D121): the page's scale (1.25 on a wide screen),
+     the HUD's width, a slot and its icon, a tooltip's icon. */
+  --ui: 1;
+  --hud: 360px;
+  --slot: 52px;
+  --slot-icon: 32px;
+  --tip-icon: 64px;
+  --button: 42px;
+  /* The font, and how big it is set against Pixelify Sans: Alegreya Sans
+     unless the settings pick the pixel font (D132). */
+  --font: 'Alegreya Sans';
+  --font-scale: 1.05;
+  --type: calc(var(--ui) * var(--font-scale));
   /* Behind the log, the panes, the bag's slots and tooltips. */
   --log-bg: rgb(0 0 0 / 0.25);
   --pane-bg: rgb(20 35 43 / 0.96);
@@ -31,6 +44,12 @@
   --rarity-epic: #a335ee;
   --rarity-legendary: #ff8000;
   color-scheme: dark;
+}
+
+/* The pixel font (D132), from the settings. */
+:root[data-font='pixel'] {
+  --font: 'Pixelify Sans';
+  --font-scale: 1;
 }
 
 /* The light theme (D81): light wooden planks. */
@@ -75,10 +94,10 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: 'Pixelify Sans', ui-monospace, monospace;
+  font-family: var(--font), ui-monospace, monospace;
   /* Pixelify Sans draws its "fi" ligature as an "A": "fisher" read "Asher". */
   font-variant-ligatures: none;
-  font-size: 17px;
+  font-size: calc(17px * var(--type));
   line-height: 1.35;
 }
 
@@ -189,7 +208,7 @@ body {
 /* ---------- Character creation ---------- */
 
 .create {
-  width: min(420px, calc(100vw - 2 * var(--gutter)));
+  width: min(calc(420px * var(--ui)), calc(100vw - 2 * var(--gutter)));
   max-height: calc(100dvh - 2 * var(--gutter));
   padding: 16px;
   color: var(--text);
@@ -211,7 +230,7 @@ body {
 .create h2 {
   margin: 0;
   color: var(--accent);
-  font-size: 22px;
+  font-size: calc(22px * var(--type));
 }
 
 .create .field {
@@ -292,7 +311,7 @@ body {
 
 .bench-section h3 {
   margin: 12px 0 6px;
-  font-size: 16px;
+  font-size: calc(16px * var(--type));
   color: var(--muted);
 }
 
@@ -334,8 +353,8 @@ body {
 
 .buff {
   position: relative;
-  width: 36px;
-  height: 36px;
+  width: calc(36px * var(--ui));
+  height: calc(36px * var(--ui));
   padding: 0;
   font: inherit;
   font-variant-ligatures: none;
@@ -356,7 +375,7 @@ body {
   position: absolute;
   top: 3px;
   left: 4px;
-  font-size: 12px;
+  font-size: calc(12px * var(--type));
   color: var(--muted);
 }
 
@@ -364,7 +383,7 @@ body {
   position: absolute;
   right: 1px;
   bottom: 1px;
-  font-size: 13px;
+  font-size: calc(13px * var(--type));
   font-weight: 600;
   color: var(--text);
   text-shadow: 1px 1px 0 #000;
@@ -377,9 +396,9 @@ body {
   /* It may cover the row below; clicks go through to it. */
   pointer-events: none;
   width: max-content;
-  max-width: 220px;
+  max-width: calc(220px * var(--ui));
   padding: 6px 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--type));
   line-height: 1.3;
   text-align: left;
   color: var(--text);
@@ -479,7 +498,7 @@ body {
 @media (min-width: 900px) {
   .hud {
     flex: none;
-    width: 360px;
+    width: var(--hud);
     height: var(--scene-height);
   }
 }
@@ -544,7 +563,7 @@ body {
 
 .world p {
   margin: 0;
-  font-size: 15px;
+  font-size: calc(15px * var(--type));
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -586,7 +605,7 @@ body {
   overflow-y: auto;
   /* Room under the newest line for the menu button. */
   padding: 2px 4px calc(var(--icon) + 14px);
-  font-size: 15px;
+  font-size: calc(15px * var(--type));
   overscroll-behavior: contain;
 }
 
@@ -625,7 +644,7 @@ body {
 .pane {
   position: absolute;
   inset: 0 auto 0 0;
-  width: min(100%, 360px);
+  width: min(100%, calc(360px * var(--ui)));
   display: flex;
   flex-direction: column;
   line-height: 1.35;
@@ -642,7 +661,7 @@ body {
 .pane.pane-center {
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
-  width: min(calc(100% - 24px), 280px);
+  width: min(calc(100% - 24px), calc(280px * var(--ui)));
   max-height: calc(100% - 24px);
   border: 2px solid var(--frame);
   border-radius: 4px;
@@ -658,15 +677,15 @@ body {
 
 .pane h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: calc(18px * var(--type));
   color: var(--accent);
 }
 
 .pane-close {
-  width: 36px;
-  height: 36px;
+  width: calc(36px * var(--ui));
+  height: calc(36px * var(--ui));
   font: inherit;
-  font-size: 22px;
+  font-size: calc(22px * var(--type));
   color: var(--text);
   background: none;
   border: 0;
@@ -677,7 +696,7 @@ body {
   flex: 1;
   overflow-y: auto;
   padding: 8px 12px 12px;
-  font-size: 15px;
+  font-size: calc(15px * var(--type));
 }
 
 .pane p {
@@ -686,7 +705,7 @@ body {
 
 .pane h3 {
   margin: 12px 0 4px;
-  font-size: 15px;
+  font-size: calc(15px * var(--type));
   color: var(--muted);
 }
 
@@ -695,7 +714,7 @@ body {
 }
 
 .pane .name {
-  font-size: 18px;
+  font-size: calc(18px * var(--type));
   font-weight: 600;
 }
 
@@ -735,14 +754,14 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 52px);
+  grid-template-columns: repeat(4, var(--slot));
   gap: 6px;
 }
 
 .slot {
   position: relative;
-  width: 52px;
-  height: 52px;
+  width: var(--slot);
+  height: var(--slot);
   padding: 0;
   display: grid;
   place-items: center;
@@ -753,8 +772,8 @@ body {
 }
 
 .slot .icon {
-  width: 32px;
-  height: 32px;
+  width: var(--slot-icon);
+  height: var(--slot-icon);
 }
 
 .slot.empty {
@@ -771,7 +790,7 @@ body {
   position: absolute;
   right: 2px;
   bottom: 0;
-  font-size: 13px;
+  font-size: calc(13px * var(--type));
   font-weight: 600;
   color: var(--text);
   text-shadow: 1px 1px 0 #000;
@@ -785,10 +804,10 @@ body {
 
 .tab {
   flex: 1;
-  min-height: 36px;
+  min-height: calc(36px * var(--ui));
   padding: 2px 4px;
   font: inherit;
-  font-size: 14px;
+  font-size: calc(14px * var(--type));
   font-variant-ligatures: none;
   color: var(--muted);
   background: var(--panel);
@@ -806,7 +825,7 @@ body {
 
 .doll {
   display: grid;
-  grid-template-columns: 52px 1fr 52px;
+  grid-template-columns: var(--slot) 1fr var(--slot);
   gap: 8px;
   margin-top: 10px;
 }
@@ -827,7 +846,7 @@ body {
 }
 
 .slot-name {
-  font-size: 11px;
+  font-size: calc(11px * var(--type));
   line-height: 1;
   text-align: center;
   color: var(--muted);
@@ -904,7 +923,7 @@ body.is-dragging {
 .errors p {
   margin: 0 0 4px;
   padding: 0 8px;
-  font-size: 17px;
+  font-size: calc(17px * var(--type));
   font-weight: 600;
   line-height: 1.2;
   color: #ff4040;
@@ -922,9 +941,9 @@ body.is-dragging {
 .tip {
   position: fixed;
   z-index: 20;
-  max-width: min(260px, calc(100vw - 16px));
+  max-width: min(calc(260px * var(--ui)), calc(100vw - 16px));
   padding: 6px 10px;
-  font-size: 15px;
+  font-size: calc(15px * var(--type));
   line-height: 1.3;
   background: var(--tip-bg);
   border: 1px solid var(--panel-edge);
@@ -934,6 +953,25 @@ body.is-dragging {
 
 .tip p {
   margin: 0;
+}
+
+/* A fish's tooltip shows the fish, twice its size in a slot (D119). */
+.tip.with-icon {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  max-width: min(calc(340px * var(--ui)), calc(100vw - 16px));
+}
+
+.tip-icon {
+  flex: none;
+  width: var(--tip-icon);
+  height: var(--tip-icon);
+  image-rendering: pixelated;
+}
+
+.tip-words {
+  min-width: 0;
 }
 
 .tip-title {
@@ -1011,7 +1049,7 @@ body.is-dragging {
 
 .title h1 {
   margin: 0 0 8px;
-  font-size: 28px;
+  font-size: calc(28px * var(--type));
   font-weight: 600;
   text-align: center;
   color: var(--accent);
@@ -1032,7 +1070,7 @@ body.is-dragging {
 
 .slot-choice span {
   color: var(--muted);
-  font-size: 15px;
+  font-size: calc(15px * var(--type));
 }
 
 .slot-choice:disabled {
@@ -1117,16 +1155,16 @@ button.perk[aria-pressed='true'] {
 }
 
 .perk-kind {
-  font-size: 13px;
+  font-size: calc(13px * var(--type));
   color: var(--muted);
 }
 
 .perk-text {
-  font-size: 14px;
+  font-size: calc(14px * var(--type));
 }
 
 .perk-effect {
-  font-size: 14px;
+  font-size: calc(14px * var(--type));
 }
 
 .perk-effect.good {
@@ -1139,7 +1177,7 @@ button.perk[aria-pressed='true'] {
 
 .perk-choice .learn {
   justify-self: end;
-  min-height: 36px;
+  min-height: calc(36px * var(--ui));
   padding: 2px 16px;
   font: inherit;
   font-variant-ligatures: none;
@@ -1166,11 +1204,14 @@ button.perk[aria-pressed='true'] {
 
 /* ---------- The action bar (D96) ---------- */
 
-/* Under the button row, its buttons the same size, centred. */
+/* On the scene's bottom left, over the shore (D120); the panes cover it. */
 .actions {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
   display: flex;
-  justify-content: center;
-  gap: 3px;
+  gap: 4px;
+  line-height: 1;
 }
 
 .actions[hidden] {
@@ -1179,7 +1220,7 @@ button.perk[aria-pressed='true'] {
 
 .action {
   position: relative;
-  width: calc((100% - 21px) / 8);
+  width: var(--button);
   aspect-ratio: 1;
   padding: 0;
   display: grid;
@@ -1209,7 +1250,7 @@ button.perk[aria-pressed='true'] {
   position: absolute;
   top: 1px;
   left: 3px;
-  font-size: 11px;
+  font-size: calc(11px * var(--type));
   line-height: 1;
   color: var(--muted);
 }
@@ -1269,7 +1310,7 @@ button.perk[aria-pressed='true'] {
 }
 
 .map-spot {
-  min-height: 36px;
+  min-height: calc(36px * var(--ui));
   padding: 4px 8px;
   text-align: left;
   font: inherit;
@@ -1285,4 +1326,143 @@ button.perk[aria-pressed='true'] {
   border-color: var(--accent);
   color: var(--accent);
   cursor: default;
+}
+
+/* ---------- The town, barter, the dive (R17-R21, D123) ---------- */
+
+/* A fish's options (R21.1), WoW's right-click menu. */
+.context-menu {
+  position: fixed;
+  z-index: 30;
+  min-width: calc(160px * var(--ui));
+  padding: 4px;
+  background: var(--pane-bg);
+  border: 2px solid var(--frame);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 40%);
+}
+
+.context-title {
+  margin: 2px 6px 6px;
+  font-size: calc(15px * var(--type));
+  font-weight: 600;
+}
+
+.context-menu button {
+  display: block;
+  width: 100%;
+  padding: 4px 8px;
+  font: inherit;
+  font-size: calc(15px * var(--type));
+  text-align: left;
+  color: var(--text);
+  background: none;
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.context-menu button:hover,
+.context-menu button:focus-visible {
+  background: var(--panel-edge);
+}
+
+/* A vendor's offers (R18.2): what you get, what it costs, the trade. */
+.offer {
+  padding: 6px 0 8px;
+  border-bottom: 1px solid var(--panel-edge);
+}
+
+.offer-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.costs {
+  margin: 4px 0 6px;
+  padding-left: 18px;
+}
+
+.cost.met .cost-count {
+  color: var(--good);
+}
+
+.cost.short .cost-count {
+  color: var(--bad);
+}
+
+.trade-button {
+  padding: 4px 14px;
+  font: inherit;
+  font-size: calc(15px * var(--type));
+  color: var(--text);
+  background: var(--panel-edge);
+  border: 1px solid var(--frame);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.trade-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.buff-slot {
+  display: grid;
+  place-items: center;
+  color: var(--good);
+}
+
+/* The dive (R20.3): the breath left, and each struck fish's dice, the
+   player's over it in ivory, the fish's under it in deep-water teal (6.8). */
+.dive-timer {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  z-index: 3;
+  transform: translateX(-50%);
+  padding: 2px 10px;
+  font-size: calc(20px * var(--type));
+  font-weight: 700;
+  color: #e8fbff;
+  background: rgb(0 30 40 / 60%);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.dive-timer[hidden] {
+  display: none;
+}
+
+.dive-die {
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  min-width: 2.2em;
+  padding: 1px 4px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  border: 2px solid;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.dive-die.player {
+  color: #2a2418;
+  background: #f3ead2;
+}
+
+.dive-die.fish {
+  color: #f3ead2;
+  background: #31899f;
+}
+
+.dive-die.caught {
+  border-color: #4fd04f;
+}
+
+.dive-die.missed {
+  border-color: #ff5a5a;
 }

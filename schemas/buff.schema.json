@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A buff or debuff that content gives: a potion, a meal, a night's rest (R12, R19.5)",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
+    "id": { "$ref": "common.schema.json#/definitions/id" },
+    "name": { "$ref": "common.schema.json#/definitions/text" },
+    "debuff": { "description": "Red, and can't be cancelled (R12.7).", "type": "boolean" },
+    "effects": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/effect" } },
+    "duration": {
+      "description": "One of: casts (spent when the line goes out, R1.5), attempts at a catch (D96), game minutes (R19.5), or real milliseconds while the game is open (D32).",
+      "type": "object",
+      "properties": {
+        "casts": { "type": "integer", "minimum": 1 },
+        "attempts": { "type": "integer", "minimum": 1 },
+        "minutes": { "type": "integer", "minimum": 1 },
+        "ms": { "type": "integer", "minimum": 1 }
+      },
+      "minProperties": 1,
+      "maxProperties": 1,
+      "additionalProperties": false
+    },
+    "retired": { "$ref": "common.schema.json#/definitions/retired" }
+  },
+  "required": ["id", "name", "effects", "duration"],
+  "additionalProperties": false
+}

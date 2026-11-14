@@ -10,6 +10,12 @@
   },
   "difficulty": 2,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "riftChance",
+      "add": 8
+    }
+  ],
   "prefers": {
     "time": [
       "night"
@@ -23,5 +29,8 @@
     "bait": [
       "small-fish"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

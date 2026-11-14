@@ -5,6 +5,7 @@ trigger: arrive
 once: false
 needs: spot lower-river
 needs: flag bottle-quest
+placeholder: true
 ---
 
 ## start

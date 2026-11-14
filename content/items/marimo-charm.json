@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "marimo-charm",
+  "placeholder": true,
+  "category": "consumable",
+  "name": "Marimo luck draught",
+  "flavor": "A little green ball turns slowly in the bottle. Luck, bottled.",
+  "rarity": "rare",
+  "value": 16,
+  "use": {
+    "buff": "marimo-charm"
+  }
+}

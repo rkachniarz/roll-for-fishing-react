@@ -10,6 +10,16 @@
   },
   "difficulty": 1,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "stuffFind",
+      "add": 16
+    },
+    {
+      "value": "treasureFind",
+      "add": 8
+    }
+  ],
   "prefers": {
     "time": [
       "morning",
@@ -24,5 +34,8 @@
     "bait": [
       "corn"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

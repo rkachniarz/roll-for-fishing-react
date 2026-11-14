@@ -22,7 +22,7 @@ import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
 import { GAME_VALUES } from './engine/values.js';
 import { deleteSave, exportGame, importGame, lastSlot, listSlots, saveGame } from './save.js';
-import { completionShown } from './engine/knowledge.js';
+import { completionShown, spotKnown } from './engine/knowledge.js';
 import { createAudio } from './audio.js';
 import { applySettings, loadSettings, saveSettings, showDice } from './settings.js';
 import { createScene } from './scene/scene.js';
@@ -32,17 +32,22 @@ import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
 import { createLog } from './ui/log.js';
-import { bagTab, fishName, itemName, link, rarityColour } from './ui/links.js';
-import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settingsPane } from './ui/panels.js';
+import { bagTab, fishName, hoursText, itemName, link, rarityColour } from './ui/links.js';
+import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settingsPane, shopPane } from './ui/panels.js';
 import { floatText } from './ui/floater.js';
-import { hideTip, showTip } from './ui/tooltip.js';
+import { bindTip, hideTip } from './ui/tooltip.js';
 import { iconName, paintIcon, weatherIcon } from './scene/icons.js';
-import { equip, fits, hookFish, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_SLOTS } from './engine/equipment.js';
+import { equip, fits, hookFish, isTiny, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_SLOTS } from './engine/equipment.js';
 import { setupDrag } from './ui/drag.js';
 import { showError } from './ui/errors.js';
 import { arrive, choose, openSlide } from './engine/events.js';
-import { owedLevels, settlePerks, takePerk } from './engine/perks.js';
+import { hasPerk, owedLevels, settlePerks, takePerk } from './engine/perks.js';
 import { eventWords, sayEventText } from './ui/event-words.js';
+import { useItem } from './engine/buffs.js';
+import { addToStew, atAquarium, atStew, eatFish, eatStew, fromAquarium, letGo, takeFromStew, toAquarium, trade } from './engine/barter.js';
+import { diveStrike, endDive } from './engine/dive.js';
+import { conditionBuffs, indoors } from './engine/conditions.js';
+import { showMenu } from './ui/menu.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 /** @typedef {import('./engine/game.js').GameCast} GameCast */
@@ -83,20 +88,26 @@ const canvas = /** @type {HTMLCanvasElement} */ ($('scene'));
 const scenery = createRng(deriveSeed(seedParam ?? randomSeed(), 'scenery'));
 const scene = await createScene(canvas, () => scenery.next());
 
-/** The button row and log beside the scene on a wide screen. */
+/** The button row and log beside the scene on a wide screen, before UI_WIDE. */
 const HUD_WIDTH = 360;
+/**
+ * The page's text and boxes on a wide screen, against a phone's (D121): the
+ * owner played a 1080p monitor at 125% browser zoom.
+ */
+const UI_WIDE = 1.25;
 /** On a phone, the room kept under the scene for the log, at least. */
 const LOG_MIN = 150;
 
 function fit() {
   const wide = window.innerWidth >= 900;
+  const ui = wide ? UI_WIDE : 1;
+  const hudWidth = Math.round(HUD_WIDTH * ui);
   const gutter = wide ? 16 : 2;
-  const width = wide ? window.innerWidth - HUD_WIDTH - 3 * gutter : window.innerWidth - 2 * gutter;
+  const width = wide ? window.innerWidth - hudWidth - 3 * gutter : window.innerWidth - 2 * gutter;
   // On a phone the row's buttons are an eighth of the width, square, and the
-  // spacer above the scene is as tall again (D94); the action bar, when there
-  // is one, is another row like it (D96).
-  const actions = document.getElementById('actions')?.hidden === false ? (width - 21) / 8 + 6 : 0;
-  const height = wide ? window.innerHeight - 2 * gutter : window.innerHeight - 2 * gutter - width / 4 - 22 - actions - LOG_MIN;
+  // spacer above the scene is as tall again (D94). The action bar is on the
+  // scene (D120), so it takes no room.
+  const height = wide ? window.innerHeight - 2 * gutter : window.innerHeight - 2 * gutter - width / 4 - 22 - LOG_MIN;
   // Less the wrapper's border, so the canvas itself gets the whole multiple.
   // On a phone the scene widens to fill the width (D93).
   scene.fit(width - 4, height - 4);
@@ -104,17 +115,29 @@ function fit() {
   const sceneWidth = box.width + 4;
   const root = document.documentElement.style;
   root.setProperty('--gutter', `${gutter}px`);
+  root.setProperty('--ui', String(ui));
+  root.setProperty('--hud', `${hudWidth}px`);
   root.setProperty('--scene', `${sceneWidth}px`);
   root.setProperty('--scene-height', `${box.height + 4}px`);
   // The row's icons, like the scene, at a whole number of device pixels per
   // icon pixel (D10).
   const dpr = window.devicePixelRatio || 1;
-  const square = (wide ? HUD_WIDTH : sceneWidth) / 8;
+  const square = (wide ? hudWidth : sceneWidth) / 8;
+  // The button row's squares, eight across with 3 px between (D94); the
+  // action bar on the scene uses the same (D120).
+  root.setProperty('--button', `${((wide ? hudWidth : sceneWidth) - 21) / 8}px`);
   // Icons are 32 pixels square (D98).
   const k = Math.max(1, Math.floor(((square - 10) * dpr) / 32));
   root.setProperty('--icon', `${(32 * k) / dpr}px`);
   // The weather's icon is smaller, as in the sketch, leaving room for the words.
   root.setProperty('--icon-small', `${(32 * Math.max(1, Math.floor((k * 3) / 4))) / dpr}px`);
+  // A slot's icon: the nearest whole number of device pixels to 32 CSS px at
+  // the page's scale, so it stays sharp; a tooltip's is twice that (D119).
+  const s = Math.max(1, Math.round(ui * dpr));
+  root.setProperty('--slot-icon', `${(32 * s) / dpr}px`);
+  root.setProperty('--tip-icon', `${(64 * s) / dpr}px`);
+  // The slot fits its icon, with room for the border and the count.
+  root.setProperty('--slot', `${Math.max(52, Math.ceil((32 * s) / dpr) + 20)}px`);
 }
 fit();
 window.addEventListener('resize', fit);
@@ -171,6 +194,7 @@ function apply(out) {
   }
   if (ended) floatStrike();
   if (out.events.some((e) => e.type === 'no-rod')) showError($('errors'), t('error.noRod'));
+  if (out.events.some((e) => e.type === 'no-water')) showError($('errors'), t('error.noWater'));
   // The roll first, then what came of it.
   const roll = ended ? describeRoll() : null;
   const landing = cast.landing;
@@ -421,6 +445,8 @@ function openEvent() {
         else {
           dialog.close();
           if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+          // A choice that opened a barter window (R18.2).
+          if (state.shop) pane = 'shop';
         }
         render();
       });
@@ -439,6 +465,11 @@ function openEvent() {
  */
 function act(now, point) {
   if (!state) return;
+  // Under the water, a fish is struck at; in town, a place is gone to (R20.3, R17.1).
+  if (state.dive || content.locations[state.location]?.town) {
+    if (point) actInView(point);
+    return;
+  }
   // A double tap on the splash shouldn't strike and then instantly recast.
   if (cast.phase === 'done' && now - lastActAt < 500) return;
   lastActAt = now;
@@ -509,6 +540,8 @@ function useFromBar(id) {
   const out = useAbility(state, id, extraSources());
   if (out.state === state) return;
   state = out.state;
+  const dive = out.events.find((e) => e.type === 'dive-started');
+  if (dive) diveEndsAt = performance.now() + dive.seconds * 1000;
   // Mid-cast the checkpoint stays the save (D74); the cast saves it when it ends.
   if (cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
   logEvents(out.events);
@@ -516,12 +549,10 @@ function useFromBar(id) {
   promptPlayer();
 }
 
-/** The bar, from the state; the layout makes room when it comes or goes. */
+/** The bar, from the state. */
 function renderActions() {
   if (!state) return;
-  const before = !$('actions').hidden;
-  const shown = actionBar.update(activePerks(state).map((id) => abilityStatus(/** @type {GameState} */ (state), id)));
-  if (shown !== before) fit();
+  actionBar.update(activePerks(state).map((id) => abilityStatus(/** @type {GameState} */ (state), id)));
 }
 
 // ---------- The frame loop ----------
@@ -553,12 +584,29 @@ scene.app.ticker.add((ticker) => {
     }
   }
   if (state) {
-    buffBar.update([...state.buffs, ...championDebuffs(state)]);
+    buffBar.update(shownBuffs());
     renderActions();
+    // The dive's breath runs out (R20.3).
+    if (state.dive) updateDive(now);
   }
   scene.update(cast, now);
   updateDice(now);
 });
+
+/** The cold and the night, worked out when the state changes (R19.2, R19.3). */
+/** @type {import('./engine/state.js').Buff[]} */
+let conditions = [];
+
+/** Every buff for the bar: the state's, with game time left (R19.5), the class fish's, the cold's. */
+function shownBuffs() {
+  if (!state) return [];
+  const time = state.time;
+  return [
+    ...state.buffs.map((b) => (b.until !== undefined ? { ...b, gameLeft: b.until - time } : b)),
+    ...championDebuffs(state),
+    ...conditions,
+  ];
+}
 
 // ---------- The log (R16.5) ----------
 
@@ -613,7 +661,37 @@ function describeEvent(e) {
     case 'season':
       return [t('log.season', { season: t(content.weather[e.season].name), description: t(e.weather.description) })];
     case 'buff-ended':
-      return [t('log.buff-ended', { buff: e.buff })];
+      return [t('log.buff-ended', { buff: buffName(e.buff) })];
+    case 'buff-gained':
+      return [t('log.buff-gained', { buff: buffName(e.buff) })];
+    case 'waited':
+      return [t('log.waited', { hours: hoursText(e.minutes) })];
+    case 'ate-stew':
+      return [t('log.ate-stew', { hours: hoursText(Math.max(30, e.minutes)) })];
+    case 'used':
+      return tParts('log.used', { item: itemLink(e.item) });
+    case 'traded-away': {
+      const parts = tParts('log.traded-away', { item: itemLink(e.item) });
+      return e.count > 1 ? [...parts, ` ×${e.count}`] : parts;
+    }
+    case 'traded-fish': {
+      const parts = tParts('log.traded-fish', { fish: fishLink(e.fish) });
+      return e.count > 1 ? [...parts, ` ×${e.count}`] : parts;
+    }
+    case 'stewed':
+    case 'ate-fish':
+    case 'to-aquarium':
+    case 'twin':
+      return tParts(`log.${e.type}`, { fish: fishLink(e.fish) });
+    case 'dive-started':
+      return [t('log.dive-started', { seconds: e.seconds })];
+    case 'dive-caught':
+    case 'dive-escaped':
+      return tParts(`log.${e.type}`, { fish: fishLink(e.fish), player: e.player, total: e.total, required: e.required });
+    case 'slept':
+    case 'time-slip':
+    case 'dive-ended':
+      return [t(`log.${e.type}`)];
     case 'feature-appeared':
     case 'feature-hit':
     case 'feature-moved':
@@ -673,6 +751,19 @@ function describeEvent(e) {
     default:
       return null;
   }
+}
+
+/**
+ * A buff's name for the log: a content buff's, a perk's, a fish's eaten raw
+ * (sushi-…), the stew's.
+ * @param {string} id
+ */
+function buffName(id) {
+  if (content.buffs?.[id]) return t(content.buffs[id].name);
+  if (content.perks[id]) return t(content.perks[id].name);
+  if (id.startsWith('sushi-') && content.fish[id.slice(6)]) return t(content.fish[id.slice(6)].name);
+  if (id === 'perpetual-stew') return t(content.rules.stew.name);
+  return id;
 }
 
 /** @param {GameEvent[]} events  In the order they happened. */
@@ -745,15 +836,13 @@ for (const [id, icon] of Object.entries(BAR_ICONS)) {
 }
 $('weather').setAttribute('aria-label', t('hud.weather'));
 $('actions').setAttribute('aria-label', t('hud.actions'));
-$('weather').addEventListener('click', () => {
-  if (state) showTip($('weather'), { title: t(weatherWords(state.weather).name), lines: [] });
-});
+bindTip($('weather'), () => (state ? { title: t(weatherWords(state.weather).name), lines: [] } : null));
 
 function renderHud() {
   if (!state) return;
   const now = clock(state.time);
   $('timeOfDay').textContent = t(`time.${now.partOfDay}`);
-  $('seasonDay').textContent = t('hud.seasonDay', { season: t(content.weather[now.season].name), day: now.day });
+  $('seasonDay').textContent = t('hud.seasonDay', { weekday: t(`weekday.${now.weekday}`), season: t(content.weather[now.season].name), day: now.day });
   // The exact time isn't shown (R16.4); the checks read it from here.
   $('world').dataset.clock = `${String(now.hour).padStart(2, '0')}:${String(now.minute).padStart(2, '0')}`;
   const icon = weatherIcon(state.weather, now.partOfDay === 'night' || now.partOfDay === 'evening');
@@ -775,7 +864,7 @@ function renderHud() {
 
 // ---------- The panes over the scene (R16.4) ----------
 
-/** @typedef {'player' | 'journal' | 'map' | 'bucket' | 'menu' | 'settings' | 'dev'} Pane */
+/** @typedef {'player' | 'journal' | 'map' | 'bucket' | 'menu' | 'settings' | 'dev' | 'shop'} Pane */
 /** @type {Pane | null} */
 let pane = null;
 /** The bag opens over the log, alongside any pane (D83). */
@@ -791,8 +880,16 @@ function menuOpen() {
 /** @param {Pane} name */
 function togglePane(name) {
   pane = pane === name ? null : name;
+  leftShop();
   hideTip();
   renderPane();
+}
+
+/** The barter window closed: the state forgets it (R18.2). */
+function leftShop() {
+  if (pane === 'shop' || !state?.shop) return;
+  state = { ...state, shop: null };
+  if (!lineOut()) save(state);
 }
 
 function toggleBag() {
@@ -806,12 +903,14 @@ function closePane() {
   if (pane) pane = null;
   else if (bagOpen) bagOpen = false;
   else return;
+  leftShop();
   hideTip();
   renderPane();
 }
 $('paneClose').setAttribute('aria-label', t('hud.close'));
 $('paneClose').addEventListener('click', () => {
   pane = null;
+  leftShop();
   hideTip();
   renderPane();
 });
@@ -838,7 +937,13 @@ function renderPane() {
     body.dataset.shown = pane;
     queueMicrotask(() => (body.scrollTop = 0));
   }
-  $('paneTitle').textContent = pane === 'player' ? s.character.name : pane === 'dev' || pane === 'settings' ? t(`menu.${pane}`) : t(`hud.${pane}`);
+  if (pane === 'shop' && !s.shop) {
+    pane = null;
+    box.hidden = true;
+    return;
+  }
+  $('paneTitle').textContent =
+    pane === 'player' ? s.character.name : pane === 'shop' ? t(content.vendors[/** @type {string} */ (s.shop)].name) : pane === 'dev' || pane === 'settings' ? t(`menu.${pane}`) : t(`hud.${pane}`);
   switch (pane) {
     case 'player':
       body.replaceChildren(...playerPane(s, valuesFor(s, extraSources()).flat, learnPerk));
@@ -850,7 +955,19 @@ function renderPane() {
       body.replaceChildren(...mapPane(s, travelTo, completionShown(s, valuesFor(s, extraSources()))));
       break;
     case 'bucket':
-      body.replaceChildren(...bucketPane(s, valuesFor(s, extraSources()).flat.bucketSize, hookFromBucket));
+      body.replaceChildren(...bucketPane(s, valuesFor(s, extraSources()).flat.bucketSize));
+      break;
+    case 'shop':
+      body.replaceChildren(
+        ...shopPane(s, /** @type {string} */ (s.shop), {
+          trade: (offer) => changeState(trade(/** @type {GameState} */ (state), /** @type {string} */ (s.shop), offer)),
+          stew: (i) => changeState(addToStew(/** @type {GameState} */ (state), i)),
+          unstew: (i) => changeState(takeFromStew(/** @type {GameState} */ (state), i)),
+          eat: () => changeState(eatStew(/** @type {GameState} */ (state))),
+          toTank: (i) => changeState(toAquarium(/** @type {GameState} */ (state), i)),
+          fromTank: (i) => changeState(fromAquarium(/** @type {GameState} */ (state), i)),
+        }),
+      );
       break;
     case 'menu':
       body.replaceChildren(
@@ -903,6 +1020,10 @@ function travelTo(location, spot) {
   if (!state) return;
   if (lineOut()) {
     showError($('errors'), t('error.busyTravel'));
+    return;
+  }
+  if (state.dive) {
+    showError($('errors'), t('error.busyDive'));
     return;
   }
   const out = travel(state, location, spot);
@@ -1009,7 +1130,10 @@ document.addEventListener('contextmenu', (e) => {
     return;
   }
   const spot = parseSpot(/** @type {string} */ (node.dataset.drag));
-  if (spot.kind === 'bag' && spot.index !== null) changeItems(quickEquip(state, spot.index));
+  const id = spot.kind === 'bag' && spot.index !== null ? state.bags[spot.index]?.id : null;
+  // A potion is drunk (R18.8); anything else goes into its slot.
+  if (id && content.items[id]?.use) changeState(useItem(state, id));
+  else if (spot.kind === 'bag' && spot.index !== null) changeItems(quickEquip(state, spot.index));
   else if (spot.kind === 'equip') {
     const stack = state.equipped[spot.key];
     if (stack) bagTabShown = bagTab(stack.id);
@@ -1021,17 +1145,20 @@ document.addEventListener('contextmenu', (e) => {
 
 function render() {
   document.body.dataset.phase = cast.phase;
-  $('status').textContent = t(pausing() ? 'status.pause' : `status.${cast.phase}`);
+  document.body.dataset.place = state && content.locations[state.location]?.town ? 'town' : state?.dive ? 'dive' : 'water';
+  $('status').textContent = state && content.locations[state.location]?.town ? t('status.town') : t(pausing() ? 'status.pause' : `status.${cast.phase}`);
   if (!state) {
     renderPane();
     return;
   }
-  buffBar.update([...state.buffs, ...championDebuffs(state)]);
+  conditions = conditionBuffs(state, valuesFor(state, extraSources()).flat.warmth);
+  buffBar.update(shownBuffs());
   renderActions();
+  scene.setView(viewFor(state));
   scene.setFeatures([
-    ...state.features.map((f) => ({ ...f, kind: content.features[f.id].kind })),
+    ...state.features.map((f) => ({ ...f, kind: content.features[f.id].kind, species: content.features[f.id].fish?.[0]?.id })),
     // Class fish (D114): a big fish with its class's aura.
-    ...championsHere(state).map((c) => ({ id: `champion-${c.class}`, kind: 'champion', aura: championClass(c.class).aura, x: c.x, y: c.y, uses: 1, born: c.born })),
+    ...championsHere(state).map((c) => ({ id: `champion-${c.class}`, kind: 'champion', aura: championClass(c.class).aura, species: c.fish.species, x: c.x, y: c.y, uses: 1, born: c.born })),
   ]);
   // The bobber slot is cosmetic: it only changes how the bobber looks (D83).
   const bobber = state.equipped.bobber;
@@ -1067,6 +1194,277 @@ function learnPerk(id) {
   logEvents([{ type: 'perk', perk: id }]);
   render();
 }
+
+// ---------- The town, the dive, barter, a fish's options (R17-R21, D123) ----------
+
+/**
+ * The town's places as buildings, placeholders until CR-5: where each stands
+ * in the play area, its size and colours. The room is inside the inn.
+ * @type {Record<string, { x: number, w: number, h: number, colour: string, roof: string }>}
+ */
+const BUILDINGS = {
+  inn: { x: 24, w: 84, h: 64, colour: '#b07a4a', roof: '#7a3b2e' },
+  alchemist: { x: 152, w: 60, h: 52, colour: '#7a6a9a', roof: '#3e3560' },
+};
+
+/** The dive's fish on screen, by their place among the swimmers: index into state.dive.fish. */
+/** @type {number[]} */
+let diveMap = [];
+/** When the dive's breath runs out (performance.now()). */
+let diveEndsAt = 0;
+/**
+ * The dice over and under a fish struck at in the dive (R20.3), until they go.
+ * @type {{ index: number, until: number, els: HTMLElement[] }[]}
+ */
+let diveBadges = [];
+/** How long a struck fish's dice stay. */
+const DIVE_DICE_MS = 1600;
+
+/**
+ * What the scene shows in the water's place (R17.1, R17.5, R20.3).
+ * @param {GameState} s
+ * @returns {import('./scene/views.js').View | null}
+ */
+function viewFor(s) {
+  if (s.dive) {
+    diveMap = [];
+    /** @type {{ key: string, species: string }[]} */
+    const fish = [];
+    s.dive.fish.forEach((f, i) => {
+      // A fish caught is gone once its dice are.
+      if (f.struck && f.caught && !diveBadges.some((b) => b.index === i)) return;
+      diveMap.push(i);
+      fish.push({ key: `dive-${i}`, species: f.fish.species });
+    });
+    return { kind: 'dive', fish };
+  }
+  if (!content.locations[s.location]?.town) return null;
+  if (s.spot === 'room') {
+    return { kind: 'room', tank: hasPerk(s, 'aquarium') ? (s.aquarium ?? []).map((f, i) => ({ key: `tank-${i}-${f.species}-${f.size}`, species: f.species })) : null };
+  }
+  const buildings = Object.entries(BUILDINGS)
+    .filter(([id]) => spotKnown(s, s.location, id))
+    .map(([id, b]) => ({ id, ...b }));
+  const part = clock(s.time).partOfDay;
+  return { kind: 'town', buildings, here: s.spot, night: part === 'night' || part === 'evening' };
+}
+
+/**
+ * A tap or click in a view: a building is gone to (or its dialogue opened
+ * again, if the player is there); a fish in the dive is struck at.
+ * @param {{ x: number, y: number }} point
+ */
+function actInView(point) {
+  if (!state) return;
+  const hit = scene.viewHit(point);
+  if (state.dive) {
+    if (hit?.kind === 'fish') strikeInDive(diveMap[hit.index]);
+    return;
+  }
+  if (hit?.kind === 'building') visit(hit.id);
+  else if (state.spot === 'room') visit('room');
+}
+
+/**
+ * Goes to a place in town, or, already there, opens its dialogue again.
+ * @param {string} spot
+ */
+function visit(spot) {
+  if (!state || state.event) return;
+  if (state.spot !== spot) {
+    travelTo(state.location, spot);
+    return;
+  }
+  const next = structuredClone(state);
+  if (!arrive(next).length) return;
+  state = next;
+  save(state);
+  render();
+  promptPlayer();
+}
+
+/**
+ * Strikes at a fish in the dive: its dice show over and under it (R20.3).
+ * @param {number} index  Into state.dive.fish.
+ */
+function strikeInDive(index) {
+  if (!state?.dive || index === undefined) return;
+  const out = diveStrike(state, index);
+  if (out.state === state) return;
+  state = out.state;
+  const f = /** @type {import('./engine/dive.js').DiveFish} */ (state.dive?.fish[index]);
+  const die = (/** @type {string} */ cls, /** @type {string} */ text) => {
+    const el = document.createElement('span');
+    el.className = `dive-die ${cls} ${f.caught ? 'caught' : 'missed'}`;
+    el.textContent = text;
+    $('sceneWrap').append(el);
+    return el;
+  };
+  diveBadges.push({ index, until: performance.now() + DIVE_DICE_MS, els: [die('player', String(f.playerRoll)), die('fish', String(f.fishRoll))] });
+  audio.play('dice');
+  logEvents(out.events);
+  if (out.events.some((e) => e.type === 'dive-caught')) audio.play('catch');
+  save(state);
+  render();
+  promptPlayer();
+}
+
+/**
+ * The dive, each frame: its dice follow their fish, the breath counts down,
+ * and at the end the player comes up.
+ * @param {number} now
+ */
+function updateDive(now) {
+  if (!state?.dive) return;
+  const timer = $('diveTimer');
+  timer.hidden = false;
+  timer.textContent = t('dive.time', { seconds: Math.max(0, Math.ceil((diveEndsAt - now) / 1000)) });
+  let gone = false;
+  const wrap = $('sceneWrap').getBoundingClientRect();
+  const scale = scene.pixelScale();
+  for (const b of diveBadges) {
+    const at = scene.viewFishAt(diveMap.indexOf(b.index));
+    if (!at) continue;
+    const above = scene.toClient({ x: at.x, y: at.y - at.h / 2 - 8 });
+    const below = scene.toClient({ x: at.x, y: at.y + at.h / 2 + 8 });
+    for (const [el, p] of /** @type {[HTMLElement, { x: number, y: number }][]} */ ([[b.els[0], above], [b.els[1], below]])) {
+      el.style.left = `${p.x - wrap.left}px`;
+      el.style.top = `${p.y - wrap.top}px`;
+      el.style.fontSize = `${Math.max(10, Math.round(6 * scale))}px`;
+    }
+  }
+  for (const b of diveBadges.filter((b) => now >= b.until)) {
+    for (const el of b.els) el.remove();
+    gone = true;
+  }
+  diveBadges = diveBadges.filter((b) => now < b.until);
+  if (gone) render();
+  if (now >= diveEndsAt && !state.pendingCatch) finishDive();
+}
+
+/** Up for air: the dive ends. */
+function finishDive() {
+  if (!state?.dive) return;
+  for (const b of diveBadges) for (const el of b.els) el.remove();
+  diveBadges = [];
+  $('diveTimer').hidden = true;
+  const out = endDive(state);
+  state = out.state;
+  logEvents(out.events);
+  save(state);
+  render();
+}
+
+/**
+ * Takes what a barter, stew or fish option returned: the new state, the
+ * log, the save.
+ * @param {{ state: GameState, events: GameEvent[] }} out
+ */
+function changeState(out) {
+  if (!state || out.state === state) return;
+  state = out.state;
+  logEvents(out.events);
+  if (!lineOut()) save(state);
+  hideTip();
+  render();
+  promptPlayer();
+}
+
+/**
+ * A fish's options (R21.1), at the pointer: Release, except in town; Hook as bait for
+ * a Tiny fish; Eat with Sushi enjoyer; into the stew at the inn; into the
+ * aquarium in the room.
+ * @param {number} index  Into the bucket.
+ * @param {{ x: number, y: number }} at
+ */
+function fishMenu(index, at) {
+  if (!state) return;
+  const stack = state.bucket[index];
+  if (!stack) return;
+  const s = state;
+  /** @type {import('./ui/menu.js').MenuOption[]} */
+  const options = [];
+  if (!indoors(s)) options.push({ label: t('fishMenu.release'), onClick: () => changeState(letGo(/** @type {GameState} */ (state), index)) });
+  if (isTiny(stack.fish)) options.push({ label: t('fishMenu.hook'), onClick: () => hookFromBucket(index) });
+  if (hasPerk(s, 'sushi-enjoyer')) options.push({ label: t('fishMenu.eat'), onClick: () => changeState(eatFish(/** @type {GameState} */ (state), index)) });
+  if (atStew(s)) options.push({ label: t('fishMenu.stew'), onClick: () => changeState(addToStew(/** @type {GameState} */ (state), index)) });
+  if (atAquarium(s)) options.push({ label: t('fishMenu.aquarium'), onClick: () => changeState(toAquarium(/** @type {GameState} */ (state), index)) });
+  options.push({ label: t('fishMenu.cancel'), onClick: () => {} });
+  hideTip();
+  showMenu(at, fishName(stack.fish), rarityColour(stack.fish.rarity), options);
+}
+
+// Right-click, or a long-press on a phone (which fires contextmenu too), on a fish in the bucket.
+document.addEventListener(
+  'contextmenu',
+  (e) => {
+    const node = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest?.('[data-fish]'));
+    if (!node) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    fishMenu(Number(node.dataset.fish), { x: e.clientX, y: e.clientY });
+  },
+  true,
+);
+// Where a long-press doesn't fire contextmenu (iOS): most of a second held.
+{
+  let timer = 0;
+  document.addEventListener('pointerdown', (e) => {
+    const node = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest?.('[data-fish]'));
+    if (!node || e.pointerType === 'mouse') return;
+    const at = { x: e.clientX, y: e.clientY };
+    timer = window.setTimeout(() => fishMenu(Number(node.dataset.fish), at), 600);
+  });
+  for (const type of ['pointerup', 'pointercancel', 'pointermove', 'contextmenu']) document.addEventListener(type, () => window.clearTimeout(timer));
+}
+
+// The pointer is a fish hook over water that can be fished, and over a fish
+// in the dive (R20.4); a hand over a place in town.
+const HOOK = [
+  '......kk....',
+  '.....kwwk...',
+  '.....kwwk...',
+  '......kk....',
+  '......kg....',
+  '......kg....',
+  '......kg....',
+  '......kg....',
+  '......kg....',
+  '.k....kg....',
+  '.kk...kg....',
+  '.kgk..kg....',
+  '..kgkkkg....',
+  '...kgggk....',
+  '....kkk.....',
+];
+const hookCursor = (() => {
+  const c = document.createElement('canvas');
+  c.width = 24;
+  c.height = 30;
+  const ctx = /** @type {CanvasRenderingContext2D} */ (c.getContext('2d'));
+  const colours = /** @type {Record<string, string>} */ ({ k: '#1b2b34', g: '#c9d3d8', w: '#f4f4f4' });
+  HOOK.forEach((row, y) =>
+    [...row].forEach((k, x) => {
+      if (k === '.') return;
+      ctx.fillStyle = colours[k];
+      ctx.fillRect(x * 2, y * 2, 2, 2);
+    }),
+  );
+  // The hotspot is the hook's point.
+  return `url(${c.toDataURL()}) 2 20, crosshair`;
+})();
+canvas.addEventListener('pointermove', (e) => {
+  if (!state || e.pointerType !== 'mouse') return;
+  const p = scene.toScene(e.clientX, e.clientY);
+  let cursor = 'default';
+  if (state.dive) cursor = scene.viewHit(p)?.kind === 'fish' ? hookCursor : 'default';
+  else if (content.locations[state.location]?.town) cursor = scene.viewHit(p) ? 'pointer' : 'default';
+  else {
+    const w = waterAt(state.location, state.spot);
+    if (p.x >= w.x0 && p.x <= w.x1 && p.y >= w.y0 && p.y <= w.y1) cursor = hookCursor;
+  }
+  if (canvas.style.cursor !== cursor) canvas.style.cursor = cursor;
+});
 
 // ---------- Character creation (DEV_PLAN 3.3) ----------
 
@@ -1231,6 +1629,13 @@ function openTitle(view = 'main', imported) {
       const settled = settlePerks(saved.state);
       state = settled.state;
       if (settled.taken.length) save(state);
+      // A dive under way when the game was left is over: up for air (R20.3).
+      if (state.dive) {
+        state = endDive(state).state;
+        save(state);
+      }
+      // A barter window left open opens again (R18.2).
+      pane = state.shop ? 'shop' : null;
       cast = /** @type {GameCast} */ ({ phase: 'idle' });
       log.clear();
       logEvents([...settled.taken.map((id) => ({ type: 'perk', perk: id })), ...(owedLevels(state).length ? [{ type: 'perk-owed' }] : [])]);

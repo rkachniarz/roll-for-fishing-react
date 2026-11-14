@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "floating-water-plantain",
+  "category": "stuff",
+  "name": "Floating water-plantain",
+  "flavor": "Oval leaves floating on long trailing stems. You rarely see it any more.",
+  "icon": "item/floating-water-plantain",
+  "rarity": "common",
+  "value": 8,
+  "placeholder": [
+    "flavor"
+  ]
+}

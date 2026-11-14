@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "snap-elixir",
+  "placeholder": true,
+  "name": "Snap elixir",
+  "effects": [
+    {
+      "value": "naturalCatch",
+      "add": -3
+    },
+    {
+      "value": "reactionFast",
+      "add": 200
+    }
+  ],
+  "duration": {
+    "casts": 10
+  }
+}

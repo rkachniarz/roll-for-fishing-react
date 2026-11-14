@@ -9,6 +9,12 @@
   },
   "difficulty": 0,
   "rarity": "uncommon",
+  "stew": [
+    {
+      "value": "baitRecovery",
+      "add": 10
+    }
+  ],
   "prefers": {
     "time": [
       "dawn",
@@ -24,5 +30,8 @@
     "bait": [
       "fly"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

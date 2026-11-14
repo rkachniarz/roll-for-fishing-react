@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/vendor.schema.json",
+  "id": "stew",
+  "placeholder": true,
+  "name": "The perpetual stew",
+  "kind": "stew",
+  "location": "town",
+  "spot": "inn"
+}

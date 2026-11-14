@@ -8,9 +8,11 @@ import { t } from '../strings.js';
 import { levelFor } from '../engine/state.js';
 import { className } from '../engine/character.js';
 import { iconName, paintIcon } from '../scene/icons.js';
-import { bagTab, fishName, rarityColour, slot } from './links.js';
-import { showTip } from './tooltip.js';
-import { EQUIPMENT_SLOTS, isTiny } from '../engine/equipment.js';
+import { bagTab, effectsText, hoursText, link, rarityColour, slot } from './links.js';
+import { bowlOf, canTrade, costStatus, offersFor } from '../engine/barter.js';
+import { vendorStatus } from '../engine/schedule.js';
+import { bindTip } from './tooltip.js';
+import { EQUIPMENT_SLOTS } from '../engine/equipment.js';
 import { offers, owedLevels } from '../engine/perks.js';
 import { completion, knownKey, locationList, placeOpen, spotKnown } from '../engine/knowledge.js';
 import { setPieces } from '../engine/events.js';
@@ -236,7 +238,7 @@ function unknownItemSlot(id) {
   const b = el('button', { type: 'button', className: 'slot unknown' }, [art]);
   const tip = { title: t('journal.unknownItem'), lines: [{ text: t('journal.heard') }] };
   b.setAttribute('aria-label', tip.title);
-  b.addEventListener('click', () => showTip(b, tip));
+  bindTip(b, tip);
   return b;
 }
 
@@ -258,12 +260,13 @@ function speciesSlot(state, id, foundHere) {
     ? {
         title: t(fish.name),
         colour: rarityColour(fish.rarity),
+        icon: iconName({ kind: 'fish', id }),
         lines: [{ text: t('journal.entry', { caught: e.caught, smallest: e.smallest.size, largest: e.largest.size, average: Math.round(e.totalSize / e.caught) }) }],
       }
     : { title: t('journal.unknown'), lines: [{ text: t(state.book.fish[id] ? 'journal.heard' : 'journal.gotAway') }] };
   b.style.borderColor = tip.colour ?? '';
   b.setAttribute('aria-label', tip.title);
-  b.addEventListener('click', () => showTip(b, tip));
+  bindTip(b, tip);
   return b;
 }
 
@@ -322,19 +325,114 @@ export function mapPane(state, onTravel, showCompletion = false) {
  * @param {number} size  The bucket's size (the bucketSize value).
  * @param {(index: number) => void} [onHook]
  */
-export function bucketPane(state, size, onHook = () => {}) {
+export function bucketPane(state, size) {
   const fish = state.bucket.reduce((n, b) => n + b.count, 0);
-  const hooks = state.bucket.flatMap((b, i) => {
-    if (!isTiny(b.fish)) return [];
-    const button = el('button', { type: 'button', className: 'map-spot', textContent: t('bucket.hook', { fish: fishName(b.fish) }) });
-    button.addEventListener('click', () => onHook(i));
-    return [button];
-  });
   return [
     el('p', { className: 'muted', textContent: t('bucket.count', { count: fish, size }) }),
-    el('div', { className: 'grid' }, [...state.bucket.map((b) => slot({ kind: 'fish', fish: b.fish }, b.count)), ...empties(size - fish)]),
-    ...(hooks.length ? [el('div', { className: 'map-spots bucket-hooks' }, hooks)] : []),
+    el('div', { className: 'grid' }, [...state.bucket.map((b, i) => fishSlot(b.fish, b.count, i)), ...empties(size - fish)]),
   ];
+}
+
+/**
+ * A fish in the bucket, with its options on right-click or long-press (R21.1):
+ * `data-fish` is its place in the bucket.
+ * @param {import('../engine/fish.js').FishInstance} fish
+ * @param {number} count
+ * @param {number} index
+ */
+function fishSlot(fish, count, index) {
+  const b = slot({ kind: 'fish', fish }, count, t('tip.options'));
+  b.dataset.fish = String(index);
+  return b;
+}
+
+/**
+ * A vendor's barter window (R18.2), the stew's pot (R18.7) or the aquarium
+ * (R17.5), by the kind of vendor.
+ * @param {GameState} state
+ * @param {string} id  The vendor.
+ * @param {{ trade: (offer: string) => void, stew: (index: number) => void, unstew: (index: number) => void, eat: () => void,
+ *   toTank: (index: number) => void, fromTank: (index: number) => void }} on
+ */
+export function shopPane(state, id, on) {
+  const vendor = content.vendors[id];
+  if (vendor.kind === 'stew') return stewPane(state, on);
+  if (vendor.kind === 'aquarium') return aquariumPane(state, on);
+  if (vendorStatus(state, id) !== 'open') return [el('p', { className: 'muted', textContent: t('shop.closed') })];
+  const list = offersFor(state, id);
+  if (!list.length) return [el('p', { className: 'muted', textContent: t('shop.none') })];
+  return list.map((offer) => {
+    const gives = offer.gives.item
+      ? slot({ kind: 'item', id: offer.gives.item }, offer.gives.count ?? 1)
+      : el('span', { className: 'slot buff-slot', textContent: '▲' });
+    const name = offer.gives.item
+      ? link({ kind: 'item', id: offer.gives.item })
+      : el('span', { className: 'muted', textContent: t(content.buffs[/** @type {string} */ (offer.gives.buff)].name) });
+    const costs = offer.costs.map((c) => {
+      const { have, need, met } = costStatus(state, c);
+      const what = c.item
+        ? link({ kind: 'item', id: c.item })
+        : el('span', {
+            textContent: c.fish && c.fish !== 'any' ? t(content.fish[c.fish].name) : c.rarity ? t('shop.fishAtLeast', { rarity: t(`rarity.${c.rarity}`) }) : t('shop.anyFish'),
+          });
+      return el('li', { className: met ? 'cost met' : 'cost short' }, [what, ' ', el('span', { className: 'cost-count', textContent: t('shop.have', { have, need }) })]);
+    });
+    const ok = canTrade(state, id, offer.id);
+    const button = el('button', { type: 'button', className: 'trade-button', textContent: t('shop.trade'), disabled: !ok });
+    button.addEventListener('click', () => on.trade(offer.id));
+    return el('div', { className: 'offer' }, [el('div', { className: 'offer-head' }, [gives, name]), el('ul', { className: 'costs' }, costs), button]);
+  });
+}
+
+/**
+ * The perpetual stew (R18.7, R19.4): the bucket on one side, the pot on the
+ * other, and what a bowl would give now.
+ * @param {GameState} state
+ * @param {{ stew: (index: number) => void, unstew: (index: number) => void, eat: () => void }} on
+ */
+function stewPane(state, on) {
+  const pot = state.stewPot ?? [];
+  const bowl = bowlOf(pot);
+  const eat = el('button', { type: 'button', className: 'trade-button', textContent: t('stew.eat'), disabled: !pot.length });
+  eat.addEventListener('click', on.eat);
+  return [
+    el('p', { className: 'muted', textContent: t('stew.bucket') }),
+    el('div', { className: 'grid' }, state.bucket.map((b, i) => clickSlot(slot({ kind: 'fish', fish: b.fish }, b.count), () => on.stew(i)))),
+    el('p', { className: 'muted', textContent: t('stew.pot') }),
+    pot.length
+      ? el('div', { className: 'grid' }, pot.map((f, i) => clickSlot(slot({ kind: 'fish', fish: f }), () => on.unstew(i))))
+      : el('p', { className: 'muted', textContent: t('stew.empty') }),
+    ...(pot.length ? [el('p', { className: 'tip-good', textContent: t('stew.bowl', { hours: hoursText(Math.max(30, bowl.minutes)), effects: effectsText(bowl.effects) }) })] : []),
+    eat,
+  ];
+}
+
+/**
+ * The aquarium (R17.5): the bucket, and the fish in the tank.
+ * @param {GameState} state
+ * @param {{ toTank: (index: number) => void, fromTank: (index: number) => void }} on
+ */
+function aquariumPane(state, on) {
+  const tank = state.aquarium ?? [];
+  return [
+    el('p', { className: 'muted', textContent: t('aquarium.bucket') }),
+    el('div', { className: 'grid' }, state.bucket.map((b, i) => clickSlot(slot({ kind: 'fish', fish: b.fish }, b.count), () => on.toTank(i)))),
+    el('p', { className: 'muted', textContent: t('aquarium.tank', { count: tank.length, size: content.rules.stew.aquarium }) }),
+    el('div', { className: 'grid' }, tank.map((f, i) => clickSlot(slot({ kind: 'fish', fish: f }), () => on.fromTank(i)))),
+  ];
+}
+
+/**
+ * A slot that does something on a click, its tooltip still on hover.
+ * @param {HTMLButtonElement} b
+ * @param {() => void} onClick
+ */
+function clickSlot(b, onClick) {
+  b.addEventListener('click', (e) => {
+    e.stopPropagation();
+    onClick();
+  });
+  return b;
 }
 
 /** @typedef {'equipment' | 'consumables' | 'stuff' | 'junk'} BagTab */
@@ -393,7 +491,7 @@ export function menuPane({ onMainMenu, onSettings, onDev, onExport }) {
 }
 
 /**
- * Settings (D81): the theme, whether the dice are shown (D99), the sound's
+ * Settings (D81): the theme, the font (D132), whether the dice are shown (D99), the sound's
  * volume (9.2).
  * @param {import('../settings.js').Settings} settings
  * @param {(change: Partial<import('../settings.js').Settings>) => void} onChange  Only what changed.
@@ -416,6 +514,24 @@ export function settingsPane(settings, onChange, diceShown) {
             onchange: () => onChange({ theme }),
           }),
           el('span', { textContent: t(`settings.${theme}`) }),
+        ]),
+      ),
+    ),
+    el('h3', { textContent: t('settings.font') }),
+    el(
+      'div',
+      { className: 'choices' },
+      /** @type {const} */ (['clear', 'pixel']).map((font) =>
+        el('label', {}, [
+          el('input', {
+            type: 'radio',
+            name: 'font',
+            id: `font-${font}`,
+            value: font,
+            checked: settings.font === font,
+            onchange: () => onChange({ font }),
+          }),
+          el('span', { textContent: t(`settings.${font}`) }),
         ]),
       ),
     ),

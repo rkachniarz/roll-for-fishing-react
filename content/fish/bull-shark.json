@@ -10,6 +10,12 @@
   },
   "difficulty": 3,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "eventMeterFill",
+      "add": 60
+    }
+  ],
   "prefers": {
     "time": [
       "night"
@@ -23,5 +29,8 @@
     "bait": [
       "small-fish"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

@@ -22,9 +22,11 @@ import { equippedIds } from './equipment.js';
 import { afterCast, arrive } from './events.js';
 import { hasPerk, levelUp, perkSources } from './perks.js';
 import { LIGHTS, abilityStatus, spendCooldownCasts, startCooldown, tickCooldowns } from './abilities.js';
-import { advanceTime, clock } from './time.js';
+import { clock } from './time.js';
 import { learn, noticeSpots, openByFragments, placeOpen, spotKnown } from './knowledge.js';
-import { changeSeason, stepWeather } from './weather.js';
+import { stepTime } from './passage.js';
+import { conditionSources } from './conditions.js';
+import { startDive } from './dive.js';
 import { championAt, championClass, championSources, championsHere, findChampion, poolKey, removeChampion, updateChampions } from './champions.js';
 
 export { poolKey };
@@ -54,7 +56,7 @@ export const MISS_LIMIT = 2;
  *   `stolen`: a Rogue takes it as it comes up (D114).
  *
  * @typedef {{ kind: 'fish', fish: PoolFish, required: number, fishNatural?: number, seenBefore: boolean, fromPool: boolean,
- *     rift?: boolean, carried?: ItemLine, knighted?: boolean,
+ *     rift?: boolean, carried?: ItemLine, knighted?: boolean, twin?: boolean,
  *     player: { mods: { label: string, value: number }[], vantage: number, stacks?: boolean, natural?: number } }
  *   | ItemLine
  *   | { kind: 'empty', reason: 'nothing' }} Line  `rift`: from the spot's rift table (D104); `carried`: a
@@ -69,6 +71,8 @@ export const MISS_LIMIT = 2;
  *   bait: { recovery: number, escapeLoss: number },
  *   bucketSize: number,
  *   meterFill: number,
+ *   featureChance?: number,
+ *   timeSlip?: boolean,
  *   reeledIn?: boolean,
  *   recast?: boolean,
  *   feature?: { id: string, born: number } | null,
@@ -89,6 +93,9 @@ export const MISS_LIMIT = 2;
 export function valuesFor(state, extra = []) {
   /** @type {import('./values.js').Source[]} */
   const sources = perkSources(state);
+  // What the class always brings (R19.1).
+  const classEffects = content.classes[state.character.classId]?.effects;
+  if (classEffects) sources.push({ label: state.character.classId, effects: classEffects });
   for (const id of equippedIds(state)) {
     const effects = content.items[id]?.effects;
     if (effects) sources.push({ label: id, effects });
@@ -96,7 +103,10 @@ export function valuesFor(state, extra = []) {
   for (const buff of state.buffs) sources.push({ label: buff.id, effects: buff.effects });
   // Class fish on this spot (D114).
   sources.push(...championSources(state));
-  return deriveValues(state.character.stats, [...sources, ...extra]);
+  const values = deriveValues(state.character.stats, [...sources, ...extra]);
+  // The cold and the night (R19.2, R19.3), which depend on the warmth the rest gives.
+  const conditions = conditionSources(state, values.flat.warmth);
+  return conditions.length ? deriveValues(state.character.stats, [...sources, ...conditions, ...extra]) : values;
 }
 
 /**
@@ -160,6 +170,10 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   }
   // Nor while an event is open (D84).
   if (state.event) return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [] };
+  // No water in town (R17.1).
+  if (content.locations[state.location]?.town) {
+    return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'no-water' }] };
+  }
   // No rod, no cast (D83). The line and the bobber are optional.
   if (!state.equipped.rod) {
     return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'no-rod' }] };
@@ -237,6 +251,9 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     bait: { recovery: values.flat.baitRecovery, escapeLoss: values.flat.baitEscapeLoss },
     bucketSize: values.flat.bucketSize,
     meterFill: values.flat.eventMeterFill,
+    featureChance: values.flat.featureChance,
+    // A strange fish's stew buff: now and then a cast takes no time (R19.4).
+    ...(values.flat.timeSlip > 0 && dice.effects.roll100() <= values.flat.timeSlip ? { timeSlip: true } : {}),
     extra,
     feature: hit ? { id: hit.id, born: hit.born } : null,
     champion: champion ? { class: champion.class, born: champion.born } : null,
@@ -359,11 +376,14 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
         const loot = rollLoot(state, values, dice.line, dice.effects, null, rolls).line;
         if (loot.kind === 'item') carried = loot;
       }
+      // A stew buff: an identical twin comes up with it, now and then (R19.4).
+      const twin = values.flat.twinChance > 0 && dice.line.roll100() <= values.flat.twinChance;
       const skill = value('fishingSkill');
       return {
         line: {
           kind: 'fish',
           fish,
+          ...(twin ? { twin } : {}),
           required,
           fishNatural: kept.result,
           seenBefore: fromPool || Boolean(featureFish),
@@ -423,8 +443,10 @@ export function momentOf(state) {
 }
 
 /**
- * No fish: treasure when d100 - Treasure Find is at or under the threshold,
- * else junk (R3.4). Also what a gutted fish had swallowed (D96).
+ * No fish: treasure when d100 - Treasure Find is at or under the threshold;
+ * if not, stuff when another d100 - Stuff Find is at or under the stuff
+ * threshold (R19.1, D125); else junk (R3.4). Also what a gutted fish had
+ * swallowed (D96).
  * @param {GameState} state
  * @param {Values} values
  * @param {Dice} lootDice  The stream for the d100 and the tables.
@@ -450,6 +472,23 @@ function rollLoot(state, values, lootDice, effectDice, feature = null, rolls = [
     const treasure = pickTreasure(state, values, lootDice);
     if (treasure) return { line: treasure, rolls };
     // Every unique treasure here is found: junk instead (D75).
+  } else {
+    // Not treasure: the white things used for something, or junk (R19.1, D125).
+    const stuffFind = applyValue(values, 'stuffFind', effectDice);
+    const stuffRoll = lootDice.roll100();
+    rolls.push({
+      kind: 'stuff',
+      die: 'd100',
+      result: stuffRoll,
+      mods: stuffFind.mods.map((m) => ({ ...m, value: -m.value })),
+      total: stuffRoll - stuffFind.total,
+      visible: false,
+    });
+    if (!feature?.junk && stuffRoll - stuffFind.total <= (loc.stuffThreshold ?? 0)) {
+      const stuff = pick(locationTable(where, 'stuff', { found: state.found }), lootDice);
+      if (stuff?.id) return { line: { kind: 'item', id: stuff.id }, rolls };
+      // Nothing left to find here: junk instead.
+    }
   }
   const junkTable = feature?.junk ? listTable(feature.junk, 'junk', { found: state.found }) : locationTable(where, 'junk', { found: state.found });
   const junk = pick(junkTable, lootDice);
@@ -578,6 +617,10 @@ function resolveCast(state, cast) {
       const shown = line.carried ? { ...fish, greedy: true } : fish;
       events.push({ type: 'caught', fish: shown, roll: cast.outcome.rolls[0], required: line.required, seenBefore: line.seenBefore });
       if (line.rift) events.push({ type: 'rift', fish });
+      if (line.twin && !champion) {
+        catchFish(next, fish, cast.bucketSize);
+        events.push({ type: 'twin', fish });
+      }
       if (line.carried) {
         receive(next, line.carried);
         events.push({ type: 'greedy', item: line.carried.id, alt: line.carried.alt });
@@ -672,24 +715,12 @@ function resolveCast(state, cast) {
   // fragment found opens its place (8.2).
   events.push(...noticeSpots(next));
   events.push(...openByFragments(next));
-  events.push(...updateFeatures(next, dice.features, { champions: dice.champions }));
+  events.push(...updateFeatures(next, dice.features, { champions: dice.champions, extraChance: cast.featureChance ?? 0 }));
 
-  // Time and weather move on with every cast that went out and ended.
-  const time = advanceTime(next.time);
-  next.time = time.minutes;
-  if (time.newSeason) {
-    next.weather = changeSeason(next.weather, time.newSeason, dice.weather);
-    events.push({ type: 'season', season: time.newSeason, weather: next.weather });
-  } else {
-    // Weather a Shaman called up from another season drifts on this
-    // season's map, from the same cell (D114).
-    const season = clock(next.time).season;
-    const step = stepWeather(next.weather.season === season ? next.weather : { ...next.weather, season }, dice.weather);
-    if (step.changed) {
-      next.weather = step.weather;
-      events.push({ type: 'weather', weather: next.weather });
-    }
-  }
+  // Time and weather move on with every cast that went out and ended, and
+  // buffs that last game time run down (R19.5); unless time slipped (R19.4).
+  if (cast.timeSlip) events.push({ type: 'time-slip' });
+  else events.push(...stepTime(next, dice.weather));
   // After the weather, so a Shaman's holds (D114).
   events.push(...updateChampions(next, dice.champions, water));
 
@@ -792,17 +823,16 @@ export function useAbility(state, id, extra = []) {
       break;
     }
     case 'jump-in': {
-      // The fish that just got away, out of the pool and into the bucket.
+      // After the fish that just got away, under the water: the dive (R20.3, D128).
       const fish = next.lit[id]?.fish;
       const key = poolKey(next);
       const pool = next.escaped[key] ?? [];
       const i = fish ? pool.findLastIndex((f) => sameFish(f, fish)) : -1;
       if (i < 0) return { state, events: [] };
-      const caught = pool[i];
+      const escapee = pool[i];
       next.escaped[key] = pool.filter((_, j) => j !== i);
-      catchFish(next, caught, values.bucketSize);
-      events.push({ type: 'caught', fish: caught, seenBefore: false });
-      if (next.pendingCatch) events.push({ type: 'bucket-full' });
+      const { tries, ...plain } = escapee;
+      events.push(...startDive(next, plain, extra));
       break;
     }
     case 'gut': {
@@ -841,7 +871,7 @@ export function useAbility(state, id, extra = []) {
  * @param {PoolFish} fish
  * @param {number} bucketSize
  */
-function catchFish(state, fish, bucketSize) {
+export function catchFish(state, fish, bucketSize) {
   const { tries, ...instance } = fish;
   // Caught either way: the book and the XP count it. A full bucket holds it
   // back until the player lets one go (D59).

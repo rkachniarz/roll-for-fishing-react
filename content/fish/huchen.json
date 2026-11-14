@@ -9,6 +9,12 @@
   },
   "difficulty": 2,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "warmth",
+      "add": 2
+    }
+  ],
   "prefers": {
     "time": [
       "dawn",
@@ -23,5 +29,8 @@
     "bait": [
       "lure"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

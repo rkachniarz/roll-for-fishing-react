@@ -1,6 +1,6 @@
 // @ts-check
-// The action bar (D96): the character's active abilities, under the button
-// row, as WoW's. Each button shows how many casts are left on its cooldown,
+// The action bar (D96): the character's active abilities, drawn on the
+// scene's bottom left (D120), as WoW's. Each button shows how many casts are left on its cooldown,
 // glows when it lights up, and is greyed out when it can't be used. A tap or
 // a click uses it; keys 1, 2, 3… do too. Hover, or a long press on a touch
 // screen, shows what it does.

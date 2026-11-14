@@ -9,6 +9,12 @@
   },
   "difficulty": -2,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "fishFind",
+      "add": 12
+    }
+  ],
   "prefers": {
     "time": [
       "evening"
@@ -22,5 +28,8 @@
     "bait": [
       "maggot"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

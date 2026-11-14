@@ -10,6 +10,12 @@
   },
   "difficulty": -1,
   "rarity": "rare",
+  "stew": [
+    {
+      "value": "twinChance",
+      "add": 9
+    }
+  ],
   "prefers": {
     "time": [
       "dawn",
@@ -21,5 +27,8 @@
     "bait": [
       "small-fish"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

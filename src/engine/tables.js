@@ -53,7 +53,8 @@ function expand(list) {
  * @param {Object} where
  * @param {string} where.location
  * @param {string | null} where.spot
- * @param {'fish' | 'treasure' | 'junk' | 'rift'} list  `rift`: the spot's rift fish (D104).
+ * @param {'fish' | 'treasure' | 'stuff' | 'junk' | 'rift'} list  `rift`: the spot's rift fish (D104);
+ *   `stuff`: the white things used for something (R19.1).
  * @param {Object} [world]
  * @param {Moment} [world.moment]
  * @param {Record<string, number>} [world.found]  Item id -> how many found so far.
@@ -71,7 +72,7 @@ export function locationTable({ location, spot }, list, { moment, found = {} } =
  * A table from any list of entries: a location's, or a surface feature's that
  * replaces it (R14). The same skipping and preferences as locationTable.
  * @param {{ id?: string, table?: string, weight?: number }[]} list
- * @param {'fish' | 'treasure' | 'junk'} kind
+ * @param {'fish' | 'treasure' | 'stuff' | 'junk'} kind
  * @param {Object} [world]
  * @param {Moment} [world.moment]
  * @param {Record<string, number>} [world.found]

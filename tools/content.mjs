@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { GAME_VALUES, EFFECT_DICE, effectSign } from '../src/engine/values.js';
 import { HEX_NEIGHBOURS, OPPOSITE } from '../src/engine/hexmap.js';
-import { PLACEHOLDERS, parseEvent } from './event-text.mjs';
+import { PLACEHOLDERS, parseEvent, parseNeed } from './event-text.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -37,6 +37,8 @@ const KINDS = {
   features: { schema: 'feature', prefix: 'feature' },
   perks: { schema: 'perk', prefix: 'perk' },
   sets: { schema: 'set', prefix: 'set' },
+  buffs: { schema: 'buff', prefix: 'buff' },
+  vendors: { schema: 'vendor', prefix: 'vendor' },
   // One file per rule set; each has its own schema, named after its id.
   rules: { schema: null, prefix: 'rules' },
 };
@@ -56,6 +58,8 @@ const TEXT = {
   features: [['name']],
   perks: [['name'], ['description']],
   sets: [['name']],
+  buffs: [['name']],
+  vendors: [['name']],
   rules: [
     ['bands', '@', 'name'],
     ['temperature', '#', 'word'],
@@ -67,11 +71,15 @@ const TEXT = {
     ['classes', '@', 'name'],
     ['classes', '@', 'note'],
     ['classes', '@', 'spells', '@', 'name'],
+    ['coldLevels', '@', 'name'],
+    ['night', 'name'],
+    ['name'],
   ],
 };
 
 const GENERATED = 'src/generated/content.js';
 const VALUES_SCHEMA = 'schemas/game-values.schema.json';
+const PLACEHOLDERS_DOC = 'docs/placeholders.md';
 
 /** The effect vocabulary as a schema, so VS Code completes value and die names. */
 export function gameValuesSchema() {
@@ -174,8 +182,8 @@ export async function buildContent(root = ROOT) {
         if (!all.fish[entry.id]) errors.push(`${where}: no fish "${entry.id}"`);
       } else {
         const item = all.items[entry.id];
-        // The junk list is everything that isn't fish or treasure: junk, stuff (D112), consumables.
-        const fits = list === 'treasure' ? ['treasure'] : ['junk', 'stuff', 'consumable'];
+        // White things have their own list (R19.1, D125); junk's holds junk and consumables.
+        const fits = list === 'treasure' ? ['treasure'] : list === 'stuff' ? ['stuff'] : ['junk', 'consumable'];
         if (!item) errors.push(`${where}: no item "${entry.id}"`);
         else if (!fits.includes(item.category)) errors.push(`${where}: "${entry.id}" is ${item.category}, not ${list}`);
       }
@@ -200,7 +208,7 @@ export async function buildContent(root = ROOT) {
 
   for (const loc of Object.values(all.locations)) {
     const where = `content/locations/${loc.id}.json`;
-    for (const list of /** @type {const} */ (['fish', 'treasure', 'junk'])) checkEntries(where, loc[list], list, loc.id);
+    for (const list of /** @type {const} */ (['fish', 'treasure', 'stuff', 'junk'])) checkEntries(where, loc[list], list, loc.id);
     // Map fragments (8.2): enough of them to open it.
     // (Sets are checked with the items.)
     const pieces = Object.values(all.items).filter((i) => i.fragmentOf === loc.id && !i.retired).length;
@@ -219,7 +227,7 @@ export async function buildContent(root = ROOT) {
       if (w && !(0 <= w.x0 && w.x0 < w.x1 && w.x1 <= 256 && 0 <= w.y0 && w.y0 < w.y1 && w.y1 <= 256)) {
         errors.push(`${where} (${spot.id}): the water box needs 0 <= x0 < x1 <= 256 and 0 <= y0 < y1 <= 256`);
       }
-      for (const list of /** @type {const} */ (['fish', 'treasure', 'junk'])) {
+      for (const list of /** @type {const} */ (['fish', 'treasure', 'stuff', 'junk'])) {
         checkEntries(`${where} (${spot.id})`, spot[list], list, `${loc.id}/${spot.id}`);
       }
       // Rift fish only in rift tables, and only rift fish there (D104).
@@ -285,6 +293,11 @@ export async function buildContent(root = ROOT) {
     for (const id of fish.prefers?.bait ?? []) if (!baits.has(id)) errors.push(`${where}: no bait "${id}"`);
   }
 
+  // What a vendor trades away is found there (R18).
+  for (const vendor of Object.values(all.vendors ?? {})) {
+    for (const offer of vendor.offers ?? []) if (offer.gives?.item) note(offer.gives.item, `${vendor.location}/${vendor.spot} (${vendor.id})`);
+  }
+
   for (const item of Object.values(all.items)) {
     const where = `content/items/${item.id}.json`;
     const signs = (item.effects ?? []).map(effectSign);
@@ -347,11 +360,71 @@ export async function buildContent(root = ROOT) {
     }
   }
 
+  const placeholders = placeholderList(all, strings);
+
   const missingArt = Object.fromEntries(
     ['fish', 'items', 'locations'].map((kind) => [kind, Object.values(all[kind]).filter((e) => !e.icon).length]),
   );
 
-  return { errors, warnings, all, bundle, strings, foundAt, missingArt };
+  return { errors, warnings, all, bundle, strings, foundAt, missingArt, placeholders };
+}
+
+/**
+ * Every placeholder in the content (D124): where it is, what of it, and the
+ * string keys of its text, which ?ph marks in the game.
+ * @param {Record<string, Record<string, any>>} all
+ * @param {Record<string, string>} strings
+ * @returns {{ rows: { kind: string, id: string, what: string }[], keys: string[] }}
+ */
+export function placeholderList(all, strings) {
+  /** @type {{ kind: string, id: string, what: string }[]} */
+  const rows = [];
+  /** @type {Set<string>} */
+  const keys = new Set();
+  const keysUnder = (/** @type {string} */ prefix) => {
+    for (const k of Object.keys(strings)) if (k === prefix || k.startsWith(`${prefix}.`)) keys.add(k);
+  };
+  for (const [kind, entities] of Object.entries(all)) {
+    const prefix = kind === 'events' ? 'event' : KINDS[kind]?.prefix;
+    for (const [id, entity] of Object.entries(entities)) {
+      const mark = entity.placeholder;
+      if (mark === true) {
+        rows.push({ kind, id, what: 'all of it' });
+        keysUnder(`${prefix}.${id}`);
+      } else if (Array.isArray(mark)) {
+        rows.push({ kind, id, what: mark.join(', ') });
+        for (const field of mark) keysUnder(`${prefix}.${id}.${field}`);
+      }
+      for (const spot of entity.spots ?? []) {
+        const m = spot.placeholder;
+        if (!m) continue;
+        rows.push({ kind, id: `${id} / ${spot.id}`, what: m === true ? 'all of it' : m.join(', ') });
+        if (m === true || m.includes('name')) keysUnder(`${prefix}.${id}.spots.${spot.id}`);
+      }
+    }
+  }
+  return { rows, keys: [...keys].sort() };
+}
+
+/** docs/placeholders.md: every placeholder, by kind (D124). */
+export function placeholdersMarkdown(/** @type {{ rows: { kind: string, id: string, what: string }[] }} */ { rows }) {
+  const out = [
+    '# Placeholders',
+    '',
+    'Generated by `npm run content` (D124): everything in `content/` marked `"placeholder"`, and events with',
+    '`placeholder: true`. Add `?ph` to the address to see placeholder text marked with a `°` in the game. Replace a',
+    "placeholder, then take its mark away (or the field's name from the list). The game's own placeholder text, outside",
+    '`content/`, is listed in `PLACEHOLDER_UI` in `src/strings.js`.',
+    '',
+  ];
+  const kinds = [...new Set(rows.map((r) => r.kind))].sort();
+  for (const kind of kinds) {
+    const these = rows.filter((r) => r.kind === kind);
+    out.push(`## ${kind} (${these.length})`, '', '| id | what is a placeholder |', '|---|---|');
+    for (const r of these) out.push(`| ${r.id} | ${r.what} |`);
+    out.push('');
+  }
+  return `${out.join('\n')}\n`;
 }
 
 /**
@@ -477,7 +550,37 @@ function checkEvents(all, errors, warnings, root) {
     if (need.kind === 'weather' && need.level !== 'temperature') {
       for (const v of [need.min, need.max]) if (v !== null && (v < 0 || v > 5)) errors.push(`${where}: ${need.level} goes from 0 to 5, not ${v}`);
     }
+    if (need.kind === 'vendor' && !all.vendors?.[need.id]) errors.push(`${where}: no vendor "${need.id}"`);
+    if (need.kind === 'perk' && !all.perks[need.id]) errors.push(`${where}: no perk "${need.id}"`);
   };
+
+  // Vendors (R18): their offers' needs are event words, read here once.
+  for (const vendor of Object.values(all.vendors ?? {})) {
+    const where = `content/vendors/${vendor.id}.json`;
+    const loc = all.locations[vendor.location];
+    if (!loc) errors.push(`${where}: no location "${vendor.location}"`);
+    else if (!(loc.spots ?? []).some((/** @type {{ id: string }} */ s) => s.id === vendor.spot)) errors.push(`${where}: ${vendor.location} has no spot "${vendor.spot}"`);
+    for (const offer of vendor.offers ?? []) {
+      const at = `${where} (${offer.id})`;
+      if (offer.gives.item && !all.items[offer.gives.item]) errors.push(`${at}: no item "${offer.gives.item}"`);
+      if (offer.gives.buff && !all.buffs?.[offer.gives.buff]) errors.push(`${at}: no buff "${offer.gives.buff}"`);
+      if (!offer.gives.item && !offer.gives.buff) errors.push(`${at}: gives nothing`);
+      for (const cost of offer.costs) {
+        if (cost.item && !all.items[cost.item]) errors.push(`${at}: no item "${cost.item}"`);
+        if (!cost.item && !cost.fish) errors.push(`${at}: a cost is an item or a fish`);
+        if (cost.fish && cost.fish !== 'any' && !all.fish[cost.fish]) errors.push(`${at}: no fish "${cost.fish}"`);
+      }
+      offer.needs = (offer.needs ?? []).map((/** @type {string} */ words) => {
+        const need = parseNeed(words);
+        if (typeof need === 'string') errors.push(`${at}: ${need}`);
+        else checkNeed(at, need);
+        return need;
+      });
+    }
+  }
+  for (const item of Object.values(all.items)) {
+    if (item.use && !all.buffs?.[item.use.buff]) errors.push(`content/items/${item.id}.json: no buff "${item.use.buff}"`);
+  }
 
   for (const event of Object.values(all.events)) {
     const where = `content/events/${event.id}.md`;
@@ -524,6 +627,9 @@ function checkEvents(all, errors, warnings, root) {
           if (effect.kind === 'trade' && all.tables[effect.table]?.kind !== 'rewards') errors.push(`${where} (${id}): no rewards table "${effect.table}"`);
           if (effect.kind === 'place' && !all.locations[effect.location]) errors.push(`${where} (${id}): no location "${effect.location}"`);
           if (effect.kind === 'set' && !all.sets?.[effect.set]) errors.push(`${where} (${id}): no set "${effect.set}"`);
+          if (effect.kind === 'buff' && !all.buffs?.[effect.id]) errors.push(`${where} (${id}): no buff "${effect.id}"`);
+          if (effect.kind === 'shop' && !all.vendors?.[effect.id]) errors.push(`${where} (${id}): no vendor "${effect.id}"`);
+          if (effect.kind === 'sleep' && !all.buffs?.rested) errors.push(`${where} (${id}): sleeping gives the buff "rested", and there is none`);
           if (effect.kind === 'learn') {
             const loc = all.locations[effect.location];
             const there = !loc
@@ -613,17 +719,20 @@ function moveText(node, path, key, strings) {
 }
 
 /** The generated files, path -> text. */
-export function generatedFiles({ bundle, strings }) {
+export function generatedFiles({ bundle, strings, placeholders }) {
   const content =
     '// Generated by `npm run content` from content/ (docs/decisions.md, D43). Don\'t edit\n' +
     '// this file: edit content/ and run it again. Text is replaced by keys into\n' +
     '// `strings` (D46).\n\n' +
     `export const content = ${JSON.stringify(bundle, null, 2)};\n\n` +
     `/** @type {Record<string, Record<string, string>>} */\n` +
-    `export const strings = ${JSON.stringify({ en: strings }, null, 2)};\n`;
+    `export const strings = ${JSON.stringify({ en: strings }, null, 2)};\n\n` +
+    '/** String keys whose text is a placeholder (D124); ?ph marks them. */\n' +
+    `export const placeholderKeys = ${JSON.stringify(placeholders?.keys ?? [], null, 2)};\n`;
   return {
     [GENERATED]: content,
     [VALUES_SCHEMA]: JSON.stringify(gameValuesSchema(), null, 2) + '\n',
+    [PLACEHOLDERS_DOC]: placeholdersMarkdown(placeholders ?? { rows: [] }),
   };
 }
 
@@ -718,5 +827,6 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   );
   const art = Object.entries(result.missingArt).filter(([, n]) => n > 0);
   if (art.length) console.log(`No art yet: ${art.map(([kind, n]) => `${n} ${kind}`).join(', ')} (default icons used).`);
-  console.log(`Written: ${GENERATED}, ${VALUES_SCHEMA}, dist/content-overview.html`);
+  console.log(`${result.placeholders.rows.length} placeholder(s), listed in ${PLACEHOLDERS_DOC}.`);
+  console.log(`Written: ${GENERATED}, ${VALUES_SCHEMA}, ${PLACEHOLDERS_DOC}, dist/content-overview.html`);
 }

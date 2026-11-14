@@ -15,11 +15,16 @@ const LONG_PRESS_MS = 1200;
 
 /**
  * What's left, for the square's corner (R12.4): casts as a number; time to the
- * nearest minute ("4m", D31) until under a minute, then seconds ("45s").
+ * nearest minute ("4m", D31) until under a minute, then seconds ("45s"); game
+ * time in hours ("5h"), `gameLeft` game minutes from the page.
  * @param {Buff} buff
  */
 export function remaining(buff) {
   if (buff.casts !== undefined) return String(buff.casts);
+  if (buff.attempts !== undefined) return String(buff.attempts);
+  // Game time left (R19.5), worked out by the page: hours, then minutes.
+  const game = /** @type {Buff & { gameLeft?: number }} */ (buff).gameLeft;
+  if (game !== undefined) return game >= 60 ? `${Math.round(game / 60)}h` : `${Math.max(0, game)}m`;
   // A class fish's debuff lasts until it's caught (D114).
   if (buff.ms === undefined) return '';
   const ms = Math.max(0, buff.ms ?? 0);

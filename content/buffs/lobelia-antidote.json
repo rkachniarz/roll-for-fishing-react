@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "lobelia-antidote",
+  "placeholder": true,
+  "name": "Lobelia antidote",
+  "effects": [
+    {
+      "value": "fishDifficulty",
+      "add": -1
+    }
+  ],
+  "duration": {
+    "casts": 10
+  }
+}

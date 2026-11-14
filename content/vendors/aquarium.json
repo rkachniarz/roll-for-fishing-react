@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/vendor.schema.json",
+  "id": "aquarium",
+  "placeholder": true,
+  "name": "Your aquarium",
+  "kind": "aquarium",
+  "location": "town",
+  "spot": "room"
+}

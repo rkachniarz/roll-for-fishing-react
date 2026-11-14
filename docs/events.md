@@ -46,6 +46,7 @@ You lunge forward and get wet, and it's like it was never there.
 | `trigger` | `meter` / `item` / `needs` / `arrive` | What starts it; one per event, see below. Default `meter`. |
 | `needs` | any number of lines | Requirements for it to start at all, in the words below. |
 | `art` | a file name | A picture for the top of the dialog, from `assets/events/<art>.png`. Optional. |
+| `placeholder` | `true` | Claude's stand-in, to be rewritten (D124): listed in `docs/placeholders.md`, marked with a ° under `?ph`. |
 
 A line in the front matter starting with `#` is a note to yourself; the game ignores it.
 
@@ -78,6 +79,9 @@ or a player could be stuck (`npm run content` warns about that).
 | `needs: set old-lorebook 2` / `needs: set old-lorebook all` | that many different pieces of the set are in the bags, or every one |
 | `needs: count cat-trust 5+` | a counter (see `add:`) is at that amount: `5` exactly, `5+`, `5-`, `3..8`, as the weather |
 | `needs: wind 3+` | the weather now: `temperature`, `wind`, `clouds` or `precipitation`, with an amount |
+| `needs: vendor alchemist open` | the vendor is in now; or `asleep`, `away` (off getting ingredients) or `closed` (not a day they work), R17.6 |
+| `needs: perk aquarium` | the player has taken the perk |
+| `needs: weekday fri` | it is that day of the week: `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `sun` |
 
 **Weather amounts:** `3` exactly, `3+` at least, `3-` at most, `2..4` between (both included). Wind, clouds and
 precipitation go from 0 to 5, as the bench shows them; precipitation is rain or snow, by the temperature. Temperature
@@ -140,6 +144,10 @@ They are checked when the slide opens. If a condition shows nothing, the spaces 
 | `learn: spot river lower-river` / `learn: fish lake wels-catfish` / `learn: item lake iron-key` | the player learns it's there: a spot shows on the map (the log says so), a fish or item in the journal as not yet found |
 | `open: mage-tower` / `close: mage-tower` | a hidden location shows on the map, or a quest's location is gone from it (a player there goes back to where a new game starts); the log says so |
 | `trade: junk junk-collector` | every useless junk item in the bags goes, and their values, added up, pick the reward from the table (below) |
+| `buff: hornwort-tonic` | the player gets a buff from `content/buffs/` (it starts over if they have it already) |
+| `wait: 2 hours` / `wait: morning` | time passes, as in waiting at the inn: the clock, the weather once per half hour, buffs that last game time (R17.2) |
+| `sleep:` | the player sleeps until the next morning and wakes with the buff `rested` (R17.4) |
+| `shop: alchemist` | the vendor's barter window opens once the event closes (`content/vendors/`, R18.2); `shop: stew` is the stew's pot, `shop: aquarium` the room's tank |
 
 Flags and counters are free-form names; use them to link events into quests (R10.7). Taking fish or items takes as
 many as there are, up to the amount, so give the choice a `needs:` if it should only show when there are enough.
@@ -195,7 +203,9 @@ One event is open at a time, and no cast goes out until it ends. A reload comes 
 
   With `once` at its default it happens on the first arrival only; `once: false` makes it every time (a greeting
   on each visit to town). A new game and going somewhere on the map count as arriving, and so do the bench's
-  location and spot pickers. Being moved by an event's `go:` doesn't, since an event is already open.
+  location and spot pickers. Being moved by an event's `go:` counts once the event has closed (R17.3), so the night's
+  "Go straight to the inn" leads to the innkeeper. In town, tapping the place the player is at arrives again: the
+  place's dialogue opens once more.
 
 ## Trying one out
 
@@ -205,5 +215,13 @@ class, for choices like the rogue's.
 
 ## Not there yet
 
-These are code work first (D42): a buff as an effect, starting another event as an
-effect, and barter (it comes with the town, D86).
+These are code work first (D42): starting another event as an effect, and a background that changes the
+character's stats.
+
+## Vendors and their windows
+
+A vendor is a file in `content/vendors/`: a name, the place in town where they are, their hours (`schedule`: the days,
+the hours asleep, the chance of being away), and their `offers`. An offer `gives` an item (and a count) or a buff, and
+`costs` items and fish: `{ "item": "shiny-pebble", "count": 1 }`, `{ "fish": "any", "rarity": "rare", "count": 1 }`.
+An offer's `needs` are the words above: `"count trades-alchemist 5+"`. Every trade counts up `trades-<vendor>` and
+`trades-<vendor>-<offer>`, counters any event can read. The place's event opens the window with `shop:`.

@@ -6,6 +6,9 @@
     "$schema": {
       "type": "string"
     },
+    "placeholder": {
+      "$ref": "common.schema.json#/definitions/placeholder"
+    },
     "id": {
       "$ref": "common.schema.json#/definitions/id"
     },

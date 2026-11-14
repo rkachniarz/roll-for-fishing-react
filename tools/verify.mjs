@@ -34,11 +34,27 @@ const clockShown = (page) => page.getAttribute('#world', 'data-clock');
 const closePane = async (page) => {
   if (await page.isVisible('#pane')) await page.click('#paneClose');
 };
-/** From the title screen: New game, a slot, and character creation's defaults. */
+/**
+ * The welcome at the start of a new game (R17.3): its last choices, each
+ * after the dialog's 400 ms guard, until it closes.
+ */
+const passWelcome = async (page) => {
+  try {
+    await page.waitForSelector('#event[open]', { timeout: 2000 });
+  } catch {
+    return;
+  }
+  for (let i = 0; i < 6 && (await page.isVisible('#event[open]')); i++) {
+    await page.waitForTimeout(450);
+    await page.click('#eventChoices button:last-child');
+  }
+};
+/** From the title screen: New game, a slot, and character creation's defaults; past the welcome. */
 const newGameIn = async (page, slot) => {
   await page.click('#titleNew');
   await page.click(`#slot-${slot}`);
   await page.click('#createStart');
+  await passWelcome(page);
 };
 /** From the title screen: Load game, a slot. */
 const loadFrom = async (page, slot) => {
@@ -182,6 +198,7 @@ await check('the map: going to another spot (D101)', PHONE, '?seed=1', async (pa
   report('map: the reedy shore is where a new game starts', (await page.textContent('.map-spot[aria-pressed="true"]')) === 'the reedy shore');
   // A new game knows each location's first spot; the rest are noticed later (R11.8).
   const shown = await page.locator('.map-spot').allTextContents();
+  // The town is on the map only once night has pointed the way (R17.3).
   report('map: only the spots known of', shown.join(', ') === 'the reedy shore, the upper river', shown.join(', '));
   await page.click('.map-spot:has-text("the upper river")');
   report('map: a tap moves there', (await logText(page)).includes('You move to the upper river.'));
@@ -241,12 +258,20 @@ await check('each spot looks different until painted (4.2)', PHONE, '?dev&seed=1
     await openBench(page);
     await page.selectOption('#dev-location', location);
     await page.selectOption('#dev-spot', spot);
-    await closePane(page);
     await page.waitForTimeout(300);
-    // The scene alone, to look at; the look painted, to compare (the water
-    // moves, so two pictures of one spot differ too).
-    await page.locator('canvas').first().screenshot({ path: `dist/verify/spot-${spot}.png` });
+    // The look painted, to compare (the water moves, so two pictures of one spot differ too).
     looks.push((await page.getAttribute('body', 'data-spot-look')) ?? 'null');
+    // The swamp's ghost greets every arrival (owner's item 24): its dialog is
+    // passed after the look is read, since backing away leaves the swamp.
+    if (await page.isVisible('#event[open]')) {
+      await page.waitForTimeout(450);
+      await page.click('#eventChoices button:last-child');
+    } else {
+      await closePane(page);
+      await page.waitForTimeout(300);
+      // The scene alone, to look at.
+      await page.locator('canvas').first().screenshot({ path: `dist/verify/spot-${spot}.png` });
+    }
   }
   report(
     'each spot looks different until painted: seven spots, seven looks',
@@ -397,20 +422,24 @@ async function warriorAtLevel3(page) {
   await closePane(page);
 }
 
-await check('action bar: under the button row, a next-cast ability and its cooldown', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
+await check('action bar: on the scene, a next-cast ability and its cooldown', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
   report('action bar: hidden before any ability', await page.isHidden('#actions'));
   const sceneBefore = await page.locator('#scene').boundingBox();
   await warriorAtLevel3(page);
   report('action bar: two abilities', (await page.locator('#actions .action').count()) === 2);
-  const bar = await page.locator('.bar').boundingBox();
   const actions = await page.locator('#actions').boundingBox();
-  const log = await page.locator('.log-frame').boundingBox();
-  report('action bar: between the button row and the log', actions.y > bar.y + bar.height - 1 && log.y >= actions.y + actions.height - 1, `${bar.y} ${actions.y} ${log.y}`);
+  const wrap = await page.locator('#sceneWrap').boundingBox();
+  // D120: drawn on the scene's bottom left, inside it with a margin.
+  report(
+    'action bar: on the scene, bottom left',
+    actions.x > wrap.x && actions.x < wrap.x + 20 && actions.y + actions.height < wrap.y + wrap.height && actions.y + actions.height > wrap.y + wrap.height - 20,
+    `${JSON.stringify(actions)} in ${JSON.stringify(wrap)}`,
+  );
   const sceneAfter = await page.locator('#scene').boundingBox();
   report('action bar: the scene keeps its size', sceneAfter.width === sceneBefore.width && sceneAfter.height === sceneBefore.height);
   report('action bar: Jump In is greyed out until something lights it', await page.locator('[data-ability="jump-in"].unusable').isVisible());
   await page.tap('[data-ability="battle-focus"]');
-  report('action bar: a used next-cast ability is armed and on the buff bar', await page.locator('[data-ability="battle-focus"].armed').isVisible() && (await page.locator('#buffBar .buff').count()) === 1);
+  report('action bar: a used next-cast ability is armed and on the buff bar', await page.locator('[data-ability="battle-focus"].armed').isVisible() && (await page.locator('#buffBar .buff[data-id="battle-focus"]').count()) === 1);
   await page.screenshot({ path: 'dist/verify/action-bar.png' });
   await tap();
   await page.waitForSelector('body[data-phase="bite"]', { timeout: 3000 });
@@ -446,7 +475,10 @@ await check('action bar: Jump In lights up when a fish gets away', PHONE, '?dev&
   const bucket = await page.getAttribute('#bucket', 'aria-label');
   await page.keyboard.press('1');
   const log = await logText(page);
-  report('action bar: key 1 uses it, and the fish is caught', /You use Jump In\.You caught/.test(log), log.slice(-160));
+  // Jump In is the dive now (D128): under the water, with a time limit.
+  report('action bar: key 1 uses it, and the Fighter dives', /You use Jump In\.You dive in after it!/.test(log) && (await page.isVisible('#diveTimer')), log.slice(-160));
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: 'dist/verify/dive.png' });
   report('action bar: then it cools down', (await page.textContent('[data-ability="jump-in"] .action-cd')) === '10');
   report('action bar: no longer lit', (await page.locator('[data-ability="jump-in"].lit').count()) === 0, bucket ?? '');
 });
@@ -467,7 +499,8 @@ await check('junk is landed without a roll', PHONE, '?seed=4&wait=600', async (p
   await page.screenshot({ path: 'dist/verify/catch-flight.png' });
   await page.waitForTimeout(1200);
   report('junk: and disappears', (await page.locator('.flying-icon').count()) === 0);
-  await page.click('#log .link');
+  // The last link: the welcome may have given something before it (R17.3).
+  await page.click('#log .link >> nth=-1');
   const tip = (await page.textContent('.tip')) ?? '';
   report('junk: a tap on the link shows its tooltip', junk !== '' && tip.startsWith(junk), tip);
   await page.click('#bag');
@@ -559,6 +592,7 @@ await check('new game', DESKTOP, '?seed=5', async (page) => {
   const name = await page.inputValue('#createName');
   await page.screenshot({ path: 'dist/verify/character-creation.png' });
   await page.click('#createStart');
+  await passWelcome(page);
   await page.click('#player');
   const who = (await page.textContent('#pane')) ?? '';
   report('new game: back to character creation, and the choices stick', who.includes('Rogue Fisherwoman') && who.includes(name), who);
@@ -638,6 +672,19 @@ await check('settings: the light theme', PHONE, '?seed=6', async (page) => {
   await page.waitForSelector('#title[open]', { timeout: 15000 });
   report('settings: kept after a reload', (await page.getAttribute('html', 'data-theme')) === 'light');
   await page.screenshot({ path: 'dist/verify/light-title.png' });
+});
+
+await check('settings: the font', DESKTOP, '?seed=6', async (page) => {
+  const font = () => page.evaluate(() => getComputedStyle(document.body).fontFamily);
+  report('settings: Alegreya Sans by default (D132)', (await font()).startsWith('"Alegreya Sans"'), await font());
+  await page.click('#menu');
+  await page.click('#openSettings');
+  report('settings: Clear is chosen', await page.isChecked('#font-clear'));
+  await page.click('#font-pixel');
+  report('settings: Pixel turns the page to Pixelify Sans', (await font()).startsWith('"Pixelify Sans"'), await font());
+  await page.reload();
+  await page.waitForSelector('#title[open]', { timeout: 15000 });
+  report('settings: the font is kept after a reload', (await font()).startsWith('"Pixelify Sans"'), await font());
 });
 
 await check('settings: no dice (D99)', PHONE, '?seed=1&wait=700', async (page, tap) => {
@@ -755,7 +802,7 @@ await check('the sky', PHONE, '?dev&seed=3', async (page) => {
   await page.waitForTimeout(1500);
   await page.screenshot({ path: 'dist/verify/sky-blizzard-night.png' });
   const shown = [await page.textContent('#timeOfDay'), await page.textContent('#seasonDay'), await page.getAttribute('#weather', 'data-icon')].join(' ');
-  report('the sky: the time and weather are shown', /^Night \w+, day \d+ weather\/snow$/.test(shown), shown);
+  report('the sky: the time and weather are shown', /^Night \w{3}, \w+ \d+ weather\/snow$/.test(shown), shown);
   await page.click('#weather');
   report('the sky: a tap on the weather names it', (await page.textContent('.tip')) === 'Blizzard', (await page.textContent('.tip')) ?? '');
   await page.screenshot({ path: 'dist/verify/weather-name.png' });
@@ -810,17 +857,46 @@ await check('two treasures (Fence)', PHONE, '?dev&seed=1&wait=600', async (page,
   report('two treasures: the log says which was kept', /You keep .*\. The other sinks back/.test(await logText(page)));
 });
 
+await check('the town: the inn, the innkeeper, the room (R17)', DESKTOP, '?dev&seed=1', async (page) => {
+  await openBench(page);
+  await page.selectOption('#dev-event', 'nightfall');
+  await page.click('#devBench >> text=Start');
+  await page.waitForSelector('#event[open]', { timeout: 2000 });
+  await page.waitForTimeout(450);
+  await page.click('#eventChoices button:has-text("Go straight to the inn")');
+  await page.waitForSelector('#event[open]', { timeout: 2000 });
+  await page.waitForFunction(() => document.querySelector('#eventTitle')?.textContent === 'The innkeeper', null, { timeout: 2000 }).catch(() => {});
+  report('the town: the innkeeper greets the player', (await page.textContent('#eventTitle')) === 'The innkeeper');
+  report('the town: no fishing here', (await page.getAttribute('body', 'data-place')) === 'town');
+  await page.screenshot({ path: 'dist/verify/town-innkeeper.png' });
+  await page.waitForTimeout(450);
+  await page.click("text=Thank you. I'll go up.");
+  await page.waitForSelector('#event[open]', { timeout: 2000 });
+  report('the town: up in the room', (await page.textContent('#eventTitle')) === 'Your room');
+  await page.waitForTimeout(450);
+  await page.click('#eventChoices button:has-text("Go back down")');
+  await page.waitForSelector('#event[open]', { timeout: 2000 });
+  report('the town: back down, the inn has its choices now', (await page.textContent('#eventTitle')) === 'The inn');
+  await page.waitForTimeout(450);
+  await page.click('#eventChoices button:has-text("The perpetual stew")');
+  report('the town: the stew opens in a pane', ((await page.textContent('#paneTitle')) ?? '') === 'The perpetual stew');
+  await page.screenshot({ path: 'dist/verify/town-stew.png' });
+});
+
 await check('a Tiny fish on the hook', PHONE, '?dev&seed=1', async (page) => {
   await openBench(page);
   await page.click('text=Tiny fish');
   await closePane(page);
   await page.click('#bucket');
-  const button = page.locator('.bucket-hooks button');
-  report('a Tiny fish on the hook: a button for it in the bucket', (await button.count()) === 1, (await button.textContent()) ?? '');
+  // In the fish's options, on right-click (R21.1).
+  await page.click('[data-fish="0"]', { button: 'right' });
+  const button = page.locator('.context-menu button:has-text("Hook as bait")');
+  report('a Tiny fish on the hook: in its options', (await button.count()) === 1, (await page.textContent('.context-menu')) ?? '');
+  report('a Tiny fish on the hook: Release is there too', (await page.locator('.context-menu button:has-text("Release fish")').count()) === 1);
   await page.screenshot({ path: 'dist/verify/tiny-fish.png' });
   await button.click();
   report('a Tiny fish on the hook: the log says so', /You put \[?Tiny Roach\]? on the hook\./.test(await logText(page)), await logText(page));
-  report('a Tiny fish on the hook: it left the bucket', (await page.locator('.bucket-hooks button').count()) === 0);
+  report('a Tiny fish on the hook: it left the bucket', (await page.locator('[data-fish]').count()) === 0);
 });
 
 // ---------- Equipment and the bag (5.1, 5.2, D83) ----------
@@ -862,7 +938,10 @@ await check('equipment: drag, right-click, no rod', DESKTOP, '?dev&seed=1', asyn
   await page.mouse.up();
   report('equipment: dragged into the hat slot', (await slotLabel(page, 'hat')) === 'Straw hat', await slotLabel(page, 'hat'));
   report('equipment: and out of the bag', (await page.locator(bagSlot('Straw hat')).count()) === 0);
-  report('equipment: no tooltip left over from the drag', !(await page.isVisible('.tip')));
+  // The pointer rests on the hat slot, so its tooltip may show on hover (D119);
+  // nothing else may be left over from the drag.
+  const after = (await page.isVisible('.tip')) ? ((await page.textContent('.tip')) ?? '') : '';
+  report('equipment: no tooltip left over from the drag', after === '' || after.startsWith('Straw hat'), after);
 
   // The wrong slot is refused, in red.
   const crumbs = await centre(page, bagSlot('Bread crumbs'));
@@ -983,12 +1062,13 @@ await check('events: the frog, from the event meter', PHONE, '?dev&seed=1&wait=6
   report('events: the last choice closes it', !(await page.isVisible('#event')));
   await openBench(page);
   report('events: Luck went down by 1, unseen', (await page.inputValue('#dev-luck')) === '-1' && !(await logText(page)).includes('Luck'));
-  report('events: the frog is seen once', ((await page.textContent('#devBench')) ?? '').includes('Seen: frog ×1'));
+  report('events: the frog is seen once', /frog ×1/.test((await page.textContent('#devBench')) ?? ''));
 });
 
 await check('events: a fighter only sees two choices, and a quick tap picks nothing', DESKTOP, '?dev&seed=1', async (page) => {
   await openBench(page);
   await page.selectOption('#dev-class', 'fish-fighter');
+  await page.selectOption('#dev-event', 'frog');
   await page.click('#devBench >> text=Start');
   await page.waitForSelector('#event[open]', { timeout: 2000 });
   report('events: no rogue choice for a fighter', (await page.locator('#eventChoices button').count()) === 2);

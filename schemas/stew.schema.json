@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "The perpetual stew (R19.4, D127): how long a bowl lasts for the fish put in, its warmth, and eating a fish raw (R21.1)",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
+    "id": { "const": "stew" },
+    "name": { "$ref": "common.schema.json#/definitions/text" },
+    "minutes": {
+      "description": "Game minutes of buff each fish put in adds, by its rarity.",
+      "type": "object",
+      "properties": {
+        "poor": { "type": "integer", "minimum": 0 },
+        "common": { "type": "integer", "minimum": 0 },
+        "uncommon": { "type": "integer", "minimum": 0 },
+        "rare": { "type": "integer", "minimum": 0 },
+        "epic": { "type": "integer", "minimum": 0 },
+        "legendary": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["poor", "common", "uncommon", "rare", "epic", "legendary"],
+      "additionalProperties": false
+    },
+    "effects": { "description": "What every bowl gives, whatever went in: the warmth.", "type": "array", "items": { "$ref": "common.schema.json#/definitions/effect" } },
+    "flavours": { "description": "How many fish's own stew buffs a bowl carries: the rarest kinds that went in.", "type": "integer", "minimum": 0 },
+    "eatCasts": { "description": "How many casts a fish eaten raw gives its stew buff for (Sushi enjoyer).", "type": "integer", "minimum": 1 },
+    "aquarium": { "description": "How many fish the room's aquarium holds.", "type": "integer", "minimum": 1 }
+  },
+  "required": ["id", "name", "minutes", "effects", "flavours", "eatCasts", "aquarium"],
+  "additionalProperties": false
+}

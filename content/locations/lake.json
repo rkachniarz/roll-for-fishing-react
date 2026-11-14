@@ -4,6 +4,7 @@
   "name": "The Lake",
   "biteThreshold": 50,
   "treasureThreshold": 5,
+  "stuffThreshold": 20,
   "featureChance": 12,
   "maxFeatures": 2,
   "fish": [],
@@ -12,21 +13,39 @@
       "table": "common-treasure"
     }
   ],
-  "junk": [
+  "stuff": [
     {
-      "table": "common-junk"
+      "id": "shiny-pebble",
+      "weight": 25
+    },
+    {
+      "id": "shiny-fish-scales",
+      "weight": 15
+    },
+    {
+      "id": "alchemists-vial",
+      "weight": 8
+    },
+    {
+      "id": "mysterious-resin",
+      "weight": 4
     },
     {
       "id": "message-in-a-bottle",
-      "weight": 1
+      "weight": 3
     },
     {
       "id": "mage-tower-map-1",
-      "weight": 1
+      "weight": 3
     },
     {
       "id": "mage-tower-map-2",
-      "weight": 1
+      "weight": 3
+    }
+  ],
+  "junk": [
+    {
+      "table": "common-junk"
     }
   ],
   "emptyHook": 45,
@@ -46,6 +65,9 @@
     {
       "id": "reedy-shore",
       "name": "the reedy shore",
+      "placeholder": [
+        "name"
+      ],
       "look": {
         "painting": "reedy"
       },
@@ -164,11 +186,28 @@
           "id": "clown-knifefish",
           "weight": 42
         }
+      ],
+      "stuff": [
+        {
+          "id": "canadian-waterweed",
+          "weight": 20
+        },
+        {
+          "id": "water-lobelia",
+          "weight": 10
+        },
+        {
+          "id": "floating-water-plantain",
+          "weight": 4
+        }
       ]
     },
     {
       "id": "swamp",
       "name": "the swamp",
+      "placeholder": [
+        "name"
+      ],
       "look": {
         "tint": "#2f4a2a",
         "tintAlpha": 0.35,
@@ -321,11 +360,24 @@
           "id": "arapaima",
           "weight": 24
         }
+      ],
+      "stuff": [
+        {
+          "id": "hornwort",
+          "weight": 20
+        },
+        {
+          "id": "waterwheel-plant",
+          "weight": 2
+        }
       ]
     },
     {
       "id": "still-water",
       "name": "still water",
+      "placeholder": [
+        "name"
+      ],
       "look": {
         "painting": "pond"
       },
@@ -445,11 +497,36 @@
           "id": "discus",
           "weight": 32
         }
+      ],
+      "stuff": [
+        {
+          "id": "canadian-waterweed",
+          "weight": 20
+        },
+        {
+          "id": "hornwort",
+          "weight": 20
+        },
+        {
+          "id": "marimo",
+          "weight": 4
+        },
+        {
+          "id": "waterwheel-plant",
+          "weight": 2
+        },
+        {
+          "id": "old-torn-doll",
+          "weight": 12
+        }
       ]
     },
     {
       "id": "rocky-shore",
       "name": "the rocky shore",
+      "placeholder": [
+        "name"
+      ],
       "look": {
         "tint": "#4b5a62",
         "tintAlpha": 0.15,
@@ -578,11 +655,24 @@
           "id": "strange-cod",
           "weight": 32
         }
+      ],
+      "stuff": [
+        {
+          "id": "quillwort",
+          "weight": 10
+        },
+        {
+          "id": "water-lobelia",
+          "weight": 10
+        }
       ]
     },
     {
       "id": "open-water",
       "name": "open water",
+      "placeholder": [
+        "name"
+      ],
       "look": {
         "tint": "#2a5a7a",
         "tintAlpha": 0.2,
@@ -699,6 +789,9 @@
     {
       "id": "deep-water",
       "name": "deep water",
+      "placeholder": [
+        "name"
+      ],
       "look": {
         "tint": "#0d2638",
         "tintAlpha": 0.4,
@@ -791,10 +884,18 @@
           "weight": 24
         }
       ],
-      "junk": [
+      "stuff": [
+        {
+          "id": "quillwort",
+          "weight": 10
+        },
+        {
+          "id": "marimo",
+          "weight": 4
+        },
         {
           "id": "lorebook-page-1",
-          "weight": 1
+          "weight": 3
         }
       ]
     }

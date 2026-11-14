@@ -16,6 +16,7 @@
   "type": "object",
   "properties": {
     "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
     "id": { "const": "champions" },
     "chance": {
       "description": "When a surface feature would appear, the chance in percent that a champion appears in its place.",

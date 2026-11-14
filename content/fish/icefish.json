@@ -10,6 +10,16 @@
   },
   "difficulty": 0,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "revealResistance",
+      "add": 1
+    },
+    {
+      "value": "fishingSkill",
+      "add": 2
+    }
+  ],
   "prefers": {
     "time": [
       "night"
@@ -23,5 +33,8 @@
     "bait": [
       "small-fish"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

@@ -10,6 +10,12 @@
   },
   "difficulty": 0,
   "rarity": "rare",
+  "stew": [
+    {
+      "value": "timeSlip",
+      "add": 15
+    }
+  ],
   "prefers": {
     "time": [
       "night"
@@ -20,5 +26,8 @@
     "bait": [
       "worm"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

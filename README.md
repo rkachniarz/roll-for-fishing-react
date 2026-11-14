@@ -53,7 +53,7 @@ and the art sheet at `/art.html` there.
 | `src/save.js` | The three save slots in the browser's storage |
 | `src/settings.js` | Settings, kept per device: the theme, Show dice, the volume |
 | `src/ui/buffbar.js` | The buff and debuff bar over the scene's top right |
-| `src/ui/actionbar.js` | The action bar under the button row: abilities, cooldowns, glows |
+| `src/ui/actionbar.js` | The action bar on the scene's bottom left (D120): abilities, cooldowns, glows |
 | `src/dev.js` | The `?dev` bench: game values, world, character, inventory, buffs |
 | `src/main.js` | Wiring: input → engine → scene and page; character creation; saving |
 | `src/rng.js` | Seeded random streams (from SuperRollies) |
@@ -72,12 +72,22 @@ and the art sheet at `/art.html` there.
 | `src/engine/abilities.js` | Active abilities: the action bar's contents, cooldowns, which are lit |
 | `src/engine/features.js` | Surface features: appearing, drifting, thinning out; the open water's bounds |
 | `src/engine/champions.js` | Class fish (D114): appearing, their effects on the spot, spells, weather, the Rogue's loot |
+| `src/engine/passage.js` | Time passing in half-hour steps: casts, waiting and sleeping in town; buffs that last game time (R17.2, R19.5) |
+| `src/engine/schedule.js` | When a vendor is in: days, hours asleep, days away (R17.6) |
+| `src/engine/barter.js` | Barter (R18): offers and trades; the perpetual stew; a fish let go, eaten, put in the aquarium (R21) |
+| `src/engine/buffs.js` | Buffs from `content/buffs/`: potions, a night's rest; using a potion from the bags |
+| `src/engine/conditions.js` | The cold and night fishing, worked out from the state (R19.2, R19.3, D126) |
+| `src/engine/dive.js` | The Fighter's dive (R20.3, D128): the fish, their rolls, strikes, coming up |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
 | `src/scene/pond.js` | Still water's scene, painted as code from photos of a pond (D115, D116); also on the art sheet |
+| `src/scene/swim.js` | Fish that swim: the swimming motion, the tank's and the surface's shoals (D129, D131) |
+| `src/scene/fish-art.js` | Every fish drawn to swim, as code: side on and from the bank below the surface, its colours from its icon (D131) |
+| `src/scene/fish-shapes.js` | Each fish's shape for swimming: presets for kinds of body, and each fish's own fins, tail and pattern |
+| `src/scene/views.js` | What takes the water's place: the town, the room and its aquarium, the dive (placeholders, CR-5) |
 | `src/scene/reedy.js` | The reedy shore's scene, painted as code from a sketch and a photo of dense reeds (D117) |
 | `src/scene/dice.js` | The fight's d20s thrown over the scene, coming to rest on the numbers rolled (D99; `d20.js`: the die's shape and numbering) |
 | `src/scene/icons.js` | 32×32 icons (D98): items and fish (a default for each kind), the button row, the weather; rarity colours |
@@ -87,6 +97,7 @@ and the art sheet at `/art.html` there.
 | `src/ui/links.js` | Names of fish and items, links to them in rarity colours, bag tabs |
 | `src/ui/tooltip.js` | The one tooltip, for links and slots |
 | `src/ui/drag.js` | Dragging items between the bag and the slots, by mouse and long-press |
+| `src/ui/menu.js` | A fish's options on right-click or long-press (R21.1) |
 | `src/audio.js` | Sound: placeholder sounds made with the Web Audio API, and the volume (9.2) |
 | `editor.html`, `tools/editor/editor.js` | The content editor (7.5): opens `content/` in Chrome or Edge, a form per file from its schema; not published |
 | `tools/sim.mjs` | `npm run sim`: seeded games played headless per class, for balance (9.1) |
@@ -105,4 +116,4 @@ and the art sheet at `/art.html` there.
 | `tools/commons.py` | Wikimedia Commons pictures: search to a contact sheet, fetch a pick with its licence |
 | `tools/py.mjs` | Runs the Python tools in their own environment, `.venv-cutout/` (`npm run cutout setup`); `tools/python-requirements.txt` lists what it installs |
 | `tools/build-artifact.mjs` | Builds `dist/artifact.html` |
-| `docs/` | Spec, decisions, history, porting notes; `docs/design/` holds sketches and photos, local only (D97); `docs/events.md` is how to write an event, `docs/art.md` how the art is made, `docs/ideas.md` the owner's ideas for events and the story |
+| `docs/` | Spec, decisions, history, porting notes; `docs/design/` holds sketches and photos, local only (D97); `docs/events.md` is how to write an event, `docs/art.md` how the art is made, `docs/ideas.md` the owner's ideas for events and the story, `docs/placeholders.md` every placeholder (generated, D124) |

@@ -9,6 +9,12 @@
   },
   "difficulty": 0,
   "rarity": "rare",
+  "stew": [
+    {
+      "value": "treasureFind",
+      "add": 6
+    }
+  ],
   "prefers": {
     "time": [
       "afternoon"
@@ -22,5 +28,8 @@
     "bait": [
       "fly"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

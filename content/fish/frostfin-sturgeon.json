@@ -9,6 +9,16 @@
   },
   "difficulty": 2,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "reactionFast",
+      "add": 400
+    },
+    {
+      "value": "reactionOk",
+      "add": 400
+    }
+  ],
   "prefers": {
     "time": [
       "night"
@@ -22,5 +32,8 @@
     "bait": [
       "worm"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

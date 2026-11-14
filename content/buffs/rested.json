@@ -1,0 +1,11 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "rested",
+  "placeholder": true,
+  "name": "Well rested",
+  "effects": [
+    { "value": "warmth", "add": 1 },
+    { "value": "fishingSkill", "add": 1 }
+  ],
+  "duration": { "minutes": 360 }
+}

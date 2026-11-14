@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "mysterious-resin",
+  "category": "stuff",
+  "name": "Mysterious resin",
+  "flavor": "Amber-coloured and warm to the touch. It smells of something you can't place.",
+  "rarity": "common",
+  "value": 6,
+  "placeholder": [
+    "flavor"
+  ]
+}

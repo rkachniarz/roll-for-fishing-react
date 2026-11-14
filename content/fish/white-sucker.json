@@ -9,6 +9,12 @@
   },
   "difficulty": 0,
   "rarity": "common",
+  "stew": [
+    {
+      "value": "baitRecovery",
+      "add": 5
+    }
+  ],
   "prefers": {
     "time": [
       "morning",
@@ -23,5 +29,8 @@
     "bait": [
       "worm"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

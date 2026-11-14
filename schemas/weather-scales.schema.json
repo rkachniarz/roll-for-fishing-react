@@ -4,6 +4,7 @@
   "type": "object",
   "properties": {
     "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
     "id": { "const": "weather-scales" },
     "temperature": {
       "description": "The first entry whose upTo is at or above the temperature.",

@@ -96,13 +96,13 @@ export function featureAt(features, landing) {
  * Changes `state` (a copy the caller owns).
  * @param {import('./state.js').GameState} state
  * @param {Dice} dice  The `features` stream.
- * @param {{ appear?: boolean, champions?: Dice }} [options]  appear: false for a cast pulled out
+ * @param {{ appear?: boolean, champions?: Dice, extraChance?: number }} [options]  appear: false for a cast pulled out
  *   before a bite, which ages and moves what's there but brings nothing new (D85).
  *   champions: the `champions` stream, for a class fish that may come up in
- *   place of a feature (D114).
+ *   place of a feature (D114). extraChance: the featureChance game value, added to the location's.
  * @returns {import('./game.js').GameEvent[]}
  */
-export function updateFeatures(state, dice, { appear = true, champions } = {}) {
+export function updateFeatures(state, dice, { appear = true, champions, extraChance = 0 } = {}) {
   const water = waterAt(state.location, state.spot);
   /** @type {import('./game.js').GameEvent[]} */
   const events = [];
@@ -127,7 +127,7 @@ export function updateFeatures(state, dice, { appear = true, champions } = {}) {
   // The location's features and the spot's own: its schools and big fish (D102).
   const spot = state.spot ? loc.spots?.find((/** @type {{ id: string }} */ s) => s.id === state.spot) : null;
   const list = [...(loc.features ?? []), ...(spot?.features ?? [])];
-  if (list.length && state.features.length < (loc.maxFeatures ?? 0) && dice.roll100() <= (loc.featureChance ?? 0)) {
+  if (list.length && state.features.length < (loc.maxFeatures ?? 0) && dice.roll100() <= (loc.featureChance ?? 0) + extraChance) {
     // Now and then a class fish instead (D114).
     const champion = champions ? maybeChampion(state, champions, water) : [];
     if (champion.length) return [...events, ...champion];

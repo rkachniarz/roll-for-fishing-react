@@ -93,8 +93,10 @@ test('passive perks change the game values; actives add nothing', () => {
 
 test('a repeatable perk taken twice counts twice', () => {
   let s = character('fish-fighter', 4);
+  const none = valuesFor({ ...s, character: { ...s.character, perks: {} } }).flat.fishingSkill;
   s = { ...s, character: { ...s.character, perks: { 2: 'steady-hands', 4: 'steady-hands' } } };
-  assert.equal(valuesFor(s).flat.fishingSkill, 5);
+  // Against the same moment without them: the cold may take some off (R19.2).
+  assert.equal(valuesFor(s).flat.fishingSkill - none, 2);
 });
 
 test('a save from before perks loads with none taken', () => {

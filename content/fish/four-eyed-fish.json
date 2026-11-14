@@ -10,6 +10,16 @@
   },
   "difficulty": -1,
   "rarity": "rare",
+  "stew": [
+    {
+      "value": "revealResistance",
+      "add": 1
+    },
+    {
+      "value": "fishingSkill",
+      "add": 1
+    }
+  ],
   "prefers": {
     "time": [
       "morning",
@@ -24,5 +34,8 @@
     "bait": [
       "shrimp"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

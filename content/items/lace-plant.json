@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "lace-plant",
+  "category": "stuff",
+  "name": "Lace plant",
+  "flavor": "Leaves like skeletal lace, all holes and veins. You can see right through them.",
+  "icon": "item/lace-plant",
+  "rarity": "common",
+  "value": 15,
+  "placeholder": [
+    "flavor"
+  ]
+}

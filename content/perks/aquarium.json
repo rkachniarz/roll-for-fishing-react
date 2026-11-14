@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "aquarium",
+  "placeholder": ["name", "description"],
+  "class": "any",
+  "kind": "passive",
+  "name": "Aquarium",
+  "description": "An aquarium in your room at the inn. Put fish from your bucket in it, and watch them swim."
+}

@@ -10,6 +10,12 @@
   },
   "difficulty": -2,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "greedyChance",
+      "add": 12
+    }
+  ],
   "prefers": {
     "time": [
       "dawn",
@@ -21,5 +27,8 @@
     "bait": [
       "shrimp"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

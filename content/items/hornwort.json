@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "hornwort",
+  "category": "stuff",
+  "name": "Hornwort",
+  "flavor": "Stiff, forked and bristly, with no roots at all. It shrugs off cold, dark water.",
+  "icon": "item/hornwort",
+  "rarity": "common",
+  "value": 2,
+  "placeholder": [
+    "flavor"
+  ]
+}

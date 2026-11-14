@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "snap-elixir",
+  "placeholder": true,
+  "category": "consumable",
+  "name": "Snap elixir",
+  "flavor": "It clicks shut in your stomach. The next fish to bite is caught before it knows it.",
+  "rarity": "epic",
+  "value": 30,
+  "use": {
+    "buff": "snap-elixir"
+  }
+}

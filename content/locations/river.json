@@ -4,6 +4,7 @@
   "name": "The River",
   "biteThreshold": 50,
   "treasureThreshold": 5,
+  "stuffThreshold": 20,
   "featureChance": 12,
   "maxFeatures": 2,
   "fish": [],
@@ -12,13 +13,31 @@
       "table": "common-treasure"
     }
   ],
-  "junk": [
+  "stuff": [
     {
-      "table": "common-junk"
+      "id": "shiny-pebble",
+      "weight": 25
+    },
+    {
+      "id": "shiny-fish-scales",
+      "weight": 15
+    },
+    {
+      "id": "alchemists-vial",
+      "weight": 8
+    },
+    {
+      "id": "mysterious-resin",
+      "weight": 4
     },
     {
       "id": "mage-tower-map-3",
-      "weight": 1
+      "weight": 3
+    }
+  ],
+  "junk": [
+    {
+      "table": "common-junk"
     }
   ],
   "emptyHook": 45,
@@ -38,6 +57,9 @@
     {
       "id": "upper-river",
       "name": "the upper river",
+      "placeholder": [
+        "name"
+      ],
       "look": {
         "tint": "#6aa0a8",
         "tintAlpha": 0.15,
@@ -159,11 +181,20 @@
           "id": "golden-mahseer",
           "weight": 56
         }
+      ],
+      "stuff": [
+        {
+          "id": "lace-plant",
+          "weight": 2
+        }
       ]
     },
     {
       "id": "lower-river",
       "name": "the lower river",
+      "placeholder": [
+        "name"
+      ],
       "look": {
         "tint": "#5a5030",
         "tintAlpha": 0.22,
@@ -306,11 +337,28 @@
           "id": "strange-giant-catfish",
           "weight": 42
         }
+      ],
+      "stuff": [
+        {
+          "id": "hornwort",
+          "weight": 20
+        },
+        {
+          "id": "floating-water-plantain",
+          "weight": 4
+        },
+        {
+          "id": "lace-plant",
+          "weight": 2
+        }
       ]
     },
     {
       "id": "river-mouth",
       "name": "the river mouth",
+      "placeholder": [
+        "name"
+      ],
       "look": {
         "tint": "#3a6f80",
         "tintAlpha": 0.15,
@@ -442,10 +490,10 @@
           "weight": 32
         }
       ],
-      "junk": [
+      "stuff": [
         {
           "id": "lorebook-page-2",
-          "weight": 1
+          "weight": 3
         }
       ]
     }

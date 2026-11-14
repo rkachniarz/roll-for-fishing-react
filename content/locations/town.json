@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schemas/location.schema.json",
+  "id": "town",
+  "placeholder": true,
+  "name": "The town",
+  "town": true,
+  "hidden": true,
+  "biteThreshold": 200,
+  "treasureThreshold": 0,
+  "fish": [],
+  "treasure": [],
+  "junk": [],
+  "emptyHook": 0,
+  "spots": [
+    {
+      "id": "square",
+      "name": "the square"
+    },
+    {
+      "id": "inn",
+      "name": "the inn"
+    },
+    {
+      "id": "room",
+      "name": "your room",
+      "learnAfter": 1000000
+    },
+    {
+      "id": "alchemist",
+      "name": "the Alchemist's shop",
+      "learnAfter": 1000000
+    }
+  ]
+}

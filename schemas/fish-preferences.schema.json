@@ -11,6 +11,7 @@
   "type": "object",
   "properties": {
     "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
     "id": { "const": "fish-preferences" },
     "factor": {
       "description": "A fish's weight in a table is multiplied by this once for each of its preferences the moment meets: time of day, weather, season, bait.",

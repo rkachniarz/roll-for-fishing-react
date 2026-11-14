@@ -18,6 +18,7 @@
   "type": "object",
   "properties": {
     "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
     "id": { "$ref": "common.schema.json#/definitions/id" },
     "name": { "$ref": "common.schema.json#/definitions/text" },
     "order": { "description": "0 for the first season of the year.", "type": "integer", "minimum": 0 },

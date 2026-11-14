@@ -8,6 +8,12 @@
   },
   "difficulty": -1,
   "rarity": "rare",
+  "stew": [
+    {
+      "value": "warmth",
+      "add": 1
+    }
+  ],
   "prefers": {
     "time": [
       "night"
@@ -18,5 +24,8 @@
     "bait": [
       "shrimp"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "veil-elixir",
+  "placeholder": true,
+  "name": "Veil elixir",
+  "effects": [
+    {
+      "value": "fishVantage",
+      "add": -1
+    }
+  ],
+  "duration": {
+    "casts": 10
+  }
+}

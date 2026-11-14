@@ -2,6 +2,7 @@
 id: quest-bottle
 title: A message in a bottle
 trigger: item
+placeholder: true
 ---
 
 ## start

@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "potion-of-breath",
+  "placeholder": true,
+  "category": "consumable",
+  "name": "Potion of breath",
+  "flavor": "Bubbles rise in it forever. Drink it and the fish seem to come to you.",
+  "rarity": "common",
+  "value": 4,
+  "use": {
+    "buff": "potion-of-breath"
+  }
+}

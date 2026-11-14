@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "plantain-float",
+  "placeholder": true,
+  "name": "Floating draught",
+  "effects": [
+    {
+      "value": "castScatter",
+      "add": -8
+    },
+    {
+      "value": "diveSeconds",
+      "add": 5
+    }
+  ],
+  "duration": {
+    "minutes": 120
+  }
+}

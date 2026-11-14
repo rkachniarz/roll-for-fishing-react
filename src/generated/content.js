@@ -15,6 +15,12 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "eventMeterFill",
+          "add": 60
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -29,7 +35,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "archerfish": {
       "id": "archerfish",
@@ -42,6 +51,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "naturalCatch",
+          "add": -1
+        }
+      ],
       "prefers": {
         "time": [
           "noon",
@@ -56,7 +71,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "asp": {
       "id": "asp",
@@ -68,6 +86,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 2
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -82,7 +106,10 @@ export const content = {
         "bait": [
           "lure"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "barbel": {
       "id": "barbel",
@@ -94,6 +121,16 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 200
+        },
+        {
+          "value": "reactionOk",
+          "add": 200
+        }
+      ],
       "prefers": {
         "time": [
           "evening",
@@ -108,7 +145,10 @@ export const content = {
         "bait": [
           "crayfish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "barramundi": {
       "id": "barramundi",
@@ -121,6 +161,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "greedyChance",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -135,7 +181,10 @@ export const content = {
         "bait": [
           "lure"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "black-crappie": {
       "id": "black-crappie",
@@ -147,6 +196,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -161,7 +216,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "blackfish": {
       "id": "blackfish",
@@ -174,6 +232,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "featureChance",
+          "add": 9
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -187,7 +251,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "bleak": {
       "id": "bleak",
@@ -199,6 +266,12 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "noon",
@@ -213,7 +286,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "bluegill": {
       "id": "bluegill",
@@ -225,6 +301,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "treasureFind",
+          "add": 4
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -239,7 +321,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "bowfin": {
       "id": "bowfin",
@@ -251,6 +336,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 2
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -264,7 +355,10 @@ export const content = {
         "bait": [
           "frog"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "brook-trout": {
       "id": "brook-trout",
@@ -276,6 +370,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -290,7 +390,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "brown-bullhead": {
       "id": "brown-bullhead",
@@ -302,6 +405,16 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 200
+        },
+        {
+          "value": "reactionOk",
+          "add": 200
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -315,7 +428,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "brown-trout": {
       "id": "brown-trout",
@@ -327,6 +443,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "baitRecovery",
+          "add": 10
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -342,7 +464,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "bull-shark": {
       "id": "bull-shark",
@@ -355,6 +480,12 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "eventMeterFill",
+          "add": 60
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -368,7 +499,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "burbot": {
       "id": "burbot",
@@ -380,6 +514,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "warmth",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -393,7 +533,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "capelin": {
       "id": "capelin",
@@ -406,6 +549,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "twinChance",
+          "add": 9
+        }
+      ],
       "prefers": {
         "time": [
           "evening",
@@ -420,7 +569,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "cassalan-pike": {
       "id": "cassalan-pike",
@@ -432,6 +584,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -446,7 +604,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "cassalan-sleeper": {
       "id": "cassalan-sleeper",
@@ -458,6 +619,16 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 200
+        },
+        {
+          "value": "reactionOk",
+          "add": 200
+        }
+      ],
       "prefers": {
         "time": [
           "evening",
@@ -472,7 +643,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "central-mudminnow": {
       "id": "central-mudminnow",
@@ -484,6 +658,12 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "warmth",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "evening",
@@ -495,7 +675,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "chain-pickerel": {
       "id": "chain-pickerel",
@@ -507,6 +690,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning"
@@ -520,7 +709,10 @@ export const content = {
         "bait": [
           "lure"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "channel-catfish": {
       "id": "channel-catfish",
@@ -532,6 +724,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -545,7 +743,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "chub": {
       "id": "chub",
@@ -557,6 +758,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "afternoon"
@@ -570,7 +777,10 @@ export const content = {
         "bait": [
           "bread"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "cisco": {
       "id": "cisco",
@@ -582,6 +792,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "warmth",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -596,7 +812,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "clown-knifefish": {
       "id": "clown-knifefish",
@@ -609,6 +828,16 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "stuffFind",
+          "add": 16
+        },
+        {
+          "value": "treasureFind",
+          "add": 8
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -619,7 +848,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "coelacanth": {
       "id": "coelacanth",
@@ -632,6 +864,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "riftChance",
+          "add": 8
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -645,7 +883,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "common-bream": {
       "id": "common-bream",
@@ -657,6 +898,16 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 100
+        },
+        {
+          "value": "reactionOk",
+          "add": 100
+        }
+      ],
       "prefers": {
         "time": [
           "evening",
@@ -671,7 +922,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "common-carp": {
       "id": "common-carp",
@@ -683,6 +937,16 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 100
+        },
+        {
+          "value": "reactionOk",
+          "add": 100
+        }
+      ],
       "prefers": {
         "time": [
           "night",
@@ -697,7 +961,10 @@ export const content = {
         "bait": [
           "corn"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "crucian-carp": {
       "id": "crucian-carp",
@@ -709,6 +976,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -723,7 +996,10 @@ export const content = {
         "bait": [
           "bread"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "dace": {
       "id": "dace",
@@ -735,6 +1011,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning"
@@ -745,7 +1027,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "deepwater-sculpin": {
       "id": "deepwater-sculpin",
@@ -757,6 +1042,16 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 200
+        },
+        {
+          "value": "reactionOk",
+          "add": 200
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -764,7 +1059,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "discus": {
       "id": "discus",
@@ -777,6 +1075,12 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "greedyChance",
+          "add": 12
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -788,7 +1092,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "electric-eel": {
       "id": "electric-eel",
@@ -801,6 +1108,12 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "featureChance",
+          "add": 12
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -814,7 +1127,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "electric-yellow-cichlid": {
       "id": "electric-yellow-cichlid",
@@ -827,6 +1143,16 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "revealResistance",
+          "add": 1
+        },
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -838,7 +1164,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "ferrstad-carp": {
       "id": "ferrstad-carp",
@@ -850,6 +1179,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -864,7 +1199,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "four-eyed-fish": {
       "id": "four-eyed-fish",
@@ -877,6 +1215,16 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "revealResistance",
+          "add": 1
+        },
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -891,7 +1239,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "frontosa": {
       "id": "frontosa",
@@ -904,6 +1255,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "twinChance",
+          "add": 9
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -915,7 +1272,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "frostfin-char": {
       "id": "frostfin-char",
@@ -927,6 +1287,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -941,7 +1307,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "frostfin-grayling": {
       "id": "frostfin-grayling",
@@ -953,6 +1322,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "treasureFind",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "afternoon"
@@ -966,7 +1341,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "frostfin-sturgeon": {
       "id": "frostfin-sturgeon",
@@ -978,6 +1356,16 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 400
+        },
+        {
+          "value": "reactionOk",
+          "add": 400
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -991,7 +1379,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "giant-freshwater-stingray": {
       "id": "giant-freshwater-stingray",
@@ -1004,6 +1395,12 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "featureChance",
+          "add": 9
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -1017,7 +1414,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "giant-gourami": {
       "id": "giant-gourami",
@@ -1030,6 +1430,16 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "wildCast",
+          "add": -1
+        },
+        {
+          "value": "castScatter",
+          "add": -4
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -1044,7 +1454,10 @@ export const content = {
         "bait": [
           "bread"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "golden-dorado": {
       "id": "golden-dorado",
@@ -1056,6 +1469,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -1070,7 +1489,10 @@ export const content = {
         "bait": [
           "lure"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "golden-mahseer": {
       "id": "golden-mahseer",
@@ -1083,6 +1505,16 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "wildCast",
+          "add": -1
+        },
+        {
+          "value": "castScatter",
+          "add": -8
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -1097,7 +1529,10 @@ export const content = {
         "bait": [
           "bread"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "golden-shiner": {
       "id": "golden-shiner",
@@ -1109,6 +1544,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "morning"
@@ -1122,7 +1563,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "goliath-tigerfish": {
       "id": "goliath-tigerfish",
@@ -1135,6 +1579,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "featureChance",
+          "add": 12
+        }
+      ],
       "prefers": {
         "time": [
           "noon",
@@ -1149,7 +1599,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "golomyanka": {
       "id": "golomyanka",
@@ -1160,6 +1613,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "warmth",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -1170,7 +1629,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "goonch-catfish": {
       "id": "goonch-catfish",
@@ -1183,6 +1645,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "greedyChance",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -1193,7 +1661,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "grass-carp": {
       "id": "grass-carp",
@@ -1205,6 +1676,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 12
+        }
+      ],
       "prefers": {
         "time": [
           "noon",
@@ -1219,7 +1696,10 @@ export const content = {
         "bait": [
           "corn"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "grasslands-silverside": {
       "id": "grasslands-silverside",
@@ -1230,6 +1710,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "warmth",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -1244,7 +1730,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "grayling": {
       "id": "grayling",
@@ -1256,6 +1745,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "treasureFind",
+          "add": 4
+        }
+      ],
       "prefers": {
         "time": [
           "noon",
@@ -1271,7 +1766,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "great-sea-salmon": {
       "id": "great-sea-salmon",
@@ -1283,6 +1781,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "baitRecovery",
+          "add": 15
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -1297,7 +1801,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "gudgeon": {
       "id": "gudgeon",
@@ -1309,6 +1816,12 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -1323,7 +1836,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "hillstream-loach": {
       "id": "hillstream-loach",
@@ -1336,6 +1852,16 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "wildCast",
+          "add": -1
+        },
+        {
+          "value": "castScatter",
+          "add": -6
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -1347,7 +1873,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "huchen": {
       "id": "huchen",
@@ -1359,6 +1888,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "warmth",
+          "add": 2
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -1373,7 +1908,10 @@ export const content = {
         "bait": [
           "lure"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "icefish": {
       "id": "icefish",
@@ -1386,6 +1924,16 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "revealResistance",
+          "add": 1
+        },
+        {
+          "value": "fishingSkill",
+          "add": 2
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -1399,7 +1947,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "ide": {
       "id": "ide",
@@ -1411,6 +1962,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "treasureFind",
+          "add": 4
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -1425,7 +1982,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "lake-brown-trout": {
       "id": "lake-brown-trout",
@@ -1437,6 +1997,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 2
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -1451,7 +2017,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "lake-sturgeon": {
       "id": "lake-sturgeon",
@@ -1463,6 +2032,16 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 400
+        },
+        {
+          "value": "reactionOk",
+          "add": 400
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -1476,7 +2055,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "lake-trout": {
       "id": "lake-trout",
@@ -1488,6 +2070,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -1502,7 +2090,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "lake-whitefish": {
       "id": "lake-whitefish",
@@ -1514,6 +2105,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "warmth",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -1528,7 +2125,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "landlocked-great-sea-salmon": {
       "id": "landlocked-great-sea-salmon",
@@ -1540,6 +2140,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -1555,7 +2161,10 @@ export const content = {
         "bait": [
           "lure"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "largemouth-bass": {
       "id": "largemouth-bass",
@@ -1567,6 +2176,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 2
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -1581,7 +2196,10 @@ export const content = {
         "bait": [
           "frog"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "lenok": {
       "id": "lenok",
@@ -1593,6 +2211,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "treasureFind",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -1607,7 +2231,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "lumpfish": {
       "id": "lumpfish",
@@ -1620,6 +2247,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "riftChance",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -1634,7 +2267,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "mainland-bullhead": {
       "id": "mainland-bullhead",
@@ -1646,6 +2282,16 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 100
+        },
+        {
+          "value": "reactionOk",
+          "add": 100
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -1653,7 +2299,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "mainland-eel": {
       "id": "mainland-eel",
@@ -1664,6 +2313,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -1678,7 +2333,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "mainland-mudminnow": {
       "id": "mainland-mudminnow",
@@ -1690,6 +2348,12 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 12
+        }
+      ],
       "prefers": {
         "time": [
           "evening"
@@ -1703,7 +2367,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "mainland-whitefish": {
       "id": "mainland-whitefish",
@@ -1715,6 +2382,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "treasureFind",
+          "add": 4
+        }
+      ],
       "prefers": {
         "time": [
           "morning"
@@ -1728,7 +2401,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "mangrove-jack": {
       "id": "mangrove-jack",
@@ -1741,6 +2417,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "timeSlip",
+          "add": 20
+        }
+      ],
       "prefers": {
         "time": [
           "sunset",
@@ -1755,7 +2437,10 @@ export const content = {
         "bait": [
           "crayfish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "marbled-lungfish": {
       "id": "marbled-lungfish",
@@ -1768,6 +2453,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "riftChance",
+          "add": 8
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -1781,7 +2472,10 @@ export const content = {
         "bait": [
           "frog"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "minnow": {
       "id": "minnow",
@@ -1793,6 +2487,12 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -1807,7 +2507,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "mudskipper": {
       "id": "mudskipper",
@@ -1820,6 +2523,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "twinChance",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "noon",
@@ -1834,7 +2543,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "muskellunge": {
       "id": "muskellunge",
@@ -1846,6 +2558,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "sunset"
@@ -1859,7 +2577,10 @@ export const content = {
         "bait": [
           "lure"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "nase": {
       "id": "nase",
@@ -1871,6 +2592,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "noon",
@@ -1885,7 +2612,10 @@ export const content = {
         "bait": [
           "bread"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "northern-pike": {
       "id": "northern-pike",
@@ -1897,6 +2627,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 2
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -1911,7 +2647,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "northern-snakehead": {
       "id": "northern-snakehead",
@@ -1923,6 +2662,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 2
+        }
+      ],
       "prefers": {
         "time": [
           "afternoon"
@@ -1936,7 +2681,10 @@ export const content = {
         "bait": [
           "frog"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "omul": {
       "id": "omul",
@@ -1948,6 +2696,16 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 300
+        },
+        {
+          "value": "reactionOk",
+          "add": 300
+        }
+      ],
       "prefers": {
         "time": [
           "evening",
@@ -1962,7 +2720,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "ornate-bichir": {
       "id": "ornate-bichir",
@@ -1975,6 +2736,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "timeSlip",
+          "add": 15
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -1985,7 +2752,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "oscar": {
       "id": "oscar",
@@ -1998,6 +2768,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "twinChance",
+          "add": 9
+        }
+      ],
       "prefers": {
         "time": [
           "afternoon"
@@ -2011,7 +2787,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "pacu": {
       "id": "pacu",
@@ -2024,6 +2803,16 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "stuffFind",
+          "add": 16
+        },
+        {
+          "value": "treasureFind",
+          "add": 8
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2038,7 +2827,10 @@ export const content = {
         "bait": [
           "corn"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "payara": {
       "id": "payara",
@@ -2051,6 +2843,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "eventMeterFill",
+          "add": 60
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2065,7 +2863,10 @@ export const content = {
         "bait": [
           "lure"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "peacock-bass": {
       "id": "peacock-bass",
@@ -2078,6 +2879,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "featureChance",
+          "add": 9
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2092,7 +2899,10 @@ export const content = {
         "bait": [
           "lure"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "perch": {
       "id": "perch",
@@ -2104,6 +2914,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2115,7 +2931,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "polar-cod": {
       "id": "polar-cod",
@@ -2128,6 +2947,16 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "wildCast",
+          "add": -1
+        },
+        {
+          "value": "castScatter",
+          "add": -6
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2141,7 +2970,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "pumpkinseed": {
       "id": "pumpkinseed",
@@ -2153,6 +2985,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "noon",
@@ -2167,7 +3005,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "rainbow-trout": {
       "id": "rainbow-trout",
@@ -2179,6 +3020,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "treasureFind",
+          "add": 4
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2193,7 +3040,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "red-bellied-piranha": {
       "id": "red-bellied-piranha",
@@ -2206,6 +3056,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "greedyChance",
+          "add": 9
+        }
+      ],
       "prefers": {
         "time": [
           "noon",
@@ -2220,7 +3076,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "redtail-catfish": {
       "id": "redtail-catfish",
@@ -2233,6 +3092,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "naturalCatch",
+          "add": -1
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2246,7 +3111,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "roach": {
       "id": "roach",
@@ -2258,6 +3126,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2269,7 +3143,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "rock-bass": {
       "id": "rock-bass",
@@ -2281,6 +3158,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "evening"
@@ -2294,7 +3177,10 @@ export const content = {
         "bait": [
           "crayfish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "rudd": {
       "id": "rudd",
@@ -2306,6 +3192,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "noon",
@@ -2320,7 +3212,10 @@ export const content = {
         "bait": [
           "bread"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "ruffe": {
       "id": "ruffe",
@@ -2332,6 +3227,16 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 100
+        },
+        {
+          "value": "reactionOk",
+          "add": 100
+        }
+      ],
       "prefers": {
         "time": [
           "evening",
@@ -2343,7 +3248,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "sauger": {
       "id": "sauger",
@@ -2355,6 +3263,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "warmth",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -2369,7 +3283,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "sea-lamprey": {
       "id": "sea-lamprey",
@@ -2381,6 +3298,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 2
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2391,7 +3314,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "silver-arowana": {
       "id": "silver-arowana",
@@ -2404,6 +3330,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "featureChance",
+          "add": 12
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -2418,7 +3350,10 @@ export const content = {
         "bait": [
           "fly"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "silver-bream": {
       "id": "silver-bream",
@@ -2430,6 +3365,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2444,7 +3385,10 @@ export const content = {
         "bait": [
           "maggot"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "silver-carp": {
       "id": "silver-carp",
@@ -2456,6 +3400,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 9
+        }
+      ],
       "prefers": {
         "time": [
           "noon"
@@ -2469,7 +3419,10 @@ export const content = {
         "bait": [
           "bread"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "smallmouth-bass": {
       "id": "smallmouth-bass",
@@ -2481,6 +3434,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2495,7 +3454,10 @@ export const content = {
         "bait": [
           "crayfish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "smelt": {
       "id": "smelt",
@@ -2507,6 +3469,16 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 100
+        },
+        {
+          "value": "reactionOk",
+          "add": 100
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2517,7 +3489,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "snailfish": {
       "id": "snailfish",
@@ -2530,6 +3505,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "timeSlip",
+          "add": 15
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2540,7 +3521,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "snow-trout": {
       "id": "snow-trout",
@@ -2553,6 +3537,16 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "wildCast",
+          "add": -1
+        },
+        {
+          "value": "castScatter",
+          "add": -8
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -2567,7 +3561,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "sterlet": {
       "id": "sterlet",
@@ -2579,6 +3576,16 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 300
+        },
+        {
+          "value": "reactionOk",
+          "add": 300
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2592,7 +3599,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "stone-loach": {
       "id": "stone-loach",
@@ -2604,6 +3614,16 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 100
+        },
+        {
+          "value": "reactionOk",
+          "add": 100
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2611,7 +3631,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "strange-cod": {
       "id": "strange-cod",
@@ -2624,6 +3647,16 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "wildCast",
+          "add": -1
+        },
+        {
+          "value": "castScatter",
+          "add": -8
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -2638,7 +3671,10 @@ export const content = {
         "bait": [
           "crayfish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "strange-giant-catfish": {
       "id": "strange-giant-catfish",
@@ -2651,6 +3687,12 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "twinChance",
+          "add": 12
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2664,7 +3706,10 @@ export const content = {
         "bait": [
           "bread"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "strange-perch": {
       "id": "strange-perch",
@@ -2677,6 +3722,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "timeSlip",
+          "add": 20
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2691,7 +3742,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "strange-shark": {
       "id": "strange-shark",
@@ -2704,6 +3758,12 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "riftChance",
+          "add": 8
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2717,7 +3777,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "strange-tilapia": {
       "id": "strange-tilapia",
@@ -2730,6 +3793,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "featureChance",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2744,7 +3813,10 @@ export const content = {
         "bait": [
           "corn"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "taimen": {
       "id": "taimen",
@@ -2756,6 +3828,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "sunset",
@@ -2770,7 +3848,10 @@ export const content = {
         "bait": [
           "mouse"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "tench": {
       "id": "tench",
@@ -2782,6 +3863,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 6
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -2796,7 +3883,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "tiger-shovelnose-catfish": {
       "id": "tiger-shovelnose-catfish",
@@ -2809,6 +3899,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "featureChance",
+          "add": 9
+        }
+      ],
       "prefers": {
         "time": [
           "evening",
@@ -2823,7 +3919,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "trahira": {
       "id": "trahira",
@@ -2835,6 +3934,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "evening",
@@ -2849,7 +3954,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "vendace": {
       "id": "vendace",
@@ -2861,6 +3969,16 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 100
+        },
+        {
+          "value": "reactionOk",
+          "add": 100
+        }
+      ],
       "prefers": {
         "time": [
           "evening",
@@ -2875,7 +3993,10 @@ export const content = {
         "bait": [
           "shrimp"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "walleye": {
       "id": "walleye",
@@ -2887,6 +4008,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -2901,7 +4028,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "weatherfish": {
       "id": "weatherfish",
@@ -2913,6 +4043,16 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "reactionFast",
+          "add": 200
+        },
+        {
+          "value": "reactionOk",
+          "add": 200
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2923,7 +4063,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "wels-catfish": {
       "id": "wels-catfish",
@@ -2935,6 +4078,12 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 2
+        }
+      ],
       "prefers": {
         "time": [
           "night"
@@ -2948,7 +4097,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "white-sucker": {
       "id": "white-sucker",
@@ -2960,6 +4112,12 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "baitRecovery",
+          "add": 5
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -2974,7 +4132,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "wildlands-pejerrey": {
       "id": "wildlands-pejerrey",
@@ -2985,6 +4146,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "afternoon"
@@ -2998,7 +4165,10 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "wildlands-perch": {
       "id": "wildlands-perch",
@@ -3010,6 +4180,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 9
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -3024,7 +4200,10 @@ export const content = {
         "bait": [
           "crayfish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "wolffish": {
       "id": "wolffish",
@@ -3037,6 +4216,12 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "stew": [
+        {
+          "value": "featureChance",
+          "add": 12
+        }
+      ],
       "prefers": {
         "time": [
           "dawn",
@@ -3051,7 +4236,10 @@ export const content = {
         "bait": [
           "crayfish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "yellow-perch": {
       "id": "yellow-perch",
@@ -3063,6 +4251,12 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "stew": [
+        {
+          "value": "fishFind",
+          "add": 3
+        }
+      ],
       "prefers": {
         "time": [
           "morning",
@@ -3074,7 +4268,10 @@ export const content = {
         "bait": [
           "worm"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     },
     "zander": {
       "id": "zander",
@@ -3086,6 +4283,12 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "stew": [
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ],
       "prefers": {
         "time": [
           "sunset",
@@ -3101,10 +4304,24 @@ export const content = {
         "bait": [
           "small-fish"
         ]
-      }
+      },
+      "placeholder": [
+        "stew"
+      ]
     }
   },
   "items": {
+    "alchemists-vial": {
+      "id": "alchemists-vial",
+      "category": "stuff",
+      "name": "item.alchemists-vial.name",
+      "flavor": "item.alchemists-vial.flavor",
+      "rarity": "common",
+      "value": 3,
+      "placeholder": [
+        "flavor"
+      ]
+    },
     "ash-rod": {
       "id": "ash-rod",
       "category": "treasure",
@@ -3235,6 +4452,18 @@ export const content = {
       "flavor": "item.broken-off-fishing-pole-tip.flavor",
       "rarity": "poor",
       "value": 1
+    },
+    "canadian-waterweed": {
+      "id": "canadian-waterweed",
+      "category": "stuff",
+      "name": "item.canadian-waterweed.name",
+      "flavor": "item.canadian-waterweed.flavor",
+      "icon": "item/canadian-waterweed",
+      "rarity": "common",
+      "value": 2,
+      "placeholder": [
+        "flavor"
+      ]
     },
     "candle-stump": {
       "id": "candle-stump",
@@ -3420,6 +4649,18 @@ export const content = {
       ],
       "devOnly": true
     },
+    "floating-water-plantain": {
+      "id": "floating-water-plantain",
+      "category": "stuff",
+      "name": "item.floating-water-plantain.name",
+      "flavor": "item.floating-water-plantain.flavor",
+      "icon": "item/floating-water-plantain",
+      "rarity": "common",
+      "value": 8,
+      "placeholder": [
+        "flavor"
+      ]
+    },
     "four-leaf-underwater-clover": {
       "id": "four-leaf-underwater-clover",
       "category": "treasure",
@@ -3448,6 +4689,18 @@ export const content = {
       "rarity": "poor",
       "value": 0
     },
+    "glimmer-draught": {
+      "id": "glimmer-draught",
+      "placeholder": true,
+      "category": "consumable",
+      "name": "item.glimmer-draught.name",
+      "flavor": "item.glimmer-draught.flavor",
+      "rarity": "uncommon",
+      "value": 8,
+      "use": {
+        "buff": "glimmer-draught"
+      }
+    },
     "heavy-bait": {
       "id": "heavy-bait",
       "category": "treasure",
@@ -3475,6 +4728,30 @@ export const content = {
       "flavor": "item.hempen-tangles.flavor",
       "rarity": "poor",
       "value": 0
+    },
+    "hornwort-tonic": {
+      "id": "hornwort-tonic",
+      "placeholder": true,
+      "category": "consumable",
+      "name": "item.hornwort-tonic.name",
+      "flavor": "item.hornwort-tonic.flavor",
+      "rarity": "common",
+      "value": 4,
+      "use": {
+        "buff": "hornwort-tonic"
+      }
+    },
+    "hornwort": {
+      "id": "hornwort",
+      "category": "stuff",
+      "name": "item.hornwort.name",
+      "flavor": "item.hornwort.flavor",
+      "icon": "item/hornwort",
+      "rarity": "common",
+      "value": 2,
+      "placeholder": [
+        "flavor"
+      ]
     },
     "horsehair-line": {
       "id": "horsehair-line",
@@ -3556,6 +4833,18 @@ export const content = {
       "rarity": "poor",
       "value": 2
     },
+    "lace-plant": {
+      "id": "lace-plant",
+      "category": "stuff",
+      "name": "item.lace-plant.name",
+      "flavor": "item.lace-plant.flavor",
+      "icon": "item/lace-plant",
+      "rarity": "common",
+      "value": 15,
+      "placeholder": [
+        "flavor"
+      ]
+    },
     "leaky-waterskin": {
       "id": "leaky-waterskin",
       "category": "junk",
@@ -3579,6 +4868,18 @@ export const content = {
         }
       ],
       "devOnly": true
+    },
+    "lobelia-antidote": {
+      "id": "lobelia-antidote",
+      "placeholder": true,
+      "category": "consumable",
+      "name": "item.lobelia-antidote.name",
+      "flavor": "item.lobelia-antidote.flavor",
+      "rarity": "uncommon",
+      "value": 8,
+      "use": {
+        "buff": "lobelia-antidote"
+      }
     },
     "lorebook-page-1": {
       "id": "lorebook-page-1",
@@ -3699,6 +5000,30 @@ export const content = {
         }
       ]
     },
+    "marimo-charm": {
+      "id": "marimo-charm",
+      "placeholder": true,
+      "category": "consumable",
+      "name": "item.marimo-charm.name",
+      "flavor": "item.marimo-charm.flavor",
+      "rarity": "rare",
+      "value": 16,
+      "use": {
+        "buff": "marimo-charm"
+      }
+    },
+    "marimo": {
+      "id": "marimo",
+      "category": "stuff",
+      "name": "item.marimo.name",
+      "flavor": "item.marimo.flavor",
+      "icon": "item/marimo",
+      "rarity": "common",
+      "value": 8,
+      "placeholder": [
+        "flavor"
+      ]
+    },
     "mega-mass-fish-chum": {
       "id": "mega-mass-fish-chum",
       "category": "treasure",
@@ -3737,6 +5062,18 @@ export const content = {
       "rarity": "poor",
       "value": 0
     },
+    "moonlit-draught": {
+      "id": "moonlit-draught",
+      "placeholder": true,
+      "category": "consumable",
+      "name": "item.moonlit-draught.name",
+      "flavor": "item.moonlit-draught.flavor",
+      "rarity": "uncommon",
+      "value": 8,
+      "use": {
+        "buff": "moonlit-draught"
+      }
+    },
     "mouse-fly": {
       "id": "mouse-fly",
       "category": "consumable",
@@ -3753,6 +5090,17 @@ export const content = {
       ],
       "devOnly": true
     },
+    "mysterious-resin": {
+      "id": "mysterious-resin",
+      "category": "stuff",
+      "name": "item.mysterious-resin.name",
+      "flavor": "item.mysterious-resin.flavor",
+      "rarity": "common",
+      "value": 6,
+      "placeholder": [
+        "flavor"
+      ]
+    },
     "old-compass": {
       "id": "old-compass",
       "category": "junk",
@@ -3768,6 +5116,54 @@ export const content = {
       "flavor": "item.old-skull.flavor",
       "rarity": "poor",
       "value": 0
+    },
+    "old-torn-doll": {
+      "id": "old-torn-doll",
+      "category": "stuff",
+      "name": "item.old-torn-doll.name",
+      "flavor": "item.old-torn-doll.flavor",
+      "rarity": "common",
+      "value": 0,
+      "unique": true,
+      "placeholder": [
+        "flavor"
+      ]
+    },
+    "plantain-float": {
+      "id": "plantain-float",
+      "placeholder": true,
+      "category": "consumable",
+      "name": "item.plantain-float.name",
+      "flavor": "item.plantain-float.flavor",
+      "rarity": "rare",
+      "value": 16,
+      "use": {
+        "buff": "plantain-float"
+      }
+    },
+    "potion-of-breath": {
+      "id": "potion-of-breath",
+      "placeholder": true,
+      "category": "consumable",
+      "name": "item.potion-of-breath.name",
+      "flavor": "item.potion-of-breath.flavor",
+      "rarity": "common",
+      "value": 4,
+      "use": {
+        "buff": "potion-of-breath"
+      }
+    },
+    "quillwort": {
+      "id": "quillwort",
+      "category": "stuff",
+      "name": "item.quillwort.name",
+      "flavor": "item.quillwort.flavor",
+      "icon": "item/quillwort",
+      "rarity": "common",
+      "value": 4,
+      "placeholder": [
+        "flavor"
+      ]
     },
     "reed-pole": {
       "id": "reed-pole",
@@ -3840,6 +5236,28 @@ export const content = {
       "flavor": "item.rusted-saucepan.flavor",
       "rarity": "poor",
       "value": 2
+    },
+    "shiny-fish-scales": {
+      "id": "shiny-fish-scales",
+      "category": "stuff",
+      "name": "item.shiny-fish-scales.name",
+      "flavor": "item.shiny-fish-scales.flavor",
+      "rarity": "common",
+      "value": 2,
+      "placeholder": [
+        "flavor"
+      ]
+    },
+    "shiny-pebble": {
+      "id": "shiny-pebble",
+      "category": "stuff",
+      "name": "item.shiny-pebble.name",
+      "flavor": "item.shiny-pebble.flavor",
+      "rarity": "common",
+      "value": 2,
+      "placeholder": [
+        "flavor"
+      ]
     },
     "shrimp": {
       "id": "shrimp",
@@ -3924,6 +5342,18 @@ export const content = {
       "flavor": "item.snail-shell.flavor",
       "rarity": "poor",
       "value": 5
+    },
+    "snap-elixir": {
+      "id": "snap-elixir",
+      "placeholder": true,
+      "category": "consumable",
+      "name": "item.snap-elixir.name",
+      "flavor": "item.snap-elixir.flavor",
+      "rarity": "epic",
+      "value": 30,
+      "use": {
+        "buff": "snap-elixir"
+      }
     },
     "soggy-treasure-map": {
       "id": "soggy-treasure-map",
@@ -4042,6 +5472,18 @@ export const content = {
         }
       ]
     },
+    "veil-elixir": {
+      "id": "veil-elixir",
+      "placeholder": true,
+      "category": "consumable",
+      "name": "item.veil-elixir.name",
+      "flavor": "item.veil-elixir.flavor",
+      "rarity": "epic",
+      "value": 30,
+      "use": {
+        "buff": "veil-elixir"
+      }
+    },
     "vendor-trash": {
       "id": "vendor-trash",
       "category": "junk",
@@ -4058,6 +5500,39 @@ export const content = {
       "rarity": "poor",
       "value": 1
     },
+    "warm-woolen-hat": {
+      "id": "warm-woolen-hat",
+      "category": "treasure",
+      "name": "item.warm-woolen-hat.name",
+      "flavor": "item.warm-woolen-hat.flavor",
+      "rarity": "uncommon",
+      "value": 4,
+      "slot": "hat",
+      "effects": [
+        {
+          "value": "warmth",
+          "add": 1
+        },
+        {
+          "value": "reactionFast",
+          "add": -50
+        }
+      ],
+      "unique": true,
+      "placeholder": true
+    },
+    "water-lobelia": {
+      "id": "water-lobelia",
+      "category": "stuff",
+      "name": "item.water-lobelia.name",
+      "flavor": "item.water-lobelia.flavor",
+      "icon": "item/water-lobelia",
+      "rarity": "common",
+      "value": 4,
+      "placeholder": [
+        "flavor"
+      ]
+    },
     "waterlogged-stick": {
       "id": "waterlogged-stick",
       "category": "junk",
@@ -4065,6 +5540,18 @@ export const content = {
       "flavor": "item.waterlogged-stick.flavor",
       "rarity": "poor",
       "value": 0
+    },
+    "waterwheel-plant": {
+      "id": "waterwheel-plant",
+      "category": "stuff",
+      "name": "item.waterwheel-plant.name",
+      "flavor": "item.waterwheel-plant.flavor",
+      "icon": "item/waterwheel-plant",
+      "rarity": "common",
+      "value": 15,
+      "placeholder": [
+        "flavor"
+      ]
     },
     "wicker-creel": {
       "id": "wicker-creel",
@@ -4157,6 +5644,7 @@ export const content = {
       "name": "location.lake.name",
       "biteThreshold": 50,
       "treasureThreshold": 5,
+      "stuffThreshold": 20,
       "featureChance": 12,
       "maxFeatures": 2,
       "fish": [],
@@ -4165,21 +5653,39 @@ export const content = {
           "table": "common-treasure"
         }
       ],
-      "junk": [
+      "stuff": [
         {
-          "table": "common-junk"
+          "id": "shiny-pebble",
+          "weight": 25
+        },
+        {
+          "id": "shiny-fish-scales",
+          "weight": 15
+        },
+        {
+          "id": "alchemists-vial",
+          "weight": 8
+        },
+        {
+          "id": "mysterious-resin",
+          "weight": 4
         },
         {
           "id": "message-in-a-bottle",
-          "weight": 1
+          "weight": 3
         },
         {
           "id": "mage-tower-map-1",
-          "weight": 1
+          "weight": 3
         },
         {
           "id": "mage-tower-map-2",
-          "weight": 1
+          "weight": 3
+        }
+      ],
+      "junk": [
+        {
+          "table": "common-junk"
         }
       ],
       "emptyHook": 45,
@@ -4199,6 +5705,9 @@ export const content = {
         {
           "id": "reedy-shore",
           "name": "location.lake.spots.reedy-shore.name",
+          "placeholder": [
+            "name"
+          ],
           "look": {
             "painting": "reedy"
           },
@@ -4317,11 +5826,28 @@ export const content = {
               "id": "clown-knifefish",
               "weight": 42
             }
+          ],
+          "stuff": [
+            {
+              "id": "canadian-waterweed",
+              "weight": 20
+            },
+            {
+              "id": "water-lobelia",
+              "weight": 10
+            },
+            {
+              "id": "floating-water-plantain",
+              "weight": 4
+            }
           ]
         },
         {
           "id": "swamp",
           "name": "location.lake.spots.swamp.name",
+          "placeholder": [
+            "name"
+          ],
           "look": {
             "tint": "#2f4a2a",
             "tintAlpha": 0.35,
@@ -4474,11 +6000,24 @@ export const content = {
               "id": "arapaima",
               "weight": 24
             }
+          ],
+          "stuff": [
+            {
+              "id": "hornwort",
+              "weight": 20
+            },
+            {
+              "id": "waterwheel-plant",
+              "weight": 2
+            }
           ]
         },
         {
           "id": "still-water",
           "name": "location.lake.spots.still-water.name",
+          "placeholder": [
+            "name"
+          ],
           "look": {
             "painting": "pond"
           },
@@ -4598,11 +6137,36 @@ export const content = {
               "id": "discus",
               "weight": 32
             }
+          ],
+          "stuff": [
+            {
+              "id": "canadian-waterweed",
+              "weight": 20
+            },
+            {
+              "id": "hornwort",
+              "weight": 20
+            },
+            {
+              "id": "marimo",
+              "weight": 4
+            },
+            {
+              "id": "waterwheel-plant",
+              "weight": 2
+            },
+            {
+              "id": "old-torn-doll",
+              "weight": 12
+            }
           ]
         },
         {
           "id": "rocky-shore",
           "name": "location.lake.spots.rocky-shore.name",
+          "placeholder": [
+            "name"
+          ],
           "look": {
             "tint": "#4b5a62",
             "tintAlpha": 0.15,
@@ -4731,11 +6295,24 @@ export const content = {
               "id": "strange-cod",
               "weight": 32
             }
+          ],
+          "stuff": [
+            {
+              "id": "quillwort",
+              "weight": 10
+            },
+            {
+              "id": "water-lobelia",
+              "weight": 10
+            }
           ]
         },
         {
           "id": "open-water",
           "name": "location.lake.spots.open-water.name",
+          "placeholder": [
+            "name"
+          ],
           "look": {
             "tint": "#2a5a7a",
             "tintAlpha": 0.2,
@@ -4852,6 +6429,9 @@ export const content = {
         {
           "id": "deep-water",
           "name": "location.lake.spots.deep-water.name",
+          "placeholder": [
+            "name"
+          ],
           "look": {
             "tint": "#0d2638",
             "tintAlpha": 0.4,
@@ -4944,10 +6524,18 @@ export const content = {
               "weight": 24
             }
           ],
-          "junk": [
+          "stuff": [
+            {
+              "id": "quillwort",
+              "weight": 10
+            },
+            {
+              "id": "marimo",
+              "weight": 4
+            },
             {
               "id": "lorebook-page-1",
-              "weight": 1
+              "weight": 3
             }
           ]
         }
@@ -4955,11 +6543,13 @@ export const content = {
     },
     "mage-tower": {
       "id": "mage-tower",
+      "placeholder": true,
       "name": "location.mage-tower.name",
       "hidden": true,
       "fragments": 3,
       "biteThreshold": 50,
       "treasureThreshold": 5,
+      "stuffThreshold": 20,
       "featureChance": 12,
       "maxFeatures": 2,
       "fish": [],
@@ -4968,6 +6558,7 @@ export const content = {
           "table": "common-treasure"
         }
       ],
+      "stuff": [],
       "junk": [
         {
           "table": "common-junk"
@@ -5030,10 +6621,10 @@ export const content = {
               "weight": 24
             }
           ],
-          "junk": [
+          "stuff": [
             {
               "id": "lorebook-page-3",
-              "weight": 1
+              "weight": 3
             }
           ]
         }
@@ -5044,6 +6635,7 @@ export const content = {
       "name": "location.river.name",
       "biteThreshold": 50,
       "treasureThreshold": 5,
+      "stuffThreshold": 20,
       "featureChance": 12,
       "maxFeatures": 2,
       "fish": [],
@@ -5052,13 +6644,31 @@ export const content = {
           "table": "common-treasure"
         }
       ],
-      "junk": [
+      "stuff": [
         {
-          "table": "common-junk"
+          "id": "shiny-pebble",
+          "weight": 25
+        },
+        {
+          "id": "shiny-fish-scales",
+          "weight": 15
+        },
+        {
+          "id": "alchemists-vial",
+          "weight": 8
+        },
+        {
+          "id": "mysterious-resin",
+          "weight": 4
         },
         {
           "id": "mage-tower-map-3",
-          "weight": 1
+          "weight": 3
+        }
+      ],
+      "junk": [
+        {
+          "table": "common-junk"
         }
       ],
       "emptyHook": 45,
@@ -5078,6 +6688,9 @@ export const content = {
         {
           "id": "upper-river",
           "name": "location.river.spots.upper-river.name",
+          "placeholder": [
+            "name"
+          ],
           "look": {
             "tint": "#6aa0a8",
             "tintAlpha": 0.15,
@@ -5199,11 +6812,20 @@ export const content = {
               "id": "golden-mahseer",
               "weight": 56
             }
+          ],
+          "stuff": [
+            {
+              "id": "lace-plant",
+              "weight": 2
+            }
           ]
         },
         {
           "id": "lower-river",
           "name": "location.river.spots.lower-river.name",
+          "placeholder": [
+            "name"
+          ],
           "look": {
             "tint": "#5a5030",
             "tintAlpha": 0.22,
@@ -5346,11 +6968,28 @@ export const content = {
               "id": "strange-giant-catfish",
               "weight": 42
             }
+          ],
+          "stuff": [
+            {
+              "id": "hornwort",
+              "weight": 20
+            },
+            {
+              "id": "floating-water-plantain",
+              "weight": 4
+            },
+            {
+              "id": "lace-plant",
+              "weight": 2
+            }
           ]
         },
         {
           "id": "river-mouth",
           "name": "location.river.spots.river-mouth.name",
+          "placeholder": [
+            "name"
+          ],
           "look": {
             "tint": "#3a6f80",
             "tintAlpha": 0.15,
@@ -5482,12 +7121,45 @@ export const content = {
               "weight": 32
             }
           ],
-          "junk": [
+          "stuff": [
             {
               "id": "lorebook-page-2",
-              "weight": 1
+              "weight": 3
             }
           ]
+        }
+      ]
+    },
+    "town": {
+      "id": "town",
+      "placeholder": true,
+      "name": "location.town.name",
+      "town": true,
+      "hidden": true,
+      "biteThreshold": 200,
+      "treasureThreshold": 0,
+      "fish": [],
+      "treasure": [],
+      "junk": [],
+      "emptyHook": 0,
+      "spots": [
+        {
+          "id": "square",
+          "name": "location.town.spots.square.name"
+        },
+        {
+          "id": "inn",
+          "name": "location.town.spots.inn.name"
+        },
+        {
+          "id": "room",
+          "name": "location.town.spots.room.name",
+          "learnAfter": 1000000
+        },
+        {
+          "id": "alchemist",
+          "name": "location.town.spots.alchemist.name",
+          "learnAfter": 1000000
         }
       ]
     }
@@ -7379,7 +9051,16 @@ export const content = {
           "min": 5,
           "max": 10
         }
-      }
+      },
+      "effects": [
+        {
+          "value": "stuffFind",
+          "add": 10
+        }
+      ],
+      "placeholder": [
+        "effects"
+      ]
     }
   },
   "features": {
@@ -8485,6 +10166,17 @@ export const content = {
     }
   },
   "perks": {
+    "aquarium": {
+      "id": "aquarium",
+      "placeholder": [
+        "name",
+        "description"
+      ],
+      "class": "any",
+      "kind": "passive",
+      "name": "perk.aquarium.name",
+      "description": "perk.aquarium.description"
+    },
     "battle-focus": {
       "id": "battle-focus",
       "class": "fish-fighter",
@@ -8734,6 +10426,16 @@ export const content = {
         "casts": 10
       }
     },
+    "sushi-enjoyer": {
+      "id": "sushi-enjoyer",
+      "placeholder": [
+        "description"
+      ],
+      "class": "any",
+      "kind": "passive",
+      "name": "perk.sushi-enjoyer.name",
+      "description": "perk.sushi-enjoyer.description"
+    },
     "trouble-magnet": {
       "id": "trouble-magnet",
       "class": "any",
@@ -8752,6 +10454,504 @@ export const content = {
     "old-lorebook": {
       "id": "old-lorebook",
       "name": "set.old-lorebook.name"
+    }
+  },
+  "buffs": {
+    "alchemists-secret": {
+      "id": "alchemists-secret",
+      "placeholder": true,
+      "name": "buff.alchemists-secret.name",
+      "effects": [
+        {
+          "value": "fishingSkill",
+          "add": 2
+        },
+        {
+          "value": "fishFind",
+          "add": 5
+        },
+        {
+          "value": "treasureFind",
+          "add": 5
+        }
+      ],
+      "duration": {
+        "minutes": 240
+      }
+    },
+    "glimmer-draught": {
+      "id": "glimmer-draught",
+      "placeholder": true,
+      "name": "buff.glimmer-draught.name",
+      "effects": [
+        {
+          "value": "featureChance",
+          "add": 10
+        }
+      ],
+      "duration": {
+        "minutes": 120
+      }
+    },
+    "hornwort-tonic": {
+      "id": "hornwort-tonic",
+      "placeholder": true,
+      "name": "buff.hornwort-tonic.name",
+      "effects": [
+        {
+          "value": "warmth",
+          "add": 1
+        }
+      ],
+      "duration": {
+        "minutes": 360
+      }
+    },
+    "lobelia-antidote": {
+      "id": "lobelia-antidote",
+      "placeholder": true,
+      "name": "buff.lobelia-antidote.name",
+      "effects": [
+        {
+          "value": "fishDifficulty",
+          "add": -1
+        }
+      ],
+      "duration": {
+        "casts": 10
+      }
+    },
+    "marimo-charm": {
+      "id": "marimo-charm",
+      "placeholder": true,
+      "name": "buff.marimo-charm.name",
+      "effects": [
+        {
+          "value": "treasureFind",
+          "add": 10
+        },
+        {
+          "value": "stuffFind",
+          "add": 10
+        }
+      ],
+      "duration": {
+        "casts": 15
+      }
+    },
+    "moonlit-draught": {
+      "id": "moonlit-draught",
+      "placeholder": true,
+      "name": "buff.moonlit-draught.name",
+      "effects": [
+        {
+          "value": "reactionFast",
+          "add": 100
+        },
+        {
+          "value": "reactionOk",
+          "add": 200
+        }
+      ],
+      "duration": {
+        "casts": 8
+      }
+    },
+    "plantain-float": {
+      "id": "plantain-float",
+      "placeholder": true,
+      "name": "buff.plantain-float.name",
+      "effects": [
+        {
+          "value": "castScatter",
+          "add": -8
+        },
+        {
+          "value": "diveSeconds",
+          "add": 5
+        }
+      ],
+      "duration": {
+        "minutes": 120
+      }
+    },
+    "potion-of-breath": {
+      "id": "potion-of-breath",
+      "placeholder": true,
+      "name": "buff.potion-of-breath.name",
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 5
+        },
+        {
+          "value": "biteDelayMax",
+          "add": -1500
+        }
+      ],
+      "duration": {
+        "casts": 10
+      }
+    },
+    "rested": {
+      "id": "rested",
+      "placeholder": true,
+      "name": "buff.rested.name",
+      "effects": [
+        {
+          "value": "warmth",
+          "add": 1
+        },
+        {
+          "value": "fishingSkill",
+          "add": 1
+        }
+      ],
+      "duration": {
+        "minutes": 360
+      }
+    },
+    "snap-elixir": {
+      "id": "snap-elixir",
+      "placeholder": true,
+      "name": "buff.snap-elixir.name",
+      "effects": [
+        {
+          "value": "naturalCatch",
+          "add": -3
+        },
+        {
+          "value": "reactionFast",
+          "add": 200
+        }
+      ],
+      "duration": {
+        "casts": 10
+      }
+    },
+    "veil-elixir": {
+      "id": "veil-elixir",
+      "placeholder": true,
+      "name": "buff.veil-elixir.name",
+      "effects": [
+        {
+          "value": "fishVantage",
+          "add": -1
+        }
+      ],
+      "duration": {
+        "casts": 10
+      }
+    }
+  },
+  "vendors": {
+    "alchemist": {
+      "id": "alchemist",
+      "placeholder": true,
+      "name": "vendor.alchemist.name",
+      "kind": "vendor",
+      "location": "town",
+      "spot": "alchemist",
+      "schedule": {
+        "days": [
+          "fri",
+          "sat",
+          "sun"
+        ],
+        "sleeps": {
+          "from": 5,
+          "to": 13
+        },
+        "awayChance": 20
+      },
+      "offers": [
+        {
+          "id": "potion-of-breath",
+          "gives": {
+            "item": "potion-of-breath",
+            "count": 1
+          },
+          "costs": [
+            {
+              "item": "canadian-waterweed",
+              "count": 2
+            },
+            {
+              "item": "shiny-pebble",
+              "count": 1
+            },
+            {
+              "item": "alchemists-vial",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "hornwort-tonic",
+          "gives": {
+            "item": "hornwort-tonic",
+            "count": 1
+          },
+          "costs": [
+            {
+              "item": "hornwort",
+              "count": 2
+            },
+            {
+              "item": "shiny-pebble",
+              "count": 1
+            },
+            {
+              "item": "alchemists-vial",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "moonlit-draught",
+          "gives": {
+            "item": "moonlit-draught",
+            "count": 1
+          },
+          "costs": [
+            {
+              "item": "quillwort",
+              "count": 2
+            },
+            {
+              "item": "shiny-pebble",
+              "count": 1
+            },
+            {
+              "item": "alchemists-vial",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "lobelia-antidote",
+          "gives": {
+            "item": "lobelia-antidote",
+            "count": 1
+          },
+          "costs": [
+            {
+              "item": "water-lobelia",
+              "count": 2
+            },
+            {
+              "item": "shiny-pebble",
+              "count": 1
+            },
+            {
+              "item": "alchemists-vial",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "marimo-charm",
+          "gives": {
+            "item": "marimo-charm",
+            "count": 1
+          },
+          "costs": [
+            {
+              "item": "marimo",
+              "count": 1
+            },
+            {
+              "item": "shiny-pebble",
+              "count": 1
+            },
+            {
+              "item": "alchemists-vial",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "plantain-float",
+          "gives": {
+            "item": "plantain-float",
+            "count": 1
+          },
+          "costs": [
+            {
+              "item": "floating-water-plantain",
+              "count": 1
+            },
+            {
+              "item": "shiny-pebble",
+              "count": 1
+            },
+            {
+              "item": "alchemists-vial",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "veil-elixir",
+          "gives": {
+            "item": "veil-elixir",
+            "count": 1
+          },
+          "costs": [
+            {
+              "item": "lace-plant",
+              "count": 1
+            },
+            {
+              "item": "mysterious-resin",
+              "count": 1
+            },
+            {
+              "item": "shiny-pebble",
+              "count": 1
+            },
+            {
+              "item": "alchemists-vial",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "snap-elixir",
+          "gives": {
+            "item": "snap-elixir",
+            "count": 1
+          },
+          "costs": [
+            {
+              "item": "waterwheel-plant",
+              "count": 1
+            },
+            {
+              "item": "mysterious-resin",
+              "count": 1
+            },
+            {
+              "item": "shiny-pebble",
+              "count": 1
+            },
+            {
+              "item": "alchemists-vial",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "glimmer-draught",
+          "gives": {
+            "item": "glimmer-draught",
+            "count": 1
+          },
+          "costs": [
+            {
+              "item": "shiny-fish-scales",
+              "count": 3
+            },
+            {
+              "item": "shiny-pebble",
+              "count": 1
+            },
+            {
+              "item": "alchemists-vial",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "vials-for-fish",
+          "gives": {
+            "item": "alchemists-vial",
+            "count": 2
+          },
+          "costs": [
+            {
+              "fish": "any",
+              "rarity": "rare",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "secret-tincture",
+          "gives": {
+            "buff": "alchemists-secret"
+          },
+          "costs": [
+            {
+              "item": "shiny-pebble",
+              "count": 5
+            }
+          ],
+          "needs": [
+            {
+              "kind": "count",
+              "name": "trades-alchemist",
+              "min": 5,
+              "max": null
+            }
+          ]
+        }
+      ]
+    },
+    "aquarium": {
+      "id": "aquarium",
+      "placeholder": true,
+      "name": "vendor.aquarium.name",
+      "kind": "aquarium",
+      "location": "town",
+      "spot": "room"
+    },
+    "innkeeper": {
+      "id": "innkeeper",
+      "placeholder": true,
+      "name": "vendor.innkeeper.name",
+      "kind": "vendor",
+      "location": "town",
+      "spot": "inn",
+      "offers": [
+        {
+          "id": "warm-woolen-hat",
+          "gives": {
+            "item": "warm-woolen-hat",
+            "count": 1
+          },
+          "costs": [
+            {
+              "fish": "any",
+              "rarity": "rare",
+              "count": 2
+            },
+            {
+              "item": "shiny-fish-scales",
+              "count": 3
+            }
+          ],
+          "needs": []
+        }
+      ]
+    },
+    "stew": {
+      "id": "stew",
+      "placeholder": true,
+      "name": "vendor.stew.name",
+      "kind": "stew",
+      "location": "town",
+      "spot": "inn"
     }
   },
   "rules": {
@@ -8897,6 +11097,93 @@ export const content = {
           ]
         }
       ]
+    },
+    "cold": {
+      "id": "cold",
+      "placeholder": true,
+      "temperature": [
+        {
+          "max": 0,
+          "points": 3
+        },
+        {
+          "max": 3,
+          "points": 2
+        },
+        {
+          "max": 6,
+          "points": 1
+        }
+      ],
+      "times": {
+        "night": 2,
+        "dawn": 1
+      },
+      "seasons": {},
+      "coldLevels": [
+        {
+          "id": "chilly",
+          "name": "rules.cold.coldLevels.chilly.name",
+          "effects": [
+            {
+              "value": "fishingSkill",
+              "add": -1
+            }
+          ]
+        },
+        {
+          "id": "cold",
+          "name": "rules.cold.coldLevels.cold.name",
+          "effects": [
+            {
+              "value": "fishingSkill",
+              "add": -2
+            },
+            {
+              "value": "reactionFast",
+              "add": -100
+            }
+          ]
+        },
+        {
+          "id": "freezing",
+          "name": "rules.cold.coldLevels.freezing.name",
+          "effects": [
+            {
+              "value": "fishingSkill",
+              "add": -4
+            },
+            {
+              "value": "fishFind",
+              "add": -10
+            },
+            {
+              "value": "reactionFast",
+              "add": -150
+            },
+            {
+              "value": "reactionOk",
+              "add": -200
+            }
+          ]
+        }
+      ],
+      "night": {
+        "name": "rules.cold.night.name",
+        "times": [
+          "night"
+        ],
+        "effects": [
+          {
+            "value": "fishSizeBand",
+            "add": 1
+          },
+          {
+            "value": "fishXp",
+            "add": 2
+          }
+        ]
+      }
     },
     "fish-preferences": {
       "id": "fish-preferences",
@@ -9142,6 +11429,28 @@ export const content = {
         }
       ]
     },
+    "stew": {
+      "id": "stew",
+      "placeholder": true,
+      "name": "rules.stew.name",
+      "minutes": {
+        "poor": 15,
+        "common": 30,
+        "uncommon": 45,
+        "rare": 60,
+        "epic": 120,
+        "legendary": 240
+      },
+      "effects": [
+        {
+          "value": "warmth",
+          "add": 2
+        }
+      ],
+      "flavours": 3,
+      "eatCasts": 5,
+      "aquarium": 6
+    },
     "weather-scales": {
       "id": "weather-scales",
       "temperature": [
@@ -9201,6 +11510,158 @@ export const content = {
     }
   },
   "events": {
+    "alchemist": {
+      "id": "alchemist",
+      "title": [
+        "event.alchemist.title"
+      ],
+      "once": false,
+      "trigger": "arrive",
+      "needs": [
+        {
+          "kind": "location",
+          "id": "town"
+        },
+        {
+          "kind": "spot",
+          "id": "alchemist"
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            {
+              "needs": [
+                {
+                  "kind": "vendor",
+                  "id": "alchemist",
+                  "status": "open"
+                }
+              ],
+              "text": "event.alchemist.start.text.0"
+            },
+            "event.alchemist.start.text.1",
+            {
+              "needs": [
+                {
+                  "kind": "vendor",
+                  "id": "alchemist",
+                  "status": "asleep"
+                }
+              ],
+              "text": "event.alchemist.start.text.2"
+            },
+            "event.alchemist.start.text.3",
+            {
+              "needs": [
+                {
+                  "kind": "vendor",
+                  "id": "alchemist",
+                  "status": "away"
+                }
+              ],
+              "text": "event.alchemist.start.text.4"
+            },
+            "event.alchemist.start.text.5",
+            {
+              "needs": [
+                {
+                  "kind": "vendor",
+                  "id": "alchemist",
+                  "status": "closed"
+                }
+              ],
+              "text": "event.alchemist.start.text.6"
+            }
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.alchemist.start.0"
+              ],
+              "to": "end",
+              "needs": [
+                {
+                  "kind": "vendor",
+                  "id": "alchemist",
+                  "status": "open"
+                }
+              ],
+              "effects": [
+                {
+                  "kind": "shop",
+                  "id": "alchemist"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.alchemist.start.1"
+              ],
+              "to": "pebbles",
+              "needs": [
+                {
+                  "kind": "vendor",
+                  "id": "alchemist",
+                  "status": "open"
+                },
+                {
+                  "kind": "count",
+                  "name": "trades-alchemist",
+                  "min": 5,
+                  "max": null
+                }
+              ],
+              "effects": []
+            },
+            {
+              "text": [
+                "event.alchemist.start.2"
+              ],
+              "to": "start",
+              "needs": [
+                {
+                  "kind": "vendor",
+                  "id": "alchemist",
+                  "status": "asleep"
+                }
+              ],
+              "effects": [
+                {
+                  "kind": "wait",
+                  "hours": 2
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.alchemist.start.3"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": []
+            }
+          ]
+        },
+        "pebbles": {
+          "text": [
+            "event.alchemist.pebbles.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.alchemist.pebbles.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": []
+            }
+          ]
+        }
+      },
+      "placeholder": true
+    },
     "frog": {
       "id": "frog",
       "title": [
@@ -9289,6 +11750,251 @@ export const content = {
         }
       }
     },
+    "innkeeper-first": {
+      "id": "innkeeper-first",
+      "title": [
+        "event.innkeeper-first.title"
+      ],
+      "once": true,
+      "trigger": "arrive",
+      "needs": [
+        {
+          "kind": "location",
+          "id": "town"
+        },
+        {
+          "kind": "spot",
+          "id": "inn"
+        },
+        {
+          "kind": "no-flag",
+          "name": "met-innkeeper"
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.innkeeper-first.start.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.innkeeper-first.start.0"
+              ],
+              "to": "stew",
+              "needs": [],
+              "effects": []
+            },
+            {
+              "text": [
+                "event.innkeeper-first.start.1"
+              ],
+              "to": "money",
+              "needs": [],
+              "effects": []
+            },
+            {
+              "text": [
+                "event.innkeeper-first.start.2"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "met-innkeeper",
+                  "set": true
+                },
+                {
+                  "kind": "learn",
+                  "what": "spot",
+                  "location": "town",
+                  "id": "room"
+                },
+                {
+                  "kind": "go",
+                  "location": "town",
+                  "spot": "room"
+                }
+              ]
+            }
+          ]
+        },
+        "money": {
+          "text": [
+            "event.innkeeper-first.money.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.innkeeper-first.money.0"
+              ],
+              "to": "stew",
+              "needs": [],
+              "effects": []
+            },
+            {
+              "text": [
+                "event.innkeeper-first.money.1"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "met-innkeeper",
+                  "set": true
+                },
+                {
+                  "kind": "learn",
+                  "what": "spot",
+                  "location": "town",
+                  "id": "room"
+                },
+                {
+                  "kind": "go",
+                  "location": "town",
+                  "spot": "room"
+                }
+              ]
+            }
+          ]
+        },
+        "stew": {
+          "text": [
+            "event.innkeeper-first.stew.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.innkeeper-first.stew.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "met-innkeeper",
+                  "set": true
+                },
+                {
+                  "kind": "learn",
+                  "what": "spot",
+                  "location": "town",
+                  "id": "room"
+                },
+                {
+                  "kind": "shop",
+                  "id": "stew"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.innkeeper-first.stew.1"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "met-innkeeper",
+                  "set": true
+                },
+                {
+                  "kind": "learn",
+                  "what": "spot",
+                  "location": "town",
+                  "id": "room"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "placeholder": true
+    },
+    "nightfall": {
+      "id": "nightfall",
+      "title": [
+        "event.nightfall.title"
+      ],
+      "once": false,
+      "trigger": "needs",
+      "needs": [
+        {
+          "kind": "time",
+          "part": "night"
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.nightfall.start.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.nightfall.start.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "place",
+                  "location": "town",
+                  "open": true
+                },
+                {
+                  "kind": "go",
+                  "location": "town",
+                  "spot": "square"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.nightfall.start.1"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "place",
+                  "location": "town",
+                  "open": true
+                },
+                {
+                  "kind": "go",
+                  "location": "town",
+                  "spot": "inn"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.nightfall.start.2"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "place",
+                  "location": "town",
+                  "open": true
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "placeholder": true,
+      "again": {
+        "days": 1
+      }
+    },
     "quest-bottle-reward": {
       "id": "quest-bottle-reward",
       "title": [
@@ -9339,7 +12045,8 @@ export const content = {
             }
           ]
         }
-      }
+      },
+      "placeholder": true
     },
     "quest-bottle-river": {
       "id": "quest-bottle-river",
@@ -9421,7 +12128,8 @@ export const content = {
             }
           ]
         }
-      }
+      },
+      "placeholder": true
     },
     "quest-bottle": {
       "id": "quest-bottle",
@@ -9460,7 +12168,247 @@ export const content = {
             }
           ]
         }
-      }
+      },
+      "placeholder": true
+    },
+    "swamp-ghost": {
+      "id": "swamp-ghost",
+      "title": [
+        "event.swamp-ghost.title"
+      ],
+      "once": false,
+      "trigger": "arrive",
+      "needs": [
+        {
+          "kind": "location",
+          "id": "lake"
+        },
+        {
+          "kind": "spot",
+          "id": "swamp"
+        },
+        {
+          "kind": "no-flag",
+          "name": "ghost-at-rest"
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.swamp-ghost.start.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.swamp-ghost.start.0"
+              ],
+              "to": "doll",
+              "needs": [
+                {
+                  "kind": "item",
+                  "id": "old-torn-doll",
+                  "count": 1
+                }
+              ],
+              "effects": []
+            },
+            {
+              "text": [
+                "event.swamp-ghost.start.1"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "go",
+                  "location": "lake",
+                  "spot": "reedy-shore"
+                }
+              ]
+            }
+          ]
+        },
+        "doll": {
+          "text": [
+            "event.swamp-ghost.doll.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.swamp-ghost.doll.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "item",
+                  "id": "old-torn-doll",
+                  "add": -1
+                },
+                {
+                  "kind": "flag",
+                  "name": "ghost-at-rest",
+                  "set": true
+                },
+                {
+                  "kind": "xp",
+                  "add": 50
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "placeholder": true
+    },
+    "the-inn": {
+      "id": "the-inn",
+      "title": [
+        "event.the-inn.title"
+      ],
+      "once": false,
+      "trigger": "arrive",
+      "needs": [
+        {
+          "kind": "location",
+          "id": "town"
+        },
+        {
+          "kind": "spot",
+          "id": "inn"
+        },
+        {
+          "kind": "flag",
+          "name": "met-innkeeper"
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.the-inn.start.text.0",
+            {
+              "needs": [
+                {
+                  "kind": "time",
+                  "part": "night"
+                }
+              ],
+              "text": "event.the-inn.start.text.1"
+            }
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.the-inn.start.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "shop",
+                  "id": "stew"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.the-inn.start.1"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "shop",
+                  "id": "innkeeper"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.the-inn.start.2"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "go",
+                  "location": "town",
+                  "spot": "room"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.the-inn.start.3"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "sleep"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.the-inn.start.4"
+              ],
+              "to": "town",
+              "needs": [],
+              "effects": []
+            },
+            {
+              "text": [
+                "event.the-inn.start.5"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": []
+            }
+          ]
+        },
+        "town": {
+          "text": [
+            "event.the-inn.town.text.0",
+            {
+              "needs": [
+                {
+                  "kind": "flag",
+                  "name": "knows-alchemist"
+                }
+              ],
+              "text": "event.the-inn.town.text.1",
+              "otherwise": "event.the-inn.town.text.1.else"
+            },
+            "event.the-inn.town.text.2"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.the-inn.town.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "knows-alchemist",
+                  "set": true
+                },
+                {
+                  "kind": "learn",
+                  "what": "spot",
+                  "location": "town",
+                  "id": "alchemist"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "placeholder": true
     },
     "the-scholar": {
       "id": "the-scholar",
@@ -9542,9 +12490,282 @@ export const content = {
           ]
         }
       },
+      "placeholder": true,
       "again": {
         "casts": 100
       }
+    },
+    "welcome": {
+      "id": "welcome",
+      "title": [
+        "event.welcome.title"
+      ],
+      "once": true,
+      "trigger": "arrive",
+      "needs": [
+        {
+          "kind": "location",
+          "id": "lake"
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.welcome.start.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.welcome.start.0.0",
+                {
+                  "needs": [
+                    {
+                      "kind": "gender",
+                      "gender": "f"
+                    }
+                  ],
+                  "text": "event.welcome.start.0.1",
+                  "otherwise": "event.welcome.start.0.1.else"
+                },
+                "event.welcome.start.0.2"
+              ],
+              "to": "coast",
+              "needs": [],
+              "effects": []
+            },
+            {
+              "text": [
+                "event.welcome.start.1.0",
+                {
+                  "needs": [
+                    {
+                      "kind": "gender",
+                      "gender": "f"
+                    }
+                  ],
+                  "text": "event.welcome.start.1.1",
+                  "otherwise": "event.welcome.start.1.1.else"
+                },
+                "event.welcome.start.1.2"
+              ],
+              "to": "squire",
+              "needs": [],
+              "effects": []
+            },
+            {
+              "text": [
+                "event.welcome.start.2"
+              ],
+              "to": "witch",
+              "needs": [],
+              "effects": []
+            },
+            {
+              "text": [
+                "event.welcome.start.3"
+              ],
+              "to": "forgotten",
+              "needs": [],
+              "effects": []
+            }
+          ]
+        },
+        "coast": {
+          "text": [
+            "event.welcome.coast.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.welcome.coast.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "background-coast",
+                  "set": true
+                },
+                {
+                  "kind": "item",
+                  "id": "worms",
+                  "add": 5
+                }
+              ]
+            }
+          ]
+        },
+        "squire": {
+          "text": [
+            "event.welcome.squire.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.welcome.squire.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "background-squire",
+                  "set": true
+                },
+                {
+                  "kind": "luck",
+                  "add": 2
+                }
+              ]
+            }
+          ]
+        },
+        "witch": {
+          "text": [
+            "event.welcome.witch.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.welcome.witch.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "background-witch",
+                  "set": true
+                },
+                {
+                  "kind": "item",
+                  "id": "alchemists-vial",
+                  "add": 2
+                }
+              ]
+            }
+          ]
+        },
+        "forgotten": {
+          "text": [
+            "event.welcome.forgotten.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.welcome.forgotten.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "background-forgotten",
+                  "set": true
+                },
+                {
+                  "kind": "item",
+                  "id": "shiny-pebble",
+                  "add": 1
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "placeholder": true
+    },
+    "your-room": {
+      "id": "your-room",
+      "title": [
+        "event.your-room.title"
+      ],
+      "once": false,
+      "trigger": "arrive",
+      "needs": [
+        {
+          "kind": "location",
+          "id": "town"
+        },
+        {
+          "kind": "spot",
+          "id": "room"
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.your-room.start.text.0",
+            {
+              "needs": [
+                {
+                  "kind": "perk",
+                  "id": "aquarium"
+                }
+              ],
+              "text": "event.your-room.start.text.1"
+            }
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.your-room.start.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "sleep"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.your-room.start.1"
+              ],
+              "to": "end",
+              "needs": [
+                {
+                  "kind": "perk",
+                  "id": "aquarium"
+                }
+              ],
+              "effects": [
+                {
+                  "kind": "shop",
+                  "id": "aquarium"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.your-room.start.2"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "go",
+                  "location": "town",
+                  "spot": "inn"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.your-room.start.3"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": []
+            }
+          ]
+        }
+      },
+      "placeholder": true
     }
   }
 };
@@ -9674,6 +12895,8 @@ export const strings = {
     "fish.wolffish.name": "Wolffish",
     "fish.yellow-perch.name": "Yellow perch",
     "fish.zander.name": "Zander",
+    "item.alchemists-vial.name": "Alchemist's vial",
+    "item.alchemists-vial.flavor": "A stoppered glass vial, empty, with a sigil scratched into the glass.",
     "item.ash-rod.name": "Ash rod",
     "item.ash-rod.flavor": "Springy. Forgiving, if not precise.",
     "item.back-cover-of-a-spellbook.name": "Back cover of a spellbook",
@@ -9696,6 +12919,8 @@ export const strings = {
     "item.bread-crumbs.flavor": "Small fish love them. So do ducks.",
     "item.broken-off-fishing-pole-tip.name": "Broken off fishing pole tip",
     "item.broken-off-fishing-pole-tip.flavor": "Lost in a fight. Possibly with oneself.",
+    "item.canadian-waterweed.name": "Waterweed",
+    "item.canadian-waterweed.flavor": "Grows fast enough to choke a lake, and breathes out bubbles in the sun.",
     "item.candle-stump.name": "A candle stump",
     "item.candle-stump.flavor": "Waxy.",
     "item.clump-of-hair.name": "A clump of hair",
@@ -9720,14 +12945,22 @@ export const strings = {
     "item.fishing-pole-laser-sight.name": "Fishing pole laser sight",
     "item.fishing-pole-laser-sight.flavor": "Now if only you could shoot at them...",
     "item.flies.name": "Flies",
+    "item.floating-water-plantain.name": "Floating water-plantain",
+    "item.floating-water-plantain.flavor": "Oval leaves floating on long trailing stems. You rarely see it any more.",
     "item.four-leaf-underwater-clover.name": "Four-leaf underwater clover",
     "item.four-leaf-underwater-clover.flavor": "You are so lucky, you only find the GOOD fish.",
     "item.freshwater-seaweed.name": "Freshwater seaweed",
     "item.freshwater-seaweed.flavor": "Wait, there's no regular word for it?",
+    "item.glimmer-draught.name": "Glimmer draught",
+    "item.glimmer-draught.flavor": "Shimmers like a shoal. Things on the water come to look.",
     "item.heavy-bait.name": "Heavy bait",
     "item.heavy-bait.flavor": "If you manage to hit 'em, they ain't got no chance",
     "item.hempen-tangles.name": "Hempen tangles",
     "item.hempen-tangles.flavor": "Bits of old rope.",
+    "item.hornwort-tonic.name": "Hornwort tonic",
+    "item.hornwort-tonic.flavor": "Bitter, bristly and warming all the way down.",
+    "item.hornwort.name": "Hornwort",
+    "item.hornwort.flavor": "Stiff, forked and bristly, with no roots at all. It shrugs off cold, dark water.",
     "item.horsehair-line.name": "Horsehair line",
     "item.horsehair-line.flavor": "The horse was not consulted.",
     "item.humanoid-molar.name": "Humanoid molar",
@@ -9742,9 +12975,13 @@ export const strings = {
     "item.iron-dagger.flavor": "Someone clearly made a lot of them.",
     "item.iron-key.name": "Iron key",
     "item.iron-key.flavor": "Surprisingly not rusted.",
+    "item.lace-plant.name": "Lace plant",
+    "item.lace-plant.flavor": "Leaves like skeletal lace, all holes and veins. You can see right through them.",
     "item.leaky-waterskin.name": "Leaky waterskin",
     "item.leaky-waterskin.flavor": "Still holds some water!",
     "item.live-frog.name": "Live frog",
+    "item.lobelia-antidote.name": "Lobelia antidote",
+    "item.lobelia-antidote.flavor": "Clears the head, and whatever's in the water seems to fight less.",
     "item.lorebook-page-1.name": "A sodden page (1 of 3)",
     "item.lorebook-page-1.flavor": "The ink has run, but most of it can still be read.",
     "item.lorebook-page-1.page": "Long ago, before the lake, a great valley lay here: a land of plenty, and home to the elves, proud makers of great treasures.",
@@ -9765,17 +13002,33 @@ export const strings = {
     "item.maggots.name": "Maggots",
     "item.magpie-feather.name": "Magpie feather",
     "item.magpie-feather.flavor": "Fish with an eye for shiny things find you. The others less so.",
+    "item.marimo-charm.name": "Marimo luck draught",
+    "item.marimo-charm.flavor": "A little green ball turns slowly in the bottle. Luck, bottled.",
+    "item.marimo.name": "Marimo",
+    "item.marimo.flavor": "A soft green ball of weed that rolls along the bottom. Some people keep them for luck.",
     "item.mega-mass-fish-chum.name": "Mega Mass Fish Chum",
     "item.mega-mass-fish-chum.flavor": "Dad, should trout have biceps this huge?",
     "item.message-in-a-bottle.name": "Message in a bottle",
     "item.message-in-a-bottle.flavor": "The cork is sealed with wax. Someone wanted this found.",
     "item.moldy-piece-of-bread.name": "Moldy piece of bread",
     "item.moldy-piece-of-bread.flavor": "A whole ecosystem in this one.",
+    "item.moonlit-draught.name": "Moonlit draught",
+    "item.moonlit-draught.flavor": "Pale as moonlight. Your eyes adjust to the dark and your hands go still.",
     "item.mouse-fly.name": "Mouse fly",
+    "item.mysterious-resin.name": "Mysterious resin",
+    "item.mysterious-resin.flavor": "Amber-coloured and warm to the touch. It smells of something you can't place.",
     "item.old-compass.name": "An old compass",
     "item.old-compass.flavor": "The needle won't stop spinning.",
     "item.old-skull.name": "Old skull",
     "item.old-skull.flavor": "Humanoid.",
+    "item.old-torn-doll.name": "Old torn doll",
+    "item.old-torn-doll.flavor": "A rag doll with one button eye. It's soaked through, and someone loved it once.",
+    "item.plantain-float.name": "Floating draught",
+    "item.plantain-float.flavor": "You feel lighter. Your casts drift where you meant them to.",
+    "item.potion-of-breath.name": "Potion of breath",
+    "item.potion-of-breath.flavor": "Bubbles rise in it forever. Drink it and the fish seem to come to you.",
+    "item.quillwort.name": "Quillwort",
+    "item.quillwort.flavor": "A spiky little rosette that breathes in at night, when everything else is asleep.",
     "item.reed-pole.name": "Reed pole",
     "item.reed-pole.flavor": "Light enough to point exactly where you mean. Snaps if you dawdle.",
     "item.rift-shard.name": "Rift shard",
@@ -9788,6 +13041,10 @@ export const strings = {
     "item.rusted-chain.flavor": "Three links long.",
     "item.rusted-saucepan.name": "Rusted saucepan",
     "item.rusted-saucepan.flavor": "Contains mud sauce.",
+    "item.shiny-fish-scales.name": "Shiny fish scales",
+    "item.shiny-fish-scales.flavor": "A pinch of scales that catch the light like coins.",
+    "item.shiny-pebble.name": "Shiny pebble",
+    "item.shiny-pebble.flavor": "Smooth, round and far too shiny for a pebble. Somebody will want it.",
     "item.shrimp.name": "Shrimp",
     "item.silk-line.name": "Silk line",
     "item.silk-line.flavor": "Fine and strong. A fish that slips it rarely takes the bait.",
@@ -9801,6 +13058,8 @@ export const strings = {
     "item.small-wheel.flavor": "Hopefully it was a third.",
     "item.snail-shell.name": "Snail shell",
     "item.snail-shell.flavor": "Pretty.",
+    "item.snap-elixir.name": "Snap elixir",
+    "item.snap-elixir.flavor": "It clicks shut in your stomach. The next fish to bite is caught before it knows it.",
     "item.soggy-treasure-map.name": "Soggy treasure map",
     "item.soggy-treasure-map.flavor": "If you look really closely, you can make out a fading X.",
     "item.spinner-lure.name": "Spinner lure",
@@ -9815,12 +13074,20 @@ export const strings = {
     "item.tangled-fishing-line.flavor": "Impressively knotted.",
     "item.tide-charm.name": "Tide charm",
     "item.tide-charm.flavor": "The fish come sooner. Whatever else is down there stays put.",
+    "item.veil-elixir.name": "Veil elixir",
+    "item.veil-elixir.flavor": "Thin as lace. The fish don't quite see you coming.",
     "item.vendor-trash.name": "Vendor trash",
     "item.vendor-trash.flavor": "Literally trash that the vendor tossed out.",
     "item.very-wet-jerky.name": "Very wet jerky",
     "item.very-wet-jerky.flavor": "Chewy.",
+    "item.warm-woolen-hat.name": "Warm woolen hat",
+    "item.warm-woolen-hat.flavor": "Knitted thick, with flaps for the ears. You hear the splash a moment late, but you're warm.",
+    "item.water-lobelia.name": "Water lobelia",
+    "item.water-lobelia.flavor": "A pale flower on a spike above the water; its roots feed the mud below.",
     "item.waterlogged-stick.name": "Waterlogged stick",
     "item.waterlogged-stick.flavor": "Sticky.",
+    "item.waterwheel-plant.name": "Waterwheel plant",
+    "item.waterwheel-plant.flavor": "Rings of tiny snapping traps, with no roots. It just closed on your finger.",
     "item.wicker-creel.name": "Wicker creel",
     "item.wicker-creel.flavor": "Room for plenty more fish. Awkward to cast with on your back.",
     "item.wide-brimmed-hat.name": "Wide-brimmed hat",
@@ -9843,6 +13110,11 @@ export const strings = {
     "location.river.spots.upper-river.name": "the upper river",
     "location.river.spots.lower-river.name": "the lower river",
     "location.river.spots.river-mouth.name": "the river mouth",
+    "location.town.name": "The town",
+    "location.town.spots.square.name": "the square",
+    "location.town.spots.inn.name": "the inn",
+    "location.town.spots.room.name": "your room",
+    "location.town.spots.alchemist.name": "the Alchemist's shop",
     "weather.autumn.name": "Autumn",
     "weather.autumn.weathers.0.name": "Humid and cloudy",
     "weather.autumn.weathers.1.name": "Sunny and clear",
@@ -10062,6 +13334,8 @@ export const strings = {
     "feature.vendace-school.name": "a school of vendace",
     "feature.white-sucker-school.name": "a school of white sucker",
     "feature.yellow-perch-school.name": "a school of yellow perch",
+    "perk.aquarium.name": "Aquarium",
+    "perk.aquarium.description": "An aquarium in your room at the inn. Put fish from your bucket in it, and watch them swim.",
     "perk.battle-focus.name": "Battle Focus",
     "perk.battle-focus.description": "Add your level to your Fishing Skill for the next cast.",
     "perk.bend-reality.name": "Bend Reality",
@@ -10100,9 +13374,26 @@ export const strings = {
     "perk.steady-hands.description": "+1 Fishing Skill.",
     "perk.summon-fish.name": "Summon Fish",
     "perk.summon-fish.description": "A fish bites on your next cast, for certain.",
+    "perk.sushi-enjoyer.name": "Sushi enjoyer",
+    "perk.sushi-enjoyer.description": "Eat a fish raw, from its options, for its stew buff for 5 casts.",
     "perk.trouble-magnet.name": "Trouble Magnet",
     "perk.trouble-magnet.description": "Things happen to you twice as often.",
     "set.old-lorebook.name": "An old lorebook",
+    "buff.alchemists-secret.name": "The Alchemist's secret",
+    "buff.glimmer-draught.name": "Glimmer draught",
+    "buff.hornwort-tonic.name": "Hornwort tonic",
+    "buff.lobelia-antidote.name": "Lobelia antidote",
+    "buff.marimo-charm.name": "Marimo luck draught",
+    "buff.moonlit-draught.name": "Moonlit draught",
+    "buff.plantain-float.name": "Floating draught",
+    "buff.potion-of-breath.name": "Potion of breath",
+    "buff.rested.name": "Well rested",
+    "buff.snap-elixir.name": "Snap elixir",
+    "buff.veil-elixir.name": "Veil elixir",
+    "vendor.alchemist.name": "The Alchemist",
+    "vendor.aquarium.name": "Your aquarium",
+    "vendor.innkeeper.name": "The innkeeper",
+    "vendor.stew.name": "The perpetual stew",
     "rules.champions.classes.witch.name": "Witch",
     "rules.champions.classes.knight.name": "Knight",
     "rules.champions.classes.shaman.name": "Shaman",
@@ -10113,6 +13404,10 @@ export const strings = {
     "rules.champions.classes.witch.spells.darkness.name": "Darkness",
     "rules.champions.classes.witch.spells.gravitational-chaos.name": "Gravitational Chaos",
     "rules.champions.classes.witch.spells.slow.name": "Slow",
+    "rules.cold.coldLevels.chilly.name": "Chilly",
+    "rules.cold.coldLevels.cold.name": "Cold",
+    "rules.cold.coldLevels.freezing.name": "Freezing",
+    "rules.cold.night.name": "Night fishing",
     "rules.fish-preferences.baits.maggot.name": "Maggot",
     "rules.fish-preferences.baits.bread.name": "Bread",
     "rules.fish-preferences.baits.worm.name": "Worm",
@@ -10138,6 +13433,7 @@ export const strings = {
     "rules.size-bands.bands.large.name": "Large",
     "rules.size-bands.bands.gigantic.name": "Gigantic",
     "rules.size-bands.bands.humongous.name": "Humongous",
+    "rules.stew.name": "Perpetual stew",
     "rules.weather-scales.temperature.0.word": "Extremely cold",
     "rules.weather-scales.temperature.1.word": "Cold",
     "rules.weather-scales.temperature.2.word": "Moderate",
@@ -10163,6 +13459,20 @@ export const strings = {
     "rules.weather-scales.precipitation.3": "Constant",
     "rules.weather-scales.precipitation.4": "Intense",
     "rules.weather-scales.precipitation.5": "Extreme",
+    "event.alchemist.title": "The Alchemist's shop",
+    "event.alchemist.start.text.0": "Jars of murky things line the walls. The Alchemist peers at you over their spectacles. \"Brought me something?\"",
+    "event.alchemist.start.text.1": " ",
+    "event.alchemist.start.text.2": "The door is locked. Through the window you can see the Alchemist asleep in a chair, snoring.",
+    "event.alchemist.start.text.3": " ",
+    "event.alchemist.start.text.4": "A note is nailed to the door: \"Off to get ingredients. Back when I'm back.\"",
+    "event.alchemist.start.text.5": " ",
+    "event.alchemist.start.text.6": "The shutters are down. A sign says: \"Friday to Sunday. Not before one.\"",
+    "event.alchemist.start.0": "Let's trade",
+    "event.alchemist.start.1": "What do you want with all these shiny pebbles?",
+    "event.alchemist.start.2": "I'll wait here",
+    "event.alchemist.start.3": "Leave",
+    "event.alchemist.pebbles.text": "The Alchemist turns a pebble over in their fingers. \"Wouldn't you like to know.\" They put it in a drawer with a lot of others, and lock it.",
+    "event.alchemist.pebbles.0": "Fair enough",
     "event.frog.title": "A froggy encounter",
     "event.frog.start.text": "You see a frog in the shallow water, just outside your reach.",
     "event.frog.start.0": "Observe it closely",
@@ -10172,6 +13482,22 @@ export const strings = {
     "event.frog.observe.0": "Thank you, frog",
     "event.frog.lunge.text": "You lunge forward and get wet, and it's like it was never there.",
     "event.frog.lunge.0": "Well, shit.",
+    "event.innkeeper-first.title": "The innkeeper",
+    "event.innkeeper-first.start.text": "The inn is warm and smells of smoke and stew. You ask the innkeeper for a room for the night.\n\nThe innkeeper gives you an odd look. \"In case it slipped your mind, friend, you already gave me every coin you had, for a room here that's yours for good. Go on up whenever you like. And if you'd eat first, mind the rule of this house: give something to take something.\"",
+    "event.innkeeper-first.start.0": "Give something to take something?",
+    "event.innkeeper-first.start.1": "I gave you all my money?",
+    "event.innkeeper-first.start.2": "Thank you. I'll go up.",
+    "event.innkeeper-first.money.text": "\"Every coin. Walked in soaking wet, put a purse on the counter and said you'd be staying. Then you went fishing.\" The innkeeper shrugs. \"Not my business what you remember.\"",
+    "event.innkeeper-first.money.0": "Give something to take something?",
+    "event.innkeeper-first.money.1": "I'll go up to my room",
+    "event.innkeeper-first.stew.text": "The innkeeper nods at the great pot over the fire. \"The stew. It's been going since my grandmother's time. Put your fish in, take a bowl out. It'll keep the cold off your bones longer than any coat.\"",
+    "event.innkeeper-first.stew.0": "Let me see the pot",
+    "event.innkeeper-first.stew.1": "Maybe later",
+    "event.nightfall.title": "Nightfall",
+    "event.nightfall.start.text": "The light is gone and the cold comes up off the water. Somewhere behind you, the lights of the town are on, and the inn's chimney is smoking.",
+    "event.nightfall.start.0": "Head into town",
+    "event.nightfall.start.1": "Go straight to the inn",
+    "event.nightfall.start.2": "Stay out here and fish",
     "event.quest-bottle-reward.title": "A package on the line",
     "event.quest-bottle-reward.start.text": "Something is tangled on your line: a small package, with your name on it.",
     "event.quest-bottle-reward.start.0": "Open it",
@@ -10184,11 +13510,229 @@ export const strings = {
     "event.quest-bottle.title": "A message in a bottle",
     "event.quest-bottle.start.text": "Inside the bottle is a note: \"Bring three roach to the lower river. Someone will be waiting.\"",
     "event.quest-bottle.start.0": "Keep the note",
+    "event.swamp-ghost.title": "The swamp is haunted",
+    "event.swamp-ghost.start.text": "The mist thickens and the frogs fall silent. Something pale drifts between the dead trees: a child, or the shape of one, searching the water. It turns towards you, and the cold goes right through your coat.\n\n\"Where is she? Where did you put her?\"",
+    "event.swamp-ghost.start.0": "Hold out the old torn doll",
+    "event.swamp-ghost.start.1": "Back away, slowly",
+    "event.swamp-ghost.doll.text": "The ghost goes very still. A small, see-through hand closes on the doll, and the doll is gone, and so is the child. The frogs start up again. The swamp is only a swamp.",
+    "event.swamp-ghost.doll.0": "Rest well",
+    "event.the-inn.title": "The inn",
+    "event.the-inn.start.text.0": "The fire crackles. The innkeeper nods at you from behind the counter.",
+    "event.the-inn.start.text.1": "\" Late one, isn't it?\"",
+    "event.the-inn.start.0": "The perpetual stew",
+    "event.the-inn.start.1": "Anything warm to wear?",
+    "event.the-inn.start.2": "Go up to my room",
+    "event.the-inn.start.3": "Sleep until morning",
+    "event.the-inn.start.4": "Anything going on in town?",
+    "event.the-inn.start.5": "Leave",
+    "event.the-inn.town.text.0": "\"Not much. ",
+    "event.the-inn.town.text.1": "The Alchemist's in from Friday to Sunday, if you can wake them.",
+    "event.the-inn.town.text.1.else": "There's an Alchemist on the corner, from Friday to Sunday. Never before one in the afternoon, mind, they sleep like the dead.",
+    "event.the-inn.town.text.2": "\"",
+    "event.the-inn.town.0": "Thanks",
     "event.the-scholar.title": "A scholar on the shore",
     "event.the-scholar.start.text": "A thin figure in ink-stained robes is waiting by your things. \"You've found pages of the old lorebook. I'd give a great deal for the whole of it.\"",
     "event.the-scholar.start.0": "Hand over all three pages",
     "event.the-scholar.start.1": "Not yet",
     "event.the-scholar.thanks.text": "\"At last. The valley, the dragons, the flood: it's all here.\" The scholar presses a purse of bait into your hands and hurries off.",
-    "event.the-scholar.thanks.0": "Farewell"
+    "event.the-scholar.thanks.0": "Farewell",
+    "event.welcome.title": "A familiar shore",
+    "event.welcome.start.text": "Morning mist lies on the water. You know this shore, though you couldn't say from when. Your rod is in your hand and your boots are wet. Who were you, before you came here?",
+    "event.welcome.start.0.0": "A fisher's ",
+    "event.welcome.start.0.1": "daughter",
+    "event.welcome.start.0.1.else": "son",
+    "event.welcome.start.0.2": " from the coast",
+    "event.welcome.start.1.0": "A squire who failed ",
+    "event.welcome.start.1.1": "her",
+    "event.welcome.start.1.1.else": "his",
+    "event.welcome.start.1.2": " knighthood",
+    "event.welcome.start.2": "A hedge-witch's apprentice",
+    "event.welcome.start.3": "I don't remember",
+    "event.welcome.coast.text": "Salt in your blood and a knot for every occasion. The lake is just bigger, quieter water.",
+    "event.welcome.coast.0": "Off to fish",
+    "event.welcome.squire.text": "You still stand like someone is about to inspect your armour. Nobody is. It's a relief.",
+    "event.welcome.squire.0": "Off to fish",
+    "event.welcome.witch.text": "You know which weeds are good for what, and which ones bite. Your old mistress made you carry her vials.",
+    "event.welcome.witch.0": "Off to fish",
+    "event.welcome.forgotten.text": "There's a gap where your past should be. Something about a town nearby, and an inn, and all your money.",
+    "event.welcome.forgotten.0": "Off to fish",
+    "event.your-room.title": "Your room",
+    "event.your-room.start.text.0": "A narrow bed, a chair, a window over the lake. It's yours, apparently.",
+    "event.your-room.start.text.1": "The aquarium bubbles away in the corner.",
+    "event.your-room.start.0": "Sleep until morning",
+    "event.your-room.start.1": "Look at the aquarium",
+    "event.your-room.start.2": "Go back down",
+    "event.your-room.start.3": "Leave"
   }
 };
+
+/** String keys whose text is a placeholder (D124); ?ph marks them. */
+export const placeholderKeys = [
+  "buff.alchemists-secret.name",
+  "buff.glimmer-draught.name",
+  "buff.hornwort-tonic.name",
+  "buff.lobelia-antidote.name",
+  "buff.marimo-charm.name",
+  "buff.moonlit-draught.name",
+  "buff.plantain-float.name",
+  "buff.potion-of-breath.name",
+  "buff.rested.name",
+  "buff.snap-elixir.name",
+  "buff.veil-elixir.name",
+  "event.alchemist.pebbles.0",
+  "event.alchemist.pebbles.text",
+  "event.alchemist.start.0",
+  "event.alchemist.start.1",
+  "event.alchemist.start.2",
+  "event.alchemist.start.3",
+  "event.alchemist.start.text.0",
+  "event.alchemist.start.text.1",
+  "event.alchemist.start.text.2",
+  "event.alchemist.start.text.3",
+  "event.alchemist.start.text.4",
+  "event.alchemist.start.text.5",
+  "event.alchemist.start.text.6",
+  "event.alchemist.title",
+  "event.innkeeper-first.money.0",
+  "event.innkeeper-first.money.1",
+  "event.innkeeper-first.money.text",
+  "event.innkeeper-first.start.0",
+  "event.innkeeper-first.start.1",
+  "event.innkeeper-first.start.2",
+  "event.innkeeper-first.start.text",
+  "event.innkeeper-first.stew.0",
+  "event.innkeeper-first.stew.1",
+  "event.innkeeper-first.stew.text",
+  "event.innkeeper-first.title",
+  "event.nightfall.start.0",
+  "event.nightfall.start.1",
+  "event.nightfall.start.2",
+  "event.nightfall.start.text",
+  "event.nightfall.title",
+  "event.quest-bottle-reward.start.0",
+  "event.quest-bottle-reward.start.text",
+  "event.quest-bottle-reward.title",
+  "event.quest-bottle-river.start.0",
+  "event.quest-bottle-river.start.1",
+  "event.quest-bottle-river.start.text",
+  "event.quest-bottle-river.thanks.0",
+  "event.quest-bottle-river.thanks.text",
+  "event.quest-bottle-river.title",
+  "event.quest-bottle.start.0",
+  "event.quest-bottle.start.text",
+  "event.quest-bottle.title",
+  "event.swamp-ghost.doll.0",
+  "event.swamp-ghost.doll.text",
+  "event.swamp-ghost.start.0",
+  "event.swamp-ghost.start.1",
+  "event.swamp-ghost.start.text",
+  "event.swamp-ghost.title",
+  "event.the-inn.start.0",
+  "event.the-inn.start.1",
+  "event.the-inn.start.2",
+  "event.the-inn.start.3",
+  "event.the-inn.start.4",
+  "event.the-inn.start.5",
+  "event.the-inn.start.text.0",
+  "event.the-inn.start.text.1",
+  "event.the-inn.title",
+  "event.the-inn.town.0",
+  "event.the-inn.town.text.0",
+  "event.the-inn.town.text.1",
+  "event.the-inn.town.text.1.else",
+  "event.the-inn.town.text.2",
+  "event.the-scholar.start.0",
+  "event.the-scholar.start.1",
+  "event.the-scholar.start.text",
+  "event.the-scholar.thanks.0",
+  "event.the-scholar.thanks.text",
+  "event.the-scholar.title",
+  "event.welcome.coast.0",
+  "event.welcome.coast.text",
+  "event.welcome.forgotten.0",
+  "event.welcome.forgotten.text",
+  "event.welcome.squire.0",
+  "event.welcome.squire.text",
+  "event.welcome.start.0.0",
+  "event.welcome.start.0.1",
+  "event.welcome.start.0.1.else",
+  "event.welcome.start.0.2",
+  "event.welcome.start.1.0",
+  "event.welcome.start.1.1",
+  "event.welcome.start.1.1.else",
+  "event.welcome.start.1.2",
+  "event.welcome.start.2",
+  "event.welcome.start.3",
+  "event.welcome.start.text",
+  "event.welcome.title",
+  "event.welcome.witch.0",
+  "event.welcome.witch.text",
+  "event.your-room.start.0",
+  "event.your-room.start.1",
+  "event.your-room.start.2",
+  "event.your-room.start.3",
+  "event.your-room.start.text.0",
+  "event.your-room.start.text.1",
+  "event.your-room.title",
+  "item.alchemists-vial.flavor",
+  "item.canadian-waterweed.flavor",
+  "item.floating-water-plantain.flavor",
+  "item.glimmer-draught.flavor",
+  "item.glimmer-draught.name",
+  "item.hornwort-tonic.flavor",
+  "item.hornwort-tonic.name",
+  "item.hornwort.flavor",
+  "item.lace-plant.flavor",
+  "item.lobelia-antidote.flavor",
+  "item.lobelia-antidote.name",
+  "item.marimo-charm.flavor",
+  "item.marimo-charm.name",
+  "item.marimo.flavor",
+  "item.moonlit-draught.flavor",
+  "item.moonlit-draught.name",
+  "item.mysterious-resin.flavor",
+  "item.old-torn-doll.flavor",
+  "item.plantain-float.flavor",
+  "item.plantain-float.name",
+  "item.potion-of-breath.flavor",
+  "item.potion-of-breath.name",
+  "item.quillwort.flavor",
+  "item.shiny-fish-scales.flavor",
+  "item.shiny-pebble.flavor",
+  "item.snap-elixir.flavor",
+  "item.snap-elixir.name",
+  "item.veil-elixir.flavor",
+  "item.veil-elixir.name",
+  "item.warm-woolen-hat.flavor",
+  "item.warm-woolen-hat.name",
+  "item.water-lobelia.flavor",
+  "item.waterwheel-plant.flavor",
+  "location.lake.spots.deep-water.name",
+  "location.lake.spots.open-water.name",
+  "location.lake.spots.reedy-shore.name",
+  "location.lake.spots.rocky-shore.name",
+  "location.lake.spots.still-water.name",
+  "location.lake.spots.swamp.name",
+  "location.mage-tower.name",
+  "location.mage-tower.spots.the-first-pool.name",
+  "location.river.spots.lower-river.name",
+  "location.river.spots.river-mouth.name",
+  "location.river.spots.upper-river.name",
+  "location.town.name",
+  "location.town.spots.alchemist.name",
+  "location.town.spots.inn.name",
+  "location.town.spots.room.name",
+  "location.town.spots.square.name",
+  "perk.aquarium.description",
+  "perk.aquarium.name",
+  "perk.sushi-enjoyer.description",
+  "rules.cold.coldLevels.chilly.name",
+  "rules.cold.coldLevels.cold.name",
+  "rules.cold.coldLevels.freezing.name",
+  "rules.cold.night.name",
+  "rules.stew.name",
+  "vendor.alchemist.name",
+  "vendor.aquarium.name",
+  "vendor.innkeeper.name",
+  "vendor.stew.name"
+];

@@ -9,6 +9,16 @@
   },
   "difficulty": 0,
   "rarity": "uncommon",
+  "stew": [
+    {
+      "value": "reactionFast",
+      "add": 200
+    },
+    {
+      "value": "reactionOk",
+      "add": 200
+    }
+  ],
   "prefers": {
     "time": [
       "night"
@@ -22,5 +32,8 @@
     "bait": [
       "worm"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

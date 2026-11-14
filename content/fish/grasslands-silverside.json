@@ -8,6 +8,12 @@
   },
   "difficulty": 0,
   "rarity": "uncommon",
+  "stew": [
+    {
+      "value": "warmth",
+      "add": 1
+    }
+  ],
   "prefers": {
     "time": [
       "morning",
@@ -22,5 +28,8 @@
     "bait": [
       "small-fish"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

@@ -51,7 +51,15 @@ export const NEEDS = {
   wind: 'wind <amount>: the wind now, 0 (none) to 5 (extreme), as temperature',
   clouds: 'clouds <amount>: the clouds now, 0 (clear) to 5 (black), as temperature',
   precipitation: 'precipitation <amount>: rain or snow now, 0 (none) to 5 (extreme), as temperature',
+  vendor: 'vendor <vendor id> open | asleep | away | closed: whether the vendor is in now, and if not, why (R17.6)',
+  perk: 'perk <perk id>: the player has taken the perk',
+  weekday: 'weekday mon | tue | wed | thu | fri | sat | sun: the day of the week (R17.6)',
 };
+
+/** What `needs: vendor` can say of a vendor (src/engine/schedule.js). */
+export const VENDOR_STATES = ['open', 'asleep', 'away', 'closed'];
+/** The days of the week, as src/engine/time.js has them. */
+export const WEEKDAY_WORDS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
 /** The weather's levels a requirement can check (src/engine/weather.js). */
 export const WEATHER_LEVELS = ['temperature', 'wind', 'clouds', 'precipitation'];
@@ -88,6 +96,10 @@ export const EFFECTS = {
   learn: 'learn: spot | fish | item <location id> <id>: the player learns that it is there (R4.5, 8.5)',
   open: 'open: <location id>: a hidden location shows on the map (8.2)',
   close: "close: <location id>: a quest's location is gone from the map; a player there goes back to the start (R11.2)",
+  buff: 'buff: <buff id>: the player gets a buff from content/buffs/ (R12)',
+  wait: 'wait: <n> hours | morning: time passes, as in waiting at the inn (R17.2)',
+  sleep: 'sleep: the player sleeps until the next morning, and wakes rested (R17.4)',
+  shop: "shop: <vendor id>: the vendor's barter window opens when the event ends (R18.2)",
 };
 
 /** Front matter `again:`: a visitor who comes back after so many casts or days (7.10). */
@@ -109,21 +121,25 @@ const INT = /^-?\d+$/;
  *   | { kind: 'location' | 'spot', id: string }
  *   | { kind: 'count', name: string, min: number | null, max: number | null }
  *   | { kind: 'fish', species: string | null, count: number }
- *   | { kind: 'set', set: string, count: number | 'all' }} Need
+ *   | { kind: 'set', set: string, count: number | 'all' }
+ *   | { kind: 'vendor', id: string, status: string } | { kind: 'perk', id: string } | { kind: 'weekday', day: number }} Need
  * @typedef {{ kind: 'luck' | 'xp', add: number } | { kind: 'item', id: string, add: number }
  *   | { kind: 'flag', name: string, set: boolean } | { kind: 'count', name: string, add: number }
  *   | { kind: 'fish', which: 'any' | 'species' | 'rarest', species: string | null, count: number }
  *   | { kind: 'go', location: string, spot: string | null } | { kind: 'lock', set: boolean }
  *   | { kind: 'trade', what: 'junk', table: string }
  *   | { kind: 'learn', what: 'spot' | 'fish' | 'item', location: string, id: string }
- *   | { kind: 'place', location: string, open: boolean } | { kind: 'set', set: string }} Effect
+ *   | { kind: 'place', location: string, open: boolean } | { kind: 'set', set: string }
+ *   | { kind: 'buff', id: string } | { kind: 'wait', hours: number | 'morning' } | { kind: 'sleep' }
+ *   | { kind: 'shop', id: string }} Effect
  * @typedef {string | { needs: Need[], text: string, otherwise?: string }} Part  Plain text, or text
  *   shown only when its needs are met, with what to show otherwise (D88).
  * @typedef {Part[]} Text
  * @typedef {{ text: Text, to: string, needs: Need[], effects: Effect[] }} Choice
  * @typedef {{ text: Text, choices: Choice[] }} Slide
  * @typedef {{ id: string, title: Text, once: boolean, trigger: string, needs: Need[],
- *   art?: string, again?: { casts?: number, days?: number }, first: string, slides: Record<string, Slide> }} GameEventData
+ *   art?: string, again?: { casts?: number, days?: number }, first: string, slides: Record<string, Slide>,
+ *   placeholder?: boolean }} GameEventData
  */
 
 /**
@@ -141,8 +157,15 @@ function parseNeed(words) {
     case 'season':
     case 'location':
     case 'spot':
+    case 'perk':
       if (args.length !== 1) return `"${word}" takes one id`;
       return { kind: word, id: args[0] };
+    case 'vendor':
+      if (args.length !== 2 || !VENDOR_STATES.includes(args[1])) return `"vendor" takes a vendor id and one of ${VENDOR_STATES.join(', ')}`;
+      return { kind: 'vendor', id: args[0], status: args[1] };
+    case 'weekday':
+      if (args.length !== 1 || !WEEKDAY_WORDS.includes(args[0])) return `"weekday" takes one of ${WEEKDAY_WORDS.join(', ')}`;
+      return { kind: 'weekday', day: WEEKDAY_WORDS.indexOf(args[0]) };
     case 'level':
     case 'luck': {
       const at = n(args[0]);
@@ -305,6 +328,16 @@ function parseEffect(verb, words) {
     if (args.length !== 3 || !['spot', 'fish', 'item'].includes(args[0])) return '"learn" takes spot, fish or item, a location id and an id: learn: spot river lower-river';
     return { kind: 'learn', what: /** @type {'spot' | 'fish' | 'item'} */ (args[0]), location: args[1], id: args[2] };
   }
+  if (verb === 'buff' || verb === 'shop') {
+    if (args.length !== 1 || !ID.test(args[0])) return `"${verb}" takes one id`;
+    return { kind: verb, id: args[0] };
+  }
+  if (verb === 'sleep') return words.trim() ? '"sleep" takes nothing after it' : { kind: 'sleep' };
+  if (verb === 'wait') {
+    if (args.length === 1 && args[0] === 'morning') return { kind: 'wait', hours: 'morning' };
+    if (args.length === 2 && INT.test(args[0]) && Number(args[0]) > 0 && /^hours?$/.test(args[1])) return { kind: 'wait', hours: Number(args[0]) };
+    return '"wait" takes a number of hours or "morning": wait: 2 hours, wait: morning';
+  }
   if (verb === 'trade') {
     if (args.length !== 2 || args[0] !== 'junk') return '"trade" takes "junk" and a table id: trade: junk junk-collector';
     return { kind: 'trade', what: 'junk', table: args[1] };
@@ -337,6 +370,8 @@ function parseEffect(verb, words) {
   return { kind: 'item', id: what, add };
 }
 
+export { parseNeed };
+
 /**
  * Reads one event file.
  * @param {string} text
@@ -365,7 +400,7 @@ export function parseEvent(text) {
       const need = parseNeed(m[2]);
       if (typeof need === 'string') fail(i, need);
       else eventNeeds.push(need);
-    } else if (!['id', 'title', 'once', 'trigger', 'art', 'again'].includes(m[1])) fail(i, `no front matter key "${m[1]}"`);
+    } else if (!['id', 'title', 'once', 'trigger', 'art', 'again', 'placeholder'].includes(m[1])) fail(i, `no front matter key "${m[1]}"`);
     else if (m[1] in front) fail(i, `"${m[1]}" twice (an event has one ${m[1]})`);
     else front[m[1]] = m[2];
   }
@@ -375,6 +410,7 @@ export function parseEvent(text) {
   if (!front.id || !ID.test(front.id)) fail(0, 'the front matter needs an id in lowercase-with-dashes');
   if (!front.title) fail(0, 'the front matter needs a title');
   if (front.once !== undefined && front.once !== 'true' && front.once !== 'false') fail(0, '"once" is true or false');
+  if (front.placeholder !== undefined && front.placeholder !== 'true' && front.placeholder !== 'false') fail(0, '"placeholder" is true or false (D124)');
   const again = front.again !== undefined ? AGAIN.exec(front.again.trim()) : null;
   if (front.again !== undefined && !again) fail(0, '"again" is a number of casts or days: again: 50 casts, again: 3 days');
   if (again && front.once === 'true') fail(0, '"again" brings an event back, so it can\'t be "once: true"');
@@ -494,6 +530,8 @@ export function parseEvent(text) {
     slides,
   };
   if (front.art) event.art = front.art;
+  // Its text and what it does are stand-ins until the owner's (D124).
+  if (front.placeholder === 'true') event.placeholder = true;
   if (again) event.again = again[2].startsWith('cast') ? { casts: Number(again[1]) } : { days: Number(again[1]) };
   return { event, errors };
 }

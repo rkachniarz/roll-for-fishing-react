@@ -9,6 +9,12 @@
   },
   "difficulty": 0,
   "rarity": "epic",
+  "stew": [
+    {
+      "value": "fishingSkill",
+      "add": 3
+    }
+  ],
   "prefers": {
     "time": [
       "evening",
@@ -23,5 +29,8 @@
     "bait": [
       "small-fish"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

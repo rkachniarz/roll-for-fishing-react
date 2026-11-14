@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/vendor.schema.json",
+  "id": "innkeeper",
+  "placeholder": true,
+  "name": "The innkeeper",
+  "kind": "vendor",
+  "location": "town",
+  "spot": "inn",
+  "offers": [
+    {
+      "id": "warm-woolen-hat",
+      "gives": {
+        "item": "warm-woolen-hat",
+        "count": 1
+      },
+      "costs": [
+        {
+          "fish": "any",
+          "rarity": "rare",
+          "count": 2
+        },
+        {
+          "item": "shiny-fish-scales",
+          "count": 3
+        }
+      ]
+    }
+  ]
+}

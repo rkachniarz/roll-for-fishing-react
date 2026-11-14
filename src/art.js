@@ -13,6 +13,8 @@ import { REEDY, REEDY_AUTUMN, REEDY_SPRING, REEDY_WINTER, paintReedy } from './s
 import { BOBBER, BOBBER_DIPPED, BOBBER_FAR, PALETTE, SPLASH, WAVES, bobberKeys, paintGrid } from './scene/sprites.js';
 import { ICONS, KEYS as ICON_KEYS, OWN_KEYS, paintIcon } from './scene/icons.js';
 import { TRIALS } from './art-trials.js';
+import { SWIM_FRAMES, fishFrames, paint } from './scene/fish-art.js';
+import { content } from './generated/content.js';
 import { createRng, deriveSeed } from './rng.js';
 
 const seed = Number(new URLSearchParams(location.search).get('seed') ?? 1);
@@ -104,6 +106,250 @@ for (const trial of TRIALS) {
     const sprites = el('div', { class: 'row sprites' });
     trials.append(sprites);
     for (const [name, rows] of trial.sprites) spriteCard(sprites, name, paintGrid(rows), PALETTE.waterMid);
+  }
+}
+
+// ---------- Fish that swim (D131) ----------
+
+/** The underwater tank's size, in scene pixels. */
+const TANK_W = 192;
+const TANK_H = 96;
+/** The dive's water, top to bottom (src/scene/views.js). */
+const DEEP_BANDS = ['#2f8f9f', '#28808f', '#22717f', '#1c626f', '#16535f', '#11444f'];
+
+/**
+ * The still part of the water: bands blended through dithered rows, light
+ * from above, sand. Painted once.
+ * @param {() => number} rand
+ */
+function paintDeep(rand) {
+  const canvas = /** @type {HTMLCanvasElement} */ (el('canvas'));
+  canvas.width = TANK_W;
+  canvas.height = TANK_H;
+  const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+  const band = TANK_H / DEEP_BANDS.length;
+  for (let y = 0; y < TANK_H; y++) {
+    const i = Math.min(DEEP_BANDS.length - 1, Math.floor(y / band));
+    const edge = y - i * band >= band - 1 && i < DEEP_BANDS.length - 1;
+    for (let x = 0; x < TANK_W; x++) {
+      ctx.fillStyle = DEEP_BANDS[edge && (x + y) % 2 ? i + 1 : i];
+      ctx.fillRect(x, y, 1, 1);
+    }
+  }
+  // Shafts of light, slanting down, dithered so they stay hard pixels.
+  for (let i = 0; i < 4; i++) {
+    const x0 = 14 + i * 50 + Math.floor(rand() * 12);
+    for (let y = 0; y < TANK_H - 12; y++) {
+      const from = x0 + Math.floor(y * 0.35);
+      for (let x = from; x < from + 7; x++) {
+        if ((x + y) % 2 === 0 && rand() > y / TANK_H) {
+          ctx.fillStyle = '#3f9fab';
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+    }
+  }
+  // The bottom: sand with darker grains.
+  for (let x = 0; x < TANK_W; x++) {
+    const top = TANK_H - 9 + Math.round(Math.sin(x / 11) * 1.5);
+    for (let y = top; y < TANK_H; y++) {
+      ctx.fillStyle = y === top ? '#7a6a48' : rand() < 0.12 ? '#4f4430' : '#5f5238';
+      ctx.fillRect(x, y, 1, 1);
+    }
+  }
+  return canvas;
+}
+
+/**
+ * A fish's frames on canvases, facing left and right, with its gulp.
+ * @param {string} species
+ */
+function swimLook(species) {
+  const f = /** @type {NonNullable<ReturnType<typeof fishFrames>>} */ (fishFrames(species));
+  return {
+    left: f.side.map((g) => paint(g)),
+    right: f.side.map((g) => paint(g, true)),
+    gulpLeft: paint(f.gulp),
+    gulpRight: paint(f.gulp, true),
+  };
+}
+
+/**
+ * A live tank: water, weed swaying, bubbles, and fish swimming across and
+ * back, each now and then bursting and gliding. A plain 2D canvas, so it
+ * doesn't count against WebGL's limit.
+ * @param {HTMLElement} parent
+ * @param {string} caption
+ * @param {string[]} species
+ */
+function tankCard(parent, caption, species) {
+  const zoom = Math.max(2, Math.min(4, Math.floor((document.documentElement.clientWidth - 40) / TANK_W)));
+  const canvas = /** @type {HTMLCanvasElement} */ (el('canvas', { style: `width:${TANK_W * zoom}px;height:${TANK_H * zoom}px` }));
+  canvas.width = TANK_W;
+  canvas.height = TANK_H;
+  parent.append(el('figure', { class: 'tank' }, [canvas, el('figcaption', {}, [caption])]));
+  const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+  const rand = createRng(deriveSeed(seed, 'scenery'));
+  const r = () => rand.next();
+  const deep = paintDeep(r);
+  const weeds = Array.from({ length: 7 }, (_, i) => ({ x: 8 + i * 27 + Math.floor(r() * 10), h: 14 + Math.floor(r() * 16) }));
+  const bubbles = Array.from({ length: 5 }, () => ({ x: Math.floor(r() * TANK_W), y: r() * TANK_H, speed: 6 + r() * 8 }));
+  const fish = species.map((id, i) => ({
+    look: swimLook(id),
+    x: 10 + r() * (TANK_W - 70),
+    y: 8 + ((i * 23) % (TANK_H - 40)),
+    dir: r() < 0.5 ? 1 : -1,
+    beat: r() * 8,
+    burstUntil: 0,
+    nextBurst: 2000 + r() * 6000,
+    glideUntil: 0,
+    nextGulp: 1500 + r() * 4000,
+    gulpUntil: 0,
+    phase: r() * 6,
+  }));
+  let last = performance.now();
+  /** @param {number} now */
+  function draw(now) {
+    const dt = Math.max(0, Math.min(0.1, (now - last) / 1000));
+    last = now;
+    ctx.drawImage(deep, 0, 0);
+    // Weed behind the fish, its top half swaying a pixel.
+    const sway = Math.floor(now / 700) % 2;
+    for (const wd of weeds) {
+      for (let y = 0; y < wd.h; y++) {
+        const off = y > wd.h / 2 ? sway : 0;
+        ctx.fillStyle = y % 5 === 0 ? '#3f7f46' : '#2f6f3a';
+        ctx.fillRect(wd.x + off + (y % 6 < 3 ? 0 : 1), TANK_H - 9 - y, 2, 1);
+      }
+    }
+    for (const f of fish) {
+      if (now > f.nextBurst) {
+        f.burstUntil = now + 700;
+        f.glideUntil = now + 2000;
+        f.nextBurst = now + 5000 + r() * 5000;
+      }
+      if (now > f.nextGulp) {
+        f.gulpUntil = now + 260;
+        f.nextGulp = now + 2500 + r() * 4000;
+      }
+      const bursting = now < f.burstUntil;
+      const gliding = now < f.glideUntil;
+      const w = f.look.left[0].width;
+      f.x += f.dir * (bursting ? 28 : gliding ? 8 : 12) * dt;
+      if (f.x > TANK_W - w - 4) f.dir = -1;
+      if (f.x < 4) f.dir = 1;
+      // The beat: quick in a burst, easy cruising, still in a glide.
+      if (!gliding || bursting) f.beat += dt * (bursting ? 22 : 8);
+      const k = Math.floor(f.beat) % SWIM_FRAMES;
+      const gulp = now < f.gulpUntil && k === 0;
+      const img = f.dir > 0 ? (gulp ? f.look.gulpRight : f.look.right[k]) : gulp ? f.look.gulpLeft : f.look.left[k];
+      ctx.drawImage(img, Math.round(f.x), Math.round(f.y + Math.sin(now / 1300 + f.phase) * 3));
+    }
+    // Bubbles in front.
+    ctx.fillStyle = '#bfeff0';
+    for (const b of bubbles) {
+      b.y -= b.speed * dt;
+      if (b.y < 0) b.y = TANK_H - 10;
+      ctx.fillRect(b.x + (Math.floor(b.y / 6) % 2), Math.round(b.y), 1, 1);
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+/**
+ * The scene's open water, far band at the top, near at the bottom, its waves
+ * shimmering, with class fish below the surface at both distances.
+ * @param {HTMLElement} parent
+ * @param {[string, string]} species  Far out, close in.
+ */
+function surfaceCard(parent, species) {
+  const W = 256;
+  const H = 120;
+  const zoom = Math.max(2, Math.min(3, Math.floor((document.documentElement.clientWidth - 40) / W)));
+  const canvas = /** @type {HTMLCanvasElement} */ (el('canvas', { style: `width:${W * zoom}px;height:${H * zoom}px` }));
+  canvas.width = W;
+  canvas.height = H;
+  parent.append(el('figure', {}, [canvas, el('figcaption', {}, [`Class fish below the surface, on the scene's water at its own size: a ${species[0]} far out, a ${species[1]} close in`])]));
+  const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+  const rand = createRng(deriveSeed(seed, 'scenery'));
+  const r = () => rand.next();
+  const still = /** @type {HTMLCanvasElement} */ (el('canvas'));
+  still.width = W;
+  still.height = H;
+  const sctx = /** @type {CanvasRenderingContext2D} */ (still.getContext('2d'));
+  const bands = [PALETTE.waterFar, PALETTE.waterMid, PALETTE.waterNear];
+  for (let y = 0; y < H; y++) {
+    const i = Math.min(2, Math.floor(y / 40));
+    const edge = y % 40 === 39 && i < 2;
+    for (let x = 0; x < W; x++) {
+      sctx.fillStyle = bands[edge && (x + y) % 2 ? i + 1 : i];
+      sctx.fillRect(x, y, 1, 1);
+    }
+  }
+  const waves = [
+    ...Array.from({ length: 14 }, () => ({ band: 'far', x: r() * W, y: 4 + r() * 32 })),
+    ...Array.from({ length: 8 }, () => ({ band: 'mid', x: r() * W, y: 42 + r() * 34 })),
+    ...Array.from({ length: 5 }, () => ({ band: 'near', x: r() * W, y: 82 + r() * 34 })),
+  ].map((w) => ({ x: Math.floor(w.x), y: Math.floor(w.y), frames: WAVES[/** @type {'far' | 'mid' | 'near'} */ (w.band)].map((rows) => paintGrid(rows)) }));
+  const fish = /** @type {const} */ (['far', 'near']).map((d, i) => {
+    const f = /** @type {NonNullable<ReturnType<typeof fishFrames>>} */ (fishFrames(species[i]));
+    return { left: f[d].map((g) => paint(g)), right: f[d].map((g) => paint(g, true)), x: i ? 40 : 150, y: i ? 86 : 12, dir: i ? 1 : -1, speed: i ? 9 : 5, beat: i * 3 };
+  });
+  let last = performance.now();
+  /** @param {number} now */
+  function draw(now) {
+    const dt = Math.max(0, Math.min(0.1, (now - last) / 1000));
+    last = now;
+    ctx.drawImage(still, 0, 0);
+    for (const f of fish) {
+      const w = f.left[0].width;
+      f.x += f.dir * f.speed * dt;
+      if (f.x > W - w - 10) f.dir = -1;
+      if (f.x < 10) f.dir = 1;
+      f.beat += dt * 6;
+      const frames = f.dir > 0 ? f.right : f.left;
+      ctx.drawImage(frames[Math.floor(f.beat) % SWIM_FRAMES], Math.round(f.x), Math.round(f.y + Math.sin(now / 1700 + f.speed) * 1.5));
+    }
+    const flip = Math.floor(now / 600) % 2;
+    for (const w of waves) ctx.drawImage(w.frames[(flip + w.x) % w.frames.length], w.x, w.y);
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+{
+  const swim = section(
+    'Fish that swim',
+    'Every fish drawn to swim (D131), after the carp trial: its shape from a preset for its kind of body ' +
+      '(src/scene/fish-shapes.js), its colours read off its icon. Side on in the tank, the aquarium and the dive; ' +
+      'from the bank, darkened, as a class fish or a big fish under the surface. Export one to mark up: ' +
+      'npm run sprite export swim-common-carp.',
+  );
+  const live = el('div', { class: 'row' });
+  swim.append(live);
+  tankCard(live, 'A carp, a perch, a pike, a roach and a tench', ['common-carp', 'perch', 'northern-pike', 'roach', 'tench']);
+  tankCard(live, 'Further afield: an arowana, a discus, a piranha, a bichir and an eel', ['silver-arowana', 'discus', 'red-bellied-piranha', 'ornate-bichir', 'mainland-eel']);
+  surfaceCard(live, ['northern-pike', 'common-carp']);
+  swim.append(el('h3', {}, ['Every fish, side on and below the surface (near and far), on the dive\'s water']));
+  const all = el('div', { class: 'row sprites' });
+  swim.append(all);
+  // Drawn a few at a time, letting the page show itself between them: on a
+  // phone the whole lot at once kept everything below waiting.
+  const ids = Object.keys(content.fish).sort();
+  for (const [i, id] of ids.entries()) {
+    const f = fishFrames(id);
+    if (!f) continue;
+    spriteCard(all, `swim-${id}`, paint(f.side[0]), DEEP_BANDS[2]);
+    if (i % 8 === 7) await new Promise((r) => setTimeout(r));
+  }
+  swim.append(el('h3', {}, ['Below the surface, from the bank, on the scene\'s water']));
+  const below = el('div', { class: 'row sprites' });
+  swim.append(below);
+  for (const id of ids) {
+    const f = fishFrames(id);
+    if (!f) continue;
+    spriteCard(below, `below-${id}`, paint(f.near[0]), PALETTE.waterNear);
   }
 }
 

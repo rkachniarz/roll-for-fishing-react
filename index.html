@@ -8,14 +8,15 @@
   <title>Roll for Fishing</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎣</text></svg>">
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;700&family=Pixelify+Sans:wght@400;600&display=swap">
   <link rel="stylesheet" href="./styles.css">
-  <!-- The theme before anything draws, so a light page doesn't flash dark
-       (src/settings.js keeps the same key). -->
+  <!-- The theme and the font before anything draws, so a light page doesn't
+       flash dark (src/settings.js keeps the same key). -->
   <script>
     try {
-      const theme = JSON.parse(localStorage.getItem('roll-for-fishing:settings') || '{}').theme;
+      const { theme, font } = JSON.parse(localStorage.getItem('roll-for-fishing:settings') || '{}');
       if (theme) document.documentElement.dataset.theme = theme;
+      if (font) document.documentElement.dataset.font = font;
     } catch {}
   </script>
 
@@ -38,6 +39,9 @@
   <div class="scene-wrap" id="sceneWrap">
     <canvas id="scene" aria-label="The lake, seen from the shore"></canvas>
     <div id="buffBar" hidden></div>
+    <!-- Active abilities, drawn on the scene's bottom left, over the shore that
+         is always there (D120). Under the panes. -->
+    <nav class="actions" id="actions" hidden></nav>
     <!-- The panes open over the scene, WoW style (docs/spec.md, R16.4). -->
     <section class="pane" id="pane" hidden aria-labelledby="paneTitle">
       <header class="pane-head">
@@ -46,6 +50,8 @@
       </header>
       <div class="pane-body" id="paneBody"></div>
     </section>
+    <!-- The dive's breath, in seconds (R20.3). -->
+    <div class="dive-timer" id="diveTimer" hidden></div>
     <!-- What the player can't do, in red, as WoW's error frame (D83). -->
     <div class="errors" id="errors" aria-live="assertive"></div>
   </div>
@@ -64,8 +70,6 @@
       <button type="button" class="bar-button" id="bucket" data-pane="bucket"></button>
       <button type="button" class="bar-button" id="bag" data-pane="bag"></button>
     </nav>
-    <!-- Active abilities, under the button row: easy to reach on a phone (D96). -->
-    <nav class="actions" id="actions" hidden></nav>
     <div class="log-frame">
       <div class="log" id="log" role="log" aria-live="polite"></div>
       <!-- The bag opens over the log, beside whatever pane is over the scene,

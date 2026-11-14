@@ -10,6 +10,16 @@
   },
   "difficulty": 0,
   "rarity": "uncommon",
+  "stew": [
+    {
+      "value": "wildCast",
+      "add": -1
+    },
+    {
+      "value": "castScatter",
+      "add": -4
+    }
+  ],
   "prefers": {
     "time": [
       "morning",
@@ -24,5 +34,8 @@
     "bait": [
       "bread"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

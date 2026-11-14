@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "warm-woolen-hat",
+  "category": "treasure",
+  "name": "Warm woolen hat",
+  "flavor": "Knitted thick, with flaps for the ears. You hear the splash a moment late, but you're warm.",
+  "rarity": "uncommon",
+  "value": 4,
+  "slot": "hat",
+  "effects": [
+    {
+      "value": "warmth",
+      "add": 1
+    },
+    {
+      "value": "reactionFast",
+      "add": -50
+    }
+  ],
+  "unique": true,
+  "placeholder": true
+}

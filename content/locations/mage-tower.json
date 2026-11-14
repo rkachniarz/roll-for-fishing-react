@@ -1,11 +1,13 @@
 {
   "$schema": "../../schemas/location.schema.json",
   "id": "mage-tower",
+  "placeholder": true,
   "name": "The Mage Tower pools",
   "hidden": true,
   "fragments": 3,
   "biteThreshold": 50,
   "treasureThreshold": 5,
+  "stuffThreshold": 20,
   "featureChance": 12,
   "maxFeatures": 2,
   "fish": [],
@@ -14,6 +16,7 @@
       "table": "common-treasure"
     }
   ],
+  "stuff": [],
   "junk": [
     {
       "table": "common-junk"
@@ -76,10 +79,10 @@
           "weight": 24
         }
       ],
-      "junk": [
+      "stuff": [
         {
           "id": "lorebook-page-3",
-          "weight": 1
+          "weight": 3
         }
       ]
     }

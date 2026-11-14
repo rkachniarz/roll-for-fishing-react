@@ -3,6 +3,7 @@ id: quest-bottle-reward
 title: A package on the line
 trigger: needs
 needs: flag bottle-paid
+placeholder: true
 ---
 
 ## start

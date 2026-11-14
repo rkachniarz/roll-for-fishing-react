@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "moonlit-draught",
+  "placeholder": true,
+  "name": "Moonlit draught",
+  "effects": [
+    {
+      "value": "reactionFast",
+      "add": 100
+    },
+    {
+      "value": "reactionOk",
+      "add": 200
+    }
+  ],
+  "duration": {
+    "casts": 8
+  }
+}

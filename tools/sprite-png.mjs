@@ -308,7 +308,44 @@ export async function sprites() {
   for (const [name, rows] of Object.entries(icons.ICONS)) {
     all.set(`icon-${name.replace('/', '-')}`, { rows, keys: icons.iconKeys(name) });
   }
+  // The fish drawn to swim (D131): side on, and below the surface close in,
+  // each colour given a letter of its own.
+  const { content } = await import('../src/generated/content.js');
+  const art = await import('../src/scene/fish-art.js');
+  for (const id of Object.keys(content.fish)) {
+    const f = art.fishFrames(id);
+    if (!f) continue;
+    all.set(`swim-${id}`, keyed(f.side[0]));
+    all.set(`below-${id}`, keyed(f.near[0]));
+  }
   return all;
+}
+
+/**
+ * A grid of colours as rows of letters and the letters' colours.
+ * @param {string[][]} grid
+ */
+function keyed(grid) {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijlmnopqrstuvwxyz0123456789';
+  /** @type {Record<string, string>} */
+  const keys = {};
+  /** @type {Map<string, string>} */
+  const of = new Map();
+  const rows = grid.map((row) =>
+    row
+      .map((c) => {
+        if (!c) return '.';
+        if (c === '#1b2b34') return (keys.k = c, 'k');
+        if (!of.has(c)) {
+          const l = letters[of.size];
+          of.set(c, l);
+          keys[l] = c;
+        }
+        return of.get(c);
+      })
+      .join(''),
+  );
+  return { rows, keys };
 }
 
 /**

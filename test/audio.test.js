@@ -16,5 +16,5 @@ test('the volume: 0 is silence, 100 the loudest, evenly in between (9.2)', () =>
 
 test('a device with old settings gets the sound at 60', () => {
   const storage = { getItem: () => JSON.stringify({ theme: 'light', dice: false }) };
-  assert.deepEqual(loadSettings(storage), { theme: 'light', dice: false, sound: 60 });
+  assert.deepEqual(loadSettings(storage), { theme: 'light', font: 'clear', dice: false, sound: 60 });
 });

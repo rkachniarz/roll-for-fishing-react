@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "shiny-pebble",
+  "category": "stuff",
+  "name": "Shiny pebble",
+  "flavor": "Smooth, round and far too shiny for a pebble. Somebody will want it.",
+  "rarity": "common",
+  "value": 2,
+  "placeholder": [
+    "flavor"
+  ]
+}

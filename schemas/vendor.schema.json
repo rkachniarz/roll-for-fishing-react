@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A vendor in town: when they're in, and what they trade (R17.6, R18)",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
+    "id": { "$ref": "common.schema.json#/definitions/id" },
+    "name": { "$ref": "common.schema.json#/definitions/text" },
+    "kind": {
+      "description": "A vendor trades offers (R18.2); the stew takes fish and gives a bowl (R18.7); the aquarium holds fish (R17.5).",
+      "enum": ["vendor", "stew", "aquarium"]
+    },
+    "location": { "$ref": "common.schema.json#/definitions/id" },
+    "spot": { "description": "The place in town where they are.", "$ref": "common.schema.json#/definitions/id" },
+    "schedule": {
+      "description": "When they're in (R17.6). Without one, always.",
+      "type": "object",
+      "properties": {
+        "days": { "description": "The days they work: mon, tue, wed, thu, fri, sat, sun.", "type": "array", "items": { "enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] }, "minItems": 1 },
+        "sleeps": {
+          "description": "Hours asleep, from and to on the 24-hour clock; may wrap past midnight (22 to 6).",
+          "type": "object",
+          "properties": { "from": { "type": "integer", "minimum": 0, "maximum": 23 }, "to": { "type": "integer", "minimum": 0, "maximum": 24 } },
+          "required": ["from", "to"],
+          "additionalProperties": false
+        },
+        "awayChance": { "description": "The chance, in percent, that on a working day they're away (off getting ingredients). Drawn once per day.", "type": "integer", "minimum": 0, "maximum": 100 }
+      },
+      "additionalProperties": false
+    },
+    "offers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/id" },
+          "gives": {
+            "description": "An item (count of it), or a buff given straight away.",
+            "type": "object",
+            "properties": {
+              "item": { "$ref": "common.schema.json#/definitions/id" },
+              "count": { "type": "integer", "minimum": 1 },
+              "buff": { "$ref": "common.schema.json#/definitions/id" }
+            },
+            "additionalProperties": false
+          },
+          "costs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "item": { "$ref": "common.schema.json#/definitions/id" },
+                "fish": { "description": "A fish species, or \"any\".", "type": "string" },
+                "rarity": { "description": "For fish: this rarity or better.", "$ref": "common.schema.json#/definitions/rarity" },
+                "count": { "type": "integer", "minimum": 1 }
+              },
+              "required": ["count"],
+              "additionalProperties": false
+            }
+          },
+          "needs": { "description": "Requirements for it to show, in the event words (docs/events.md): \"count trades-alchemist 5+\".", "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["id", "gives", "costs"],
+        "additionalProperties": false
+      }
+    },
+    "retired": { "$ref": "common.schema.json#/definitions/retired" }
+  },
+  "required": ["id", "name", "kind", "location", "spot"],
+  "additionalProperties": false
+}

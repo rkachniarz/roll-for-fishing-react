@@ -10,6 +10,12 @@
   },
   "difficulty": 2,
   "rarity": "uncommon",
+  "stew": [
+    {
+      "value": "naturalCatch",
+      "add": -1
+    }
+  ],
   "prefers": {
     "time": [
       "night"
@@ -23,5 +29,8 @@
     "bait": [
       "small-fish"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

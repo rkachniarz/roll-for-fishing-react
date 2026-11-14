@@ -9,6 +9,12 @@
   },
   "difficulty": -1,
   "rarity": "rare",
+  "stew": [
+    {
+      "value": "fishFind",
+      "add": 9
+    }
+  ],
   "prefers": {
     "time": [
       "dawn",
@@ -23,5 +29,8 @@
     "bait": [
       "crayfish"
     ]
-  }
+  },
+  "placeholder": [
+    "stew"
+  ]
 }

@@ -1,0 +1,249 @@
+{
+  "$schema": "../../schemas/vendor.schema.json",
+  "id": "alchemist",
+  "placeholder": true,
+  "name": "The Alchemist",
+  "kind": "vendor",
+  "location": "town",
+  "spot": "alchemist",
+  "schedule": {
+    "days": [
+      "fri",
+      "sat",
+      "sun"
+    ],
+    "sleeps": {
+      "from": 5,
+      "to": 13
+    },
+    "awayChance": 20
+  },
+  "offers": [
+    {
+      "id": "potion-of-breath",
+      "gives": {
+        "item": "potion-of-breath",
+        "count": 1
+      },
+      "costs": [
+        {
+          "item": "canadian-waterweed",
+          "count": 2
+        },
+        {
+          "item": "shiny-pebble",
+          "count": 1
+        },
+        {
+          "item": "alchemists-vial",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "hornwort-tonic",
+      "gives": {
+        "item": "hornwort-tonic",
+        "count": 1
+      },
+      "costs": [
+        {
+          "item": "hornwort",
+          "count": 2
+        },
+        {
+          "item": "shiny-pebble",
+          "count": 1
+        },
+        {
+          "item": "alchemists-vial",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "moonlit-draught",
+      "gives": {
+        "item": "moonlit-draught",
+        "count": 1
+      },
+      "costs": [
+        {
+          "item": "quillwort",
+          "count": 2
+        },
+        {
+          "item": "shiny-pebble",
+          "count": 1
+        },
+        {
+          "item": "alchemists-vial",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "lobelia-antidote",
+      "gives": {
+        "item": "lobelia-antidote",
+        "count": 1
+      },
+      "costs": [
+        {
+          "item": "water-lobelia",
+          "count": 2
+        },
+        {
+          "item": "shiny-pebble",
+          "count": 1
+        },
+        {
+          "item": "alchemists-vial",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "marimo-charm",
+      "gives": {
+        "item": "marimo-charm",
+        "count": 1
+      },
+      "costs": [
+        {
+          "item": "marimo",
+          "count": 1
+        },
+        {
+          "item": "shiny-pebble",
+          "count": 1
+        },
+        {
+          "item": "alchemists-vial",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "plantain-float",
+      "gives": {
+        "item": "plantain-float",
+        "count": 1
+      },
+      "costs": [
+        {
+          "item": "floating-water-plantain",
+          "count": 1
+        },
+        {
+          "item": "shiny-pebble",
+          "count": 1
+        },
+        {
+          "item": "alchemists-vial",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "veil-elixir",
+      "gives": {
+        "item": "veil-elixir",
+        "count": 1
+      },
+      "costs": [
+        {
+          "item": "lace-plant",
+          "count": 1
+        },
+        {
+          "item": "mysterious-resin",
+          "count": 1
+        },
+        {
+          "item": "shiny-pebble",
+          "count": 1
+        },
+        {
+          "item": "alchemists-vial",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "snap-elixir",
+      "gives": {
+        "item": "snap-elixir",
+        "count": 1
+      },
+      "costs": [
+        {
+          "item": "waterwheel-plant",
+          "count": 1
+        },
+        {
+          "item": "mysterious-resin",
+          "count": 1
+        },
+        {
+          "item": "shiny-pebble",
+          "count": 1
+        },
+        {
+          "item": "alchemists-vial",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "glimmer-draught",
+      "gives": {
+        "item": "glimmer-draught",
+        "count": 1
+      },
+      "costs": [
+        {
+          "item": "shiny-fish-scales",
+          "count": 3
+        },
+        {
+          "item": "shiny-pebble",
+          "count": 1
+        },
+        {
+          "item": "alchemists-vial",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "vials-for-fish",
+      "gives": {
+        "item": "alchemists-vial",
+        "count": 2
+      },
+      "costs": [
+        {
+          "fish": "any",
+          "rarity": "rare",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "secret-tincture",
+      "gives": {
+        "buff": "alchemists-secret"
+      },
+      "costs": [
+        {
+          "item": "shiny-pebble",
+          "count": 5
+        }
+      ],
+      "needs": [
+        "count trades-alchemist 5+"
+      ]
+    }
+  ]
+}

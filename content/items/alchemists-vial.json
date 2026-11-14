@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "alchemists-vial",
+  "category": "stuff",
+  "name": "Alchemist's vial",
+  "flavor": "A stoppered glass vial, empty, with a sigil scratched into the glass.",
+  "rarity": "common",
+  "value": 3,
+  "placeholder": [
+    "flavor"
+  ]
+}

@@ -21,7 +21,11 @@ import { diceFrom, levelFor } from './state.js';
 import { clock } from './time.js';
 import { RARITIES } from './fish.js';
 import { learn } from './knowledge.js';
-import { levelUp } from './perks.js';
+import { hasPerk, levelUp } from './perks.js';
+import { vendorStatus } from './schedule.js';
+import { giveBuff } from './buffs.js';
+import { passTime } from './passage.js';
+import { minutesToMorning } from './time.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./game.js').GameEvent} GameEvent */
@@ -79,6 +83,12 @@ export function meets(state, need) {
     }
     case 'fish':
       return state.bucket.filter((b) => !need.species || b.fish.species === need.species).reduce((n, b) => n + b.count, 0) >= need.count;
+    case 'vendor':
+      return vendorStatus(state, need.id) === need.status;
+    case 'perk':
+      return hasPerk(state, need.id);
+    case 'weekday':
+      return clock(state.time).weekday === need.day;
     default:
       return false;
   }
@@ -264,19 +274,25 @@ export function choose(state, index) {
   /** @type {GameEvent[]} */
   const events = [];
   const { dice, commit } = diceFrom(next);
-  for (const effect of choice.effects) events.push(...applyEffect(next, effect, dice.events));
+  for (const effect of choice.effects) events.push(...applyEffect(next, effect, dice));
   next.streams = commit();
   levelUp(next, levelBefore, events);
 
   next.event = choice.to === 'end' ? null : { id: event.id, slide: choice.to };
-  if (!next.event) events.push({ type: 'event-ended', event: event.id });
+  if (!next.event) {
+    events.push({ type: 'event-ended', event: event.id });
+    // Moved by the event: arriving there happens now it's closed (R17.3), so
+    // a place's greeting can start.
+    if (choice.effects.some((e) => e.kind === 'go' || (e.kind === 'place' && !e.open))) events.push(...arrive(next));
+  }
   return { state: next, events };
 }
 
 /**
  * @param {GameState} state  Changed in place.
  * @param {Effect} effect
- * @param {Dice} dice  The `events` stream, for a trade's reward (7.9).
+ * @param {Record<string, Dice>} dice  The `events` stream for a trade's reward (7.9), the
+ *   `weather` stream for time passing (R17.2).
  * @returns {GameEvent[]}  For the log. Luck is hidden (R6.7), and flags and counters too.
  */
 function applyEffect(state, effect, dice) {
@@ -320,7 +336,22 @@ function applyEffect(state, effect, dice) {
       state.locked = effect.set ? state.location : null;
       return [];
     case 'trade':
-      return tradeJunk(state, effect.table, dice);
+      return tradeJunk(state, effect.table, dice.events);
+    case 'buff':
+      return giveBuff(state, effect.id);
+    case 'shop':
+      // The barter window, once the event has closed (R18.2).
+      state.shop = effect.id;
+      return [];
+    case 'wait': {
+      const minutes = effect.hours === 'morning' ? minutesToMorning(state.time) : effect.hours * 60;
+      return [{ type: 'waited', minutes }, ...passTime(state, minutes, dice.weather)];
+    }
+    case 'sleep': {
+      // Until the next morning, waking rested (R17.4).
+      const minutes = minutesToMorning(state.time);
+      return [{ type: 'slept', minutes }, ...passTime(state, minutes, dice.weather), ...giveBuff(state, 'rested')];
+    }
     case 'set':
       // Every piece of the set in the bags, handed in (8.7).
       return setPieces(effect.set).flatMap((id) => {

@@ -1,6 +1,6 @@
 # Roll for Fishing: design and requirements
 
-What the game is meant to be: the vision, the requirements (`R1`–`R16`) and the catalogues. Code cites these by number
+What the game is meant to be: the vision, the requirements (`R1`–`R21`) and the catalogues. Code cites these by number
 (`R2.3`, `§C.2`). The reasons behind them are in [decisions.md](decisions.md); work still to do is in
 [DEV_PLAN.md](../DEV_PLAN.md). A requirement changes by recording a decision first, then editing it here.
 
@@ -327,6 +327,82 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   roll goes in the log. *(D82)*
 - **R16.3** The player can keep fishing with a panel open; taps on a panel stay in it. On a phone the main view is the
   scene, a small log and the buttons, and inventory or equipment panels may take most of the screen. *(D71)*
+
+### R17: The town and its people
+
+From the owner's brainstorm of 2026-11-14 (`docs/brainstorm-2026-11-14.md`, D123).
+
+- **R17.1** The town is a location with no water: its spots are places (the inn, the player's room, the Alchemist's
+  shop…). There is no casting there; the scene shows the places, and choosing one goes there. Arriving at a place opens
+  its dialogue, WoW's gossip window: the event dialog, with choices that may open a barter window, wait, or sleep.
+- **R17.2** **Time doesn't pass in town** unless a choice says so: sleeping until morning, or waiting ("I'll wait
+  here") for so many hours. Waiting moves the clock, steps the weather once per half hour and runs down buffs counted
+  in game time, as casts would; nothing else of a cast happens.
+- **R17.3** **The game starts in the morning** at the start spot (D85); a welcome event asks for the character's
+  background, which is a flag for later events and a small gift, not a change of stats. The town is not on the map
+  until the first night (the first day is where a tutorial would live). **When it gets dark** an event points the
+  player to town, with going to town, going straight to the inn, or staying; whichever they choose, the town is on
+  the map from then on. The night's cold starts then too. At first the inn is the only place in town the player can
+  use.
+- **R17.4** **The inn:** the innkeeper has been paid already (the player gave them all their money for a permanent
+  room, which the player may not remember: a story hook). The inn offers sleep until the next morning, the perpetual
+  stew ("give something to take something") and the player's room.
+- **R17.5** **The room** holds decorations, and what some perks bring: the aquarium.
+- **R17.6** **Vendors keep hours** that suit them: days of the week, hours of the day, and days away. The Alchemist
+  is open Friday to Sunday, sleeps from 5 AM to 1 PM, and is sometimes off getting ingredients. The clock has a
+  weekday for this. Whether a vendor is in is something events can check.
+- **R17.7** Every vendor but the innkeeper is paid in things fished up (R18).
+
+### R18: Barter
+
+- **R18.1** There is no money (D86). A vendor has **offers**: what it gives (an item, a potion, a service), and what it
+  wants for it: items from the bags and fish from the bucket, by count, and fish by species or by rarity at least.
+- **R18.2** **The barter window** lists a vendor's offers, WoW's vendor window crossed with its crafting window: each
+  offer's result with its tooltip, and each cost with how many the player has and needs, green when there are enough
+  and red when not. A button makes the trade when every cost is met. Values stay hidden: no prices in numbers beyond
+  counts.
+- **R18.3** An offer can need something to show at all (a flag, a level, a count of trades), in the event words.
+- **R18.4** Every trade with a vendor is counted per vendor and per offer, and events can read the counts (`needs:
+  count`), so a vendor can have more to say after so many trades: the Alchemist, asked about Shiny pebbles after
+  enough brews, never says why.
+- **R18.5** Fish handed over in a trade go from the bucket, the least valuable that qualifies first (7.8); equipped
+  items are never taken (D83).
+- **R18.6** A vendor's whole stock is data: a file per vendor in `content/vendors/`, with its schedule and offers.
+- **R18.7** The perpetual stew is a barter window of its own kind: the player puts fish in (any fish, any number),
+  and eats a bowl, whose buff follows from what went in (R19.4).
+- **R18.8** What a trade gives can be an item, or a buff straight away (a meal, a service). Potions are consumables:
+  used from the bags (right-click, as WoW's), they give their buff.
+
+### R19: Cold, night and the stew
+
+- **R19.1** **White items** (stuff, D112) are the common non-fish: a non-fish is junk (gray), stuff (white) or
+  treasure (green and up). A third roll decides stuff, with **Stuff Find** as a game value; the Rogue has the most.
+  Each spot has its own list of stuff; stuff is always findable, whether or not the player knows its use.
+- **R19.2** **Cold** has three levels, each a debuff worse than the last, worked out from the temperature, the time
+  of day and the player's **warmth**, a game value. At first a night out is cold even in summer, and the inn is the
+  way through it; winter nights need more warmth than the stew alone gives.
+- **R19.3** **Night fishing pays:** bigger fish and more XP at night.
+- **R19.4** **The perpetual stew** gives a buff that lasts game hours: each fish put in adds time by its rarity (12
+  epic fish make 24 hours). It gives warmth and, on top, the stew buffs of the fish that went in: every fish has one,
+  and the strange (rift) fish have the strangest.
+- **R19.5** Buffs can last a length of game time as well as casts or real time (refines R12.2).
+
+### R20: Fish that swim
+
+- **R20.1** Fish can be shown swimming, in a way pleasant to watch and like fish: gliding, a beat of the tail, turns.
+  Seen from the side, made from their icons. Never scaled (R7.3).
+- **R20.2** They swim in the aquarium, just under the surface (schools and big fish), and under the water in the
+  Fighter's dive.
+- **R20.3** **The dive** (the Fighter's Jump In): the scene goes under the water for a few seconds; a few fish swim by,
+  the one that got away among them. Each can be clicked for its own roll: the player's d20 above the fish, the fish's
+  below, showing whether it's caught. While its dice show, the fish can't be clicked again. Time up, the dive ends.
+- **R20.4** The pointer is a fish hook over water that can be fished, and over a fish in the dive.
+
+### R21: A fish's options
+
+- **R21.1** A fish's slot or link has options on right-click (long-press on a phone): a menu like WoW's. **Release
+  fish** is there everywhere but in town, which has no water; **Hook as bait** for a Tiny fish (D41); **Eat** with the Sushi enjoyer perk, which gives the
+  fish's stew buff for 5 casts; **Put in the stew** at the inn and **Put in the aquarium** in the room.
 ---
 
 ## 3. Catalogues

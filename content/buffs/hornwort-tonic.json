@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "hornwort-tonic",
+  "placeholder": true,
+  "name": "Hornwort tonic",
+  "effects": [
+    {
+      "value": "warmth",
+      "add": 1
+    }
+  ],
+  "duration": {
+    "minutes": 360
+  }
+}

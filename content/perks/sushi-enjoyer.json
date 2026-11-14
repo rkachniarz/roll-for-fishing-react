@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "sushi-enjoyer",
+  "placeholder": ["description"],
+  "class": "any",
+  "kind": "passive",
+  "name": "Sushi enjoyer",
+  "description": "Eat a fish raw, from its options, for its stew buff for 5 casts."
+}

@@ -32,6 +32,14 @@ export const GAME_VALUES = {
   fishFind: { better: 'higher' },
   /** Raises the chance of treasure over junk (R3.4). */
   treasureFind: { better: 'higher' },
+  /** Raises the chance of stuff, the white things used for something, over junk (R19.1, D125). */
+  stuffFind: { better: 'higher', base: 0 },
+  /** Keeps the cold off: each point takes one off the cold (R19.2, D126). */
+  warmth: { better: 'higher', base: 0 },
+  /** The chance, in percent, that a fish caught comes with an identical twin (a stew buff, R19.4). */
+  twinChance: { better: 'higher', base: 0, unit: '%' },
+  /** The chance, in percent, that a cast takes no time at all (a strange fish's stew buff, R19.4). */
+  timeSlip: { better: 'higher', base: 0, unit: '%' },
   /** Above 0: the fishing d20 is rolled with advantage; below 0, disadvantage. */
   playerVantage: { better: 'higher', base: 0 },
   /** Above 0: every source of advantage adds a die, the best one kept, rather than all of them counting as one (D96). */
@@ -93,6 +101,16 @@ export const GAME_VALUES = {
   strikeLimit: { better: 'higher', base: 3000, unit: 'ms' },
   /** After a missed splash, how long nothing happens before the line counts as cast again (D64). */
   missPause: { better: 'lower', base: 5000, unit: 'ms' },
+
+  // ---- Surface features (R14) ----
+  /** Added to the location's chance, in percent, that a new surface feature appears after a cast. */
+  featureChance: { better: 'higher', base: 0, unit: '%' },
+
+  // ---- The dive (R20.3) ----
+  /** How long the Fighter can stay under the water, in seconds. */
+  diveSeconds: { better: 'higher', base: 10 },
+  /** How many fish swim by in a dive. */
+  diveFish: { better: 'higher', base: 4 },
 
   // ---- The bucket (D57) ----
   /** How many fish the bucket holds; a full one sends the player to town. */

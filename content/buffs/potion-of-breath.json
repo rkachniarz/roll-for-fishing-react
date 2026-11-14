@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "potion-of-breath",
+  "placeholder": true,
+  "name": "Potion of breath",
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 5
+    },
+    {
+      "value": "biteDelayMax",
+      "add": -1500
+    }
+  ],
+  "duration": {
+    "casts": 10
+  }
+}

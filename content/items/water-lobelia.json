@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "water-lobelia",
+  "category": "stuff",
+  "name": "Water lobelia",
+  "flavor": "A pale flower on a spike above the water; its roots feed the mud below.",
+  "icon": "item/water-lobelia",
+  "rarity": "common",
+  "value": 4,
+  "placeholder": [
+    "flavor"
+  ]
+}
