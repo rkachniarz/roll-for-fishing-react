@@ -48,6 +48,12 @@ is where the others may lead.
   button that cycles the depths instead.
 - [ ] **11.7** Spawning seasons: each fish's breeding season (gathering, breeding colours, perhaps closed seasons or a
   reward for letting a spawning fish go).
+  *The owner's answers (2026-11-15):* spawning fish **gather**: likelier at the spots they spawn in, their schools
+  showing as surface features more often (no breeding colours, release reward or closed season for now). **Weather-
+  driven:** a species spawns when the water passes its temperature, read from the weather's temperature, not by a
+  fixed season. The temperatures and timing **looked up** (FishBase or similar), the source noted; made-up fish get
+  marked placeholders. **The player isn't told**; a perk or an item may later let them know, and then the journal
+  shows it.
 - [ ] **11.8** Plants and fish together: the plants on a spot draw certain fish (perch spawn on weed, tench live in
   weed beds); marimo's luck from folklore.
 - [ ] **11.9** Shoaling: shoal fish swim together and turn together, solitary ones alone; in the dive a shoal
