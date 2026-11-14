@@ -676,6 +676,19 @@ await check('settings: the light theme', PHONE, '?seed=6', async (page) => {
   await page.screenshot({ path: 'dist/verify/light-title.png' });
 });
 
+await check('settings: the background, plain or the pattern (D144)', DESKTOP, '?seed=6', async (page) => {
+  const layer = () => page.evaluate(() => getComputedStyle(document.body, '::before').backgroundImage);
+  await page.click('#menu');
+  await page.click('#openSettings');
+  await page.click('#theme-light');
+  report('settings: the light theme has its tabletop by default', (await layer()).includes('data:image/png'));
+  await page.click('#background-plain');
+  report('settings: a plain background leaves only the colour', !(await layer()).includes('data:image/png'));
+  await page.reload();
+  await page.waitForSelector('#title[open], body[data-phase="idle"]', { timeout: 15000 });
+  report('settings: the plain background is kept after a reload', (await page.getAttribute('html', 'data-background')) === 'plain');
+});
+
 await check('settings: the font', DESKTOP, '?seed=6', async (page) => {
   const font = () => page.evaluate(() => getComputedStyle(document.body).fontFamily);
   report('settings: Alegreya Sans by default (D132)', (await font()).startsWith('"Alegreya Sans"'), await font());

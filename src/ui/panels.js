@@ -507,7 +507,7 @@ export function menuPane({ onMainMenu, onSettings, onDev, onExport }) {
 }
 
 /**
- * Settings (D81): the theme, the font (D132), whether the dice are shown (D99), the sound's
+ * Settings (D81): the theme, the background (D144), the font (D132), whether the dice are shown (D99), the sound's
  * volume (9.2).
  * @param {import('../settings.js').Settings} settings
  * @param {(change: Partial<import('../settings.js').Settings>) => void} onChange  Only what changed.
@@ -530,6 +530,24 @@ export function settingsPane(settings, onChange, diceShown) {
             onchange: () => onChange({ theme }),
           }),
           el('span', { textContent: t(`settings.${theme}`) }),
+        ]),
+      ),
+    ),
+    el('h3', { textContent: t('settings.background') }),
+    el(
+      'div',
+      { className: 'choices' },
+      /** @type {const} */ (['plain', 'pattern']).map((background) =>
+        el('label', {}, [
+          el('input', {
+            type: 'radio',
+            name: 'background',
+            id: `background-${background}`,
+            value: background,
+            checked: settings.background === background,
+            onchange: () => onChange({ background }),
+          }),
+          el('span', { textContent: t(`settings.${background}`) }),
         ]),
       ),
     ),

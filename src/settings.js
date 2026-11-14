@@ -1,10 +1,10 @@
 // @ts-check
 // Settings: kept per device, apart from the save slots, since they belong to
 // the player at this screen rather than to a game (D81): the theme (dark, or
-// light wooden planks), the font (D132: clear or pixel), whether the fight's dice are shown (D99), and how loud
+// light), the background (D144: plain, or the theme's pattern), the font (D132: clear or pixel), whether the fight's dice are shown (D99), and how loud
 // the sound is (9.2, 9.3).
 //
-// The theme and the font are also read by a line in index.html's <head>,
+// The theme, the background and the font are also read by a line in index.html's <head>,
 // before the page draws, so a light page doesn't flash dark first. That line
 // uses the same key.
 
@@ -13,12 +13,13 @@ const KEY = 'roll-for-fishing:settings';
 /**
  * `dice` is left out until the player sets it: the dice then follow the
  * device's "reduce motion" (`showDice`). `sound` is 0 (none) to 100. `font` is
- * Alegreya Sans (`clear`) or Pixelify Sans (`pixel`), D132.
- * @typedef {{ theme: 'dark' | 'light', font: 'clear' | 'pixel', dice?: boolean, sound: number }} Settings
+ * Alegreya Sans (`clear`) or Pixelify Sans (`pixel`), D132. `background` is the
+ * page's plain colour or its theme's pattern (D144).
+ * @typedef {{ theme: 'dark' | 'light', background: 'plain' | 'pattern', font: 'clear' | 'pixel', dice?: boolean, sound: number }} Settings
  */
 
 /** @type {Settings} */
-const DEFAULTS = { theme: 'dark', font: 'clear', sound: 60 };
+const DEFAULTS = { theme: 'dark', background: 'pattern', font: 'clear', sound: 60 };
 
 /**
  * @param {Pick<Storage, 'getItem'>} storage
@@ -55,5 +56,6 @@ export const showDice = (settings, reduceMotion) => settings.dice ?? !reduceMoti
  */
 export function applySettings(settings) {
   document.documentElement.dataset.theme = settings.theme;
+  document.documentElement.dataset.background = settings.background;
   document.documentElement.dataset.font = settings.font;
 }

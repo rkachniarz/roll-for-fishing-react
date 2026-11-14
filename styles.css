@@ -88,12 +88,13 @@
   /* planks:end */
 }
 
-/* The body lets them through: its own background would paint over a layer behind it. */
-:root[data-theme='light'] body {
+/* The body lets them through: its own background would paint over a layer behind it.
+   Background: plain (D144) leaves only the colour. */
+:root[data-theme='light']:not([data-background='plain']) body {
   background: transparent;
 }
 
-:root[data-theme='light'] body::before {
+:root[data-theme='light']:not([data-background='plain']) body::before {
   content: '';
   position: fixed;
   inset: 0;
