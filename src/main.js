@@ -38,7 +38,7 @@ import { bagTab, fishName, hoursText, itemName, link, rarityColour, showStatusWh
 import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settingsPane, shopPane } from './ui/panels.js';
 import { floatText } from './ui/floater.js';
 import { bindTip, hideTip } from './ui/tooltip.js';
-import { iconName, paintIcon, weatherIcon } from './scene/icons.js';
+import { eventIcon, iconName, paintIcon, weatherIcon } from './scene/icons.js';
 import { equip, fits, hookFish, isTiny, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_SLOTS } from './engine/equipment.js';
 import { setupDrag } from './ui/drag.js';
 import { showError } from './ui/errors.js';
@@ -138,6 +138,8 @@ function fit() {
   const s = Math.max(1, Math.round(ui * dpr));
   root.setProperty('--slot-icon', `${(32 * s) / dpr}px`);
   root.setProperty('--tip-icon', `${(64 * s) / dpr}px`);
+  // An event's portrait (D142): its 64 pixels, half as big again as a slot's.
+  root.setProperty('--portrait', `${(64 * Math.max(1, Math.round(1.5 * ui * dpr))) / dpr}px`);
   // The slot fits its icon, with room for the border and the count.
   root.setProperty('--slot', `${Math.max(52, Math.ceil((32 * s) / dpr) + 20)}px`);
   // The title's menu (D135): on a phone where the log starts, one button row
@@ -434,9 +436,8 @@ function openEvent() {
   const words = eventWords(state);
   const say = (/** @type {string[]} */ keys) => sayEventText(keys, words, state?.flags);
   $('eventTitle').textContent = say(slide.title);
-  const art = $('eventArt');
-  art.hidden = !slide.art;
-  art.replaceChildren(...(slide.art ? [Object.assign(document.createElement('img'), { src: `assets/events/${slide.art}.png`, alt: '' })] : []));
+  // Its picture in the round frame, or the old scroll (D142).
+  $('eventArt').replaceChildren(paintIcon(eventIcon(slide.art)));
   $('eventText').replaceChildren(
     ...say(slide.text).split('\n\n').map((p) => Object.assign(document.createElement('p'), { textContent: p })),
   );

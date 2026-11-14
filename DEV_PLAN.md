@@ -395,10 +395,10 @@ placeholder, it's added here.
 - [ ] **CR-5** The town and its people (8.3, 8.6, 8.9): the inn, the scrap dealer, the Alchemist, the cat, and the
   portraits. *Replaces the squares and triangles: the town's buildings, the room and the aquarium, the dive's water
   (`src/scene/views.js`), and the dive's dice as labels.*
-- [ ] **CR-6** Event illustrations: the dialog has room for one (7.3). An event names its picture with `art:` in
-  its front matter (`docs/events.md`), read from `assets/events/<art>.png`; no event has one yet, and the folder
-  doesn't exist. The single-file build (`npm run build`) doesn't carry the pictures, so they show on GitHub Pages only
-  until it does.
+- [ ] **CR-6** Event pictures (D142): 64×64 icons, `event/<name>`, in the round portrait beside the event's title,
+  made from photos like the item icons. An event names its own with `art:`. *Replaces the default, an old scroll
+  (`event/scroll`), that every event shows until it has its own; the scroll itself is a first draft for the owner's
+  markup.*
 - [ ] **CR-7** The map, each location's spots drawn on it (8.1). *Replaces the placeholder shapes.*
 - [ ] **CR-8** Perk and ability icons (the action bar shows initials), and the look of a Greedy fish and a bent fish
   (6.3). *Also replaces the green eye around Look Underwater (D139), four flat rings in `src/scene/views.js`.*

@@ -108,6 +108,8 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   sources passed to the engine, never saved.
 - **`index.html` has a small script in `<head>`** that reads the theme and the font (D132) from the settings key
   before the page draws, so a light page doesn't flash dark. It duplicates `src/settings.js`'s key on purpose (D81).
+- **Event pictures are icons too, 64×64 (D142):** `event/<name>`, the scroll by default (`eventIcon`), in a round
+  portrait on the event dialog; `paintIcon` sizes its canvas to the grid. Draw them inside the circle.
 - **Icons are 32×32 (D98), but most grids in `src/scene/icons.js` are 16 wide:** those were drawn before D98 and
   `paintIcon` doubles them (`DRAWN_AT_16`). New icons go after that line, at 32. An icon can keep its own colours in
   `OWN_KEYS`; always draw and export with `iconKeys(name)`, never `KEYS` alone.

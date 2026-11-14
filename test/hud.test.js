@@ -4,7 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { tParts } from '../src/strings.js';
-import { ICONS, iconKeys, weatherIcon } from '../src/scene/icons.js';
+import { DEFAULT_EVENT_ICON, ICONS, eventIcon, iconKeys, weatherIcon } from '../src/scene/icons.js';
 import { content } from '../src/generated/content.js';
 
 test('a line can hold a link where its placeholder was', () => {
@@ -26,14 +26,28 @@ test('the weather picks its icon: wet first, then cloud, then wind', () => {
   assert.equal(weatherIcon(w({ precipitation: 3, temperature: 1 }), false), 'weather/snow');
 });
 
-test('every icon is at most 32×32, with rows of one width and keys it has colours for (D98)', () => {
+test('every icon is at most 32×32, an event picture 64×64, with rows of one width and keys it has colours for (D98, D142)', () => {
   for (const [name, rows] of Object.entries(ICONS)) {
-    assert.ok(rows.length <= 32, name);
+    const max = name.startsWith('event/') ? 64 : 32;
+    assert.ok(rows.length <= max, name);
     assert.equal(new Set(rows.map((r) => r.length)).size, 1, name);
-    assert.ok(rows[0].length <= 32, name);
+    assert.ok(rows[0].length <= max, name);
     const keys = iconKeys(name);
     for (const key of new Set(rows.join(''))) assert.ok(key === '.' || key in keys, `${name}: no colour for "${key}"`);
   }
+});
+
+test('every picture an event names is an icon, and the default is there (D142)', () => {
+  assert.ok(ICONS[DEFAULT_EVENT_ICON]);
+  assert.equal(ICONS[DEFAULT_EVENT_ICON].length, 64);
+  for (const event of Object.values(content.events ?? {})) {
+    for (const [id, slide] of Object.entries(event.slides)) {
+      const art = /** @type {{ art?: string }} */ (slide).art;
+      if (art) assert.ok(ICONS['event/' + art], event.id + ' (' + id + '): no icon event/' + art);
+    }
+  }
+  assert.equal(eventIcon(undefined), DEFAULT_EVENT_ICON);
+  assert.equal(eventIcon('no-such-picture'), DEFAULT_EVENT_ICON);
 });
 
 test('every icon a fish or item names exists', () => {

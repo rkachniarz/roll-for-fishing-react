@@ -96,7 +96,7 @@ places goes in the strips.
 | Waves | 5×2 far, 8×2 mid, 12×3 near; 2 frames each | |
 | Reeds | 26×110 a side, 2 frames | Drawn by code today: a real-size drawing would replace it. |
 | Icons | 32×32 | Items, fish, the button row, the weather (D98). Fish lie tilted about 30°, to fill the square. Older icons drawn at 16 show doubled until redrawn. |
-| Event pictures | 128×64 (2:1) | Shown in the event dialog, enlarged to fit. PNGs in `assets/events/`. |
+| Event pictures | 64×64 | Icons, `event/<name>` (D142), in a round portrait beside the event's title. Draw inside the circle: the corners are cut off. |
 
 Anything at two distances needs **one drawing per distance**. Nothing is shrunk in the game, because shrinking pixel
 art smears it (R7.3). The far bobber is its own little drawing, not the near one made smaller.
@@ -159,6 +159,6 @@ and it's the way the spots will be made (CR-1).
   Read it, and the scene screenshots in `dist/verify/` when the scene changed.
 - A sprite named in `tools/sprite-png.mjs` (`sprites()`) should also be on the art sheet (`src/art.js`), under the
   same name.
-- Large pictures, such as event pictures and future backdrops per spot, are the hardest to draw well as code. For
-  those, prefer the owner's real-size drawing or a CC0 pack (credited in `assets/CREDITS.md`, D9), fitted to the
+- Large pictures, such as future backdrops per spot, are the hardest to draw well as code. Event pictures are icons
+  at 64 (D142), made from a photo like any icon. For the large ones, prefer the owner's real-size drawing or a CC0 pack (credited in `assets/CREDITS.md`, D9), fitted to the
   palette.

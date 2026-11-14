@@ -6535,6 +6535,108 @@ const SIZE = 32;
  * otherwise its kind's default (R15.5).
  * @param {{ kind: 'fish', id: string } | { kind: 'item', id: string }} thing
  */
+// ---------- Event pictures (D142): 64×64, in the round portrait on the event dialog ----------
+
+/** The picture an event shows when it names none of its own. */
+export const DEFAULT_EVENT_ICON = 'event/scroll';
+
+Object.assign(ICONS, {
+  // An old scroll, from a photo of a rotulus (Bern, Burgerbibliothek Cod. 803, public domain;
+  // docs/design/refs/ScrollOld.jpg, D97), drawn as code from it: the roll with its rod, the sheet
+  // with lines of writing, the bottom rod and a cord.
+  'event/scroll': [
+    '................................................................',
+    '................................................................',
+    '................................................................',
+    '................................................................',
+    '................................................................',
+    '..............kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk.............',
+    '.............kIIIJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJIIIk............',
+    '............kIIIIIJJJJJJJJJJJJJJJJJJJJJJJJJJJJJIIIIIk...........',
+    '............kIIAIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIAIIkkkk........',
+    '.........kkkkIAIAIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIAIAIRRRRk.......',
+    '........kRRRRIIrIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHIIrIIrrrrk.......',
+    '........krrrrIIrIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHIIrIIkkkk........',
+    '.........kkkkIAIAIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIAIAIk...........',
+    '............kIIAIIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIIAIIk...........',
+    '............kIIIIIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDIIIIIk...........',
+    '.............kIIIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDIIIk............',
+    '..............kkkGGHHHHHHHHHHHHHHHHHHHHHHHHHHHGGkkk.............',
+    '................kGGHIIIIIIIIIIIHHHHHHHHHHHHHHHGGk...............',
+    '................kGGHIIIIIIIIIIIHHHHHHHHHHHHHHHGGk...............',
+    '................kGGHIIIIIIIIIIIHHHHHHHHHHHHHHHGGk...............',
+    '................kGGHHHIIIIIIHHHHHHHHHHHHHHHHHHGGk...............',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHHGGk...............',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHGGk................',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHGGk................',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHGGk................',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHGGk................',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHGGk................',
+    '................kGGHHHHHHAAAAnHAHAnAAAAHAHHHHGGk................',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHGGk................',
+    '................kGGHHHAnAAHAHAAAAnAHAHnHHHHHHGGk................',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHJJJJk................',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHJJJJk................',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHJJJJk................',
+    '................kGGGGGHGGGGGGGGGGHGGGGGGGGGGJGGk................',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHGGk................',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHHGGk...............',
+    '................kGGHHHHAHAAnAAAHnHAAAnAAHAHHHHGGk...............',
+    '................kGJJJHHHHHHHHHHHHHHHHHHHHHHHHHGGk...............',
+    '................kGJJJnAAAAnHAHAnAAAAHAHAAHHHHHGGk...............',
+    '................kGJJJHHHHHHHHHHHHHHHHHHHHHHHHHGGk...............',
+    '................kGJJJHAHAHAAAAnAHAHnAAAAHHHHHHGGk...............',
+    '................kGGHHHHHHHHHHHHHHHHEEEEHHHHHHHHGGk..............',
+    '................kGGHHHAAnAAAHnHAAAHEEEEHHHHHHHHGGk..............',
+    '................kGGHHHHHHHHHHHHHHHHHEHHHHHHHHHHGGk..............',
+    '................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHHHGGk..............',
+    '.................kGGHHAnHAHAnAAAAHAHAAnAAAHHHHHGGk..............',
+    '.................kGGHHHHHHHHHHHHHHHHHHHHHHHHHHHGGk..............',
+    '.................kGGHHHHAAAnAHAHnAAAAnHIIIIIIHHGGk..............',
+    '.................kGGHHHHHHHHHHHHHHHHHHHIIIIIIHHGGk..............',
+    '.................kGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGk..............',
+    '.................kGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGk..............',
+    '............k....kGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGk..k...........',
+    '...........krkkkkDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDGkkkrk..........',
+    '..........krrrRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrrk.........',
+    '..........krrrRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrrk.........',
+    '..........krrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrk.........',
+    '...........krkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkrk..........',
+    '............k....kck.......kck...............kck....k...........',
+    '.................kcCk....kkck...............kcCck...............',
+    '..................kckkkkkCck...............kcCcck...............',
+    '...................kcCcCckk.................kkkk................',
+    '....................kkkkk.......................................',
+    '................................................................',
+    '................................................................',
+  ],
+});
+Object.assign(OWN_KEYS, {
+  'event/scroll': {
+    k: '#1b2b34',
+    J: '#f2e2c6',
+    I: '#e6cda7',
+    H: '#e3bc87',
+    G: '#d0a56f',
+    D: '#b98a58',
+    E: '#b6a991',
+    A: '#895b37',
+    n: '#5a3a22',
+    R: '#9a6a3f',
+    r: '#6b4428',
+    c: '#e9e4d8',
+    C: '#bdb4a0',
+  },
+});
+
+/**
+ * An event slide's picture (D142): the icon `event/<art>`, or the scroll.
+ * @param {string | undefined} art
+ */
+export function eventIcon(art) {
+  return art && ICONS[`event/${art}`] ? `event/${art}` : DEFAULT_EVENT_ICON;
+}
+
 export function iconName(thing) {
   const entity = thing.kind === 'fish' ? content.fish[thing.id] : content.items[thing.id];
   if (entity?.icon && ICONS[entity.icon]) return entity.icon;
@@ -6569,12 +6671,14 @@ export function paintIcon(name) {
   const rows = ICONS[name];
   const keys = iconKeys(name);
   const zoom = DRAWN_AT_16.has(name) ? 2 : 1;
+  // 32 square, or bigger for a bigger grid: an event's picture is 64 (D142).
+  const size = Math.max(SIZE, rows.length * zoom, ...rows.map((r) => r.length * zoom));
   const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = SIZE;
+  canvas.width = canvas.height = size;
   const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-  const top = Math.floor((SIZE / zoom - rows.length) / 2);
+  const top = Math.floor((size / zoom - rows.length) / 2);
   rows.forEach((row, y) => {
-    const left = Math.floor((SIZE / zoom - row.length) / 2);
+    const left = Math.floor((size / zoom - row.length) / 2);
     [...row].forEach((key, x) => {
       if (key === '.') return;
       ctx.fillStyle = keys[key];

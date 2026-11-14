@@ -45,7 +45,7 @@ You lunge forward and get wet, and it's like it was never there.
 | `again` | `50 casts` / `3 days` | A visitor who comes back: it can happen again, but not until that many casts or game days have passed since it last started. Leave `once` out. |
 | `trigger` | `meter` / `item` / `needs` / `arrive` | What starts it; one per event, see below. Default `meter`. |
 | `needs` | any number of lines | Requirements for it to start at all, in the words below. |
-| `art` | a file name | A picture for the top of the dialog, from `assets/events/<art>.png`. Optional. |
+| `art` | a name | The picture in the round portrait beside the title: the 64×64 icon `event/<name>` in `src/scene/icons.js` (D142). Optional: without one, an old scroll. |
 | `placeholder` | `true` | Claude's stand-in, to be rewritten (D124): listed in `docs/placeholders.md`, marked with a ° under `?ph`. |
 
 A line in the front matter starting with `#` is a note to yourself; the game ignores it.

@@ -24,6 +24,18 @@ Items with no note are left alone.
 
 Newest first.
 
+## Event pictures as portraits (2026-11-14, D142)
+
+- **The default scroll** is from a public-domain photo of a medieval rotulus (Bern, Burgerbibliothek Cod. 803), found
+  after five rounds of Commons searches: most "scrolls" there are Japanese hanging scrolls or flat papyri. The draft
+  tool lost the rolled top and the writing, so the shapes were drawn as code from the photo, in the draft's colours.
+  It's a first draft for your markup: `npm run sprite export icon-event-scroll`.
+- **The frame:** a round portrait left of the title, in the legendary orange (`--rarity-legendary`) with a thin
+  dark inner ring. WoW's quest portraits have a gold ring; say if it should be gold, or bigger, or sit over the
+  dialog's top edge instead of inside it.
+- **Size:** the 64 pixels at about one and a half times a bag slot's scale, whole device pixels (`--portrait`).
+- **Every event shows a portrait now,** the scroll when it has no picture of its own, so the dialog is never bare.
+
 ## How fish fight (2026-11-14, D141, 11.3)
 
 - **Which style each fish has** is Claude's, from what it knows of the real fish, not looked up. The ones most

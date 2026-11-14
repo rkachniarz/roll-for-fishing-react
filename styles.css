@@ -440,21 +440,34 @@ body {
 /* ---------- Events: WoW's gossip window (D84) ---------- */
 
 .event h2 {
-  margin: 0 0 10px;
+  margin: 0;
 }
 
-/* Room for an illustration: a fixed frame, the picture scaled in whole pixels by the browser. */
+/* The title beside a round portrait, as a quest giver's in WoW's quest window (D142). */
+.event-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* The event's picture, a 64×64 icon at whole device pixels (--portrait, set by fit), in a round frame. */
 .event-art {
-  aspect-ratio: 2 / 1;
-  margin-bottom: 10px;
-  border: 1px solid var(--panel-edge);
+  flex-shrink: 0;
+  width: calc(var(--portrait, 96px) + 8px);
+  height: calc(var(--portrait, 96px) + 8px);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 3px solid var(--rarity-legendary);
+  box-shadow: inset 0 0 0 2px var(--panel-edge);
   background: var(--panel);
+  overflow: hidden;
 }
 
-.event-art img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.event-art canvas {
+  width: var(--portrait, 96px);
+  height: var(--portrait, 96px);
   image-rendering: pixelated;
 }
 

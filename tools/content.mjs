@@ -611,8 +611,7 @@ function checkEvents(all, errors, warnings, root) {
     for (const [id, slide] of Object.entries(event.slides)) {
       const s = /** @type {any} */ (slide);
       checkText(`${where} (${id})`, s.text);
-      // The dialog shows assets/events/<art>.png (src/main.js).
-      if (s.art && !existsSync(join(root, 'assets', 'events', `${s.art}.png`))) warnings.push(`${where} (${id}): no picture assets/events/${s.art}.png`);
+      // `art` names an icon, event/<art>, in src/scene/icons.js (D142); test/hud.test.js checks it's there.
       for (const choice of s.choices) {
         checkText(`${where} (${id})`, choice.text);
         reached.add(choice.to);
