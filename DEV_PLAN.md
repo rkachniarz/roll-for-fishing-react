@@ -30,11 +30,22 @@ is where the others may lead.
   (likelier for famous fighters), the Rogue's showmanship, a calming draught and a paralysing rod.
 - [ ] **11.4** Weight from length: each species' published length-weight constants (FishBase); a caught fish has a
   weight, and the journal and records show it.
+  *The owner's answers (2026-11-15):* shown everywhere to start with (the catch log line, the fish tooltip, the
+  journal with a heaviest-catch record beside the longest); each fish its own condition, a spread of about ±10%,
+  rolled hidden when the line goes out; only shown, no effect on the game; the constants looked up on FishBase per
+  species with the source noted, a close relative's where none is found, listed in REVIEW.md.
 - [ ] **11.5** How they swim: a speed and burst rate per species (a pike still then lunging, an eel slow and winding,
   a trout holding against the current, bleak darting), in `src/scene/swim.js`.
+  *The owner's answers (2026-11-15):* everywhere fish swim (the aquarium, the dive, Look Underwater, the title, the
+  shadows on the water); numbers per species, not a handful of kinds, unless that costs performance.
 - [ ] **11.6** Set your depth (the owner's idea): at some level a perk lets the player set their weights for one of
   the four depths (`swims`, D136), through Fish Find by depth (D137); the bottom depth also gives an extra chance of
   something that isn't a fish, being nearest the bottom. Needs a way to pick the depth, likely an action-bar button.
+  *The owner's answers (2026-11-15):* **gear, not a perk:** a line in the line slot that can be adjusted, its tooltip
+  saying so in green ("Adjustable"). With one equipped, a button shows like a class skill's; it opens a small popup
+  drawing the line with its four depths as radio buttons. The chosen depth gets +10 Fish Find and the others −10 (as
+  the Heavyweight heavy weights), and the bottom adds a few % more non-fish. If the popup is too complicated, a bar
+  button that cycles the depths instead.
 - [ ] **11.7** Spawning seasons: each fish's breeding season (gathering, breeding colours, perhaps closed seasons or a
   reward for letting a spawning fish go).
 - [ ] **11.8** Plants and fish together: the plants on a spot draw certain fish (perch spawn on weed, tench live in
