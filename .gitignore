@@ -19,3 +19,7 @@ docs/design/
 # The Python tools' environment (tools/py.mjs, npm run cutout setup).
 .venv-cutout/
 __pycache__/
+
+# Sprite exports for marking up in Paint (npm run sprite export): read back into the code, never tracked.
+art/*.png
+art/*.bmp
