@@ -117,6 +117,7 @@ and the art sheet at `/art.html` there.
 | `tools/photo-icon.mjs` | A photo to a first-draft 32×32 icon, a fish's eye included (`eye=1`); the photo-to-icon skill |
 | `tools/cutout.py` | Cuts the subject out of a photo (rembg), onto magenta or transparent; run by `tools/py.mjs` |
 | `tools/planks.py` | The light theme's pine tabletop, from a photo, written into `styles.css` (`npm run planks`, D143) |
+| `tools/obsidian.py` | The dark theme's obsidian, drawn as code, written into `styles.css` (`npm run obsidian`, D145) |
 | `tools/commons.py` | Wikimedia Commons pictures: search to a contact sheet, fetch a pick with its licence |
 | `tools/py.mjs` | Runs the Python tools in their own environment, `.venv-cutout/` (`npm run cutout setup`); `tools/python-requirements.txt` lists what it installs |
 | `tools/build-artifact.mjs` | Builds `dist/artifact.html` |

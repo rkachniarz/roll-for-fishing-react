@@ -63,6 +63,7 @@ npm run cutout <photo> [flip=Name]   # cut the subject out of a busy photo, onto
 npm run commons search <slug> "<query>"   # Wikimedia Commons pictures on a contact sheet; then commons fetch <slug> <n> name=<Name>
 npm run sim [casts=500 games=20 class=rogue-fisher strike=250..900 perks=first|passive|active]   # balance: seeded games per class (9.1)
 npm run planks [pine|oak]   # the light theme's tabletop tile, from docs/design/refs/, into styles.css (D143)
+npm run obsidian            # the dark theme's obsidian tile, drawn as code, into styles.css (D145)
 npm run prompts # record the owner's prompts per session in docs/prompts.json, and print the total
 # http://localhost:8001/art.html   the art sheet: trials, every sprite enlarged, the scene in five lights
 # http://localhost:8001/?ph          placeholder text marked with a ° (D124)
@@ -107,8 +108,9 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
 - **`src/main.js` saves the `checkpoint` while a cast is in progress, the full state otherwise.** The dev bench
   only changes the state between casts for the same reason. Its game value overrides and `?wait` are `extra`
   sources passed to the engine, never saved.
-- **`styles.css` holds the light theme's tabletop as a data URL** between `planks:start` and `planks:end`, written by
-  `npm run planks` (D143); don't edit it by hand. It is on `body::before`, so its pixelated look isn't inherited.
+- **`styles.css` holds both themes' patterns as data URLs** (`planks:start`/`planks:end`, `obsidian:start`/`obsidian:end`),
+  written by `npm run planks` and `npm run obsidian` (D143, D145); don't edit them by hand. Background: plain
+  turns them off (D144, `data-background`, read in `<head>`). It is on `body::before`, so its pixelated look isn't inherited.
   While `body[data-phase=loading]`, everything but the background is hidden.
 - **`index.html` has a small script in `<head>`** that reads the theme and the font (D132) from the settings key
   before the page draws, so a light page doesn't flash dark. It duplicates `src/settings.js`'s key on purpose (D81).

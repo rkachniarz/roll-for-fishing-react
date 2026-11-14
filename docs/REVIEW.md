@@ -24,6 +24,16 @@ Items with no note are left alone.
 
 Newest first.
 
+## Obsidian and the background setting (2026-11-14, D144, D145)
+
+- **Pattern is the default** for both themes; Plain is the page's colour alone, as on the loading screen.
+- **The obsidian is drawn, not photographed:** the photo, shrunk and blended into a repeating tile, lost the glass and
+  became dark blotches. The drawn one keeps what reads as obsidian at this size, the ripple lines of its fractures.
+  The four shells, their ripple spacing and the facet lines come from a fixed seed in `tools/obsidian.py`; change
+  `SEED` for another arrangement. It repeats every 480 CSS pixels, and the shells mark the repeat if you look.
+- **Its brightness:** the ripples peak at about the dark theme's panel edge colour. Say if it should be fainter or
+  bolder, or the swells darker.
+
 ## The first load and the pine tabletop (2026-11-14, D143)
 
 - **Pine, not oak:** both were made; at 32 pixels a board the oak photo's coarse grain turned blotchy. `npm run planks oak`
