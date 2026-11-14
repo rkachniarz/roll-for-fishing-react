@@ -9,6 +9,7 @@
   },
   "difficulty": -2,
   "rarity": "common",
+  "swims": "lower",
   "stew": [
     {
       "value": "warmth",

@@ -15,6 +15,7 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "swims": "surface",
       "stew": [
         {
           "value": "eventMeterFill",
@@ -51,6 +52,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "surface",
       "stew": [
         {
           "value": "naturalCatch",
@@ -86,6 +88,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishingSkill",
@@ -121,6 +124,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -161,6 +165,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "greedyChance",
@@ -196,6 +201,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishingSkill",
@@ -232,6 +238,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "swims": "lower",
       "stew": [
         {
           "value": "featureChance",
@@ -266,6 +273,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "swims": "surface",
       "stew": [
         {
           "value": "fishFind",
@@ -301,6 +309,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "treasureFind",
@@ -336,6 +345,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishingSkill",
@@ -370,6 +380,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishFind",
@@ -405,6 +416,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -443,6 +455,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "baitRecovery",
@@ -480,6 +493,7 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "swims": "upper",
       "stew": [
         {
           "value": "eventMeterFill",
@@ -514,6 +528,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "common",
+      "swims": "bottom",
       "stew": [
         {
           "value": "warmth",
@@ -549,6 +564,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "swims": "upper",
       "stew": [
         {
           "value": "twinChance",
@@ -584,6 +600,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishingSkill",
@@ -619,6 +636,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -658,6 +676,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "swims": "lower",
       "stew": [
         {
           "value": "warmth",
@@ -690,6 +709,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishingSkill",
@@ -724,6 +744,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "fishingSkill",
@@ -758,6 +779,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "common",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishFind",
@@ -792,6 +814,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "upper",
       "stew": [
         {
           "value": "warmth",
@@ -828,6 +851,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "stuffFind",
@@ -864,6 +888,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "bottom",
       "stew": [
         {
           "value": "riftChance",
@@ -898,6 +923,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "common",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -937,6 +963,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "common",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -976,6 +1003,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishFind",
@@ -1011,6 +1039,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "swims": "surface",
       "stew": [
         {
           "value": "fishFind",
@@ -1042,6 +1071,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -1075,6 +1105,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "greedyChance",
@@ -1108,6 +1139,7 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "swims": "bottom",
       "stew": [
         {
           "value": "featureChance",
@@ -1143,6 +1175,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "revealResistance",
@@ -1179,6 +1212,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "swims": "bottom",
       "stew": [
         {
           "value": "fishFind",
@@ -1215,6 +1249,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "swims": "surface",
       "stew": [
         {
           "value": "revealResistance",
@@ -1255,6 +1290,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "twinChance",
@@ -1287,6 +1323,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishFind",
@@ -1322,6 +1359,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "swims": "upper",
       "stew": [
         {
           "value": "treasureFind",
@@ -1356,6 +1394,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -1395,6 +1434,7 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "featureChance",
@@ -1430,6 +1470,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "upper",
       "stew": [
         {
           "value": "wildCast",
@@ -1469,6 +1510,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishingSkill",
@@ -1505,6 +1547,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "wildCast",
@@ -1544,6 +1587,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishFind",
@@ -1579,6 +1623,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "upper",
       "stew": [
         {
           "value": "featureChance",
@@ -1613,6 +1658,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "swims": "lower",
       "stew": [
         {
           "value": "warmth",
@@ -1645,6 +1691,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "greedyChance",
@@ -1676,6 +1723,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishFind",
@@ -1710,6 +1758,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "surface",
       "stew": [
         {
           "value": "warmth",
@@ -1745,6 +1794,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "upper",
       "stew": [
         {
           "value": "treasureFind",
@@ -1781,6 +1831,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "rare",
+      "swims": "upper",
       "stew": [
         {
           "value": "baitRecovery",
@@ -1816,6 +1867,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "swims": "bottom",
       "stew": [
         {
           "value": "fishFind",
@@ -1852,6 +1904,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "wildCast",
@@ -1888,6 +1941,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "warmth",
@@ -1924,6 +1978,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "epic",
+      "swims": "bottom",
       "stew": [
         {
           "value": "revealResistance",
@@ -1962,6 +2017,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "upper",
       "stew": [
         {
           "value": "treasureFind",
@@ -1997,6 +2053,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2032,6 +2089,7 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -2070,6 +2128,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2105,6 +2164,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "warmth",
@@ -2140,6 +2200,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2176,6 +2237,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2211,6 +2273,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "swims": "upper",
       "stew": [
         {
           "value": "treasureFind",
@@ -2247,6 +2310,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "riftChance",
@@ -2282,6 +2346,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -2313,6 +2378,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2348,6 +2414,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishFind",
@@ -2382,6 +2449,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "upper",
       "stew": [
         {
           "value": "treasureFind",
@@ -2417,6 +2485,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "timeSlip",
@@ -2453,6 +2522,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "bottom",
       "stew": [
         {
           "value": "riftChance",
@@ -2487,6 +2557,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishFind",
@@ -2523,6 +2594,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "surface",
       "stew": [
         {
           "value": "twinChance",
@@ -2558,6 +2630,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2592,6 +2665,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "fishFind",
@@ -2627,6 +2701,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2662,6 +2737,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "swims": "surface",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2696,6 +2772,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "swims": "upper",
       "stew": [
         {
           "value": "reactionFast",
@@ -2736,6 +2813,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "timeSlip",
@@ -2768,6 +2846,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "swims": "lower",
       "stew": [
         {
           "value": "twinChance",
@@ -2803,6 +2882,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "swims": "surface",
       "stew": [
         {
           "value": "stuffFind",
@@ -2843,6 +2923,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "swims": "upper",
       "stew": [
         {
           "value": "eventMeterFill",
@@ -2879,6 +2960,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "swims": "lower",
       "stew": [
         {
           "value": "featureChance",
@@ -2914,6 +2996,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "common",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishFind",
@@ -2947,6 +3030,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "swims": "upper",
       "stew": [
         {
           "value": "wildCast",
@@ -2985,6 +3069,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishFind",
@@ -3020,6 +3105,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "swims": "upper",
       "stew": [
         {
           "value": "treasureFind",
@@ -3056,6 +3142,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "swims": "lower",
       "stew": [
         {
           "value": "greedyChance",
@@ -3092,6 +3179,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "naturalCatch",
@@ -3126,6 +3214,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishFind",
@@ -3158,6 +3247,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishFind",
@@ -3192,6 +3282,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "swims": "surface",
       "stew": [
         {
           "value": "fishFind",
@@ -3227,6 +3318,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -3263,6 +3355,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "warmth",
@@ -3298,6 +3391,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "fishingSkill",
@@ -3330,6 +3424,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "swims": "surface",
       "stew": [
         {
           "value": "featureChance",
@@ -3365,6 +3460,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishFind",
@@ -3400,6 +3496,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "swims": "upper",
       "stew": [
         {
           "value": "fishFind",
@@ -3434,6 +3531,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishFind",
@@ -3469,6 +3567,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "swims": "upper",
       "stew": [
         {
           "value": "reactionFast",
@@ -3505,6 +3604,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "timeSlip",
@@ -3537,6 +3637,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "epic",
+      "swims": "bottom",
       "stew": [
         {
           "value": "wildCast",
@@ -3576,6 +3677,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -3614,6 +3716,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "common",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -3647,6 +3750,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "wildCast",
@@ -3687,6 +3791,7 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "swims": "bottom",
       "stew": [
         {
           "value": "twinChance",
@@ -3722,6 +3827,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "timeSlip",
@@ -3758,6 +3864,7 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "swims": "bottom",
       "stew": [
         {
           "value": "riftChance",
@@ -3793,6 +3900,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "featureChance",
@@ -3828,6 +3936,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishingSkill",
@@ -3863,6 +3972,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "fishFind",
@@ -3899,6 +4009,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "featureChance",
@@ -3934,6 +4045,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "epic",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishingSkill",
@@ -3969,6 +4081,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "swims": "upper",
       "stew": [
         {
           "value": "reactionFast",
@@ -4008,6 +4121,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishingSkill",
@@ -4043,6 +4157,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "bottom",
       "stew": [
         {
           "value": "reactionFast",
@@ -4078,6 +4193,7 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "rare",
+      "swims": "bottom",
       "stew": [
         {
           "value": "fishingSkill",
@@ -4112,6 +4228,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "common",
+      "swims": "bottom",
       "stew": [
         {
           "value": "baitRecovery",
@@ -4146,6 +4263,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "uncommon",
+      "swims": "surface",
       "stew": [
         {
           "value": "fishingSkill",
@@ -4180,6 +4298,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishFind",
@@ -4216,6 +4335,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "swims": "bottom",
       "stew": [
         {
           "value": "featureChance",
@@ -4251,6 +4371,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "common",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishFind",
@@ -4283,6 +4404,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "swims": "lower",
       "stew": [
         {
           "value": "fishingSkill",
@@ -4719,6 +4841,31 @@ export const content = {
           "value": "playerVantage",
           "add": -1
         }
+      ]
+    },
+    "heavyweight-heavy-weights": {
+      "id": "heavyweight-heavy-weights",
+      "category": "treasure",
+      "name": "item.heavyweight-heavy-weights.name",
+      "flavor": "item.heavyweight-heavy-weights.flavor",
+      "rarity": "uncommon",
+      "value": 3,
+      "unique": true,
+      "slot": "trinket",
+      "effects": [
+        {
+          "value": "bottomFishFind",
+          "add": 10
+        },
+        {
+          "value": "otherFishFind",
+          "add": -10
+        }
+      ],
+      "placeholder": [
+        "flavor",
+        "rarity",
+        "value"
       ]
     },
     "hempen-tangles": {
@@ -7333,6 +7480,10 @@ export const content = {
         },
         {
           "id": "fishing-pole-laser-sight",
+          "weight": 1
+        },
+        {
+          "id": "heavyweight-heavy-weights",
           "weight": 1
         },
         {
@@ -12955,6 +13106,8 @@ export const strings = {
     "item.glimmer-draught.flavor": "Shimmers like a shoal. Things on the water come to look.",
     "item.heavy-bait.name": "Heavy bait",
     "item.heavy-bait.flavor": "If you manage to hit 'em, they ain't got no chance",
+    "item.heavyweight-heavy-weights.name": "Heavyweight heavy weights",
+    "item.heavyweight-heavy-weights.flavor": "Lead enough to sink a boot. Whatever bites is something that lives down in the mud.",
     "item.hempen-tangles.name": "Hempen tangles",
     "item.hempen-tangles.flavor": "Bits of old rope.",
     "item.hornwort-tonic.name": "Hornwort tonic",
@@ -13679,6 +13832,7 @@ export const placeholderKeys = [
   "item.floating-water-plantain.flavor",
   "item.glimmer-draught.flavor",
   "item.glimmer-draught.name",
+  "item.heavyweight-heavy-weights.flavor",
   "item.hornwort-tonic.flavor",
   "item.hornwort-tonic.name",
   "item.hornwort.flavor",

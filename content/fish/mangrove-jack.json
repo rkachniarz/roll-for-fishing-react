@@ -10,6 +10,7 @@
   },
   "difficulty": 1,
   "rarity": "epic",
+  "swims": "lower",
   "stew": [
     {
       "value": "timeSlip",

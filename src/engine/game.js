@@ -305,10 +305,19 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
 
   // Abilities can make a fish certain, or rule one out (D96).
   const certain = values.flat.biteCertain;
-  if (certain > 0 || (certain === 0 && biteRoll + fishFind.total >= loc.biteThreshold)) {
+  // Fish Find by depth (D137): the same roll checked for bottom fish and for
+  // the rest, each with its own bonus; only fish whose check passes can bite.
+  // With neither bonus the two checks are one, and nothing else is drawn.
+  /** @param {number} bonus */
+  const bites = (bonus) => certain > 0 || (certain === 0 && biteRoll + fishFind.total + bonus >= loc.biteThreshold);
+  const bottomBites = bites(values.flat.bottomFishFind);
+  const otherBites = bites(values.flat.otherFishFind);
+  /** @param {string} species */
+  const canBite = (species) => (content.fish[species]?.swims === 'bottom' ? bottomBites : otherBites);
+  if (bottomBites || otherBites) {
     // A fish that got away here may come back: the more there are, the likelier (R3.6).
     const key = poolKey(state);
-    const pool = state.escaped[key] ?? [];
+    const pool = (state.escaped[key] ?? []).filter((f) => canBite(f.species));
     /** @type {PoolFish | null} */
     let fish = null;
     let fromPool = false;
@@ -316,11 +325,11 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
     // A feature with its own fish (a school, a big fish) brings up those, not the pool's.
     if (featureFish) {
       // Not from the pool: it stays with the feature if pulled out too early.
-      fish = featureFish;
+      fish = canBite(featureFish.species) ? featureFish : null;
     } else if (!feature?.fish && pool.length > 0 && (values.flat.fromPool > 0 || dice.line.roll100() <= pool.length)) {
       const i = dice.line.getRandomNumber(0, pool.length - 1);
       fish = pool[i];
-      state.escaped[key] = pool.filter((_, j) => j !== i);
+      state.escaped[key] = (state.escaped[key] ?? []).filter((f) => f !== fish);
       fromPool = true;
     } else {
       // Rift Fishing: now and then, the spot's rift table instead (D104, D106).
@@ -332,7 +341,7 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
         : feature?.fish
           ? listTable(feature.fish, 'fish', { moment: momentOf(state) })
           : locationTable(where, 'fish', { moment: momentOf(state) });
-      const species = pick(table, dice.line);
+      const species = pick(bottomBites && otherBites ? table : table.filter((e) => canBite(/** @type {string} */ (e.id))), dice.line);
       const minBand = feature?.minBand ? sizeBands().findIndex((/** @type {{ id: string }} */ b) => b.id === feature.minBand) : 0;
       if (species) {
         fish = rollFish(

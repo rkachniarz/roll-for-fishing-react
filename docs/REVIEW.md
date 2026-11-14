@@ -24,6 +24,36 @@ Items with no note are left alone.
 
 Newest first.
 
+## Heavyweight heavy weights (2026-11-14, D137)
+
+- **A trinket** (the two trinket slots), not a slot of its own: weights go on the line, but a line slot holds the line.
+- **Found as treasure,** in the common treasure table at weight 1 like the Bait pouch; unique. Uncommon, value 3,
+  and its line ("Lead enough to sink a boot...") are placeholders.
+- **How the bonus works:** one bite roll, checked for bottom fish with +10 and for the rest with -10. So with the
+  weights on, a cast that would have brought up any fish now and then brings up only a bottom fish, and a weak roll
+  that brings up nothing else can still bring up a bottom fish. Not the same as picking the fish first and then
+  rolling for it, which would have meant drawing the dice in a new order for every cast.
+- **The tooltip says** "Bottom Fish Find +10" and "Fish Find (not bottom fish) -10".
+
+## Fish keep to their depth (2026-11-14, D136)
+
+Every fish's `swims` (in `content/fish/<id>.json`) was looked up by two research agents from the real species: 12
+surface, 30 upper, 39 lower, 41 bottom. Change any in the content editor or the file.
+
+- **Least sure:** golomyanka (lower; deep open water), icefish (bottom, taken as an Antarctic icefish from its size),
+  blackfish (lower, taken as the Alaska blackfish), black crappie (upper), frostfin char and lake whitefish (lower,
+  could be bottom), lenok (upper), muskellunge (upper), red-bellied piranha and peacock bass (lower), walleye and
+  zander (lower, could be bottom), polar cod (upper).
+- **The made-up names were read as:** wildlands perch = Patagonian creole perch; strange perch = Nile perch; strange
+  tilapia = Nile tilapia; strange giant catfish = Mekong giant catfish (the repo names only strange cod = Murray cod
+  and strange shark = Greenland shark).
+- **Surface fish that aren't quite fish of the water:** the mudskipper and the arapaima (an air-breather) count as
+  surface; so does the pacu, which takes fruit falling on the water.
+- **How strictly:** a goal in its own quarter or up to a twentieth of the water over its edges; about one goal in
+  seven is anywhere, so fish don't look ruled into bands.
+- **The title's menu** starts where the log does on a phone (one button row below the scene), and just under the scene
+  on a wide screen.
+
 ## The title's logo (2026-11-14, D135)
 
 - **The colours:** ROLL in the page's gold (`--accent`, #ffd36b) with its lower third a darker gold (#d99a2b, new),

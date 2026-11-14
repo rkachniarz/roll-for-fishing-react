@@ -9,6 +9,7 @@
   },
   "difficulty": 0,
   "rarity": "common",
+  "swims": "bottom",
   "stew": [
     {
       "value": "baitRecovery",

@@ -304,6 +304,10 @@ placeholders everywhere, marked as D124 says. Takes in 8.3 and 8.6. In order:
   light, the findable plants on the sand, 2d6+3 fish from those caught in any slot and the reedy shore's.
 - [x] **10.17** The title's logo (D135): ROLL with the d20 rolling into its O and landing on a gold 20, "for fishing"
   under it as wide, behind the fish; the button row and the log hidden on the title.
+- [x] **10.18** Fish keep to their depth (D136): every fish's `swims` quarter, from the real species' habits, used
+  wherever fish swim side on (the title, the aquarium, the dive); the title's menu one button row below the scene.
+- [x] **10.19** Fish Find by depth (D137): `bottomFishFind` and `otherFishFind`, and the owner's Heavyweight heavy
+  weights (a trinket, +10 for bottom fish, -10 for the rest), found as treasure.
 
 ## Phase 9: Balance and finish
 

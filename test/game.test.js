@@ -687,6 +687,30 @@ test('a catch is found where it was caught; a version 8 save keeps its spots and
   assert.equal(migrated.castsAt.lake, s.book.casts);
 });
 
+test('Fish Find by depth: weights bring up bottom fish, and no bonus changes nothing (D137)', () => {
+  /** @param {number} bottom @param {number} other */
+  const by = (bottom, other) => [{ label: 'x', effects: [{ value: 'bottomFishFind', add: bottom }, { value: 'otherFishFind', add: other }] }];
+  const swims = (/** @type {GameCast} */ c) => (c.line.kind === 'fish' ? content.fish[c.line.fish.species].swims : null);
+  for (const [bottom, other, want] of /** @type {const} */ ([[1000, -1000, 'bottom'], [-1000, 1000, 'not']])) {
+    let s = game(31);
+    let fish = 0;
+    for (let i = 0; i < 60; i++) {
+      const out = castLine(s, 0, { extra: by(bottom, other) });
+      const depth = swims(out.cast);
+      if (depth) {
+        fish++;
+        assert.ok(want === 'bottom' ? depth === 'bottom' : depth !== 'bottom', `${want}: got a ${depth} fish`);
+      }
+      s = endEvent({ ...out.state, missStreak: 0 });
+    }
+    assert.ok(fish > 10, `${want}: fish came up (${fish})`);
+  }
+  // Neither bonus: the same line as without them, draw for draw.
+  for (const seed of [32, 33, 34]) {
+    assert.deepEqual(castLine(game(seed), 0, { extra: by(0, 0) }).cast.line, castLine(game(seed), 0).cast.line);
+  }
+});
+
 test('a hidden place opens once its map fragments are found, and a quest can close it (8.2, 8.4)', async () => {
   const { placeOpen } = await import('../src/engine/knowledge.js');
   const { startEvent } = await import('../src/engine/events.js');

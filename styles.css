@@ -1047,11 +1047,13 @@ body.is-dragging {
 
 /* ---------- The title screen (D80) ---------- */
 
-/* At the bottom of the screen, as WoW's login buttons are (D29), with only a
-   light shade: the water behind it is the title's picture. */
+/* Under the scene, as WoW's login buttons are under its picture (D29): on a
+   phone one button row below it, where the log starts (`--title-top`, set by
+   fit in src/main.js). Only a light shade: the water is the title's picture. */
 .title {
-  margin-top: auto;
-  margin-bottom: var(--gutter);
+  margin-top: var(--title-top, auto);
+  margin-bottom: auto;
+  max-height: calc(100dvh - var(--title-top, 0px) - var(--gutter));
 }
 
 .title::backdrop {

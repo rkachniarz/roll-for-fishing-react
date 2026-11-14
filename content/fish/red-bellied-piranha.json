@@ -10,6 +10,7 @@
   },
   "difficulty": -1,
   "rarity": "rare",
+  "swims": "lower",
   "stew": [
     {
       "value": "greedyChance",

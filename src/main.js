@@ -138,6 +138,10 @@ function fit() {
   root.setProperty('--tip-icon', `${(64 * s) / dpr}px`);
   // The slot fits its icon, with room for the border and the count.
   root.setProperty('--slot', `${Math.max(52, Math.ceil((32 * s) / dpr) + 20)}px`);
+  // The title's menu (D135): on a phone where the log starts, one button row
+  // below the scene; on a wide screen just under the scene, the HUD being beside it.
+  const log = /** @type {HTMLElement} */ (document.querySelector('.log-frame')).getBoundingClientRect();
+  root.setProperty('--title-top', `${Math.round(wide ? canvas.getBoundingClientRect().bottom + 2 + gutter : log.top)}px`);
 }
 fit();
 window.addEventListener('resize', fit);

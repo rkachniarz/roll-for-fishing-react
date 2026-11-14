@@ -10,6 +10,7 @@
   },
   "difficulty": -1,
   "rarity": "uncommon",
+  "swims": "surface",
   "stew": [
     {
       "value": "naturalCatch",

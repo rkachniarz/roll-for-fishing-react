@@ -34,6 +34,10 @@ export const GAME_VALUES = {
   treasureFind: { better: 'higher' },
   /** Raises the chance of stuff, the white things used for something, over junk (R19.1, D125). */
   stuffFind: { better: 'higher', base: 0 },
+  /** Fish Find for bottom fish only (a fish's `swims`, D137): the bite roll checked again for them. */
+  bottomFishFind: { better: 'higher', base: 0 },
+  /** Fish Find for every fish that doesn't keep to the bottom (D137). */
+  otherFishFind: { better: 'higher', base: 0 },
   /** Keeps the cold off: each point takes one off the cold (R19.2, D126). */
   warmth: { better: 'higher', base: 0 },
   /** The chance, in percent, that a fish caught comes with an identical twin (a stew buff, R19.4). */

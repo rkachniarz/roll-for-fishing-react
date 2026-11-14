@@ -15,6 +15,8 @@ const UI_STRINGS = {
   'value.fishFind': 'Fish Find',
   'value.treasureFind': 'Treasure Find',
   'value.stuffFind': 'Stuff Find',
+  'value.bottomFishFind': 'Bottom Fish Find',
+  'value.otherFishFind': 'Fish Find (not bottom fish)',
   'value.warmth': 'Warmth',
   'value.twinChance': 'chance of a twin with every fish caught',
   'value.timeSlip': 'chance that a cast takes no time',

@@ -8,6 +8,7 @@
   },
   "difficulty": 1,
   "rarity": "uncommon",
+  "swims": "bottom",
   "stew": [
     {
       "value": "fishingSkill",

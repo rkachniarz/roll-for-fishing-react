@@ -14,6 +14,12 @@
 import { Container, Sprite, Texture } from 'pixi.js';
 import { iconName, paintIcon } from './icons.js';
 import { bodyAngle, fishFrames, paint, turnGrid } from './fish-art.js';
+import { content } from '../generated/content.js';
+
+/** Which quarter of the water, top to bottom, a fish keeps to (a fish's `swims`, D136). */
+const QUARTER = { surface: 0, upper: 1, lower: 2, bottom: 3 };
+/** How often a fish heads somewhere outside its quarter, so the water doesn't look ruled into bands. */
+const WANDER = 0.15;
 
 /** Frames of the tail's beat. */
 const FRAMES = 6;
@@ -154,6 +160,7 @@ export function swimSprite(species) {
  * @property {boolean} right  Facing right.
  * @property {'own' | 'shadow' | 'small'} look
  * @property {{ x0: number, y0: number, x1: number, y1: number } | null} box  Its own box, if not the shoal's.
+ * @property {number | null} quarter  The quarter of the water it keeps to (D136), or anywhere.
  */
 
 /**
@@ -169,11 +176,25 @@ export function createShoal(parent, rand) {
   let box = { x0: 0, y0: 0, x1: 256, y1: 256 };
   let last = 0;
 
+  /**
+   * Where in the box a fish goes: anywhere, or mostly in its own quarter
+   * (D136), a little over its edges, now and then anywhere at all.
+   * @param {{ x0: number, y0: number, x1: number, y1: number }} b
+   * @param {number | null} quarter
+   */
+  function depthIn(b, quarter) {
+    const h = Math.max(1, b.y1 - b.y0);
+    if (quarter === null || rand() < WANDER) return b.y0 + rand() * h;
+    const from = Math.max(0, quarter / 4 - 0.05);
+    const to = Math.min(1, (quarter + 1) / 4 + 0.05);
+    return b.y0 + (from + rand() * (to - from)) * h;
+  }
+
   /** @param {Swimmer} s @param {number} now */
   function newGoal(s, now) {
     const b = s.box ?? box;
     const pad = Math.min(16, (b.x1 - b.x0) / 4);
-    s.goal = { x: b.x0 + pad + rand() * Math.max(1, b.x1 - b.x0 - 2 * pad), y: b.y0 + rand() * Math.max(1, b.y1 - b.y0) };
+    s.goal = { x: b.x0 + pad + rand() * Math.max(1, b.x1 - b.x0 - 2 * pad), y: depthIn(b, s.quarter) };
     s.nextGoal = now + 2500 + rand() * 4000;
     // Now and then a burst, as a startled fish does.
     if (rand() < 0.2) s.burstUntil = now + 500 + rand() * 400;
@@ -200,6 +221,9 @@ export function createShoal(parent, rand) {
         }
         const art = swimSprite(f.species);
         const look = f.look ?? 'own';
+        // Under the surface, in its patch, a fish goes anywhere; side on, it keeps to its quarter.
+        const swims = /** @type {keyof typeof QUARTER | undefined} */ (content.fish[f.species]?.swims);
+        const quarter = !f.box && swims ? QUARTER[swims] : null;
         const sprite = new Sprite((look === 'own' ? art.frames : look === 'shadow' ? art.shadows : art.small)[0]);
         sprite.anchor.set(0.5);
         // A drawn fish's view from the bank is already darkened; a turned icon's is a shadow.
@@ -210,7 +234,7 @@ export function createShoal(parent, rand) {
           species: f.species,
           sprite,
           x: f.x ?? (f.box ?? box).x0 + rand() * ((f.box ?? box).x1 - (f.box ?? box).x0),
-          y: f.y ?? (f.box ?? box).y0 + rand() * ((f.box ?? box).y1 - (f.box ?? box).y0),
+          y: f.y ?? depthIn(f.box ?? box, quarter),
           vx: (rand() - 0.5) * 10,
           vy: 0,
           goal: { x: 0, y: 0 },
@@ -221,6 +245,7 @@ export function createShoal(parent, rand) {
           right: rand() < 0.5,
           look,
           box: f.box ?? null,
+          quarter,
         };
         newGoal(s, now);
         return /** @type {Swimmer} */ (s);

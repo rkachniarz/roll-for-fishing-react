@@ -27,6 +27,12 @@ test('the generated files are up to date (run npm run content)', async () => {
   }
 });
 
+test('every fish says which quarter of the water it swims in (D136)', async () => {
+  const { content } = await import('../src/generated/content.js');
+  const without = Object.values(content.fish).filter((f) => !f.retired && !f.swims).map((f) => f.id);
+  assert.deepEqual(without, []);
+});
+
 test("the spots hold the owner's spawn table (D101)", () => {
   const { lake, river } = result.all.locations;
   assert.deepEqual(lake.spots.map((/** @type {{ id: string }} */ s) => s.id), ['reedy-shore', 'swamp', 'still-water', 'rocky-shore', 'open-water', 'deep-water']);
@@ -43,7 +49,7 @@ test("the spots hold the owner's spawn table (D101)", () => {
   // The prototype's junk and treasure, shared by both locations, with the placeholder gear (5.3, 5.7).
   const junk = result.all.tables['common-junk'].entries;
   assert.equal(junk.length, 38);
-  assert.equal(result.all.tables['common-treasure'].entries.length, 7 + 16);
+  assert.equal(result.all.tables['common-treasure'].entries.length, 7 + 16 + 1, 'and the Heavyweight heavy weights (D137)');
   assert.equal(junk.reduce((/** @type {number} */ t, /** @type {{ weight: number }} */ j) => t + j.weight, 0) + lake.emptyHook, 100);
 });
 

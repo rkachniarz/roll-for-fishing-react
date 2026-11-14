@@ -170,7 +170,7 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | yellow-perch | stew |
 | zander | stew |
 
-## items (23)
+## items (24)
 
 | id | what is a placeholder |
 |---|---|
@@ -178,6 +178,7 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | canadian-waterweed | flavor |
 | floating-water-plantain | flavor |
 | glimmer-draught | all of it |
+| heavyweight-heavy-weights | flavor, rarity, value |
 | hornwort-tonic | all of it |
 | hornwort | flavor |
 | lace-plant | flavor |

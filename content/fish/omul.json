@@ -9,6 +9,7 @@
   },
   "difficulty": 0,
   "rarity": "rare",
+  "swims": "upper",
   "stew": [
     {
       "value": "reactionFast",

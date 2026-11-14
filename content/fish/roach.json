@@ -9,6 +9,7 @@
   },
   "difficulty": -1,
   "rarity": "common",
+  "swims": "upper",
   "stew": [
     {
       "value": "fishFind",

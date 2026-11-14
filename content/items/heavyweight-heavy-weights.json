@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "heavyweight-heavy-weights",
+  "category": "treasure",
+  "name": "Heavyweight heavy weights",
+  "flavor": "Lead enough to sink a boot. Whatever bites is something that lives down in the mud.",
+  "rarity": "uncommon",
+  "value": 3,
+  "unique": true,
+  "slot": "trinket",
+  "effects": [
+    {
+      "value": "bottomFishFind",
+      "add": 10
+    },
+    {
+      "value": "otherFishFind",
+      "add": -10
+    }
+  ],
+  "placeholder": [
+    "flavor",
+    "rarity",
+    "value"
+  ]
+}

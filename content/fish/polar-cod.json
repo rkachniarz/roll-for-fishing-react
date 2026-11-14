@@ -10,6 +10,7 @@
   },
   "difficulty": -1,
   "rarity": "rare",
+  "swims": "upper",
   "stew": [
     {
       "value": "wildCast",

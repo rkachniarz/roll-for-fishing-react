@@ -33,6 +33,10 @@
       "description": "The species' rarity; the size band shifts it (D49, D63).",
       "$ref": "common.schema.json#/definitions/rarity"
     },
+    "swims": {
+      "description": "Which quarter of the water it keeps to, side on (the aquarium, the dive, the title): where the real fish spends most of its time (D136).",
+      "enum": ["surface", "upper", "lower", "bottom"]
+    },
     "prefers": {
       "description": "When the fish is likelier (D101): each preference the moment meets multiplies its weight in a table by the factor in rules/fish-preferences.json. Leave one out for no preference (\"Any\").",
       "type": "object",
