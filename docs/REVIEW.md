@@ -24,6 +24,37 @@ Items with no note are left alone.
 
 Newest first.
 
+## The title's logo (2026-11-14, D135)
+
+- **The colours:** ROLL in the page's gold (`--accent`, #ffd36b) with its lower third a darker gold (#d99a2b, new),
+  outlined and shadowed in the dice's ink; "for fishing" in the dice's cream. The die's 20 is that gold, outlined, since
+  gold alone hardly shows on the die's pale face. Its digits are the dice's own 3×5, so the 20 is small.
+- **The die is the in-game size** (17 pixels to a corner), and ROLL's letters are a little shorter than it.
+- **It rolls in every time the title opens,** from below, as in a cast; a window resize puts it straight back at rest.
+- **"for fishing" is spread** letter by letter to ROLL's width, the space a little wider than the rest.
+- **The logo's place:** the middle of the water above the lake bottom, behind the fish and the near weed but over
+  the far weed and the shafts of light.
+- **The dialog's "Roll for Fishing" heading is gone** from view (screen readers still have it): the logo names the game.
+
+## The title screen under the water (2026-11-14, D134)
+
+- **The plants are their icons, upright on the sand,** with the black outline turned to the water's darkest band
+  (scene sprites have no outline). Some sit oddly on the bottom: the floating water-plantain's leaf and flower float
+  in real life, and the lace plant's two leaves look cut. They'd read better as their own drawings for the scene.
+- **Which plants:** all eight that can be found (`PLANTS` in `src/scene/views.js`), one about every 20 pixels across,
+  picked at random, not only the ones the player has found.
+- **The lake bottom's depth:** 44 pixels of floor in three bands, far to near (`FLOOR` in `src/scene/deep.js`): the
+  back two are the sand mixed with the water's darkest band, new colours. Each plant gets a random depth: the far
+  third hazed 45% towards the water, the middle 20%, the near third full colour and in front of the fish. Plants
+  aren't spaced apart, so two can overlap. The fish swim down to the middle of the floor, among the weed.
+- **The fish:** "seen" is taken as caught (the book), from every slot, not only the last game played; the reedy
+  shore's own list, without its rift fish. Two of a kind only when 2d6+3 is more than the pool (15 against the reedy
+  shore's 14 in a new install). They swim above the sand, down among the weed's tops.
+- **The light:** one shaft about every 50 pixels, 6 to 10 pixels wide, fading out towards the sand; each flicks
+  between dither frames every quarter to nearly a second and drifts two pixels either way over several seconds.
+- **The dialog at the bottom of the screen** (WoW's login), over a 15% shade instead of the other dialogs' 60%. On a
+  phone it covers the log, which is empty there.
+
 ## Every fish drawn to swim (2026-11-14, D131, CR-17)
 
 After the carp trial, all 122 fish are drawn the same way (`src/scene/fish-art.js`, shapes in

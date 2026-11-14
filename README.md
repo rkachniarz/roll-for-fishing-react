@@ -87,7 +87,9 @@ and the art sheet at `/art.html` there.
 | `src/scene/swim.js` | Fish that swim: the swimming motion, the tank's and the surface's shoals (D129, D131) |
 | `src/scene/fish-art.js` | Every fish drawn to swim, as code: side on and from the bank below the surface, its colours from its icon (D131) |
 | `src/scene/fish-shapes.js` | Each fish's shape for swimming: presets for kinds of body, and each fish's own fins, tail and pattern |
-| `src/scene/views.js` | What takes the water's place: the town, the room and its aquarium, the dive (placeholders, CR-5) |
+| `src/scene/views.js` | What takes the water's place: the town, the room and its aquarium, the dive (placeholders, CR-5), the title screen's water (D134) |
+| `src/scene/logo.js` | The title's logo: ROLL with the d20 as its O, "for fishing" under it (D135, CR-18) |
+| `src/scene/deep.js` | Under the water, side on: the bands, the sand and the shafts of light, for the art sheet's tank and the title (D134) |
 | `src/scene/reedy.js` | The reedy shore's scene, painted as code from a sketch and a photo of dense reeds (D117) |
 | `src/scene/dice.js` | The fight's d20s thrown over the scene, coming to rest on the numbers rolled (D99; `d20.js`: the die's shape and numbering) |
 | `src/scene/icons.js` | 32×32 icons (D98): items and fish (a default for each kind), the button row, the weather; rarity colours |

@@ -16,6 +16,7 @@ import { TRIALS } from './art-trials.js';
 import { SWIM_FRAMES, fishFrames, paint } from './scene/fish-art.js';
 import { content } from './generated/content.js';
 import { createRng, deriveSeed } from './rng.js';
+import { DEEP_BANDS, paintDeep } from './scene/deep.js';
 
 const seed = Number(new URLSearchParams(location.search).get('seed') ?? 1);
 
@@ -114,52 +115,6 @@ for (const trial of TRIALS) {
 /** The underwater tank's size, in scene pixels. */
 const TANK_W = 192;
 const TANK_H = 96;
-/** The dive's water, top to bottom (src/scene/views.js). */
-const DEEP_BANDS = ['#2f8f9f', '#28808f', '#22717f', '#1c626f', '#16535f', '#11444f'];
-
-/**
- * The still part of the water: bands blended through dithered rows, light
- * from above, sand. Painted once.
- * @param {() => number} rand
- */
-function paintDeep(rand) {
-  const canvas = /** @type {HTMLCanvasElement} */ (el('canvas'));
-  canvas.width = TANK_W;
-  canvas.height = TANK_H;
-  const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-  const band = TANK_H / DEEP_BANDS.length;
-  for (let y = 0; y < TANK_H; y++) {
-    const i = Math.min(DEEP_BANDS.length - 1, Math.floor(y / band));
-    const edge = y - i * band >= band - 1 && i < DEEP_BANDS.length - 1;
-    for (let x = 0; x < TANK_W; x++) {
-      ctx.fillStyle = DEEP_BANDS[edge && (x + y) % 2 ? i + 1 : i];
-      ctx.fillRect(x, y, 1, 1);
-    }
-  }
-  // Shafts of light, slanting down, dithered so they stay hard pixels.
-  for (let i = 0; i < 4; i++) {
-    const x0 = 14 + i * 50 + Math.floor(rand() * 12);
-    for (let y = 0; y < TANK_H - 12; y++) {
-      const from = x0 + Math.floor(y * 0.35);
-      for (let x = from; x < from + 7; x++) {
-        if ((x + y) % 2 === 0 && rand() > y / TANK_H) {
-          ctx.fillStyle = '#3f9fab';
-          ctx.fillRect(x, y, 1, 1);
-        }
-      }
-    }
-  }
-  // The bottom: sand with darker grains.
-  for (let x = 0; x < TANK_W; x++) {
-    const top = TANK_H - 9 + Math.round(Math.sin(x / 11) * 1.5);
-    for (let y = top; y < TANK_H; y++) {
-      ctx.fillStyle = y === top ? '#7a6a48' : rand() < 0.12 ? '#4f4430' : '#5f5238';
-      ctx.fillRect(x, y, 1, 1);
-    }
-  }
-  return canvas;
-}
-
 /**
  * A fish's frames on canvases, facing left and right, with its gulp.
  * @param {string} species
@@ -191,7 +146,7 @@ function tankCard(parent, caption, species) {
   const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
   const rand = createRng(deriveSeed(seed, 'scenery'));
   const r = () => rand.next();
-  const deep = paintDeep(r);
+  const deep = paintDeep(TANK_W, TANK_H, r);
   const weeds = Array.from({ length: 7 }, (_, i) => ({ x: 8 + i * 27 + Math.floor(r() * 10), h: 14 + Math.floor(r() * 16) }));
   const bubbles = Array.from({ length: 5 }, () => ({ x: Math.floor(r() * TANK_W), y: r() * TANK_H, speed: 6 + r() * 8 }));
   const fish = species.map((id, i) => ({

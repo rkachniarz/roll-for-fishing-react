@@ -1147,10 +1147,15 @@ function render() {
   document.body.dataset.phase = cast.phase;
   document.body.dataset.place = state && content.locations[state.location]?.town ? 'town' : state?.dive ? 'dive' : 'water';
   $('status').textContent = state && content.locations[state.location]?.town ? t('status.town') : t(pausing() ? 'status.pause' : `status.${cast.phase}`);
+  // The title screen hides the button row and the log: only the water (D134).
+  document.body.toggleAttribute('data-title', !state);
   if (!state) {
+    titleView ??= titleScene();
+    scene.setView(titleView);
     renderPane();
     return;
   }
+  titleView = null;
   conditions = conditionBuffs(state, valuesFor(state, extraSources()).flat.warmth);
   buffBar.update(shownBuffs());
   renderActions();
@@ -1709,6 +1714,41 @@ function openTitle(view = 'main', imported) {
   if (!dialog.open) {
       dialog.showModal();
   }
+}
+
+/**
+ * The title screen's water, while it shows: chosen once each time it opens.
+ * @type {import('./scene/views.js').View | null}
+ */
+let titleView = null;
+
+/**
+ * Under the water behind the title screen: 2d6+3 fish, from every fish caught
+ * in any slot and every fish of the reedy shore, where a new game starts.
+ * Cosmetic: the scenery stream (D4).
+ * @returns {import('./scene/views.js').View}
+ */
+function titleScene() {
+  const dice = diceFor(scenery);
+  const reedy = content.locations.lake.spots.find((/** @type {{ id: string }} */ s) => s.id === 'reedy-shore');
+  const pool = [
+    ...new Set([
+      ...listSlots(storage).flatMap((saved) => Object.keys(saved.state?.book.fish ?? {})),
+      ...(reedy?.fish ?? []).map((/** @type {{ id: string }} */ f) => f.id),
+    ]),
+  ].filter((id) => content.fish[id] && !content.fish[id].retired);
+  const count = dice.roll2d6() + 3;
+  /** @type {{ key: string, species: string }[]} */
+  const fish = [];
+  // Every one different while there are enough; then again from the start.
+  /** @type {string[]} */
+  let left = [];
+  for (let i = 0; i < count && pool.length; i++) {
+    if (!left.length) left = [...pool];
+    const species = left.splice(dice.getRandomNumber(0, left.length - 1), 1)[0];
+    fish.push({ key: `title-${i}-${species}`, species });
+  }
+  return { kind: 'title', fish };
 }
 
 /** Back to the title screen from the menu, between casts. The game is already saved. */

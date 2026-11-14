@@ -1047,7 +1047,31 @@ body.is-dragging {
 
 /* ---------- The title screen (D80) ---------- */
 
+/* At the bottom of the screen, as WoW's login buttons are (D29), with only a
+   light shade: the water behind it is the title's picture. */
+.title {
+  margin-top: auto;
+  margin-bottom: var(--gutter);
+}
+
+.title::backdrop {
+  background: rgb(0 0 0 / 0.15);
+}
+
+/* The title screen is the water and its logo: no button row, no log (D134).
+   Hidden, not removed, so the scene stays where the game will have it. */
+body[data-title] .hud {
+  visibility: hidden;
+}
+
+/* The name is in the logo on the water; the heading stays for screen readers. */
 .title h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
   margin: 0 0 8px;
   font-size: calc(28px * var(--type));
   font-weight: 600;

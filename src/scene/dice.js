@@ -31,6 +31,8 @@ export const DICE_COLOURS = {
   ink: '#2a1a10',
   /** A natural 20's number. */
   crit: '#c4241b',
+  /** The title's die (D134): its 20 in the logo's gold, outlined so it reads on the pale face. */
+  gold: '#ffd36b',
   /** The fish's dice (6.8): its own colour, a deep-water teal, with pale numbers. */
   fishLight: '#5fb3c4',
   fishMid: '#31899f',
@@ -79,6 +81,7 @@ const LIGHT = (() => {
  * @property {boolean} kept   False for a die that didn't count.
  * @property {boolean} crit   Its number in red: a natural 20.
  * @property {boolean} fish   The fish's die (6.8): teal, thrown from the top right.
+ * @property {boolean} gold   The title's die (D134): its number in gold, outlined.
  * @property {{ x: number, y: number }} from  Where it comes in, in the scene's pixels.
  * @property {{ x: number, y: number }} to    Where it stops.
  * @property {number} start   When it's thrown.
@@ -109,6 +112,8 @@ export function createDice(addTo, rand) {
   let dice = [];
   let goneAt = -Infinity;
   let settledAt = -Infinity;
+  /** Dice that stay (the title's) are drawn once more after they settle, then left. */
+  let drawnStill = false;
 
   /** @param {number} w @param {number} h */
   function setSize(w, h) {
@@ -122,17 +127,19 @@ export function createDice(addTo, rand) {
     texture = Texture.from(canvas);
     sprite.texture = texture;
     old.destroy(true);
+    drawnStill = false;
   }
   /**
    * Throws dice that come to rest side by side: the player's around `at`, the
    * fish's (6.8) around `fishAt`, from the other side of the desk.
-   * @param {{ value: number, kept: boolean, crit?: boolean, fish?: boolean }[]} values
+   * @param {{ value: number, kept: boolean, crit?: boolean, fish?: boolean, gold?: boolean }[]} values
    * @param {{ x: number, y: number }} at  Where the player's gather, in the layer's pixels.
    * @param {number} now
    * @param {{ x: number, y: number }} [fishAt]  Where the fish's gather.
+   * @param {{ stay?: boolean }} [options]  `stay`: the dice stay where they land (the title's, D134).
    * @returns {{ settled: number, gone: number, points: { x: number, y: number }[] }}  In the order given.
    */
-  function roll(values, at, now, fishAt = at) {
+  function roll(values, at, now, fishAt = at, { stay = false } = {}) {
     const gap = RADIUS * 2 + 6;
     // The player's thrown from below, from their side of the desk, a little from
     // the right; the fish's from the top right, from across the desk.
@@ -153,6 +160,7 @@ export function createDice(addTo, rand) {
         kept: v.kept,
         crit: v.crit ?? false,
         fish: v.fish ?? false,
+        gold: v.gold ?? false,
         from: f,
         to,
         start,
@@ -166,7 +174,8 @@ export function createDice(addTo, rand) {
       };
     });
     settledAt = Math.max(...dice.map((d) => d.start + d.rollMs));
-    goneAt = settledAt + HOLD_MS + FADE_MS;
+    goneAt = stay ? Infinity : settledAt + HOLD_MS + FADE_MS;
+    drawnStill = false;
     return { settled: settledAt, gone: goneAt, points: dice.map((d) => d.to) };
   }
 
@@ -185,6 +194,10 @@ export function createDice(addTo, rand) {
       return;
     }
     sprite.visible = true;
+    if (now >= settledAt && goneAt === Infinity) {
+      if (drawnStill) return;
+      drawnStill = true;
+    }
     const px = image.data;
     px.fill(0);
     const fade = now <= goneAt - FADE_MS ? 0 : (now - (goneAt - FADE_MS)) / FADE_MS;
@@ -251,7 +264,7 @@ export function createDice(addTo, rand) {
       dim ? [C.dimLight, C.dimMid, C.dimShade, C.dimDark] : fish ? [C.fishLight, C.fishMid, C.fishShade, C.fishDark] : [C.light, C.mid, C.shade, C.dark]
     ).map(rgb);
     const outline = rgb(C.outline);
-    const ink = rgb(dim ? C.dimInk : p.die.crit && landed ? C.crit : fish ? C.fishInk : C.ink);
+    const ink = rgb(dim ? C.dimInk : p.die.crit && landed ? C.crit : p.die.gold ? C.gold : fish ? C.fishInk : C.ink);
     const cx = p.x, cy = p.y - p.h;
 
     // The faces that face the viewer, as triangles on the page.
@@ -306,6 +319,16 @@ export function createDice(addTo, rand) {
       const w = text.length * 4 - 1;
       const left = Math.round(cx + mx - w / 2);
       const top = Math.round(cy - my - 2.5);
+      // A gold number is outlined first, all round, so it reads on the pale face.
+      const lit = (/** @type {number} */ x, /** @type {number} */ y) => {
+        const i = Math.floor(x / 4);
+        return x >= 0 && y >= 0 && y < 5 && i < text.length && x % 4 < 3 && DIGITS[Number(text[i])][y][x % 4] === '#';
+      };
+      if (p.die.gold) {
+        for (let y = -1; y <= 5; y++) for (let x = -1; x <= w; x++) {
+          if (!lit(x, y) && (lit(x - 1, y) || lit(x + 1, y) || lit(x, y - 1) || lit(x, y + 1))) put(left + x, top + y, outline);
+        }
+      }
       [...text].forEach((ch, i) => {
         DIGITS[Number(ch)].forEach((row, ry) => {
           for (let rx = 0; rx < 3; rx++) if (row[rx] === '#') put(left + i * 4 + rx, top + ry, ink);

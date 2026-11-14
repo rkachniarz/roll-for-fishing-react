@@ -300,6 +300,10 @@ placeholders everywhere, marked as D124 says. Takes in 8.3 and 8.6. In order:
 - [x] **10.14** Tests, verify, build; docs; the morning's questions at the top of REVIEW.md.
 - [x] **10.15** The owner's answers (D130): the town hidden until nightfall, the cold from dark, no Release in town,
   the Warm woolen hat at the inn (placeholder).
+- [x] **10.16** The title screen under the water (D134): the art sheet's tank across the scene, flickering shafts of
+  light, the findable plants on the sand, 2d6+3 fish from those caught in any slot and the reedy shore's.
+- [x] **10.17** The title's logo (D135): ROLL with the d20 rolling into its O and landing on a gold 20, "for fishing"
+  under it as wide, behind the fish; the button row and the log hidden on the title.
 
 ## Phase 9: Balance and finish
 
@@ -372,6 +376,8 @@ placeholder, it's added here.
 - [ ] **CR-17** Swimming fish drawn for swimming (R20.1): each fish its own side view, in its icon's colours, with a
   real swim. *Done as code for all 122 after the owner liked the carp trial (D131); the owner's markup, fish by fish,
   is what's left: `npm run sprite export swim-<fish>`. The stingray (a disc from above) is the roughest.*
+- [ ] **CR-18** The logo (D135). *Replaces the first one in `src/scene/logo.js`: Pixelify Sans cut to pixels, gold
+  ROLL, cream "for fishing", the game's d20 as the O.*
 
 ## Sound
 
@@ -386,7 +392,6 @@ Not scheduled.
 - **A precision timing bar for the cast**: tap a spot, a bar appears with a marker running up and down; the target
   area depends on the rod's quality, the marker's speed on the wind. The scatter (D85) would carry over to it. The
   owner's idea.
-- **Random scenes on the title screen**, from the locations the player has unlocked.
 
 - **Consumables as a hand of cards** along the bottom of the screen, to make using them more tempting. A loose idea from
   the owner, not a decision.
