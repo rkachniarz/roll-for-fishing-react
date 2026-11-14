@@ -35,7 +35,7 @@ npm run commons fetch ruffe 3 name=Ruffe   # one of them at 1280 px, with its li
 How the art is made, and drawing for the game in MS Paint: [docs/art.md](docs/art.md).
 
 No build step is needed to play: any static file server works. The game is published to GitHub Pages from every push
-to `fresh-start` whose tests pass (`.github/workflows/pages.yml`): https://rkachniarz.github.io/roll-for-fishing-react/,
+to `master` whose tests pass (`.github/workflows/pages.yml`): https://rkachniarz.github.io/roll-for-fishing-react/,
 and the art sheet at `/art.html` there.
 
 ## Files

@@ -9,7 +9,7 @@ name: Pages
 
 on:
   push:
-    branches: [fresh-start, master]
+    branches: [master]
   workflow_dispatch:
 
 permissions:

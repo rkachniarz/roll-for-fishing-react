@@ -615,8 +615,7 @@ ability used when it can be. Things worth a look, none changed:
 
 ## GitHub Pages (3.5, D91)
 
-- **Both `fresh-start` and `master` publish,** whichever was pushed last. Only `fresh-start` is used now; `master`
-  is there for when the work moves back to it.
+- **Only `master` publishes** (D133). The old `master`, the 2023 prototype, is the branch `legacy`.
 - **The 2023 prototype's site is replaced** at the same address. Its `gh-pages` branch is untouched, so it could be
   put back, and the prototype's code is still at the tag `legacy-prototype`.
 

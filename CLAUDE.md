@@ -30,7 +30,7 @@ by number:
 - `docs/PORTING-NOTES.md`: what to port from the React prototype (tag `legacy-prototype`; read old files with
   `git show legacy-prototype:src/Data/weather.js`) and the lessons it taught.
 
-Pushing `fresh-start` publishes the game to GitHub Pages once `npm test` passes (D91):
+Pushing `master` publishes the game to GitHub Pages once `npm test` passes (D91, D133):
 https://rkachniarz.github.io/roll-for-fishing-react/ (and `art.html`). Push only when the owner asks.
 
 A phase ends with `npm test` and `npm run verify` passing, then `npm run build` (`npm run check` does all three), then a docs refresh: DEV_PLAN.md
