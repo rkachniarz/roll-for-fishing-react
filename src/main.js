@@ -34,7 +34,7 @@ import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
 import { createLog } from './ui/log.js';
-import { bagTab, fishName, hoursText, itemName, link, rarityColour, showTasteWhen } from './ui/links.js';
+import { bagTab, fishName, hoursText, itemName, link, rarityColour, showStatusWhen, showTasteWhen } from './ui/links.js';
 import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settingsPane, shopPane } from './ui/panels.js';
 import { floatText } from './ui/floater.js';
 import { bindTip, hideTip } from './ui/tooltip.js';
@@ -161,6 +161,8 @@ const save = (s) => saveGame(storage, slot, s);
 let state = null;
 // A fish's tooltip tells how it eats to a Sushi enjoyer who has eaten one (D138).
 showTasteWhen((species) => Boolean(state && hasPerk(state, 'sushi-enjoyer') && state.tasted?.[species]));
+// And that it is endangered, to a Conservationist (D140).
+showStatusWhen(() => Boolean(state && hasPerk(state, 'conservationist')));
 /** @type {GameCast} */
 let cast = /** @type {GameCast} */ ({ phase: 'idle' });
 let lastActAt = -Infinity;
@@ -745,6 +747,9 @@ function describeEvent(e) {
     }
     case 'released':
       return tParts('log.released', { fish: fishLink(e.fish) });
+    case 'conserved':
+      // An endangered fish let go (D140): XP, or Luck, which is never shown (R5.2).
+      return [e.xp ? t('log.conserved-xp', { xp: e.xp }) : t('log.conserved-luck')];
     case 'champion-appeared':
     case 'champion-hit':
     case 'champion-caught':

@@ -216,11 +216,12 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | river / river-mouth | name |
 | town | all of it |
 
-## perks (3)
+## perks (4)
 
 | id | what is a placeholder |
 |---|---|
 | aquarium | name, description |
+| conservationist | description |
 | look-underwater | description, cooldown |
 | sushi-enjoyer | description |
 

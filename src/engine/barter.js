@@ -174,7 +174,38 @@ export function letGo(state, index) {
   const { champion, ...plain } = /** @type {FishInstance & { champion?: string }} */ (fish);
   const key = poolKey(next);
   next.escaped[key] = [...(next.escaped[key] ?? []), { ...plain, tries: 0 }];
-  return { state: next, events: [{ type: 'released', fish }] };
+  return { state: next, events: [{ type: 'released', fish }, ...conserve(next, fish)] };
+}
+
+/** The counter among the flags (R18.4's kind): endangered fish a Conservationist has let go. */
+export const CONSERVED = 'endangered-released';
+
+/**
+ * A fish has been let go (D140): for a character with the Conservationist
+ * perk an endangered one counts. Every `releasesPerLuck` of them give 1 Luck,
+ * unseen, until `maxLuck`; after that each gives a share of its XP, rounded
+ * up. Changes `state` in place.
+ * @param {GameState} state
+ * @param {FishInstance} fish
+ * @returns {GameEvent[]}
+ */
+export function conserve(state, fish) {
+  if (!hasPerk(state, 'conservationist') || !content.fish[fish.species]?.endangered) return [];
+  const rules = content.rules.conservation;
+  const count = Number(state.flags[CONSERVED] ?? 0) + 1;
+  state.flags = { ...state.flags, [CONSERVED]: count };
+  if (count <= rules.releasesPerLuck * rules.maxLuck) {
+    if (count % rules.releasesPerLuck !== 0) return [];
+    state.character.luck += 1;
+    return [{ type: 'conserved', fish }];
+  }
+  const xp = Math.ceil((fish.xp * rules.xpPercent) / 100);
+  const levelBefore = levelFor(state.character.xp);
+  state.character.xp += xp;
+  /** @type {GameEvent[]} */
+  const events = [{ type: 'conserved', fish, xp }];
+  levelUp(state, levelBefore, events);
+  return events;
 }
 
 /**

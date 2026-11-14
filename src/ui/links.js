@@ -25,6 +25,17 @@ export function showTasteWhen(when) {
 }
 
 /**
+ * Whether a fish's tooltip says it is endangered (D140): only to a
+ * Conservationist, the page says.
+ * @type {() => boolean}
+ */
+let statusShown = () => false;
+/** @param {() => boolean} when */
+export function showStatusWhen(when) {
+  statusShown = when;
+}
+
+/**
  * How a species eats, as tooltip lines (D138): its grade, and a sentence.
  * @param {string} species
  * @returns {import('./tooltip.js').Tip['lines']}
@@ -77,6 +88,7 @@ export function tipFor(thing) {
       lines: [
         { text: t('tip.fish') },
         { text: t('tip.size', { size: thing.fish.size }) },
+        ...(content.fish[thing.fish.species]?.endangered && statusShown() ? [{ text: t('tip.endangered'), tone: /** @type {const} */ ('bad') }] : []),
         // What it adds to the stew, and gives eaten raw (R19.4, R21.1).
         ...(content.fish[thing.fish.species]?.stew?.length ? [{ text: t('tip.stew', { effects: effectsText(content.fish[thing.fish.species].stew) }), tone: /** @type {const} */ ('good') }] : []),
         ...(tasteShown(thing.fish.species) ? tasteLines(thing.fish.species) : []),

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "What letting an endangered fish go earns a Conservationist (D140)",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "placeholder": {
+      "$ref": "common.schema.json#/definitions/placeholder"
+    },
+    "id": {
+      "const": "conservation"
+    },
+    "releasesPerLuck": {
+      "description": "Every this many endangered fish let go give 1 Luck.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "maxLuck": {
+      "description": "Until this much Luck has been earned so.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "xpPercent": {
+      "description": "After that, each one let go gives this share of the fish's XP, in percent, rounded up.",
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "id",
+    "releasesPerLuck",
+    "maxLuck",
+    "xpPercent"
+  ],
+  "additionalProperties": false
+}

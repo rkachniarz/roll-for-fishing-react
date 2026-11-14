@@ -28,6 +28,7 @@ import { stepTime } from './passage.js';
 import { conditionSources } from './conditions.js';
 import { startDive } from './dive.js';
 import { lookUnderwater, tended } from './pool.js';
+import { conserve } from './barter.js';
 import { championAt, championClass, championSources, championsHere, findChampion, poolKey, removeChampion, updateChampions } from './champions.js';
 
 export { poolKey };
@@ -968,7 +969,7 @@ export function releaseFish(state, choice) {
   // A class fish let go is an ordinary fish now (D114).
   const { champion, ...plain } = released;
   next.escaped[key] = [...(next.escaped[key] ?? []), { ...plain, tries: 0 }];
-  return { state: next, events: [{ type: 'released', fish: released }] };
+  return { state: next, events: [{ type: 'released', fish: released }, ...conserve(next, released)] };
 }
 
 /**

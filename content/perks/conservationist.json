@@ -1,0 +1,11 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "conservationist",
+  "placeholder": [
+    "description"
+  ],
+  "class": "any",
+  "kind": "passive",
+  "name": "Conservationist",
+  "description": "You can tell an endangered fish when you see one, and letting them go does you good."
+}

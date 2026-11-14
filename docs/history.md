@@ -420,3 +420,7 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   the player has met; two browser checks changed (the collection's fish got away under the new dice, and the dive's
   timer is waited for). The look reuses the title's water with the spot's own plants. Measured: 239 unit tests, a
   browser check that stocks a pool of 12, looks, and taps back to the bank; the artifact builds at 1041.0 kB.
+- **11.2** Endangered fish (D140): `endangered` on 16 fish, the Conservationist perk, `conserve` in
+  `src/engine/barter.js` called from both ways of letting a fish go, counted in a flag so the save needed no new
+  version. Six web searches for Red List statuses confirmed five species and left the rest to memory (REVIEW.md).
+  Measured: 240 unit tests, one of which checks that every spot has exactly two endangered kinds.

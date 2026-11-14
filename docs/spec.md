@@ -87,7 +87,8 @@ out; the splash only reveals the result. *(D63)*
 - **R3.6** A fish that gets away can be met again later, marked as "seen before", and the catch record remembers how many
   tries it took. A released fish (R8.3) joins the same pool; caught again, it counts as a new catch. *(D59, D60)*
   The pool is what lives at the spot: stocked with 2d6+3 fish the first time it is looked at, topped up by the day,
-  rolled anew each season and when it runs low; the wizard's Look Underwater shows it. *(D139)*
+  rolled anew each season and when it runs low; the wizard's Look Underwater shows it. *(D139)* A character with the
+  Conservationist perk is paid for letting an endangered fish go: Luck, then XP. *(D140)*
 
 ### R4: Fish and records
 

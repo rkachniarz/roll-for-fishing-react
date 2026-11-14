@@ -955,6 +955,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "endangered": true,
       "swims": "bottom",
       "stew": [
         {
@@ -1035,6 +1036,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "common",
+      "endangered": true,
       "swims": "bottom",
       "stew": [
         {
@@ -1420,6 +1422,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "endangered": true,
       "swims": "lower",
       "stew": [
         {
@@ -1540,6 +1543,7 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "rare",
+      "endangered": true,
       "swims": "bottom",
       "stew": [
         {
@@ -1620,6 +1624,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "epic",
+      "endangered": true,
       "swims": "upper",
       "stew": [
         {
@@ -1660,6 +1665,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "endangered": true,
       "swims": "lower",
       "stew": [
         {
@@ -1848,6 +1854,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "endangered": true,
       "swims": "upper",
       "stew": [
         {
@@ -2083,6 +2090,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "endangered": true,
       "swims": "lower",
       "stew": [
         {
@@ -2242,6 +2250,7 @@ export const content = {
       },
       "difficulty": 3,
       "rarity": "epic",
+      "endangered": true,
       "swims": "bottom",
       "stew": [
         {
@@ -2554,6 +2563,7 @@ export const content = {
       },
       "difficulty": 1,
       "rarity": "uncommon",
+      "endangered": true,
       "swims": "bottom",
       "stew": [
         {
@@ -2593,6 +2603,7 @@ export const content = {
       },
       "difficulty": -2,
       "rarity": "epic",
+      "endangered": true,
       "swims": "lower",
       "stew": [
         {
@@ -2631,6 +2642,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "uncommon",
+      "endangered": true,
       "swims": "upper",
       "stew": [
         {
@@ -2824,6 +2836,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "endangered": true,
       "swims": "upper",
       "stew": [
         {
@@ -2978,6 +2991,7 @@ export const content = {
       },
       "difficulty": 0,
       "rarity": "rare",
+      "endangered": true,
       "swims": "upper",
       "stew": [
         {
@@ -4232,6 +4246,7 @@ export const content = {
       },
       "difficulty": 2,
       "rarity": "epic",
+      "endangered": true,
       "swims": "lower",
       "stew": [
         {
@@ -4623,6 +4638,7 @@ export const content = {
       },
       "difficulty": -1,
       "rarity": "rare",
+      "endangered": true,
       "swims": "lower",
       "stew": [
         {
@@ -10706,6 +10722,16 @@ export const content = {
         }
       ]
     },
+    "conservationist": {
+      "id": "conservationist",
+      "placeholder": [
+        "description"
+      ],
+      "class": "any",
+      "kind": "passive",
+      "name": "perk.conservationist.name",
+      "description": "perk.conservationist.description"
+    },
     "ever-summoning": {
       "id": "ever-summoning",
       "class": "fishing-wizard",
@@ -11700,6 +11726,12 @@ export const content = {
           }
         ]
       }
+    },
+    "conservation": {
+      "id": "conservation",
+      "releasesPerLuck": 10,
+      "maxLuck": 2,
+      "xpPercent": 25
     },
     "fish-preferences": {
       "id": "fish-preferences",
@@ -14003,6 +14035,8 @@ export const strings = {
     "perk.bend-reality.description": "Right after a catch: bend reality around the fish, to make it bigger and rarer. With Rift Fishing, rift fish come twice as often.",
     "perk.bigger-bucket.name": "Bigger Bucket",
     "perk.bigger-bucket.description": "Your bucket holds 4 more fish.",
+    "perk.conservationist.name": "Conservationist",
+    "perk.conservationist.description": "You can tell an endangered fish when you see one, and letting them go does you good.",
     "perk.ever-summoning.name": "Ever-Summoning",
     "perk.ever-summoning.description": "Summon Fish works by itself, every other cast.",
     "perk.fence.name": "Fence",
@@ -14397,6 +14431,7 @@ export const placeholderKeys = [
   "location.town.spots.square.name",
   "perk.aquarium.description",
   "perk.aquarium.name",
+  "perk.conservationist.description",
   "perk.look-underwater.description",
   "perk.sushi-enjoyer.description",
   "rules.cold.coldLevels.chilly.name",

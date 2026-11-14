@@ -29,6 +29,10 @@
       "type": "array",
       "items": { "$ref": "common.schema.json#/definitions/effect" }
     },
+    "endangered": {
+      "description": "An endangered fish (D140): letting one go pays a character with the Conservationist perk (rules/conservation.json). Two per spot, and a few rift fish.",
+      "type": "boolean"
+    },
     "taste": {
       "description": "How it eats (D138): a bowl of stew lasts longer or shorter for it, and so does its buff eaten raw (rules/stew.json). Plain if left out.",
       "enum": ["poor", "plain", "good", "delicacy"]

@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schemas/conservation.schema.json",
+  "id": "conservation",
+  "releasesPerLuck": 10,
+  "maxLuck": 2,
+  "xpPercent": 25
+}

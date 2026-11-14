@@ -9,6 +9,7 @@
   },
   "difficulty": -1,
   "rarity": "rare",
+  "endangered": true,
   "swims": "lower",
   "stew": [
     {

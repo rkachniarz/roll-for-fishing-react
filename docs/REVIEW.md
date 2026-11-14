@@ -24,6 +24,34 @@ Items with no note are left alone.
 
 Newest first.
 
+## Endangered fish and the Conservationist (2026-11-14, D140, 11.2)
+
+- **Which fish, two per spot.** The status belongs to the species, and many fish live at several spots, so the picks
+  had to overlap exactly for every spot to have two:
+  reedy shore: Common carp, Muskellunge · swamp: Mainland eel, Mainland mudminnow · still water: Common carp, Grass
+  carp · rocky shore: Frostfin char, Wildlands perch · open water: Mainland whitefish, Omul · deep water: Lake
+  sturgeon, Frostfin char · upper river: Huchen, Taimen · lower river: Lake sturgeon, Golden dorado · river mouth:
+  Mainland eel, Lake sturgeon. **The Mage Tower's first pool has only one** (Golden dorado): any second pick there
+  would have given another spot three.
+- **What the lookup confirmed** (web searches, secondary sources citing the Red List; the Red List's own pages didn't
+  come up): European eel, critically endangered; lake sturgeon, endangered since 2022; huchen, endangered; Siberian
+  taimen, vulnerable (an older source says critically endangered); European mudminnow, vulnerable. Common carp:
+  sources disagree (vulnerable in one, least concern in another).
+- **Not confirmed, picked from memory or to make up the two:** Mainland whitefish and Omul (searches found nothing);
+  Golden dorado (nothing found; threatened in parts of its range, as far as I know); and four that are, as far as I
+  know, **not** threatened in our world and are there only to fill a spot's second place: Muskellunge, Grass carp,
+  Frostfin (Arctic) char, Wildlands perch.
+- **Really threatened, but left out to keep to two per spot:** the Sterlet and the Frostfin (Siberian) sturgeon, both
+  on the Red List; flagging either would give the river mouth three or four.
+- **Rift fish, three:** Coelacanth, Giant freshwater stingray (endangered in the sources found), Golden mahseer
+  (endangered in one source). The coelacanth's status didn't come up in the searches; critically endangered from memory.
+- **Both ways of letting go count:** from a fish's options, and when a full bucket makes you choose. Not in town.
+- **The first 20 releases show almost nothing:** Luck is hidden, so the 10th and 20th only log a hint ("The water
+  seems to think better of you."), a placeholder; the other 18 log nothing beyond the release.
+- **A fish let go can be caught and let go again,** and counts again. The pool makes that easier than before
+  (Recall, the dive).
+- **The tooltip line is red** ("Endangered"), the tone used for bad effects. The perk's description is a placeholder.
+
 ## The fish under the surface, and Look Underwater (2026-11-14, D139)
 
 - **Every spot now starts with 5 to 15 fish in its pool, for every class,** as you chose. A pool fish comes back on

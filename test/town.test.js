@@ -351,6 +351,40 @@ test('Look Underwater: a shadow, then colours, then its name; offered to the wiz
   assert.equal(offered('fish-fighter'), 0);
 });
 
+test('Conservationist: endangered fish let go give Luck twice, then a quarter of their XP (D140)', () => {
+  const rules = content.rules.conservation;
+  const sturgeon = { ...fish('lake-sturgeon', 'epic'), xp: 9 };
+  const base = /** @type {GameState} */ ({ ...game(), bucket: [{ fish: sturgeon, count: 40 }, { fish: fish('roach', 'common'), count: 5 }] });
+  const plain = letGo(base, 0);
+  assert.deepEqual(plain.events.map((e) => e.type), ['released'], 'nothing without the perk');
+  assert.equal(plain.state.flags['endangered-released'], undefined);
+
+  let s = /** @type {GameState} */ ({ ...base, character: { ...base.character, xp: content.rules.levels.xp[2], perks: { 1: 'jump-in', 2: 'conservationist' } } });
+  assert.deepEqual(letGo(s, 1).events.map((e) => e.type), ['released'], 'a roach is not endangered');
+  const luck = s.character.luck;
+  const xp = s.character.xp;
+  for (let n = 1; n <= rules.releasesPerLuck * rules.maxLuck; n++) {
+    const out = letGo(s, 0);
+    s = out.state;
+    assert.equal(out.events.some((e) => e.type === 'conserved'), n % rules.releasesPerLuck === 0, `fish ${n}`);
+  }
+  assert.equal(s.character.luck, luck + rules.maxLuck);
+  assert.equal(s.character.xp, xp, 'no XP until the Luck is earned');
+  const after = letGo(s, 0);
+  assert.equal(after.state.character.luck, luck + rules.maxLuck, 'no more Luck');
+  assert.equal(after.state.character.xp, xp + 3, 'a quarter of 9 XP, rounded up');
+  assert.equal(after.events.find((e) => e.type === 'conserved')?.xp, 3);
+
+  // Every spot with fish has two endangered kinds; the tower's pool has one.
+  for (const loc of Object.values(content.locations)) {
+    for (const spot of loc.spots ?? []) {
+      if (!spot.fish?.length) continue;
+      const n = spot.fish.filter((/** @type {{ id: string }} */ e) => content.fish[e.id]?.endangered).length;
+      assert.equal(n, loc.id === 'mage-tower' ? 1 : 2, `${loc.id}/${spot.id}`);
+    }
+  }
+});
+
 test('white things come up as their own tier, more for a rogue (R19.1)', () => {
   /** @param {string} classId */
   const count = (classId) => {

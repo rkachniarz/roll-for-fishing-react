@@ -24,7 +24,8 @@ is where the others may lead.
   step towards 11.12): each spot's pool is stocked with 2d6+3 fish when first looked at and kept (a fish a day, a
   new roll each season and under two fish); the pool's fish are the shadows on the water and the dive's fish; the
   look shows them, a shadow, then colours, then by name.
-- [ ] **11.2** Conservation status: a field per fish; releasing an endangered one (sturgeon, eel) earns something.
+- [x] **11.2** Conservation status (D140): two endangered fish per spot; the Conservationist perk shows it and pays
+  for letting them go, Luck twice and then XP.
 - [ ] **11.3** How they fight on the line: a few fight styles (jumper, head-shaker, long runner), each with its own
   strike lines.
 - [ ] **11.4** Weight from length: each species' published length-weight constants (FishBase); a caught fish has a
@@ -49,7 +50,8 @@ is where the others may lead.
   and balance.
 
 **Where things stand (2026-11-14):** Phase 11 has begun: 11.1, taste (D138), and 11.13, the stocked pools and Look
-Underwater (D139), are in, their guesses at the top of REVIEW.md; 11.2, conservation status, is next. Before it, Phase 10, the owner's brainstorm of the night, the town and the stew, was built
+Underwater (D139), are in, and so is 11.2, endangered fish and the Conservationist (D140), their guesses at the top of REVIEW.md; 11.3, how
+fish fight on the line, is next. Before it, Phase 10, the owner's brainstorm of the night, the town and the stew, was built
 overnight with placeholders (D123–D129; questions at the top of REVIEW.md): a town with an inn, a room and an
 Alchemist who keeps hours; barter; the perpetual stew and every fish's stew buff; cold and night fishing; white items
 as their own tier; a fish's options menu; fish that swim (the aquarium, the dive, shadows under the surface); the
