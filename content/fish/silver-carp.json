@@ -10,6 +10,8 @@
   "difficulty": 1,
   "rarity": "rare",
   "swims": "upper",
+  "fights": "jumper",
+  "fighter": true,
   "stew": [
     {
       "value": "fishFind",

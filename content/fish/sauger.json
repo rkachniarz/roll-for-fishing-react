@@ -10,6 +10,7 @@
   "difficulty": 0,
   "rarity": "rare",
   "swims": "bottom",
+  "fights": "head-shaker",
   "stew": [
     {
       "value": "warmth",

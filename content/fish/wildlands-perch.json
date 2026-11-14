@@ -11,6 +11,7 @@
   "rarity": "rare",
   "endangered": true,
   "swims": "lower",
+  "fights": "head-shaker",
   "stew": [
     {
       "value": "fishFind",

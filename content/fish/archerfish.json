@@ -11,6 +11,7 @@
   "difficulty": -1,
   "rarity": "uncommon",
   "swims": "surface",
+  "fights": "jumper",
   "stew": [
     {
       "value": "naturalCatch",

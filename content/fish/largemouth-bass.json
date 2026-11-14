@@ -10,6 +10,8 @@
   "difficulty": 0,
   "rarity": "rare",
   "swims": "lower",
+  "fights": "jumper",
+  "fighter": true,
   "stew": [
     {
       "value": "fishingSkill",

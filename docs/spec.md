@@ -89,6 +89,9 @@ out; the splash only reveals the result. *(D63)*
   The pool is what lives at the spot: stocked with 2d6+3 fish the first time it is looked at, topped up by the day,
   rolled anew each season and when it runs low; the wizard's Look Underwater shows it. *(D139)* A character with the
   Conservationist perk is paid for letting an endangered fish go: Luck, then XP. *(D140)*
+- **R3.7** Fish fight their own way: each species has a fight style that tilts the roll by how it was struck, and
+  now and then a fish makes its move after the roll has landed it, which the player must answer in time. Calming
+  items switch it off. *(D141)*
 
 ### R4: Fish and records
 

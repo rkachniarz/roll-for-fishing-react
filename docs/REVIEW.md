@@ -24,6 +24,36 @@ Items with no note are left alone.
 
 Newest first.
 
+## How fish fight (2026-11-14, D141, 11.3)
+
+- **Which style each fish has** is Claude's, from what it knows of the real fish, not looked up. The ones most
+  worth a look: roach, chub, ide and the small silver fish as **jumpers** (they flip at the surface, but hardly fight);
+  bluegill and pumpkinseed as **head-shakers** (they circle more than shake); lake trout, char and the whitefish as
+  **long runners**; mangrove jack as a **bottom-hugger** (it dives for the snags, which is its fame). The made-up
+  strange fish are placeholders. The whole list is in the fish files (`fights`).
+- **The famous fighters (35% manoeuvre):** pike, Cassalan pike, muskellunge, huchen, taimen, asp, the salmon,
+  smallmouth and largemouth bass, golden dorado, silver carp, common carp, grass carp, wels, both big sturgeons; and in
+  the rift arapaima, barramundi, payara, peacock bass, goliath tigerfish, bull shark, golden mahseer, mangrove jack,
+  giant freshwater stingray. Everyone else 5%.
+- **The numbers are guesses:** each style's tilt (±1, −2, natural 1–2), the 1.5 s to answer a manoeuvre, its delay of
+  0.5–1.2 s after the strike, the Rogue's +2.
+- **Long runner without a line:** "harder on a light line" became "−2 with no line equipped", since lines have no
+  strength yet. A line's strength could come later.
+- **Striking before the fish moves throws the hook.** That makes a nervous double tap costly. Say if a tap before it
+  moves should just be ignored instead.
+- **The manoeuvre only happens when the roll would have landed the fish;** if the roll failed, the fish simply got
+  away, as before. So it can only ever cost a catch, and the Rogue's +2 is what pays them back.
+- **The roll's line shows the tilt as "its fight",** not the style's name, so the log doesn't give the style away
+  before the journal does. The text over the bobber during a manoeuvre ("It leaps!", "It dives for the weed!") does
+  hint at it.
+- **The calming items:** Calming draught at the Alchemist for a waterweed, a pebble and a vial, 10 casts; the
+  Paralysing rod in the common treasure at weight 1, its downside +6 scatter (every item with an upside has one,
+  R8.5). Names and texts are placeholders.
+- **Balance:** the sim's catch rates didn't move, but it strikes in 250–900 ms, mostly fast; slow strikers will feel
+  the bottom-huggers and rollers more.
+- **Not checked in a browser:** the manoeuvre's splash and its text over the bobber. The engine's side has unit tests,
+  but no browser check reaches a manoeuvre, since one can't be forced from the dev bench yet.
+
 ## Endangered fish and the Conservationist (2026-11-14, D140, 11.2)
 
 - **Which fish, two per spot.** The status belongs to the species, and many fish live at several spots, so the picks

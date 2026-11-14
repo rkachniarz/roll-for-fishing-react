@@ -243,6 +243,16 @@ function unknownItemSlot(id) {
 }
 
 /**
+ * How a species fights, for its journal entry (D141): its style's line.
+ * @param {string} id
+ * @returns {import('./tooltip.js').Tip['lines']}
+ */
+function fightLines(id) {
+  const style = content.rules['fight-styles']?.styles.find((/** @type {{ id: string }} */ s) => s.id === content.fish[id]?.fights);
+  return style ? [{ text: `"${t(style.journal)}"`, tone: 'flavor' }] : [];
+}
+
+/**
  * A species in the collection (R4.3): its icon and its records on a tap, or,
  * if it has only been seen or heard of here, its silhouette and no name.
  * @param {GameState} state
@@ -263,6 +273,8 @@ function speciesSlot(state, id, foundHere) {
         icon: iconName({ kind: 'fish', id }),
         lines: [
           { text: t('journal.entry', { caught: e.caught, smallest: e.smallest.size, largest: e.largest.size, average: Math.round(e.totalSize / e.caught) }) },
+          // How it fights, once caught (D141).
+          ...fightLines(id),
           // How it eats, once the player has eaten one (D138).
           ...(state.tasted?.[id] ? tasteLines(id) : []),
         ],

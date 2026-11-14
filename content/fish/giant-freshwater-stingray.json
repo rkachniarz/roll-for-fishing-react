@@ -12,6 +12,8 @@
   "rarity": "rare",
   "endangered": true,
   "swims": "bottom",
+  "fights": "bottom-hugger",
+  "fighter": true,
   "stew": [
     {
       "value": "featureChance",

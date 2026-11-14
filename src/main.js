@@ -181,7 +181,7 @@ function pausing() {
 
 /** The line is out, or about to go out again: no changing equipment (D83). */
 function lineOut() {
-  return cast.phase === 'waiting' || cast.phase === 'bite' || pausing();
+  return cast.phase === 'waiting' || cast.phase === 'bite' || cast.phase === 'fight' || pausing();
 }
 
 /**
@@ -230,7 +230,7 @@ function apply(out) {
   };
   // While a cast is in progress, only the checkpoint is saved (D74).
   if (out.checkpoint) save(out.checkpoint);
-  else if (changed && cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
+  else if (changed && cast.phase !== 'waiting' && cast.phase !== 'bite' && cast.phase !== 'fight') save(state);
   render();
   if (roll && cast.phase === 'done' && showDice(settings, reducedMotion.matches)) rollDice(cast.outcome.rolls[0], reveal, flights);
   else {
@@ -533,7 +533,7 @@ const buffBar = createBuffBar($('buffBar'), (id) => {
   if (!state) return;
   state = cancelBuff(state, id);
   // Mid-cast, the resolved cast will save it (D74).
-  if (cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
+  if (cast.phase !== 'waiting' && cast.phase !== 'bite' && cast.phase !== 'fight') save(state);
   render();
 });
 
@@ -576,7 +576,7 @@ function useFromBar(id) {
     };
   }
   // Mid-cast the checkpoint stays the save (D74); the cast saves it when it ends.
-  if (cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
+  if (cast.phase !== 'waiting' && cast.phase !== 'bite' && cast.phase !== 'fight') save(state);
   logEvents(out.events);
   render();
   promptPlayer();
@@ -591,6 +591,8 @@ function renderActions() {
 // ---------- The frame loop ----------
 
 let buffSavedAt = 0;
+/** The manoeuvre already shown, by when it came (D141). */
+let fightShownAt = 0;
 scene.app.ticker.add((ticker) => {
   const now = performance.now();
   if (state) {
@@ -600,6 +602,14 @@ scene.app.ticker.add((ticker) => {
     if (cast.phase === 'waiting' && out.cast.phase === 'bite') {
       out.cast = { ...out.cast, biteAt: now };
       audio.play('splash');
+    }
+    // A fish's manoeuvre (D141): it splashes again, and says what it does.
+    if (cast.phase === 'fight' && out.cast.phase === 'fight' && now >= cast.fightAt && fightShownAt !== cast.fightAt) {
+      fightShownAt = cast.fightAt;
+      audio.play('splash');
+      const line = cast.line;
+      const style = line.kind === 'fish' ? content.rules['fight-styles'].styles.find((/** @type {{ id: string }} */ s) => s.id === line.fight?.style) : null;
+      if (style && cast.landing) floatText({ text: t(style.manoeuvre), tone: 'wild', at: scene.toClient(cast.landing), scale: scene.pixelScale() });
     }
     if (out.cast !== cast || out.state !== state) apply(out);
 
@@ -622,7 +632,8 @@ scene.app.ticker.add((ticker) => {
     // The dive's breath runs out (R20.3).
     if (state.dive) updateDive(now);
   }
-  scene.update(cast, now);
+  // A fish's manoeuvre looks like the wait and then the bite to the scene (D141).
+  scene.update(cast.phase === 'fight' ? /** @type {any} */ ({ ...cast, phase: now >= cast.fightAt ? 'bite' : 'waiting' }) : cast, now);
   updateDice(now);
 });
 
@@ -660,7 +671,7 @@ function describeEvent(e) {
       return e.seenBefore ? [...parts, ' ' + t('log.seenBefore')] : parts;
     }
     case 'escaped':
-      return tParts('log.escaped', { fish: fishLink(e.fish) });
+      return tParts(e.thrown ? 'log.thrown' : 'log.escaped', { fish: fishLink(e.fish) });
     case 'missed':
       return e.fish ? tParts('log.missed', { fish: fishLink(e.fish) }) : [t('log.missedSomething')];
     case 'found':
@@ -1252,7 +1263,7 @@ function learnPerk(id) {
   state = next;
   // Mid-cast the checkpoint stays the save (D74); the perk is saved when the
   // cast ends, and a reload before then only offers the choice again.
-  if (cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
+  if (cast.phase !== 'waiting' && cast.phase !== 'bite' && cast.phase !== 'fight') save(state);
   logEvents([{ type: 'perk', perk: id }]);
   render();
 }
@@ -1848,7 +1859,7 @@ function titleScene() {
 
 /** Back to the title screen from the menu, between casts. The game is already saved. */
 function toTitle() {
-  if (!state || cast.phase === 'waiting' || cast.phase === 'bite') return;
+  if (!state || cast.phase === 'waiting' || cast.phase === 'bite' || cast.phase === 'fight') return;
   // Dice still rolling would land their lines in the next game's log.
   dropDice();
   save(state);
@@ -1871,7 +1882,7 @@ const bench = DEV
       getState: () => state,
       // Only between casts, so a cast in progress keeps its checkpoint (D74).
       setState: (/** @type {GameState} */ next) => {
-        if (cast.phase === 'waiting' || cast.phase === 'bite') return;
+        if (cast.phase === 'waiting' || cast.phase === 'bite' || cast.phase === 'fight') return;
         // A new level from the bench gives its level-1 perk as a cast would (D96).
         const settled = settlePerks(next);
         state = settled.state;

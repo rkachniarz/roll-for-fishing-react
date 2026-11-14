@@ -26,8 +26,8 @@ is where the others may lead.
   look shows them, a shadow, then colours, then by name.
 - [x] **11.2** Conservation status (D140): two endangered fish per spot; the Conservationist perk shows it and pays
   for letting them go, Luck twice and then XP.
-- [ ] **11.3** How they fight on the line: a few fight styles (jumper, head-shaker, long runner), each with its own
-  strike lines.
+- [x] **11.3** How they fight on the line (D141): five styles that tilt the roll, a rare manoeuvre to answer in time
+  (likelier for famous fighters), the Rogue's showmanship, a calming draught and a paralysing rod.
 - [ ] **11.4** Weight from length: each species' published length-weight constants (FishBase); a caught fish has a
   weight, and the journal and records show it.
 - [ ] **11.5** How they swim: a speed and burst rate per species (a pike still then lunging, an eel slow and winding,
@@ -50,8 +50,8 @@ is where the others may lead.
   and balance.
 
 **Where things stand (2026-11-14):** Phase 11 has begun: 11.1, taste (D138), and 11.13, the stocked pools and Look
-Underwater (D139), are in, and so is 11.2, endangered fish and the Conservationist (D140), their guesses at the top of REVIEW.md; 11.3, how
-fish fight on the line, is next. Before it, Phase 10, the owner's brainstorm of the night, the town and the stew, was built
+Underwater (D139), are in, 11.2, endangered fish and the Conservationist (D140), and 11.3, how fish fight (D141), their guesses at the top of
+REVIEW.md; 11.4, weight from length, is next. Before it, Phase 10, the owner's brainstorm of the night, the town and the stew, was built
 overnight with placeholders (D123–D129; questions at the top of REVIEW.md): a town with an inn, a room and an
 Alchemist who keeps hours; barter; the perpetual stew and every fish's stew buff; cold and night fishing; white items
 as their own tier; a fish's options menu; fish that swim (the aquarium, the dive, shadows under the surface); the

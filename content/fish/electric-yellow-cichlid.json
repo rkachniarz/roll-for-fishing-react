@@ -11,6 +11,7 @@
   "difficulty": -2,
   "rarity": "uncommon",
   "swims": "lower",
+  "fights": "head-shaker",
   "stew": [
     {
       "value": "revealResistance",

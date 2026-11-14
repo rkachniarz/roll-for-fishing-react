@@ -18,7 +18,7 @@ import { emptyEquipment } from './equipment.js';
 import { knownKey, locationList } from './knowledge.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 13;
+export const SAVE_VERSION = 14;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -28,9 +28,9 @@ export const SAVE_VERSION = 13;
  * events: the event meter and which event it picks · abilities: dice an
  * ability rolls when used (D96) · champions: class fish appearing and acting (D114) ·
  * taste: a raw fish sitting badly, and which fish a bowl of stew tastes of (D138) ·
- * pool: the fish a spot's pool is stocked with (D139).
+ * pool: the fish a spot's pool is stocked with (D139) · fight: a fish's manoeuvre on the line (D141).
  */
-export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions', 'taste', 'pool'];
+export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions', 'taste', 'pool', 'fight'];
 
 /**
  * @typedef {import('./fish.js').FishInstance & { tries?: number, wild?: boolean, looks?: number }} PoolFish  A fish
@@ -317,6 +317,8 @@ const MIGRATIONS = {
     pools: {},
     streams: { ...save.streams, taste: deriveSeed(save.seed, 'taste'), pool: deriveSeed(save.seed, 'pool') },
   }),
+  // 13 -> 14: fish fight their own way (D141), with a stream for their manoeuvres.
+  13: (save) => ({ ...save, streams: { ...save.streams, fight: deriveSeed(save.seed, 'fight') } }),
 };
 
 /** @param {GameState} state */

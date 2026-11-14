@@ -11,6 +11,8 @@
   "rarity": "epic",
   "endangered": true,
   "swims": "upper",
+  "fights": "long-runner",
+  "fighter": true,
   "stew": [
     {
       "value": "fishFind",

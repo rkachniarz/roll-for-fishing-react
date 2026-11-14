@@ -11,6 +11,7 @@
   "rarity": "rare",
   "endangered": true,
   "swims": "upper",
+  "fights": "long-runner",
   "stew": [
     {
       "value": "reactionFast",

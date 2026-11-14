@@ -12,6 +12,7 @@
   "rarity": "epic",
   "endangered": true,
   "swims": "bottom",
+  "fights": "bottom-hugger",
   "stew": [
     {
       "value": "riftChance",

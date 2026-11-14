@@ -385,6 +385,70 @@ test('Conservationist: endangered fish let go give Luck twice, then a quarter of
   }
 });
 
+test('fight styles: every fish has one; each tilts the roll by the strike; calm fish fight plainly (D141)', () => {
+  const rules = content.rules['fight-styles'];
+  const ids = rules.styles.map((/** @type {{ id: string }} */ s) => s.id);
+  for (const f of Object.values(content.fish)) assert.ok(ids.includes(f.fights), `${f.id} fights`);
+  /** A cast with a fish of this species on the line, from many seeds. @param {string} species @param {GameState} [base] */
+  const lines = (species, base) => {
+    const out = [];
+    for (let seed = 1; seed <= 300 && out.length < 120; seed++) {
+      const s = /** @type {GameState} */ ({ ...(base ?? game({ seed })), seed, streams: game({ seed }).streams });
+      const c = castLine({ ...s, features: [], champions: {}, escaped: {}, pools: {} }, 0).cast;
+      if (c.line?.kind === 'fish' && c.line.fish.species === species) out.push(c.line);
+    }
+    return out;
+  };
+  // The reedy shore's first fish, the roach, is a jumper: +1 fast, −1 slow.
+  const roach = lines('roach');
+  assert.ok(roach.length > 20, String(roach.length));
+  assert.deepEqual(roach[0].fight.tilt, { fast: 1, bad: -1 });
+  const moves = roach.filter((l) => l.fight.manoeuvre).length;
+  assert.ok(moves < roach.length * 0.2, `a roach moves rarely: ${moves} of ${roach.length}`);
+  // Calmed: no fight at all.
+  const calm = game();
+  calm.buffs = [{ id: 'calm', source: 'calm', effects: [{ value: 'calmFish', add: 1 }], casts: 5 }];
+  assert.ok(lines('roach', calm).every((l) => !l.fight));
+});
+
+test('a manoeuvre: the roll landed it, then it moves, and the next strike must come in time (D141)', async () => {
+  const { strike, fightStrike, tickCast, TIMING } = await import('../src/engine/cast.js');
+  const dice = { roll20Kept: () => ({ result: 10 }) };
+  const bite = /** @type {any} */ ({ phase: 'bite', castAt: 0, biteAt: 1000 });
+  // A head-shaker throws the hook on a low natural roll, whatever the total.
+  const low = strike(bite, 1100, /** @type {any} */ ({ roll20Kept: () => ({ result: 2 }) }), { difficulty: 0, throwsOn: 2 });
+  assert.equal(low.phase === 'done' && low.outcome.result, 'escaped');
+  assert.equal(low.phase === 'done' && low.outcome.thrown, true);
+  // A jumper struck fast gets +1.
+  const fast = strike(bite, 1100, /** @type {any} */ (dice), { difficulty: 12, tilt: { fast: 1 } });
+  assert.equal(fast.phase === 'done' && fast.outcome.result, 'caught', '10 + 1 fast + 1 its fight');
+  // The fight: too early throws it, in time lands it, too late throws it.
+  const held = { result: 'caught', rolls: [] };
+  const fight = /** @type {any} */ ({ phase: 'fight', castAt: 0, biteAt: 1000, fightAt: 2000, held });
+  assert.equal(/** @type {any} */ (fightStrike(fight, 1900)).outcome.thrown, true, 'before it moves');
+  assert.equal(/** @type {any} */ (fightStrike(fight, 2300)).outcome.result, 'caught', 'in time');
+  const late = /** @type {any} */ (tickCast(fight, 2000 + TIMING.fightMs));
+  assert.equal(late.outcome.thrown, true, 'nobody answered');
+  assert.equal(late.endedAt, 2000 + TIMING.fightMs);
+});
+
+test('the Rogue shows off on a fish that makes its move; the rod and the draught calm fish (D141)', () => {
+  const rogue = content.classes['rogue-fisher'].effects.find((/** @type {{ value: string }} */ e) => e.value === 'manoeuvreBonus');
+  assert.equal(rogue?.add, 2);
+  assert.ok(content.items['paralysing-rod'].effects.some((/** @type {{ value: string }} */ e) => e.value === 'calmFish'));
+  assert.equal(content.buffs[content.items['calming-draught'].use.buff].effects[0].value, 'calmFish');
+  assert.ok(content.vendors.alchemist.offers.some((/** @type {{ id: string }} */ o) => o.id === 'calming-draught'));
+  // A rogue's line, when the fish moves, has the bonus in its mods.
+  for (let seed = 1; seed <= 400; seed++) {
+    const s = game({ classId: 'rogue-fisher', seed });
+    const c = castLine({ ...s, features: [], champions: {} }, 0).cast;
+    if (c.line?.kind !== 'fish' || !c.line.fight?.manoeuvre) continue;
+    assert.ok(c.line.player.mods.some((/** @type {{ label: string, value: number }} */ m) => m.label === 'showmanship' && m.value === 2));
+    return;
+  }
+  assert.fail('no manoeuvre in 400 casts');
+});
+
 test('white things come up as their own tier, more for a rogue (R19.1)', () => {
   /** @param {string} classId */
   const count = (classId) => {

@@ -16,6 +16,8 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "surface",
+      "fights": "jumper",
+      "fighter": true,
       "stew": [
         {
           "value": "eventMeterFill",
@@ -55,6 +57,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
+      "fights": "jumper",
       "stew": [
         {
           "value": "naturalCatch",
@@ -93,6 +96,8 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "fights": "jumper",
+      "fighter": true,
       "stew": [
         {
           "value": "fishingSkill",
@@ -132,6 +137,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "reactionFast",
@@ -176,6 +182,8 @@ export const content = {
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "jumper",
+      "fighter": true,
       "stew": [
         {
           "value": "greedyChance",
@@ -214,6 +222,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "upper",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishingSkill",
@@ -254,6 +263,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "featureChance",
@@ -293,6 +303,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "surface",
+      "fights": "jumper",
       "stew": [
         {
           "value": "fishFind",
@@ -332,6 +343,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "treasureFind",
@@ -371,6 +383,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishingSkill",
@@ -409,6 +422,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "fishFind",
@@ -448,6 +462,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "reactionFast",
@@ -490,6 +505,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "jumper",
       "stew": [
         {
           "value": "baitRecovery",
@@ -531,6 +547,8 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "upper",
+      "fights": "long-runner",
+      "fighter": true,
       "stew": [
         {
           "value": "eventMeterFill",
@@ -568,6 +586,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "common",
       "swims": "bottom",
+      "fights": "roller",
       "stew": [
         {
           "value": "warmth",
@@ -607,6 +626,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "upper",
+      "fights": "roller",
       "stew": [
         {
           "value": "twinChance",
@@ -645,6 +665,8 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
+      "fights": "head-shaker",
+      "fighter": true,
       "stew": [
         {
           "value": "fishingSkill",
@@ -684,6 +706,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "reactionFast",
@@ -727,6 +750,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "lower",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "warmth",
@@ -763,6 +787,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishingSkill",
@@ -801,6 +826,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "fishingSkill",
@@ -839,6 +865,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "fishFind",
@@ -877,6 +904,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "warmth",
@@ -917,6 +945,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
+      "fights": "roller",
       "stew": [
         {
           "value": "stuffFind",
@@ -957,6 +986,7 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "riftChance",
@@ -994,6 +1024,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "reactionFast",
@@ -1038,6 +1069,8 @@ export const content = {
       "rarity": "common",
       "endangered": true,
       "swims": "bottom",
+      "fights": "long-runner",
+      "fighter": true,
       "stew": [
         {
           "value": "reactionFast",
@@ -1081,6 +1114,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "fishFind",
@@ -1120,6 +1154,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
+      "fights": "jumper",
       "stew": [
         {
           "value": "fishFind",
@@ -1155,6 +1190,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "reactionFast",
@@ -1192,6 +1228,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "epic",
       "swims": "lower",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "greedyChance",
@@ -1228,6 +1265,7 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "bottom",
+      "fights": "roller",
       "stew": [
         {
           "value": "featureChance",
@@ -1266,6 +1304,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "revealResistance",
@@ -1305,6 +1344,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "fishFind",
@@ -1345,6 +1385,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "surface",
+      "fights": "jumper",
       "stew": [
         {
           "value": "revealResistance",
@@ -1388,6 +1429,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "twinChance",
@@ -1424,6 +1466,7 @@ export const content = {
       "rarity": "uncommon",
       "endangered": true,
       "swims": "lower",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "fishFind",
@@ -1463,6 +1506,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "treasureFind",
@@ -1501,6 +1545,8 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
+      "fights": "long-runner",
+      "fighter": true,
       "stew": [
         {
           "value": "reactionFast",
@@ -1545,6 +1591,8 @@ export const content = {
       "rarity": "rare",
       "endangered": true,
       "swims": "bottom",
+      "fights": "bottom-hugger",
+      "fighter": true,
       "stew": [
         {
           "value": "featureChance",
@@ -1583,6 +1631,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "wildCast",
@@ -1626,6 +1675,8 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "fights": "jumper",
+      "fighter": true,
       "stew": [
         {
           "value": "fishingSkill",
@@ -1667,6 +1718,8 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "fights": "long-runner",
+      "fighter": true,
       "stew": [
         {
           "value": "wildCast",
@@ -1709,6 +1762,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "fishFind",
@@ -1748,6 +1802,8 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "upper",
+      "fights": "head-shaker",
+      "fighter": true,
       "stew": [
         {
           "value": "featureChance",
@@ -1785,6 +1841,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "warmth",
@@ -1821,6 +1878,7 @@ export const content = {
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "greedyChance",
@@ -1856,6 +1914,8 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "fights": "long-runner",
+      "fighter": true,
       "stew": [
         {
           "value": "fishFind",
@@ -1894,6 +1954,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "surface",
+      "fights": "jumper",
       "stew": [
         {
           "value": "warmth",
@@ -1933,6 +1994,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "treasureFind",
@@ -1973,6 +2035,8 @@ export const content = {
       "difficulty": 2,
       "rarity": "rare",
       "swims": "upper",
+      "fights": "jumper",
+      "fighter": true,
       "stew": [
         {
           "value": "baitRecovery",
@@ -2012,6 +2076,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "fishFind",
@@ -2052,6 +2117,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "rare",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "wildCast",
@@ -2092,6 +2158,8 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "fights": "head-shaker",
+      "fighter": true,
       "stew": [
         {
           "value": "warmth",
@@ -2132,6 +2200,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "bottom",
+      "fights": "roller",
       "stew": [
         {
           "value": "revealResistance",
@@ -2173,6 +2242,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "treasureFind",
@@ -2212,6 +2282,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2252,6 +2323,8 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "bottom",
+      "fights": "long-runner",
+      "fighter": true,
       "stew": [
         {
           "value": "reactionFast",
@@ -2294,6 +2367,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2333,6 +2407,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "warmth",
@@ -2372,6 +2447,8 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "upper",
+      "fights": "jumper",
+      "fighter": true,
       "stew": [
         {
           "value": "fishingSkill",
@@ -2412,6 +2489,8 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "lower",
+      "fights": "jumper",
+      "fighter": true,
       "stew": [
         {
           "value": "fishingSkill",
@@ -2451,6 +2530,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "treasureFind",
@@ -2491,6 +2571,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "riftChance",
@@ -2529,6 +2610,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "reactionFast",
@@ -2565,6 +2647,7 @@ export const content = {
       "rarity": "uncommon",
       "endangered": true,
       "swims": "bottom",
+      "fights": "roller",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2605,6 +2688,7 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "fishFind",
@@ -2644,6 +2728,7 @@ export const content = {
       "rarity": "uncommon",
       "endangered": true,
       "swims": "upper",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "treasureFind",
@@ -2683,6 +2768,8 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
+      "fights": "bottom-hugger",
+      "fighter": true,
       "stew": [
         {
           "value": "timeSlip",
@@ -2722,6 +2809,7 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
+      "fights": "roller",
       "stew": [
         {
           "value": "riftChance",
@@ -2759,6 +2847,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "fishFind",
@@ -2799,6 +2888,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
+      "fights": "jumper",
       "stew": [
         {
           "value": "twinChance",
@@ -2838,6 +2928,8 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "fights": "head-shaker",
+      "fighter": true,
       "stew": [
         {
           "value": "fishingSkill",
@@ -2876,6 +2968,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "fishFind",
@@ -2915,6 +3008,8 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "lower",
+      "fights": "head-shaker",
+      "fighter": true,
       "stew": [
         {
           "value": "fishingSkill",
@@ -2954,6 +3049,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "surface",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishingSkill",
@@ -2993,6 +3089,7 @@ export const content = {
       "rarity": "rare",
       "endangered": true,
       "swims": "upper",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "reactionFast",
@@ -3037,6 +3134,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
+      "fights": "roller",
       "stew": [
         {
           "value": "timeSlip",
@@ -3072,6 +3170,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "twinChance",
@@ -3110,6 +3209,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "surface",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "stuffFind",
@@ -3153,6 +3253,8 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "upper",
+      "fights": "jumper",
+      "fighter": true,
       "stew": [
         {
           "value": "eventMeterFill",
@@ -3192,6 +3294,8 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "lower",
+      "fights": "head-shaker",
+      "fighter": true,
       "stew": [
         {
           "value": "featureChance",
@@ -3230,6 +3334,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishFind",
@@ -3267,6 +3372,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "upper",
+      "fights": "roller",
       "stew": [
         {
           "value": "wildCast",
@@ -3308,6 +3414,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishFind",
@@ -3347,6 +3454,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "treasureFind",
@@ -3387,6 +3495,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "greedyChance",
@@ -3426,6 +3535,7 @@ export const content = {
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "bottom",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "naturalCatch",
@@ -3463,6 +3573,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "fishFind",
@@ -3499,6 +3610,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishFind",
@@ -3537,6 +3649,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
+      "fights": "jumper",
       "stew": [
         {
           "value": "fishFind",
@@ -3576,6 +3689,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "reactionFast",
@@ -3616,6 +3730,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "warmth",
@@ -3655,6 +3770,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
+      "fights": "roller",
       "stew": [
         {
           "value": "fishingSkill",
@@ -3691,6 +3807,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "surface",
+      "fights": "jumper",
       "stew": [
         {
           "value": "featureChance",
@@ -3729,6 +3846,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "fishFind",
@@ -3768,6 +3886,8 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "fights": "jumper",
+      "fighter": true,
       "stew": [
         {
           "value": "fishFind",
@@ -3806,6 +3926,8 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "jumper",
+      "fighter": true,
       "stew": [
         {
           "value": "fishFind",
@@ -3845,6 +3967,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "reactionFast",
@@ -3885,6 +4008,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "bottom",
+      "fights": "roller",
       "stew": [
         {
           "value": "timeSlip",
@@ -3920,6 +4044,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "epic",
       "swims": "bottom",
+      "fights": "jumper",
       "stew": [
         {
           "value": "wildCast",
@@ -3962,6 +4087,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "reactionFast",
@@ -4004,6 +4130,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "reactionFast",
@@ -4041,6 +4168,7 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "lower",
+      "fights": "roller",
       "stew": [
         {
           "value": "wildCast",
@@ -4071,7 +4199,8 @@ export const content = {
       "placeholder": [
         "stew",
         "taste",
-        "tasteLine"
+        "tasteLine",
+        "fights"
       ]
     },
     "strange-giant-catfish": {
@@ -4086,6 +4215,7 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "bottom",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "twinChance",
@@ -4111,7 +4241,8 @@ export const content = {
       "placeholder": [
         "stew",
         "taste",
-        "tasteLine"
+        "tasteLine",
+        "fights"
       ]
     },
     "strange-perch": {
@@ -4126,6 +4257,7 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "timeSlip",
@@ -4152,7 +4284,8 @@ export const content = {
       "placeholder": [
         "stew",
         "taste",
-        "tasteLine"
+        "tasteLine",
+        "fights"
       ]
     },
     "strange-shark": {
@@ -4167,6 +4300,7 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "bottom",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "riftChance",
@@ -4192,7 +4326,8 @@ export const content = {
       "placeholder": [
         "stew",
         "taste",
-        "tasteLine"
+        "tasteLine",
+        "fights"
       ]
     },
     "strange-tilapia": {
@@ -4207,6 +4342,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "jumper",
       "stew": [
         {
           "value": "featureChance",
@@ -4233,7 +4369,8 @@ export const content = {
       "placeholder": [
         "stew",
         "taste",
-        "tasteLine"
+        "tasteLine",
+        "fights"
       ]
     },
     "taimen": {
@@ -4248,6 +4385,8 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "fights": "head-shaker",
+      "fighter": true,
       "stew": [
         {
           "value": "fishingSkill",
@@ -4287,6 +4426,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "fights": "bottom-hugger",
       "stew": [
         {
           "value": "fishFind",
@@ -4327,6 +4467,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "featureChance",
@@ -4365,6 +4506,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishingSkill",
@@ -4404,6 +4546,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "fights": "jumper",
       "stew": [
         {
           "value": "reactionFast",
@@ -4447,6 +4590,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishingSkill",
@@ -4486,6 +4630,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "fights": "roller",
       "stew": [
         {
           "value": "reactionFast",
@@ -4525,6 +4670,8 @@ export const content = {
       "difficulty": 3,
       "rarity": "rare",
       "swims": "bottom",
+      "fights": "long-runner",
+      "fighter": true,
       "stew": [
         {
           "value": "fishingSkill",
@@ -4563,6 +4710,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "bottom",
+      "fights": "long-runner",
       "stew": [
         {
           "value": "baitRecovery",
@@ -4601,6 +4749,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
+      "fights": "jumper",
       "stew": [
         {
           "value": "fishingSkill",
@@ -4640,6 +4789,7 @@ export const content = {
       "rarity": "rare",
       "endangered": true,
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishFind",
@@ -4680,6 +4830,7 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "featureChance",
@@ -4718,6 +4869,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishFind",
@@ -4754,6 +4906,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "lower",
+      "fights": "head-shaker",
       "stew": [
         {
           "value": "fishingSkill",
@@ -4926,6 +5079,18 @@ export const content = {
       "flavor": "item.broken-off-fishing-pole-tip.flavor",
       "rarity": "poor",
       "value": 1
+    },
+    "calming-draught": {
+      "id": "calming-draught",
+      "placeholder": true,
+      "category": "consumable",
+      "name": "item.calming-draught.name",
+      "flavor": "item.calming-draught.flavor",
+      "rarity": "common",
+      "value": 4,
+      "use": {
+        "buff": "calm"
+      }
     },
     "canadian-waterweed": {
       "id": "canadian-waterweed",
@@ -5626,6 +5791,27 @@ export const content = {
       "unique": true,
       "placeholder": [
         "flavor"
+      ]
+    },
+    "paralysing-rod": {
+      "id": "paralysing-rod",
+      "placeholder": true,
+      "category": "treasure",
+      "name": "item.paralysing-rod.name",
+      "flavor": "item.paralysing-rod.flavor",
+      "rarity": "rare",
+      "value": 6,
+      "unique": true,
+      "slot": "rod",
+      "effects": [
+        {
+          "value": "calmFish",
+          "add": 1
+        },
+        {
+          "value": "castScatter",
+          "add": 6
+        }
       ]
     },
     "plantain-float": {
@@ -7871,6 +8057,10 @@ export const content = {
           "weight": 1
         },
         {
+          "id": "paralysing-rod",
+          "weight": 1
+        },
+        {
           "id": "silk-line",
           "weight": 1
         },
@@ -9559,6 +9749,10 @@ export const content = {
         {
           "value": "stuffFind",
           "add": 10
+        },
+        {
+          "value": "manoeuvreBonus",
+          "add": 2
         }
       ],
       "placeholder": [
@@ -11006,6 +11200,20 @@ export const content = {
         "minutes": 240
       }
     },
+    "calm": {
+      "id": "calm",
+      "placeholder": true,
+      "name": "buff.calm.name",
+      "effects": [
+        {
+          "value": "calmFish",
+          "add": 1
+        }
+      ],
+      "duration": {
+        "casts": 10
+      }
+    },
     "glimmer-draught": {
       "id": "glimmer-draught",
       "placeholder": true,
@@ -11217,6 +11425,28 @@ export const content = {
             {
               "item": "canadian-waterweed",
               "count": 2
+            },
+            {
+              "item": "shiny-pebble",
+              "count": 1
+            },
+            {
+              "item": "alchemists-vial",
+              "count": 1
+            }
+          ],
+          "needs": []
+        },
+        {
+          "id": "calming-draught",
+          "gives": {
+            "item": "calming-draught",
+            "count": 1
+          },
+          "costs": [
+            {
+              "item": "canadian-waterweed",
+              "count": 1
             },
             {
               "item": "shiny-pebble",
@@ -11732,6 +11962,55 @@ export const content = {
       "releasesPerLuck": 10,
       "maxLuck": 2,
       "xpPercent": 25
+    },
+    "fight-styles": {
+      "id": "fight-styles",
+      "placeholder": true,
+      "manoeuvreChance": 5,
+      "fighterChance": 35,
+      "delay": {
+        "min": 500,
+        "max": 1200
+      },
+      "styles": [
+        {
+          "id": "jumper",
+          "name": "rules.fight-styles.styles.jumper.name",
+          "journal": "rules.fight-styles.styles.jumper.journal",
+          "manoeuvre": "rules.fight-styles.styles.jumper.manoeuvre",
+          "fast": 1,
+          "bad": -1
+        },
+        {
+          "id": "head-shaker",
+          "name": "rules.fight-styles.styles.head-shaker.name",
+          "journal": "rules.fight-styles.styles.head-shaker.journal",
+          "manoeuvre": "rules.fight-styles.styles.head-shaker.manoeuvre",
+          "throwsOn": 2
+        },
+        {
+          "id": "long-runner",
+          "name": "rules.fight-styles.styles.long-runner.name",
+          "journal": "rules.fight-styles.styles.long-runner.journal",
+          "manoeuvre": "rules.fight-styles.styles.long-runner.manoeuvre",
+          "withoutLine": -2
+        },
+        {
+          "id": "bottom-hugger",
+          "name": "rules.fight-styles.styles.bottom-hugger.name",
+          "journal": "rules.fight-styles.styles.bottom-hugger.journal",
+          "manoeuvre": "rules.fight-styles.styles.bottom-hugger.manoeuvre",
+          "bad": -2
+        },
+        {
+          "id": "roller",
+          "name": "rules.fight-styles.styles.roller.name",
+          "journal": "rules.fight-styles.styles.roller.journal",
+          "manoeuvre": "rules.fight-styles.styles.roller.manoeuvre",
+          "ok": -1,
+          "bad": -1
+        }
+      ]
     },
     "fish-preferences": {
       "id": "fish-preferences",
@@ -13610,6 +13889,8 @@ export const strings = {
     "item.bread-crumbs.flavor": "Small fish love them. So do ducks.",
     "item.broken-off-fishing-pole-tip.name": "Broken off fishing pole tip",
     "item.broken-off-fishing-pole-tip.flavor": "Lost in a fight. Possibly with oneself.",
+    "item.calming-draught.name": "Calming draught",
+    "item.calming-draught.flavor": "A few drops on the bait, and the fish forget to fight.",
     "item.canadian-waterweed.name": "Waterweed",
     "item.canadian-waterweed.flavor": "Grows fast enough to choke a lake, and breathes out bubbles in the sun.",
     "item.candle-stump.name": "A candle stump",
@@ -13716,6 +13997,8 @@ export const strings = {
     "item.old-skull.flavor": "Humanoid.",
     "item.old-torn-doll.name": "Old torn doll",
     "item.old-torn-doll.flavor": "A rag doll with one button eye. It's soaked through, and someone loved it once.",
+    "item.paralysing-rod.name": "Paralysing rod",
+    "item.paralysing-rod.flavor": "A faint hum runs down the line. Whatever bites goes still.",
     "item.plantain-float.name": "Floating draught",
     "item.plantain-float.flavor": "You feel lighter. Your casts drift where you meant them to.",
     "item.potion-of-breath.name": "Potion of breath",
@@ -14077,6 +14360,7 @@ export const strings = {
     "perk.trouble-magnet.description": "Things happen to you twice as often.",
     "set.old-lorebook.name": "An old lorebook",
     "buff.alchemists-secret.name": "The Alchemist's secret",
+    "buff.calm.name": "Calming draught",
     "buff.glimmer-draught.name": "Glimmer draught",
     "buff.hornwort-tonic.name": "Hornwort tonic",
     "buff.lobelia-antidote.name": "Lobelia antidote",
@@ -14106,6 +14390,21 @@ export const strings = {
     "rules.cold.coldLevels.cold.name": "Cold",
     "rules.cold.coldLevels.freezing.name": "Freezing",
     "rules.cold.night.name": "Night fishing",
+    "rules.fight-styles.styles.jumper.name": "Jumper",
+    "rules.fight-styles.styles.head-shaker.name": "Head-shaker",
+    "rules.fight-styles.styles.long-runner.name": "Long runner",
+    "rules.fight-styles.styles.bottom-hugger.name": "Bottom-hugger",
+    "rules.fight-styles.styles.roller.name": "Roller",
+    "rules.fight-styles.styles.jumper.journal": "Leaps clear of the water to shake the hook.",
+    "rules.fight-styles.styles.head-shaker.journal": "Shakes its head hard; a weak hookset comes loose.",
+    "rules.fight-styles.styles.long-runner.journal": "Runs long and strong; a light line won't hold it.",
+    "rules.fight-styles.styles.bottom-hugger.journal": "Likes to hug the bottom, and dives for the weed.",
+    "rules.fight-styles.styles.roller.journal": "Rolls and twists the line round itself.",
+    "rules.fight-styles.styles.jumper.manoeuvre": "It leaps!",
+    "rules.fight-styles.styles.head-shaker.manoeuvre": "It shakes its head!",
+    "rules.fight-styles.styles.long-runner.manoeuvre": "It runs!",
+    "rules.fight-styles.styles.bottom-hugger.manoeuvre": "It dives for the weed!",
+    "rules.fight-styles.styles.roller.manoeuvre": "It rolls!",
     "rules.fish-preferences.baits.maggot.name": "Maggot",
     "rules.fish-preferences.baits.bread.name": "Bread",
     "rules.fish-preferences.baits.worm.name": "Worm",
@@ -14267,6 +14566,7 @@ export const strings = {
 /** String keys whose text is a placeholder (D124); ?ph marks them. */
 export const placeholderKeys = [
   "buff.alchemists-secret.name",
+  "buff.calm.name",
   "buff.glimmer-draught.name",
   "buff.hornwort-tonic.name",
   "buff.lobelia-antidote.name",
@@ -14380,6 +14680,8 @@ export const placeholderKeys = [
   "fish.strange-shark.tasteLine",
   "fish.strange-tilapia.tasteLine",
   "item.alchemists-vial.flavor",
+  "item.calming-draught.flavor",
+  "item.calming-draught.name",
   "item.canadian-waterweed.flavor",
   "item.floating-water-plantain.flavor",
   "item.glimmer-draught.flavor",
@@ -14398,6 +14700,8 @@ export const placeholderKeys = [
   "item.moonlit-draught.name",
   "item.mysterious-resin.flavor",
   "item.old-torn-doll.flavor",
+  "item.paralysing-rod.flavor",
+  "item.paralysing-rod.name",
   "item.plantain-float.flavor",
   "item.plantain-float.name",
   "item.potion-of-breath.flavor",
@@ -14438,6 +14742,21 @@ export const placeholderKeys = [
   "rules.cold.coldLevels.cold.name",
   "rules.cold.coldLevels.freezing.name",
   "rules.cold.night.name",
+  "rules.fight-styles.styles.bottom-hugger.journal",
+  "rules.fight-styles.styles.bottom-hugger.manoeuvre",
+  "rules.fight-styles.styles.bottom-hugger.name",
+  "rules.fight-styles.styles.head-shaker.journal",
+  "rules.fight-styles.styles.head-shaker.manoeuvre",
+  "rules.fight-styles.styles.head-shaker.name",
+  "rules.fight-styles.styles.jumper.journal",
+  "rules.fight-styles.styles.jumper.manoeuvre",
+  "rules.fight-styles.styles.jumper.name",
+  "rules.fight-styles.styles.long-runner.journal",
+  "rules.fight-styles.styles.long-runner.manoeuvre",
+  "rules.fight-styles.styles.long-runner.name",
+  "rules.fight-styles.styles.roller.journal",
+  "rules.fight-styles.styles.roller.manoeuvre",
+  "rules.fight-styles.styles.roller.name",
   "rules.stew.name",
   "vendor.alchemist.name",
   "vendor.aquarium.name",

@@ -11,6 +11,8 @@
   "difficulty": 0,
   "rarity": "rare",
   "swims": "lower",
+  "fights": "head-shaker",
+  "fighter": true,
   "stew": [
     {
       "value": "featureChance",

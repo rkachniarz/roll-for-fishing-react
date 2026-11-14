@@ -12,6 +12,8 @@
   "rarity": "epic",
   "endangered": true,
   "swims": "lower",
+  "fights": "long-runner",
+  "fighter": true,
   "stew": [
     {
       "value": "wildCast",

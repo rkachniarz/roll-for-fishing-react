@@ -10,6 +10,7 @@
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "lower",
+  "fights": "long-runner",
   "stew": [
     {
       "value": "warmth",

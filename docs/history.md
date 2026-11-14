@@ -424,3 +424,10 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   `src/engine/barter.js` called from both ways of letting a fish go, counted in a flag so the save needed no new
   version. Six web searches for Red List statuses confirmed five species and left the rest to memory (REVIEW.md).
   Measured: 240 unit tests, one of which checks that every spot has exactly two endangered kinds.
+- **A fix to 11.13:** `startDive` took the streams, then stocked the pool, then wrote the old positions back,
+  winding the pool stream back. Found reading the code back; a test now fails on the old order.
+- **11.3** Fight styles (D141): `fights` and `fighter` on all 122 fish, `rules/fight-styles.json`, a `fight` phase
+  in `src/engine/cast.js` (`fightStrike`, a timeout in `tickCast`), the tilt and a head-shaker's throw in `strike`,
+  `fightFor` in `src/engine/game.js` drawing from a new `fight` stream (save version 14). Three test helpers and
+  the sim strike again when a cast goes to `fight`. The scene sees the fight as a wait, then a bite, so it needed no
+  change. Measured: 244 unit tests; the sim's catch rates unchanged within noise (it strikes fast).

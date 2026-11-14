@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "calming-draught",
+  "placeholder": true,
+  "category": "consumable",
+  "name": "Calming draught",
+  "flavor": "A few drops on the bait, and the fish forget to fight.",
+  "rarity": "common",
+  "value": 4,
+  "use": {
+    "buff": "calm"
+  }
+}

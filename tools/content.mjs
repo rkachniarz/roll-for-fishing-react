@@ -73,6 +73,9 @@ const TEXT = {
     ['classes', '@', 'spells', '@', 'name'],
     ['coldLevels', '@', 'name'],
     ['night', 'name'],
+    ['styles', '@', 'name'],
+    ['styles', '@', 'journal'],
+    ['styles', '@', 'manoeuvre'],
     ['name'],
   ],
 };

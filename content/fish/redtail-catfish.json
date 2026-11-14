@@ -11,6 +11,7 @@
   "difficulty": 2,
   "rarity": "uncommon",
   "swims": "bottom",
+  "fights": "long-runner",
   "stew": [
     {
       "value": "naturalCatch",

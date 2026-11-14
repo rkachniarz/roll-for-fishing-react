@@ -10,6 +10,8 @@
   "difficulty": 2,
   "rarity": "epic",
   "swims": "bottom",
+  "fights": "long-runner",
+  "fighter": true,
   "stew": [
     {
       "value": "reactionFast",

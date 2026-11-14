@@ -39,7 +39,9 @@ function withChampion(state, cls, extra = {}) {
 /** Strikes fast on the splash. */
 function strikeOn(/** @type {GameState} */ state, /** @type {GameCast} */ cast) {
   const bitten = tick(state, cast, cast.biteAt);
-  return strikeLine(bitten.state, bitten.cast, cast.biteAt + 100);
+  const out = strikeLine(bitten.state, bitten.cast, cast.biteAt + 100);
+  // A fish's manoeuvre (D141), answered in time.
+  return out.cast.phase === 'fight' ? strikeLine(out.state, out.cast, out.cast.fightAt + 100) : out;
 }
 
 test('a champion comes up in place of a feature: a large fish from the spot, worth twice the XP, never two of a class', () => {

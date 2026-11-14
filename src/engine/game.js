@@ -16,7 +16,7 @@ import { applyValue, deriveValues } from './values.js';
 import { listTable, locationTable, pick } from './tables.js';
 import { bendFish, rollFish, sameFish, sizeBands } from './fish.js';
 import { featureAt, swimOff, updateFeatures, waterAt } from './features.js';
-import { startCast, strike, tickCast } from './cast.js';
+import { fightStrike, startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
 import { equippedIds } from './equipment.js';
 import { afterCast, arrive } from './events.js';
@@ -394,6 +394,10 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
       // A stew buff: an identical twin comes up with it, now and then (R19.4).
       const twin = values.flat.twinChance > 0 && dice.line.roll100() <= values.flat.twinChance;
       const skill = value('fishingSkill');
+      const fight = fightFor(state, values, fish, dice.fight);
+      const playerMods = skill.mods.map((m) => (m.label === 'stat' ? { ...m, label: 'skill' } : m));
+      // The Rogue shows off on a fish that makes its move (D141).
+      if (fight?.manoeuvre && values.flat.manoeuvreBonus) playerMods.push({ label: 'showmanship', value: values.flat.manoeuvreBonus });
       return {
         line: {
           kind: 'fish',
@@ -407,8 +411,9 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
           ...(rift ? { rift } : {}),
           ...(carried ? { carried } : {}),
           ...(knighted ? { knighted } : {}),
+          ...(fight ? { fight } : {}),
           player: {
-            mods: skill.mods.map((m) => (m.label === 'stat' ? { ...m, label: 'skill' } : m)),
+            mods: playerMods,
             vantage: value('playerVantage').total,
             stacks: value('vantageStacks').total > 0,
             natural: value('naturalCatch').total,
@@ -558,8 +563,42 @@ export function tick(state, cast, now) {
 }
 
 /**
+ * How a fish on the line fights (D141): its style's tilt by how it is struck,
+ * and, now and then, its manoeuvre, rolled now and hidden like the rest of
+ * the line (D63). None when the fish are calmed. Draws only from `fight`,
+ * and only for a fish with a style.
+ * @param {GameState} state
+ * @param {Values} values
+ * @param {PoolFish} fish
+ * @param {Dice} dice
+ * @returns {{ style: string, tilt: { fast?: number, ok?: number, bad?: number }, throwsOn?: number, manoeuvre?: { delay: number } } | null}
+ */
+function fightFor(state, values, fish, dice) {
+  const species = content.fish[fish.species];
+  const rules = content.rules['fight-styles'];
+  const style = rules?.styles.find((/** @type {{ id: string }} */ s) => s.id === species?.fights);
+  if (!style || values.flat.calmFish > 0) return null;
+  const line = state.equipped.line ? 0 : style.withoutLine ?? 0;
+  /** @type {{ fast?: number, ok?: number, bad?: number }} */
+  const tilt = {};
+  for (const grade of /** @type {const} */ (['fast', 'ok', 'bad'])) {
+    const n = (style[grade] ?? 0) + line;
+    if (n) tilt[grade] = n;
+  }
+  const chance = species.fighter ? rules.fighterChance : rules.manoeuvreChance;
+  const moves = dice.roll100() <= chance;
+  return {
+    style: style.id,
+    tilt,
+    ...(style.throwsOn ? { throwsOn: style.throwsOn } : {}),
+    ...(moves ? { manoeuvre: { delay: dice.getRandomNumber(rules.delay.min, rules.delay.max) } } : {}),
+  };
+}
+
+/**
  * The player strikes. During the pause after a missed splash, a strike pulls
- * the line out instead (D64).
+ * the line out instead (D64). A fish the roll has landed may make its
+ * manoeuvre first: the cast goes to `fight`, and the next strike answers it (D141).
  * @param {GameState} state
  * @param {GameCast} cast
  * @param {number} now
@@ -571,6 +610,10 @@ export function strikeLine(state, cast, now) {
     if (pausing) return { state, cast: { ...cast, reeledIn: true }, events: [{ type: 'reeled-in' }] };
     return { state, cast, events: [] };
   }
+  if (cast.phase === 'fight') {
+    const next = /** @type {GameCast} */ (fightStrike(cast, now, cast.timing));
+    return next.phase === 'done' ? resolveCast(state, next) : { state, cast: next, events: [] };
+  }
   const line = cast.line;
   const opponent =
     line.kind === 'fish'
@@ -581,11 +624,19 @@ export function strikeLine(state, cast, now) {
           stacks: line.player.stacks,
           natural: line.player.natural,
           fishNatural: line.fishNatural,
+          ...(line.fight ? { tilt: line.fight.tilt, throwsOn: line.fight.throwsOn } : {}),
         }
       : null;
   const { dice, commit } = diceFrom(state);
   const next = /** @type {GameCast} */ (strike(cast, now, dice.fishing, opponent, cast.timing));
   if (next.phase !== 'done') return { state, cast: next, events: [] };
+  // Landed by the roll, but it makes its move first (D141).
+  const move = line.kind === 'fish' ? line.fight?.manoeuvre : undefined;
+  if (move && next.outcome.result === 'caught') {
+    const { endedAt, outcome, ...rest } = next;
+    const fighting = /** @type {GameCast} */ ({ ...rest, phase: 'fight', fightAt: now + move.delay, held: outcome });
+    return { state: { ...state, streams: commit() }, cast: fighting, events: [] };
+  }
   return resolveCast({ ...state, streams: commit() }, next);
 }
 
@@ -662,7 +713,7 @@ function resolveCast(state, cast) {
       // Met now: no longer one of the pool's wild fish, so a new season leaves it (D139).
       const { wild, ...met } = fish;
       const escaped = { ...met, tries: (fish.tries ?? 0) + 1 };
-      events.push({ type: result, fish, roll: cast.outcome.rolls[0], required: line.required });
+      events.push({ type: result, fish, roll: cast.outcome.rolls[0], required: line.required, ...(cast.outcome.thrown ? { thrown: true } : {}) });
       const def = hit ? content.features[hit.id] : null;
       if (champion) {
         // A class fish stays where it is, and is met again there (D114).

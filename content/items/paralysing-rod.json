@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "paralysing-rod",
+  "placeholder": true,
+  "category": "treasure",
+  "name": "Paralysing rod",
+  "flavor": "A faint hum runs down the line. Whatever bites goes still.",
+  "rarity": "rare",
+  "value": 6,
+  "unique": true,
+  "slot": "rod",
+  "effects": [
+    {
+      "value": "calmFish",
+      "add": 1
+    },
+    {
+      "value": "castScatter",
+      "add": 6
+    }
+  ]
+}

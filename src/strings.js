@@ -91,6 +91,12 @@ const UI_STRINGS = {
   'status.bite': 'Splash! Strike now!',
   'status.done': 'Tap to cast again.',
   'status.pause': 'The bobber bobs back up…',
+  'status.fight': 'It fights! Strike when it moves!',
+  'log.thrown': 'The {fish} threw the hook!',
+  'journal.fights': '{fights}',
+  'value.calmFish': 'calm fish',
+  'effect.calmFish': "Fish don't fight their own way",
+  'value.manoeuvreBonus': "to the roll on a fish's manoeuvre",
 
   // ---- The strike, floating over the bobber (D82); the roll, in the log ----
   'float.fast': 'Fast strike!',
@@ -406,6 +412,10 @@ export const PLACEHOLDER_UI = new Set([
   'log.ate-stew',
   'log.ate-fish',
   'log.stew-taste',
+  'status.fight',
+  'log.thrown',
+  'effect.calmFish',
+  'value.manoeuvreBonus',
   'log.conserved-xp',
   'log.conserved-luck',
   'log.looked',

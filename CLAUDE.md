@@ -182,6 +182,9 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   `src/engine/pool.js` stocks and tops it up lazily, whenever it is looked at (`castLine`, the dive, the wizard's
   look, and `render` in `src/main.js` between casts), from the `pool` stream alone. A test that counts a pool must
   leave out the `wild` fish. The look itself (`looking` in `src/main.js`) is the page's, never saved.
+- **A landed fish can still fight (D141):** `strikeLine` may return a cast in phase `fight` instead of `done`; the
+  next strike, at or after `fightAt`, answers it. Anything that plays a cast (test helpers, the sim) must strike
+  again then, and the page treats `fight` as a line still out. The scene is given it as `waiting`, then `bite`.
 - **Time moves in half-hour steps through `stepTime` (`src/engine/passage.js`)**, for a cast and for `wait:` and
   `sleep:`; buffs with `until` end there. Buffs can last casts, attempts, real ms or game minutes.
 - **Swimming fish are drawn as code (D131):** `src/scene/fish-art.js` paints each from its shape in

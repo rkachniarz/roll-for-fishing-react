@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "calm",
+  "placeholder": true,
+  "name": "Calming draught",
+  "effects": [
+    {
+      "value": "calmFish",
+      "add": 1
+    }
+  ],
+  "duration": {
+    "casts": 10
+  }
+}

@@ -10,6 +10,7 @@
   "difficulty": -1,
   "rarity": "uncommon",
   "swims": "lower",
+  "fights": "head-shaker",
   "stew": [
     {
       "value": "fishFind",

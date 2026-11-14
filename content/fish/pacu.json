@@ -11,6 +11,7 @@
   "difficulty": 1,
   "rarity": "epic",
   "swims": "surface",
+  "fights": "long-runner",
   "stew": [
     {
       "value": "stuffFind",

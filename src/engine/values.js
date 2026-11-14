@@ -58,6 +58,10 @@ export const GAME_VALUES = {
   riftChance: { better: 'higher', base: 0, unit: '%' },
   /** Above 0: the rift chance is doubled (Bend Reality with Rift Fishing, D106). */
   riftDoubled: { better: 'higher', base: 0 },
+  /** Above 0: fish don't fight their own way, no style and no manoeuvre (a calming draught, the paralysing rod, D141). */
+  calmFish: { better: 'higher', base: 0 },
+  /** Added to the roll on a fish that makes its manoeuvre (the Rogue's showmanship, D141). */
+  manoeuvreBonus: { better: 'higher', base: 0 },
   /** The chance, in percent, that a fish is Greedy: something caught on it, junk or treasure (Greedy Fish, D106). */
   greedyChance: { better: 'higher', base: 0, unit: '%' },
   /** Above 0: treasure comes up two at a time, and the player keeps one (Fence, D106). */

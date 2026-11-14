@@ -11,6 +11,8 @@
   "difficulty": 3,
   "rarity": "epic",
   "swims": "surface",
+  "fights": "jumper",
+  "fighter": true,
   "stew": [
     {
       "value": "eventMeterFill",

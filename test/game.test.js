@@ -55,7 +55,9 @@ function endEvent(state) {
 /** Strikes `ms` after the splash. */
 function strikeAfter(/** @type {GameState} */ state, /** @type {GameCast} */ cast, ms) {
   const bitten = tick(state, cast, cast.biteAt);
-  return strikeLine(bitten.state, bitten.cast, cast.biteAt + ms);
+  const out = strikeLine(bitten.state, bitten.cast, cast.biteAt + ms);
+  // A fish's manoeuvre (D141), answered as quickly.
+  return out.cast.phase === 'fight' ? strikeLine(out.state, out.cast, out.cast.fightAt + ms) : out;
 }
 
 // ---------- State and saves (2.1) ----------
@@ -71,7 +73,7 @@ test('a new game: the Lake, the stick, a morning in year 1, every stream seeded'
   assert.equal(s.weather.season, c.season, "the weather is the start's season");
   assert.deepEqual(game(), s, 'the same seed, the same start');
   assert.equal(s.character.luck, 0, 'Luck starts at 0 (R6.7)');
-  assert.equal(Object.keys(s.streams).length, 13);
+  assert.equal(Object.keys(s.streams).length, 14);
   assert.deepEqual(s.features, []);
 });
 

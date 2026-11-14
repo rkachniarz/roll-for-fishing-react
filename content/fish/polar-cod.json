@@ -11,6 +11,7 @@
   "difficulty": -1,
   "rarity": "rare",
   "swims": "upper",
+  "fights": "roller",
   "stew": [
     {
       "value": "wildCast",

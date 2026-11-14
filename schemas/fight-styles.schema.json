@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "How fish fight on the line (D141): each style tilts the roll by how the player struck, and now and then a fish makes its manoeuvre",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "placeholder": {
+      "$ref": "common.schema.json#/definitions/placeholder"
+    },
+    "id": {
+      "const": "fight-styles"
+    },
+    "manoeuvreChance": {
+      "description": "The chance in a hundred that any fish makes its manoeuvre.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "fighterChance": {
+      "description": "The chance for a fish marked `fighter`.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "delay": {
+      "description": "Milliseconds from the strike to the manoeuvre, a range.",
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false
+    },
+    "styles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/definitions/id"
+          },
+          "name": {
+            "$ref": "common.schema.json#/definitions/text"
+          },
+          "journal": {
+            "description": "Its line in the journal, once the fish is caught.",
+            "$ref": "common.schema.json#/definitions/text"
+          },
+          "manoeuvre": {
+            "description": "Over the bobber when the fish makes its move.",
+            "$ref": "common.schema.json#/definitions/text"
+          },
+          "fast": {
+            "description": "Added to the roll on a fast strike.",
+            "type": "integer"
+          },
+          "ok": {
+            "description": "On an ok strike.",
+            "type": "integer"
+          },
+          "bad": {
+            "description": "On a slow strike.",
+            "type": "integer"
+          },
+          "withoutLine": {
+            "description": "Added to the roll when no line is equipped.",
+            "type": "integer"
+          },
+          "throwsOn": {
+            "description": "A natural roll this low or lower throws the hook, whatever the total (a natural catch aside).",
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "journal",
+          "manoeuvre"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "id",
+    "manoeuvreChance",
+    "fighterChance",
+    "delay",
+    "styles"
+  ],
+  "additionalProperties": false
+}

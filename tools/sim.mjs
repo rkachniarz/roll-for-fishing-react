@@ -84,6 +84,8 @@ function playGame(classId, seed, options, tally) {
     const bite = tick(out.state, cast, cast.biteAt);
     const ms = reaction.getRandomNumber(options.strike[0], options.strike[1]);
     let done = strikeLine(bite.state, bite.cast, cast.biteAt + ms);
+    // A fish's manoeuvre (D141): answered as quickly as the strike was.
+    if (done.cast.phase === 'fight') done = strikeLine(done.state, done.cast, done.cast.fightAt + ms);
     if (done.cast.phase !== 'done') done = tick(bite.state, bite.cast, cast.biteAt + 60000);
     // A missed splash: pull out in the pause, so every cast is one cast.
     const missed = done.cast.phase === 'done' && done.cast.outcome.result === 'missed';

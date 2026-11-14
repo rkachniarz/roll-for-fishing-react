@@ -11,6 +11,7 @@
   "difficulty": -1,
   "rarity": "rare",
   "swims": "bottom",
+  "fights": "bottom-hugger",
   "stew": [
     {
       "value": "twinChance",

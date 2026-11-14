@@ -46,7 +46,10 @@ function play(state, ms = 100) {
     return { ...pulled, events: [...missed.events, ...pulled.events], line: cast.line };
   }
   const bitten = tick(out.state, cast, cast.biteAt);
-  return { ...strikeLine(bitten.state, bitten.cast, cast.biteAt + ms), line: cast.line };
+  const struck = strikeLine(bitten.state, bitten.cast, cast.biteAt + ms);
+  // A fish's manoeuvre (D141), answered as quickly.
+  const done = struck.cast.phase === 'fight' ? strikeLine(struck.state, struck.cast, struck.cast.fightAt + ms) : struck;
+  return { ...done, line: cast.line };
 }
 
 /** @param {{ cast: GameCast }} out */

@@ -29,6 +29,14 @@
       "type": "array",
       "items": { "$ref": "common.schema.json#/definitions/effect" }
     },
+    "fights": {
+      "description": "How it fights on the line (D141): its style in rules/fight-styles.json tilts the roll by how the player struck.",
+      "enum": ["jumper", "head-shaker", "long-runner", "bottom-hugger", "roller"]
+    },
+    "fighter": {
+      "description": "A famous fighter (D141): its manoeuvre, a second beat after the strike, is much likelier.",
+      "type": "boolean"
+    },
     "endangered": {
       "description": "An endangered fish (D140): letting one go pays a character with the Conservationist perk (rules/conservation.json). Two per spot, and a few rift fish.",
       "type": "boolean"

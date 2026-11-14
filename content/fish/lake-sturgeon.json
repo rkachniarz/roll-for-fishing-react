@@ -11,6 +11,8 @@
   "rarity": "epic",
   "endangered": true,
   "swims": "bottom",
+  "fights": "long-runner",
+  "fighter": true,
   "stew": [
     {
       "value": "reactionFast",

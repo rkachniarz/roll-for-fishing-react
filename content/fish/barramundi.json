@@ -11,6 +11,8 @@
   "difficulty": 2,
   "rarity": "uncommon",
   "swims": "lower",
+  "fights": "jumper",
+  "fighter": true,
   "stew": [
     {
       "value": "greedyChance",

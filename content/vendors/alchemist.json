@@ -41,6 +41,27 @@
       ]
     },
     {
+      "id": "calming-draught",
+      "gives": {
+        "item": "calming-draught",
+        "count": 1
+      },
+      "costs": [
+        {
+          "item": "canadian-waterweed",
+          "count": 1
+        },
+        {
+          "item": "shiny-pebble",
+          "count": 1
+        },
+        {
+          "item": "alchemists-vial",
+          "count": 1
+        }
+      ]
+    },
+    {
       "id": "hornwort-tonic",
       "gives": {
         "item": "hornwort-tonic",

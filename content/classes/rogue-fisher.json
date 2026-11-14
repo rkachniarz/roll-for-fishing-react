@@ -26,6 +26,10 @@
     {
       "value": "stuffFind",
       "add": 10
+    },
+    {
+      "value": "manoeuvreBonus",
+      "add": 2
     }
   ],
   "placeholder": [

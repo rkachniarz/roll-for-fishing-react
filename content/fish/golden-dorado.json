@@ -11,6 +11,8 @@
   "rarity": "epic",
   "endangered": true,
   "swims": "upper",
+  "fights": "jumper",
+  "fighter": true,
   "stew": [
     {
       "value": "fishingSkill",

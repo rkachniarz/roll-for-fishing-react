@@ -11,6 +11,7 @@
   "difficulty": 2,
   "rarity": "epic",
   "swims": "lower",
+  "fights": "head-shaker",
   "stew": [
     {
       "value": "timeSlip",
@@ -37,6 +38,7 @@
   "placeholder": [
     "stew",
     "taste",
-    "tasteLine"
+    "tasteLine",
+    "fights"
   ]
 }

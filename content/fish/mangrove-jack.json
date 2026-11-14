@@ -11,6 +11,8 @@
   "difficulty": 1,
   "rarity": "epic",
   "swims": "lower",
+  "fights": "bottom-hugger",
+  "fighter": true,
   "stew": [
     {
       "value": "timeSlip",

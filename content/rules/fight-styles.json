@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schemas/fight-styles.schema.json",
+  "id": "fight-styles",
+  "placeholder": true,
+  "manoeuvreChance": 5,
+  "fighterChance": 35,
+  "delay": {
+    "min": 500,
+    "max": 1200
+  },
+  "styles": [
+    {
+      "id": "jumper",
+      "name": "Jumper",
+      "journal": "Leaps clear of the water to shake the hook.",
+      "manoeuvre": "It leaps!",
+      "fast": 1,
+      "bad": -1
+    },
+    {
+      "id": "head-shaker",
+      "name": "Head-shaker",
+      "journal": "Shakes its head hard; a weak hookset comes loose.",
+      "manoeuvre": "It shakes its head!",
+      "throwsOn": 2
+    },
+    {
+      "id": "long-runner",
+      "name": "Long runner",
+      "journal": "Runs long and strong; a light line won't hold it.",
+      "manoeuvre": "It runs!",
+      "withoutLine": -2
+    },
+    {
+      "id": "bottom-hugger",
+      "name": "Bottom-hugger",
+      "journal": "Likes to hug the bottom, and dives for the weed.",
+      "manoeuvre": "It dives for the weed!",
+      "bad": -2
+    },
+    {
+      "id": "roller",
+      "name": "Roller",
+      "journal": "Rolls and twists the line round itself.",
+      "manoeuvre": "It rolls!",
+      "ok": -1,
+      "bad": -1
+    }
+  ]
+}

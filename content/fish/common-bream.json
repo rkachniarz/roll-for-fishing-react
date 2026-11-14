@@ -10,6 +10,7 @@
   "difficulty": 0,
   "rarity": "common",
   "swims": "bottom",
+  "fights": "bottom-hugger",
   "stew": [
     {
       "value": "reactionFast",

@@ -11,6 +11,7 @@
   "difficulty": 0,
   "rarity": "rare",
   "swims": "bottom",
+  "fights": "bottom-hugger",
   "stew": [
     {
       "value": "riftChance",

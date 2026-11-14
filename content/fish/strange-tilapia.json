@@ -11,6 +11,7 @@
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "lower",
+  "fights": "jumper",
   "stew": [
     {
       "value": "featureChance",
@@ -37,6 +38,7 @@
   "placeholder": [
     "stew",
     "taste",
-    "tasteLine"
+    "tasteLine",
+    "fights"
   ]
 }
