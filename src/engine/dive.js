@@ -44,6 +44,9 @@ import { tendPool } from './pool.js';
  * @returns {GameEvent[]}
  */
 export function startDive(state, escapee, extra = []) {
+  // The pool first: it draws from its own stream and commits it, so the dive's
+  // dice are taken after, or their commit would wind the pool's back (D53).
+  tendPool(state, extra);
   const values = valuesFor(state, extra);
   const { dice, commit } = diceFrom(state);
   const d = dice.abilities;
@@ -51,7 +54,6 @@ export function startDive(state, escapee, extra = []) {
   /** @type {FishInstance[]} */
   const fish = [escapee];
   // The pool's fish swim here: as many as the dive shows, out of the pool until it ends.
-  tendPool(state, extra);
   const key = poolKey(state);
   const others = Math.max(1, values.flat.diveFish) - 1;
   const pool = [...(state.escaped[key] ?? [])];

@@ -172,6 +172,18 @@ test('Jump In lights up when a fish gets away, dives after it among others, and 
   assert.fail('no fish ever got away');
 });
 
+test('a dive that stocks the pool keeps the pool stream where the stocking left it (D53, D139)', () => {
+  const s = hero('fish-fighter', { 1: 'jump-in' });
+  const escapee = { species: 'roach', subname: -1, band: 2, size: 20, difficulty: 1, xp: 1, rarity: 'common' };
+  // A spot whose pool nobody has looked at yet.
+  const fresh = { ...structuredClone(s), escaped: {}, pools: {}, lit: { 'jump-in': { fish: escapee } } };
+  fresh.escaped[poolKey(fresh)] = [{ ...escapee, tries: 1 }];
+  const used = useAbility(fresh, 'jump-in');
+  assert.ok(used.events.some((e) => e.type === 'dive-started'));
+  assert.ok(used.state.pools[poolKey(fresh)], 'the dive stocked the pool');
+  assert.notEqual(used.state.streams.pool, fresh.streams.pool, 'and its stream moved on');
+});
+
 test('Gut lights up after a catch, and empties the fish into the bags', () => {
   let s = hero('rogue-fisher', { 1: 'gut' });
   for (let i = 0; i < 300; i++) {
