@@ -24,6 +24,21 @@ Items with no note are left alone.
 
 Newest first.
 
+## The first load and the pine tabletop (2026-11-14, D143)
+
+- **Pine, not oak:** both were made; at 32 pixels a board the oak photo's coarse grain turned blotchy. `npm run planks oak`
+  puts it in, if you want to compare in the game.
+- **Three boards, 96 CSS pixels each,** three CSS pixels to one of the tile's. The tile repeats every 768 CSS pixels
+  across; a light patch in the top board marks the repeat if you look for it.
+- **The grain is softened** to read behind text, and a smoothing pass removed specks the photo left.
+- **Licence:** the pine photo is CC BY-SA 3.0, so the tile in `styles.css` is shared under it. Its author isn't
+  given on the file's record that the tool fetched; `assets/CREDITS.md` points at the file page.
+- **A gap found on the way:** the fish and item icons drawn from Commons photos (D97) aren't credited anywhere in
+  the repo; their sources were only in the local, untracked `docs/design/refs/credits.csv`. Many of those photos are
+  CC BY or CC BY-SA. Worth adding them to `assets/CREDITS.md` before the game is shared more widely.
+- **Loading:** if the game's scripts never arrive (no network for the graphics library), the page now stays a blank
+  background, where before it showed empty frames. Neither tells the player anything; a line of text could.
+
 ## Event pictures as portraits (2026-11-14, D142)
 
 - **The default scroll** is from a public-domain photo of a medieval rotulus (Bern, Burgerbibliothek Cod. 803), found

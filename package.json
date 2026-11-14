@@ -14,6 +14,7 @@
     "photo-icon": "node tools/photo-icon.mjs",
     "cutout": "node tools/py.mjs cutout",
     "commons": "node tools/py.mjs commons",
+    "planks": "node tools/py.mjs planks",
     "sim": "node tools/sim.mjs",
     "prompts": "node tools/prompts.mjs",
     "check": "npm test && npm run verify && npm run build"

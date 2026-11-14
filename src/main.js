@@ -138,6 +138,8 @@ function fit() {
   const s = Math.max(1, Math.round(ui * dpr));
   root.setProperty('--slot-icon', `${(32 * s) / dpr}px`);
   root.setProperty('--tip-icon', `${(64 * s) / dpr}px`);
+  // The light theme's planks (D143): their 256 pixels, three CSS pixels to one, in whole device pixels.
+  root.setProperty('--planks-size', `${(256 * Math.max(1, Math.round(3 * dpr))) / dpr}px`);
   // An event's portrait (D142): its 64 pixels, half as big again as a slot's.
   root.setProperty('--portrait', `${(64 * Math.max(1, Math.round(1.5 * ui * dpr))) / dpr}px`);
   // The slot fits its icon, with room for the border and the count.
