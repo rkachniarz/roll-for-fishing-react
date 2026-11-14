@@ -57,6 +57,11 @@ is where the others may lead.
   simple. The water is magical and never freezes.
 - [ ] **11.8** Plants and fish together: the plants on a spot draw certain fish (perch spawn on weed, tench live in
   weed beds); marimo's luck from folklore.
+  *The owner's answers (2026-11-15):* **a spot's own plants** (the ones in its lists) make the fish that like them
+  likelier there; nothing for the player to do. Which fish like which plants **looked up** from what the real species
+  do, only the clear cases, the source noted. **Marimo:** +1 Luck while one is in the bags (not more for several),
+  hidden like all Luck. **Shown in the journal** once the fish is caught ("Lives in weed beds"), like the fight
+  style's line.
 - [ ] **11.9** Shoaling: shoal fish swim together and turn together, solitary ones alone; in the dive a shoal
   scatters when one is struck.
 - [ ] **11.10** Folklore events: the carp leaping the dragon gate, the catfish that shakes the earth, the archerfish
