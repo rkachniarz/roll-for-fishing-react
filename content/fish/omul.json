@@ -20,6 +20,9 @@
       "add": 300
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Tender and fat; smoked, salted or fresh, the pride of its lake.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "evening",

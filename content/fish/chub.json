@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Watery and full of forked bones: cotton wool stuffed with needles.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "afternoon"

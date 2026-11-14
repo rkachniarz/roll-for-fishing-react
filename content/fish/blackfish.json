@@ -17,6 +17,8 @@
       "add": 9
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Dark, oily meat; filling rather than fine.",
   "prefers": {
     "time": [
       "night"
@@ -32,6 +34,8 @@
     ]
   },
   "placeholder": [
-    "stew"
+    "stew",
+    "taste",
+    "tasteLine"
   ]
 }

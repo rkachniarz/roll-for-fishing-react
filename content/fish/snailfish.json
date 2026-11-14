@@ -17,6 +17,8 @@
       "add": 15
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Jelly-soft and watery; nothing to eat.",
   "prefers": {
     "time": [
       "night"

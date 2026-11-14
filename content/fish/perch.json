@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "good",
+  "tasteLine": "Firm, white and sweet; the scales and spines are the hard part.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "morning",

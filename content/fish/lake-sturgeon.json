@@ -20,6 +20,9 @@
       "add": 400
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Dense, boneless meat, best smoked; its roe is caviar.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

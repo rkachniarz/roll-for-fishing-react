@@ -16,6 +16,9 @@
       "add": 6
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Soft and bony; a bait fish.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning"

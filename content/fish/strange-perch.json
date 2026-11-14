@@ -17,6 +17,8 @@
       "add": 20
     }
   ],
+  "taste": "good",
+  "tasteLine": "It tastes of perch, only more so.",
   "prefers": {
     "time": [
       "morning",
@@ -33,6 +35,8 @@
     ]
   },
   "placeholder": [
-    "stew"
+    "stew",
+    "taste",
+    "tasteLine"
   ]
 }

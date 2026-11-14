@@ -20,6 +20,9 @@
       "add": 200
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Sweet and firm from clean water, muddy from a warm pond.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

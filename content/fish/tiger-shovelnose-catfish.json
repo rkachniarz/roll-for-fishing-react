@@ -17,6 +17,8 @@
       "add": 9
     }
   ],
+  "taste": "good",
+  "tasteLine": "Firm, yellowish, boneless flesh with a mild taste.",
   "prefers": {
     "time": [
       "evening",

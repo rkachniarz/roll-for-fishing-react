@@ -18,8 +18,12 @@ order**, one at a time. **How we work through it:** once a task is pushed to Git
 refinement questions for the next one before starting it. The last task, a simulation of what's under the surface,
 is where the others may lead.
 
-- [ ] **11.1** Taste: a line per fish on how it eats, and small tweaks to the stew and Sushi enjoyer (bony pike, muddy
-  carp; a parasite risk from raw freshwater fish).
+- [x] **11.1** Taste (D138): a grade and a line per fish on how it eats, learned by eating it; the grade makes a bowl
+  and a raw fish's buff last longer or shorter; a parasite risk from raw freshwater fish.
+- [x] **11.13** The fish under the surface, and the wizard's Look Underwater (D139; the owner's addition, a first
+  step towards 11.12): each spot's pool is stocked with 2d6+3 fish when first looked at and kept (a fish a day, a
+  new roll each season and under two fish); the pool's fish are the shadows on the water and the dive's fish; the
+  look shows them, a shadow, then colours, then by name.
 - [ ] **11.2** Conservation status: a field per fish; releasing an endangered one (sturgeon, eel) earns something.
 - [ ] **11.3** How they fight on the line: a few fight styles (jumper, head-shaker, long runner), each with its own
   strike lines.
@@ -44,7 +48,8 @@ is where the others may lead.
   time, weather and season, and a cast drawing from it. Touches the engine's core, the save, D63's rolling on the cast,
   and balance.
 
-**Where things stand (2026-11-14):** Phase 10, the owner's brainstorm of the night, the town and the stew, was built
+**Where things stand (2026-11-14):** Phase 11 has begun: 11.1, taste (D138), and 11.13, the stocked pools and Look
+Underwater (D139), are in, their guesses at the top of REVIEW.md; 11.2, conservation status, is next. Before it, Phase 10, the owner's brainstorm of the night, the town and the stew, was built
 overnight with placeholders (D123–D129; questions at the top of REVIEW.md): a town with an inn, a room and an
 Alchemist who keeps hours; barter; the perpetual stew and every fish's stew buff; cold and night fishing; white items
 as their own tier; a fish's options menu; fish that swim (the aquarium, the dive, shadows under the surface); the
@@ -391,7 +396,7 @@ placeholder, it's added here.
 - [ ] **CR-6** Event illustrations: the dialog has room for one (7.3).
 - [ ] **CR-7** The map, each location's spots drawn on it (8.1). *Replaces the placeholder shapes.*
 - [ ] **CR-8** Perk and ability icons (the action bar shows initials), and the look of a Greedy fish and a bent fish
-  (6.3).
+  (6.3). *Also replaces the green eye around Look Underwater (D139), four flat rings in `src/scene/views.js`.*
 - [ ] **CR-9** The fixed palette (4.1) and the art sheet's open trials (`art.html`).
 - [ ] **CR-15** Class fish (D114): how each looks on the water, its aura and the witch's spells, and their log lines.
   *The fish itself now shows below the surface in its ring, seen from the bank (D131). Still Claude's: the ring of dots

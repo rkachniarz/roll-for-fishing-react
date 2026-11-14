@@ -7,11 +7,13 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { content } from '../src/generated/content.js';
 import { deserialize, newGame, serialize } from '../src/engine/state.js';
-import { castLine, valuesFor } from '../src/engine/game.js';
+import { castLine, useAbility, valuesFor } from '../src/engine/game.js';
+import { lookStage, poolDue, tended } from '../src/engine/pool.js';
+import { offers } from '../src/engine/perks.js';
 import { arrive, choose, openSlide } from '../src/engine/events.js';
 import { clock, minutesToMorning } from '../src/engine/time.js';
 import { vendorStatus } from '../src/engine/schedule.js';
-import { addToStew, bowlOf, costStatus, eatFish, eatStew, letGo, offersFor, toAquarium, trade } from '../src/engine/barter.js';
+import { addToStew, bowlOf, costStatus, eatFish, eatStew, letGo, offersFor, tasteFactor, toAquarium, trade } from '../src/engine/barter.js';
 import { coldLevel, coldPoints, conditionBuffs } from '../src/engine/conditions.js';
 import { passTime } from '../src/engine/passage.js';
 import { placeOpen } from '../src/engine/knowledge.js';
@@ -160,6 +162,7 @@ test('the cold: three levels from the temperature and the time, less warmth; non
 });
 
 test('the stew: 12 epic fish make a bowl of 24 hours, with warmth and the rarest fish\'s buffs (R19.4)', () => {
+  // Pike is plain eating (D138), so its minutes are the rarity's own.
   const pot = Array.from({ length: 12 }, () => fish('northern-pike', 'epic'));
   assert.equal(bowlOf(pot).minutes, 24 * 60);
   let s = /** @type {GameState} */ ({ ...game(), location: 'town', spot: 'inn', bucket: [{ fish: fish('roach', 'common'), count: 2 }, { fish: fish('northern-pike', 'rare'), count: 1 }] });
@@ -169,7 +172,7 @@ test('the stew: 12 epic fish make a bowl of 24 hours, with warmth and the rarest
   assert.equal(s.bucket[0].count, 1);
   const out = eatStew(s);
   const buff = /** @type {any} */ (out.state.buffs.find((b) => b.id === 'perpetual-stew'));
-  assert.equal(buff.until, s.time + 60 + 30);
+  assert.equal(buff.until, s.time + 60 + 15, 'a rare pike, plain, and a common roach, poor eating (D138)');
   assert.ok(buff.effects.some((/** @type {any} */ e) => e.value === 'warmth'));
   assert.deepEqual(out.state.stewPot, []);
   assert.equal(addToStew({ ...s, spot: 'square' }, 0).state.stewPot.length, 2, 'only at the inn');
@@ -189,9 +192,163 @@ test('a fish\'s options: let go, eaten with Sushi enjoyer, into the aquarium (R2
   assert.equal(eatFish(s, 0).state, s, 'not without the perk');
   const sushi = { ...s, character: { ...s.character, xp: content.rules.levels.xp[2], perks: { 2: 'sushi-enjoyer' } } };
   const eaten = eatFish(sushi, 0).state;
-  assert.ok(eaten.buffs.some((b) => b.id === 'sushi-roach' && b.casts === 5));
+  assert.ok(eaten.buffs.some((b) => b.id === 'sushi-roach' && b.casts === 3), 'poor eating: fewer casts (D138)');
   const room = { ...sushi, character: { ...sushi.character, perks: { 2: 'aquarium' } }, location: 'town', spot: 'room' };
   assert.equal(toAquarium(room, 0).state.aquarium.length, 1);
+});
+
+test('taste: a tastier fish makes a longer bowl and a longer raw buff (D138)', () => {
+  const { taste } = content.rules.stew;
+  assert.ok(taste.poor < taste.plain && taste.plain < taste.good && taste.good < taste.delicacy);
+  assert.equal(tasteFactor('roach'), taste.poor);
+  assert.equal(tasteFactor('zander'), taste.delicacy);
+  assert.ok(bowlOf([fish('zander', 'rare')]).minutes > bowlOf([fish('northern-pike', 'rare')]).minutes);
+  assert.ok(bowlOf([fish('roach', 'rare')]).minutes < bowlOf([fish('northern-pike', 'rare')]).minutes);
+  for (const f of Object.values(content.fish)) {
+    assert.ok(f.taste && f.tasteLine, `${f.id} has a taste`);
+    assert.equal(Boolean(f.parasites), !f.rift, `${f.id}: freshwater fish carry a risk, rift fish none`);
+  }
+  assert.ok(content.buffs[content.rules.stew.parasites.buff].debuff);
+});
+
+test('taste: eating a fish teaches its taste; a bowl teaches one kind in it, a new one first (D138)', () => {
+  const sushi = /** @type {GameState} */ ({ ...game(), bucket: [{ fish: fish('zander', 'common'), count: 1 }] });
+  sushi.character = { ...sushi.character, xp: content.rules.levels.xp[2], perks: { 2: 'sushi-enjoyer' } };
+  assert.deepEqual(sushi.tasted, {});
+  const raw = eatFish(sushi, 0);
+  assert.deepEqual(raw.state.tasted, { zander: true });
+  assert.ok(raw.state.buffs.some((b) => b.id === 'sushi-zander' && b.casts === 8), 'a delicacy lasts longer');
+
+  const inn = /** @type {GameState} */ ({ ...game(), location: 'town', spot: 'inn', tasted: { roach: true } });
+  inn.stewPot = [fish('roach', 'common'), fish('roach', 'common'), fish('northern-pike', 'rare')];
+  const bowl = eatStew(inn);
+  assert.equal(bowl.events[0].taste, 'northern-pike', 'the one not yet known');
+  assert.deepEqual(bowl.state.tasted, { roach: true, 'northern-pike': true });
+  assert.deepEqual(bowl.state.streams, inn.streams, 'one fish to pick from: nothing drawn');
+
+  const mixed = { ...inn, tasted: {}, stewPot: [fish('roach', 'common'), fish('northern-pike', 'rare'), fish('zander', 'rare')] };
+  const picked = eatStew(mixed);
+  assert.equal(Object.keys(picked.state.tasted).length, 1, 'only one of them');
+  assert.deepEqual(eatStew(mixed).events, picked.events, 'the same game picks the same fish');
+  assert.notEqual(picked.state.streams.taste, mixed.streams.taste);
+  assert.deepEqual({ ...picked.state.streams, taste: 0 }, { ...mixed.streams, taste: 0 }, 'only its own stream moves');
+});
+
+test('taste: a raw freshwater fish may leave the player queasy, a rift fish never (D138)', () => {
+  const { parasites } = content.rules.stew;
+  /** @param {string} species */
+  const sick = (species) => {
+    let n = 0;
+    for (let seed = 1; seed <= 400; seed++) {
+      const s = /** @type {GameState} */ ({ ...game({ seed }), bucket: [{ fish: fish(species, 'common'), count: 1 }] });
+      s.character = { ...s.character, xp: content.rules.levels.xp[2], perks: { 2: 'sushi-enjoyer' } };
+      const out = eatFish(s, 0);
+      const queasy = out.state.buffs.some((b) => b.id === parasites.buff && b.debuff);
+      assert.equal(out.events[0].queasy, queasy);
+      assert.ok(out.state.buffs.some((b) => b.id === `sushi-${species}`), 'the buff comes either way');
+      if (queasy) n++;
+    }
+    return n;
+  };
+  const high = sick('northern-pike');
+  const low = sick('tench');
+  assert.ok(high > 400 * (parasites.high / 100) * 0.6 && high < 400 * (parasites.high / 100) * 1.4, `pike: ${high} of 400`);
+  assert.ok(low > 0 && low < high, `tench: ${low} of 400`);
+  assert.equal(sick('arapaima'), 0);
+});
+
+test('a save from version 12 loads, with nothing tasted and the taste stream (D138)', () => {
+  const v12 = /** @type {any} */ ({ ...game(), version: 12 });
+  delete v12.tasted;
+  delete v12.pools;
+  v12.streams = Object.fromEntries(Object.entries(v12.streams).filter(([k]) => k !== 'taste' && k !== 'pool'));
+  const s = deserialize(serialize(v12));
+  assert.deepEqual(s.tasted, {});
+  assert.equal(s.streams.taste, game().streams.taste);
+  assert.deepEqual(s.pools, {});
+  assert.equal(s.streams.pool, game().streams.pool);
+});
+
+test('the pool: stocked with 2d6+3 fish the first time it is looked at, from its own stream (D139)', () => {
+  const s = game();
+  assert.ok(poolDue(s));
+  const stocked = tended(s);
+  const pool = stocked.escaped['lake/reedy-shore'];
+  assert.ok(pool.length >= 5 && pool.length <= 15, String(pool.length));
+  assert.ok(pool.every((f) => f.wild && !f.tries));
+  assert.equal(stocked.pools['lake/reedy-shore'].size, pool.length);
+  assert.deepEqual({ ...stocked.streams, pool: 0 }, { ...s.streams, pool: 0 }, 'only its own stream moves');
+  assert.equal(tended(stocked), stocked, 'kept from then on');
+  assert.deepEqual(tended(s), stocked, 'the same game stocks the same fish');
+  assert.equal(castLine(s, 0).checkpoint.escaped['lake/reedy-shore'].length, pool.length, 'a cast looks too');
+  const town = /** @type {GameState} */ ({ ...s, location: 'town', spot: 'inn' });
+  assert.equal(tended(town), town, 'no water in town');
+});
+
+test('the pool: a fish a day drifts in, a new season rolls the wild fish anew, and under two it is rolled anew (D139)', () => {
+  const stocked = tended(game());
+  const key = 'lake/reedy-shore';
+  const size = stocked.pools[key].size;
+  const met = { ...stocked.escaped[key][0], wild: undefined, tries: 2 };
+  delete met.wild;
+  // Three fish left, one of them met; two days on, two more.
+  const thinned = { ...stocked, escaped: { [key]: [met, ...stocked.escaped[key].slice(1, 3)] } };
+  assert.equal(tended(thinned), thinned, 'nothing the same day');
+  const later = tended({ ...thinned, time: thinned.time + 2 * 24 * 60 + 30 });
+  assert.equal(later.escaped[key].length, 5);
+  assert.equal(later.pools[key].at, stocked.pools[key].at + 2 * 24 * 60, 'whole days are counted');
+  // A full pool takes nobody in, though the day is counted.
+  const full = tended({ ...stocked, time: stocked.time + 24 * 60 });
+  assert.equal(full.escaped[key].length, size);
+  assert.equal(full.pools[key].at, stocked.pools[key].at + 24 * 60);
+  // A new season: the wild ones go, the one the player met stays.
+  const season = tended({ ...thinned, pools: { [key]: { ...thinned.pools[key], season: 'another' } } });
+  assert.ok(season.escaped[key].some((f) => f.tries === 2), 'the fish that got away is still there');
+  assert.equal(season.escaped[key].filter((f) => f.wild).length, season.pools[key].size);
+  assert.equal(season.escaped[key].length, season.pools[key].size + 1);
+  // Down to one: rolled anew, on top of it.
+  const low = tended({ ...stocked, escaped: { [key]: [met] } });
+  assert.equal(low.escaped[key].length, low.pools[key].size + 1);
+});
+
+test('Look Underwater: a shadow, then colours, then its name; offered to the wizard on the universal levels (D139)', () => {
+  const wizard = /** @type {GameState} */ ({ ...game({ classId: 'fishing-wizard' }) });
+  wizard.character = { ...wizard.character, xp: content.rules.levels.xp[2], perks: { 1: 'summon-fish', 2: 'look-underwater' } };
+  assert.equal(lookStage(1), 'shadow');
+  assert.equal(lookStage(2), 'colour');
+  assert.equal(lookStage(3), 'named');
+  const first = useAbility(wizard, 'look-underwater');
+  const seen = first.events.find((e) => e.type === 'looked');
+  assert.ok(seen.fish.length >= 5 && seen.fish.every((/** @type {any} */ f) => f.looks === 1));
+  assert.deepEqual(first.state.known, wizard.known, 'a shadow teaches nothing');
+  assert.deepEqual(first.state.cooldowns['look-underwater'], { casts: 10, pending: true });
+  assert.equal(first.state.time, wizard.time, 'no time passes');
+  let s = { ...first.state, cooldowns: {} };
+  s = { ...useAbility(s, 'look-underwater').state, cooldowns: {} };
+  // A fish that got away since has been looked at less than the others.
+  const key = 'lake/reedy-shore';
+  s = { ...s, escaped: { [key]: [...s.escaped[key], { ...s.escaped[key][0], species: 'northern-pike', looks: 0, tries: 1 }] } };
+  const third = useAbility(s, 'look-underwater');
+  const pool = third.state.escaped[key];
+  assert.ok(pool.slice(0, -1).every((f) => f.looks === 3));
+  assert.equal(pool.at(-1)?.looks, 1, 'each fish keeps its own count');
+  for (const f of pool.slice(0, -1)) assert.ok(third.state.known[`lake:fish:${f.species}`], `${f.species} is known to be here`);
+  // A fish from the pool the wizard has looked at is one seen before; a wild one never looked at is not.
+  const town = /** @type {GameState} */ ({ ...wizard, location: 'town', spot: 'inn' });
+  assert.equal(useAbility(town, 'look-underwater').state, town, 'no water to look into');
+
+  // On the universal levels, for the wizard alone.
+  /** @param {string} classId */
+  const offered = (classId) => {
+    let n = 0;
+    for (let seed = 1; seed <= 60; seed++) {
+      const g = game({ classId, seed });
+      if (offers({ ...g, character: { ...g.character, xp: content.rules.levels.xp[2], perks: { 1: 'x' } } }, 2).includes('look-underwater')) n++;
+    }
+    return n;
+  };
+  assert.ok(offered('fishing-wizard') > 0);
+  assert.equal(offered('fish-fighter'), 0);
 });
 
 test('white things come up as their own tier, more for a rogue (R19.1)', () => {

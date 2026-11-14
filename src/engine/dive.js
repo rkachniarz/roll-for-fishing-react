@@ -12,6 +12,7 @@ import { rollFish } from './fish.js';
 import { diceFrom, levelFor } from './state.js';
 import { levelUp } from './perks.js';
 import { catchFish, fishInBucket, momentOf, poolKey, valuesFor } from './game.js';
+import { tendPool } from './pool.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./fish.js').FishInstance} FishInstance */
@@ -27,14 +28,16 @@ import { catchFish, fishInBucket, momentOf, poolKey, valuesFor } from './game.js
  * @property {boolean} caught
  * @property {boolean} struck  Struck at already: it can't be again.
  * @property {boolean} [escapee]  The fish that got away, which lit Jump In.
+ * @property {boolean} [pooled]  One of the spot's pool (D139): back there if it isn't caught.
  *
  * @typedef {{ seconds: number, fish: DiveFish[] }} Dive
  */
 
 /**
  * The dive begins: the fish that lit Jump In, taken out of the pool, and
- * `diveFish` - 1 others from the spot. Changes `state` in place (a copy the
- * caller owns).
+ * `diveFish` - 1 others: the pool's own fish, picked at random (D139), and
+ * fish from the spot's table if the pool hasn't enough. Changes `state` in
+ * place (a copy the caller owns).
  * @param {GameState} state
  * @param {FishInstance} escapee
  * @param {import('./values.js').Source[]} [extra]
@@ -47,8 +50,16 @@ export function startDive(state, escapee, extra = []) {
   const where = { location: state.location, spot: state.spot };
   /** @type {FishInstance[]} */
   const fish = [escapee];
+  // The pool's fish swim here: as many as the dive shows, out of the pool until it ends.
+  tendPool(state, extra);
+  const key = poolKey(state);
+  const others = Math.max(1, values.flat.diveFish) - 1;
+  const pool = [...(state.escaped[key] ?? [])];
+  while (fish.length - 1 < others && pool.length > 0) fish.push(pool.splice(d.getRandomNumber(0, pool.length - 1), 1)[0]);
+  const pooled = fish.length;
+  state.escaped = { ...state.escaped, [key]: pool };
   const table = locationTable(where, 'fish', { moment: momentOf(state) });
-  for (let i = 1; i < Math.max(1, values.flat.diveFish); i++) {
+  for (let i = fish.length; i < others + 1; i++) {
     const species = pick(table, d);
     if (!species?.id) continue;
     fish.push(
@@ -69,7 +80,7 @@ export function startDive(state, escapee, extra = []) {
       const playerTotal = playerRoll + skill;
       // A natural 20 lands it unless the fish's own d20 is a 20 too (D96).
       const caught = (playerRoll === 20 && fishRoll !== 20) || playerTotal >= required;
-      return { fish: f, fishRoll, required, playerRoll, playerTotal, caught, struck: false, ...(i === 0 ? { escapee: true } : {}) };
+      return { fish: f, fishRoll, required, playerRoll, playerTotal, caught, struck: false, ...(i === 0 ? { escapee: true } : i < pooled ? { pooled: true } : {}) };
     }),
   };
   state.streams = commit();
@@ -109,7 +120,7 @@ export function diveStrike(state, index) {
 
 /**
  * Out of the water: the fish that got away, if it wasn't caught, is back in
- * the pool; the others swim off.
+ * the pool, and so are the pool's own fish (D139); any others swim off.
  * @param {GameState} state
  * @returns {{ state: GameState, events: GameEvent[] }}
  */
@@ -117,10 +128,12 @@ export function endDive(state) {
   if (!state.dive) return { state, events: [] };
   const next = structuredClone(state);
   const escapee = next.dive?.fish.find((f) => f.escapee);
+  const key = poolKey(next);
   if (escapee && !(escapee.struck && escapee.caught)) {
-    const key = poolKey(next);
     next.escaped[key] = [...(next.escaped[key] ?? []), { ...escapee.fish, tries: 1 }];
   }
+  const back = (next.dive?.fish ?? []).filter((f) => f.pooled && !(f.struck && f.caught)).map((f) => f.fish);
+  if (back.length) next.escaped[key] = [...(next.escaped[key] ?? []), ...back];
   const caught = next.dive?.fish.filter((f) => f.struck && f.caught).length ?? 0;
   next.dive = null;
   return { state: next, events: [{ type: 'dive-ended', caught }] };

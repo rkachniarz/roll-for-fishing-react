@@ -16,6 +16,9 @@
       "add": 15
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Rich, pink and fat; good cooked, cured or smoked.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "dawn",

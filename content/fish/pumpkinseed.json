@@ -16,6 +16,9 @@
       "add": 6
     }
   ],
+  "taste": "good",
+  "tasteLine": "Sweet white meat, on a very small fish.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "noon",

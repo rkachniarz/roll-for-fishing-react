@@ -16,6 +16,9 @@
       "add": 9
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Mild white meat, threaded with awkward forked bones.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "noon"

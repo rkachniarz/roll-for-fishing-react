@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schemas/buff.schema.json",
+  "id": "queasy",
+  "placeholder": true,
+  "name": "Queasy",
+  "debuff": true,
+  "effects": [
+    {
+      "value": "fishingSkill",
+      "add": -2
+    }
+  ],
+  "duration": {
+    "casts": 8
+  }
+}

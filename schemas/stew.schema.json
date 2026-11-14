@@ -24,8 +24,31 @@
     "effects": { "description": "What every bowl gives, whatever went in: the warmth.", "type": "array", "items": { "$ref": "common.schema.json#/definitions/effect" } },
     "flavours": { "description": "How many fish's own stew buffs a bowl carries: the rarest kinds that went in.", "type": "integer", "minimum": 0 },
     "eatCasts": { "description": "How many casts a fish eaten raw gives its stew buff for (Sushi enjoyer).", "type": "integer", "minimum": 1 },
+    "taste": {
+      "description": "What a fish's taste grade does (D138): the minutes it adds to a bowl, and the casts its buff lasts eaten raw, are multiplied by this.",
+      "type": "object",
+      "properties": {
+        "poor": { "type": "number", "minimum": 0 },
+        "plain": { "type": "number", "minimum": 0 },
+        "good": { "type": "number", "minimum": 0 },
+        "delicacy": { "type": "number", "minimum": 0 }
+      },
+      "required": ["poor", "plain", "good", "delicacy"],
+      "additionalProperties": false
+    },
+    "parasites": {
+      "description": "The chance in a hundred that a fish eaten raw leaves the player with the debuff, by the fish's risk (D138).",
+      "type": "object",
+      "properties": {
+        "low": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "high": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "buff": { "description": "The debuff, from content/buffs/.", "$ref": "common.schema.json#/definitions/id" }
+      },
+      "required": ["low", "high", "buff"],
+      "additionalProperties": false
+    },
     "aquarium": { "description": "How many fish the room's aquarium holds.", "type": "integer", "minimum": 1 }
   },
-  "required": ["id", "name", "minutes", "effects", "flavours", "eatCasts", "aquarium"],
+  "required": ["id", "name", "minutes", "effects", "flavours", "eatCasts", "taste", "parasites", "aquarium"],
   "additionalProperties": false
 }

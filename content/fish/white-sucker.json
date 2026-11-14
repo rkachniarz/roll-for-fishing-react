@@ -16,6 +16,9 @@
       "add": 5
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Sweet and firm from cold water, but riddled with small bones.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

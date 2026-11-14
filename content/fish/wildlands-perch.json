@@ -16,6 +16,9 @@
       "add": 9
     }
   ],
+  "taste": "good",
+  "tasteLine": "Firm white flesh, mild and clean.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "dawn",

@@ -17,6 +17,8 @@
       "add": 6
     }
   ],
+  "taste": "plain",
+  "tasteLine": "The meat is watery; the roe is the prize, a poor man's caviar.",
   "prefers": {
     "time": [
       "morning",

@@ -17,6 +17,8 @@
       "add": 9
     }
   ],
+  "taste": "good",
+  "tasteLine": "Mild white flesh; a market fish where it comes from.",
   "prefers": {
     "time": [
       "afternoon"

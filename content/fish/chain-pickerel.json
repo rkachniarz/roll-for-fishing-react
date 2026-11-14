@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Sweet white meat, hidden among a great many fine bones.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "morning"

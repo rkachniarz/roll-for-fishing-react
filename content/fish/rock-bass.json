@@ -16,6 +16,9 @@
       "add": 6
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Firm white meat, a little coarse; fair for the pan.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "evening"

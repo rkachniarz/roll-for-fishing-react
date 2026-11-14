@@ -18,7 +18,7 @@ import { levelFor } from './state.js';
 export const LIGHTS = /** @type {const} */ ({ 'jump-in': 'got-away', gut: 'caught', 'bend-reality': 'caught' });
 
 /** The abilities that work so far; the rest show on the bar, greyed out (6.3). */
-export const WORKING = new Set(['jump-in', 'battle-focus', 'full-force', 'summon-fish', 'recall', 'gut', 'sleight-of-hook', 'bend-reality', 'polish']);
+export const WORKING = new Set(['jump-in', 'battle-focus', 'full-force', 'summon-fish', 'recall', 'gut', 'sleight-of-hook', 'bend-reality', 'polish', 'look-underwater']);
 
 /**
  * The character's active perks, in the order they were taken: the action bar.

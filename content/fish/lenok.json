@@ -16,6 +16,9 @@
       "add": 6
     }
   ],
+  "taste": "good",
+  "tasteLine": "Tender trout flesh, fat in autumn.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "dawn",

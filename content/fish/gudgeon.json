@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "good",
+  "tasteLine": "Tiny, but sweet; fried by the dozen.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

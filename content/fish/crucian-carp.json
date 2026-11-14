@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Sweet when fried crisp in sour cream, but small and bony.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

@@ -17,7 +17,7 @@
       "$ref": "common.schema.json#/definitions/id"
     },
     "level": {
-      "description": "A class perk's level. Each class has one perk at level 1 and two (a passive and an active) at each later class level, to choose between.",
+      "description": "A class perk's level. Each class has one perk at level 1 and two (a passive and an active) at each later class level, to choose between. A class perk with no level is offered to that class on the universal levels, among the universal perks (D139).",
       "type": "integer",
       "minimum": 1
     },

@@ -16,6 +16,9 @@
       "add": 2
     }
   ],
+  "taste": "plain",
+  "tasteLine": "White and firm; fine from cold clean water, weedy from a warm pond.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "dawn",

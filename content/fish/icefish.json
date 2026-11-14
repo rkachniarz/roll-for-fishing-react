@@ -21,6 +21,8 @@
       "add": 2
     }
   ],
+  "taste": "good",
+  "tasteLine": "Snow-white, delicate and mild; its blood has no red in it.",
   "prefers": {
     "time": [
       "night"

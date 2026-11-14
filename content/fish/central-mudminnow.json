@@ -16,6 +16,9 @@
       "add": 1
     }
   ],
+  "taste": "poor",
+  "tasteLine": "A mouthful of mud; used for bait, not for the table.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "evening",

@@ -21,6 +21,8 @@
       "add": -8
     }
   ],
+  "taste": "plain",
+  "tasteLine": "It tastes of cod, and then of something else.",
   "prefers": {
     "time": [
       "dawn",
@@ -37,6 +39,8 @@
     ]
   },
   "placeholder": [
-    "stew"
+    "stew",
+    "taste",
+    "tasteLine"
   ]
 }

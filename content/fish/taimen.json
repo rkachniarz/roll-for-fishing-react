@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "good",
+  "tasteLine": "Fat, tender, pale pink flesh.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "sunset",

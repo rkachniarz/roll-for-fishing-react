@@ -21,6 +21,8 @@
       "add": -8
     }
   ],
+  "taste": "good",
+  "tasteLine": "A tasty mountain fish, though bony.",
   "prefers": {
     "time": [
       "dawn",

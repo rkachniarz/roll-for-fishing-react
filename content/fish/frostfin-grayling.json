@@ -16,6 +16,9 @@
       "add": 6
     }
   ],
+  "taste": "good",
+  "tasteLine": "White and delicate; best eaten the day it's caught.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "afternoon"

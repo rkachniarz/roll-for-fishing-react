@@ -17,6 +17,8 @@
       "add": 12
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Edible, as any cichlid is, but few would cook a fish this handsome.",
   "prefers": {
     "time": [
       "dawn",

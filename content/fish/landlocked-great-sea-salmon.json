@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "good",
+  "tasteLine": "A salmon that never saw the sea: leaner and paler, still very good.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "dawn",

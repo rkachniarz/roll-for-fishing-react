@@ -17,6 +17,8 @@
       "add": -1
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Edible, but there's little meat on it.",
   "prefers": {
     "time": [
       "noon",

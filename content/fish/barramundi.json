@@ -17,6 +17,8 @@
       "add": 6
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Moist, buttery white flesh with a mild, sweet taste.",
   "prefers": {
     "time": [
       "dawn",

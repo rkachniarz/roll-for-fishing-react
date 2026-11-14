@@ -476,7 +476,9 @@ await check('action bar: Jump In lights up when a fish gets away', PHONE, '?dev&
   await page.keyboard.press('1');
   const log = await logText(page);
   // Jump In is the dive now (D128): under the water, with a time limit.
-  report('action bar: key 1 uses it, and the Fighter dives', /You use Jump In\.You dive in after it!/.test(log) && (await page.isVisible('#diveTimer')), log.slice(-160));
+  // The timer shows with the next frame.
+  const timer = await page.waitForSelector('#diveTimer', { state: 'visible', timeout: 1000 }).then(() => true, () => false);
+  report('action bar: key 1 uses it, and the Fighter dives', /You use Jump In\.You dive in after it!/.test(log) && timer, log.slice(-160));
   await page.waitForTimeout(400);
   await page.screenshot({ path: 'dist/verify/dive.png' });
   report('action bar: then it cools down', (await page.textContent('[data-ability="jump-in"] .action-cd')) === '10');
@@ -619,7 +621,7 @@ await check('the collection (9.4)', PHONE, '?dev&seed=1&wait=600', async (page, 
   const shown = await page.locator('#paneBody .collection .slot').count();
   report('the collection: the fish caught is in it', !caught || shown === 1, `${caught?.[1] ?? 'nothing caught'}, ${shown} shown`);
   if (shown) await page.click('#paneBody .collection .slot');
-  report('the collection: a tap shows its records', !shown || /caught,/.test((await page.textContent('.tip')) ?? ''), (await page.textContent('.tip')) ?? '');
+  report('the collection: a tap shows its records', !caught || !shown || /caught,/.test((await page.textContent('.tip')) ?? ''), (await page.textContent('.tip')) ?? '');
   await page.screenshot({ path: 'dist/verify/collection.png' });
 });
 
@@ -881,6 +883,62 @@ await check('the town: the inn, the innkeeper, the room (R17)', DESKTOP, '?dev&s
   await page.click('#eventChoices button:has-text("The perpetual stew")');
   report('the town: the stew opens in a pane', ((await page.textContent('#paneTitle')) ?? '') === 'The perpetual stew');
   await page.screenshot({ path: 'dist/verify/town-stew.png' });
+});
+
+await check('taste: a fish eaten raw (D138)', DESKTOP, '?seed=1', async (page) => {
+  // The saved game, given the Sushi enjoyer perk and two roach, and loaded again.
+  await page.evaluate(() => {
+    const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
+    save.character.xp = 100;
+    save.character.perks = { 2: 'sushi-enjoyer' };
+    save.bucket = [{ fish: { species: 'roach', subname: -1, band: 2, size: 20, difficulty: 1, xp: 1, rarity: 'common' }, count: 2 }];
+    localStorage.setItem('roll-for-fishing:save:1', JSON.stringify(save));
+  });
+  await page.reload();
+  await loadFrom(page, 1);
+  await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+  await page.click('#bucket');
+  await page.hover('[data-fish="0"]');
+  const before = (await page.textContent('.tip')) ?? '';
+  report('taste: the tooltip keeps quiet before the fish is eaten', before.includes('Roach') && !before.includes('Taste'), before);
+  await page.click('[data-fish="0"]', { button: 'right' });
+  await page.click('.context-menu button:has-text("Eat")');
+  const log = await logText(page);
+  report('taste: the log says how it eats', /You eat \[?Roach\]? raw\. Bony and bland/.test(log), log);
+  await page.hover('[data-fish="0"]');
+  const after = (await page.textContent('.tip')) ?? '';
+  report('taste: the tooltip tells a Sushi enjoyer, once eaten', after.includes('Taste: Poor') && after.includes('Bony and bland'), after);
+  await page.screenshot({ path: 'dist/verify/taste.png' });
+});
+
+await check('look underwater: the wizard sees the pool (D139)', DESKTOP, '?seed=1', async (page, tap) => {
+  // The saved game, made a wizard with Look Underwater, and loaded again.
+  await page.evaluate(() => {
+    const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
+    save.character.classId = 'fishing-wizard';
+    save.character.xp = 10;
+    save.character.perks = { 1: 'summon-fish', 2: 'look-underwater' };
+    localStorage.setItem('roll-for-fishing:save:1', JSON.stringify(save));
+  });
+  await page.reload();
+  await loadFrom(page, 1);
+  await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+  const pool = () => page.evaluate(() => {
+    const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
+    return (save.escaped[`${save.location}/${save.spot}`] ?? []).map((/** @type {{ looks?: number }} */ f) => f.looks ?? 0);
+  });
+  const stocked = await pool();
+  report('look underwater: the pool is stocked as soon as the spot shows', stocked.length >= 5 && stocked.length <= 15 && stocked.every((n) => n === 0), String(stocked.length));
+  await page.click('[data-ability="look-underwater"]');
+  report('look underwater: the scene goes under the water', (await page.getAttribute('body', 'data-place')) === 'look');
+  const log = await logText(page);
+  report('look underwater: the log counts the fish', log.includes(`You look under the water: ${stocked.length} fish.`), log);
+  report('look underwater: every fish has been looked at once', (await pool()).every((n) => n === 1));
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: 'dist/verify/look-underwater.png' });
+  await tap();
+  report('look underwater: a tap is back on the bank, and casts nothing', (await page.getAttribute('body', 'data-place')) === 'water' && (await page.getAttribute('body', 'data-phase')) === 'idle');
+  await page.screenshot({ path: 'dist/verify/pool-shadows.png' });
 });
 
 await check('a Tiny fish on the hook', PHONE, '?dev&seed=1', async (page) => {

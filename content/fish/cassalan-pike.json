@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Lean white meat, good but laced with forked bones.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "morning",

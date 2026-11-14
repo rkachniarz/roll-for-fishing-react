@@ -27,12 +27,14 @@ import { createAudio } from './audio.js';
 import { applySettings, loadSettings, saveSettings, showDice } from './settings.js';
 import { createScene } from './scene/scene.js';
 import { waterAt } from './engine/features.js';
-import { championClass, championDebuffs, championsHere } from './engine/champions.js';
+import { PLANTS } from './scene/views.js';
+import { championClass, championDebuffs, championsHere, poolKey } from './engine/champions.js';
+import { hasWater, lookStage, poolDue, tended } from './engine/pool.js';
 import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
 import { createLog } from './ui/log.js';
-import { bagTab, fishName, hoursText, itemName, link, rarityColour } from './ui/links.js';
+import { bagTab, fishName, hoursText, itemName, link, rarityColour, showTasteWhen } from './ui/links.js';
 import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settingsPane, shopPane } from './ui/panels.js';
 import { floatText } from './ui/floater.js';
 import { bindTip, hideTip } from './ui/tooltip.js';
@@ -157,6 +159,8 @@ let slot = 1;
 const save = (s) => saveGame(storage, slot, s);
 /** @type {GameState | null} */
 let state = null;
+// A fish's tooltip tells how it eats to a Sushi enjoyer who has eaten one (D138).
+showTasteWhen((species) => Boolean(state && hasPerk(state, 'sushi-enjoyer') && state.tasted?.[species]));
 /** @type {GameCast} */
 let cast = /** @type {GameCast} */ ({ phase: 'idle' });
 let lastActAt = -Infinity;
@@ -469,6 +473,12 @@ function openEvent() {
  */
 function act(now, point) {
   if (!state) return;
+  // Any tap ends a look under the water (D139).
+  if (looking) {
+    looking = null;
+    render();
+    return;
+  }
   // Under the water, a fish is struck at; in town, a place is gone to (R20.3, R17.1).
   if (state.dive || content.locations[state.location]?.town) {
     if (point) actInView(point);
@@ -535,6 +545,11 @@ const actionBar = createActionBar($('actions'), useFromBar);
  */
 function useFromBar(id) {
   if (!state) return;
+  // A look under the water takes the scene: not while a line is out on it (D139).
+  if (id === 'look-underwater' && lineOut()) {
+    showError($('errors'), t('error.ability.lineOut'));
+    return;
+  }
   const status = abilityStatus(state, id);
   if (!status.usable) {
     const why = !status.working ? 'notYet' : status.waiting ? 'waiting' : status.cooldown ? 'notReady' : status.armed ? 'armed' : 'notLit';
@@ -546,6 +561,18 @@ function useFromBar(id) {
   state = out.state;
   const dive = out.events.find((e) => e.type === 'dive-started');
   if (dive) diveEndsAt = performance.now() + dive.seconds * 1000;
+  // Look Underwater (D139): the pool's fish, each as well as it's known by now, until a tap.
+  const looked = out.events.find((e) => e.type === 'looked');
+  if (looked) {
+    looking = {
+      where: poolKey(state),
+      fish: looked.fish.map((/** @type {{ species: string, size: number, looks: number }} */ f, /** @type {number} */ i) => ({
+        key: `look-${i}-${f.species}-${f.size}`,
+        species: f.species,
+        look: lookStage(f.looks) === 'shadow' ? /** @type {const} */ ('shadow') : /** @type {const} */ ('own'),
+      })),
+    };
+  }
   // Mid-cast the checkpoint stays the save (D74); the cast saves it when it ends.
   if (cast.phase !== 'waiting' && cast.phase !== 'bite') save(state);
   logEvents(out.events);
@@ -670,8 +697,17 @@ function describeEvent(e) {
       return [t('log.buff-gained', { buff: buffName(e.buff) })];
     case 'waited':
       return [t('log.waited', { hours: hoursText(e.minutes) })];
+    case 'looked': {
+      // What the wizard saw (D139), and the fish known by name by now.
+      const named = [...new Set(e.fish.filter((/** @type {{ looks: number }} */ f) => lookStage(f.looks) === 'named').map((/** @type {{ species: string }} */ f) => t(content.fish[f.species].name)))];
+      return [t('log.looked', { count: e.fish.length }), ...(named.length ? [' ', t('log.looked-named', { names: named.join(', ') })] : [])];
+    }
     case 'ate-stew':
-      return [t('log.ate-stew', { hours: hoursText(Math.max(30, e.minutes)) })];
+      return [
+        t('log.ate-stew', { hours: hoursText(Math.max(30, e.minutes)) }),
+        // One of the fish in it, and how it eats (D138).
+        ...(content.fish[e.taste]?.tasteLine ? [' ', t('log.stew-taste', { fish: t(content.fish[e.taste].name), taste: t(content.fish[e.taste].tasteLine) })] : []),
+      ];
     case 'used':
       return tParts('log.used', { item: itemLink(e.item) });
     case 'traded-away': {
@@ -682,8 +718,12 @@ function describeEvent(e) {
       const parts = tParts('log.traded-fish', { fish: fishLink(e.fish) });
       return e.count > 1 ? [...parts, ` ×${e.count}`] : parts;
     }
+    case 'ate-fish': {
+      // How it eats (D138), and whether it sat badly.
+      const line = content.fish[e.fish.species]?.tasteLine;
+      return [...tParts('log.ate-fish', { fish: fishLink(e.fish) }), ...(line ? [' ', t(line)] : []), ...(e.queasy ? [' ', t('log.queasy')] : [])];
+    }
     case 'stewed':
-    case 'ate-fish':
     case 'to-aquarium':
     case 'twin':
       return tParts(`log.${e.type}`, { fish: fishLink(e.fish) });
@@ -1148,8 +1188,15 @@ document.addEventListener('contextmenu', (e) => {
 // ---------- Drawing it all ----------
 
 function render() {
+  // The fish under the surface here, stocked or topped up if it's time (D139):
+  // between casts, so the save mid-cast stays the checkpoint (D74).
+  if (state && !lineOut() && !state.dive && poolDue(state)) {
+    state = tended(state, extraSources());
+    save(state);
+  }
+  if (looking && (!state || looking.where !== poolKey(state))) looking = null;
   document.body.dataset.phase = cast.phase;
-  document.body.dataset.place = state && content.locations[state.location]?.town ? 'town' : state?.dive ? 'dive' : 'water';
+  document.body.dataset.place = state && content.locations[state.location]?.town ? 'town' : state?.dive ? 'dive' : looking ? 'look' : 'water';
   $('status').textContent = state && content.locations[state.location]?.town ? t('status.town') : t(pausing() ? 'status.pause' : `status.${cast.phase}`);
   // The title screen hides the button row and the log: only the water (D134).
   document.body.toggleAttribute('data-title', !state);
@@ -1169,6 +1216,7 @@ function render() {
     // Class fish (D114): a big fish with its class's aura.
     ...championsHere(state).map((c) => ({ id: `champion-${c.class}`, kind: 'champion', aura: championClass(c.class).aura, species: c.fish.species, x: c.x, y: c.y, uses: 1, born: c.born })),
   ]);
+  scene.setPoolFish(poolShadows(state));
   // The bobber slot is cosmetic: it only changes how the bobber looks (D83).
   const bobber = state.equipped.bobber;
   scene.setBobber(bobber ? (content.items[bobber.id]?.bobber ?? null) : null);
@@ -1230,11 +1278,49 @@ let diveBadges = [];
 const DIVE_DICE_MS = 1600;
 
 /**
+ * The wizard's look under the water (D139), while it lasts: where, and the
+ * pool's fish as they were seen. The page's own, never saved: a reload is back
+ * on the bank.
+ * @type {{ where: string, fish: { key: string, species: string, look: 'own' | 'shadow' }[] } | null}
+ */
+let looking = null;
+
+/**
+ * The pool's fish as shadows under the surface (D139, R20.2): each in its own
+ * patch of the spot's water, placed by its key, so it stays put between
+ * redraws and no dice are spent on it.
+ * @param {GameState} s
+ */
+function poolShadows(s) {
+  if (!hasWater(s)) return [];
+  const water = waterAt(s.location, s.spot);
+  /** @type {Record<string, number>} */
+  const seen = {};
+  return (s.escaped[poolKey(s)] ?? []).slice(0, content.rules.pool.shadows).map((f) => {
+    const kind = `${f.species}-${f.size}`;
+    seen[kind] = (seen[kind] ?? 0) + 1;
+    const key = `pool-${poolKey(s)}-${kind}-${seen[kind]}`;
+    let h = 2166136261;
+    for (let i = 0; i < key.length; i++) h = Math.imul(h ^ key.charCodeAt(i), 16777619) >>> 0;
+    const cx = water.x0 + 16 + (h % 1000) / 1000 * Math.max(1, water.x1 - water.x0 - 32);
+    const cy = water.y0 + 6 + ((h >>> 10) % 1000) / 1000 * Math.max(1, water.y1 - water.y0 - 12);
+    return { key, species: f.species, box: { x0: cx - 16, y0: cy - 4, x1: cx + 16, y1: cy + 4 } };
+  });
+}
+
+/**
  * What the scene shows in the water's place (R17.1, R17.5, R20.3).
  * @param {GameState} s
  * @returns {import('./scene/views.js').View | null}
  */
 function viewFor(s) {
+  if (looking && !s.dive) {
+    // Only the weed that grows at this spot (the owner, D139): the plants in its own lists.
+    const loc = content.locations[s.location];
+    const spot = loc.spots?.find((/** @type {{ id: string }} */ x) => x.id === s.spot);
+    const here = new Set([...(loc.stuff ?? []), ...(spot?.stuff ?? [])].map((/** @type {{ id?: string }} */ e) => e.id));
+    return { kind: 'look', fish: looking.fish, plants: PLANTS.filter((id) => here.has(id)) };
+  }
   if (s.dive) {
     diveMap = [];
     /** @type {{ key: string, species: string }[]} */

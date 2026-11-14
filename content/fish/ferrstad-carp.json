@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Bony, and it takes the taste of its pond; fried crisp it does well enough.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

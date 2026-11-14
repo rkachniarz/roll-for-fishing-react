@@ -16,6 +16,9 @@
       "add": 4
     }
   ],
+  "taste": "good",
+  "tasteLine": "Delicate, lightly fatty white flesh; excellent smoked.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning"

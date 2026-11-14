@@ -16,6 +16,9 @@
       "add": 2
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Rich, meaty and boneless; a king is said to have died of eating too many.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

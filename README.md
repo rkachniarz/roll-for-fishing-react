@@ -77,6 +77,7 @@ and the art sheet at `/art.html` there.
 | `src/engine/barter.js` | Barter (R18): offers and trades; the perpetual stew; a fish let go, eaten, put in the aquarium (R21) |
 | `src/engine/buffs.js` | Buffs from `content/buffs/`: potions, a night's rest; using a potion from the bags |
 | `src/engine/conditions.js` | The cold and night fishing, worked out from the state (R19.2, R19.3, D126) |
+| `src/engine/pool.js` | The fish under the surface at a spot (D139): stocking and keeping its pool, the wizard's Look Underwater |
 | `src/engine/dive.js` | The Fighter's dive (R20.3, D128): the fish, their rolls, strikes, coming up |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |

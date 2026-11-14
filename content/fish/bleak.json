@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Too small to fillet; fried whole and eaten bones and all.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "noon",

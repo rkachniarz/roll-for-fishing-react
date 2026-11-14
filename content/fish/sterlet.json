@@ -20,6 +20,9 @@
       "add": 300
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "The finest of the sturgeons; a royal fish soup is made of it.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

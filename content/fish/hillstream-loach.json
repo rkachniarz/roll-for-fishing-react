@@ -21,6 +21,8 @@
       "add": -6
     }
   ],
+  "taste": "poor",
+  "tasteLine": "A scrap of a fish, barely worth frying.",
   "prefers": {
     "time": [
       "morning",

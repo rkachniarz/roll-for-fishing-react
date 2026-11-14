@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Bony, with a bitter note of weed.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "noon",

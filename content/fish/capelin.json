@@ -17,6 +17,8 @@
       "add": 9
     }
   ],
+  "taste": "good",
+  "tasteLine": "Eaten whole, roe and all; best when full of eggs.",
   "prefers": {
     "time": [
       "evening",

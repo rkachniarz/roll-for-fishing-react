@@ -15,6 +15,9 @@
       "add": 1
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Rich and fat, superb smoked. Never raw: its blood is poisonous until cooked.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "night"

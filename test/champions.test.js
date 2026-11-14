@@ -89,7 +89,7 @@ test("one that gets away stays where it is, and isn't in the pool", () => {
   const [knight] = championsHere(done.state);
   assert.deepEqual({ x: knight.x, y: knight.y }, AT);
   assert.equal(knight.fish.tries, 1);
-  assert.deepEqual(done.state.escaped, {});
+  assert.deepEqual(Object.values(done.state.escaped).flat().filter((f) => !f.wild), [], 'only the fish the pool was stocked with (D139)');
 });
 
 test('let go, a champion is an ordinary fish in the pool', () => {

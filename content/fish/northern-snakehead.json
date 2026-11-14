@@ -16,6 +16,9 @@
       "add": 2
     }
   ],
+  "taste": "good",
+  "tasteLine": "Firm, white and nearly boneless; a prized soup fish.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "afternoon"

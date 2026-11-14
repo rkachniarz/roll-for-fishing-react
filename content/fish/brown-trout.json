@@ -16,6 +16,9 @@
       "add": 10
     }
   ],
+  "taste": "good",
+  "tasteLine": "Firm and rich; the big old ones turn coarse.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "dawn",

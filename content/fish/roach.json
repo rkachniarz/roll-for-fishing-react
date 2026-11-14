@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Bony and bland; better dried and salted than fried.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "morning",

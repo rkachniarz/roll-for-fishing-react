@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schemas/perk.schema.json",
+  "id": "look-underwater",
+  "placeholder": [
+    "description",
+    "cooldown"
+  ],
+  "class": "fishing-wizard",
+  "kind": "active",
+  "name": "Look Underwater",
+  "description": "Look under the water at the fish that are there. The first look at a fish shows its shadow, the second its colours, and from the third you know what it is.",
+  "cooldown": {
+    "casts": 10
+  }
+}

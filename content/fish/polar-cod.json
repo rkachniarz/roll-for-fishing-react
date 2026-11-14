@@ -21,6 +21,8 @@
       "add": -6
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Soft and bland; more often fed to dogs than to people.",
   "prefers": {
     "time": [
       "night"

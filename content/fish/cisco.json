@@ -16,6 +16,9 @@
       "add": 1
     }
   ],
+  "taste": "good",
+  "tasteLine": "Rich and oily; at its best smoked.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "dawn",

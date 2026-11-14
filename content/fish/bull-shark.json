@@ -17,6 +17,8 @@
       "add": 60
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Firm and meaty, but it reeks of ammonia unless bled at once.",
   "prefers": {
     "time": [
       "night"

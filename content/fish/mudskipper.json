@@ -17,6 +17,8 @@
       "add": 6
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Tender and slightly sweet; grilled on skewers or cooked in soup.",
   "prefers": {
     "time": [
       "noon",

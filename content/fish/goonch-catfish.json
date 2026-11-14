@@ -17,6 +17,8 @@
       "add": 6
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Coarse catfish meat, fair in a stew.",
   "prefers": {
     "time": [
       "night"

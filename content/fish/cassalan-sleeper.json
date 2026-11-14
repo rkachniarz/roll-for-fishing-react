@@ -20,6 +20,9 @@
       "add": 200
     }
   ],
+  "taste": "plain",
+  "tasteLine": "White and better than a swamp fish has any right to be, though there is little on it.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "evening",

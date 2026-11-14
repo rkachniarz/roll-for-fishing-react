@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "The fish under the surface at a spot (D139): how a spot's pool is stocked and kept, and what the wizard's looks show",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "placeholder": {
+      "$ref": "common.schema.json#/definitions/placeholder"
+    },
+    "id": {
+      "const": "pool"
+    },
+    "add": {
+      "description": "A pool is stocked with 2d6 plus this many fish.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "perDay": {
+      "description": "How many fish drift in each game day, up to the number first rolled.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "rollBelow": {
+      "description": "A pool with fewer fish than this is rolled anew.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "colourAt": {
+      "description": "From this many looks, Look Underwater shows a fish in its colours; before, as a shadow.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "nameAt": {
+      "description": "From this many looks, the player knows what the fish is: the log names it and the journal lists it.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "shadows": {
+      "description": "How many of the pool's fish show as shadows under the surface, at most.",
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "id",
+    "add",
+    "perDay",
+    "rollBelow",
+    "colourAt",
+    "nameAt",
+    "shadows"
+  ],
+  "additionalProperties": false
+}

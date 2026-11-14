@@ -16,6 +16,9 @@
       "add": 1
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Mild, white and sweet; one of the best freshwater fish there is.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

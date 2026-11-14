@@ -346,6 +346,17 @@ export async function createScene(canvas, rand, look = {}) {
     features = list;
   }
 
+  /**
+   * The pool's fish (D139), as small shadows under the surface (R20.2): each
+   * keeps to its own patch of the water.
+   * @type {{ key: string, species: string, box: { x0: number, y0: number, x1: number, y1: number } }[]}
+   */
+  let poolFish = [];
+  /** @param {typeof poolFish} list */
+  function setPoolFish(list) {
+    poolFish = list;
+  }
+
   /** @param {number} now */
   function drawFeatures(now) {
     featureLayer.clear();
@@ -428,6 +439,7 @@ export async function createScene(canvas, rand, look = {}) {
       }
     });
     for (const key of shownAt.keys()) if (!live.has(key)) shownAt.delete(key);
+    for (const f of poolFish) shadows.push({ key: f.key, species: f.species, look: 'small', box: f.box });
     surfaceFish.set(shadows, { x0: 0, y0: 0, x1: SIZE, y1: SIZE });
     surfaceFish.update(now);
   }
@@ -575,6 +587,7 @@ export async function createScene(canvas, rand, look = {}) {
     aimAt,
     update,
     setFeatures,
+    setPoolFish,
     /** @param {import('./sky.js').World} world */
     setWorld(world) {
       sky.setWorld(world);

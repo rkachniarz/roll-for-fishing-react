@@ -27,6 +27,7 @@ import { learn, noticeSpots, openByFragments, placeOpen, spotKnown } from './kno
 import { stepTime } from './passage.js';
 import { conditionSources } from './conditions.js';
 import { startDive } from './dive.js';
+import { lookUnderwater, tended } from './pool.js';
 import { championAt, championClass, championSources, championsHere, findChampion, poolKey, removeChampion, updateChampions } from './champions.js';
 
 export { poolKey };
@@ -178,6 +179,8 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   if (!state.equipped.rod) {
     return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'no-rod' }] };
   }
+  // The fish under the surface here, stocked or topped up if it's time (D139).
+  state = tended(state, extra);
   // Ever-Summoning: Summon Fish by itself, every other cast (D106).
   const summoned = hasPerk(state, 'ever-summoning') && (state.book.casts + 1) % 2 === 0;
   const lineExtra = summoned ? [...extra, { label: 'ever-summoning', effects: [{ value: 'biteCertain', add: 1 }] }] : extra;
@@ -327,8 +330,10 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
       // Not from the pool: it stays with the feature if pulled out too early.
       fish = canBite(featureFish.species) ? featureFish : null;
     } else if (!feature?.fish && pool.length > 0 && (values.flat.fromPool > 0 || dice.line.roll100() <= pool.length)) {
-      const i = dice.line.getRandomNumber(0, pool.length - 1);
-      fish = pool[i];
+      // Recall brings back one the player has met, if there is one; else any of the pool's (D139).
+      const met = values.flat.fromPool > 0 ? pool.filter((f) => !f.wild) : [];
+      const from = met.length ? met : pool;
+      fish = from[dice.line.getRandomNumber(0, from.length - 1)];
       state.escaped[key] = (state.escaped[key] ?? []).filter((f) => f !== fish);
       fromPool = true;
     } else {
@@ -395,7 +400,8 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
           ...(twin ? { twin } : {}),
           required,
           fishNatural: kept.result,
-          seenBefore: fromPool || Boolean(featureFish),
+          // A fish the pool was stocked with is new to the player, unless the wizard has looked at it (D139).
+          seenBefore: Boolean(featureFish) || (fromPool && (!fish.wild || (fish.looks ?? 0) > 0)),
           fromPool,
           ...(rift ? { rift } : {}),
           ...(carried ? { carried } : {}),
@@ -652,7 +658,9 @@ function resolveCast(state, cast) {
         else events.push({ type: 'bait-eaten', bait: useBait(next), fish });
       }
     } else if (result === 'escaped' || result === 'missed') {
-      const escaped = { ...fish, tries: (fish.tries ?? 0) + 1 };
+      // Met now: no longer one of the pool's wild fish, so a new season leaves it (D139).
+      const { wild, ...met } = fish;
+      const escaped = { ...met, tries: (fish.tries ?? 0) + 1 };
       events.push({ type: result, fish, roll: cast.outcome.rolls[0], required: line.required });
       const def = hit ? content.features[hit.id] : null;
       if (champion) {
@@ -803,6 +811,13 @@ export function useAbility(state, id, extra = []) {
     case 'recall':
       nextCast([{ value: 'fromPool', add: 1 }]);
       break;
+    case 'look-underwater': {
+      // The pool here, each fish looked at once more (D139).
+      const looked = lookUnderwater(next, extra);
+      if (!looked.length) return { state, events: [] };
+      events.push(...looked);
+      break;
+    }
     case 'polish':
       // Until junk comes up, however many casts that takes (D106).
       next.buffs.push({ id, source: id, effects: [{ value: 'junkToTreasure', add: 1 }] });
@@ -881,7 +896,7 @@ export function useAbility(state, id, extra = []) {
  * @param {number} bucketSize
  */
 export function catchFish(state, fish, bucketSize) {
-  const { tries, ...instance } = fish;
+  const { tries, wild, looks, ...instance } = fish;
   // Caught either way: the book and the XP count it. A full bucket holds it
   // back until the player lets one go (D59).
   if (fishInBucket(state) >= bucketSize) state.pendingCatch = instance;

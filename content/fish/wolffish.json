@@ -17,6 +17,8 @@
       "add": 12
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Firm, sweet white meat, like the shellfish it eats.",
   "prefers": {
     "time": [
       "dawn",

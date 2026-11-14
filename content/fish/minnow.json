@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "plain",
+  "tasteLine": "A mouthful; fried whole in handfuls.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

@@ -16,6 +16,9 @@
       "add": 12
     }
   ],
+  "taste": "good",
+  "tasteLine": "Clean-tasting white meat, since it eats only plants; the bones are large and easy to pick.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "noon",

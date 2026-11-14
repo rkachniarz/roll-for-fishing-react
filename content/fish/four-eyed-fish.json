@@ -21,6 +21,8 @@
       "add": 1
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Small, oily and scarcely eaten.",
   "prefers": {
     "time": [
       "morning",

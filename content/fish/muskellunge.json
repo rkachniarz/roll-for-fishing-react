@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Much like pike: good white meat, forked bones.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "sunset"

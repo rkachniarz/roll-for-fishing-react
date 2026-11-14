@@ -22,6 +22,8 @@ export const content = {
           "add": 60
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.arapaima.tasteLine",
       "prefers": {
         "time": [
           "dawn",
@@ -59,6 +61,8 @@ export const content = {
           "add": -1
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.archerfish.tasteLine",
       "prefers": {
         "time": [
           "noon",
@@ -95,6 +99,9 @@ export const content = {
           "add": 2
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.asp.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -135,6 +142,9 @@ export const content = {
           "add": 200
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.barbel.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "evening",
@@ -172,6 +182,8 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.barramundi.tasteLine",
       "prefers": {
         "time": [
           "dawn",
@@ -208,6 +220,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.black-crappie.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -245,6 +260,8 @@ export const content = {
           "add": 9
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.blackfish.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -260,7 +277,9 @@ export const content = {
         ]
       },
       "placeholder": [
-        "stew"
+        "stew",
+        "taste",
+        "tasteLine"
       ]
     },
     "bleak": {
@@ -280,6 +299,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.bleak.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "noon",
@@ -316,6 +338,9 @@ export const content = {
           "add": 4
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.bluegill.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -352,6 +377,9 @@ export const content = {
           "add": 2
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.bowfin.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -387,6 +415,9 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.brook-trout.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -427,6 +458,9 @@ export const content = {
           "add": 200
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.brown-bullhead.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -462,6 +496,9 @@ export const content = {
           "add": 10
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.brown-trout.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -500,6 +537,8 @@ export const content = {
           "add": 60
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.bull-shark.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -535,6 +574,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.burbot.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "night"
@@ -571,6 +613,8 @@ export const content = {
           "add": 9
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.capelin.tasteLine",
       "prefers": {
         "time": [
           "evening",
@@ -607,6 +651,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.cassalan-pike.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "morning",
@@ -647,6 +694,9 @@ export const content = {
           "add": 200
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.cassalan-sleeper.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "evening",
@@ -683,6 +733,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.central-mudminnow.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "evening",
@@ -716,6 +769,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.chain-pickerel.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "morning"
@@ -751,6 +807,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.channel-catfish.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -786,6 +845,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.chub.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "afternoon"
@@ -821,6 +883,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.cisco.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -862,6 +927,8 @@ export const content = {
           "add": 8
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.clown-knifefish.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -895,6 +962,8 @@ export const content = {
           "add": 8
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.coelacanth.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -934,6 +1003,9 @@ export const content = {
           "add": 100
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.common-bream.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "evening",
@@ -974,6 +1046,9 @@ export const content = {
           "add": 100
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.common-carp.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night",
@@ -1010,6 +1085,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.crucian-carp.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -1046,6 +1124,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.dace.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "morning"
@@ -1082,6 +1163,9 @@ export const content = {
           "add": 200
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.deepwater-sculpin.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -1112,6 +1196,8 @@ export const content = {
           "add": 12
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.discus.tasteLine",
       "prefers": {
         "time": [
           "dawn",
@@ -1146,6 +1232,8 @@ export const content = {
           "add": 12
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.electric-eel.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -1186,6 +1274,8 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.electric-yellow-cichlid.tasteLine",
       "prefers": {
         "time": [
           "morning",
@@ -1219,6 +1309,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.ferrstad-carp.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -1260,6 +1353,8 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.four-eyed-fish.tasteLine",
       "prefers": {
         "time": [
           "morning",
@@ -1297,6 +1392,8 @@ export const content = {
           "add": 9
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.frontosa.tasteLine",
       "prefers": {
         "time": [
           "dawn",
@@ -1330,6 +1427,9 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.frostfin-char.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -1366,6 +1466,9 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.frostfin-grayling.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "afternoon"
@@ -1405,6 +1508,9 @@ export const content = {
           "add": 400
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.frostfin-sturgeon.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -1441,6 +1547,8 @@ export const content = {
           "add": 9
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.giant-freshwater-stingray.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -1481,6 +1589,8 @@ export const content = {
           "add": -4
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.giant-gourami.tasteLine",
       "prefers": {
         "time": [
           "morning",
@@ -1517,6 +1627,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.golden-dorado.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -1558,6 +1671,8 @@ export const content = {
           "add": -8
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.golden-mahseer.tasteLine",
       "prefers": {
         "time": [
           "dawn",
@@ -1594,6 +1709,9 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.golden-shiner.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning"
@@ -1630,6 +1748,8 @@ export const content = {
           "add": 12
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.goliath-tigerfish.tasteLine",
       "prefers": {
         "time": [
           "noon",
@@ -1665,6 +1785,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.golomyanka.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -1698,6 +1821,8 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.goonch-catfish.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -1730,6 +1855,9 @@ export const content = {
           "add": 12
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.grass-carp.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "noon",
@@ -1765,6 +1893,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.grasslands-silverside.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -1801,6 +1932,9 @@ export const content = {
           "add": 4
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.grayling.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "noon",
@@ -1838,6 +1972,9 @@ export const content = {
           "add": 15
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.great-sea-salmon.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -1874,6 +2011,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.gudgeon.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -1915,6 +2055,8 @@ export const content = {
           "add": -6
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.hillstream-loach.tasteLine",
       "prefers": {
         "time": [
           "morning",
@@ -1948,6 +2090,9 @@ export const content = {
           "add": 2
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.huchen.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -1989,6 +2134,8 @@ export const content = {
           "add": 2
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.icefish.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -2024,6 +2171,9 @@ export const content = {
           "add": 4
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.ide.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "morning",
@@ -2060,6 +2210,9 @@ export const content = {
           "add": 2
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.lake-brown-trout.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -2100,6 +2253,9 @@ export const content = {
           "add": 400
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.lake-sturgeon.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -2135,6 +2291,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.lake-trout.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -2171,6 +2330,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.lake-whitefish.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -2207,6 +2369,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.landlocked-great-sea-salmon.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -2244,6 +2409,9 @@ export const content = {
           "add": 2
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.largemouth-bass.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -2280,6 +2448,9 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.lenok.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -2317,6 +2488,8 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.lumpfish.tasteLine",
       "prefers": {
         "time": [
           "morning",
@@ -2357,6 +2530,9 @@ export const content = {
           "add": 100
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.mainland-bullhead.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -2385,6 +2561,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.mainland-eel.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "night"
@@ -2421,6 +2600,9 @@ export const content = {
           "add": 12
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.mainland-mudminnow.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "evening"
@@ -2456,6 +2638,9 @@ export const content = {
           "add": 4
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.mainland-whitefish.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning"
@@ -2492,6 +2677,8 @@ export const content = {
           "add": 20
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.mangrove-jack.tasteLine",
       "prefers": {
         "time": [
           "sunset",
@@ -2529,6 +2716,8 @@ export const content = {
           "add": 8
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.marbled-lungfish.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -2564,6 +2753,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.minnow.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -2601,6 +2793,8 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.mudskipper.tasteLine",
       "prefers": {
         "time": [
           "noon",
@@ -2637,6 +2831,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.muskellunge.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "sunset"
@@ -2672,6 +2869,9 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.nase.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "noon",
@@ -2708,6 +2908,9 @@ export const content = {
           "add": 2
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.northern-pike.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "morning",
@@ -2744,6 +2947,9 @@ export const content = {
           "add": 2
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.northern-snakehead.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "afternoon"
@@ -2783,6 +2989,9 @@ export const content = {
           "add": 300
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.omul.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "evening",
@@ -2820,6 +3029,8 @@ export const content = {
           "add": 15
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.ornate-bichir.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -2853,6 +3064,8 @@ export const content = {
           "add": 9
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.oscar.tasteLine",
       "prefers": {
         "time": [
           "afternoon"
@@ -2893,6 +3106,8 @@ export const content = {
           "add": 8
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.pacu.tasteLine",
       "prefers": {
         "time": [
           "morning",
@@ -2930,6 +3145,8 @@ export const content = {
           "add": 60
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.payara.tasteLine",
       "prefers": {
         "time": [
           "morning",
@@ -2967,6 +3184,8 @@ export const content = {
           "add": 9
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.peacock-bass.tasteLine",
       "prefers": {
         "time": [
           "morning",
@@ -3003,6 +3222,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.perch.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "morning",
@@ -3041,6 +3263,8 @@ export const content = {
           "add": -6
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.polar-cod.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -3076,6 +3300,9 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.pumpkinseed.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "noon",
@@ -3112,6 +3339,9 @@ export const content = {
           "add": 4
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.rainbow-trout.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -3149,6 +3379,8 @@ export const content = {
           "add": 9
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.red-bellied-piranha.tasteLine",
       "prefers": {
         "time": [
           "noon",
@@ -3186,6 +3418,8 @@ export const content = {
           "add": -1
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.redtail-catfish.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -3221,6 +3455,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.roach.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "morning",
@@ -3254,6 +3491,9 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.rock-bass.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "evening"
@@ -3289,6 +3529,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.rudd.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "noon",
@@ -3329,6 +3572,9 @@ export const content = {
           "add": 100
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.ruffe.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "evening",
@@ -3362,6 +3608,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.sauger.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "dawn",
@@ -3398,6 +3647,9 @@ export const content = {
           "add": 2
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.sea-lamprey.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -3431,6 +3683,8 @@ export const content = {
           "add": 12
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.silver-arowana.tasteLine",
       "prefers": {
         "time": [
           "dawn",
@@ -3467,6 +3721,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.silver-bream.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -3503,6 +3760,9 @@ export const content = {
           "add": 9
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.silver-carp.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "noon"
@@ -3538,6 +3798,9 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.smallmouth-bass.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -3578,6 +3841,9 @@ export const content = {
           "add": 100
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.smelt.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -3611,6 +3877,8 @@ export const content = {
           "add": 15
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.snailfish.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -3648,6 +3916,8 @@ export const content = {
           "add": -8
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.snow-trout.tasteLine",
       "prefers": {
         "time": [
           "dawn",
@@ -3688,6 +3958,9 @@ export const content = {
           "add": 300
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.sterlet.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -3727,6 +4000,9 @@ export const content = {
           "add": 100
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.stone-loach.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -3761,6 +4037,8 @@ export const content = {
           "add": -8
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.strange-cod.tasteLine",
       "prefers": {
         "time": [
           "dawn",
@@ -3777,7 +4055,9 @@ export const content = {
         ]
       },
       "placeholder": [
-        "stew"
+        "stew",
+        "taste",
+        "tasteLine"
       ]
     },
     "strange-giant-catfish": {
@@ -3798,6 +4078,8 @@ export const content = {
           "add": 12
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.strange-giant-catfish.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -3813,7 +4095,9 @@ export const content = {
         ]
       },
       "placeholder": [
-        "stew"
+        "stew",
+        "taste",
+        "tasteLine"
       ]
     },
     "strange-perch": {
@@ -3834,6 +4118,8 @@ export const content = {
           "add": 20
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.strange-perch.tasteLine",
       "prefers": {
         "time": [
           "morning",
@@ -3850,7 +4136,9 @@ export const content = {
         ]
       },
       "placeholder": [
-        "stew"
+        "stew",
+        "taste",
+        "tasteLine"
       ]
     },
     "strange-shark": {
@@ -3871,6 +4159,8 @@ export const content = {
           "add": 8
         }
       ],
+      "taste": "poor",
+      "tasteLine": "fish.strange-shark.tasteLine",
       "prefers": {
         "time": [
           "night"
@@ -3886,7 +4176,9 @@ export const content = {
         ]
       },
       "placeholder": [
-        "stew"
+        "stew",
+        "taste",
+        "tasteLine"
       ]
     },
     "strange-tilapia": {
@@ -3907,6 +4199,8 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.strange-tilapia.tasteLine",
       "prefers": {
         "time": [
           "morning",
@@ -3923,7 +4217,9 @@ export const content = {
         ]
       },
       "placeholder": [
-        "stew"
+        "stew",
+        "taste",
+        "tasteLine"
       ]
     },
     "taimen": {
@@ -3943,6 +4239,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.taimen.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "sunset",
@@ -3979,6 +4278,9 @@ export const content = {
           "add": 6
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.tench.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -4016,6 +4318,8 @@ export const content = {
           "add": 9
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.tiger-shovelnose-catfish.tasteLine",
       "prefers": {
         "time": [
           "evening",
@@ -4052,6 +4356,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.trahira.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "evening",
@@ -4092,6 +4399,9 @@ export const content = {
           "add": 100
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.vendace.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "evening",
@@ -4128,6 +4438,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.walleye.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "dawn",
@@ -4168,6 +4481,9 @@ export const content = {
           "add": 200
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.weatherfish.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "night"
@@ -4200,6 +4516,9 @@ export const content = {
           "add": 2
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.wels-catfish.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "night"
@@ -4235,6 +4554,9 @@ export const content = {
           "add": 5
         }
       ],
+      "taste": "plain",
+      "tasteLine": "fish.white-sucker.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "morning",
@@ -4270,6 +4592,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.wildlands-pejerrey.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "afternoon"
@@ -4305,6 +4630,9 @@ export const content = {
           "add": 9
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.wildlands-perch.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "dawn",
@@ -4342,6 +4670,8 @@ export const content = {
           "add": 12
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.wolffish.tasteLine",
       "prefers": {
         "time": [
           "dawn",
@@ -4378,6 +4708,9 @@ export const content = {
           "add": 3
         }
       ],
+      "taste": "good",
+      "tasteLine": "fish.yellow-perch.tasteLine",
+      "parasites": "high",
       "prefers": {
         "time": [
           "morning",
@@ -4411,6 +4744,9 @@ export const content = {
           "add": 1
         }
       ],
+      "taste": "delicacy",
+      "tasteLine": "fish.zander.tasteLine",
+      "parasites": "low",
       "prefers": {
         "time": [
           "sunset",
@@ -10473,6 +10809,20 @@ export const content = {
         "casts": 10
       }
     },
+    "look-underwater": {
+      "id": "look-underwater",
+      "placeholder": [
+        "description",
+        "cooldown"
+      ],
+      "class": "fishing-wizard",
+      "kind": "active",
+      "name": "perk.look-underwater.name",
+      "description": "perk.look-underwater.description",
+      "cooldown": {
+        "casts": 10
+      }
+    },
     "magpie-eye": {
       "id": "magpie-eye",
       "class": "any",
@@ -10742,6 +11092,21 @@ export const content = {
       ],
       "duration": {
         "casts": 10
+      }
+    },
+    "queasy": {
+      "id": "queasy",
+      "placeholder": true,
+      "name": "buff.queasy.name",
+      "debuff": true,
+      "effects": [
+        {
+          "value": "fishingSkill",
+          "add": -2
+        }
+      ],
+      "duration": {
+        "casts": 8
       }
     },
     "rested": {
@@ -11532,6 +11897,16 @@ export const content = {
         "rod": "stick"
       }
     },
+    "pool": {
+      "id": "pool",
+      "placeholder": true,
+      "add": 3,
+      "perDay": 1,
+      "rollBelow": 2,
+      "colourAt": 2,
+      "nameAt": 3,
+      "shadows": 12
+    },
     "size-bands": {
       "id": "size-bands",
       "bands": [
@@ -11600,6 +11975,17 @@ export const content = {
       ],
       "flavours": 3,
       "eatCasts": 5,
+      "taste": {
+        "poor": 0.5,
+        "plain": 1,
+        "good": 1.25,
+        "delicacy": 1.5
+      },
+      "parasites": {
+        "low": 5,
+        "high": 20,
+        "buff": "queasy"
+      },
       "aquarium": 6
     },
     "weather-scales": {
@@ -12925,127 +13311,249 @@ export const content = {
 export const strings = {
   "en": {
     "fish.arapaima.name": "Arapaima",
+    "fish.arapaima.tasteLine": "Firm, boneless white steaks; salted and dried like cod.",
     "fish.archerfish.name": "Archerfish",
+    "fish.archerfish.tasteLine": "Edible, but there's little meat on it.",
     "fish.asp.name": "Asp",
+    "fish.asp.tasteLine": "Tasty and fat, but full of fine bones; best smoked or dried.",
     "fish.barbel.name": "Barbel",
+    "fish.barbel.tasteLine": "Bony and bland, and its roe is poisonous.",
     "fish.barramundi.name": "Barramundi",
+    "fish.barramundi.tasteLine": "Moist, buttery white flesh with a mild, sweet taste.",
     "fish.black-crappie.name": "Black crappie",
+    "fish.black-crappie.tasteLine": "Sweet, flaky white meat; a favourite for the frying pan.",
     "fish.blackfish.name": "Blackfish",
+    "fish.blackfish.tasteLine": "Dark, oily meat; filling rather than fine.",
     "fish.bleak.name": "Bleak",
+    "fish.bleak.tasteLine": "Too small to fillet; fried whole and eaten bones and all.",
     "fish.bluegill.name": "Bluegill",
+    "fish.bluegill.tasteLine": "Mild and sweet; small, but a classic pan fish.",
     "fish.bowfin.name": "Bowfin",
+    "fish.bowfin.tasteLine": "Soft and mushy unless cooked at once; few bother.",
     "fish.brook-trout.name": "Brook trout",
+    "fish.brook-trout.tasteLine": "Delicate pink flesh, among the finest of the trout.",
     "fish.brown-bullhead.name": "Brown bullhead",
+    "fish.brown-bullhead.tasteLine": "Sweet and firm from clean water, muddy from a warm pond.",
     "fish.brown-trout.name": "Brown trout",
+    "fish.brown-trout.tasteLine": "Firm and rich; the big old ones turn coarse.",
     "fish.bull-shark.name": "Bull shark",
+    "fish.bull-shark.tasteLine": "Firm and meaty, but it reeks of ammonia unless bled at once.",
     "fish.burbot.name": "Burbot",
+    "fish.burbot.tasteLine": "Firm, white and boneless, the poor man's lobster; its liver is prized.",
     "fish.capelin.name": "Capelin",
+    "fish.capelin.tasteLine": "Eaten whole, roe and all; best when full of eggs.",
     "fish.cassalan-pike.name": "Cassalan pike",
+    "fish.cassalan-pike.tasteLine": "Lean white meat, good but laced with forked bones.",
     "fish.cassalan-sleeper.name": "Cassalan sleeper",
+    "fish.cassalan-sleeper.tasteLine": "White and better than a swamp fish has any right to be, though there is little on it.",
     "fish.central-mudminnow.name": "Central mudminnow",
+    "fish.central-mudminnow.tasteLine": "A mouthful of mud; used for bait, not for the table.",
     "fish.chain-pickerel.name": "Chain pickerel",
+    "fish.chain-pickerel.tasteLine": "Sweet white meat, hidden among a great many fine bones.",
     "fish.channel-catfish.name": "Channel catfish",
+    "fish.channel-catfish.tasteLine": "Mild, moist and boneless in the fillet; made for frying.",
     "fish.chub.name": "Chub",
+    "fish.chub.tasteLine": "Watery and full of forked bones: cotton wool stuffed with needles.",
     "fish.cisco.name": "Cisco",
+    "fish.cisco.tasteLine": "Rich and oily; at its best smoked.",
     "fish.clown-knifefish.name": "Clown knifefish",
+    "fish.clown-knifefish.tasteLine": "Bony, but the flesh is scraped off and pounded into springy fish balls.",
     "fish.coelacanth.name": "Coelacanth",
+    "fish.coelacanth.tasteLine": "Oily, slimy and foul; it makes those who eat it ill.",
     "fish.common-bream.name": "Common bream",
+    "fish.common-bream.tasteLine": "Bony and a little slimy; the big ones are good dried or smoked.",
     "fish.common-carp.name": "Common carp",
+    "fish.common-carp.tasteLine": "Rich, but muddy unless kept a few days in clean water; a feast-day fish all the same.",
     "fish.crucian-carp.name": "Crucian carp",
+    "fish.crucian-carp.tasteLine": "Sweet when fried crisp in sour cream, but small and bony.",
     "fish.dace.name": "Dace",
+    "fish.dace.tasteLine": "Small, dry and bony.",
     "fish.deepwater-sculpin.name": "Deepwater sculpin",
+    "fish.deepwater-sculpin.tasteLine": "Mostly head and spines; nobody eats it.",
     "fish.discus.name": "Discus",
+    "fish.discus.tasteLine": "Edible, as any cichlid is, but few would cook a fish this handsome.",
     "fish.electric-eel.name": "Electric eel",
+    "fish.electric-eel.tasteLine": "Bony and oily; hardly worth the trouble of catching it.",
     "fish.electric-yellow-cichlid.name": "Electric yellow cichlid",
+    "fish.electric-yellow-cichlid.tasteLine": "A mouthful of mild white meat, and bones.",
     "fish.ferrstad-carp.name": "Ferrstad carp",
+    "fish.ferrstad-carp.tasteLine": "Bony, and it takes the taste of its pond; fried crisp it does well enough.",
     "fish.four-eyed-fish.name": "Four-eyed fish",
+    "fish.four-eyed-fish.tasteLine": "Small, oily and scarcely eaten.",
     "fish.frontosa.name": "Frontosa",
+    "fish.frontosa.tasteLine": "Firm and tasty; a food fish on its home lake.",
     "fish.frostfin-char.name": "Frostfin char",
+    "fish.frostfin-char.tasteLine": "Between salmon and trout: fine, fat, pink flesh.",
     "fish.frostfin-grayling.name": "Frostfin grayling",
+    "fish.frostfin-grayling.tasteLine": "White and delicate; best eaten the day it's caught.",
     "fish.frostfin-sturgeon.name": "Frostfin sturgeon",
+    "fish.frostfin-sturgeon.tasteLine": "Firm, boneless, meaty flesh, and roe worth more than the fish.",
     "fish.giant-freshwater-stingray.name": "Giant freshwater stingray",
+    "fish.giant-freshwater-stingray.tasteLine": "The wings give ribbed meat, a little like scallop.",
     "fish.giant-gourami.name": "Giant gourami",
+    "fish.giant-gourami.tasteLine": "Thick, sweet flesh; excellent fried.",
     "fish.golden-dorado.name": "Golden dorado",
+    "fish.golden-dorado.tasteLine": "Firm and tasty, though with a fair few bones.",
     "fish.golden-mahseer.name": "Golden mahseer",
+    "fish.golden-mahseer.tasteLine": "Well flavoured, but bony.",
     "fish.golden-shiner.name": "Golden shiner",
+    "fish.golden-shiner.tasteLine": "Soft and bony; a bait fish.",
     "fish.goliath-tigerfish.name": "Goliath tigerfish",
+    "fish.goliath-tigerfish.tasteLine": "Edible, bony and dry.",
     "fish.golomyanka.name": "Golomyanka",
+    "fish.golomyanka.tasteLine": "A third of it is oil; in the pan it melts away to fat and bones.",
     "fish.goonch-catfish.name": "Goonch catfish",
+    "fish.goonch-catfish.tasteLine": "Coarse catfish meat, fair in a stew.",
     "fish.grass-carp.name": "Grass carp",
+    "fish.grass-carp.tasteLine": "Clean-tasting white meat, since it eats only plants; the bones are large and easy to pick.",
     "fish.grasslands-silverside.name": "Grasslands silverside",
+    "fish.grasslands-silverside.tasteLine": "Delicate white flesh, prized fried.",
     "fish.grayling.name": "Grayling",
+    "fish.grayling.tasteLine": "Fine white flesh said to smell of thyme; it spoils within hours.",
     "fish.great-sea-salmon.name": "Great Sea salmon",
+    "fish.great-sea-salmon.tasteLine": "Rich, pink and fat; good cooked, cured or smoked.",
     "fish.gudgeon.name": "Gudgeon",
+    "fish.gudgeon.tasteLine": "Tiny, but sweet; fried by the dozen.",
     "fish.hillstream-loach.name": "Hillstream loach",
+    "fish.hillstream-loach.tasteLine": "A scrap of a fish, barely worth frying.",
     "fish.huchen.name": "Huchen",
+    "fish.huchen.tasteLine": "Firm, pale flesh, like a lean salmon.",
     "fish.icefish.name": "Icefish",
+    "fish.icefish.tasteLine": "Snow-white, delicate and mild; its blood has no red in it.",
     "fish.ide.name": "Ide",
+    "fish.ide.tasteLine": "Fair eating, but bony; better smoked.",
     "fish.lake-brown-trout.name": "Lake brown trout",
+    "fish.lake-brown-trout.tasteLine": "Fat and pink from feeding in open water.",
     "fish.lake-sturgeon.name": "Lake sturgeon",
+    "fish.lake-sturgeon.tasteLine": "Dense, boneless meat, best smoked; its roe is caviar.",
     "fish.lake-trout.name": "Lake trout",
+    "fish.lake-trout.tasteLine": "Rich and oily; the fat ones are best smoked.",
     "fish.lake-whitefish.name": "Lake whitefish",
+    "fish.lake-whitefish.tasteLine": "Mild, white and sweet; one of the best freshwater fish there is.",
     "fish.landlocked-great-sea-salmon.name": "Landlocked Great Sea salmon",
+    "fish.landlocked-great-sea-salmon.tasteLine": "A salmon that never saw the sea: leaner and paler, still very good.",
     "fish.largemouth-bass.name": "Largemouth bass",
+    "fish.largemouth-bass.tasteLine": "White and firm; fine from cold clean water, weedy from a warm pond.",
     "fish.lenok.name": "Lenok",
+    "fish.lenok.tasteLine": "Tender trout flesh, fat in autumn.",
     "fish.lumpfish.name": "Lumpfish",
+    "fish.lumpfish.tasteLine": "The meat is watery; the roe is the prize, a poor man's caviar.",
     "fish.mainland-bullhead.name": "Mainland bullhead",
+    "fish.mainland-bullhead.tasteLine": "Hardly a bite, but that bite is sweet; once caught for soup.",
     "fish.mainland-eel.name": "Mainland eel",
+    "fish.mainland-eel.tasteLine": "Rich and fat, superb smoked. Never raw: its blood is poisonous until cooked.",
     "fish.mainland-mudminnow.name": "Mainland mudminnow",
+    "fish.mainland-mudminnow.tasteLine": "Tiny, and tasting of the bog.",
     "fish.mainland-whitefish.name": "Mainland whitefish",
+    "fish.mainland-whitefish.tasteLine": "Delicate, lightly fatty white flesh; excellent smoked.",
     "fish.mangrove-jack.name": "Mangrove jack",
+    "fish.mangrove-jack.tasteLine": "Firm, sweet white flesh; one of the best.",
     "fish.marbled-lungfish.name": "Marbled lungfish",
+    "fish.marbled-lungfish.tasteLine": "Strong-tasting; people either love it or won't touch it.",
     "fish.minnow.name": "Minnow",
+    "fish.minnow.tasteLine": "A mouthful; fried whole in handfuls.",
     "fish.mudskipper.name": "Mudskipper",
+    "fish.mudskipper.tasteLine": "Tender and slightly sweet; grilled on skewers or cooked in soup.",
     "fish.muskellunge.name": "Muskellunge",
+    "fish.muskellunge.tasteLine": "Much like pike: good white meat, forked bones.",
     "fish.nase.name": "Nase",
+    "fish.nase.tasteLine": "Soft, and bony beyond patience.",
     "fish.northern-pike.name": "Northern pike",
+    "fish.northern-pike.tasteLine": "Lean, firm white meat, but full of forked bones.",
     "fish.northern-snakehead.name": "Northern snakehead",
+    "fish.northern-snakehead.tasteLine": "Firm, white and nearly boneless; a prized soup fish.",
     "fish.omul.name": "Omul",
+    "fish.omul.tasteLine": "Tender and fat; smoked, salted or fresh, the pride of its lake.",
     "fish.ornate-bichir.name": "Ornate bichir",
+    "fish.ornate-bichir.tasteLine": "Armour-scaled and tough; more trouble than meat.",
     "fish.oscar.name": "Oscar",
+    "fish.oscar.tasteLine": "Mild white flesh; a market fish where it comes from.",
     "fish.pacu.name": "Pacu",
+    "fish.pacu.tasteLine": "Mild and sweet, a little nutty from the fruit it eats; the ribs are grilled.",
     "fish.payara.name": "Payara",
+    "fish.payara.tasteLine": "Edible, but bony and dry.",
     "fish.peacock-bass.name": "Peacock bass",
+    "fish.peacock-bass.tasteLine": "White, sweet and not at all oily, with few bones.",
     "fish.perch.name": "Perch",
+    "fish.perch.tasteLine": "Firm, white and sweet; the scales and spines are the hard part.",
     "fish.polar-cod.name": "Polar cod",
+    "fish.polar-cod.tasteLine": "Soft and bland; more often fed to dogs than to people.",
     "fish.pumpkinseed.name": "Pumpkinseed",
+    "fish.pumpkinseed.tasteLine": "Sweet white meat, on a very small fish.",
     "fish.rainbow-trout.name": "Rainbow trout",
+    "fish.rainbow-trout.tasteLine": "Mild, pink and tender.",
     "fish.red-bellied-piranha.name": "Red-bellied piranha",
+    "fish.red-bellied-piranha.tasteLine": "Bony, but good in soup; said to be a tonic.",
     "fish.redtail-catfish.name": "Redtail catfish",
+    "fish.redtail-catfish.tasteLine": "Dark meat that few will eat.",
     "fish.roach.name": "Roach",
+    "fish.roach.tasteLine": "Bony and bland; better dried and salted than fried.",
     "fish.rock-bass.name": "Rock bass",
+    "fish.rock-bass.tasteLine": "Firm white meat, a little coarse; fair for the pan.",
     "fish.rudd.name": "Rudd",
+    "fish.rudd.tasteLine": "Bony, with a bitter note of weed.",
     "fish.ruffe.name": "Ruffe",
+    "fish.ruffe.tasteLine": "All spines and slime, but it makes the finest fish soup.",
     "fish.sauger.name": "Sauger",
+    "fish.sauger.tasteLine": "Like walleye: white, flaky and sweet.",
     "fish.sea-lamprey.name": "Sea lamprey",
+    "fish.sea-lamprey.tasteLine": "Rich, meaty and boneless; a king is said to have died of eating too many.",
     "fish.silver-arowana.name": "Silver arowana",
+    "fish.silver-arowana.tasteLine": "Lean and bony; eaten where it lives, though most prize it alive.",
     "fish.silver-bream.name": "Silver bream",
+    "fish.silver-bream.tasteLine": "Thin, bony and tasteless.",
     "fish.silver-carp.name": "Silver carp",
+    "fish.silver-carp.tasteLine": "Mild white meat, threaded with awkward forked bones.",
     "fish.smallmouth-bass.name": "Smallmouth bass",
+    "fish.smallmouth-bass.tasteLine": "Firm, white and clean-tasting.",
     "fish.smelt.name": "Smelt",
+    "fish.smelt.tasteLine": "Fresh ones smell of cucumber; fried whole and crisp.",
     "fish.snailfish.name": "Snailfish",
+    "fish.snailfish.tasteLine": "Jelly-soft and watery; nothing to eat.",
     "fish.snow-trout.name": "Snow trout",
+    "fish.snow-trout.tasteLine": "A tasty mountain fish, though bony.",
     "fish.sterlet.name": "Sterlet",
+    "fish.sterlet.tasteLine": "The finest of the sturgeons; a royal fish soup is made of it.",
     "fish.stone-loach.name": "Stone loach",
+    "fish.stone-loach.tasteLine": "Small, but fine and delicate; once thought good for the sick.",
     "fish.strange-cod.name": "Strange cod",
+    "fish.strange-cod.tasteLine": "It tastes of cod, and then of something else.",
     "fish.strange-giant-catfish.name": "Strange giant catfish",
+    "fish.strange-giant-catfish.tasteLine": "A great deal of meat, none of it quite right.",
     "fish.strange-perch.name": "Strange perch",
+    "fish.strange-perch.tasteLine": "It tastes of perch, only more so.",
     "fish.strange-shark.name": "Strange shark",
+    "fish.strange-shark.tasteLine": "It tastes the way thunder smells.",
     "fish.strange-tilapia.name": "Strange tilapia",
+    "fish.strange-tilapia.tasteLine": "Mild, white and faintly glowing.",
     "fish.taimen.name": "Taimen",
+    "fish.taimen.tasteLine": "Fat, tender, pale pink flesh.",
     "fish.tench.name": "Tench",
+    "fish.tench.tasteLine": "Sweet, firm flesh, once the slime and the muddy taste are dealt with.",
     "fish.tiger-shovelnose-catfish.name": "Tiger shovelnose catfish",
+    "fish.tiger-shovelnose-catfish.tasteLine": "Firm, yellowish, boneless flesh with a mild taste.",
     "fish.trahira.name": "Trahira",
+    "fish.trahira.tasteLine": "Tasty white meat, cursed with forked bones.",
     "fish.vendace.name": "Vendace",
+    "fish.vendace.tasteLine": "Small and delicate, fried whole in butter; its roe is a treasure.",
     "fish.walleye.name": "Walleye",
+    "fish.walleye.tasteLine": "Sweet, white, flaky and nearly boneless: the best of the perch family.",
     "fish.weatherfish.name": "Weatherfish",
+    "fish.weatherfish.tasteLine": "Muddy unless kept in clean water first; good in soup.",
     "fish.wels-catfish.name": "Wels catfish",
+    "fish.wels-catfish.tasteLine": "Young ones are white and boneless; the old giants are fatty and coarse.",
     "fish.white-sucker.name": "White sucker",
+    "fish.white-sucker.tasteLine": "Sweet and firm from cold water, but riddled with small bones.",
     "fish.wildlands-pejerrey.name": "Wildlands pejerrey",
+    "fish.wildlands-pejerrey.tasteLine": "Delicate, white and lean.",
     "fish.wildlands-perch.name": "Wildlands perch",
+    "fish.wildlands-perch.tasteLine": "Firm white flesh, mild and clean.",
     "fish.wolffish.name": "Wolffish",
+    "fish.wolffish.tasteLine": "Firm, sweet white meat, like the shellfish it eats.",
     "fish.yellow-perch.name": "Yellow perch",
+    "fish.yellow-perch.tasteLine": "Sweet, firm and mild; made for a lakeside fry.",
     "fish.zander.name": "Zander",
+    "fish.zander.tasteLine": "Lean, white, tender and almost boneless.",
     "item.alchemists-vial.name": "Alchemist's vial",
     "item.alchemists-vial.flavor": "A stoppered glass vial, empty, with a sigil scratched into the glass.",
     "item.ash-rod.name": "Ash rod",
@@ -13511,6 +14019,8 @@ export const strings = {
     "perk.heavy-hand.description": "A natural 19 lands the fish, as a natural 20 does.",
     "perk.jump-in.name": "Jump In",
     "perk.jump-in.description": "When a fish gets away, jump in after it and beat it into submission. It goes in your bucket.",
+    "perk.look-underwater.name": "Look Underwater",
+    "perk.look-underwater.description": "Look under the water at the fish that are there. The first look at a fish shows its shadow, the second its colours, and from the third you know what it is.",
     "perk.magpie-eye.name": "Magpie Eye",
     "perk.magpie-eye.description": "+5 Treasure Find.",
     "perk.overwhelm.name": "Overwhelm",
@@ -13540,6 +14050,7 @@ export const strings = {
     "buff.moonlit-draught.name": "Moonlit draught",
     "buff.plantain-float.name": "Floating draught",
     "buff.potion-of-breath.name": "Potion of breath",
+    "buff.queasy.name": "Queasy",
     "buff.rested.name": "Well rested",
     "buff.snap-elixir.name": "Snap elixir",
     "buff.veil-elixir.name": "Veil elixir",
@@ -13729,6 +14240,7 @@ export const placeholderKeys = [
   "buff.moonlit-draught.name",
   "buff.plantain-float.name",
   "buff.potion-of-breath.name",
+  "buff.queasy.name",
   "buff.rested.name",
   "buff.snap-elixir.name",
   "buff.veil-elixir.name",
@@ -13827,6 +14339,12 @@ export const placeholderKeys = [
   "event.your-room.start.text.0",
   "event.your-room.start.text.1",
   "event.your-room.title",
+  "fish.blackfish.tasteLine",
+  "fish.strange-cod.tasteLine",
+  "fish.strange-giant-catfish.tasteLine",
+  "fish.strange-perch.tasteLine",
+  "fish.strange-shark.tasteLine",
+  "fish.strange-tilapia.tasteLine",
   "item.alchemists-vial.flavor",
   "item.canadian-waterweed.flavor",
   "item.floating-water-plantain.flavor",
@@ -13879,6 +14397,7 @@ export const placeholderKeys = [
   "location.town.spots.square.name",
   "perk.aquarium.description",
   "perk.aquarium.name",
+  "perk.look-underwater.description",
   "perk.sushi-enjoyer.description",
   "rules.cold.coldLevels.chilly.name",
   "rules.cold.coldLevels.cold.name",

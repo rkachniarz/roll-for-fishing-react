@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "good",
+  "tasteLine": "Firm and tasty, though with a fair few bones.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

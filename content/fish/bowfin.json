@@ -16,6 +16,9 @@
       "add": 2
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Soft and mushy unless cooked at once; few bother.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

@@ -17,6 +17,8 @@
       "add": 60
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Edible, but bony and dry.",
   "prefers": {
     "time": [
       "morning",

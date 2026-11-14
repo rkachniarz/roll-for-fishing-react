@@ -16,6 +16,9 @@
       "add": 2
     }
   ],
+  "taste": "good",
+  "tasteLine": "Firm, pale flesh, like a lean salmon.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "dawn",

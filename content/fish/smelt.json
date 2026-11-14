@@ -20,6 +20,9 @@
       "add": 100
     }
   ],
+  "taste": "good",
+  "tasteLine": "Fresh ones smell of cucumber; fried whole and crisp.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

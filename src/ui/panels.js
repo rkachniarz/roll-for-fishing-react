@@ -8,7 +8,7 @@ import { t } from '../strings.js';
 import { levelFor } from '../engine/state.js';
 import { className } from '../engine/character.js';
 import { iconName, paintIcon } from '../scene/icons.js';
-import { bagTab, effectsText, hoursText, link, rarityColour, slot } from './links.js';
+import { bagTab, effectsText, hoursText, link, rarityColour, slot, tasteLines } from './links.js';
 import { bowlOf, canTrade, costStatus, offersFor } from '../engine/barter.js';
 import { vendorStatus } from '../engine/schedule.js';
 import { bindTip } from './tooltip.js';
@@ -261,7 +261,11 @@ function speciesSlot(state, id, foundHere) {
         title: t(fish.name),
         colour: rarityColour(fish.rarity),
         icon: iconName({ kind: 'fish', id }),
-        lines: [{ text: t('journal.entry', { caught: e.caught, smallest: e.smallest.size, largest: e.largest.size, average: Math.round(e.totalSize / e.caught) }) }],
+        lines: [
+          { text: t('journal.entry', { caught: e.caught, smallest: e.smallest.size, largest: e.largest.size, average: Math.round(e.totalSize / e.caught) }) },
+          // How it eats, once the player has eaten one (D138).
+          ...(state.tasted?.[id] ? tasteLines(id) : []),
+        ],
       }
     : { title: t('journal.unknown'), lines: [{ text: t(state.book.fish[id] ? 'journal.heard' : 'journal.gotAway') }] };
   b.style.borderColor = tip.colour ?? '';

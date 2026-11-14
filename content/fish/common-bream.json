@@ -20,6 +20,9 @@
       "add": 100
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Bony and a little slimy; the big ones are good dried or smoked.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "evening",

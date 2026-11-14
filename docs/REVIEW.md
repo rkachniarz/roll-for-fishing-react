@@ -24,6 +24,65 @@ Items with no note are left alone.
 
 Newest first.
 
+## The fish under the surface, and Look Underwater (2026-11-14, D139)
+
+- **Every spot now starts with 5 to 15 fish in its pool, for every class,** as you chose. A pool fish comes back on
+  the line with a chance equal to the pool's size in percent (the old rule for fish that got away), so roughly one
+  bite in ten is now a pool fish. Those fish were rolled when the pool was stocked, so they follow that moment's
+  time and weather, not the cast's. Not measured with the balance sim yet.
+- **"Tops up with time":** one fish per game day, up to the number first rolled. The rate is a guess
+  (`content/rules/pool.json`).
+- **"Reroll new season" keeps the fish you've met:** only the stocked fish nobody has hooked are replaced; one that
+  got away or was let go stays, with its tries. Otherwise a season would wipe the "seen before" fish.
+- **"Roll anew under 2":** a fresh 2d6+3 is added on top of the one fish left.
+- **A stocked fish isn't "seen before"** when it bites, unless the wizard has looked at it. Once it gets away it is
+  an ordinary fish that got away.
+- **Recall** ("one that got away here before") picks from the fish you've met, if there are any, and only otherwise
+  from the stocked ones.
+- **The dive's other fish are the pool's own now,** back in the pool if not caught; it only rolls new ones if the
+  pool is too small.
+- **Shadows on the water:** up to 12 of the pool's fish, each milling in its own small patch. They are the small
+  swimming sprites, the same as a school's, so a sharp eye can tell a pike from a roach from the bank.
+- **The look's "shadow" is the fish's darkened bank view, not a flat black shape,** because that is what the drawn
+  fish have for a shadow. It hides the colours, but the outline still gives the kind away. Say if it should be a
+  flat silhouette.
+- **Each fish keeps its own look count,** as you suggested. A fish that joins the pool later starts at none.
+  On the third look the species goes in the journal as "known to be here" and the log names it; fish in the view
+  can't be tapped for a tooltip.
+- **The cooldown is 10 casts** (Summon Fish's), and the look can't be started while a line is out. A reload during
+  a look is back on the bank; the look still counted.
+- **The eye** is four green rings darkening to the corners, a placeholder (CR-8). **The plants** in the view are the
+  ones in the spot's and location's `stuff` lists; a spot with none has bare sand.
+- **The perk's name, "Look Underwater", is from your words;** its description is a placeholder.
+
+## Taste (2026-11-14, D138, 11.1)
+
+- **The grades are Claude's reading of each fish's reputation at the table,** not a measured thing: 18 delicacies
+  (burbot, eel, the sturgeons, zander, walleye, whitefish, char, salmon, vendace, sea lamprey among them), poor for the
+  bony or muddy (roach, rudd, chub, dace, nase, the mudminnows, bowfin). Pike is **plain**: good meat, counted down for
+  its bones, as the plan's "bony pike" asked; carp is plain too, for the mud. Each is one word in the fish's file.
+- **The taste lines for real species are written as facts, from memory, not checked against a source.** The ones
+  most worth a second look: barbel roe being poisonous, raw eel blood being poisonous, grayling smelling of thyme,
+  smelt smelling of cucumber, the coelacanth making people ill, the icefish's colourless blood, a king dying of
+  lampreys, chub as "cotton wool stuffed with needles".
+- **Six lines are placeholders, marked:** the five strange fish, and the **Blackfish**, since Claude doesn't know
+  which real fish it is. Tell Claude and it gets a real line.
+- **The numbers:** a bowl's minutes and a raw fish's casts times 0.5 (poor), 1, 1.25, 1.5 (delicacy), so a raw
+  fish's buff lasts 3, 5, 6 or 8 casts. Parasites: 5% for a low risk, 20% for a high one. **Queasy** (a placeholder
+  name): −2 Fishing Skill for 8 casts.
+- **Which fish are a high risk:** the pikes and perches (pike, Cassalan pike, pickerel, muskellunge, perch, yellow
+  perch, walleye, sauger, ruffe), burbot, roach, ide and dace, the snakehead, the weatherfish and the eel (for its
+  blood). Loosely after the real hosts of fish tapeworm and liver fluke; every other freshwater fish is low. Zander
+  is low, which is a guess.
+- **Rift fish carry no risk at all,** as you chose, though many are real freshwater fish (arapaima, pacu, piranha).
+- **A bowl teaches the taste of one fish it didn't know before, if there is one,** rather than any fish at random:
+  otherwise a pot of ten roach and one sturgeon would nearly always say "roach" again. Only that one fish's taste
+  becomes known.
+- **The parasite risk is never shown,** before or after: only the Queasy debuff and its log line tell. The eel's
+  line gives its own away.
+- **The raw fish's log line lost "Not bad."** (Claude's placeholder), since the taste line now follows it.
+- **The tooltip and the journal show the grade as well as the line:** "Taste: Poor", then the sentence.
+
 ## Heavyweight heavy weights (2026-11-14, D137)
 
 - **A trinket** (the two trinket slots), not a slot of its own: weights go on the line, but a line slot holds the line.

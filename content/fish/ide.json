@@ -16,6 +16,9 @@
       "add": 4
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Fair eating, but bony; better smoked.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "morning",

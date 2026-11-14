@@ -36,7 +36,8 @@ export function hasPerk(state, id) {
  * The perk ids a level offers this character. A class level offers the
  * class's perks for it (one at level 1, a passive and an active later); a
  * universal level, two universal perks drawn from a stream keyed by the
- * level, so a reload offers the same two (D96).
+ * level, so a reload offers the same two (D96). A class perk with no level
+ * of its own is among the universal ones for its class (D139).
  * @param {GameState} state
  * @param {number} level
  * @returns {string[]}
@@ -45,7 +46,7 @@ export function offers(state, level) {
   if (content.rules.levels.universal.includes(level)) {
     const held = new Set(Object.values(state.character.perks));
     const pool = Object.values(content.perks)
-      .filter((p) => p.class === 'any' && !p.retired && (p.repeatable || !held.has(p.id)))
+      .filter((p) => (p.class === 'any' || (p.class === state.character.classId && p.level === undefined)) && !p.retired && (p.repeatable || !held.has(p.id)))
       .map((p) => p.id)
       .sort();
     const dice = diceFor(createRng(deriveSeed(state.seed, `perks-${level}`)));

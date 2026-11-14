@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Thin, bony and tasteless.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

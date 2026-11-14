@@ -29,6 +29,18 @@
       "type": "array",
       "items": { "$ref": "common.schema.json#/definitions/effect" }
     },
+    "taste": {
+      "description": "How it eats (D138): a bowl of stew lasts longer or shorter for it, and so does its buff eaten raw (rules/stew.json). Plain if left out.",
+      "enum": ["poor", "plain", "good", "delicacy"]
+    },
+    "tasteLine": {
+      "description": "A sentence on how it eats, shown once the player has eaten one (D138).",
+      "$ref": "common.schema.json#/definitions/text"
+    },
+    "parasites": {
+      "description": "The risk in eating it raw (Sushi enjoyer, D138): the chance of the Queasy debuff is in rules/stew.json. Leave out for none: sea fish and rift fish.",
+      "enum": ["low", "high"]
+    },
     "rarity": {
       "description": "The species' rarity; the size band shifts it (D49, D63).",
       "$ref": "common.schema.json#/definitions/rarity"

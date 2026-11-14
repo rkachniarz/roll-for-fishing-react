@@ -17,6 +17,8 @@
       "add": 12
     }
   ],
+  "taste": "plain",
+  "tasteLine": "A great deal of meat, none of it quite right.",
   "prefers": {
     "time": [
       "night"
@@ -32,6 +34,8 @@
     ]
   },
   "placeholder": [
-    "stew"
+    "stew",
+    "taste",
+    "tasteLine"
   ]
 }

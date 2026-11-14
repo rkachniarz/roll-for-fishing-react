@@ -17,6 +17,8 @@
       "add": 9
     }
   ],
+  "taste": "good",
+  "tasteLine": "Firm and tasty; a food fish on its home lake.",
   "prefers": {
     "time": [
       "dawn",

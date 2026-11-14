@@ -16,6 +16,9 @@
       "add": 1
     }
   ],
+  "taste": "good",
+  "tasteLine": "Like walleye: white, flaky and sweet.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "dawn",

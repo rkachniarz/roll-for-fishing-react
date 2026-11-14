@@ -21,6 +21,8 @@
       "add": -8
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Well flavoured, but bony.",
   "prefers": {
     "time": [
       "dawn",

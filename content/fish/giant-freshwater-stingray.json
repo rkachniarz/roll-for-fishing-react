@@ -17,6 +17,8 @@
       "add": 9
     }
   ],
+  "taste": "plain",
+  "tasteLine": "The wings give ribbed meat, a little like scallop.",
   "prefers": {
     "time": [
       "night"

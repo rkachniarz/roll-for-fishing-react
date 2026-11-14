@@ -17,6 +17,8 @@
       "add": 12
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Lean and bony; eaten where it lives, though most prize it alive.",
   "prefers": {
     "time": [
       "dawn",

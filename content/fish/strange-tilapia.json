@@ -17,6 +17,8 @@
       "add": 6
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Mild, white and faintly glowing.",
   "prefers": {
     "time": [
       "morning",
@@ -33,6 +35,8 @@
     ]
   },
   "placeholder": [
-    "stew"
+    "stew",
+    "taste",
+    "tasteLine"
   ]
 }

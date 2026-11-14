@@ -16,6 +16,9 @@
       "add": 6
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Soft, and bony beyond patience.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "noon",

@@ -174,6 +174,14 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   morning; compare against the same moment instead.
 - **A non-fish rolls twice (D125):** treasure, then stuff against `stuffThreshold` with Stuff Find, then junk. White
   things live in the `stuff` lists, never in junk's.
+- **Taste is learned by eating (D138):** `state.tasted` holds the species eaten, raw or in a bowl. A fish's tooltip
+  can't see the game, so `src/main.js` tells `src/ui/links.js` when to show a taste (`showTasteWhen`); the journal
+  reads the state itself. The `taste` stream is drawn only for a fish with a parasite risk, and for a bowl with more
+  than one kind to pick from.
+- **A spot's pool (`state.escaped`) is what lives there (D139),** not only the fish that got away:
+  `src/engine/pool.js` stocks and tops it up lazily, whenever it is looked at (`castLine`, the dive, the wizard's
+  look, and `render` in `src/main.js` between casts), from the `pool` stream alone. A test that counts a pool must
+  leave out the `wild` fish. The look itself (`looking` in `src/main.js`) is the page's, never saved.
 - **Time moves in half-hour steps through `stepTime` (`src/engine/passage.js`)**, for a cast and for `wait:` and
   `sleep:`; buffs with `until` end there. Buffs can last casts, attempts, real ms or game minutes.
 - **Swimming fish are drawn as code (D131):** `src/scene/fish-art.js` paints each from its shape in

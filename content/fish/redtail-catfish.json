@@ -17,6 +17,8 @@
       "add": -1
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Dark meat that few will eat.",
   "prefers": {
     "time": [
       "night"

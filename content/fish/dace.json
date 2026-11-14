@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Small, dry and bony.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "morning"

@@ -49,7 +49,7 @@ const KINDS = {
  * location.lake.spots.crossroads.name.
  */
 const TEXT = {
-  fish: [['name'], ['subnames', '#']],
+  fish: [['name'], ['subnames', '#'], ['tasteLine']],
   items: [['name'], ['flavor'], ['page']],
   locations: [['name'], ['spots', '@', 'name']],
   tables: [],
@@ -444,9 +444,9 @@ function checkPerks(all, errors, warnings) {
       if (perk.level !== undefined) errors.push(`${where}: a universal perk comes on the levels in rules/levels.json, not its own`);
     } else {
       if (!all.classes[perk.class]) errors.push(`${where}: no class "${perk.class}"`);
-      if (perk.level === undefined) errors.push(`${where}: a class perk needs a level`);
+      // A class perk with no level is offered to its class on the universal levels (D139).
       if (perk.repeatable) errors.push(`${where}: only a universal perk can be repeatable`);
-      if (!perk.retired) ((byClass[perk.class] ??= {})[perk.level] ??= []).push(perk);
+      if (!perk.retired && perk.level !== undefined) ((byClass[perk.class] ??= {})[perk.level] ??= []).push(perk);
     }
     if (perk.kind === 'active' && !perk.cooldown) errors.push(`${where}: an active perk needs a cooldown`);
     // A cooldown counts casts, or time, or both; one with neither never runs (D96).

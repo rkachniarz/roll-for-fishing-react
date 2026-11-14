@@ -14,7 +14,7 @@ import { vendorStatus } from './schedule.js';
 import { addBuff, buffFrom, giveBuff } from './buffs.js';
 import { hasPerk } from './perks.js';
 import { poolKey } from './champions.js';
-import { levelFor } from './state.js';
+import { diceFrom, levelFor } from './state.js';
 import { levelUp } from './perks.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
@@ -187,7 +187,20 @@ export function stewEffects(species) {
 }
 
 /**
- * Sushi enjoyer (R21.1): eats a fish raw for its stew buff, for a few casts.
+ * What a fish's taste does (D138): the minutes it adds to a bowl, and the
+ * casts its buff lasts eaten raw, are multiplied by this.
+ * @param {string} species
+ * @returns {number}
+ */
+export function tasteFactor(species) {
+  return content.rules.stew.taste[content.fish[species]?.taste ?? 'plain'] ?? 1;
+}
+
+/**
+ * Sushi enjoyer (R21.1): eats a fish raw for its stew buff, for a few casts,
+ * more or fewer by its taste. The player knows its taste from then on. A
+ * freshwater fish may carry parasites (D138): a hidden roll by the fish's
+ * risk, and a bad one leaves the player queasy on top of the buff.
  * @param {GameState} state
  * @param {number} index
  * @returns {{ state: GameState, events: GameEvent[] }}
@@ -201,11 +214,22 @@ export function eatFish(state, index) {
     id: `sushi-${fish.species}`,
     source: 'sushi-enjoyer',
     effects: stewEffects(fish.species),
-    casts: rules.eatCasts,
+    casts: Math.max(1, Math.round(rules.eatCasts * tasteFactor(fish.species))),
     // Named for the fish (D124: the buff's name is the fish's).
     label: [content.fish[fish.species].name],
   });
-  return { state: next, events: [{ type: 'ate-fish', fish }] };
+  next.tasted = { ...next.tasted, [fish.species]: true };
+  // A fish with no risk draws nothing.
+  const chance = rules.parasites[content.fish[fish.species].parasites] ?? 0;
+  let queasy = false;
+  if (chance > 0) {
+    const { dice, commit } = diceFrom(next);
+    queasy = dice.taste.roll100() <= chance;
+    next.streams = commit();
+  }
+  const sick = content.buffs?.[rules.parasites.buff];
+  if (queasy && sick) addBuff(next, buffFrom(next, sick, { label: [sick.name] }));
+  return { state: next, events: [{ type: 'ate-fish', fish, queasy }] };
 }
 
 // ---------- The perpetual stew (R18.7, R19.4) ----------
@@ -252,14 +276,14 @@ export function atStew(state) {
 
 /**
  * The bowl the pot's fish would make (R19.4): game minutes by each fish's
- * rarity, the stew's warmth, and the stew buffs of the rarest kinds that
- * went in, up to `flavours` of them.
+ * rarity, more or fewer by its taste (D138), the stew's warmth, and the stew
+ * buffs of the rarest kinds that went in, up to `flavours` of them.
  * @param {FishInstance[]} pot
  * @returns {{ minutes: number, effects: import('./values.js').Effect[], flavours: string[] }}
  */
 export function bowlOf(pot) {
   const rules = content.rules.stew;
-  const minutes = pot.reduce((sum, f) => sum + (rules.minutes[f.rarity] ?? 0), 0);
+  const minutes = pot.reduce((sum, f) => sum + Math.round((rules.minutes[f.rarity] ?? 0) * tasteFactor(f.species)), 0);
   /** @type {Map<string, number>} */
   const best = new Map();
   for (const f of pot) best.set(f.species, Math.max(best.get(f.species) ?? -1, RARITIES.indexOf(f.rarity)));
@@ -273,7 +297,8 @@ export function bowlOf(pot) {
 /**
  * Eats a bowl (R19.4): a buff that lasts game time, from what went into the
  * pot since the last bowl; the pot is empty again. A new bowl replaces a
- * running one.
+ * running one. The player learns the taste of one kind of fish in it, picked
+ * at random from those they don't know yet, or from them all (D138).
  * @param {GameState} state
  * @returns {{ state: GameState, events: GameEvent[] }}
  */
@@ -283,8 +308,18 @@ export function eatStew(state) {
   const bowl = bowlOf(next.stewPot);
   const rules = content.rules.stew;
   addBuff(next, buffFrom(next, { id: 'perpetual-stew', effects: bowl.effects, duration: { minutes: Math.max(30, bowl.minutes) } }, { label: [rules.name] }));
+  const kinds = [...new Set(next.stewPot.map((f) => f.species))].sort();
+  const fresh = kinds.filter((k) => !next.tasted?.[k]);
+  const from = fresh.length ? fresh : kinds;
+  let taste = from[0];
+  if (from.length > 1) {
+    const { dice, commit } = diceFrom(next);
+    taste = from[dice.taste.getRandomNumber(0, from.length - 1)];
+    next.streams = commit();
+  }
+  next.tasted = { ...next.tasted, [taste]: true };
   next.stewPot = [];
-  return { state: next, events: [{ type: 'ate-stew', minutes: bowl.minutes, flavours: bowl.flavours }] };
+  return { state: next, events: [{ type: 'ate-stew', minutes: bowl.minutes, flavours: bowl.flavours, taste }] };
 }
 
 // ---------- The aquarium (R17.5) ----------

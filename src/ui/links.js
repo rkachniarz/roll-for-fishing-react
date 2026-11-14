@@ -13,6 +13,28 @@ import { effectLine } from './effects.js';
 /** @typedef {import('../engine/fish.js').FishInstance} FishInstance */
 /** @typedef {{ kind: 'fish', fish: FishInstance } | { kind: 'item', id: string }} Thing */
 
+/**
+ * Whether a fish's tooltip tells how it eats (D138): the page says, since
+ * only it knows the game. The journal tells whenever the fish has been eaten.
+ * @type {(species: string) => boolean}
+ */
+let tasteShown = () => false;
+/** @param {(species: string) => boolean} when */
+export function showTasteWhen(when) {
+  tasteShown = when;
+}
+
+/**
+ * How a species eats, as tooltip lines (D138): its grade, and a sentence.
+ * @param {string} species
+ * @returns {import('./tooltip.js').Tip['lines']}
+ */
+export function tasteLines(species) {
+  const fish = content.fish[species];
+  if (!fish?.tasteLine) return [];
+  return [{ text: t('tip.taste', { grade: t(`taste.${fish.taste ?? 'plain'}`) }) }, { text: `"${t(fish.tasteLine)}"`, tone: 'flavor' }];
+}
+
 /** @param {FishInstance} fish */
 export const fishName = (fish) => fishNameKeys(fish).map((k) => t(k)).join(' ');
 /** @param {string} id */
@@ -57,6 +79,7 @@ export function tipFor(thing) {
         { text: t('tip.size', { size: thing.fish.size }) },
         // What it adds to the stew, and gives eaten raw (R19.4, R21.1).
         ...(content.fish[thing.fish.species]?.stew?.length ? [{ text: t('tip.stew', { effects: effectsText(content.fish[thing.fish.species].stew) }), tone: /** @type {const} */ ('good') }] : []),
+        ...(tasteShown(thing.fish.species) ? tasteLines(thing.fish.species) : []),
       ],
     };
   }

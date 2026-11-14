@@ -17,6 +17,8 @@
       "add": 8
     }
   ],
+  "taste": "poor",
+  "tasteLine": "It tastes the way thunder smells.",
   "prefers": {
     "time": [
       "night"
@@ -32,6 +34,8 @@
     ]
   },
   "placeholder": [
-    "stew"
+    "stew",
+    "taste",
+    "tasteLine"
   ]
 }

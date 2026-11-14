@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "good",
+  "tasteLine": "Sweet, firm and mild; made for a lakeside fry.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "morning",

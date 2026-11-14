@@ -20,6 +20,9 @@
       "add": 400
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Firm, boneless, meaty flesh, and roe worth more than the fish.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

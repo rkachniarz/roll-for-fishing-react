@@ -17,6 +17,8 @@
       "add": 9
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Bony, but good in soup; said to be a tonic.",
   "prefers": {
     "time": [
       "noon",

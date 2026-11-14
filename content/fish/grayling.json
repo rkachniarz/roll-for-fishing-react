@@ -16,6 +16,9 @@
       "add": 4
     }
   ],
+  "taste": "good",
+  "tasteLine": "Fine white flesh said to smell of thyme; it spoils within hours.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "noon",

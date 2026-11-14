@@ -21,6 +21,8 @@
       "add": 1
     }
   ],
+  "taste": "plain",
+  "tasteLine": "A mouthful of mild white meat, and bones.",
   "prefers": {
     "time": [
       "morning",

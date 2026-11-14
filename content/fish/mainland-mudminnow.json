@@ -16,6 +16,9 @@
       "add": 12
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Tiny, and tasting of the bog.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "evening"

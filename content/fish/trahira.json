@@ -16,6 +16,9 @@
       "add": 3
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Tasty white meat, cursed with forked bones.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "evening",

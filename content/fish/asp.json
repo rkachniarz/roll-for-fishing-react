@@ -16,6 +16,9 @@
       "add": 2
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Tasty and fat, but full of fine bones; best smoked or dried.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

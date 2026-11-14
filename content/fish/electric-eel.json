@@ -17,6 +17,8 @@
       "add": 12
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Bony and oily; hardly worth the trouble of catching it.",
   "prefers": {
     "time": [
       "night"

@@ -1,0 +1,11 @@
+{
+  "$schema": "../../schemas/pool.schema.json",
+  "id": "pool",
+  "placeholder": true,
+  "add": 3,
+  "perDay": 1,
+  "rollBelow": 2,
+  "colourAt": 2,
+  "nameAt": 3,
+  "shadows": 12
+}

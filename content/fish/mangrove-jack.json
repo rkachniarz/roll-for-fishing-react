@@ -17,6 +17,8 @@
       "add": 20
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Firm, sweet white flesh; one of the best.",
   "prefers": {
     "time": [
       "sunset",

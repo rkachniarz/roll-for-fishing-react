@@ -20,6 +20,9 @@
       "add": 200
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Muddy unless kept in clean water first; good in soup.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "night"

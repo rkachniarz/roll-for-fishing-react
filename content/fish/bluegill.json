@@ -16,6 +16,9 @@
       "add": 4
     }
   ],
+  "taste": "good",
+  "tasteLine": "Mild and sweet; small, but a classic pan fish.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

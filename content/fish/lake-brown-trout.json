@@ -16,6 +16,9 @@
       "add": 2
     }
   ],
+  "taste": "good",
+  "tasteLine": "Fat and pink from feeding in open water.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "dawn",

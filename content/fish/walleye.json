@@ -16,6 +16,9 @@
       "add": 1
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Sweet, white, flaky and nearly boneless: the best of the perch family.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "dawn",

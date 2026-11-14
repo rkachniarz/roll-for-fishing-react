@@ -20,6 +20,9 @@
       "add": 100
     }
   ],
+  "taste": "plain",
+  "tasteLine": "All spines and slime, but it makes the finest fish soup.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "evening",

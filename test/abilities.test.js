@@ -147,12 +147,14 @@ test('Jump In lights up when a fish gets away, dives after it among others, and 
     const pool = s.escaped[poolKey(s)].length;
     const bucket = s.bucket.reduce((n, b) => n + b.count, 0);
     const used = useAbility(s, 'jump-in');
-    // The dive (R20.3): the fish that got away and three others, rolled now.
+    // The dive (R20.3): the fish that got away and three others, the pool's own (D139).
     assert.ok(used.events.some((e) => e.type === 'dive-started'));
     const dive = /** @type {any} */ (used.state.dive);
     assert.equal(dive.fish.length, 4);
     assert.equal(dive.fish[0].fish.species, fish?.species);
-    assert.equal(used.state.escaped[poolKey(s)].length, pool - 1, 'out of the pool while the dive lasts');
+    const pooled = dive.fish.filter((/** @type {any} */ f) => f.pooled);
+    assert.equal(pooled.length, 3, 'the others are from the pool');
+    assert.equal(used.state.escaped[poolKey(s)].length, pool - 4, 'out of the pool while the dive lasts');
     let after = used.state;
     for (let n = 0; n < dive.fish.length; n++) after = diveStrike(after, n).state;
     assert.equal(diveStrike(after, 0).state, after, 'struck once only');
@@ -160,7 +162,7 @@ test('Jump In lights up when a fish gets away, dives after it among others, and 
     assert.equal(after.bucket.reduce((n, b) => n + b.count, 0), bucket + caught);
     const ended = endDive(after).state;
     assert.equal(ended.dive, null);
-    assert.equal(ended.escaped[poolKey(s)].length, pool - 1 + (dive.fish[0].caught ? 0 : 1), 'the one that got away again is back in the pool');
+    assert.equal(ended.escaped[poolKey(s)].length, pool - caught, 'those not caught are back in the pool');
     assert.deepEqual(used.state.cooldowns['jump-in'], { casts: 10, pending: true });
     assert.equal(used.state.lit['jump-in'], undefined);
     // Unused, it goes dark when the next line goes out.

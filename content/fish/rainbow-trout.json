@@ -16,6 +16,9 @@
       "add": 4
     }
   ],
+  "taste": "good",
+  "tasteLine": "Mild, pink and tender.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

@@ -405,3 +405,18 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   simulated games with no Treasure Find (weight 9 gave 77%).
 - **10.14** Measured at the end: `npm run check` passes, with 226 unit tests and every browser check (a new one walks
   the town: the map, the innkeeper, the room, the inn, the stew); the artifact builds at 915.4 kB.
+
+## Phase 11: What the real species do (in progress)
+
+- **11.1** Taste (D138): `taste`, `tasteLine` and `parasites` on all 122 fish; the grade's factor on a bowl's
+  minutes and a raw fish's casts; the Queasy debuff from a hidden d100; `state.tasted` and a `taste` stream (save
+  version 13); the line in the log, the journal and, for a Sushi enjoyer, the tooltip. The tooltip has no way to
+  see the game, so the page tells `src/ui/links.js` when to show a taste (`showTasteWhen`). Measured: 236 unit
+  tests, and a browser check that plants the perk and two roach in a save, eats one and reads the log and the
+  tooltip.
+- **11.13** The stocked pools and Look Underwater (D139): `src/engine/pool.js` tends a pool when it is looked at
+  (`castLine`, the dive, the look, and the page before each redraw between casts); `state.pools` and a `pool`
+  stream, in save version 13 with 11.1. Seven seeded unit tests had counted on an empty pool and now count the fish
+  the player has met; two browser checks changed (the collection's fish got away under the new dice, and the dive's
+  timer is waited for). The look reuses the title's water with the spot's own plants. Measured: 239 unit tests, a
+  browser check that stocks a pool of 12, looks, and taps back to the bank; the artifact builds at 1041.0 kB.

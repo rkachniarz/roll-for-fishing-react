@@ -16,6 +16,9 @@
       "add": 6
     }
   ],
+  "taste": "good",
+  "tasteLine": "Firm, white and clean-tasting.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

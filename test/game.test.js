@@ -71,7 +71,7 @@ test('a new game: the Lake, the stick, a morning in year 1, every stream seeded'
   assert.equal(s.weather.season, c.season, "the weather is the start's season");
   assert.deepEqual(game(), s, 'the same seed, the same start');
   assert.equal(s.character.luck, 0, 'Luck starts at 0 (R6.7)');
-  assert.equal(Object.keys(s.streams).length, 11);
+  assert.equal(Object.keys(s.streams).length, 13);
   assert.deepEqual(s.features, []);
 });
 
@@ -190,7 +190,7 @@ test('a big fish that gets away swims off with the same fish, then goes for good
   assert.ok(moved);
   assert.ok(Math.hypot(moved.x - 120, moved.y - 100) >= 50, 'far off, not a drift');
   assert.equal(moved.uses, 1);
-  assert.deepEqual(missed.state.escaped, {}, 'not in the pool while the feature holds it');
+  assert.deepEqual(Object.values(missed.state.escaped).flat().filter((f) => !f.wild), [], 'not in the pool while the feature holds it');
 
   const again = castLine({ ...missed.state, missStreak: 0 }, 0, { landing: { x: moved.x, y: moved.y } });
   assert.ok(again.cast.line.kind === 'fish');
@@ -198,7 +198,7 @@ test('a big fish that gets away swims off with the same fish, then goes for good
   assert.equal(again.cast.line.kind === 'fish' && again.cast.line.seenBefore, true);
   const gone = tick(again.state, again.cast, again.cast.biteAt + again.cast.timing.lateMs + 1);
   assert.ok(!gone.state.features.some((f) => f.id === 'big-pike'), 'the second time it goes');
-  assert.equal(Object.values(gone.state.escaped).flat().length, 1, 'and the pike is in the pool');
+  assert.equal(Object.values(gone.state.escaped).flat().filter((f) => !f.wild).length, 1, 'and the pike is in the pool');
 });
 
 // ---------- Missing the splash (D64) and the escaped pool (2.7) ----------
@@ -208,8 +208,10 @@ test('a missed fish joins the pool; after the pause the line counts as cast agai
   const late = cast.biteAt + cast.timing.lateMs;
   const missed = tick(state, cast, late);
   assert.equal(missed.state.missStreak, 1);
-  assert.equal(missed.state.escaped[POOL].length, 1);
-  assert.equal(missed.state.escaped[POOL][0].tries, 1);
+  // Among the fish the pool was stocked with (D139), the one that got away.
+  const met = missed.state.escaped[POOL].filter((f) => !f.wild);
+  assert.equal(met.length, 1);
+  assert.equal(met[0].tries, 1);
 
   const waiting = tick(missed.state, missed.cast, late + cast.missPause - 1);
   assert.equal(waiting.cast, missed.cast, 'nothing happens during the pause');
@@ -255,7 +257,9 @@ test('"next n casts" buffs spend a charge when the line goes out, and cover that
   const state = { ...game(), buffs: [{ id: 'stew', source: 'inn', effects: [{ value: 'fishingSkill', add: 4 }], casts: 1 }] };
   const out = castLine(state, 0);
   assert.equal(out.checkpoint.buffs.length, 0, 'the charge is spent, even if the cast is voided');
-  assert.deepEqual(out.checkpoint.streams, state.streams, 'and nothing else changed in the checkpoint');
+  // The pool is stocked as the first line goes out (D139), from its own stream.
+  assert.deepEqual({ ...out.checkpoint.streams, pool: 0 }, { ...state.streams, pool: 0 }, 'and nothing else changed in the checkpoint');
+  assert.ok(out.checkpoint.escaped[POOL].length >= 5);
   if (out.cast.line.kind === 'fish') assert.ok(out.cast.line.player.mods.some((m) => m.label === 'stew'));
 });
 

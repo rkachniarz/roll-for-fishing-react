@@ -16,6 +16,9 @@
       "add": 1
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Lean, white, tender and almost boneless.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "sunset",

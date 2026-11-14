@@ -17,6 +17,8 @@
       "add": 15
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Armour-scaled and tough; more trouble than meat.",
   "prefers": {
     "time": [
       "night"

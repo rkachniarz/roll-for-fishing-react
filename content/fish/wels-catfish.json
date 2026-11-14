@@ -16,6 +16,9 @@
       "add": 2
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Young ones are white and boneless; the old giants are fatty and coarse.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

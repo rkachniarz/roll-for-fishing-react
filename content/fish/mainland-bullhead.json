@@ -20,6 +20,9 @@
       "add": 100
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Hardly a bite, but that bite is sweet; once caught for soup.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

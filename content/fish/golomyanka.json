@@ -15,6 +15,9 @@
       "add": 1
     }
   ],
+  "taste": "poor",
+  "tasteLine": "A third of it is oil; in the pan it melts away to fat and bones.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

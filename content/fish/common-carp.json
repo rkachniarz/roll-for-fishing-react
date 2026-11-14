@@ -20,6 +20,9 @@
       "add": 100
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Rich, but muddy unless kept a few days in clean water; a feast-day fish all the same.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night",

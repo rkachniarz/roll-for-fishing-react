@@ -17,6 +17,8 @@
       "add": 8
     }
   ],
+  "taste": "plain",
+  "tasteLine": "Strong-tasting; people either love it or won't touch it.",
   "prefers": {
     "time": [
       "night"

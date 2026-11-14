@@ -15,6 +15,9 @@
       "add": 1
     }
   ],
+  "taste": "good",
+  "tasteLine": "Delicate white flesh, prized fried.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "morning",

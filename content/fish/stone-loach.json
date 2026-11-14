@@ -20,6 +20,9 @@
       "add": 100
     }
   ],
+  "taste": "good",
+  "tasteLine": "Small, but fine and delicate; once thought good for the sick.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

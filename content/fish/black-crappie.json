@@ -16,6 +16,9 @@
       "add": 1
     }
   ],
+  "taste": "good",
+  "tasteLine": "Sweet, flaky white meat; a favourite for the frying pan.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "dawn",

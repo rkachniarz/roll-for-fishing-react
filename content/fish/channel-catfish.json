@@ -16,6 +16,9 @@
       "add": 1
     }
   ],
+  "taste": "good",
+  "tasteLine": "Mild, moist and boneless in the fillet; made for frying.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

@@ -17,6 +17,7 @@ import { paintLogo } from './logo.js';
  * @typedef {{ kind: 'town', buildings: Building[], here: string | null, night?: boolean }
  *   | { kind: 'room', tank: { key: string, species: string }[] | null }
  *   | { kind: 'dive', fish: { key: string, species: string }[] }
+ *   | { kind: 'look', fish: { key: string, species: string, look: 'own' | 'shadow' }[], plants: string[] }
  *   | { kind: 'title', fish: { key: string, species: string }[] }} View
  */
 
@@ -37,7 +38,7 @@ const HAZE = [0x16, 0x53, 0x5f];
 /** Where fish swim on the title screen: under the surface, down among the weed. */
 const TITLE_WATER = { x0: 12, y0: 24, x1: 244, y1: 224 };
 /** The plants that can be found in the water (content/items), growing on the title's sand. */
-const PLANTS = ['canadian-waterweed', 'hornwort', 'quillwort', 'water-lobelia', 'marimo', 'floating-water-plantain', 'lace-plant', 'waterwheel-plant'];
+export const PLANTS = ['canadian-waterweed', 'hornwort', 'quillwort', 'water-lobelia', 'marimo', 'floating-water-plantain', 'lace-plant', 'waterwheel-plant'];
 
 /**
  * A plant's two frames, swaying: its icon, and its icon with the top half a
@@ -125,6 +126,9 @@ export function createViews(parent, rand) {
   const shoal = createShoal(play, rand);
   const front = new Graphics();
   play.addChild(front);
+  // The inside of the eye around a look under the water (D139), over everything.
+  const eye = new Graphics();
+  root.addChild(eye);
   /** @type {View | null} */
   let view = null;
   let key = '';
@@ -138,6 +142,7 @@ export function createViews(parent, rand) {
   function paint() {
     back.clear();
     front.clear();
+    eye.clear();
     for (const layer of [title, titleFront, logo]) {
       for (const child of layer.removeChildren()) child.destroy({ texture: true, textureSource: true });
     }
@@ -151,7 +156,14 @@ export function createViews(parent, rand) {
     }
     if (!view) return;
     if (view.kind === 'title') {
-      paintTitle();
+      paintTitle(PLANTS, true);
+      return;
+    }
+    // A look under the water (D139): the title's water, with only the plants
+    // that grow at this spot, and the eye around it.
+    if (view.kind === 'look') {
+      paintTitle(view.plants, false);
+      paintEye();
       return;
     }
     if (view.kind === 'town') {
@@ -207,12 +219,40 @@ export function createViews(parent, rand) {
   }
 
   /**
+   * The wizard's Look Underwater (D139): the inside of an eye around the
+   * scene, green, darker towards the corners. Each ring is everything outside
+   * an ellipse wider than the scene, so the open middle is an eye's almond.
+   * A placeholder (CR-8).
+   */
+  function paintEye() {
+    const cx = width / 2;
+    const cy = SIZE / 2;
+    for (const [rx, ry, colour, alpha] of /** @type {[number, number, string, number][]} */ ([
+      [0.6, 0.56, '#4fd67a', 0.22],
+      [0.56, 0.5, '#2f9f55', 0.35],
+      [0.53, 0.45, '#145f30', 0.55],
+      [0.51, 0.41, '#06280f', 0.8],
+    ])) {
+      for (let y = 0; y < SIZE; y += 2) {
+        const dy = (y + 1 - cy) / (SIZE * ry);
+        const half = Math.abs(dy) >= 1 ? 0 : Math.round(width * rx * Math.sqrt(1 - dy * dy));
+        const left = Math.max(0, Math.round(cx - half));
+        if (left <= 0) continue;
+        eye.rect(0, y, left, 2).fill({ color: colour, alpha });
+        eye.rect(width - left, y, left, 2).fill({ color: colour, alpha });
+      }
+    }
+  }
+
+  /**
    * The title's water across the whole width: the bands and sand; a shaft of
    * light every fifty pixels or so, with three frames of its dither to flicker
    * between; and plants that can be found, planted at varied depths on the
    * lake bottom, the far ones hazed, the near ones in front of the fish.
+   * @param {string[]} plants  Which plants grow here: all of them on the title, a spot's own for a look (D139).
+   * @param {boolean} withLogo  The game's name and its die: the title's.
    */
-  function paintTitle() {
+  function paintTitle(plants, withLogo) {
     title.addChild(new Sprite(Texture.from(paintWater(width, SIZE, SAND, rand, true))));
     const len = SIZE - SAND - 2;
     const count = Math.max(3, Math.round(width / 50));
@@ -232,8 +272,8 @@ export function createViews(parent, rand) {
     const top = SIZE - SAND;
     /** @type {{ x: number, depth: number, id: string }[]} */
     const planted = [];
-    for (let x = Math.floor(rand() * 10) - 8; x < width - 8; x += 12 + Math.floor(rand() * 16)) {
-      planted.push({ x, depth: rand(), id: PLANTS[Math.floor(rand() * PLANTS.length)] });
+    for (let x = Math.floor(rand() * 10) - 8; plants.length > 0 && x < width - 8; x += 12 + Math.floor(rand() * 16)) {
+      planted.push({ x, depth: rand(), id: plants[Math.floor(rand() * plants.length)] });
     }
     planted.sort((a, b) => a.depth - b.depth);
     for (const p of planted) {
@@ -245,6 +285,7 @@ export function createViews(parent, rand) {
       weed.push({ sprite, frames, next: rand() * 1400 });
     }
     bubbles = Array.from({ length: 8 }, () => ({ x: 10 + rand() * 236, y: rand() * SIZE, speed: 6 + rand() * 10 }));
+    if (!withLogo) return;
     // The name, in the middle of the water once its font is in; the die
     // rolls in from below and lands on 20 in the O.
     const mine = logoFor;
@@ -276,7 +317,7 @@ export function createViews(parent, rand) {
       }
       if (view?.kind === 'room' && view.tank) shoal.set(view.tank, TANK);
       else if (view?.kind === 'dive') shoal.set(view.fish, DEEP);
-      else if (view?.kind === 'title') shoal.set(view.fish, TITLE_WATER);
+      else if (view?.kind === 'title' || view?.kind === 'look') shoal.set(view.fish, TITLE_WATER);
       else shoal.set([], DEEP);
     },
     /** @param {number} w @param {number} o */
@@ -291,7 +332,7 @@ export function createViews(parent, rand) {
       if (!view) return;
       shoal.update(now);
       bubbleLayer.clear();
-      if (view.kind === 'title') {
+      if (view.kind === 'title' || view.kind === 'look') {
         logoDie.update(now);
         // The light flickers as the surface moves over it and drifts a pixel
         // or two; the weed sways a pixel now and then, each to its own time.
@@ -309,12 +350,12 @@ export function createViews(parent, rand) {
           }
         }
       }
-      if (view.kind === 'dive' || view.kind === 'title' || (view.kind === 'room' && view.tank)) {
+      if (view.kind === 'dive' || view.kind === 'look' || view.kind === 'title' || (view.kind === 'room' && view.tank)) {
         if (!bubbles.length) bubbles = Array.from({ length: 6 }, () => ({ x: TANK.x0 + rand() * (TANK.x1 - TANK.x0), y: TANK.y1, speed: 8 + rand() * 8 }));
         const top = view.kind === 'room' ? TANK.y0 : 0;
         for (const b of bubbles) {
           b.y -= b.speed / 60;
-          if (b.y < top) b.y = view.kind === 'dive' ? 230 : view.kind === 'title' ? SIZE - SAND : TANK.y1;
+          if (b.y < top) b.y = view.kind === 'dive' ? 230 : view.kind === 'title' || view.kind === 'look' ? SIZE - SAND : TANK.y1;
           bubbleLayer.rect(Math.round(b.x), Math.round(b.y), 1, 1).fill({ color: '#e8fbff', alpha: 0.7 });
         }
       }

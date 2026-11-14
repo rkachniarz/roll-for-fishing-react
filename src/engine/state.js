@@ -18,7 +18,7 @@ import { emptyEquipment } from './equipment.js';
 import { knownKey, locationList } from './knowledge.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 12;
+export const SAVE_VERSION = 13;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -26,13 +26,17 @@ export const SAVE_VERSION = 12;
  * line · effects: dice on effects · weather · scatter: where the bobber lands ·
  * bait: saving or losing bait · features: surface features appearing and drifting ·
  * events: the event meter and which event it picks · abilities: dice an
- * ability rolls when used (D96) · champions: class fish appearing and acting (D114).
+ * ability rolls when used (D96) · champions: class fish appearing and acting (D114) ·
+ * taste: a raw fish sitting badly, and which fish a bowl of stew tastes of (D138) ·
+ * pool: the fish a spot's pool is stocked with (D139).
  */
-export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions'];
+export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions', 'taste', 'pool'];
 
 /**
- * @typedef {import('./fish.js').FishInstance & { tries?: number }} PoolFish  A fish
- *   that got away or was released, with how many times it was met.
+ * @typedef {import('./fish.js').FishInstance & { tries?: number, wild?: boolean, looks?: number }} PoolFish  A fish
+ *   in a spot's pool (pool.js, D139): one that got away or was released, with how many times it was met, or
+ *   one the pool was stocked with, `wild` until the player meets it. `looks`: how many times the wizard
+ *   has looked at it under the water.
  *
  * @typedef {Object} Buff  A temporary modifier (R12). Lasts `casts` casts, `attempts` attempts at a
  *   catch (an ability's "next cast", D96) or `ms` real milliseconds.
@@ -64,7 +68,11 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {{ id: string, count: number }[]} bags
  * @property {{ fish: import('./fish.js').FishInstance, count: number }[]} bucket
  * @property {Record<string, number>} found  Item id -> how many ever found.
- * @property {Record<string, PoolFish[]>} escaped  Per location or location/spot (R3.6, D59).
+ * @property {Record<string, PoolFish[]>} escaped  Each spot's pool of fish, per location or
+ *   location/spot (R3.6, D59, D139).
+ * @property {Record<string, { season: string, size: number, at: number }>} pools  Each pool that has been
+ *   stocked (pool.js, D139): the season it was rolled in, the number rolled, and the game minute its days
+ *   are counted from.
  * @property {Buff[]} buffs
  * @property {import('./features.js').Feature[]} features  On the water now (R14).
  * @property {Record<string, import('./champions.js').Champion[]>} champions  Class fish, per location or
@@ -99,6 +107,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {import('./fish.js').FishInstance[]} stewPot  Fish put in the stew since the last bowl (R19.4).
  * @property {import('./fish.js').FishInstance[]} aquarium  Fish in the room's aquarium (R17.5).
  * @property {import('./dive.js').Dive | null} dive  The Fighter's dive under way (R20.3).
+ * @property {Record<string, true>} tasted  Species the player has eaten, raw or in a bowl, and so
+ *   knows the taste of (D138).
  */
 
 /**
@@ -149,6 +159,7 @@ export function newGame({ seed, character, month }) {
     bucket: [],
     found: {},
     escaped: {},
+    pools: {},
     buffs: [],
     features: [],
     champions: {},
@@ -171,6 +182,7 @@ export function newGame({ seed, character, month }) {
     stewPot: [],
     aquarium: [],
     dive: null,
+    tasted: {},
   };
 }
 
@@ -297,6 +309,14 @@ const MIGRATIONS = {
   // 11 -> 12: the town (D123): a barter window, the stew's pot, the aquarium, the dive.
   // A game already under way has had its welcome (R17.3).
   11: (save) => ({ ...save, shop: null, stewPot: [], aquarium: [], dive: null, eventsSeen: { ...save.eventsSeen, welcome: 1 } }),
+  // 12 -> 13: taste (D138): what the player has eaten, with its own stream; and the pools
+  // stocked with fish (D139), none yet, with theirs.
+  12: (save) => ({
+    ...save,
+    tasted: {},
+    pools: {},
+    streams: { ...save.streams, taste: deriveSeed(save.seed, 'taste'), pool: deriveSeed(save.seed, 'pool') },
+  }),
 };
 
 /** @param {GameState} state */

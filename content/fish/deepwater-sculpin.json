@@ -20,6 +20,9 @@
       "add": 200
     }
   ],
+  "taste": "poor",
+  "tasteLine": "Mostly head and spines; nobody eats it.",
+  "parasites": "low",
   "prefers": {
     "time": [
       "night"

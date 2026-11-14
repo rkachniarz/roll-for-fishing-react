@@ -16,6 +16,9 @@
       "add": 1
     }
   ],
+  "taste": "delicacy",
+  "tasteLine": "Firm, white and boneless, the poor man's lobster; its liver is prized.",
+  "parasites": "high",
   "prefers": {
     "time": [
       "night"

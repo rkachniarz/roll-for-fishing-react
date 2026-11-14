@@ -86,6 +86,8 @@ out; the splash only reveals the result. *(D63)*
   difficulty.
 - **R3.6** A fish that gets away can be met again later, marked as "seen before", and the catch record remembers how many
   tries it took. A released fish (R8.3) joins the same pool; caught again, it counts as a new catch. *(D59, D60)*
+  The pool is what lives at the spot: stocked with 2d6+3 fish the first time it is looked at, topped up by the day,
+  rolled anew each season and when it runs low; the wizard's Look Underwater shows it. *(D139)*
 
 ### R4: Fish and records
 
@@ -384,7 +386,8 @@ From the owner's brainstorm of 2026-11-14 (`docs/brainstorm-2026-11-14.md`, D123
 - **R19.3** **Night fishing pays:** bigger fish and more XP at night.
 - **R19.4** **The perpetual stew** gives a buff that lasts game hours: each fish put in adds time by its rarity (12
   epic fish make 24 hours). It gives warmth and, on top, the stew buffs of the fish that went in: every fish has one,
-  and the strange (rift) fish have the strangest.
+  and the strange (rift) fish have the strangest. A fish's **taste** (poor, plain, good, a delicacy) makes its time in
+  the bowl shorter or longer (D138).
 - **R19.5** Buffs can last a length of game time as well as casts or real time (refines R12.2).
 
 ### R20: Fish that swim
@@ -402,7 +405,8 @@ From the owner's brainstorm of 2026-11-14 (`docs/brainstorm-2026-11-14.md`, D123
 
 - **R21.1** A fish's slot or link has options on right-click (long-press on a phone): a menu like WoW's. **Release
   fish** is there everywhere but in town, which has no water; **Hook as bait** for a Tiny fish (D41); **Eat** with the Sushi enjoyer perk, which gives the
-  fish's stew buff for 5 casts; **Put in the stew** at the inn and **Put in the aquarium** in the room.
+  fish's stew buff for 5 casts, fewer or more by its taste, with a hidden chance that a raw freshwater fish leaves the
+  player queasy (D138); **Put in the stew** at the inn and **Put in the aquarium** in the room.
 ---
 
 ## 3. Catalogues
