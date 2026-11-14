@@ -31,6 +31,9 @@ Newest first.
   became dark blotches. The drawn one keeps what reads as obsidian at this size, the ripple lines of its fractures.
   The four shells, their ripple spacing and the facet lines come from a fixed seed in `tools/obsidian.py`; change
   `SEED` for another arrangement. It repeats every 480 CSS pixels, and the shells mark the repeat if you look.
+- **An art trial, ripples against banded:** `npm run obsidian banded` makes the other, from a photo of flow-banded
+  golden-sheen obsidian: horizontal bands with a speckled sheen, busier and a little brighter, its light patches near
+  the panels' colour. The ripples stay in until you choose; `npm run obsidian` puts them back.
 - **Its brightness:** the ripples peak at about the dark theme's panel edge colour. Say if it should be fainter or
   bolder, or the swells darker.
 

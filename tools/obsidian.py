@@ -1,6 +1,6 @@
 """The dark theme's background (D145): obsidian, drawn as code as a small repeating pixel tile.
 
-    npm run obsidian
+    npm run obsidian [ripples|banded]
 
 Drawn after a photo of obsidian's shell-shaped (conchoidal) fractures (Wikimedia Commons, James St. John,
 CC BY 2.0, credited in assets/CREDITS.md): a near-black glassy surface with slow swells of light; a few
@@ -8,6 +8,10 @@ fan-shaped shells, each a set of concentric ripple lines catching the light and 
 gradient inside; and a few sharp facet edges. Every distance is measured across the tile's wrap, so it repeats
 without a seam. Coloured along the dark theme's teals, cut to a small palette, and written into styles.css as a
 data URL between the obsidian markers; an enlarged preview to art/obsidian.png.
+
+`banded` (an art trial, D145) instead shrinks a photo of flow-banded golden-sheen obsidian (Wikimedia Commons,
+James St. John, CC BY 2.0) to the tile, its ends faded into its starts across and down so it repeats, and
+colours it the same way.
 """
 import base64
 import io
@@ -16,11 +20,13 @@ import os
 import random
 import re
 import sys
-from PIL import Image
+from PIL import Image, ImageFilter, ImageStat
 
 SIZE = 160                  # the tile, square, in pixels
 COLOURS = 10
 SEED = 7                    # the same tile every time
+KIND = sys.argv[1] if len(sys.argv) > 1 else 'ripples'
+BANDED = (192, 128)         # the banded trial's tile: wider than tall, as its bands run across
 # Dark to light along the dark theme's colours (styles.css: --bg #14232b, --panel #1d3540, --panel-edge #2c4f5e);
 # the brightest is the sheen on a ripple, kept well below the text.
 RAMP = [(11, 21, 27), (15, 28, 35), (20, 35, 43), (25, 43, 53), (32, 55, 66), (44, 74, 88), (62, 98, 114)]
@@ -91,12 +97,46 @@ for y in range(SIZE):
                     v -= 0.15 * fade               # its shadow
         level[y][x] = v
 
+
+
+def banded():
+    """The trial: lightness from the banded photo, as a W x H grid looping both ways."""
+    w, h = BANDED
+    fade = 32
+    photo = Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs', 'design', 'refs', 'ObsidianBanded.jpg')).convert('L')
+    # The photo's middle, past its broken left edge and the pale table at the corners.
+    crop = photo.crop((260, 110, 1260, 110 + int(1000 * (h + fade) / (w + fade))))
+    big = crop.resize((w + fade, h + fade), Image.LANCZOS).filter(ImageFilter.MedianFilter(3))
+    src = big.load()
+    out = [[0.0] * w for _ in range(h)]
+    for y in range(h):
+        for x in range(w):
+            # The ends fade into the starts: near 0, what lies past the tile is blended in.
+            v = src[x, y]
+            if x < fade:
+                t = x / fade
+                v = src[w + x, y] * (1 - t) + v * t
+            if y < fade:
+                b = src[x, h + y]
+                if x < fade:
+                    t = x / fade
+                    b = src[w + x, h + y] * (1 - t) + b * t
+                t = y / fade
+                v = b * (1 - t) + v * t
+            out[y][x] = v
+    return out
+
+
+if KIND == 'banded':
+    level = banded()
+    SIZE = None
 flat = sorted(v for row in level for v in row)
 lo, hi = flat[int(len(flat) * 0.02)], flat[int(len(flat) * 0.995)]
-tile = Image.new('RGB', (SIZE, SIZE))
+TW, TH = len(level[0]), len(level)
+tile = Image.new('RGB', (TW, TH))
 tp = tile.load()
-for y in range(SIZE):
-    for x in range(SIZE):
+for y in range(TH):
+    for x in range(TW):
         t = min(1.0, max(0.0, (level[y][x] - lo) / (hi - lo))) * (len(RAMP) - 1)
         i = min(len(RAMP) - 2, int(t))
         f = t - i
@@ -120,10 +160,10 @@ css = re.sub(re.escape(start) + r'.*?' + re.escape(end), lambda m: block, css, f
 with open(css_path, 'w', encoding='utf-8', newline='') as f:
     f.write(css)
 rgb = small.convert('RGB')
-prev = Image.new('RGB', (SIZE * 3, SIZE * 2))
+prev = Image.new('RGB', (TW * 3, TH * 2))
 for i in range(3):
     for k in range(2):
-        prev.paste(rgb, (i * SIZE, k * SIZE))
+        prev.paste(rgb, (i * TW, k * TH))
 os.makedirs(os.path.join(HERE, '..', 'art'), exist_ok=True)
 prev.resize((prev.size[0] * 3, prev.size[1] * 3), Image.NEAREST).save(os.path.join(HERE, '..', 'art', 'obsidian.png'))
-print(f'obsidian: {SIZE}x{SIZE}, {len(buf.getvalue())} bytes, into styles.css; preview art/obsidian.png')
+print(f'obsidian: {KIND}, {TW}x{TH}, {len(buf.getvalue())} bytes, into styles.css; preview art/obsidian.png')
