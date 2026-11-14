@@ -11,6 +11,39 @@ a plain generic sentence, a stand-in rule. A town of placeholder squares is bett
 listed under the creative task that will replace it, so nothing is forgotten; a placeholder that fits no task gets a
 new one.
 
+## Next up: Phase 11, what the real species do
+
+The owner's list of 2026-11-14, from what we know about the real fish and plants, **easiest first and done in this
+order**, one at a time. **How we work through it:** once a task is pushed to GitHub, Claude asks the owner its
+refinement questions for the next one before starting it. The last task, a simulation of what's under the surface,
+is where the others may lead.
+
+- [ ] **11.1** Taste: a line per fish on how it eats, and small tweaks to the stew and Sushi enjoyer (bony pike, muddy
+  carp; a parasite risk from raw freshwater fish).
+- [ ] **11.2** Conservation status: a field per fish; releasing an endangered one (sturgeon, eel) earns something.
+- [ ] **11.3** How they fight on the line: a few fight styles (jumper, head-shaker, long runner), each with its own
+  strike lines.
+- [ ] **11.4** Weight from length: each species' published length-weight constants (FishBase); a caught fish has a
+  weight, and the journal and records show it.
+- [ ] **11.5** How they swim: a speed and burst rate per species (a pike still then lunging, an eel slow and winding,
+  a trout holding against the current, bleak darting), in `src/scene/swim.js`.
+- [ ] **11.6** Set your depth (the owner's idea): at some level a perk lets the player set their weights for one of
+  the four depths (`swims`, D136), through Fish Find by depth (D137); the bottom depth also gives an extra chance of
+  something that isn't a fish, being nearest the bottom. Needs a way to pick the depth, likely an action-bar button.
+- [ ] **11.7** Spawning seasons: each fish's breeding season (gathering, breeding colours, perhaps closed seasons or a
+  reward for letting a spawning fish go).
+- [ ] **11.8** Plants and fish together: the plants on a spot draw certain fish (perch spawn on weed, tench live in
+  weed beds); marimo's luck from folklore.
+- [ ] **11.9** Shoaling: shoal fish swim together and turn together, solitary ones alone; in the dive a shoal
+  scatters when one is struck.
+- [ ] **11.10** Folklore events: the carp leaping the dragon gate, the catfish that shakes the earth, the archerfish
+  spitting insects off leaves. Writing work, so placeholders until the creative track.
+- [ ] **11.11** Who eats whom: predators and prey in the aquarium (keeping them apart, small fish hiding from a passing
+  pike, perhaps one going missing).
+- [ ] **11.12** A simulation of what's under the surface at all times: each spot's living population moving with the
+  time, weather and season, and a cast drawing from it. Touches the engine's core, the save, D63's rolling on the cast,
+  and balance.
+
 **Where things stand (2026-11-14):** Phase 10, the owner's brainstorm of the night, the town and the stew, was built
 overnight with placeholders (D123–D129; questions at the top of REVIEW.md): a town with an inn, a room and an
 Alchemist who keeps hours; barter; the perpetual stew and every fish's stew buff; cold and night fishing; white items
