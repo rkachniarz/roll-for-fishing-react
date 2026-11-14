@@ -53,7 +53,8 @@ is where the others may lead.
   driven:** a species spawns when the water passes its temperature, read from the weather's temperature, not by a
   fixed season. The temperatures and timing **looked up** (FishBase or similar), the source noted; made-up fish get
   marked placeholders. **The player isn't told**; a perk or an item may later let them know, and then the journal
-  shows it.
+  shows it. **The water's temperature** follows the air's with a lag, on the weather's own temperature scale; kept
+  simple. The water is magical and never freezes.
 - [ ] **11.8** Plants and fish together: the plants on a spot draw certain fish (perch spawn on weed, tench live in
   weed beds); marimo's luck from folklore.
 - [ ] **11.9** Shoaling: shoal fish swim together and turn together, solitary ones alone; in the dive a shoal
