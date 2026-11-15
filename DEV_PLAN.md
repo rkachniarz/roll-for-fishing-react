@@ -73,6 +73,14 @@ is where the others may lead.
   spitting insects off leaves. Writing work, so placeholders until the creative track.
 - [ ] **11.11** Who eats whom: predators and prey in the aquarium (keeping them apart, small fish hiding from a passing
   pike, perhaps one going missing).
+  *The owner's answers (2026-11-15):* **now and then** a predator in the room's aquarium eats a tank-mate small
+  enough for it (checked when the player comes back to the room, or by the game day), with a log line; rare enough to
+  sting, not punish. **A predator mark per species, looked up** from what it eats in the wild, the source noted; it
+  can eat only fish well under its own length (less than half, a guess). **Keeping them apart:** putting a fish in
+  the tank beside one that would eat it, or that it would eat, **warns first**, as WoW's "are you sure"; and **fed fish
+  don't hunt**: a bait item used on the tank keeps the predators from eating for a few days. **Hiding everywhere fish
+  swim**: in the tank, the dive and Look Underwater, small fish keep away from a predator swimming near (built on 11.5
+  and 11.9).
 - [ ] **11.12** A simulation of what's under the surface at all times: each spot's living population moving with the
   time, weather and season, and a cast drawing from it. Touches the engine's core, the save, D63's rolling on the cast,
   and balance.
