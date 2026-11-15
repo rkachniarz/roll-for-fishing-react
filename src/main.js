@@ -936,6 +936,8 @@ function buffName(id) {
 /** @param {GameEvent[]} events  In the order they happened. */
 function logEvents(events) {
   for (const e of events) {
+    // A predator takes a fish (D157): seen on the water, never told.
+    if (e.type === 'pool-strike') scene.swirl(e.at.x, e.at.y);
     const line = describeEvent(e);
     if (line) log.add(line);
   }
@@ -1418,15 +1420,12 @@ let looking = null;
  * @param {GameState} s
  */
 function poolShadows(s) {
-  // Which fish show, and where, is the engine's (D156): a cast that lands on one is after that fish.
-  /** @type {Record<string, number>} */
-  const seen = {};
+  // Which fish show, and where, is the engine's (D156): a cast that lands on one is after that fish. Each keeps
+  // its number, so a fish that drifts, or lunges at another, swims there instead of jumping (D157).
   return shadowsOf(s).map((f) => {
-    const kind = `${f.species}-${f.size}-${f.x}-${f.y}`;
-    seen[kind] = (seen[kind] ?? 0) + 1;
     const cx = f.x ?? 0;
     const cy = f.y ?? 0;
-    return { key: `pool-${poolKey(s)}-${kind}-${seen[kind]}`, species: f.species, box: { x0: cx - 16, y0: cy - 4, x1: cx + 16, y1: cy + 4 } };
+    return { key: `pool-${poolKey(s)}-${f.n}`, species: f.species, box: { x0: cx - 16, y0: cy - 4, x1: cx + 16, y1: cy + 4 } };
   });
 }
 

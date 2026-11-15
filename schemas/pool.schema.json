@@ -39,7 +39,7 @@
       "maximum": 100
     },
     "school": {
-      "description": "How many fish a school brings into the pool.",
+      "description": "How many fish a school feature brings into the pool (the bench only: schools form by themselves, D157).",
       "type": "object",
       "properties": {
         "min": {
@@ -114,6 +114,51 @@
         "y"
       ],
       "additionalProperties": false
+    },
+    "eat": {
+      "description": "With each new part of the day, the chance (%) per point of the water's temperature that a predator with a wild fish under half its length there takes one (D157).",
+      "type": "number",
+      "minimum": 0
+    },
+    "fromPool": {
+      "description": "Of the fish that bite, the share (%) that are the pool's own when it is at its number; less as it thins, a passer-by from the spot's table filling the gap (D157).",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "spawnCrowd": {
+      "description": "A full pool still draws a spawning kind until it holds this many times its number.",
+      "type": "number",
+      "minimum": 1
+    },
+    "shoal": {
+      "description": "This many of a shoaling kind in a pool swim as a school.",
+      "type": "integer",
+      "minimum": 2
+    },
+    "shoalGap": {
+      "description": "How far apart, in scene pixels across and up, the fish of a school keep.",
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number",
+          "minimum": 0
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "additionalProperties": false
+    },
+    "drift": {
+      "description": "How many scene pixels a pool fish may drift with each cast, at most; half as much up and down.",
+      "type": "integer",
+      "minimum": 0
     }
   },
   "required": [
@@ -126,7 +171,13 @@
     "shadows",
     "show",
     "dim",
-    "aim"
+    "aim",
+    "eat",
+    "fromPool",
+    "spawnCrowd",
+    "shoal",
+    "shoalGap",
+    "drift"
   ],
   "additionalProperties": false
 }

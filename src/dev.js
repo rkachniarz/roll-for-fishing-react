@@ -19,6 +19,10 @@ import { METER_FIRES, startEvent } from './engine/events.js';
 import { owedLevels } from './engine/perks.js';
 import { championRules, maybeChampion, poolKey } from './engine/champions.js';
 import { bringFeature, partFish, waterAt } from './engine/features.js';
+import { passTime } from './engine/passage.js';
+import { hasWater, partKey, shadowsOf, shoalsIn, tendPool } from './engine/pool.js';
+import { spawningNow, waterNow } from './engine/spawning.js';
+import { rollFish, sizeBands } from './engine/fish.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 
@@ -113,15 +117,74 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       return { ...s, weather: weatherAt(seasonSelect.value, Number(cellSelect.value), dice.weather), streams: commit() };
     }),
   );
-  /** @param {number} minutes */
+  /**
+   * Time passes as it does in the game, half an hour at a step: the weather and the water move, buffs run out,
+   * and every pool takes its turns (D157).
+   * @param {number} minutes
+   */
   const later = (minutes) =>
     edit((s) => {
-      const time = s.time + minutes;
-      const season = clock(time).season;
-      if (season === s.weather.season) return { ...s, time };
-      // Crossing into another season takes the weather with it, as a cast would.
       const { dice, commit } = diceFrom(s);
-      return { ...s, time, weather: weatherAt(season, s.weather.cell, dice.weather), streams: commit() };
+      passTime(s, minutes, dice);
+      s.streams = commit();
+      return s;
+    });
+  /** On to the next part of the day: one turn for every pool. */
+  const nextPart = () =>
+    edit((s) => {
+      const { dice, commit } = diceFrom(s);
+      const part = partKey(s);
+      for (let i = 0; i < 48 && partKey(s) === part; i++) passTime(s, TIME.castMinutes, dice);
+      s.streams = commit();
+      return s;
+    });
+
+  // ---------- The pool here (D139, D156, D157) ----------
+  const poolLine = el('p');
+  const poolFishSelect = el('select', { id: 'dev-pool-fish' });
+  for (const f of Object.values(content.fish).sort((a, b) => t(a.name).localeCompare(t(b.name)))) {
+    poolFishSelect.append(el('option', { value: f.id, textContent: `${t(f.name)}${f.predator ? ' (predator)' : ''}${f.shoals ? ' (shoals)' : ''}` }));
+  }
+  const poolBandSelect = el('select', { id: 'dev-pool-band' });
+  poolBandSelect.append(el('option', { value: '', textContent: 'any size' }));
+  sizeBands().forEach((/** @type {{ id: string }} */ b, /** @type {number} */ i) => poolBandSelect.append(el('option', { value: String(i), textContent: b.id })));
+  /**
+   * Wild fish of the chosen kind into the pool here, as the pool's own are rolled; the pool finds them a place.
+   * @param {number} count
+   */
+  const addToPool = (count) =>
+    edit((s) => {
+      if (!hasWater(s)) return s;
+      tendPool(s);
+      const { dice, commit } = diceFrom(s);
+      const key = poolKey(s);
+      const band = poolBandSelect.value === '' ? null : Number(poolBandSelect.value);
+      const fish = [];
+      for (let i = 0; i < count; i++) {
+        let one = rollFish(poolFishSelect.value, { fishSizeBand: 0, fishDifficulty: 0, fishXp: 0 }, dice.pool, { condition: dice.condition });
+        // A chosen size: rolled until it comes up, a hundred tries at most.
+        for (let n = 0; band !== null && one.band !== band && n < 100; n++) one = rollFish(poolFishSelect.value, { fishSizeBand: 0, fishDifficulty: 0, fishXp: 0 }, dice.pool, { condition: dice.condition });
+        fish.push({ ...one, wild: true });
+      }
+      s.escaped = { ...s.escaped, [key]: [...(s.escaped[key] ?? []), ...fish] };
+      s.streams = commit();
+      tendPool(s);
+      return s;
+    });
+  /** The pool here as if never looked at: stocked anew on the next redraw. */
+  const restock = () =>
+    edit((s) => {
+      const key = poolKey(s);
+      const { [key]: gone, ...pools } = s.pools;
+      s.pools = pools;
+      s.escaped = { ...s.escaped, [key]: (s.escaped[key] ?? []).filter((f) => f.of !== undefined) };
+      return s;
+    });
+  const emptyPool = () =>
+    edit((s) => {
+      const key = poolKey(s);
+      s.escaped = { ...s.escaped, [key]: (s.escaped[key] ?? []).filter((f) => f.of !== undefined) };
+      return s;
     });
   const clockLine = el('p');
 
@@ -251,6 +314,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       el('div', { className: 'dev-row' }, ['Location ', locationSelect, ' spot ', spotSelect]),
       el('div', { className: 'dev-row' }, [seasonSelect, cellSelect, setWeather]),
       el('div', { className: 'dev-row' }, [
+        button('Next part of the day', nextPart),
         button('+1 hour', () => later(60)),
         button('+6 hours', () => later(360)),
         button('+1 day', () => later(24 * 60)),
@@ -265,6 +329,11 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       )]),
       featuresLine,
       el('div', { className: 'dev-row' }, ['Class fish ', championSelect, spawnChampion, clearChampions]),
+    ]),
+    section('The pool here', [
+      poolLine,
+      el('div', { className: 'dev-row' }, [poolFishSelect, poolBandSelect, button('Add 1', () => addToPool(1)), button('Add 3', () => addToPool(3))]),
+      el('div', { className: 'dev-row' }, [button('Stock anew', restock), button('Empty', emptyPool)]),
     ]),
     section('Character', [el('div', { className: 'dev-fields' }, [el('label', { htmlFor: 'dev-xp', textContent: 'XP' }), xpInput, el('label', { htmlFor: 'dev-luck', textContent: 'Luck' }), luckInput, el('label', { htmlFor: 'dev-class', textContent: 'Class' }), classSelect]), statsLine, el('div', { className: 'dev-row' }, [perkSelect, grantPerk, clearPerks, resetCooldowns])]),
     section('Inventory', [
@@ -329,6 +398,25 @@ export function createBench(root, { getState, setState, overrides, extraSources,
         `Year ${c.year}, ${c.season} day ${c.day}, ${String(c.hour).padStart(2, '0')}:${String(c.minute).padStart(2, '0')} (${c.partOfDay}). ` +
         `Weather: ${s.weather.season} #${s.weather.cell}, temperature ${s.weather.temperature}, wind ${s.weather.wind}, ` +
         `clouds ${s.weather.clouds}, precipitation ${s.weather.precipitation} (${weatherWords(s.weather).join(', ') || 'no weather words'}).`;
+
+      const pool = s.escaped[poolKey(s)] ?? [];
+      const meta = s.pools?.[poolKey(s)];
+      if (!hasWater(s)) poolLine.textContent = 'No water here.';
+      else {
+        /** @type {Record<string, number>} */
+        const kinds = {};
+        for (const f of pool) kinds[f.species] = (kinds[f.species] ?? 0) + 1;
+        const own = pool.filter((f) => f.of === undefined);
+        const shoals = [...shoalsIn(pool)];
+        const spawning = [...spawningNow(s)].filter((id) => kinds[id]);
+        const w = waterNow(s);
+        poolLine.textContent =
+          `${own.length} fish of its own (number ${meta?.size ?? '-'}, room ${meta?.room ?? '-'}), ${own.filter((f) => !f.wild).length} of them met, ${pool.length - own.length} a big fish's; ` +
+          `${shadowsOf(s).length} show as shadows. ` +
+          `${Object.entries(kinds).sort((a, b) => b[1] - a[1]).map(([id, n]) => `${n} ${t(content.fish[id].name)}`).join(', ') || 'Nobody home'}. ` +
+          `Schools: ${shoals.map((id) => t(content.fish[id].name)).join(', ') || 'none'}. Spawning here: ${spawning.map((id) => t(content.fish[id].name)).join(', ') || 'nobody'}. ` +
+          `Water ${w.water.toFixed(1)}, ${w.warming ? 'warming' : 'cooling'}: a predator's chance each part of the day is ${(w.water * content.rules.pool.eat).toFixed(1)}%.`;
+      }
 
       featuresLine.textContent = s.features.length
         ? s.features.map((f) => `${f.id} at ${f.x},${f.y}: ${f.uses} uses, ${f.castsLeft} casts left`).join('; ')

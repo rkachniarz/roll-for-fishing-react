@@ -316,6 +316,8 @@ export async function createScene(canvas, rand, look = {}) {
   let target = { x: SIZE / 2, y: 120 };
   /** @type {{ x: number, y: number, born: number, life: number, maxRx: number }[]} */
   let rippleList = [];
+  /** Where a fish was just taken under the surface (D157). @type {{ x: number, y: number, born: number }[]} */
+  let swirls = [];
   let splashAt = -Infinity;
   /** @type {Cast['phase'] | null} */
   let lastPhase = null;
@@ -439,6 +441,16 @@ export async function createScene(canvas, rand, look = {}) {
       }
     });
     for (const key of shownAt.keys()) if (!live.has(key)) shownAt.delete(key);
+    // A fish taken under the surface (D157): foam thrown up for a moment where it was.
+    swirls = swirls.filter((s) => now - s.born < 480);
+    for (const s of swirls) {
+      const step = Math.floor((now - s.born) / 120);
+      for (let a = 0; a < 5; a++) {
+        const t = a * 1.26 + step;
+        const r = 1 + step * 2;
+        featureLayer.rect(Math.round(s.x + Math.cos(t) * r), Math.round(s.y - 1 - (step < 2 ? step : 3 - step) + Math.sin(t) * r * 0.4), 1, 1).fill({ color: PALETTE.foam, alpha: 0.9 });
+      }
+    }
     for (const f of poolFish) shadows.push({ key: f.key, species: f.species, look: 'small', box: f.box });
     surfaceFish.set(shadows, { x0: 0, y0: 0, x1: SIZE, y1: SIZE });
     surfaceFish.update(now);
@@ -588,6 +600,16 @@ export async function createScene(canvas, rand, look = {}) {
     update,
     setFeatures,
     setPoolFish,
+    /**
+     * A fish taken under the surface (D157): a swirl of rings and a splash of foam where it was.
+     * @param {number} x @param {number} y  In the play area's pixels.
+     */
+    swirl(x, y) {
+      const now = performance.now();
+      const far = y < farLine;
+      for (let i = 0; i < 3; i++) addRipple(x, y, now + i * 140, far ? 7 : 11);
+      swirls.push({ x, y, born: now });
+    },
     /** @param {import('./sky.js').World} world */
     setWorld(world) {
       sky.setWorld(world);

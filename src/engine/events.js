@@ -351,12 +351,12 @@ function applyEffect(state, effect, dice) {
       return [];
     case 'wait': {
       const minutes = effect.hours === 'morning' ? minutesToMorning(state.time) : effect.hours * 60;
-      return [{ type: 'waited', minutes }, ...passTime(state, minutes, dice.weather)];
+      return [{ type: 'waited', minutes }, ...passTime(state, minutes, dice)];
     }
     case 'sleep': {
       // Until the next morning, waking rested (R17.4).
       const minutes = minutesToMorning(state.time);
-      return [{ type: 'slept', minutes }, ...passTime(state, minutes, dice.weather), ...giveBuff(state, 'rested')];
+      return [{ type: 'slept', minutes }, ...passTime(state, minutes, dice), ...giveBuff(state, 'rested')];
     }
     case 'set':
       // Every piece of the set in the bags, handed in (8.7).

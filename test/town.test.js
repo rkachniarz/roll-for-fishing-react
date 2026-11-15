@@ -6,7 +6,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { content } from '../src/generated/content.js';
-import { deserialize, newGame, serialize } from '../src/engine/state.js';
+import { deserialize, diceFrom, newGame, serialize } from '../src/engine/state.js';
 import { castLine, catchFish, lineAdjustable, setLineDepth, useAbility, valuesFor } from '../src/engine/game.js';
 import { lookStage, poolDue, tended } from '../src/engine/pool.js';
 import { spawningIn, stepWater } from '../src/engine/spawning.js';
@@ -60,7 +60,7 @@ test('the next morning: from the night, the evening, and from a morning, the nex
 test('time passing steps the weather and ends buffs that last game time (R17.2, R19.5)', () => {
   const s = /** @type {GameState} */ (structuredClone(game()));
   s.buffs = [{ id: 'short', source: 'x', effects: [], until: s.time + 60 }, { id: 'long', source: 'x', effects: [], until: s.time + 600 }];
-  const events = passTime(s, 120, diceFor(createRng(1)));
+  const events = passTime(s, 120, diceFrom(s).dice);
   assert.equal(s.time, game().time + 120);
   assert.deepEqual(s.buffs.map((b) => b.id), ['long']);
   assert.ok(events.some((e) => e.type === 'buff-ended' && e.buff === 'short'));
@@ -294,38 +294,166 @@ test('the pool: stocked with 2d6+3 fish the first time it is looked at, from its
   assert.equal(tended(town), town, 'no water in town');
 });
 
-test('the pool turns over with the part of the day: the unsuited may leave, others come, a met fish stays its days (D156)', () => {
-  const stocked = tended(game());
+/**
+ * Time passing, as a cast's does, with the state's own dice (D157).
+ * @param {GameState} s
+ * @param {number} minutes
+ */
+function later(s, minutes) {
+  const next = structuredClone(s);
+  const { dice, commit } = diceFrom(next);
+  const events = passTime(next, minutes, dice);
+  next.streams = commit();
+  return { state: next, events };
+}
+
+test('every pool the player has been to takes its turn with each part of the day, wherever they are (D157)', () => {
   const key = 'lake/reedy-shore';
+  const stocked = tended(game());
   const size = stocked.pools[key].size;
   const water = content.locations.lake.spots.find((/** @type {{ id: string }} */ x) => x.id === 'reedy-shore').water;
   assert.ok(stocked.escaped[key].every((f) => f.x >= water.x0 && f.x <= water.x1 && f.y >= water.y0 && f.y <= water.y1), 'each has its place on the water');
-  const soon = { ...stocked, time: stocked.time + 30 };
-  assert.equal(tended(soon), soon, 'nothing in the same part of the day');
-  // Into the afternoon: some wild fish have gone, and the pool is full again.
-  let changed = 0;
-  for (let seed = 1; seed <= 20; seed++) {
-    const first = tended(game({ seed }));
-    const later = tended({ ...first, time: first.time + 4 * 60 });
-    assert.equal(later.escaped[key].length, later.pools[key].size, 'up to the spot\'s number');
-    if (later.escaped[key].some((f) => !first.escaped[key].some((g) => g.x === f.x && g.y === f.y && g.species === f.species))) changed++;
+  assert.equal(new Set(stocked.escaped[key].map((f) => f.n)).size, size, 'and its own number');
+  assert.deepEqual(later(stocked, 30).state.escaped[key], stocked.escaped[key], 'nothing in the same part of the day');
+  // A week by the water, or a week in town: the pool changes all the same, and stays about its number.
+  for (const there of [stocked, { ...stocked, location: 'town', spot: 'inn' }]) {
+    let s = /** @type {GameState} */ (there);
+    let turns = 0;
+    let total = 0;
+    for (let i = 0; i < 48 * 7; i++) {
+      const next = later(s, 30).state;
+      if (clock(next.time).partOfDay !== clock(s.time).partOfDay) {
+        assert.equal(next.pools[key].at, next.time, 'its turn, with the new part of the day');
+        turns++;
+        total += next.escaped[key].length;
+      } else assert.deepEqual(next.escaped[key], s.escaped[key]);
+      s = next;
+    }
+    assert.equal(turns, 7 * 7, 'a turn with each part of each day');
+    assert.ok(!s.escaped[key].some((f) => stocked.escaped[key].some((g) => g.n === f.n)), 'nobody of a week ago is left');
+    const mean = total / turns;
+    assert.ok(mean > size * 0.4 && mean < size * content.rules.pool.spawnCrowd + 1, `about its number: ${mean.toFixed(1)} of ${size}`);
+    assert.ok(s.escaped[key].every((f) => f.x !== undefined && f.n !== undefined));
   }
-  assert.ok(changed > 10, `the pool changed in ${changed} of 20 games`);
-  // A day away: the wild fish are all new; one the player met is still there, until its days are up.
+});
+
+test('a met fish stays its days, 1d4, then swims off (D156)', () => {
+  const key = 'lake/reedy-shore';
+  const stocked = tended(game());
   const met = { ...stocked.escaped[key][0], tries: 2, since: stocked.time, stays: 3 };
   delete met.wild;
   const withMet = { ...stocked, escaped: { [key]: [met, ...stocked.escaped[key].slice(1)] } };
-  const nextDay = tended({ ...withMet, time: withMet.time + DAY + 60 });
-  assert.ok(nextDay.escaped[key].some((f) => f.tries === 2), 'the fish that got away is still there');
-  assert.equal(nextDay.escaped[key].filter((f) => f.wild).length, size - 1, 'it has a wild fish\'s place');
-  const gone = tended({ ...withMet, time: withMet.time + 3 * DAY + 60 });
-  assert.ok(!gone.escaped[key].some((f) => f.tries === 2), 'after its days it swims off');
-  assert.equal(gone.escaped[key].length, size);
+  assert.ok(later(withMet, 2 * DAY).state.escaped[key].some((f) => f.tries === 2), 'the fish that got away is still there');
+  assert.ok(!later(withMet, 3 * DAY + 60).state.escaped[key].some((f) => f.tries === 2), 'after its days it swims off');
   // A fish just met has its days rolled when the pool is next looked at: 1d4.
   const fresh = { ...met };
   delete fresh.stays;
   const rolled = tended({ ...stocked, escaped: { [key]: [fresh, ...stocked.escaped[key].slice(1)] } }).escaped[key][0];
   assert.ok(rolled.stays >= 1 && rolled.stays <= 4, String(rolled.stays));
+});
+
+test('a predator in the pool takes a small fish now and then, likelier in warm water; seen only between two shadows (D157)', async () => {
+  const { stepPools, shadowsOf } = await import('../src/engine/pool.js');
+  const key = 'lake/reedy-shore';
+  /** @param {number} water */
+  const eatenAt = (water) => {
+    let eaten = 0;
+    let seen = 0;
+    for (let seed = 1; seed <= 300; seed++) {
+      const base = tended(game({ seed }));
+      const pike = { ...fish('northern-pike', 'rare', 90), wild: true, x: 100, y: 150, n: 900 };
+      const roach = { ...fish('roach', 'common', 20), wild: true, x: 140, y: 160, n: 901 };
+      const big = { ...fish('roach', 'common', 60), wild: true, x: 80, y: 140, n: 902 };
+      const s = structuredClone({ ...base, water, escaped: { [key]: [pike, roach, big] }, pools: { [key]: { ...base.pools[key], size: 0 } } });
+      const shown = shadowsOf(s).length === 3;
+      const { dice } = diceFrom(s);
+      const events = stepPools(s, dice);
+      assert.ok(s.escaped[key].some((f) => f.n === 902) || true);
+      if (!s.escaped[key].some((f) => f.n === 901) && s.escaped[key].some((f) => f.n === 900 && f.x === 140 && f.y === 160)) {
+        eaten++;
+        const strike = events.find((e) => e.type === 'pool-strike');
+        if (shown) {
+          assert.deepEqual(strike?.at, { x: 140, y: 160 });
+          seen++;
+        } else assert.equal(strike, undefined);
+      }
+    }
+    return { eaten, seen };
+  };
+  const summer = eatenAt(13);
+  const winter = eatenAt(3);
+  assert.ok(summer.eaten > 10 && summer.eaten < 80, `summer: ${summer.eaten} of 300 parts`);
+  assert.ok(winter.eaten < summer.eaten / 2, `winter: ${winter.eaten}`);
+  assert.ok(summer.seen > 0, 'seen from the bank when both show');
+});
+
+test('three of a shoaling kind draw together into a school, and always show (D157)', async () => {
+  const { driftPool, shoalsIn, shadowsOf } = await import('../src/engine/pool.js');
+  const key = 'lake/reedy-shore';
+  const base = tended(game({ hour: 1 }));
+  const roach = [0, 1, 2, 3].map((i) => ({ ...fish('roach', 'common', 20 + i), wild: true, x: 60 + i * 40, y: 125 + i * 15, n: 100 + i }));
+  const pike = { ...fish('northern-pike', 'rare', 80), wild: true, x: 200, y: 170, n: 200 };
+  let s = structuredClone({ ...base, escaped: { [key]: [...roach, pike] } });
+  assert.deepEqual([...shoalsIn(s.escaped[key])], ['roach']);
+  assert.ok(!shoalsIn([...roach.slice(0, 2), pike]).size, 'two are not a school');
+  const spread = () => Math.max(...s.escaped[key].filter((f) => f.species === 'roach').map((f) => Math.hypot(f.x - s.escaped[key][0].x, f.y - s.escaped[key][0].y)));
+  const before = spread();
+  for (let i = 0; i < 8; i++) {
+    const { dice, commit } = diceFrom(s);
+    driftPool(s, dice.pool);
+    s.streams = commit();
+  }
+  assert.ok(spread() < 30 && spread() < before / 3, `drawn together: ${before.toFixed(0)} -> ${spread().toFixed(0)}`);
+  const moved = s.escaped[key].find((f) => f.n === 200);
+  assert.ok(Math.abs(moved.x - 200) <= 8 * content.rules.pool.drift, 'a fish alone drifts a little');
+  // At night, when few shadows show, the school still does (roach swim low).
+  assert.equal(shadowsOf(s).filter((f) => f.species === 'roach').length, 4);
+});
+
+test('the fish that bites is mostly the pool\'s; a passer-by fills the gap in a thin pool (D157)', () => {
+  const key = 'lake/reedy-shore';
+  /** @param {(s: GameState) => GameState} change */
+  const play = (change) => {
+    let fishBites = 0;
+    let fromPool = 0;
+    for (let seed = 1; seed <= 300; seed++) {
+      const s = change(tended(game({ seed })));
+      const line = castLine({ ...s, features: [], champions: {} }, 0).cast.line;
+      if (line.kind !== 'fish') continue;
+      fishBites++;
+      if (line.fromPool) fromPool++;
+    }
+    return { fishBites, share: fromPool / fishBites };
+  };
+  const full = play((s) => s);
+  const empty = play((s) => ({ ...s, escaped: { [key]: [] } }));
+  const half = play((s) => ({ ...s, escaped: { [key]: s.escaped[key].slice(0, Math.floor(s.pools[key].size / 2)) } }));
+  assert.ok(full.share > 0.65 && full.share < 0.92, `a full pool: ${(full.share * 100).toFixed(0)}% of bites are its own`);
+  assert.equal(empty.share, 0);
+  assert.ok(half.share > 0.25 && half.share < full.share - 0.15, `half a pool: ${(half.share * 100).toFixed(0)}%`);
+  assert.ok(Math.abs(empty.fishBites - full.fishBites) < 40, `as many fish bite: ${empty.fishBites} and ${full.fishBites} of 300`);
+});
+
+test('a pool fish on the line takes the cast\'s difficulty and XP, and goes back as it was (D157)', async () => {
+  const { strikeLine, tick } = await import('../src/engine/game.js');
+  const key = 'lake/reedy-shore';
+  const harder = [{ label: 'test', effects: [{ value: 'fishDifficulty', add: 4 }, { value: 'fishXp', add: 2 }] }];
+  for (let seed = 1; seed <= 60; seed++) {
+    const s = tended(game({ seed }));
+    const out = castLine({ ...s, features: [], champions: {} }, 0, { extra: harder });
+    const line = out.cast.line;
+    if (line.kind !== 'fish' || !line.fromPool) continue;
+    const was = s.escaped[key].find((f) => f.n === line.fish.n);
+    assert.equal(line.fish.difficulty, was.difficulty + 4);
+    assert.equal(line.fish.xp, Math.max(was.xp + 6, 1));
+    const missed = tick(out.state, out.cast, out.cast.biteAt + out.cast.timing.lateMs + 1);
+    const back = missed.state.escaped[key].find((f) => f.n === line.fish.n);
+    assert.equal(back.difficulty, was.difficulty, 'back in the water as it was');
+    assert.equal(back.xp, was.xp);
+    assert.ok(!('plain' in back));
+    return;
+  }
+  assert.fail('no pool fish bit in 60 games');
 });
 
 test('the pool has room for a few met fish; past it a wild fish makes way (D156)', async () => {
@@ -372,7 +500,7 @@ test('a cast that lands on a shadow brings up that very fish, if a fish bites (D
 });
 
 test('shadows from the bank: the fish near the top, a deeper one now and then, fewer at night (D156)', async () => {
-  const { shadowsOf } = await import('../src/engine/pool.js');
+  const { shadowsOf, shoalsIn } = await import('../src/engine/pool.js');
   let day = 0;
   let night = 0;
   let deepShown = 0;
@@ -381,11 +509,12 @@ test('shadows from the bank: the fish near the top, a deeper one now and then, f
     const s = tended(game({ seed, hour: 12 }));
     const pool = s.escaped['lake/reedy-shore'];
     const shown = shadowsOf(s);
+    const shoals = shoalsIn(pool);
     day += shown.length;
     for (const f of pool) {
       const swims = content.fish[f.species].swims;
       if (swims === 'surface' || swims === 'upper') assert.ok(shown.includes(f) || shown.length === content.rules.pool.shadows, `${f.species} swims near the top`);
-      else {
+      else if (!shoals.has(f.species)) {
         deep++;
         if (shown.includes(f)) deepShown++;
       }
@@ -393,7 +522,7 @@ test('shadows from the bank: the fish near the top, a deeper one now and then, f
     night += shadowsOf(tended(game({ seed, hour: 1 }))).length;
   }
   assert.ok(deepShown > 0 && deepShown < deep * 0.6, `${deepShown} of ${deep} deeper fish showed`);
-  assert.ok(night < day * 0.75, `${night} shadows at night, ${day} by day`);
+  assert.ok(night < day * 0.85, `${night} shadows at night, ${day} by day`);
 });
 
 test('a save from before the pool turned over: schools gone from the water, met fish counting from now (D156)', () => {

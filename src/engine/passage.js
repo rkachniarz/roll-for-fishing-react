@@ -7,6 +7,7 @@
 import { advanceTime, clock, TIME } from './time.js';
 import { changeSeason, stepWeather } from './weather.js';
 import { stepWater } from './spawning.js';
+import { partKey, stepPools } from './pool.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./game.js').GameEvent} GameEvent */
@@ -15,12 +16,15 @@ import { stepWater } from './spawning.js';
 /**
  * One half-hour step. Changes `state` in place (a copy the caller owns).
  * @param {GameState} state
- * @param {Dice} weatherDice  The `weather` stream.
+ * @param {Record<string, Dice>} dice  The state's dice (diceFrom): the weather from `weather`, the pools from
+ *   `pool` and `condition`.
  * @returns {GameEvent[]}
  */
-export function stepTime(state, weatherDice) {
+export function stepTime(state, dice) {
+  const weatherDice = dice.weather;
   /** @type {GameEvent[]} */
   const events = [];
+  const part = partKey(state);
   const time = advanceTime(state.time);
   state.time = time.minutes;
   if (time.newSeason) {
@@ -38,6 +42,8 @@ export function stepTime(state, weatherDice) {
   }
   // The water follows the air, a day behind (D149).
   stepWater(state);
+  // A new part of the day: every pool the player has been to lives on (D157).
+  if (partKey(state) !== part) events.push(...stepPools(state, dice));
   events.push(...expireBuffs(state));
   return events;
 }
@@ -48,16 +54,16 @@ export function stepTime(state, weatherDice) {
  * the log. Changes `state` in place.
  * @param {GameState} state
  * @param {number} minutes
- * @param {Dice} weatherDice
+ * @param {Record<string, Dice>} dice  As stepTime's.
  * @returns {GameEvent[]}
  */
-export function passTime(state, minutes, weatherDice) {
+export function passTime(state, minutes, dice) {
   /** @type {GameEvent[]} */
   const events = [];
   /** @type {GameEvent | null} */
   let weather = null;
   for (let left = minutes; left > 0; left -= TIME.castMinutes) {
-    for (const e of stepTime(state, weatherDice)) {
+    for (const e of stepTime(state, dice)) {
       if (e.type === 'weather') weather = e;
       else events.push(e);
     }

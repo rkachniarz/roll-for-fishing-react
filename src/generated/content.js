@@ -14531,7 +14531,16 @@ export const content = {
       "id": "pool",
       "placeholder": true,
       "add": 3,
-      "leave": 50,
+      "leave": 30,
+      "eat": 0.8,
+      "fromPool": 80,
+      "spawnCrowd": 1.5,
+      "shoal": 3,
+      "shoalGap": {
+        "x": 6,
+        "y": 3
+      },
+      "drift": 4,
       "school": {
         "min": 3,
         "max": 5

@@ -24,6 +24,31 @@ Items with no note are left alone.
 
 Newest first.
 
+## The simulation under the surface (2026-11-15, D157, 11.12)
+
+- **Spawners are slow to leave, not certain to stay.** You chose "they arrive in groups and stay". With that, every
+  pool sat at its cap for whole seasons, since some kind is spawning at most spots through spring and summer. So:
+  a spawning fish is four times less likely to leave, and a spawning crowd tops out at one and a half times the
+  pool's number (`spawnCrowd`), not twice.
+- **What an unfished pool holds, measured over a year at four spots:** 0.7 to 0.9 of its number out of the spawning
+  seasons, 1.2 to 1.5 in them; a little over one fish leaves and one arrives each part of the day. For that the
+  chance to leave came down from 50% to 30% (`leave`). You asked for the leaving rate: at 50% a pool held only 0.6.
+- **A predator takes only wild fish,** never one that got away from you or that you let go. `eat` is 0.8% per point
+  of water temperature, for every predator alike; the deep water has about six predators in its pool, so its
+  small fish go fastest.
+- **The strike has not been looked at in a browser by Claude:** the predator's shadow swims to where the prey was,
+  three rings and a few pixels of foam. Worth a look, and a word if it should be bigger.
+- **Bites from the pool: 80% at its number** (`fromPool`), measured 65 to 92% in play; the rest are passers-by.
+  A thin pool gives more passers-by, as you chose, so there is no fishing a spot out.
+- **Bigger-fish bait and perks** now mostly choose which of the pool's fish bites (the bigger the likelier); only a
+  passer-by is rolled a size up. Difficulty and XP values count for every fish.
+- **Rift Fishing is rolled before the pool,** so it keeps its full chance.
+- **Schools from the list are gone from play.** The school features and D154's lists stay in content, used only by
+  the bench; `schools` in `rules/spawning.json` is no longer read. Say if they should be retired outright.
+- **A school always shows,** whatever the depth or the hour; its fish keep 6 pixels apart across and 3 up
+  (`shoalGap`) and close half the distance with each cast. Each fish alone drifts up to 4 pixels a cast (`drift`).
+- **The night counts as one part of the day across midnight,** so there are seven turns a day.
+
 ## Fish leave the pool; aiming at a shadow (2026-11-15, D156, 11.14)
 
 - **Class fish are shown under the water but are not in the pool.** You chose "truly in the pool" for schools,

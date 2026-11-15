@@ -80,7 +80,7 @@ and the art sheet at `/art.html` there.
 | `src/engine/buffs.js` | Buffs from `content/buffs/`: potions, a night's rest; using a potion from the bags |
 | `src/engine/conditions.js` | The cold and night fishing, worked out from the state (R19.2, R19.3, D126) |
 | `src/engine/spawning.js` | The water's temperature, and who is spawning (D149) |
-| `src/engine/pool.js` | The fish under the surface at a spot (D139, D156): stocking its pool and turning it over, its room, which fish show as shadows and the one a cast lands on, the wizard's Look Underwater |
+| `src/engine/pool.js` | The fish under the surface at a spot (D139, D156, D157): stocking its pool, every pool's turn with each part of the day (leaving, predators, arrivals, spawners), the drift and the shoals, its room, which fish show as shadows and the one a cast lands on, the wizard's Look Underwater |
 | `src/engine/dive.js` | The Fighter's dive (R20.3, D128): the fish, their rolls, strikes, coming up |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |

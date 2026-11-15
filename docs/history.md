@@ -530,3 +530,14 @@ browser check.
   gone from their files; save version 20. A first rule, "only the unsuited leave", turned over 3 pools in 20,
   nearly every fish having its season or hour met, so every wild fish can leave, the less likely the better
   suited. Measured: 270 unit tests, every browser check; the sim plays through.
+- **11.12** The simulation under the surface (D157): `stepPools`, `driftPool` and `shoalsIn` in
+  `src/engine/pool.js`, called from `stepTime` (which takes the whole dice record now) and from `resolveCast`;
+  `rollLine` takes the pool's own fish for most bites, `onLine` giving it the cast's values; schools no longer come
+  up from the list; `scene.swirl` for a predator's strike; the shadows keyed by each fish's number. A research pass
+  on what real predators eat found usable numbers for pike only. Tuned by measuring a year of unfished pools: the
+  chance to leave from 50% to 30%, spawners slow to leave where they first stayed for certain, the crowd's cap from
+  twice the number to one and a half. Measured: 275 unit tests, every browser check; the sim plays through, the
+  Fish Fighter landing a fish on 28% of casts as before.
+  The bench has a section for the pool here (who is in it, its schools, who spawns, the predators' chance; add
+  fish of a kind and size, stock anew, empty), a button to the next part of the day, and its time buttons now pass
+  time as the game does, so the weather, the water and every pool move with them.

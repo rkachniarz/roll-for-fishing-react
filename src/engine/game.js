@@ -27,7 +27,7 @@ import { learn, noticeSpots, openByFragments, placeOpen, spotKnown } from './kno
 import { stepTime } from './passage.js';
 import { conditionSources } from './conditions.js';
 import { startDive } from './dive.js';
-import { aimedAt, joinPool, lookUnderwater, tended } from './pool.js';
+import { aimedAt, driftPool, joinPool, lookUnderwater, tended } from './pool.js';
 import { waterNow } from './spawning.js';
 import { conserve, tankMeals } from './barter.js';
 import { championAt, championClass, championSources, championsHere, findChampion, poolKey, removeChampion, updateChampions } from './champions.js';
@@ -388,6 +388,18 @@ function rollLine(state, values, dice, feature = null, hit = null, champion = nu
       state.escaped[key] = (state.escaped[key] ?? []).filter((f) => f !== one);
       return one;
     };
+    /**
+     * A pool fish as it fights this cast: the cast's difficulty and XP values count for it as for a fish
+     * rolled now (D157). `plain`: what it goes back into the pool as if it gets away.
+     * @param {PoolFish} one
+     * @returns {PoolFish}
+     */
+    const onLine = (one) => {
+      const harder = value('fishDifficulty').total;
+      const xp = value('fishXp').total;
+      if (!harder && !xp) return one;
+      return { ...one, difficulty: one.difficulty + harder, xp: Math.max(one.xp + harder + xp, 1), plain: { difficulty: one.difficulty, xp: one.xp } };
+    };
     /** @type {PoolFish | null} */
     let fish = null;
     let fromPool = false;
@@ -399,37 +411,52 @@ function rollLine(state, values, dice, feature = null, hit = null, champion = nu
       // A school or a big fish: one of its own fish, if one bites at this depth; no other.
       const theirs = hit ? (state.escaped[key] ?? []).filter((f) => f.of === hit.born && canBite(f.species)) : [];
       if (theirs.length) {
-        fish = take(theirs.length === 1 ? theirs[0] : theirs[dice.line.getRandomNumber(0, theirs.length - 1)]);
+        fish = onLine(take(theirs.length === 1 ? theirs[0] : theirs[dice.line.getRandomNumber(0, theirs.length - 1)]));
         fromPool = true;
       }
     } else if (aimed && canBite(aimed.species)) {
       // Fishing where the fish are: the one whose shadow the bobber landed on (D156).
-      fish = take(aimed);
-      fromPool = true;
-    } else if (pool.length > 0 && (values.flat.fromPool > 0 || dice.line.roll100() <= pool.length)) {
-      // Recall brings back one the player has met, if there is one; else any of the pool's (D139).
-      const met = values.flat.fromPool > 0 ? pool.filter((f) => !f.wild) : [];
-      const from = met.length ? met : pool;
-      fish = take(from[dice.line.getRandomNumber(0, from.length - 1)]);
+      fish = onLine(take(aimed));
       fromPool = true;
     } else {
+      // Recall brings back one the player has met, if there is one (D139).
+      const met = values.flat.fromPool > 0 ? pool.filter((f) => !f.wild) : [];
       // Rift Fishing: now and then, the spot's rift table instead (D104, D106).
       const riftChance = values.flat.riftChance * (values.flat.riftDoubled > 0 ? 2 : 1);
-      const riftTable = riftChance > 0 && dice.line.roll100() <= riftChance ? locationTable(where, 'rift', { moment: momentOf(state) }) : [];
+      const riftTable = !met.length && riftChance > 0 && dice.line.roll100() <= riftChance ? locationTable(where, 'rift', { moment: momentOf(state) }) : [];
       rift = riftTable.length > 0;
+      // The fish that bites lives here, mostly (D157): the pool's own, by how full the pool is; a passer-by
+      // from the spot's table fills the gap, so a thin pool gives other fish, not fewer.
+      const size = state.pools?.[key]?.size ?? pool.length;
+      const share = content.rules.pool.fromPool * Math.min(1, size > 0 ? pool.length / size : 0);
+      if (met.length) {
+        fish = onLine(take(met[dice.line.getRandomNumber(0, met.length - 1)]));
+        fromPool = true;
+      } else if (!rift && pool.length > 0 && dice.line.roll100() <= share) {
+        // Which of them: any, or with a size shift (a big bait, a perk) the bigger or the smaller the likelier.
+        const shift = value('fishSizeBand').total;
+        const bands = content.rules['size-bands'].bands.length;
+        const one = pick(pool.map((f) => ({ fish: f, weight: shift > 0 ? (f.band + 1) ** shift : shift < 0 ? (bands - f.band) ** -shift : 1 })), dice.line);
+        if (one) {
+          fish = onLine(take(one.fish));
+          fromPool = true;
+        }
+      }
       const table = rift ? riftTable : locationTable(where, 'fish', { moment: momentOf(state) });
-      const species = pick(allBite ? table : table.filter((e) => canBite(/** @type {string} */ (e.id))), dice.line);
-      if (species) {
-        fish = rollFish(
-          /** @type {string} */ (species.id),
-          {
-            fishSizeBand: value('fishSizeBand').total,
-            fishDifficulty: value('fishDifficulty').total,
-            fishXp: value('fishXp').total,
-          },
-          dice.line,
-          { condition: dice.condition },
-        );
+      if (!fish) {
+        const species = pick(allBite ? table : table.filter((e) => canBite(/** @type {string} */ (e.id))), dice.line);
+        if (species) {
+          fish = rollFish(
+            /** @type {string} */ (species.id),
+            {
+              fishSizeBand: value('fishSizeBand').total,
+              fishDifficulty: value('fishDifficulty').total,
+              fishXp: value('fishXp').total,
+            },
+            dice.line,
+            { condition: dice.condition },
+          );
+        }
       }
     }
     if (fish) {
@@ -787,8 +814,10 @@ function resolveCast(state, cast) {
         else events.push({ type: 'bait-eaten', bait: useBait(next), fish });
       }
     } else if (result === 'escaped' || result === 'missed') {
-      // Met now: no longer one of the pool's wild fish, so a new season leaves it (D139).
-      const { wild, ...met } = fish;
+      // Met now: no longer one of the pool's wild fish (D139). Back in the water it is as it was, without
+      // this cast's values (D157).
+      const { wild, plain, ...asCaught } = fish;
+      const met = { ...asCaught, ...plain };
       const escaped = { ...met, tries: (fish.tries ?? 0) + 1 };
       events.push({ type: result, fish, roll: cast.outcome.rolls[0], required: line.required, ...(cast.outcome.thrown ? { thrown: true } : {}) });
       const def = hit ? content.features[hit.id] : null;
@@ -817,7 +846,8 @@ function resolveCast(state, cast) {
       // It never bit: a fish from the pool goes back, untouched.
       if (line.fromPool) {
         const key = poolKey(next);
-        next.escaped[key] = [...(next.escaped[key] ?? []), fish];
+        const { plain, ...asCaught } = fish;
+        next.escaped[key] = [...(next.escaped[key] ?? []), { ...asCaught, ...plain }];
       }
       events.push({ type: 'too-early' });
     }
@@ -847,6 +877,7 @@ function resolveCast(state, cast) {
     if (hit && !content.features[hit.id].fish) hit.uses++;
     events.push(...updateFeatures(next, dice.features, { appear: false }));
     events.push(...updateChampions(next, dice.champions, water, { moveOnly: true }));
+    driftPool(next, dice.pool);
     next.streams = commit();
     return { state: next, cast, events };
   }
@@ -863,11 +894,13 @@ function resolveCast(state, cast) {
   events.push(...noticeSpots(next));
   events.push(...openByFragments(next));
   events.push(...updateFeatures(next, dice.features, { champions: dice.champions, extraChance: cast.featureChance ?? 0, condition: dice.condition }));
+  // The fish here move a little with every cast, and a shoal draws together (D157).
+  driftPool(next, dice.pool);
 
   // Time and weather move on with every cast that went out and ended, and
   // buffs that last game time run down (R19.5); unless time slipped (R19.4).
   if (cast.timeSlip) events.push({ type: 'time-slip' });
-  else events.push(...stepTime(next, dice.weather));
+  else events.push(...stepTime(next, dice));
   // After the weather, so a Shaman's holds (D114).
   events.push(...updateChampions(next, dice.champions, water));
 
@@ -1027,7 +1060,7 @@ export function useAbility(state, id, extra = []) {
  * @param {number} bucketSize
  */
 export function catchFish(state, fish, bucketSize) {
-  const { tries, wild, looks, since, stays, x, y, of, ...instance } = fish;
+  const { tries, wild, looks, since, stays, x, y, of, n, plain, ...instance } = fish;
   // Caught either way: the book and the XP count it. A full bucket holds it
   // back until the player lets one go (D59).
   if (fishInBucket(state) >= bucketSize) state.pendingCatch = instance;

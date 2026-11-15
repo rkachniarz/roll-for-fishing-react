@@ -82,7 +82,7 @@ is where the others may lead.
   don't hunt**: a bait item used on the tank keeps the predators from eating for a few days. **Hiding everywhere fish
   swim**: in the tank, the dive and Look Underwater, small fish keep away from a predator swimming near (built on 11.5
   and 11.9).
-- [ ] **11.12** A simulation of what's under the surface at all times: each spot's living population moving with the
+- [x] **11.12** A simulation of what's under the surface at all times (D157): each spot's living population moving with the
   time, weather and season, and a cast drawing from it. Touches the engine's core, the save, D63's rolling on the cast,
   and balance.
   *The owner's answers (2026-11-15, polls; 11.14, D156, built the pool's size, its turning over and aiming):*
@@ -128,6 +128,10 @@ is where the others may lead.
   how strongly preferences, spawning and plants stack (up to ×96 now, one fish up to 90% of a spot's bites); a new
   bed of plants rolled now and then; seasons that turn gradually instead of in a step. The mechanics exist and are
   knobs in `content/rules/`; the numbers wait for the simulations.
+
+**11.12 (2026-11-15):** the pools live wherever the player is, a turn with each part of the day: fish leave and
+arrive, predators eat, spawners gather, shoals form by themselves, and the cast fishes the pool (D157). Phase 11 has
+only 11.10 (with the Legendary fish) and 11.15 (balance by simulation) left.
 
 **11.14 (2026-11-15):** the pool turns over and has a size, a shadow can be aimed at, and schools and big fish are
 in the pool (D156); its guesses at the top of REVIEW.md.

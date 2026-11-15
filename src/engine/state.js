@@ -36,12 +36,13 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
 
 /**
  * @typedef {import('./fish.js').FishInstance & { tries?: number, wild?: boolean, looks?: number, since?: number,
- *   stays?: number, x?: number, y?: number, of?: number }} PoolFish  A fish
+ *   stays?: number, x?: number, y?: number, of?: number, n?: number, plain?: { difficulty: number, xp: number } }} PoolFish  A fish
  *   in a spot's pool (pool.js, D139, D156): one that got away or was released, with how many times it was met
  *   and `since` when (a game minute) and how many days it `stays` from then (1d4), or one the pool was stocked with, `wild` until the
  *   player meets it. `looks`: how many times the wizard has looked at it under the water. `x`, `y`: where it
  *   keeps on the water, for its shadow and a cast aimed at it. `of`: the school or big fish it belongs to, that
- *   feature's `born`; it has no place of its own.
+ *   feature's `born`; it has no place of its own. `n`: its number in its pool, to tell it apart. `plain`: only
+ *   while on the line, what it goes back as (D157).
  *
  * @typedef {Object} Buff  A temporary modifier (R12). Lasts `casts` casts, `attempts` attempts at a
  *   catch (an ability's "next cast", D96) or `ms` real milliseconds.
@@ -75,7 +76,7 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, number>} found  Item id -> how many ever found.
  * @property {Record<string, PoolFish[]>} escaped  Each spot's pool of fish, per location or
  *   location/spot (R3.6, D59, D139).
- * @property {Record<string, { season: string, size: number, at: number, part: string, room?: number }>} pools  Each pool that has been
+ * @property {Record<string, { season: string, size: number, at: number, room?: number, next?: number }>} pools  Each pool that has been
  *   stocked (pool.js, D139): the season it was rolled in, the number rolled, and the game minute its days
  *   are counted from.
  * @property {Buff[]} buffs
