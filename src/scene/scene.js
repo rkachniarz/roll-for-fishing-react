@@ -376,9 +376,9 @@ export async function createScene(canvas, rand, look = {}) {
       const far = cy < farLine;
       const phase = i * 1.7;
       if (f.kind === 'school' && f.species) {
-        // Small fish milling about under the surface (R20.2); fewer as it is fished out.
+        // Small fish milling about under the surface (R20.2): as many as the school has in the pool (D156).
         const r = far ? 12 : 18;
-        for (let n = 0; n < 1 + f.uses; n++) {
+        for (let n = 0; n < f.uses; n++) {
           shadows.push({ key: `${key}-${n}`, species: f.species, look: 'small', box: { x0: cx - r, y0: cy - r * 0.5, x1: cx + r, y1: cy + r * 0.5 } });
         }
       } else if (f.kind === 'school') {

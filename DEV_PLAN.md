@@ -86,8 +86,8 @@ is where the others may lead.
   time, weather and season, and a cast drawing from it. Touches the engine's core, the save, D63's rolling on the cast,
   and balance.
 
-- [ ] **11.14** Fish leave the pool (the owner, 2026-11-15: the pool, and so the fish seen under the water, gets too
-  big). Requirements to come from the owner's answers to Claude's refinement questions.
+- [x] **11.14** Fish leave the pool, and a shadow is a fish to aim at (D156; the owner, 2026-11-15: the pool, and so
+  the fish seen under the water, gets too big).
   *The owner so far (2026-11-15):* a watcher kept casting at the shadows, "to fish where the fish are", so **aiming
   at a shadow should be rewarded**: a better chance of that very fish. **Schools, big fish and class fish should
   show when looking underwater**, which probably means they join the pool, though they behave a little differently
@@ -100,13 +100,16 @@ is where the others may lead.
   bites; the bite roll is as ever. **Schools, big fish and class fish are truly in the pool:** one population, seen
   in Look Underwater and the dive. **Shadows shown by depth and light:** the fish near the top, a few deeper ones
   now and then, fewer at night or in rain.
-  *Still to settle before building:* how many fish a school puts in the pool and what its +40 Fish Find becomes;
-  whether a big fish or class fish in the pool keeps its sure bite when cast at; what "a few" is for the room above
-  the stocked number and the days a met fish stays (Claude's guesses otherwise: +3, 3 days).
+  *And (2026-11-15):* a school puts 3 to 5 fish in the pool and its Fish Find is replaced by "one of these, if a
+  fish bites"; a big fish and a class fish keep their sure bite; the room is 1d4 fish, rolled per pool, and a met fish stays 1d4 days, rolled per fish ("if 1d4 isn't an over
+  complication, we are doing it").
 - [ ] **11.15** Balance by simulation, later (the owner, 2026-11-15; Review 3's numbers are in history.md and D153):
   how strongly preferences, spawning and plants stack (up to ×96 now, one fish up to 90% of a spot's bites); a new
   bed of plants rolled now and then; seasons that turn gradually instead of in a step. The mechanics exist and are
   knobs in `content/rules/`; the numbers wait for the simulations.
+
+**11.14 (2026-11-15):** the pool turns over and has a size, a shadow can be aimed at, and schools and big fish are
+in the pool (D156); its guesses at the top of REVIEW.md.
 
 **Review 3 (2026-11-15):** a code and doc review of D114 to D152, its fixes in history.md; how the lake's rules
 meet, and what may not be as meant, is at the top of REVIEW.md, three of them fixed already (D153).

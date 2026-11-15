@@ -522,3 +522,11 @@ Then, at the owner's word, the three fixes Claude proposed (D153): the water's t
 none of the player's values. And the schools brought in step with the shoaling marks (D154): six fish marked, six
 schools retired, two new; and the big fish with the predator mark (D155): five new. Measured: 265 unit tests, every
 browser check.
+
+- **11.14** The pool turns over, and a shadow is a fish to aim at (D156): `tendPool` rewritten (a part of the day's
+  turn, the met fish's days, a place for every fish), `joinPool`, `shadowsOf` and `aimedAt` in
+  `src/engine/pool.js`; `bringFeature`, `fishOf` and `partFish` in `src/engine/features.js`, a school's and a big
+  fish's own fish in the pool marked `of`; `rollLine` takes the aimed fish or the feature's; the schools' Fish Find
+  gone from their files; save version 20. A first rule, "only the unsuited leave", turned over 3 pools in 20,
+  nearly every fish having its season or hour met, so every wild fish can leave, the less likely the better
+  suited. Measured: 270 unit tests, every browser check; the sim plays through.

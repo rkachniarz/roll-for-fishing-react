@@ -12,7 +12,7 @@ import { rollFish } from './fish.js';
 import { diceFrom, levelFor } from './state.js';
 import { levelUp } from './perks.js';
 import { catchFish, fishInBucket, momentOf, poolKey, valuesFor } from './game.js';
-import { tendPool } from './pool.js';
+import { joinPool, tendPool } from './pool.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./fish.js').FishInstance} FishInstance */
@@ -134,7 +134,7 @@ export function endDive(state) {
   const key = poolKey(next);
   if (escapee && !(escapee.struck && escapee.caught)) {
     // However many times it got away before, and once more (R3.6).
-    next.escaped[key] = [...(next.escaped[key] ?? []), { ...escapee.fish, tries: (/** @type {import('./state.js').PoolFish} */ (escapee.fish).tries ?? 0) + 1 }];
+    joinPool(next, { ...escapee.fish, tries: (/** @type {import('./state.js').PoolFish} */ (escapee.fish).tries ?? 0) + 1 });
   }
   const back = (next.dive?.fish ?? []).filter((f) => f.pooled && !(f.struck && f.caught)).map((f) => f.fish);
   if (back.length) next.escaped[key] = [...(next.escaped[key] ?? []), ...back];

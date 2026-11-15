@@ -19,7 +19,7 @@ import { knownKey, locationList } from './knowledge.js';
 import { fishWeight } from './fish.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 19;
+export const SAVE_VERSION = 20;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -35,10 +35,13 @@ export const SAVE_VERSION = 19;
 export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions', 'taste', 'pool', 'fight', 'condition', 'tank'];
 
 /**
- * @typedef {import('./fish.js').FishInstance & { tries?: number, wild?: boolean, looks?: number }} PoolFish  A fish
- *   in a spot's pool (pool.js, D139): one that got away or was released, with how many times it was met, or
- *   one the pool was stocked with, `wild` until the player meets it. `looks`: how many times the wizard
- *   has looked at it under the water.
+ * @typedef {import('./fish.js').FishInstance & { tries?: number, wild?: boolean, looks?: number, since?: number,
+ *   stays?: number, x?: number, y?: number, of?: number }} PoolFish  A fish
+ *   in a spot's pool (pool.js, D139, D156): one that got away or was released, with how many times it was met
+ *   and `since` when (a game minute) and how many days it `stays` from then (1d4), or one the pool was stocked with, `wild` until the
+ *   player meets it. `looks`: how many times the wizard has looked at it under the water. `x`, `y`: where it
+ *   keeps on the water, for its shadow and a cast aimed at it. `of`: the school or big fish it belongs to, that
+ *   feature's `born`; it has no place of its own.
  *
  * @typedef {Object} Buff  A temporary modifier (R12). Lasts `casts` casts, `attempts` attempts at a
  *   catch (an ability's "next cast", D96) or `ms` real milliseconds.
@@ -72,7 +75,7 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, number>} found  Item id -> how many ever found.
  * @property {Record<string, PoolFish[]>} escaped  Each spot's pool of fish, per location or
  *   location/spot (R3.6, D59, D139).
- * @property {Record<string, { season: string, size: number, at: number }>} pools  Each pool that has been
+ * @property {Record<string, { season: string, size: number, at: number, part: string, room?: number }>} pools  Each pool that has been
  *   stocked (pool.js, D139): the season it was rolled in, the number rolled, and the game minute its days
  *   are counted from.
  * @property {Buff[]} buffs
@@ -335,6 +338,15 @@ const MIGRATIONS = {
   13: (save) => ({ ...save, streams: { ...save.streams, fight: deriveSeed(save.seed, 'fight') } }),
   // 15 -> 16: the line's depth (D148), unset.
   15: (save) => ({ ...save, lineDepth: null }),
+  // 19 -> 20: the pool turns over (D156). Fish the player has met count their days from now; schools and big
+  // fish are in the pool, so the ones on the water, which have none there, go; the pools take up their turning
+  // over from now.
+  19: (save) => ({
+    ...save,
+    features: [],
+    escaped: Object.fromEntries(Object.entries(save.escaped ?? {}).map(([key, pool]) => [key, /** @type {any[]} */ (pool).map((f) => (f.wild ? f : { ...f, since: save.time ?? 0 }))])),
+    pools: Object.fromEntries(Object.entries(save.pools ?? {}).map(([key, meta]) => [key, { .../** @type {any} */ (meta), part: '' }])),
+  }),
   // 18 -> 19: the water's slow average (D153), starting where the water is.
   18: (save) => ({ ...save, waterSlow: save.water }),
   // 17 -> 18: who eats whom in the aquarium (D152), counted from today, with its own stream.

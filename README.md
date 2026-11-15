@@ -72,7 +72,7 @@ and the art sheet at `/art.html` there.
 | `src/engine/perks.js` | Perks: what each level offers, what is owed and taken, passive perks' effects |
 | `src/engine/knowledge.js` | What the player knows of each place: spots noticed, its list, completion, hidden places opened (D109, D110) |
 | `src/engine/abilities.js` | Active abilities: the action bar's contents, cooldowns, which are lit |
-| `src/engine/features.js` | Surface features: appearing, drifting, thinning out; the open water's bounds |
+| `src/engine/features.js` | Surface features: appearing, drifting, thinning out; a school's and a big fish's own fish in the pool (D156); the open water's bounds |
 | `src/engine/champions.js` | Class fish (D114): appearing, their effects on the spot, spells, weather, the Rogue's loot |
 | `src/engine/passage.js` | Time passing in half-hour steps: casts, waiting and sleeping in town; buffs that last game time (R17.2, R19.5) |
 | `src/engine/schedule.js` | When a vendor is in: days, hours asleep, days away (R17.6) |
@@ -80,7 +80,7 @@ and the art sheet at `/art.html` there.
 | `src/engine/buffs.js` | Buffs from `content/buffs/`: potions, a night's rest; using a potion from the bags |
 | `src/engine/conditions.js` | The cold and night fishing, worked out from the state (R19.2, R19.3, D126) |
 | `src/engine/spawning.js` | The water's temperature, and who is spawning (D149) |
-| `src/engine/pool.js` | The fish under the surface at a spot (D139): stocking and keeping its pool, the wizard's Look Underwater |
+| `src/engine/pool.js` | The fish under the surface at a spot (D139, D156): stocking its pool and turning it over, its room, which fish show as shadows and the one a cast lands on, the wizard's Look Underwater |
 | `src/engine/dive.js` | The Fighter's dive (R20.3, D128): the fish, their rolls, strikes, coming up |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |

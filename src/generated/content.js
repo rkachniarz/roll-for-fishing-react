@@ -12757,12 +12757,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "bleak",
@@ -12778,12 +12772,6 @@ export const content = {
       "uses": 3,
       "lifetime": 20,
       "drift": 3,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 30
-        }
-      ],
       "fish": [
         {
           "id": "common-carp",
@@ -12799,12 +12787,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "central-mudminnow",
@@ -12821,12 +12803,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "chub",
@@ -12843,12 +12819,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "common-bream",
@@ -12864,12 +12834,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "crucian-carp",
@@ -12885,12 +12849,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "dace",
@@ -12906,12 +12864,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "deepwater-sculpin",
@@ -12928,12 +12880,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "ferrstad-carp",
@@ -12949,12 +12895,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "frostfin-grayling",
@@ -12992,12 +12932,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "grayling",
@@ -13016,12 +12950,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "gudgeon",
@@ -13037,12 +12965,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "mainland-bullhead",
@@ -13059,12 +12981,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "minnow",
@@ -13080,12 +12996,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "perch",
@@ -13101,12 +13011,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "roach",
@@ -13122,12 +13026,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "rock-bass",
@@ -13144,12 +13042,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "rudd",
@@ -13165,12 +13057,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "ruffe",
@@ -13186,12 +13072,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "silver-bream",
@@ -13207,12 +13087,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "smelt",
@@ -13228,12 +13102,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "stone-loach",
@@ -13250,12 +13118,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "vendace",
@@ -13271,12 +13133,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "white-sucker",
@@ -13292,12 +13148,6 @@ export const content = {
       "uses": 4,
       "lifetime": 24,
       "drift": 4,
-      "effects": [
-        {
-          "value": "fishFind",
-          "add": 40
-        }
-      ],
       "fish": [
         {
           "id": "yellow-perch",
@@ -14681,11 +14531,25 @@ export const content = {
       "id": "pool",
       "placeholder": true,
       "add": 3,
-      "perDay": 1,
-      "rollBelow": 2,
+      "leave": 50,
+      "school": {
+        "min": 3,
+        "max": 5
+      },
       "colourAt": 2,
       "nameAt": 3,
-      "shadows": 12
+      "shadows": 12,
+      "show": {
+        "surface": 100,
+        "upper": 100,
+        "lower": 40,
+        "bottom": 15
+      },
+      "dim": 50,
+      "aim": {
+        "x": 16,
+        "y": 6
+      }
     },
     "size-bands": {
       "id": "size-bands",

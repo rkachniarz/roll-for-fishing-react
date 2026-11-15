@@ -13,7 +13,7 @@ import { meetsAll } from './events.js';
 import { vendorStatus } from './schedule.js';
 import { addBuff, buffFrom, giveBuff } from './buffs.js';
 import { hasPerk } from './perks.js';
-import { poolKey } from './champions.js';
+import { joinPool } from './pool.js';
 import { diceFrom, levelFor } from './state.js';
 import { levelUp } from './perks.js';
 import { fishInBucket, valuesFor } from './game.js';
@@ -176,8 +176,7 @@ export function letGo(state, index) {
   const fish = fromBucket(next, index);
   if (!fish) return { state, events: [] };
   const { champion, ...plain } = /** @type {FishInstance & { champion?: string }} */ (fish);
-  const key = poolKey(next);
-  next.escaped[key] = [...(next.escaped[key] ?? []), { ...plain, tries: 0 }];
+  joinPool(next, { ...plain, tries: 0 });
   return { state: next, events: [{ type: 'released', fish }, ...conserve(next, fish)] };
 }
 

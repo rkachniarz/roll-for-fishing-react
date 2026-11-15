@@ -29,7 +29,7 @@ import { createScene } from './scene/scene.js';
 import { waterAt } from './engine/features.js';
 import { PLANTS } from './scene/views.js';
 import { championClass, championDebuffs, championsHere, poolKey } from './engine/champions.js';
-import { hasWater, lookStage, poolDue, tended } from './engine/pool.js';
+import { hasWater, lookStage, poolDue, tended, shadowsOf } from './engine/pool.js';
 import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
@@ -1418,19 +1418,15 @@ let looking = null;
  * @param {GameState} s
  */
 function poolShadows(s) {
-  if (!hasWater(s)) return [];
-  const water = waterAt(s.location, s.spot);
+  // Which fish show, and where, is the engine's (D156): a cast that lands on one is after that fish.
   /** @type {Record<string, number>} */
   const seen = {};
-  return (s.escaped[poolKey(s)] ?? []).slice(0, content.rules.pool.shadows).map((f) => {
-    const kind = `${f.species}-${f.size}`;
+  return shadowsOf(s).map((f) => {
+    const kind = `${f.species}-${f.size}-${f.x}-${f.y}`;
     seen[kind] = (seen[kind] ?? 0) + 1;
-    const key = `pool-${poolKey(s)}-${kind}-${seen[kind]}`;
-    let h = 2166136261;
-    for (let i = 0; i < key.length; i++) h = Math.imul(h ^ key.charCodeAt(i), 16777619) >>> 0;
-    const cx = water.x0 + 16 + (h % 1000) / 1000 * Math.max(1, water.x1 - water.x0 - 32);
-    const cy = water.y0 + 6 + ((h >>> 10) % 1000) / 1000 * Math.max(1, water.y1 - water.y0 - 12);
-    return { key, species: f.species, box: { x0: cx - 16, y0: cy - 4, x1: cx + 16, y1: cy + 4 } };
+    const cx = f.x ?? 0;
+    const cy = f.y ?? 0;
+    return { key: `pool-${poolKey(s)}-${kind}-${seen[kind]}`, species: f.species, box: { x0: cx - 16, y0: cy - 4, x1: cx + 16, y1: cy + 4 } };
   });
 }
 

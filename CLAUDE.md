@@ -189,11 +189,18 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   can't see the game, so `src/main.js` tells `src/ui/links.js` when to show a taste (`showTasteWhen`); the journal
   reads the state itself. The `taste` stream is drawn only for a fish with a parasite risk, and for a bowl with more
   than one kind to pick from.
-- **A spot's pool (`state.escaped`) is what lives there (D139),** not only the fish that got away:
-  `src/engine/pool.js` stocks and tops it up lazily, whenever it is looked at (`castLine`, the dive, the wizard's
-  look, and `render` in `src/main.js` between casts), from the `pool` stream (and `condition`), with no bait and
-  none of the player's values counted (D153). A test that counts a pool must
-  leave out the `wild` fish. The look itself (`looking` in `src/main.js`) is the page's, never saved.
+- **A spot's pool (`state.escaped`) is what lives there (D139, D156),** not only the fish that got away:
+  `src/engine/pool.js` stocks it and turns it over lazily, whenever it is looked at (`castLine`, the dive, the
+  wizard's look, and `render` in `src/main.js` between casts), from the `pool` stream (and `condition`), with no
+  bait and none of the player's values counted (D153). Put a met fish back with `joinPool`, never by pushing onto
+  the list: it keeps the pool's room and starts the fish's days. A test that counts a pool must leave out the
+  `wild` fish. The look itself (`looking` in `src/main.js`) is the page's, never saved.
+- **A school's fish and a big fish are pool fish marked `of` their feature's `born` (D156),** brought in by
+  `bringFeature` and taken out by `partFish` (`src/engine/features.js`) when the feature goes or the player
+  travels. The pool's turning over, its room and a random comeback leave them alone; a feature's `uses` is how
+  many it has left. Class fish are not in the pool (`state.champions`).
+- **Which pool fish show as shadows, and where, is the engine's (`shadowsOf`, D156),** worked out from the state
+  with a hash and no dice, so a cast can land on one (`aimedAt`). The page only draws that list.
 - **A fish's weight is worked out, never stored (D146):** `fishWeight` from its species' `lengthWeight` and its own
   `condition`, rolled from the `condition` stream wherever a fish is rolled. Two fish of a different condition
   don't stack (`sameFish`).

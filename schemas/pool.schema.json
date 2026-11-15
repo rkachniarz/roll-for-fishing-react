@@ -17,16 +17,6 @@
       "type": "integer",
       "minimum": 0
     },
-    "perDay": {
-      "description": "How many fish drift in each game day, up to the number first rolled.",
-      "type": "integer",
-      "minimum": 0
-    },
-    "rollBelow": {
-      "description": "A pool with fewer fish than this is rolled anew.",
-      "type": "integer",
-      "minimum": 0
-    },
     "colourAt": {
       "description": "From this many looks, Look Underwater shows a fish in its colours; before, as a shadow.",
       "type": "integer",
@@ -41,16 +31,102 @@
       "description": "How many of the pool's fish show as shadows under the surface, at most.",
       "type": "integer",
       "minimum": 0
+    },
+    "leave": {
+      "description": "With each new part of the day, the chance (%) that a wild fish leaves when the moment meets none of its preferences; halved (the preference factor) for each one met, and once more while it spawns.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "school": {
+      "description": "How many fish a school brings into the pool.",
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false
+    },
+    "show": {
+      "description": "The chance (%) that a pool fish shows as a shadow from the bank, by the depth it swims at (D136).",
+      "type": "object",
+      "properties": {
+        "surface": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "upper": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "lower": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "bottom": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "surface",
+        "upper",
+        "lower",
+        "bottom"
+      ],
+      "additionalProperties": false
+    },
+    "dim": {
+      "description": "At night and in the rain, the share (%) of those chances that is left.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "aim": {
+      "description": "How far from a shadow, in scene pixels across and up, a cast still lands on it.",
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number",
+          "minimum": 0
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "additionalProperties": false
     }
   },
   "required": [
     "id",
     "add",
-    "perDay",
-    "rollBelow",
+    "leave",
+    "school",
     "colourAt",
     "nameAt",
-    "shadows"
+    "shadows",
+    "show",
+    "dim",
+    "aim"
   ],
   "additionalProperties": false
 }

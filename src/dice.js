@@ -71,9 +71,13 @@ export function diceFor(rng) {
     return getRandomNumber(1, 6);
   }
 
+  function roll4() {
+    return getRandomNumber(1, 4);
+  }
+
   function roll2d6() {
     return getRandomNumber(1, 6) + getRandomNumber(1, 6);
   }
 
-  return { getRandomNumber, roll20, roll20Kept, roll100, roll12, roll6, roll2d6 };
+  return { getRandomNumber, roll20, roll20Kept, roll100, roll12, roll6, roll4, roll2d6 };
 }

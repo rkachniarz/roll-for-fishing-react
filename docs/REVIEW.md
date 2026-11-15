@@ -24,6 +24,27 @@ Items with no note are left alone.
 
 Newest first.
 
+## Fish leave the pool; aiming at a shadow (2026-11-15, D156, 11.14)
+
+- **Class fish are shown under the water but are not in the pool.** You chose "truly in the pool" for schools,
+  big fish and class fish. Schools and big fish are. A class fish holds its spot when you travel, isn't caught in
+  a dive and carries what it stole, so it stays in its own list and only shows in Look Underwater. Say if it
+  should be in the dive too.
+- **Every wild fish can leave, not only the unsuited.** With "the unsuited may leave" almost nobody left: nearly
+  every fish has its season or hour met. So: 50% to leave with nothing met, halved for each preference met and
+  for spawning. Plants don't count, being always there.
+- **After a day away, every wild fish is new;** within a day, one turn however many parts of the day went by.
+- **What shows:** surface and upper swimmers always; lower 40%, bottom 15%; half at night or in rain (precipitation
+  2 and up); 12 at most. At the deep water, where everyone swims low, that is few shadows: worth a look.
+- **Landing on a shadow:** 16 pixels across, 6 up and down, the patch the shadow mills about in. With a cast's
+  scatter of 20 it takes some luck; a better rod narrows it.
+- **A school is 3 to 5 fish and has no Fish Find any more,** as you said; it lasts until its fish are gone or its
+  24 casts are up. A fish of it that gets away is still the school's. Its fish are rolled as it comes up, so a
+  perk for bigger fish doesn't reach them, nor the big fish (as with the pool, D153).
+- **A fish that gets away reappears where the bobber was;** one let go finds a place of its own.
+- **Jump In now works after a big fish too:** it used to be "somewhere else"; it is in the pool now.
+- **Older saves** lose the schools and big fish that were on the water at the time.
+
 ## Review 3: how the lake's rules meet (2026-11-15)
 
 The bugs the review found are fixed and listed in history.md. These are not bugs: places where two of the lake's
@@ -32,11 +53,6 @@ multipliers, the plants and the seasons' steps are knobs for the balance simulat
 the adjustable line, Luck (events will roll with it and gate choices by it) and the one water temperature are
 fine as they are. What's left:
 
-- **A fish from the pool skips the moment (D139).** Since pools are stocked, 5 to 15% of bites are a pool fish
-  (a d100 at or under the pool's size), rolled when the pool was stocked: that day's weather, hour and bait, and
-  the size and difficulty values the player had then. It also skips the rift roll, so Rift Fishing is that much
-  weaker than its number. (The bait and the player's values no longer count when a pool is stocked, D153; the
-  weather and the hour of that day still do.)
 - **Weight touches nothing but the records (D146), by the owner's call,** with one side effect: twins must share a
   condition, 21 steps, so fish almost never stack in the bucket now.
 - **The tank goes by the fish, hiding by the kind (D152).** A meal needs the prey under half the eater's own

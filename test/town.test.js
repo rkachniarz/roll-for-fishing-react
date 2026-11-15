@@ -294,30 +294,124 @@ test('the pool: stocked with 2d6+3 fish the first time it is looked at, from its
   assert.equal(tended(town), town, 'no water in town');
 });
 
-test('the pool: a fish a day drifts in, a new season rolls the wild fish anew, and under two it is rolled anew (D139)', () => {
+test('the pool turns over with the part of the day: the unsuited may leave, others come, a met fish stays its days (D156)', () => {
   const stocked = tended(game());
   const key = 'lake/reedy-shore';
   const size = stocked.pools[key].size;
-  const met = { ...stocked.escaped[key][0], wild: undefined, tries: 2 };
+  const water = content.locations.lake.spots.find((/** @type {{ id: string }} */ x) => x.id === 'reedy-shore').water;
+  assert.ok(stocked.escaped[key].every((f) => f.x >= water.x0 && f.x <= water.x1 && f.y >= water.y0 && f.y <= water.y1), 'each has its place on the water');
+  const soon = { ...stocked, time: stocked.time + 30 };
+  assert.equal(tended(soon), soon, 'nothing in the same part of the day');
+  // Into the afternoon: some wild fish have gone, and the pool is full again.
+  let changed = 0;
+  for (let seed = 1; seed <= 20; seed++) {
+    const first = tended(game({ seed }));
+    const later = tended({ ...first, time: first.time + 4 * 60 });
+    assert.equal(later.escaped[key].length, later.pools[key].size, 'up to the spot\'s number');
+    if (later.escaped[key].some((f) => !first.escaped[key].some((g) => g.x === f.x && g.y === f.y && g.species === f.species))) changed++;
+  }
+  assert.ok(changed > 10, `the pool changed in ${changed} of 20 games`);
+  // A day away: the wild fish are all new; one the player met is still there, until its days are up.
+  const met = { ...stocked.escaped[key][0], tries: 2, since: stocked.time, stays: 3 };
   delete met.wild;
-  // Three fish left, one of them met; two days on, two more.
-  const thinned = { ...stocked, escaped: { [key]: [met, ...stocked.escaped[key].slice(1, 3)] } };
-  assert.equal(tended(thinned), thinned, 'nothing the same day');
-  const later = tended({ ...thinned, time: thinned.time + 2 * 24 * 60 + 30 });
-  assert.equal(later.escaped[key].length, 5);
-  assert.equal(later.pools[key].at, stocked.pools[key].at + 2 * 24 * 60, 'whole days are counted');
-  // A full pool takes nobody in, though the day is counted.
-  const full = tended({ ...stocked, time: stocked.time + 24 * 60 });
-  assert.equal(full.escaped[key].length, size);
-  assert.equal(full.pools[key].at, stocked.pools[key].at + 24 * 60);
-  // A new season: the wild ones go, the one the player met stays.
-  const season = tended({ ...thinned, pools: { [key]: { ...thinned.pools[key], season: 'another' } } });
-  assert.ok(season.escaped[key].some((f) => f.tries === 2), 'the fish that got away is still there');
-  assert.equal(season.escaped[key].filter((f) => f.wild).length, season.pools[key].size);
-  assert.equal(season.escaped[key].length, season.pools[key].size + 1);
-  // Down to one: rolled anew, on top of it.
-  const low = tended({ ...stocked, escaped: { [key]: [met] } });
-  assert.equal(low.escaped[key].length, low.pools[key].size + 1);
+  const withMet = { ...stocked, escaped: { [key]: [met, ...stocked.escaped[key].slice(1)] } };
+  const nextDay = tended({ ...withMet, time: withMet.time + DAY + 60 });
+  assert.ok(nextDay.escaped[key].some((f) => f.tries === 2), 'the fish that got away is still there');
+  assert.equal(nextDay.escaped[key].filter((f) => f.wild).length, size - 1, 'it has a wild fish\'s place');
+  const gone = tended({ ...withMet, time: withMet.time + 3 * DAY + 60 });
+  assert.ok(!gone.escaped[key].some((f) => f.tries === 2), 'after its days it swims off');
+  assert.equal(gone.escaped[key].length, size);
+  // A fish just met has its days rolled when the pool is next looked at: 1d4.
+  const fresh = { ...met };
+  delete fresh.stays;
+  const rolled = tended({ ...stocked, escaped: { [key]: [fresh, ...stocked.escaped[key].slice(1)] } }).escaped[key][0];
+  assert.ok(rolled.stays >= 1 && rolled.stays <= 4, String(rolled.stays));
+});
+
+test('the pool has room for a few met fish; past it a wild fish makes way (D156)', async () => {
+  const { joinPool } = await import('../src/engine/pool.js');
+  const s = structuredClone(tended(game()));
+  const key = 'lake/reedy-shore';
+  const size = s.pools[key].size;
+  const room = s.pools[key].room;
+  assert.ok(room >= 1 && room <= 4, `1d4 of room: ${room}`);
+  for (let i = 0; i < room; i++) joinPool(s, { ...fish('roach', 'common', 20 + i), tries: 1 }, { x: 100, y: 150 });
+  assert.equal(s.escaped[key].length, size + room, 'room above the stocked number');
+  assert.equal(s.escaped[key].filter((f) => f.wild).length, size);
+  joinPool(s, { ...fish('roach', 'common', 40), tries: 1 }, { x: 100, y: 150 });
+  assert.equal(s.escaped[key].length, size + room, 'no more than that');
+  assert.equal(s.escaped[key].filter((f) => f.wild).length, size - 1, 'a wild fish left');
+  assert.equal(s.escaped[key].at(-1).since, s.time);
+  assert.deepEqual([s.escaped[key].at(-1).x, s.escaped[key].at(-1).y], [100, 150], 'where it went back in');
+});
+
+test('a cast that lands on a shadow brings up that very fish, if a fish bites (D156)', async () => {
+  const { shadowsOf, aimedAt } = await import('../src/engine/pool.js');
+  let aimed = 0;
+  let bitten = 0;
+  for (let seed = 1; seed <= 40; seed++) {
+    const s = tended(game({ seed }));
+    const shown = shadowsOf(s);
+    assert.ok(shown.length <= content.rules.pool.shadows);
+    assert.ok(shown.every((f) => f.of === undefined));
+    const target = shown[0];
+    if (!target) continue;
+    assert.equal(aimedAt(s, { x: target.x, y: target.y })?.species, target.species);
+    const out = castLine({ ...s, features: [], champions: {} }, 0, { landing: { x: target.x, y: target.y } });
+    assert.ok(out.events.some((e) => e.type === 'shadow-hit'));
+    aimed++;
+    if (out.cast.line.kind !== 'fish') continue;
+    bitten++;
+    assert.deepEqual([out.cast.line.fish.x, out.cast.line.fish.y, out.cast.line.fish.species], [target.x, target.y, target.species], `seed ${seed}`);
+    assert.equal(out.cast.line.fromPool, true);
+  }
+  assert.ok(aimed > 30, `a shadow to aim at in ${aimed} of 40 games`);
+  assert.ok(bitten > 8 && bitten < aimed, `it bit in ${bitten}: the bite roll is as ever`);
+  // Away from every shadow, the cast is an ordinary one.
+  assert.equal(aimedAt(tended(game()), { x: -50, y: -50 }), null);
+});
+
+test('shadows from the bank: the fish near the top, a deeper one now and then, fewer at night (D156)', async () => {
+  const { shadowsOf } = await import('../src/engine/pool.js');
+  let day = 0;
+  let night = 0;
+  let deepShown = 0;
+  let deep = 0;
+  for (let seed = 1; seed <= 40; seed++) {
+    const s = tended(game({ seed, hour: 12 }));
+    const pool = s.escaped['lake/reedy-shore'];
+    const shown = shadowsOf(s);
+    day += shown.length;
+    for (const f of pool) {
+      const swims = content.fish[f.species].swims;
+      if (swims === 'surface' || swims === 'upper') assert.ok(shown.includes(f) || shown.length === content.rules.pool.shadows, `${f.species} swims near the top`);
+      else {
+        deep++;
+        if (shown.includes(f)) deepShown++;
+      }
+    }
+    night += shadowsOf(tended(game({ seed, hour: 1 }))).length;
+  }
+  assert.ok(deepShown > 0 && deepShown < deep * 0.6, `${deepShown} of ${deep} deeper fish showed`);
+  assert.ok(night < day * 0.75, `${night} shadows at night, ${day} by day`);
+});
+
+test('a save from before the pool turned over: schools gone from the water, met fish counting from now (D156)', () => {
+  const s = tended(game());
+  const key = 'lake/reedy-shore';
+  const old = JSON.parse(serialize(s));
+  old.version = 19;
+  old.features = [{ id: 'roach-school', x: 100, y: 150, uses: 4, castsLeft: 10, born: 0 }];
+  old.escaped[key] = old.escaped[key].map((/** @type {any} */ f, /** @type {number} */ i) => {
+    const { x, y, ...rest } = f;
+    return i === 0 ? { ...rest, wild: undefined, tries: 1 } : rest;
+  });
+  delete old.pools[key].part;
+  const loaded = deserialize(JSON.stringify(old));
+  assert.deepEqual(loaded.features, []);
+  assert.equal(loaded.escaped[key][0].since, s.time);
+  const next = tended(loaded);
+  assert.ok(next.escaped[key].every((f) => f.x !== undefined), 'every fish finds a place');
 });
 
 test('Look Underwater: a shadow, then colours, then its name; offered to the wizard on the universal levels (D139)', () => {

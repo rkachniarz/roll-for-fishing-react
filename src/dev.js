@@ -18,7 +18,7 @@ import { EQUIPMENT_SLOTS, quickEquip } from './engine/equipment.js';
 import { METER_FIRES, startEvent } from './engine/events.js';
 import { owedLevels } from './engine/perks.js';
 import { championRules, maybeChampion, poolKey } from './engine/champions.js';
-import { waterAt } from './engine/features.js';
+import { bringFeature, partFish, waterAt } from './engine/features.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
 
@@ -134,7 +134,11 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       const water = waterAt(s.location, s.spot);
       const x = Math.round((water.x0 + water.x1) / 2);
       const y = Math.round((water.y0 + water.y1) / 2);
-      s.features.push({ id: def.id, x, y, uses: def.uses, castsLeft: def.lifetime, born: s.book.casts });
+      // Its fish come into the pool with it (D156); told apart from another spawned on the same cast.
+      const { dice, commit } = diceFrom(s);
+      const feature = bringFeature(s, def.id, { x, y }, dice.features, dice.condition);
+      while (s.features.some((f) => f !== feature && f.born === feature.born)) feature.born += 0.01;
+      s.streams = commit();
       return s;
     }),
   );
@@ -253,7 +257,12 @@ export function createBench(root, { getState, setState, overrides, extraSources,
         button('+1 season', () => later(TIME.seasonDays * 24 * 60)),
       ]),
       clockLine,
-      el('div', { className: 'dev-row' }, ['Surface feature ', featureSelect, spawnFeature, button('Clear', () => edit((s) => ({ ...s, features: [] })))]),
+      el('div', { className: 'dev-row' }, ['Surface feature ', featureSelect, spawnFeature, button('Clear', () =>
+        edit((s) => {
+          partFish(s);
+          return { ...s, features: [] };
+        }),
+      )]),
       featuresLine,
       el('div', { className: 'dev-row' }, ['Class fish ', championSelect, spawnChampion, clearChampions]),
     ]),

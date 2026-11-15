@@ -11,7 +11,8 @@
 import { content } from '../generated/content.js';
 import { spawningNow } from './spawning.js';
 import { pick } from './tables.js';
-import { maybeChampion } from './champions.js';
+import { maybeChampion, poolKey } from './champions.js';
+import { rollFish, sizeBands } from './fish.js';
 
 /** @typedef {ReturnType<import('../dice.js').diceFor>} Dice */
 
@@ -37,25 +38,60 @@ export function waterAt(location, spot) {
  * @property {string} id         A feature id from content/features/.
  * @property {number} x
  * @property {number} y
- * @property {number} uses       Casts into it left before it's fished out.
+ * @property {number} uses       Casts into it left before it's fished out; for a school or a big fish, how many
+ *   of its fish are in the pool (D156).
  * @property {number} castsLeft  Casts before it goes anyway.
  * @property {number} born       The cast it appeared after: tells two of the same kind apart.
  * @property {number} [swamOff]  How many times its fish got away and it swam off (D85).
- * @property {import('./state.js').PoolFish} [fish]  The fish it holds, once one got away from it.
  */
+
+/**
+ * A school's fish, or the one big fish, are in the spot's pool (D156), each
+ * marked `of` its feature's `born`. These are they.
+ * @param {import('./state.js').GameState} state
+ * @param {{ born: number }} feature
+ * @returns {import('./state.js').PoolFish[]}
+ */
+export function fishOf(state, feature) {
+  return (state.escaped[poolKey(state)] ?? []).filter((f) => f.of === feature.born);
+}
+
+/**
+ * A feature's fish leave with it (D156): the wild ones go; one the player has
+ * met stays in the pool as any met fish does, with a place of its own where
+ * the feature was. `born` left out: every feature's, as when the player goes.
+ * Changes `state` in place.
+ * @param {import('./state.js').GameState} state
+ * @param {Feature} [feature]
+ */
+export function partFish(state, feature) {
+  const key = poolKey(state);
+  const pool = state.escaped[key];
+  if (!pool?.some((f) => f.of !== undefined)) return;
+  state.escaped = {
+    ...state.escaped,
+    [key]: pool.flatMap((f) => {
+      if (f.of === undefined || (feature && f.of !== feature.born)) return [f];
+      if (f.wild) return [];
+      const { of, ...own } = f;
+      const from = feature ?? state.features.find((x) => x.born === of);
+      return [{ ...own, ...(from ? { x: Math.round(from.x), y: Math.round(from.y) } : {}) }];
+    }),
+  };
+}
 
 /** How far a big fish swims off when it gets away, at the least, in scene pixels (D85). */
 export const SWIM_OFF = 60;
 
 /**
  * A fish got away from this feature, and it swims off: far across the water,
- * with the same fish and its uses and lifetime back. Changes `feature`.
+ * with its lifetime back; its fish stays in the pool, marked as its own
+ * (D156). Changes `feature`.
  * @param {Feature} feature
  * @param {any} def  Its content.
- * @param {import('./state.js').PoolFish} fish
  * @param {Dice} dice  The `features` stream.
  */
-export function swimOff(feature, def, fish, dice, water = WATER) {
+export function swimOff(feature, def, dice, water = WATER) {
   let x, y;
   let tries = 0;
   do {
@@ -65,10 +101,8 @@ export function swimOff(feature, def, fish, dice, water = WATER) {
   } while (Math.hypot(x - feature.x, y - feature.y) < SWIM_OFF && tries < 50);
   feature.x = x;
   feature.y = y;
-  feature.uses = def.uses;
   feature.castsLeft = def.lifetime;
   feature.swamOff = (feature.swamOff ?? 0) + 1;
-  feature.fish = fish;
 }
 
 /**
@@ -93,17 +127,53 @@ export function featureAt(features, landing) {
 }
 
 /**
+ * A feature comes up on the water. A school or a big fish brings its fish
+ * into the spot's pool with it (D156): a school's few, or the one big fish,
+ * rolled now and marked as its own. Changes `state` in place.
+ * @param {import('./state.js').GameState} state
+ * @param {string} id  A feature id.
+ * @param {{ x: number, y: number }} at
+ * @param {Dice} dice  The `features` stream.
+ * @param {Dice} [condition]  The `condition` stream (D146).
+ * @returns {Feature}
+ */
+export function bringFeature(state, id, at, dice, condition) {
+  const def = content.features[id];
+  /** @type {Feature} */
+  const feature = { id, x: at.x, y: at.y, uses: def.uses, castsLeft: def.lifetime, born: state.book.casts };
+  if (def.fish?.length) {
+    const school = content.rules.pool.school;
+    const count = def.kind === 'school' ? dice.getRandomNumber(school.min, school.max) : 1;
+    const minBand = def.minBand ? sizeBands().findIndex((/** @type {{ id: string }} */ b) => b.id === def.minBand) : 0;
+    const key = poolKey(state);
+    /** @type {import('./state.js').PoolFish[]} */
+    const fish = [];
+    for (let i = 0; i < count; i++) {
+      const species = pick(def.fish, dice);
+      if (!species?.id) continue;
+      // As the pool's own (D153): none of the player's values.
+      fish.push({ ...rollFish(species.id, { fishSizeBand: 0, fishDifficulty: 0, fishXp: 0 }, dice, { minBand, condition }), wild: true, of: feature.born });
+    }
+    state.escaped = { ...state.escaped, [key]: [...(state.escaped[key] ?? []), ...fish] };
+    feature.uses = fish.length;
+  }
+  state.features = [...state.features, feature];
+  return feature;
+}
+
+/**
  * After a resolved cast: features age, drift and go, and a new one may appear.
  * Changes `state` (a copy the caller owns).
  * @param {import('./state.js').GameState} state
  * @param {Dice} dice  The `features` stream.
- * @param {{ appear?: boolean, champions?: Dice, extraChance?: number }} [options]  appear: false for a cast pulled out
+ * @param {{ appear?: boolean, champions?: Dice, extraChance?: number, condition?: Dice }} [options]  appear: false for a cast pulled out
  *   before a bite, which ages and moves what's there but brings nothing new (D85).
  *   champions: the `champions` stream, for a class fish that may come up in
  *   place of a feature (D114). extraChance: the featureChance game value, added to the location's.
+ *   condition: the `condition` stream, for the fish a new school or big fish brings (D146, D156).
  * @returns {import('./game.js').GameEvent[]}
  */
-export function updateFeatures(state, dice, { appear = true, champions, extraChance = 0 } = {}) {
+export function updateFeatures(state, dice, { appear = true, champions, extraChance = 0, condition } = {}) {
   const water = waterAt(state.location, state.spot);
   /** @type {import('./game.js').GameEvent[]} */
   const events = [];
@@ -111,8 +181,11 @@ export function updateFeatures(state, dice, { appear = true, champions, extraCha
   for (const f of state.features) {
     const def = content.features[f.id];
     const next = { ...f, castsLeft: f.castsLeft - 1 };
+    // A school or a big fish is as many as its fish still in the pool (D156).
+    if (def.fish) next.uses = fishOf(state, f).length;
     if (next.uses <= 0 || next.castsLeft <= 0) {
       events.push({ type: 'feature-gone', feature: f.id, fishedOut: next.uses <= 0 });
+      partFish(state, f);
       continue;
     }
     if (def.drift > 0) {
@@ -146,16 +219,7 @@ export function updateFeatures(state, dice, { appear = true, champions, extraCha
       dice,
     );
     if (choice) {
-      const def = content.features[choice.id];
-      const feature = {
-        id: choice.id,
-        x: dice.getRandomNumber(water.x0, water.x1),
-        y: dice.getRandomNumber(water.y0, water.y1),
-        uses: def.uses,
-        castsLeft: def.lifetime,
-        born: state.book.casts,
-      };
-      state.features.push(feature);
+      bringFeature(state, choice.id, { x: dice.getRandomNumber(water.x0, water.x1), y: dice.getRandomNumber(water.y0, water.y1) }, dice, condition);
       events.push({ type: 'feature-appeared', feature: choice.id });
     }
   }

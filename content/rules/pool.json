@@ -3,9 +3,23 @@
   "id": "pool",
   "placeholder": true,
   "add": 3,
-  "perDay": 1,
-  "rollBelow": 2,
+  "leave": 50,
+  "school": {
+    "min": 3,
+    "max": 5
+  },
   "colourAt": 2,
   "nameAt": 3,
-  "shadows": 12
+  "shadows": 12,
+  "show": {
+    "surface": 100,
+    "upper": 100,
+    "lower": 40,
+    "bottom": 15
+  },
+  "dim": 50,
+  "aim": {
+    "x": 16,
+    "y": 6
+  }
 }

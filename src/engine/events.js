@@ -27,6 +27,7 @@ import { giveBuff } from './buffs.js';
 import { passTime } from './passage.js';
 import { minutesToMorning } from './time.js';
 import { tankMeals } from './barter.js';
+import { partFish } from './features.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./game.js').GameEvent} GameEvent */
@@ -327,6 +328,7 @@ function applyEffect(state, effect, dice) {
     case 'go': {
       // Moved by an event (7.6): the surface features stay behind, as with travel.
       const loc = content.locations[effect.location];
+      partFish(state);
       state.location = effect.location;
       state.spot = effect.spot ?? loc.spots?.[0]?.id ?? null;
       state.features = [];

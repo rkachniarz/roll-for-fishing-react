@@ -10,7 +10,8 @@ import { choose, openSlide } from '../src/engine/events.js';
 import { createRng } from '../src/rng.js';
 import { diceFor } from '../src/dice.js';
 import { TIME, clock } from '../src/engine/time.js';
-import { WATER } from '../src/engine/features.js';
+import { WATER, bringFeature, fishOf } from '../src/engine/features.js';
+import { diceFrom } from '../src/engine/state.js';
 import { content } from '../src/generated/content.js';
 
 /** @typedef {import('../src/engine/state.js').GameState} GameState */
@@ -25,6 +26,19 @@ const character = /** @type {const} */ ({
 const game = (seed = 1) => newGame({ seed, character: { ...character, luck: 0, xp: 0 } });
 /** Where a new game starts: its escaped-fish pool (D59, D101). */
 const POOL = 'lake/reedy-shore';
+
+/**
+ * A game with a feature on the water, a school's or a big fish's own fish in the pool with it (D156).
+ * @param {GameState} state
+ * @param {string} id
+ */
+function withFeature(state, id, at = { x: 120, y: 100 }) {
+  const next = structuredClone(state);
+  const { dice, commit } = diceFrom(next);
+  bringFeature(next, id, at, dice.features, dice.condition);
+  next.streams = commit();
+  return next;
+}
 
 /**
  * Casts until the line holds something of `kind`, so a test can pick its case
@@ -152,17 +166,19 @@ test('every resolved cast moves time on 30 minutes and may move the weather', ()
   assert.equal(out.state.time, start.time + 30);
 });
 
-test('pulling out before anything bites: no time, no meter, the feature keeps its use but ages (D85)', () => {
-  const start = { ...game(), features: [{ id: 'roach-school', x: 120, y: 100, uses: 2, castsLeft: 10, born: 0 }] };
+test('pulling out before anything bites: no time, no meter, the feature keeps its fish but ages (D85)', () => {
+  const start = withFeature(game(), 'roach-school');
+  const fish = start.features[0].uses;
+  assert.ok(fish >= 3 && fish <= 5, `a school of ${fish}`);
   const { state, cast } = castLine(start, 0, { landing: { x: 120, y: 100 } });
-  assert.equal(state.features[0].uses, 1);
   const out = strikeLine(state, cast, 1);
   assert.equal(out.cast.phase === 'done' && out.cast.outcome.result, 'too-early');
   assert.equal(out.state.time, start.time);
   assert.equal(out.state.eventMeter, start.eventMeter);
   assert.equal(out.state.features.length, 1, 'no new feature');
-  assert.equal(out.state.features[0].uses, 2, 'its use back');
-  assert.equal(out.state.features[0].castsLeft, 9, 'but a cast older, so retrying until it hits costs its lifetime');
+  assert.equal(out.state.features[0].uses, fish, 'every fish of it still there');
+  assert.equal(fishOf(out.state, out.state.features[0]).length, fish);
+  assert.equal(out.state.features[0].castsLeft, content.features['roach-school'].lifetime - 1, 'but a cast older, so retrying until it hits costs its lifetime');
   assert.deepEqual(out.state.weather, start.weather);
 });
 
@@ -181,18 +197,19 @@ test('one cast in a hundred flies way off target (D85)', () => {
   assert.ok(wild > 8 && wild < 40, `${wild} wild casts in 2000`);
 });
 
-test('a big fish that gets away swims off with the same fish, then goes for good (D85)', () => {
-  const pike = { id: 'big-pike', x: 120, y: 100, uses: 1, castsLeft: 10, born: 0 };
-  const first = castLine({ ...game(41), features: [pike] }, 0, { landing: { x: 120, y: 100 } });
+test('a big fish that gets away swims off with the same fish, then is a fish of the pool (D85, D156)', () => {
+  const start = withFeature(game(41), 'big-pike');
+  const first = castLine(start, 0, { landing: { x: 120, y: 100 } });
   assert.equal(first.cast.line.kind, 'fish');
   const fish = first.cast.line.kind === 'fish' ? first.cast.line.fish : null;
+  assert.equal(fish?.of, start.features[0].born, 'the big fish is the one in the pool, marked as its own');
   const missed = tick(first.state, first.cast, first.cast.biteAt + first.cast.timing.lateMs + 1);
   assert.ok(missed.events.some((e) => e.type === 'feature-moved'));
   const moved = missed.state.features.find((f) => f.id === 'big-pike');
   assert.ok(moved);
   assert.ok(Math.hypot(moved.x - 120, moved.y - 100) >= 50, 'far off, not a drift');
   assert.equal(moved.uses, 1);
-  assert.deepEqual(Object.values(missed.state.escaped).flat().filter((f) => !f.wild), [], 'not in the pool while the feature holds it');
+  assert.deepEqual(Object.values(missed.state.escaped).flat().filter((f) => !f.wild).map((f) => f.of), [moved.born], 'met, and still the feature\u2019s');
 
   const again = castLine({ ...missed.state, missStreak: 0 }, 0, { landing: { x: moved.x, y: moved.y } });
   assert.ok(again.cast.line.kind === 'fish');
@@ -200,7 +217,10 @@ test('a big fish that gets away swims off with the same fish, then goes for good
   assert.equal(again.cast.line.kind === 'fish' && again.cast.line.seenBefore, true);
   const gone = tick(again.state, again.cast, again.cast.biteAt + again.cast.timing.lateMs + 1);
   assert.ok(!gone.state.features.some((f) => f.id === 'big-pike'), 'the second time it goes');
-  assert.equal(Object.values(gone.state.escaped).flat().filter((f) => !f.wild).length, 1, 'and the pike is in the pool');
+  const met = Object.values(gone.state.escaped).flat().filter((f) => !f.wild);
+  assert.equal(met.length, 1, 'and the pike is in the pool');
+  assert.equal(met[0].of, undefined, 'on its own now');
+  assert.equal(met[0].tries, 2);
 });
 
 // ---------- Missing the splash (D64) and the escaped pool (2.7) ----------
@@ -564,32 +584,62 @@ test("a spot's own schools and big fish come up there, and the location's glint 
   for (const id of seen) assert.ok(allowed.has(id), id);
 });
 
-test('landing in a school brings up its fish, and fishes it out', () => {
-  const state = { ...game(22), features: [{ id: 'roach-school', x: 120, y: 100, uses: 1, castsLeft: 10 }] };
-  const out = castLine(state, 0, { aim: { x: 120, y: 100 }, bounds: water });
-  assert.ok(out.events.some((e) => e.type === 'feature-hit' && e.feature === 'roach-school'));
-  assert.equal(out.cast.line.kind, 'fish', 'the school raises the bite chance');
-  assert.equal(out.cast.line.kind === 'fish' && out.cast.line.fish.species, 'roach');
-  const done = strikeAfter(out.state, out.cast, 300);
-  assert.equal(done.state.features.length, 0);
-  assert.ok(done.events.some((e) => e.type === 'feature-gone' && e.fishedOut));
-  assert.equal(out.checkpoint.features[0].uses, 1, 'a voided cast leaves the feature as it was');
+test('landing in a school brings up one of its fish, if a fish bites, and fishes it out (D156)', () => {
+  let bitten = 0;
+  let fishedOut = false;
+  for (let seed = 1; seed <= 60; seed++) {
+    const start = withFeature(game(seed), 'roach-school');
+    const born = start.features[0].born;
+    const fish = start.features[0].uses;
+    const out = castLine(start, 0, { landing: { x: 120, y: 100 } });
+    assert.ok(out.events.some((e) => e.type === 'feature-hit' && e.feature === 'roach-school'));
+    assert.equal(out.checkpoint.features[0].uses, fish, 'a voided cast leaves the feature as it was');
+    if (out.cast.line.kind !== 'fish') continue;
+    bitten++;
+    assert.equal(out.cast.line.fish.species, 'roach');
+    assert.equal(out.cast.line.fish.of, born, 'one of the school\u2019s own');
+    const done = strikeAfter(out.state, out.cast, 300);
+    const caught = done.events.some((e) => e.type === 'caught');
+    assert.equal(done.state.features.find((f) => f.born === born)?.uses, caught ? fish - 1 : fish);
+    if (caught) assert.ok(!done.state.bucket.some((b) => 'of' in b.fish || 'x' in b.fish), 'the bucket holds the fish, not its place in the pool');
+    // The last of a school: with it caught, the school is gone.
+    const last = structuredClone(start);
+    const one = fishOf(last, last.features[0])[0];
+    last.escaped[POOL] = last.escaped[POOL].filter((f) => f.of === undefined || f === one);
+    const lastCast = castLine(last, 0, { landing: { x: 120, y: 100 } });
+    if (lastCast.cast.line.kind !== 'fish') continue;
+    const end = strikeAfter(lastCast.state, lastCast.cast, 300);
+    if (!end.events.some((e) => e.type === 'caught')) continue;
+    assert.ok(end.events.some((e) => e.type === 'feature-gone' && e.fishedOut));
+    assert.ok(!end.state.features.some((f) => f.born === born));
+    fishedOut = true;
+  }
+  // No bonus to the bite any more: about as often as any cast here.
+  assert.ok(bitten > 15 && bitten < 55, `a fish bit in ${bitten} of 60`);
+  assert.ok(fishedOut, 'a school was fished out');
 });
 
-test('a big fish under the surface is at least Gigantic', () => {
+test('a big fish under the surface is at least Gigantic, and still a sure bite', () => {
   for (let seed = 30; seed < 60; seed++) {
-    const state = { ...game(seed), features: [{ id: 'big-pike', x: 120, y: 100, uses: 1, castsLeft: 10 }] };
-    const { cast } = castLine(state, 0, { aim: { x: 120, y: 100 }, bounds: water });
-    if (cast.landing && Math.hypot(cast.landing.x - 120, cast.landing.y - 100) > 8) continue;
+    const { cast } = castLine(withFeature(game(seed), 'big-pike'), 0, { landing: { x: 120, y: 100 } });
     assert.ok(cast.line.kind === 'fish' && cast.line.fish.species === 'northern-pike' && cast.line.fish.band >= 4);
   }
 });
 
+test('going elsewhere, a school\u2019s fish leave the pool with it (D156)', () => {
+  const start = withFeature({ ...game(3), known: { 'lake:spot:swamp': 'heard' } }, 'roach-school');
+  assert.ok(start.escaped[POOL].some((f) => f.of !== undefined));
+  const there = travel(start, 'lake', 'swamp').state;
+  assert.equal(there.spot, 'swamp');
+  assert.ok(!(there.escaped[POOL] ?? []).some((f) => f.of !== undefined));
+});
+
 test('a cast that misses a feature is an ordinary cast', () => {
-  const state = { ...game(23), features: [{ id: 'roach-school', x: 60, y: 40, uses: 4, castsLeft: 10 }] };
+  const state = withFeature(game(23), 'roach-school', { x: 60, y: 40 });
   const out = castLine(state, 0, { aim: { x: 200, y: 170 }, bounds: water });
   assert.ok(!out.events.some((e) => e.type === 'feature-hit'));
-  assert.equal(out.state.features[0].uses, 4);
+  assert.equal(out.state.features[0].uses, state.features[0].uses);
+  assert.ok(out.cast.line.kind !== 'fish' || out.cast.line.fish.of === undefined, 'never a school\u2019s fish from elsewhere');
 });
 
 // ---------- A full bucket (5.5, D57, D59) ----------
@@ -625,7 +675,7 @@ test('letting the new fish go puts it back in the water here', () => {
   const { state, events } = releaseFish(out.state, 'new');
   assert.equal(state.pendingCatch, null);
   assert.equal(fishInBucket(state), 16);
-  assert.deepEqual(state.escaped[POOL].at(-1), { ...fish, tries: 0 });
+  assert.deepEqual(state.escaped[POOL].at(-1), { ...fish, tries: 0, since: state.time }, 'met, and counting its days');
   assert.equal(events[0].type, 'released');
 });
 
