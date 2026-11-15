@@ -16,6 +16,7 @@
   "difficulty": -2,
   "rarity": "epic",
   "swims": "lower",
+  "shoals": true,
   "spawn": {
     "min": 10,
     "max": 14,

@@ -29,6 +29,10 @@
       "type": "array",
       "items": { "$ref": "common.schema.json#/definitions/effect" }
     },
+    "shoals": {
+      "description": "Its adults swim in shoals (D151), from FishBase: drawn swimming, fish of its kind keep together and turn together; struck at in the dive, the rest scatter.",
+      "type": "boolean"
+    },
     "plants": {
       "description": "How it keeps to water plants (D150), from FishBase: `lives` among them, `spawns` on them. At a spot where plants grow, it is likelier: always if it lives there, while spawning (D149) if it spawns there.",
       "type": "array",

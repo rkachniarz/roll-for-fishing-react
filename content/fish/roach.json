@@ -15,6 +15,7 @@
   "difficulty": -1,
   "rarity": "common",
   "swims": "upper",
+  "shoals": true,
   "plants": [
     "lives",
     "spawns"

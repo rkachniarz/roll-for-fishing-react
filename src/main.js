@@ -553,6 +553,8 @@ const actionBar = createActionBar($('actions'), useFromBar);
  */
 function useFromBar(id) {
   if (!state) return;
+  // Its tooltip would cover what it does: the look, the depth window.
+  hideTip();
   // Not an ability: the adjustable line's depth (D148).
   if (id === 'line-depth') {
     openDepthPicker();
@@ -1492,6 +1494,9 @@ function visit(spot) {
  */
 function strikeInDive(index) {
   if (!state?.dive || index === undefined) return;
+  // The rest of its shoal bolt (D151): the swimmer is its place among those shown.
+  const shown = diveMap.indexOf(index);
+  if (shown >= 0) scene.viewScatter(shown);
   const out = diveStrike(state, index);
   if (out.state === state) return;
   state = out.state;

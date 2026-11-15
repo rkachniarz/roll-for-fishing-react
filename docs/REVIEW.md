@@ -24,6 +24,17 @@ Items with no note are left alone.
 
 Newest first.
 
+## Shoaling (2026-11-15, D151, 11.9)
+
+- **Who shoals,** from FishBase: bream, bleak, silver bream, barbel, nase, dace, minnow, gudgeon, vendace, whitefish,
+  smelt, both graylings, yellow perch, black crappie, piranha, discus, frontosa, capelin, four-eyed fish, archerfish,
+  peacock bass, silver carp, mangrove jack, pejerrey; and **roach and perch**, from your examples, though FishBase's
+  pages don't say it in so many words. **Alone:** ide, chub and asp too, whose young shoal but adults don't.
+- **A shoal is the fish of one kind in one view.** In a tank of six with two roach, the two roach swim together.
+- **The scatter:** 1.5 s, and only the middle of a bolting fish counts as a tap: guesses.
+- **Not seen moving by eye:** a screenshot three seconds into a look shows a loose group of the pool's silver fish
+  together; the turning together and the scatter can only be seen in the game.
+
 ## Plants and fish (2026-11-15, D150, 11.8)
 
 - **Read from FishBase's own sentences,** every species' page fetched and searched for vegetation, weed, macrophytes,

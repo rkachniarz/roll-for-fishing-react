@@ -79,6 +79,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
+      "shoals": true,
       "spawn": {
         "min": 10,
         "max": 14,
@@ -196,6 +197,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "shoals": true,
       "spawn": {
         "min": 7,
         "max": 8,
@@ -315,6 +317,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "upper",
+      "shoals": true,
       "plants": [
         "lives"
       ],
@@ -436,6 +439,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "surface",
+      "shoals": true,
       "spawn": {
         "min": 6,
         "max": 12,
@@ -907,6 +911,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "upper",
+      "shoals": true,
       "spawn": {
         "min": 5,
         "max": 6,
@@ -1480,6 +1485,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "bottom",
+      "shoals": true,
       "plants": [
         "spawns"
       ],
@@ -1672,6 +1678,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
+      "shoals": true,
       "spawn": {
         "min": 4,
         "max": 5,
@@ -1780,6 +1787,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "epic",
       "swims": "lower",
+      "shoals": true,
       "spawn": {
         "min": 10,
         "max": 14,
@@ -2004,6 +2012,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "surface",
+      "shoals": true,
       "swim": {
         "cruise": 12,
         "rest": 0.3,
@@ -2059,6 +2068,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "bottom",
+      "shoals": true,
       "swim": {
         "cruise": 4,
         "rest": 0.5,
@@ -2164,6 +2174,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "upper",
+      "shoals": true,
       "spawn": {
         "min": 3,
         "max": 6,
@@ -2796,6 +2807,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "surface",
+      "shoals": true,
       "plants": [
         "spawns"
       ],
@@ -2856,6 +2868,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "shoals": true,
       "spawn": {
         "min": 4,
         "max": 6,
@@ -2972,6 +2985,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "shoals": true,
       "spawn": {
         "min": 6,
         "max": 8,
@@ -3898,6 +3912,7 @@ export const content = {
       "rarity": "uncommon",
       "endangered": true,
       "swims": "upper",
+      "shoals": true,
       "spawn": {
         "min": 3,
         "max": 5,
@@ -3955,6 +3970,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
+      "shoals": true,
       "swim": {
         "cruise": 5,
         "rest": 0.55,
@@ -4063,6 +4079,7 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "upper",
+      "shoals": true,
       "spawn": {
         "min": 6,
         "max": 7,
@@ -4232,6 +4249,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "shoals": true,
       "spawn": {
         "min": 4,
         "max": 6,
@@ -4703,6 +4721,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "lower",
+      "shoals": true,
       "swim": {
         "cruise": 8,
         "rest": 0.4,
@@ -4754,6 +4773,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "lower",
+      "shoals": true,
       "plants": [
         "spawns"
       ],
@@ -4989,6 +5009,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "shoals": true,
       "plants": [
         "spawns"
       ],
@@ -5104,6 +5125,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "shoals": true,
       "plants": [
         "lives",
         "spawns"
@@ -5505,6 +5527,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "shoals": true,
       "plants": [
         "spawns"
       ],
@@ -5565,6 +5588,7 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "shoals": true,
       "spawn": {
         "min": 8,
         "max": 12,
@@ -5680,6 +5704,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "shoals": true,
       "spawn": {
         "min": 2,
         "max": 6,
@@ -6513,6 +6538,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "shoals": true,
       "spawn": {
         "min": 2,
         "max": 4,
@@ -6977,6 +7003,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "shoals": true,
       "plants": [
         "lives"
       ],

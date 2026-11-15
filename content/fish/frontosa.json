@@ -16,6 +16,7 @@
   "difficulty": -1,
   "rarity": "rare",
   "swims": "bottom",
+  "shoals": true,
   "swim": {
     "cruise": 4,
     "rest": 0.5,

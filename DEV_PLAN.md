@@ -62,7 +62,7 @@ is where the others may lead.
   do, only the clear cases, the source noted. **Marimo:** +1 Luck while one is in the bags (not more for several),
   hidden like all Luck. **Shown in the journal** once the fish is caught ("Lives in weed beds"), like the fight
   style's line.
-- [ ] **11.9** Shoaling: shoal fish swim together and turn together, solitary ones alone; in the dive a shoal
+- [x] **11.9** Shoaling (D151): shoal fish swim together and turn together, solitary ones alone; in the dive a shoal
   scatters when one is struck.
   *The owner's answers (2026-11-15):* **everywhere fish swim**, as 11.5, which it builds on. Which fish shoal
   **looked up** from the real species (roach, bream, bleak, perch, whitefish, smelt shoal; pike, wels, burbot keep

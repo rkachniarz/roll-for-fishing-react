@@ -16,6 +16,7 @@
   "rarity": "uncommon",
   "endangered": true,
   "swims": "upper",
+  "shoals": true,
   "spawn": {
     "min": 3,
     "max": 5,

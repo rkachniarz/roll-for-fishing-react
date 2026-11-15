@@ -629,6 +629,8 @@ export async function createScene(canvas, rand, look = {}) {
     viewHit: views.hit,
     /** Where a fish swimming in the view is now, in the play area's pixels. */
     viewFishAt: views.fishAt,
+    /** A strike at a fish in the view: the rest of its shoal scatter (D151). */
+    viewScatter: views.scatter,
     /**
      * How the bobber looks: the equipped bobber item's colours, or the
      * sketch's red feather (D83). Repainted only when it changes.

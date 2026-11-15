@@ -616,6 +616,11 @@ test('plants and fish (D150): where plants grow, a fish that lives among them is
   assert.equal(luckOf({ ...s, bags: [{ id: 'marimo', count: 3 }] }), s.character.luck + 1, 'one, however many');
 });
 
+test('shoaling (D151): the shoaling fish are marked, the loners not', () => {
+  for (const id of ['roach', 'common-bream', 'bleak', 'perch', 'vendace', 'smelt']) assert.equal(content.fish[id].shoals, true, id);
+  for (const id of ['northern-pike', 'wels-catfish', 'burbot', 'mainland-eel', 'muskellunge']) assert.ok(!content.fish[id].shoals, id);
+});
+
 test('white things come up as their own tier, more for a rogue (R19.1)', () => {
   /** @param {string} classId */
   const count = (classId) => {

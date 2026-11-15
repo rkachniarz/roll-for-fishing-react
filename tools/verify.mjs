@@ -947,7 +947,8 @@ await check('look underwater: the wizard sees the pool (D139)', DESKTOP, '?seed=
   const log = await logText(page);
   report('look underwater: the log counts the fish', log.includes(`You look under the water: ${stocked.length} fish.`), log);
   report('look underwater: every fish has been looked at once', (await pool()).every((n) => n === 1));
-  await page.waitForTimeout(600);
+  // Long enough for a shoal to gather behind its leader (D151).
+  await page.waitForTimeout(3000);
   await page.screenshot({ path: 'dist/verify/look-underwater.png' });
   await tap();
   report('look underwater: a tap is back on the bank, and casts nothing', (await page.getAttribute('body', 'data-place')) === 'water' && (await page.getAttribute('body', 'data-phase')) === 'idle');

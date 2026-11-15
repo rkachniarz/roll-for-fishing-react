@@ -381,6 +381,8 @@ export function createViews(parent, rand) {
     },
     /** @param {number} i  Where a swimming fish is now. */
     fishAt: (/** @type {number} */ i) => shoal.at(i),
+    /** @param {number} i  A strike at a fish in the view: its shoal scatters (D151). */
+    scatter: (/** @type {number} */ i) => shoal.scatter(i, performance.now()),
     active: () => Boolean(view),
   };
 }

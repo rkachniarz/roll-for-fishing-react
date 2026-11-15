@@ -15,6 +15,7 @@
   "difficulty": 1,
   "rarity": "rare",
   "swims": "upper",
+  "shoals": true,
   "spawn": {
     "min": 8,
     "max": 12,

@@ -452,3 +452,6 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   then cut by hand; `plants` on 35 fish, `hasPlants` and the factor in `src/engine/tables.js`, `luckOf` in
   `src/engine/events.js`. The spot-table test now counts the plants (the muskie lives among them). Measured: 255 unit
   tests, every browser check.
+- **11.9** Shoaling (D151): `shoals` on 27 fish; leaders and followers, and `scatter`, in `createShoal`; the dive calls
+  `viewScatter` on a strike. The look's screenshot now waits three seconds, long enough for a shoal to gather; it also
+  showed the ability's tooltip covering the view, so using one hides it. Measured: 256 unit tests, every browser check.
