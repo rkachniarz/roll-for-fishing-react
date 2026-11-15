@@ -47,7 +47,7 @@ import { arrive, choose, openSlide } from './engine/events.js';
 import { hasPerk, owedLevels, settlePerks, takePerk } from './engine/perks.js';
 import { eventWords, sayEventText } from './ui/event-words.js';
 import { useItem } from './engine/buffs.js';
-import { addToStew, atAquarium, atStew, eatFish, eatStew, fromAquarium, letGo, takeFromStew, toAquarium, trade } from './engine/barter.js';
+import { addToStew, atAquarium, atStew, eatFish, eatStew, feedTank, fromAquarium, letGo, takeFromStew, tankDanger, toAquarium, trade } from './engine/barter.js';
 import { diveStrike, endDive } from './engine/dive.js';
 import { conditionBuffs, indoors } from './engine/conditions.js';
 import { showMenu } from './ui/menu.js';
@@ -850,6 +850,10 @@ function describeEvent(e) {
     }
     case 'released':
       return tParts('log.released', { fish: fishLink(e.fish) });
+    case 'tank-eaten':
+      return tParts('log.tank-eaten', { eater: fishLink(e.eater), fish: fishLink(e.fish) });
+    case 'tank-fed':
+      return tParts('log.tank-fed', { item: itemLink(e.item) });
     case 'depth-set':
       return [e.depth ? t('log.depth-set', { depth: t(`depth.${e.depth}`) }) : t('log.depth-cleared')];
     case 'conserved':
@@ -1118,8 +1122,9 @@ function renderPane() {
           stew: (i) => changeState(addToStew(/** @type {GameState} */ (state), i)),
           unstew: (i) => changeState(takeFromStew(/** @type {GameState} */ (state), i)),
           eat: () => changeState(eatStew(/** @type {GameState} */ (state))),
-          toTank: (i) => changeState(toAquarium(/** @type {GameState} */ (state), i)),
+          toTank: (i) => toTankWarned(i),
           fromTank: (i) => changeState(fromAquarium(/** @type {GameState} */ (state), i)),
+          feed: () => changeState(feedTank(/** @type {GameState} */ (state))),
         }),
       );
       break;
@@ -1579,6 +1584,30 @@ function changeState(out) {
 }
 
 /**
+ * A fish into the aquarium (R17.5), but first a warning if it would share the
+ * tank with one that would eat it, or that it would eat (D152), as WoW asks
+ * "are you sure".
+ * @param {number} index  Into the bucket.
+ * @param {{ x: number, y: number }} [at]  Where to ask; the middle of the pane if not given.
+ */
+function toTankWarned(index, at) {
+  if (!state) return;
+  const fish = state.bucket[index]?.fish;
+  const danger = fish ? tankDanger(state, fish) : null;
+  if (!danger) {
+    changeState(toAquarium(state, index));
+    return;
+  }
+  const box = $('pane').getBoundingClientRect();
+  const where = at ?? { x: box.left + box.width / 2, y: box.top + box.height / 3 };
+  const title = t('aquarium.warn', { eater: fishName(danger.eater), eaten: fishName(danger.eaten) });
+  showMenu(where, title, 'var(--bad)', [
+    { label: t('aquarium.anyway'), onClick: () => changeState(toAquarium(/** @type {GameState} */ (state), index)) },
+    { label: t('aquarium.keepOut'), onClick: () => {} },
+  ]);
+}
+
+/**
  * A fish's options (R21.1), at the pointer: Release, except in town; Hook as bait for
  * a Tiny fish; Eat with Sushi enjoyer; into the stew at the inn; into the
  * aquarium in the room.
@@ -1596,7 +1625,7 @@ function fishMenu(index, at) {
   if (isTiny(stack.fish)) options.push({ label: t('fishMenu.hook'), onClick: () => hookFromBucket(index) });
   if (hasPerk(s, 'sushi-enjoyer')) options.push({ label: t('fishMenu.eat'), onClick: () => changeState(eatFish(/** @type {GameState} */ (state), index)) });
   if (atStew(s)) options.push({ label: t('fishMenu.stew'), onClick: () => changeState(addToStew(/** @type {GameState} */ (state), index)) });
-  if (atAquarium(s)) options.push({ label: t('fishMenu.aquarium'), onClick: () => changeState(toAquarium(/** @type {GameState} */ (state), index)) });
+  if (atAquarium(s)) options.push({ label: t('fishMenu.aquarium'), onClick: () => toTankWarned(index, at) });
   options.push({ label: t('fishMenu.cancel'), onClick: () => {} });
   hideTip();
   showMenu(at, fishName(stack.fish), rarityColour(stack.fish.rarity), options);

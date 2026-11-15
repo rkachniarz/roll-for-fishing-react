@@ -14,6 +14,7 @@
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "surface",
+  "predator": true,
   "shoals": true,
   "plants": [
     "spawns"

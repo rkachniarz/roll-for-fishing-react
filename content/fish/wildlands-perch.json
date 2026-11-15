@@ -16,6 +16,7 @@
   "rarity": "rare",
   "endangered": true,
   "swims": "lower",
+  "predator": true,
   "spawn": {
     "min": 3,
     "max": 7,

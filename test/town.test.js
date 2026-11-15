@@ -16,7 +16,7 @@ import { offers } from '../src/engine/perks.js';
 import { arrive, choose, openSlide } from '../src/engine/events.js';
 import { clock, minutesToMorning } from '../src/engine/time.js';
 import { vendorStatus } from '../src/engine/schedule.js';
-import { addToStew, bowlOf, costStatus, eatFish, eatStew, letGo, offersFor, tasteFactor, toAquarium, trade } from '../src/engine/barter.js';
+import { addToStew, bowlOf, costStatus, eatFish, eatStew, eats, feedTank, letGo, offersFor, tankDanger, tankMeals, tasteFactor, toAquarium, trade } from '../src/engine/barter.js';
 import { coldLevel, coldPoints, conditionBuffs } from '../src/engine/conditions.js';
 import { passTime } from '../src/engine/passage.js';
 import { placeOpen } from '../src/engine/knowledge.js';
@@ -619,6 +619,39 @@ test('plants and fish (D150): where plants grow, a fish that lives among them is
 test('shoaling (D151): the shoaling fish are marked, the loners not', () => {
   for (const id of ['roach', 'common-bream', 'bleak', 'perch', 'vendace', 'smelt']) assert.equal(content.fish[id].shoals, true, id);
   for (const id of ['northern-pike', 'wels-catfish', 'burbot', 'mainland-eel', 'muskellunge']) assert.ok(!content.fish[id].shoals, id);
+});
+
+test('who eats whom (D152): a predator eats a tank-mate well under its length, now and then, unless fed', () => {
+  const pike = { ...fish('northern-pike', 'rare', 90) };
+  const roach = { ...fish('roach', 'common', 20) };
+  const big = { ...fish('roach', 'common', 60) };
+  assert.ok(eats(pike, roach));
+  assert.ok(!eats(pike, big), 'not one over half its length');
+  assert.ok(!eats(roach, pike), 'a roach eats no one');
+  const room = /** @type {GameState} */ ({ ...game(), location: 'town', spot: 'room', aquarium: [pike, roach] });
+  room.character = { ...room.character, xp: content.rules.levels.xp[2], perks: { 2: 'aquarium' } };
+  assert.deepEqual(tankDanger({ ...room, aquarium: [pike] }, roach), { eater: pike, eaten: roach });
+  // A week away: the roach is likely gone, and it was rolled from the tank stream alone.
+  let eaten = 0;
+  for (let seed = 1; seed <= 60; seed++) {
+    const s = /** @type {GameState} */ (structuredClone({ ...room, seed, streams: game({ seed }).streams, tank: { day: 0, fedUntil: 0 }, time: 7 * 24 * 60 + 600 }));
+    const events = tankMeals(s);
+    if (events.some((e) => e.type === 'tank-eaten')) eaten++;
+  }
+  assert.ok(eaten > 20 && eaten < 60, `eaten in ${eaten} of 60 weeks`);
+  // Fed for the whole time: nobody eats.
+  const fed = /** @type {GameState} */ (structuredClone({ ...room, tank: { day: 0, fedUntil: 8 * 24 * 60 }, time: 7 * 24 * 60 + 600 }));
+  assert.deepEqual(tankMeals(fed), []);
+  // Feeding uses a bait.
+  const bagged = /** @type {GameState} */ ({ ...room, bags: [{ id: 'bread-crumbs', count: 2 }] });
+  const out = feedTank(bagged);
+  assert.equal(out.state.bags[0].count, 1);
+  assert.ok(out.state.tank.fedUntil > bagged.time);
+});
+
+test('every fish FishBase calls a fish-eater is a predator; the small fish are not (D152)', () => {
+  for (const id of ['northern-pike', 'zander', 'wels-catfish', 'perch', 'burbot']) assert.equal(content.fish[id].predator, true, id);
+  for (const id of ['roach', 'common-bream', 'tench', 'bleak']) assert.ok(!content.fish[id].predator, id);
 });
 
 test('white things come up as their own tier, more for a rogue (R19.1)', () => {

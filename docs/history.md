@@ -455,3 +455,8 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
 - **11.9** Shoaling (D151): `shoals` on 27 fish; leaders and followers, and `scatter`, in `createShoal`; the dive calls
   `viewScatter` on a strike. The look's screenshot now waits three seconds, long enough for a shoal to gather; it also
   showed the ability's tooltip covering the view, so using one hides it. Measured: 256 unit tests, every browser check.
+- **11.11** Who eats whom (D152): `predator` on 52 fish from the saved FishBase pages (a first pattern caught the pages'
+  own menus, "Food items (preys)", everywhere; the second left them out); `eats`, `tankDanger`, `tankMeals` and
+  `feedTank` in `src/engine/barter.js`, the meals on coming into the room; the warning through the fish's menu; hiding
+  in `createShoal`. One full check failed when its local server stopped partway; the rerun passed. Measured: 258 unit
+  tests, every browser check.

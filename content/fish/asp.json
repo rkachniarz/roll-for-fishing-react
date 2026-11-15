@@ -15,6 +15,7 @@
   "difficulty": 1,
   "rarity": "rare",
   "swims": "upper",
+  "predator": true,
   "plants": [
     "spawns"
   ],

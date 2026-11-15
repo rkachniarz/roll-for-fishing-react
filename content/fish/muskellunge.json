@@ -16,6 +16,7 @@
   "rarity": "epic",
   "endangered": true,
   "swims": "upper",
+  "predator": true,
   "plants": [
     "lives"
   ],

@@ -383,7 +383,7 @@ function fishSlot(fish, count, index) {
  * @param {GameState} state
  * @param {string} id  The vendor.
  * @param {{ trade: (offer: string) => void, stew: (index: number) => void, unstew: (index: number) => void, eat: () => void,
- *   toTank: (index: number) => void, fromTank: (index: number) => void }} on
+ *   toTank: (index: number) => void, fromTank: (index: number) => void, feed?: () => void }} on
  */
 export function shopPane(state, id, on) {
   const vendor = content.vendors[id];
@@ -441,7 +441,7 @@ function stewPane(state, on) {
 /**
  * The aquarium (R17.5): the bucket, and the fish in the tank.
  * @param {GameState} state
- * @param {{ toTank: (index: number) => void, fromTank: (index: number) => void }} on
+ * @param {{ toTank: (index: number) => void, fromTank: (index: number) => void, feed?: () => void }} on
  */
 function aquariumPane(state, on) {
   const tank = state.aquarium ?? [];
@@ -450,6 +450,23 @@ function aquariumPane(state, on) {
     el('div', { className: 'grid' }, state.bucket.map((b, i) => clickSlot(slot({ kind: 'fish', fish: b.fish }, b.count), () => on.toTank(i)))),
     el('p', { className: 'muted', textContent: t('aquarium.tank', { count: tank.length, size: content.rules.stew.aquarium }) }),
     el('div', { className: 'grid' }, tank.map((f, i) => clickSlot(slot({ kind: 'fish', fish: f }), () => on.fromTank(i)))),
+    ...feedRow(state, on),
+  ];
+}
+
+/**
+ * Feeding the tank (D152): a button that uses one bait from the bags; how long the last feeding lasts.
+ * @param {GameState} state
+ * @param {{ feed?: () => void }} on
+ */
+function feedRow(state, on) {
+  const bait = state.bags.find((b) => content.items[b.id]?.slot === 'bait');
+  const fed = (state.tank?.fedUntil ?? 0) > state.time;
+  const button = el('button', { type: 'button', className: 'trade-button', id: 'feedTank', textContent: t('aquarium.feed'), disabled: !bait });
+  button.addEventListener('click', () => on.feed?.());
+  return [
+    el('p', { className: 'muted', textContent: fed ? t('aquarium.fed', { hours: hoursText((state.tank?.fedUntil ?? 0) - state.time) }) : t('aquarium.hungry') }),
+    button,
   ];
 }
 

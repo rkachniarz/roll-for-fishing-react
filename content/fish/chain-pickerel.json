@@ -15,6 +15,7 @@
   "difficulty": 0,
   "rarity": "epic",
   "swims": "lower",
+  "predator": true,
   "plants": [
     "lives"
   ],

@@ -29,6 +29,10 @@
       "type": "array",
       "items": { "$ref": "common.schema.json#/definitions/effect" }
     },
+    "predator": {
+      "description": "It eats other fish (D152), from FishBase: in the room's aquarium it may eat a tank-mate well under its length, and smaller fish keep away from it wherever fish swim.",
+      "type": "boolean"
+    },
     "shoals": {
       "description": "Its adults swim in shoals (D151), from FishBase: drawn swimming, fish of its kind keep together and turn together; struck at in the dive, the rest scatter.",
       "type": "boolean"

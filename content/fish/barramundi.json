@@ -16,6 +16,7 @@
   "difficulty": 2,
   "rarity": "uncommon",
   "swims": "lower",
+  "predator": true,
   "spawn": {
     "min": 14,
     "max": 16,

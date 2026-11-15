@@ -29,7 +29,7 @@ import { conditionSources } from './conditions.js';
 import { startDive } from './dive.js';
 import { lookUnderwater, tended } from './pool.js';
 import { waterNow } from './spawning.js';
-import { conserve } from './barter.js';
+import { conserve, tankMeals } from './barter.js';
 import { championAt, championClass, championSources, championsHere, findChampion, poolKey, removeChampion, updateChampions } from './champions.js';
 
 export { poolKey };
@@ -502,7 +502,9 @@ export function travel(state, location, spot, { force = false } = {}) {
   // A lit ability acts on a fish at the spot it lit up; it goes dark here, as
   // it does when the next line goes out (D96).
   const next = { ...structuredClone(state), location, spot, features: [], lit: {} };
-  return { state: next, events: arrive(next) };
+  // Back in the room: what happened in the aquarium meanwhile (D152).
+  const meals = content.locations[location]?.town && spot === 'room' ? tankMeals(next) : [];
+  return { state: next, events: [...meals, ...arrive(next)] };
 }
 
 /**

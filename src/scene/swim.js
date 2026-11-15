@@ -159,6 +159,7 @@ export function swimSprite(species) {
  * @property {Swimmer | null} leader  The fish of its shoal it follows (D151), or none: it leads, or swims alone.
  * @property {{ x: number, y: number }} place  Where it keeps in its shoal, from the leader.
  * @property {number} scatterUntil  Bolting from a strike at its shoal until then (D151).
+ * @property {number} fleeUntil  Keeping away from a passing predator until then (D152).
  * @property {number} burstUntil
  * @property {number} nextGoal
  * @property {number} beat  Where the tail is in its beat, in frames.
@@ -183,6 +184,8 @@ export function createShoal(parent, rand) {
   let swimmers = [];
   let box = { x0: 0, y0: 0, x1: 256, y1: 256 };
   let last = 0;
+  /** When the hiding was last checked (D152). */
+  let lastHide = 0;
 
   /**
    * Where in the box a fish goes: anywhere, or mostly in its own quarter
@@ -258,6 +261,7 @@ export function createShoal(parent, rand) {
           leader: null,
           place: { x: 0, y: 0 },
           scatterUntil: 0,
+          fleeUntil: 0,
           burstUntil: 0,
           nextGoal: 0,
           beat: rand() * 6,
@@ -312,8 +316,32 @@ export function createShoal(parent, rand) {
     update(now) {
       const dt = Math.min(0.1, last ? (now - last) / 1000 : 0);
       last = now;
+      // Small fish keep away from a predator swimming near (D152): checked a few times a second.
+      if (now - lastHide > 200) {
+        lastHide = now;
+        for (const s of swimmers) {
+          if (now < s.fleeUntil) continue;
+          const mine = content.fish[s.species];
+          const myLength = mine ? (mine.size.min + mine.size.max) / 2 : 0;
+          for (const p of swimmers) {
+            const them = content.fish[p.species];
+            if (p === s || !them?.predator || (s.box ?? box) !== (p.box ?? box)) continue;
+            if ((them.size.min + them.size.max) / 2 < myLength * (content.rules.tank?.hideRatio ?? 2)) continue;
+            const dx = s.x - p.x;
+            const dy = s.y - p.y;
+            if (Math.abs(dx) > 40 || Math.abs(dy) > 18) continue;
+            const b = s.box ?? box;
+            s.goal = { x: Math.min(b.x1, Math.max(b.x0, s.x + Math.sign(dx || 1) * 60)), y: Math.min(b.y1, Math.max(b.y0, s.y + Math.sign(dy || 1) * 20)) };
+            s.fleeUntil = now + 1200;
+            s.burstUntil = now + 500;
+            s.restUntil = 0;
+            s.nextGoal = s.fleeUntil;
+            break;
+          }
+        }
+      }
       for (const s of swimmers) {
-        const scattering = now < s.scatterUntil;
+        const scattering = now < s.scatterUntil || now < s.fleeUntil;
         // A shoal-mate keeps its place behind its leader and does as it does: rests, bursts, turns (D151).
         if (s.leader && !scattering && s.leader.scatterUntil <= now) {
           s.goal = { x: s.leader.x + (s.leader.right ? -1 : 1) * Math.abs(s.place.x) * 0.6 + s.place.x * 0.4, y: s.leader.y + s.place.y };

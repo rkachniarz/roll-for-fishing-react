@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schemas/tank.schema.json",
+  "id": "tank",
+  "placeholder": true,
+  "preyRatio": 0.5,
+  "chancePerDay": 15,
+  "days": 7,
+  "fedDays": 3,
+  "hideRatio": 2
+}

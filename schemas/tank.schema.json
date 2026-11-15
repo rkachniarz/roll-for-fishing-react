@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Who eats whom in the room's aquarium (D152)",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "placeholder": {
+      "$ref": "common.schema.json#/definitions/placeholder"
+    },
+    "id": {
+      "const": "tank"
+    },
+    "preyRatio": {
+      "description": "A predator can eat a fish shorter than this share of its own length.",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 1
+    },
+    "chancePerDay": {
+      "description": "The chance in a hundred, each game day, that a predator with prey in the tank eats one.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "days": {
+      "description": "The most days counted at once when the player comes back.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "fedDays": {
+      "description": "Game days a bait fed to the tank keeps the predators from hunting.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "hideRatio": {
+      "description": "Drawn swimming, a fish keeps away from a predator whose species is this many times its size.",
+      "type": "number",
+      "minimum": 1
+    }
+  },
+  "required": [
+    "id",
+    "preyRatio",
+    "chancePerDay",
+    "days",
+    "fedDays",
+    "hideRatio"
+  ],
+  "additionalProperties": false
+}

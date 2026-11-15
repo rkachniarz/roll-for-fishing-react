@@ -229,7 +229,7 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | look-underwater | description, cooldown |
 | sushi-enjoyer | description |
 
-## rules (7)
+## rules (8)
 
 | id | what is a placeholder |
 |---|---|
@@ -240,6 +240,7 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | pool | all of it |
 | spawning | all of it |
 | stew | all of it |
+| tank | all of it |
 
 ## vendors (4)
 

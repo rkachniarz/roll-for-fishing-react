@@ -15,6 +15,7 @@
   "difficulty": 0,
   "rarity": "common",
   "swims": "lower",
+  "predator": true,
   "shoals": true,
   "plants": [
     "spawns"

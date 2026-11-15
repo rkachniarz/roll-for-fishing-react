@@ -19,7 +19,7 @@ import { knownKey, locationList } from './knowledge.js';
 import { fishWeight } from './fish.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 17;
+export const SAVE_VERSION = 18;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -30,9 +30,9 @@ export const SAVE_VERSION = 17;
  * ability rolls when used (D96) · champions: class fish appearing and acting (D114) ·
  * taste: a raw fish sitting badly, and which fish a bowl of stew tastes of (D138) ·
  * pool: the fish a spot's pool is stocked with (D139) · fight: a fish's manoeuvre on the line (D141) ·
- * condition: how fat or thin each fish is, for its weight (D146).
+ * condition: how fat or thin each fish is, for its weight (D146) · tank: who eats whom in the aquarium (D152).
  */
-export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions', 'taste', 'pool', 'fight', 'condition'];
+export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions', 'taste', 'pool', 'fight', 'condition', 'tank'];
 
 /**
  * @typedef {import('./fish.js').FishInstance & { tries?: number, wild?: boolean, looks?: number }} PoolFish  A fish
@@ -109,6 +109,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {import('./fish.js').FishInstance[]} stewPot  Fish put in the stew since the last bowl (R19.4).
  * @property {import('./fish.js').FishInstance[]} aquarium  Fish in the room's aquarium (R17.5).
  * @property {import('./dive.js').Dive | null} dive  The Fighter's dive under way (R20.3).
+ * @property {{ day: number, fedUntil: number }} tank  The aquarium (D152): the game day its predators were last
+ *   checked on, and the game minute a feeding lasts until.
  * @property {number} water  The water's temperature on the weather's scale (D149), following the air's.
  * @property {'surface' | 'upper' | 'lower' | 'bottom' | null} lineDepth  The depth an adjustable line is set to
  *   (D148); it counts only while such a line is equipped.
@@ -192,6 +194,7 @@ export function newGame({ seed, character, month }) {
     tasted: {},
     lineDepth: null,
     water: weather.temperature,
+    tank: { day: 0, fedUntil: 0 },
   };
 }
 
@@ -330,6 +333,12 @@ const MIGRATIONS = {
   13: (save) => ({ ...save, streams: { ...save.streams, fight: deriveSeed(save.seed, 'fight') } }),
   // 15 -> 16: the line's depth (D148), unset.
   15: (save) => ({ ...save, lineDepth: null }),
+  // 17 -> 18: who eats whom in the aquarium (D152), counted from today, with its own stream.
+  17: (save) => ({
+    ...save,
+    tank: { day: Math.floor((save.time ?? 0) / (24 * 60)), fedUntil: 0 },
+    streams: { ...save.streams, tank: deriveSeed(save.seed, 'tank') },
+  }),
   // 16 -> 17: the water's temperature (D149), as warm as the air is now.
   16: (save) => ({ ...save, water: save.weather?.temperature ?? content.rules.spawning.minWater }),
   // 14 -> 15: fish have a weight (D146), with a stream for their condition; each species' heaviest record is

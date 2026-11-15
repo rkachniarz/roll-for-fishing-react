@@ -16,6 +16,7 @@
   "difficulty": 1,
   "rarity": "epic",
   "swims": "upper",
+  "predator": true,
   "spawn": {
     "min": 10,
     "max": 14,

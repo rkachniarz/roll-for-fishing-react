@@ -16,6 +16,7 @@
   "difficulty": 2,
   "rarity": "epic",
   "swims": "upper",
+  "predator": true,
   "swim": {
     "cruise": 10.2,
     "rest": 0.1,

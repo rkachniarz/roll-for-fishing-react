@@ -16,6 +16,7 @@
   "difficulty": 1,
   "rarity": "epic",
   "swims": "lower",
+  "predator": true,
   "shoals": true,
   "swim": {
     "cruise": 5,

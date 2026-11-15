@@ -24,6 +24,23 @@ Items with no note are left alone.
 
 Newest first.
 
+## Who eats whom (2026-11-15, D152, 11.11)
+
+- **Predators from FishBase's diet sentences** ("feed mainly on fishes", "piscivore", "voracious predator"), 44 of them,
+  and **eight known fish-eaters whose pages are silent:** muskie and chain pickerel (pike's genus), brown trout,
+  Wildlands perch, payara, goliath tigerfish, arapaima, goonch. Fish that eat a little fish among much else (bluegill,
+  lenok, rainbow trout, capelin) are left out; perch, yellow perch, ide and chub are in, as FishBase says the bigger ones
+  eat mainly fish.
+- **The numbers** (half its length, 15% a day, up to 7 days counted, 3 days for a feeding, twice the size to make a fish
+  hide) are guesses in `rules/tank.json`.
+- **Any bait feeds the tank,** the first bait in the bags. Say if it should be a particular food.
+- **Only checked when you come into the room,** so a tank isn't hunting while you watch it. Sleeping in the room counts
+  from the next time you come in.
+- **Not checked in a browser:** the warning and the Feed button pass every browser check without errors, but none of
+  them opens the aquarium with a predator in it. The engine side has unit tests.
+- **Hiding** is drawn only: in the tank, the dive and the look. Whether it reads as hiding, or as fish twitching, wants
+  your eye.
+
 ## Shoaling (2026-11-15, D151, 11.9)
 
 - **Who shoals,** from FishBase: bream, bleak, silver bream, barbel, nase, dace, minnow, gudgeon, vendace, whitefish,

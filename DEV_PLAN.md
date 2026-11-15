@@ -71,7 +71,7 @@ is where the others may lead.
   they're harder to tap until they settle; their rolls stay as rolled.
 - [ ] **11.10** Folklore events: the carp leaping the dragon gate, the catfish that shakes the earth, the archerfish
   spitting insects off leaves. Writing work, so placeholders until the creative track.
-- [ ] **11.11** Who eats whom: predators and prey in the aquarium (keeping them apart, small fish hiding from a passing
+- [x] **11.11** Who eats whom (D152): predators and prey in the aquarium (keeping them apart, small fish hiding from a passing
   pike, perhaps one going missing).
   *The owner's answers (2026-11-15):* **now and then** a predator in the room's aquarium eats a tank-mate small
   enough for it (checked when the player comes back to the room, or by the game day), with a log line; rare enough to

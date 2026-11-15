@@ -356,6 +356,86 @@ export function eatStew(state) {
 // ---------- The aquarium (R17.5) ----------
 
 /**
+ * Could one fish eat the other (D152)? A predator, and the other well under its length.
+ * @param {FishInstance} a
+ * @param {FishInstance} b
+ */
+export function eats(a, b) {
+  return Boolean(content.fish[a.species]?.predator) && b.size < a.size * content.rules.tank.preyRatio;
+}
+
+/**
+ * Putting a fish in the tank beside one that would eat it, or that it would
+ * eat (D152): the pair, for the page to warn about, or null.
+ * @param {GameState} state
+ * @param {FishInstance} fish
+ * @returns {{ eater: FishInstance, eaten: FishInstance } | null}
+ */
+export function tankDanger(state, fish) {
+  for (const other of state.aquarium ?? []) {
+    if (eats(other, fish)) return { eater: other, eaten: fish };
+    if (eats(fish, other)) return { eater: fish, eaten: other };
+  }
+  return null;
+}
+
+/**
+ * The days since the tank was last looked at (D152): each one, a predator
+ * with prey in the tank may eat it, unless the tank was fed. Run when the
+ * player comes into the room. Changes `state` in place; draws from `tank`
+ * only when there is prey to eat.
+ * @param {GameState} state
+ * @returns {GameEvent[]}
+ */
+export function tankMeals(state) {
+  const rules = content.rules.tank;
+  const today = Math.floor(state.time / (24 * 60));
+  const tank = state.tank ?? { day: today, fedUntil: 0 };
+  const days = Math.min(rules.days, Math.max(0, today - tank.day));
+  state.tank = { ...tank, day: today };
+  if (!days || !hasPerk(state, 'aquarium')) return [];
+  /** @type {GameEvent[]} */
+  const events = [];
+  const { dice, commit } = diceFrom(state);
+  let drew = false;
+  for (let d = 0; d < days; d++) {
+    // A fed tank: nobody hunts until the feeding wears off.
+    const dayStart = (today - days + d) * 24 * 60;
+    if (dayStart < tank.fedUntil) continue;
+    const fish = state.aquarium ?? [];
+    for (const eater of fish) {
+      const prey = fish.filter((f) => f !== eater && eats(eater, f));
+      if (!prey.length) continue;
+      drew = true;
+      if (dice.tank.roll100() > rules.chancePerDay) continue;
+      const eaten = prey[dice.tank.getRandomNumber(0, prey.length - 1)];
+      state.aquarium = (state.aquarium ?? []).filter((f) => f !== eaten);
+      events.push({ type: 'tank-eaten', eater, fish: eaten });
+      break;
+    }
+  }
+  if (drew) state.streams = commit();
+  return events;
+}
+
+/**
+ * Feeds the tank (D152): one bait from the bags, and the predators don't hunt
+ * for a few game days.
+ * @param {GameState} state
+ * @returns {{ state: GameState, events: GameEvent[] }}
+ */
+export function feedTank(state) {
+  const bait = state.bags.find((b) => content.items[b.id]?.slot === 'bait');
+  if (!atAquarium(state) || !bait) return { state, events: [] };
+  const next = structuredClone(state);
+  const mine = /** @type {{ id: string, count: number }} */ (next.bags.find((b) => b.id === bait.id));
+  mine.count--;
+  next.bags = next.bags.filter((b) => b.count > 0);
+  next.tank = { ...(next.tank ?? { day: 0, fedUntil: 0 }), fedUntil: next.time + content.rules.tank.fedDays * 24 * 60 };
+  return { state: next, events: [{ type: 'tank-fed', item: bait.id }] };
+}
+
+/**
  * Is the player in their room, with the aquarium perk?
  * @param {GameState} state
  */
