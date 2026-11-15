@@ -64,6 +64,11 @@ is where the others may lead.
   style's line.
 - [ ] **11.9** Shoaling: shoal fish swim together and turn together, solitary ones alone; in the dive a shoal
   scatters when one is struck.
+  *The owner's answers (2026-11-15):* **everywhere fish swim**, as 11.5, which it builds on. Which fish shoal
+  **looked up** from the real species (roach, bream, bleak, perch, whitefish, smelt shoal; pike, wels, burbot keep
+  alone), a mark per fish, the source noted; a species whose young shoal but adults don't counts as solitary.
+  **Looks only**, no change to the game. **The dive's scatter:** the rest bolt apart and swim fast for a moment, so
+  they're harder to tap until they settle; their rolls stay as rolled.
 - [ ] **11.10** Folklore events: the carp leaping the dragon gate, the catfish that shakes the earth, the archerfish
   spitting insects off leaves. Writing work, so placeholders until the creative track.
 - [ ] **11.11** Who eats whom: predators and prey in the aquarium (keeping them apart, small fish hiding from a passing
