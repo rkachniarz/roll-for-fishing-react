@@ -9,6 +9,7 @@
 // replayable (D4); the scene smooths the drift between casts.
 
 import { content } from '../generated/content.js';
+import { spawningNow } from './spawning.js';
 import { pick } from './tables.js';
 import { maybeChampion } from './champions.js';
 
@@ -131,8 +132,17 @@ export function updateFeatures(state, dice, { appear = true, champions, extraCha
     // Now and then a class fish instead (D114).
     const champion = champions ? maybeChampion(state, champions, water) : [];
     if (champion.length) return [...events, ...champion];
+    // A spawning fish's school comes up more often (D149).
+    const spawning = spawningNow(state);
+    const factor = content.rules.spawning.schools;
     const choice = pick(
-      list.filter((/** @type {{ id: string }} */ e) => !content.features[e.id].retired),
+      list
+        .filter((/** @type {{ id: string }} */ e) => !content.features[e.id].retired)
+        .map((/** @type {{ id: string, weight: number }} */ e) => {
+          const def = content.features[e.id];
+          const fish = def.kind === 'school' ? def.fish?.[0]?.id : null;
+          return fish && spawning.has(fish) ? { ...e, weight: e.weight * factor } : e;
+        }),
       dice,
     );
     if (choice) {

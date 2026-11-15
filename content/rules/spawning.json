@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schemas/spawning.schema.json",
+  "id": "spawning",
+  "placeholder": true,
+  "lag": 48,
+  "minWater": 1,
+  "gather": 3,
+  "schools": 3
+}

@@ -21,6 +21,12 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "surface",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "cooling",
+        "from": "season: dry"
+      },
       "swim": {
         "cruise": 5.95,
         "rest": 0.3,
@@ -73,6 +79,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "warming",
+        "from": "season: monsoon"
+      },
       "swim": {
         "cruise": 9,
         "rest": 0.5,
@@ -123,6 +135,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "spawn": {
+        "min": 5,
+        "max": 8,
+        "trend": "warming",
+        "from": "9.5-15 °C"
+      },
       "swim": {
         "cruise": 16,
         "rest": 0.1,
@@ -175,6 +193,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "spawn": {
+        "min": 7,
+        "max": 8,
+        "trend": "warming",
+        "from": "14-16 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.45,
@@ -231,6 +255,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 14,
+        "max": 16,
+        "trend": "warming",
+        "from": "27-33 °C"
+      },
       "swim": {
         "cruise": 10.2,
         "rest": 0.1,
@@ -282,6 +312,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "upper",
+      "spawn": {
+        "min": 7,
+        "max": 11,
+        "trend": "warming",
+        "from": "14-22 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.5,
@@ -334,6 +370,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "spawn": {
+        "min": 3,
+        "max": 7,
+        "trend": "warming",
+        "from": "season: spring"
+      },
       "swim": {
         "cruise": 4,
         "rest": 0.6,
@@ -385,6 +427,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "surface",
+      "spawn": {
+        "min": 6,
+        "max": 12,
+        "trend": "warming",
+        "from": "12-23 °C"
+      },
       "swim": {
         "cruise": 22,
         "rest": 0.05,
@@ -436,6 +484,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 10,
+        "max": 13,
+        "trend": "warming",
+        "from": "19-26 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.5,
@@ -487,6 +541,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "lower",
+      "spawn": {
+        "min": 8,
+        "max": 10,
+        "trend": "warming",
+        "from": "16-19 °C"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.65,
@@ -538,6 +598,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "spawn": {
+        "min": 2,
+        "max": 4,
+        "trend": "cooling",
+        "from": "3-9 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.5,
@@ -589,6 +655,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "spawn": {
+        "min": 7,
+        "max": 12,
+        "trend": "warming",
+        "from": "14-25 °C"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.45,
@@ -643,6 +715,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 3,
+        "max": 6,
+        "trend": "cooling",
+        "from": "6.6-12.4 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.5,
@@ -696,6 +774,12 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "upper",
+      "spawn": {
+        "min": 3,
+        "max": 7,
+        "trend": "warming",
+        "from": "season: spring"
+      },
       "swim": {
         "cruise": 8.5,
         "rest": 0,
@@ -746,6 +830,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "common",
       "swims": "bottom",
+      "spawn": {
+        "min": 0,
+        "max": 1,
+        "trend": "cooling",
+        "from": "0.6-1.7 °C"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.4,
@@ -798,6 +888,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "upper",
+      "spawn": {
+        "min": 5,
+        "max": 6,
+        "trend": "warming",
+        "from": "10-12.5 °C"
+      },
       "swim": {
         "cruise": 20,
         "rest": 0.05,
@@ -848,6 +944,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
+      "spawn": {
+        "min": 3,
+        "max": 7,
+        "trend": "warming",
+        "from": "season: spring"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.7,
@@ -900,6 +1002,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "spawn": {
+        "min": 8,
+        "max": 10,
+        "trend": "warming",
+        "from": "15-20 °C"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.65,
@@ -955,6 +1063,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "lower",
+      "spawn": {
+        "min": 6,
+        "max": 8,
+        "trend": "warming",
+        "from": "12.8-15.3 °C"
+      },
       "swim": {
         "cruise": 4,
         "rest": 0.65,
@@ -1003,6 +1117,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "lower",
+      "spawn": {
+        "min": 3,
+        "max": 9,
+        "trend": "warming",
+        "from": "5.8-18.3 °C"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.65,
@@ -1053,6 +1173,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "spawn": {
+        "min": 9,
+        "max": 14,
+        "trend": "warming",
+        "from": "18-27 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.35,
@@ -1103,6 +1229,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "upper",
+      "spawn": {
+        "min": 7,
+        "max": 9,
+        "trend": "warming",
+        "from": "14-18 °C"
+      },
       "swim": {
         "cruise": 12,
         "rest": 0.1,
@@ -1153,6 +1285,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "spawn": {
+        "min": 2,
+        "max": 3,
+        "trend": "cooling",
+        "from": "5-6 °C"
+      },
       "swim": {
         "cruise": 14,
         "rest": 0.05,
@@ -1205,6 +1343,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "warming",
+        "from": "season: wet"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.4,
@@ -1308,6 +1452,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "bottom",
+      "spawn": {
+        "min": 6,
+        "max": 10,
+        "trend": "warming",
+        "from": "12-19 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.25,
@@ -1364,6 +1514,12 @@ export const content = {
       "rarity": "common",
       "endangered": true,
       "swims": "bottom",
+      "spawn": {
+        "min": 8,
+        "max": 10,
+        "trend": "warming",
+        "from": "15-20 °C"
+      },
       "swim": {
         "cruise": 8,
         "rest": 0.2,
@@ -1420,6 +1576,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "spawn": {
+        "min": 9,
+        "max": 11,
+        "trend": "warming",
+        "from": "18-22 °C"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.5,
@@ -1471,6 +1633,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
+      "spawn": {
+        "min": 4,
+        "max": 5,
+        "trend": "warming",
+        "from": "8-10 °C"
+      },
       "swim": {
         "cruise": 18,
         "rest": 0.05,
@@ -1518,6 +1686,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "spawn": {
+        "min": 2,
+        "max": 4,
+        "trend": "cooling",
+        "from": "4-7 °C"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.6,
@@ -1567,6 +1741,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "epic",
       "swims": "lower",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "warming",
+        "from": "season: flood"
+      },
       "swim": {
         "cruise": 4,
         "rest": 0.5,
@@ -1615,6 +1795,12 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "bottom",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "cooling",
+        "from": "season: dry"
+      },
       "swim": {
         "cruise": 3.4,
         "rest": 0.2,
@@ -1717,6 +1903,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
+      "spawn": {
+        "min": 7,
+        "max": 9,
+        "trend": "warming",
+        "from": "14-18 °C"
+      },
       "swim": {
         "cruise": 8,
         "rest": 0.1,
@@ -1872,6 +2064,12 @@ export const content = {
       "rarity": "uncommon",
       "endangered": true,
       "swims": "lower",
+      "spawn": {
+        "min": 2,
+        "max": 3,
+        "trend": "cooling",
+        "from": "5-6 °C"
+      },
       "swim": {
         "cruise": 8,
         "rest": 0.35,
@@ -1923,6 +2121,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "upper",
+      "spawn": {
+        "min": 3,
+        "max": 6,
+        "trend": "warming",
+        "from": "6-12 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.55,
@@ -1973,6 +2177,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
+      "spawn": {
+        "min": 4,
+        "max": 9,
+        "trend": "warming",
+        "from": "9-18 °C"
+      },
       "swim": {
         "cruise": 4.25,
         "rest": 0.25,
@@ -2081,6 +2291,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "spawn": {
+        "min": 14,
+        "max": 16,
+        "trend": "warming",
+        "from": "28-32 °C"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.5,
@@ -2136,6 +2352,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "spawn": {
+        "min": 3,
+        "max": 7,
+        "trend": "warming",
+        "from": "season: spring"
+      },
       "swim": {
         "cruise": 15,
         "rest": 0.1,
@@ -2190,6 +2412,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "spawn": {
+        "min": 12,
+        "max": 13,
+        "trend": "warming",
+        "from": "23.5-26.5 °C"
+      },
       "swim": {
         "cruise": 11.05,
         "rest": 0.1,
@@ -2245,6 +2473,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "upper",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "warming",
+        "from": "20-27 °C"
+      },
       "swim": {
         "cruise": 14,
         "rest": 0.05,
@@ -2346,6 +2580,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "spawn": {
+        "min": 8,
+        "max": 12,
+        "trend": "warming",
+        "from": "season: summer"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.3,
@@ -2394,6 +2634,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "bottom",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "warming",
+        "from": "season: rain"
+      },
       "swim": {
         "cruise": 3.4,
         "rest": 0.55,
@@ -2441,6 +2687,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "spawn": {
+        "min": 8,
+        "max": 13,
+        "trend": "warming",
+        "from": "16-26 °C"
+      },
       "swim": {
         "cruise": 7.65,
         "rest": 0.1,
@@ -2492,6 +2744,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "surface",
+      "spawn": {
+        "min": 3,
+        "max": 7,
+        "trend": "warming",
+        "from": "season: spring"
+      },
       "swim": {
         "cruise": 18,
         "rest": 0.05,
@@ -2543,6 +2801,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "spawn": {
+        "min": 4,
+        "max": 6,
+        "trend": "warming",
+        "from": "8-11 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.55,
@@ -2595,6 +2859,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "rare",
       "swims": "upper",
+      "spawn": {
+        "min": 3,
+        "max": 5,
+        "trend": "cooling",
+        "from": "6-10 °C"
+      },
       "swim": {
         "cruise": 12.75,
         "rest": 0.1,
@@ -2647,6 +2917,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "spawn": {
+        "min": 6,
+        "max": 8,
+        "trend": "warming",
+        "from": "12-16 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.3,
@@ -2752,6 +3028,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "spawn": {
+        "min": 3,
+        "max": 5,
+        "trend": "warming",
+        "from": "6-10 °C"
+      },
       "swim": {
         "cruise": 5.95,
         "rest": 0.5,
@@ -2805,6 +3087,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "bottom",
+      "spawn": {
+        "min": 0,
+        "max": 1,
+        "trend": "cooling",
+        "from": "-0.4-1.5 °C"
+      },
       "swim": {
         "cruise": 4,
         "rest": 0.6,
@@ -2858,6 +3146,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "spawn": {
+        "min": 5,
+        "max": 7,
+        "trend": "warming",
+        "from": "10-14 °C"
+      },
       "swim": {
         "cruise": 12,
         "rest": 0.1,
@@ -2909,6 +3203,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "spawn": {
+        "min": 3,
+        "max": 6,
+        "trend": "cooling",
+        "from": "6.6-12.4 °C"
+      },
       "swim": {
         "cruise": 9,
         "rest": 0.35,
@@ -2961,6 +3261,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "bottom",
+      "spawn": {
+        "min": 4,
+        "max": 9,
+        "trend": "warming",
+        "from": "9-18 °C"
+      },
       "swim": {
         "cruise": 4.25,
         "rest": 0.25,
@@ -3016,6 +3322,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 4,
+        "max": 7,
+        "trend": "cooling",
+        "from": "8.9-13.9 °C"
+      },
       "swim": {
         "cruise": 10,
         "rest": 0.1,
@@ -3067,6 +3379,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 2,
+        "max": 4,
+        "trend": "cooling",
+        "from": "3.8-7.8 °C"
+      },
       "swim": {
         "cruise": 12,
         "rest": 0.1,
@@ -3118,6 +3436,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "upper",
+      "spawn": {
+        "min": 3,
+        "max": 5,
+        "trend": "cooling",
+        "from": "6-10 °C"
+      },
       "swim": {
         "cruise": 14,
         "rest": 0.1,
@@ -3171,6 +3495,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "lower",
+      "spawn": {
+        "min": 8,
+        "max": 10,
+        "trend": "warming",
+        "from": "15-21 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.5,
@@ -3223,6 +3553,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "upper",
+      "spawn": {
+        "min": 3,
+        "max": 7,
+        "trend": "warming",
+        "from": "season: spring"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.5,
@@ -3275,6 +3611,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
+      "spawn": {
+        "min": 4,
+        "max": 6,
+        "trend": "warming",
+        "from": "8-12 °C"
+      },
       "swim": {
         "cruise": 3,
         "rest": 0.65,
@@ -3325,6 +3667,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "spawn": {
+        "min": 6,
+        "max": 8,
+        "trend": "warming",
+        "from": "12-16 °C"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.6,
@@ -3373,6 +3721,12 @@ export const content = {
       "rarity": "uncommon",
       "endangered": true,
       "swims": "bottom",
+      "spawn": {
+        "min": 10,
+        "max": 12,
+        "trend": "warming",
+        "from": "20-24 °C"
+      },
       "swim": {
         "cruise": 5.1,
         "rest": 0.2,
@@ -3426,6 +3780,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "spawn": {
+        "min": 6,
+        "max": 8,
+        "trend": "warming",
+        "from": "12-16 °C"
+      },
       "swim": {
         "cruise": 4,
         "rest": 0.65,
@@ -3477,6 +3837,12 @@ export const content = {
       "rarity": "uncommon",
       "endangered": true,
       "swims": "upper",
+      "spawn": {
+        "min": 3,
+        "max": 5,
+        "trend": "cooling",
+        "from": "5.5-10 °C"
+      },
       "swim": {
         "cruise": 12,
         "rest": 0.1,
@@ -3580,6 +3946,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "warming",
+        "from": "season: flood"
+      },
       "swim": {
         "cruise": 3.4,
         "rest": 0.4,
@@ -3630,6 +4002,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "upper",
+      "spawn": {
+        "min": 6,
+        "max": 7,
+        "trend": "warming",
+        "from": "12-14 °C"
+      },
       "swim": {
         "cruise": 15,
         "rest": 0.05,
@@ -3733,6 +4111,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "spawn": {
+        "min": 4,
+        "max": 8,
+        "trend": "warming",
+        "from": "9-15 °C"
+      },
       "swim": {
         "cruise": 4.25,
         "rest": 0.8,
@@ -3784,6 +4168,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "spawn": {
+        "min": 4,
+        "max": 6,
+        "trend": "warming",
+        "from": "8-12 °C"
+      },
       "swim": {
         "cruise": 8,
         "rest": 0.35,
@@ -3835,6 +4225,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "lower",
+      "spawn": {
+        "min": 2,
+        "max": 6,
+        "trend": "warming",
+        "from": "4.4-11.1 °C"
+      },
       "swim": {
         "cruise": 4.25,
         "rest": 0.75,
@@ -3887,6 +4283,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "surface",
+      "spawn": {
+        "min": 8,
+        "max": 12,
+        "trend": "warming",
+        "from": "season: summer"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.65,
@@ -3939,6 +4341,12 @@ export const content = {
       "rarity": "rare",
       "endangered": true,
       "swims": "upper",
+      "spawn": {
+        "min": 4,
+        "max": 10,
+        "trend": "cooling",
+        "from": "9-20 °C"
+      },
       "swim": {
         "cruise": 13,
         "rest": 0.1,
@@ -3995,6 +4403,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "warming",
+        "from": "season: rain"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.4,
@@ -4043,6 +4457,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "spawn": {
+        "min": 12,
+        "max": 14,
+        "trend": "warming",
+        "from": "25-29 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.5,
@@ -4093,6 +4513,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "surface",
+      "spawn": {
+        "min": 14,
+        "max": 16,
+        "trend": "warming",
+        "from": "27-31 °C"
+      },
       "swim": {
         "cruise": 9,
         "rest": 0.1,
@@ -4148,6 +4574,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "upper",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "warming",
+        "from": "season: flood"
+      },
       "swim": {
         "cruise": 9,
         "rest": 0.65,
@@ -4251,6 +4683,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "lower",
+      "spawn": {
+        "min": 4,
+        "max": 4,
+        "trend": "warming",
+        "from": "7-8 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.5,
@@ -4300,6 +4738,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "upper",
+      "spawn": {
+        "min": -2,
+        "max": 1,
+        "trend": "cooling",
+        "from": "-4-0 °C"
+      },
       "swim": {
         "cruise": 10,
         "rest": 0.1,
@@ -4353,6 +4797,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 8,
+        "max": 9,
+        "trend": "warming",
+        "from": "16-18 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.5,
@@ -4404,6 +4854,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "upper",
+      "spawn": {
+        "min": 2,
+        "max": 5,
+        "trend": "warming",
+        "from": "4-10 °C"
+      },
       "swim": {
         "cruise": 8,
         "rest": 0.5,
@@ -4456,6 +4912,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "warming",
+        "from": "season: rain"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.5,
@@ -4507,6 +4969,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "bottom",
+      "spawn": {
+        "min": 10,
+        "max": 14,
+        "trend": "warming",
+        "from": "season: flood"
+      },
       "swim": {
         "cruise": 5.1,
         "rest": 0.45,
@@ -4556,6 +5024,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "spawn": {
+        "min": 6,
+        "max": 8,
+        "trend": "warming",
+        "from": "12-16 °C"
+      },
       "swim": {
         "cruise": 12,
         "rest": 0.05,
@@ -4604,6 +5078,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 8,
+        "max": 14,
+        "trend": "warming",
+        "from": "15-27 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.5,
@@ -4654,6 +5134,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
+      "spawn": {
+        "min": 8,
+        "max": 10,
+        "trend": "warming",
+        "from": "15-19 °C"
+      },
       "swim": {
         "cruise": 13,
         "rest": 0.05,
@@ -4705,6 +5191,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
+      "spawn": {
+        "min": 6,
+        "max": 9,
+        "trend": "warming",
+        "from": "12-18 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.45,
@@ -4757,6 +5249,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
+      "spawn": {
+        "min": 3,
+        "max": 6,
+        "trend": "warming",
+        "from": "6-12 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.5,
@@ -4808,6 +5306,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
+      "spawn": {
+        "min": 8,
+        "max": 9,
+        "trend": "warming",
+        "from": "15-18 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.2,
@@ -4907,6 +5411,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "spawn": {
+        "min": 8,
+        "max": 12,
+        "trend": "warming",
+        "from": "16-25 °C"
+      },
       "swim": {
         "cruise": 8,
         "rest": 0.1,
@@ -4958,6 +5468,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "spawn": {
+        "min": 8,
+        "max": 12,
+        "trend": "warming",
+        "from": "17-25 °C"
+      },
       "swim": {
         "cruise": 11.05,
         "rest": 0.1,
@@ -5009,6 +5525,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 6,
+        "max": 10,
+        "trend": "warming",
+        "from": "12.8-20 °C"
+      },
       "swim": {
         "cruise": 8,
         "rest": 0.5,
@@ -5061,6 +5583,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "spawn": {
+        "min": 2,
+        "max": 6,
+        "trend": "warming",
+        "from": "4-12 °C"
+      },
       "swim": {
         "cruise": 20,
         "rest": 0.05,
@@ -5113,6 +5641,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "bottom",
+      "spawn": {
+        "min": 1,
+        "max": 3,
+        "trend": "cooling",
+        "from": "season: winter"
+      },
       "swim": {
         "cruise": 3,
         "rest": 0.2,
@@ -5161,6 +5695,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "epic",
       "swims": "bottom",
+      "spawn": {
+        "min": 8,
+        "max": 10,
+        "trend": "warming",
+        "from": "16-21 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.5,
@@ -5215,6 +5755,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
+      "spawn": {
+        "min": 5,
+        "max": 7,
+        "trend": "warming",
+        "from": "10-14 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.2,
@@ -5269,6 +5815,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "spawn": {
+        "min": 5,
+        "max": 7,
+        "trend": "warming",
+        "from": "10-14 °C"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.45,
@@ -5319,6 +5871,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "lower",
+      "spawn": {
+        "min": 0,
+        "max": 3,
+        "trend": "cooling",
+        "from": "0-6 °C"
+      },
       "swim": {
         "cruise": 6.8,
         "rest": 0.1,
@@ -5354,11 +5912,12 @@ export const content = {
         ]
       },
       "placeholder": [
+        "fights",
+        "lengthWeight",
+        "spawn",
         "stew",
         "taste",
-        "tasteLine",
-        "fights",
-        "lengthWeight"
+        "tasteLine"
       ]
     },
     "strange-giant-catfish": {
@@ -5378,6 +5937,12 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "bottom",
+      "spawn": {
+        "min": 10,
+        "max": 12,
+        "trend": "warming",
+        "from": "20-24 °C"
+      },
       "swim": {
         "cruise": 3.4,
         "rest": 0.45,
@@ -5408,11 +5973,12 @@ export const content = {
         ]
       },
       "placeholder": [
+        "fights",
+        "lengthWeight",
+        "spawn",
         "stew",
         "taste",
-        "tasteLine",
-        "fights",
-        "lengthWeight"
+        "tasteLine"
       ]
     },
     "strange-perch": {
@@ -5432,6 +5998,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "lower",
+      "spawn": {
+        "min": 4,
+        "max": 4,
+        "trend": "warming",
+        "from": "7-8 °C"
+      },
       "swim": {
         "cruise": 5.1,
         "rest": 0.5,
@@ -5463,11 +6035,12 @@ export const content = {
         ]
       },
       "placeholder": [
+        "fights",
+        "lengthWeight",
+        "spawn",
         "stew",
         "taste",
-        "tasteLine",
-        "fights",
-        "lengthWeight"
+        "tasteLine"
       ]
     },
     "strange-shark": {
@@ -5487,6 +6060,12 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "bottom",
+      "spawn": {
+        "min": 3,
+        "max": 7,
+        "trend": "warming",
+        "from": "season: spring"
+      },
       "swim": {
         "cruise": 6.8,
         "rest": 0,
@@ -5517,11 +6096,12 @@ export const content = {
         ]
       },
       "placeholder": [
+        "fights",
+        "lengthWeight",
+        "spawn",
         "stew",
         "taste",
-        "tasteLine",
-        "fights",
-        "lengthWeight"
+        "tasteLine"
       ]
     },
     "strange-tilapia": {
@@ -5541,6 +6121,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 10,
+        "max": 12,
+        "trend": "warming",
+        "from": "20-24 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.5,
@@ -5572,11 +6158,12 @@ export const content = {
         ]
       },
       "placeholder": [
+        "fights",
+        "lengthWeight",
+        "spawn",
         "stew",
         "taste",
-        "tasteLine",
-        "fights",
-        "lengthWeight"
+        "tasteLine"
       ]
     },
     "taimen": {
@@ -5596,6 +6183,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "spawn": {
+        "min": 2,
+        "max": 5,
+        "trend": "warming",
+        "from": "5-10 °C"
+      },
       "swim": {
         "cruise": 5.95,
         "rest": 0.5,
@@ -5648,6 +6241,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "spawn": {
+        "min": 10,
+        "max": 12,
+        "trend": "warming",
+        "from": "19-24 °C"
+      },
       "swim": {
         "cruise": 4,
         "rest": 0.5,
@@ -5750,6 +6349,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "lower",
+      "spawn": {
+        "min": 3,
+        "max": 7,
+        "trend": "warming",
+        "from": "season: spring"
+      },
       "swim": {
         "cruise": 5,
         "rest": 0.65,
@@ -5801,6 +6406,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "spawn": {
+        "min": 2,
+        "max": 4,
+        "trend": "cooling",
+        "from": "3-7 °C"
+      },
       "swim": {
         "cruise": 18,
         "rest": 0.05,
@@ -5856,6 +6467,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 3,
+        "max": 6,
+        "trend": "warming",
+        "from": "5.6-11.1 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.45,
@@ -5907,6 +6524,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "spawn": {
+        "min": 10,
+        "max": 12,
+        "trend": "warming",
+        "from": "19-23 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.2,
@@ -5959,6 +6582,12 @@ export const content = {
       "difficulty": 3,
       "rarity": "rare",
       "swims": "bottom",
+      "spawn": {
+        "min": 10,
+        "max": 12,
+        "trend": "warming",
+        "from": "20-24 °C"
+      },
       "swim": {
         "cruise": 3.4,
         "rest": 0.65,
@@ -6011,6 +6640,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "bottom",
+      "spawn": {
+        "min": 5,
+        "max": 8,
+        "trend": "warming",
+        "from": "10-16 °C"
+      },
       "swim": {
         "cruise": 6,
         "rest": 0.45,
@@ -6061,6 +6696,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
+      "spawn": {
+        "min": 3,
+        "max": 7,
+        "trend": "warming",
+        "from": "season: spring"
+      },
       "swim": {
         "cruise": 16,
         "rest": 0.05,
@@ -6112,6 +6753,12 @@ export const content = {
       "rarity": "rare",
       "endangered": true,
       "swims": "lower",
+      "spawn": {
+        "min": 3,
+        "max": 7,
+        "trend": "warming",
+        "from": "season: spring"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.5,
@@ -6164,6 +6811,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
+      "spawn": {
+        "min": 4,
+        "max": 8,
+        "trend": "cooling",
+        "from": "season: autumn"
+      },
       "swim": {
         "cruise": 4.25,
         "rest": 0.45,
@@ -6214,6 +6867,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "spawn": {
+        "min": 3,
+        "max": 6,
+        "trend": "warming",
+        "from": "6.7-12.2 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.5,
@@ -6262,6 +6921,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "lower",
+      "spawn": {
+        "min": 5,
+        "max": 7,
+        "trend": "warming",
+        "from": "10-14 °C"
+      },
       "swim": {
         "cruise": 7,
         "rest": 0.45,
@@ -13653,6 +14318,14 @@ export const content = {
           "rarity": 3
         }
       ]
+    },
+    "spawning": {
+      "id": "spawning",
+      "placeholder": true,
+      "lag": 48,
+      "minWater": 1,
+      "gather": 3,
+      "schools": 3
     },
     "stew": {
       "id": "stew",

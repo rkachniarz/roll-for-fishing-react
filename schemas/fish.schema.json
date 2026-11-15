@@ -29,6 +29,18 @@
       "type": "array",
       "items": { "$ref": "common.schema.json#/definitions/effect" }
     },
+    "spawn": {
+      "description": "When it spawns (D149): the water's temperature, on the weather's scale (0 extremely cold to 15 and up extremely hot; about 2 °C a step), from min to max, and whether it spawns as the water warms or cools. Spawning fish gather.",
+      "type": "object",
+      "properties": {
+        "min": { "type": "integer" },
+        "max": { "type": "integer" },
+        "trend": { "enum": ["warming", "cooling"] },
+        "from": { "type": "string" }
+      },
+      "required": ["min", "max", "trend"],
+      "additionalProperties": false
+    },
     "swim": {
       "description": "How it moves when drawn swimming (D147): its easy speed in pixels a second; the chance it holds still at each new goal (a pike waiting, a trout holding against the current); the chance of a burst, and how many times its easy speed a burst is; how far it winds up and down as it goes, in pixels (an eel).",
       "type": "object",

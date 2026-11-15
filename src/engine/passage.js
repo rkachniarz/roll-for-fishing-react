@@ -6,6 +6,7 @@
 
 import { advanceTime, clock, TIME } from './time.js';
 import { changeSeason, stepWeather } from './weather.js';
+import { stepWater } from './spawning.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./game.js').GameEvent} GameEvent */
@@ -35,6 +36,8 @@ export function stepTime(state, weatherDice) {
       events.push({ type: 'weather', weather: state.weather });
     }
   }
+  // The water follows the air, a day behind (D149).
+  stepWater(state);
   events.push(...expireBuffs(state));
   return events;
 }

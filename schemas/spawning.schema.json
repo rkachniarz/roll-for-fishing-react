@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Spawning and the water (D149)",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "placeholder": {
+      "$ref": "common.schema.json#/definitions/placeholder"
+    },
+    "id": {
+      "const": "spawning"
+    },
+    "lag": {
+      "description": "Half-hour steps for the water to close its gap to the air: each step it goes 1/lag of the way.",
+      "type": "number",
+      "minimum": 1
+    },
+    "minWater": {
+      "description": "The coldest the water gets, on the weather's temperature scale: it never freezes.",
+      "type": "number"
+    },
+    "gather": {
+      "description": "A spawning fish's weight in its spot's tables is multiplied by this.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "schools": {
+      "description": "A spawning fish's school is this many times likelier to come up on the water.",
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "required": [
+    "id",
+    "lag",
+    "minWater",
+    "gather",
+    "schools"
+  ],
+  "additionalProperties": false
+}

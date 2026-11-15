@@ -9,6 +9,7 @@
 // of its own.
 
 import { content } from '../generated/content.js';
+import { spawningIn } from './spawning.js';
 
 /** @typedef {ReturnType<import('../dice.js').diceFor>} Dice */
 /** @typedef {{ id: string | null, weight: number }} Entry  id null: an empty hook. */
@@ -17,6 +18,8 @@ import { content } from '../generated/content.js';
  * @property {import('./weather.js').Weather} weather  Its season too.
  * @property {import('./time.js').PartOfDay} partOfDay
  * @property {string | null} bait  The kind of bait on the hook, if any.
+ * @property {number} [water]  The water's temperature (D149).
+ * @property {boolean} [warming]  The water is warming: the air is warmer than it.
  */
 
 /**
@@ -100,7 +103,9 @@ export function listTable(list, kind, { moment, found = {} } = {}) {
  * @param {Moment} moment
  */
 export function preferenceFactor(fish, moment) {
-  return content.rules['fish-preferences'].factor ** preferencesMet(fish, moment).length;
+  // A spawning fish gathers where it lives (D149).
+  const spawning = spawningIn(fish, moment) ? content.rules.spawning.gather : 1;
+  return content.rules['fish-preferences'].factor ** preferencesMet(fish, moment).length * spawning;
 }
 
 /**

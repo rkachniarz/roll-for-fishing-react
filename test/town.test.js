@@ -9,6 +9,8 @@ import { content } from '../src/generated/content.js';
 import { deserialize, newGame, serialize } from '../src/engine/state.js';
 import { castLine, catchFish, lineAdjustable, setLineDepth, useAbility, valuesFor } from '../src/engine/game.js';
 import { lookStage, poolDue, tended } from '../src/engine/pool.js';
+import { spawningIn, stepWater } from '../src/engine/spawning.js';
+import { preferenceFactor } from '../src/engine/tables.js';
 import { offers } from '../src/engine/perks.js';
 import { arrive, choose, openSlide } from '../src/engine/events.js';
 import { clock, minutesToMorning } from '../src/engine/time.js';
@@ -556,6 +558,45 @@ test('a save from version 15 loads with no depth set (D148)', () => {
   const v15 = /** @type {any} */ ({ ...game(), version: 15 });
   delete v15.lineDepth;
   assert.equal(deserialize(serialize(v15)).lineDepth, null);
+});
+
+test('the water follows the air a day behind, and never freezes (D149)', () => {
+  const rules = content.rules.spawning;
+  const s = /** @type {GameState} */ ({ ...game(), water: 4 });
+  s.weather = { ...s.weather, temperature: 12 };
+  stepWater(s);
+  assert.ok(s.water > 4 && s.water < 4.5, `one step: ${s.water}`);
+  for (let i = 0; i < 48 * 3; i++) stepWater(s);
+  assert.ok(s.water > 11, `three days on: ${s.water}`);
+  s.weather = { ...s.weather, temperature: -10 };
+  for (let i = 0; i < 48 * 20; i++) stepWater(s);
+  assert.equal(s.water, rules.minWater, 'magical water never freezes');
+});
+
+test('spawning (D149): in its window and going its way; a spawning fish weighs more where it lives', () => {
+  const spring = { spawn: { min: 3, max: 5, trend: /** @type {const} */ ('warming') } };
+  const autumn = { spawn: { min: 3, max: 5, trend: /** @type {const} */ ('cooling') } };
+  assert.equal(spawningIn(spring, { water: 4, warming: true }), true);
+  assert.equal(spawningIn(spring, { water: 4, warming: false }), false, 'not while it cools');
+  assert.equal(spawningIn(autumn, { water: 4.4, warming: false }), true);
+  assert.equal(spawningIn(spring, { water: 7, warming: true }), false, 'too warm');
+  assert.equal(spawningIn({}, { water: 4, warming: true }), false);
+  // In the tables: the same fish, three times its weight while spawning.
+  const pike = content.fish['northern-pike'];
+  if (pike.spawn) {
+    const mid = Math.round((pike.spawn.min + pike.spawn.max) / 2);
+    const warming = pike.spawn.trend === 'warming';
+    const moment = { weather: game().weather, partOfDay: 'morning', bait: null };
+    const on = preferenceFactor(pike, { ...moment, water: mid, warming });
+    const off = preferenceFactor(pike, { ...moment, water: mid, warming: !warming });
+    assert.equal(on, off * content.rules.spawning.gather);
+  }
+});
+
+test('a save from version 16 loads with the water as warm as the air (D149)', () => {
+  const v16 = /** @type {any} */ ({ ...game(), version: 16 });
+  delete v16.water;
+  assert.equal(deserialize(serialize(v16)).water, v16.weather.temperature);
 });
 
 test('white things come up as their own tier, more for a rogue (R19.1)', () => {

@@ -19,7 +19,7 @@ import { knownKey, locationList } from './knowledge.js';
 import { fishWeight } from './fish.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 16;
+export const SAVE_VERSION = 17;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -109,6 +109,7 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {import('./fish.js').FishInstance[]} stewPot  Fish put in the stew since the last bowl (R19.4).
  * @property {import('./fish.js').FishInstance[]} aquarium  Fish in the room's aquarium (R17.5).
  * @property {import('./dive.js').Dive | null} dive  The Fighter's dive under way (R20.3).
+ * @property {number} water  The water's temperature on the weather's scale (D149), following the air's.
  * @property {'surface' | 'upper' | 'lower' | 'bottom' | null} lineDepth  The depth an adjustable line is set to
  *   (D148); it counts only while such a line is equipped.
  * @property {Record<string, true>} tasted  Species the player has eaten, raw or in a bowl, and so
@@ -190,6 +191,7 @@ export function newGame({ seed, character, month }) {
     dive: null,
     tasted: {},
     lineDepth: null,
+    water: weather.temperature,
   };
 }
 
@@ -328,6 +330,8 @@ const MIGRATIONS = {
   13: (save) => ({ ...save, streams: { ...save.streams, fight: deriveSeed(save.seed, 'fight') } }),
   // 15 -> 16: the line's depth (D148), unset.
   15: (save) => ({ ...save, lineDepth: null }),
+  // 16 -> 17: the water's temperature (D149), as warm as the air is now.
+  16: (save) => ({ ...save, water: save.weather?.temperature ?? content.rules.spawning.minWater }),
   // 14 -> 15: fish have a weight (D146), with a stream for their condition; each species' heaviest record is
   // its longest, as the formula weighs it.
   14: (save) => ({

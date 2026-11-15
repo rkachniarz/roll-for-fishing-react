@@ -152,11 +152,11 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | snow-trout | stew |
 | sterlet | stew |
 | stone-loach | stew |
-| strange-cod | stew, taste, tasteLine, fights, lengthWeight |
-| strange-giant-catfish | stew, taste, tasteLine, fights, lengthWeight |
-| strange-perch | stew, taste, tasteLine, fights, lengthWeight |
-| strange-shark | stew, taste, tasteLine, fights, lengthWeight |
-| strange-tilapia | stew, taste, tasteLine, fights, lengthWeight |
+| strange-cod | fights, lengthWeight, spawn, stew, taste, tasteLine |
+| strange-giant-catfish | fights, lengthWeight, spawn, stew, taste, tasteLine |
+| strange-perch | fights, lengthWeight, spawn, stew, taste, tasteLine |
+| strange-shark | fights, lengthWeight, spawn, stew, taste, tasteLine |
+| strange-tilapia | fights, lengthWeight, spawn, stew, taste, tasteLine |
 | taimen | stew |
 | tench | stew |
 | tiger-shovelnose-catfish | stew |
@@ -229,7 +229,7 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | look-underwater | description, cooldown |
 | sushi-enjoyer | description |
 
-## rules (5)
+## rules (6)
 
 | id | what is a placeholder |
 |---|---|
@@ -237,6 +237,7 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | depth | all of it |
 | fight-styles | all of it |
 | pool | all of it |
+| spawning | all of it |
 | stew | all of it |
 
 ## vendors (4)

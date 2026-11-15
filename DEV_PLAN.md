@@ -46,7 +46,7 @@ is where the others may lead.
   drawing the line with its four depths as radio buttons. The chosen depth gets +10 Fish Find and the others −10 (as
   the Heavyweight heavy weights), and the bottom adds a few % more non-fish. If the popup is too complicated, a bar
   button that cycles the depths instead.
-- [ ] **11.7** Spawning seasons: each fish's breeding season (gathering, breeding colours, perhaps closed seasons or a
+- [x] **11.7** Spawning seasons (D149): each fish's breeding season (gathering, breeding colours, perhaps closed seasons or a
   reward for letting a spawning fish go).
   *The owner's answers (2026-11-15):* spawning fish **gather**: likelier at the spots they spawn in, their schools
   showing as surface features more often (no breeding colours, release reward or closed season for now). **Weather-

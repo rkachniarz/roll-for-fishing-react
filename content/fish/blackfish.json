@@ -16,6 +16,12 @@
   "difficulty": -1,
   "rarity": "rare",
   "swims": "lower",
+  "spawn": {
+    "min": 3,
+    "max": 7,
+    "trend": "warming",
+    "from": "season: spring"
+  },
   "swim": {
     "cruise": 4,
     "rest": 0.6,

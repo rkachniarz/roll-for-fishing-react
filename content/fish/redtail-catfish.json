@@ -16,6 +16,12 @@
   "difficulty": 2,
   "rarity": "uncommon",
   "swims": "bottom",
+  "spawn": {
+    "min": 10,
+    "max": 14,
+    "trend": "warming",
+    "from": "season: flood"
+  },
   "swim": {
     "cruise": 5.1,
     "rest": 0.45,

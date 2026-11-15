@@ -16,6 +16,12 @@
   "difficulty": 2,
   "rarity": "epic",
   "swims": "lower",
+  "spawn": {
+    "min": 0,
+    "max": 3,
+    "trend": "cooling",
+    "from": "0-6 °C"
+  },
   "swim": {
     "cruise": 6.8,
     "rest": 0.1,
@@ -51,10 +57,11 @@
     ]
   },
   "placeholder": [
+    "fights",
+    "lengthWeight",
+    "spawn",
     "stew",
     "taste",
-    "tasteLine",
-    "fights",
-    "lengthWeight"
+    "tasteLine"
   ]
 }

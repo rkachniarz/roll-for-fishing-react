@@ -16,6 +16,12 @@
   "rarity": "epic",
   "endangered": true,
   "swims": "upper",
+  "spawn": {
+    "min": 3,
+    "max": 7,
+    "trend": "warming",
+    "from": "season: spring"
+  },
   "swim": {
     "cruise": 15,
     "rest": 0.1,

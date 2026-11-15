@@ -17,6 +17,12 @@
   "rarity": "epic",
   "endangered": true,
   "swims": "lower",
+  "spawn": {
+    "min": 12,
+    "max": 13,
+    "trend": "warming",
+    "from": "23.5-26.5 °C"
+  },
   "swim": {
     "cruise": 11.05,
     "rest": 0.1,

@@ -15,6 +15,12 @@
   "difficulty": 1,
   "rarity": "common",
   "swims": "bottom",
+  "spawn": {
+    "min": 0,
+    "max": 1,
+    "trend": "cooling",
+    "from": "0.6-1.7 °C"
+  },
   "swim": {
     "cruise": 5,
     "rest": 0.4,

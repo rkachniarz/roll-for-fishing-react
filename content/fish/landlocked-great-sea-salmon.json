@@ -15,6 +15,12 @@
   "difficulty": 1,
   "rarity": "epic",
   "swims": "upper",
+  "spawn": {
+    "min": 3,
+    "max": 5,
+    "trend": "cooling",
+    "from": "6-10 °C"
+  },
   "swim": {
     "cruise": 14,
     "rest": 0.1,

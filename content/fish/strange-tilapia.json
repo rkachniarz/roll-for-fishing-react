@@ -16,6 +16,12 @@
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "lower",
+  "spawn": {
+    "min": 10,
+    "max": 12,
+    "trend": "warming",
+    "from": "20-24 °C"
+  },
   "swim": {
     "cruise": 6,
     "rest": 0.5,
@@ -47,10 +53,11 @@
     ]
   },
   "placeholder": [
+    "fights",
+    "lengthWeight",
+    "spawn",
     "stew",
     "taste",
-    "tasteLine",
-    "fights",
-    "lengthWeight"
+    "tasteLine"
   ]
 }

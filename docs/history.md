@@ -443,3 +443,8 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   button on the action bar (the bar now takes statuses that aren't perks, with their own label and tooltip) and its
   window over the scene. A browser check plants the line in a save, opens the window and sets the bottom; the first
   screenshot showed the button's tooltip covering the window, so opening it hides the tooltip. Measured: 251 unit tests.
+- **11.7** Spawning (D149): three helpers looked up each species' spawning temperatures and seasons (78 with a
+  temperature, 30 with a season alone); a script turned them into windows on the scale. `src/engine/spawning.js`: the
+  water (stepped in `stepTime`), `spawningIn`, `spawningNow`; spawning fish weigh three times as much in
+  `preferenceFactor`, and their schools in the feature pick. A migration crashed on a file that wasn't a save, before
+  the loader could refuse it, so it reads the weather carefully. Measured: 254 unit tests, every browser check.

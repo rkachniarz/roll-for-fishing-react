@@ -24,6 +24,26 @@ Items with no note are left alone.
 
 Newest first.
 
+## Spawning (2026-11-15, D149, 11.7)
+
+- **About 2 °C a step of the weather's scale** is my reading of its words (cold 1-3, moderate 4-6, just right 7-9,
+  warm 10-12, hot 13-14). The water's floor is level 1, so a fish that spawns colder still (burbot, polar cod, icefish)
+  spawns at the coldest water there is.
+- **Where sources disagreed, the helpers picked one,** and each fish's `from` keeps the °C used: capelin (10-12.5 °C, out
+  of 2.8-13.7 by stock), channel catfish (18-27), pumpkinseed (16-18), rainbow trout (4-10), perch (FishBase's own
+  "7-8 °C", narrow; its records run 6-16), Arctic char (an autumn record, 5-6 °C).
+- **Single thresholds got 4 °C added** for the top of the window (roach, rudd, chub, wels, gudgeon, ide, weatherfish,
+  and others); and **the eel's** 20-24 °C is the Sargasso Sea's, which no lake in this world reaches, so it never spawns
+  here. That may be right.
+- **Known only by their season (25),** mostly tropical and rift fish: spring is warming water at 3-7, summer warming at
+  8-12, autumn cooling at 4-8, winter cooling at 1-3, the rains warming at 10-14. Marked by `from: "season: ..."`.
+- **No spawning at all (12):** the coelacanth, the stingray (both live-bearers), the goliath tigerfish, the yellow lab
+  cichlid, frontosa, the four-eyed fish, the mudskipper, the hillstream loach, peacock bass, mangrove jack, silver
+  arowana, tiger shovelnose: all year round, by the rains, or no record.
+- **Tripled** in the tables while spawning, schools too: a guess. With 110 species having a window, a fair few gather at
+  once in spring; the sim didn't measure it.
+- **Not shown anywhere,** as you asked; a perk or an item to read it is for later.
+
 ## The adjustable line (2026-11-15, D148, 11.6)
 
 - **How it's found:** in the common treasure at weight 2, like the other gear. Its name and text are placeholders.
