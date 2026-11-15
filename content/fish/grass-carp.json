@@ -16,6 +16,9 @@
   "rarity": "epic",
   "endangered": true,
   "swims": "upper",
+  "plants": [
+    "lives"
+  ],
   "spawn": {
     "min": 8,
     "max": 13,
@@ -26,7 +29,7 @@
     "cruise": 7.65,
     "rest": 0.1,
     "burst": 0.15,
-    "lunge": 3.0
+    "lunge": 3
   },
   "fights": "long-runner",
   "fighter": true,

@@ -15,6 +15,9 @@
   "difficulty": -1,
   "rarity": "common",
   "swims": "lower",
+  "plants": [
+    "spawns"
+  ],
   "spawn": {
     "min": 8,
     "max": 12,
@@ -25,7 +28,7 @@
     "cruise": 8,
     "rest": 0.1,
     "burst": 0.15,
-    "lunge": 3.0
+    "lunge": 3
   },
   "fights": "bottom-hugger",
   "stew": [

@@ -56,7 +56,7 @@ export function meets(state, need) {
     case 'level':
       return levelFor(state.character.xp) >= need.at;
     case 'luck':
-      return state.character.luck >= need.at;
+      return luckOf(state) >= need.at;
     case 'item':
       return countInBags(state, need.id) >= need.count;
     case 'flag':
@@ -488,4 +488,14 @@ function takeFromBags(state, id, count) {
   }
   state.bags = state.bags.filter((b) => b.count > 0);
   return count - left;
+}
+
+/**
+ * The character's Luck as events see it: its own, and a marimo's while one is
+ * in the bags (D150, folklore: the moss balls of Lake Akan bring luck).
+ * @param {GameState} state
+ */
+export function luckOf(state) {
+  const marimo = state.bags.some((b) => b.id === 'marimo') ? content.rules.plants?.luck ?? 0 : 0;
+  return state.character.luck + marimo;
 }

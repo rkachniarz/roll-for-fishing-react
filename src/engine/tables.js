@@ -20,7 +20,19 @@ import { spawningIn } from './spawning.js';
  * @property {string | null} bait  The kind of bait on the hook, if any.
  * @property {number} [water]  The water's temperature (D149).
  * @property {boolean} [warming]  The water is warming: the air is warmer than it.
+ * @property {boolean} [plants]  The spot has water plants (D150).
  */
+
+/**
+ * Does a spot have water plants (D150)? Any in its lists, or its location's.
+ * @param {any} loc
+ * @param {any} spot
+ */
+export function hasPlants(loc, spot) {
+  const plants = new Set(content.rules.plants?.plants ?? []);
+  const lists = [loc?.stuff, loc?.junk, loc?.treasure, spot?.stuff, spot?.junk, spot?.treasure];
+  return lists.some((l) => (l ?? []).some((/** @type {{ id?: string }} */ e) => e.id && plants.has(e.id)));
+}
 
 /**
  * One entry, picked by weight. Null if the table is empty.
@@ -66,7 +78,9 @@ function expand(list) {
 export function locationTable({ location, spot }, list, { moment, found = {} } = {}) {
   const loc = content.locations[location];
   const spotData = spot ? loc.spots.find((/** @type {{ id: string }} */ s) => s.id === spot) : null;
-  const table = listTable([...(loc[list] ?? []), ...(spotData?.[list] ?? [])], list === 'rift' ? 'fish' : list, { moment, found });
+  // A spot with water plants in its lists draws the fish that keep to them (D150).
+  const planted = list !== 'junk' && list !== 'treasure' && list !== 'stuff' && hasPlants(loc, spotData);
+  const table = listTable([...(loc[list] ?? []), ...(spotData?.[list] ?? [])], list === 'rift' ? 'fish' : list, { moment: moment && planted ? { ...moment, plants: true } : moment, found });
   if (list === 'junk' && loc.emptyHook > 0) table.push({ id: null, weight: loc.emptyHook });
   return table;
 }
@@ -104,8 +118,10 @@ export function listTable(list, kind, { moment, found = {} } = {}) {
  */
 export function preferenceFactor(fish, moment) {
   // A spawning fish gathers where it lives (D149).
-  const spawning = spawningIn(fish, moment) ? content.rules.spawning.gather : 1;
-  return content.rules['fish-preferences'].factor ** preferencesMet(fish, moment).length * spawning;
+  const spawning = spawningIn(fish, moment);
+  // Where plants grow, those that live among them, and those that spawn on them while they spawn (D150).
+  const plants = moment.plants && (fish.plants?.includes('lives') || (spawning && fish.plants?.includes('spawns'))) ? content.rules.plants.factor : 1;
+  return content.rules['fish-preferences'].factor ** preferencesMet(fish, moment).length * (spawning ? content.rules.spawning.gather : 1) * plants;
 }
 
 /**

@@ -26,7 +26,7 @@
     "cruise": 5,
     "rest": 0.4,
     "burst": 0.1,
-    "lunge": 2.0,
+    "lunge": 2,
     "wind": 2
   },
   "fights": "roller",

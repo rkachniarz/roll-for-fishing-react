@@ -25,7 +25,7 @@
     "cruise": 7,
     "rest": 0.5,
     "burst": 0.3,
-    "lunge": 4.0
+    "lunge": 4
   },
   "fights": "jumper",
   "stew": [

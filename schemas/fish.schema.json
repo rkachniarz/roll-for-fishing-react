@@ -29,6 +29,12 @@
       "type": "array",
       "items": { "$ref": "common.schema.json#/definitions/effect" }
     },
+    "plants": {
+      "description": "How it keeps to water plants (D150), from FishBase: `lives` among them, `spawns` on them. At a spot where plants grow, it is likelier: always if it lives there, while spawning (D149) if it spawns there.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "enum": ["lives", "spawns"] }
+    },
     "spawn": {
       "description": "When it spawns (D149): the water's temperature, on the weather's scale (0 extremely cold to 15 and up extremely hot; about 2 °C a step), from min to max, and whether it spawns as the water warms or cools. Spawning fish gather.",
       "type": "object",

@@ -26,7 +26,7 @@
     "cruise": 8,
     "rest": 0.35,
     "burst": 0.3,
-    "lunge": 4.0
+    "lunge": 4
   },
   "fights": "long-runner",
   "stew": [

@@ -20,7 +20,7 @@
     "cruise": 7,
     "rest": 0.5,
     "burst": 0.35,
-    "lunge": 3.0
+    "lunge": 3
   },
   "fights": "head-shaker",
   "stew": [

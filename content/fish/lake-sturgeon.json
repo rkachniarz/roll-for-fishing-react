@@ -26,7 +26,7 @@
     "cruise": 4.25,
     "rest": 0.25,
     "burst": 0.05,
-    "lunge": 3.0
+    "lunge": 3
   },
   "fights": "long-runner",
   "fighter": true,

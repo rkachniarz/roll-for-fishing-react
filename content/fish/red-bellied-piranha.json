@@ -16,6 +16,9 @@
   "difficulty": -1,
   "rarity": "rare",
   "swims": "lower",
+  "plants": [
+    "spawns"
+  ],
   "spawn": {
     "min": 10,
     "max": 14,

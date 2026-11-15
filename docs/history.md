@@ -448,3 +448,7 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   water (stepped in `stepTime`), `spawningIn`, `spawningNow`; spawning fish weigh three times as much in
   `preferenceFactor`, and their schools in the feature pick. A migration crashed on a file that wasn't a save, before
   the loader could refuse it, so it reads the weather carefully. Measured: 254 unit tests, every browser check.
+- **11.8** Plants and fish (D150): every species' FishBase page fetched and its plant sentences pulled out by a script,
+  then cut by hand; `plants` on 35 fish, `hasPlants` and the factor in `src/engine/tables.js`, `luckOf` in
+  `src/engine/events.js`. The spot-table test now counts the plants (the muskie lives among them). Measured: 255 unit
+  tests, every browser check.

@@ -287,8 +287,9 @@ function speciesSlot(state, id, foundHere) {
           ...(e.heaviest?.weight !== undefined
             ? [{ text: t('journal.heaviest', { weight: weightText(e.heaviest.weight), size: e.heaviest.size, place: recordPlace(e.heaviest) }) }]
             : []),
-          // How it fights, once caught (D141).
+          // How it fights, once caught (D141), and its water plants (D150).
           ...fightLines(id),
+          ...(fish.plants?.length ? [{ text: t(`journal.plants.${fish.plants.join('-')}`), tone: /** @type {const} */ ('flavor') }] : []),
           // How it eats, once the player has eaten one (D138).
           ...(state.tasted?.[id] ? tasteLines(id) : []),
         ],

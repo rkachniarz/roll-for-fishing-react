@@ -99,9 +99,10 @@ test("a spot's table follows the moment", () => {
   const weight = (/** @type {ReturnType<typeof moment>} */ m, /** @type {string} */ id) => locationTable(where, 'fish', { moment: m }).find((e) => e.id === id)?.weight;
   const plainTable = locationTable(where, 'fish');
   assert.equal(plainTable.find((e) => e.id === 'muskellunge')?.weight, 2, 'rank 14 of 14');
-  // Muskellunge: sunset, overcast, autumn, lure.
-  assert.equal(weight(moment('autumn', 15, 'sunset', 'lure'), 'muskellunge'), 2 * 16);
-  assert.equal(weight(moment('summer', 4, 'noon'), 'muskellunge'), 2);
+  // Muskellunge: sunset, overcast, autumn, lure; and it lives among water plants, which grow at the reedy shore (D150).
+  const plants = content.fish.muskellunge.plants?.includes('lives') ? content.rules.plants.factor : 1;
+  assert.equal(weight(moment('autumn', 15, 'sunset', 'lure'), 'muskellunge'), 2 * 16 * plants);
+  assert.equal(weight(moment('summer', 4, 'noon'), 'muskellunge'), 2 * plants);
 });
 
 // ---------- Fish ----------

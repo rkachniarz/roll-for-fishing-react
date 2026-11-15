@@ -135,6 +135,9 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "plants": [
+        "spawns"
+      ],
       "spawn": {
         "min": 5,
         "max": 8,
@@ -312,6 +315,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "upper",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 7,
         "max": 11,
@@ -370,6 +376,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 3,
         "max": 7,
@@ -484,6 +493,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 10,
         "max": 13,
@@ -541,6 +553,10 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "lower",
+      "plants": [
+        "lives",
+        "spawns"
+      ],
       "spawn": {
         "min": 8,
         "max": 10,
@@ -830,6 +846,9 @@ export const content = {
       "difficulty": 1,
       "rarity": "common",
       "swims": "bottom",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 0,
         "max": 1,
@@ -1002,6 +1021,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 8,
         "max": 10,
@@ -1063,6 +1085,9 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "lower",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 6,
         "max": 8,
@@ -1117,6 +1142,9 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "lower",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 3,
         "max": 9,
@@ -1452,6 +1480,9 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "bottom",
+      "plants": [
+        "spawns"
+      ],
       "spawn": {
         "min": 6,
         "max": 10,
@@ -1514,6 +1545,10 @@ export const content = {
       "rarity": "common",
       "endangered": true,
       "swims": "bottom",
+      "plants": [
+        "lives",
+        "spawns"
+      ],
       "spawn": {
         "min": 8,
         "max": 10,
@@ -1576,6 +1611,10 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "plants": [
+        "lives",
+        "spawns"
+      ],
       "spawn": {
         "min": 9,
         "max": 11,
@@ -1903,6 +1942,10 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
+      "plants": [
+        "lives",
+        "spawns"
+      ],
       "spawn": {
         "min": 7,
         "max": 9,
@@ -2291,6 +2334,9 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 14,
         "max": 16,
@@ -2473,6 +2519,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "upper",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 10,
         "max": 14,
@@ -2687,6 +2736,9 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 8,
         "max": 13,
@@ -2744,6 +2796,9 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "surface",
+      "plants": [
+        "spawns"
+      ],
       "spawn": {
         "min": 3,
         "max": 7,
@@ -3146,6 +3201,9 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "plants": [
+        "spawns"
+      ],
       "spawn": {
         "min": 5,
         "max": 7,
@@ -3780,6 +3838,9 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 6,
         "max": 8,
@@ -4111,6 +4172,9 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 4,
         "max": 8,
@@ -4225,6 +4289,10 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "lower",
+      "plants": [
+        "lives",
+        "spawns"
+      ],
       "spawn": {
         "min": 2,
         "max": 6,
@@ -4403,6 +4471,9 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
+      "plants": [
+        "spawns"
+      ],
       "spawn": {
         "min": 10,
         "max": 14,
@@ -4683,6 +4754,9 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "lower",
+      "plants": [
+        "spawns"
+      ],
       "spawn": {
         "min": 4,
         "max": 4,
@@ -4797,6 +4871,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 8,
         "max": 9,
@@ -4912,6 +4989,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "plants": [
+        "spawns"
+      ],
       "spawn": {
         "min": 10,
         "max": 14,
@@ -5024,6 +5104,10 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "plants": [
+        "lives",
+        "spawns"
+      ],
       "spawn": {
         "min": 6,
         "max": 8,
@@ -5078,6 +5162,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 8,
         "max": 14,
@@ -5134,6 +5221,10 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
+      "plants": [
+        "lives",
+        "spawns"
+      ],
       "spawn": {
         "min": 8,
         "max": 10,
@@ -5191,6 +5282,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
+      "plants": [
+        "spawns"
+      ],
       "spawn": {
         "min": 6,
         "max": 9,
@@ -5411,6 +5505,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "plants": [
+        "spawns"
+      ],
       "spawn": {
         "min": 8,
         "max": 12,
@@ -5815,6 +5912,9 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "plants": [
+        "spawns"
+      ],
       "spawn": {
         "min": 5,
         "max": 7,
@@ -6241,6 +6341,10 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "plants": [
+        "lives",
+        "spawns"
+      ],
       "spawn": {
         "min": 10,
         "max": 12,
@@ -6349,6 +6453,9 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "lower",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 3,
         "max": 7,
@@ -6582,6 +6689,9 @@ export const content = {
       "difficulty": 3,
       "rarity": "rare",
       "swims": "bottom",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 10,
         "max": 12,
@@ -6867,6 +6977,9 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "plants": [
+        "lives"
+      ],
       "spawn": {
         "min": 3,
         "max": 6,
@@ -14260,6 +14373,24 @@ export const content = {
       "equipped": {
         "rod": "stick"
       }
+    },
+    "plants": {
+      "id": "plants",
+      "placeholder": [
+        "factor"
+      ],
+      "plants": [
+        "canadian-waterweed",
+        "hornwort",
+        "quillwort",
+        "water-lobelia",
+        "marimo",
+        "floating-water-plantain",
+        "lace-plant",
+        "waterwheel-plant"
+      ],
+      "factor": 2,
+      "luck": 1
     },
     "pool": {
       "id": "pool",

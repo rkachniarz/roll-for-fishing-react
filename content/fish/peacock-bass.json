@@ -20,7 +20,7 @@
     "cruise": 8,
     "rest": 0.4,
     "burst": 0.45,
-    "lunge": 6.0
+    "lunge": 6
   },
   "fights": "head-shaker",
   "fighter": true,

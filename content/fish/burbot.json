@@ -15,6 +15,9 @@
   "difficulty": 1,
   "rarity": "common",
   "swims": "bottom",
+  "plants": [
+    "lives"
+  ],
   "spawn": {
     "min": 0,
     "max": 1,
@@ -25,7 +28,7 @@
     "cruise": 5,
     "rest": 0.4,
     "burst": 0.1,
-    "lunge": 2.0,
+    "lunge": 2,
     "wind": 1.5
   },
   "fights": "roller",

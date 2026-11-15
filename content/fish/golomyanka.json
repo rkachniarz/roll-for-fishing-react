@@ -24,7 +24,7 @@
     "cruise": 5,
     "rest": 0.3,
     "burst": 0.25,
-    "lunge": 3.0
+    "lunge": 3
   },
   "fights": "bottom-hugger",
   "stew": [

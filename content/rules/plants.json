@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/plants.schema.json",
+  "id": "plants",
+  "placeholder": [
+    "factor"
+  ],
+  "plants": [
+    "canadian-waterweed",
+    "hornwort",
+    "quillwort",
+    "water-lobelia",
+    "marimo",
+    "floating-water-plantain",
+    "lace-plant",
+    "waterwheel-plant"
+  ],
+  "factor": 2,
+  "luck": 1
+}

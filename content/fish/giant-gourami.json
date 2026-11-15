@@ -16,6 +16,9 @@
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "upper",
+  "plants": [
+    "lives"
+  ],
   "spawn": {
     "min": 14,
     "max": 16,
@@ -26,7 +29,7 @@
     "cruise": 5,
     "rest": 0.5,
     "burst": 0.25,
-    "lunge": 3.0
+    "lunge": 3
   },
   "fights": "long-runner",
   "stew": [

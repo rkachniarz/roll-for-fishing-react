@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plants and fish (D150)",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "placeholder": {
+      "$ref": "common.schema.json#/definitions/placeholder"
+    },
+    "id": {
+      "const": "plants"
+    },
+    "plants": {
+      "description": "The items that are water plants: a spot whose lists hold one has plants.",
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/definitions/id"
+      }
+    },
+    "factor": {
+      "description": "A plant fish's weight at a spot with plants is multiplied by this.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "luck": {
+      "description": "What a marimo in the bags adds to Luck, however many there are.",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "plants",
+    "factor",
+    "luck"
+  ],
+  "additionalProperties": false
+}

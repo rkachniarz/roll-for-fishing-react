@@ -9,12 +9,15 @@
   },
   "lengthWeight": {
     "a": 0.00955,
-    "b": 3.0,
+    "b": 3,
     "from": "Gymnocephalus cernua"
   },
   "difficulty": -1,
   "rarity": "common",
   "swims": "bottom",
+  "plants": [
+    "spawns"
+  ],
   "spawn": {
     "min": 6,
     "max": 9,

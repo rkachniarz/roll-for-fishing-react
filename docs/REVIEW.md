@@ -24,6 +24,19 @@ Items with no note are left alone.
 
 Newest first.
 
+## Plants and fish (2026-11-15, D150, 11.8)
+
+- **Read from FishBase's own sentences,** every species' page fetched and searched for vegetation, weed, macrophytes,
+  water plants; then cut by hand to the clear cases. **Left out:** the ruffe's "lives" (its page says it prefers water
+  *without* vegetation; it still spawns on weed), the bleak's and chub's spawning ("occasionally", "rarely"), the chub's
+  "lives", the brown trout, grayling, barramundi and archerfish (they keep under *overhanging* bank plants), the lumpfish
+  (sea-weed), the snow trout (it eats plants). **Added:** the stone loach, which "breeds among aquatic vegetation".
+- **Which plants doesn't matter,** only whether a spot has any: real fish keep to weed beds, not to one species of
+  plant. A marimo counts as a plant.
+- **Twice as likely** at a spot with plants is a guess. Most of the lake's spots have plants in their lists, so it
+  mostly shifts the balance between weed fish and others there; the open and deep water have fewer.
+- **The marimo's Luck counts only for events,** since that's all Luck does yet.
+
 ## Spawning (2026-11-15, D149, 11.7)
 
 - **About 2 °C a step of the weather's scale** is my reading of its words (cold 1-3, moderate 4-6, just right 7-9,

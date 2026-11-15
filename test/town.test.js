@@ -10,7 +10,8 @@ import { deserialize, newGame, serialize } from '../src/engine/state.js';
 import { castLine, catchFish, lineAdjustable, setLineDepth, useAbility, valuesFor } from '../src/engine/game.js';
 import { lookStage, poolDue, tended } from '../src/engine/pool.js';
 import { spawningIn, stepWater } from '../src/engine/spawning.js';
-import { preferenceFactor } from '../src/engine/tables.js';
+import { hasPlants, preferenceFactor } from '../src/engine/tables.js';
+import { luckOf } from '../src/engine/events.js';
 import { offers } from '../src/engine/perks.js';
 import { arrive, choose, openSlide } from '../src/engine/events.js';
 import { clock, minutesToMorning } from '../src/engine/time.js';
@@ -597,6 +598,22 @@ test('a save from version 16 loads with the water as warm as the air (D149)', ()
   const v16 = /** @type {any} */ ({ ...game(), version: 16 });
   delete v16.water;
   assert.equal(deserialize(serialize(v16)).water, v16.weather.temperature);
+});
+
+test('plants and fish (D150): where plants grow, a fish that lives among them is likelier; a marimo brings luck', () => {
+  const tench = content.fish.tench;
+  assert.ok(tench.plants?.includes('lives'), 'tench live in weed beds (FishBase)');
+  const moment = { weather: game().weather, partOfDay: 'morning', bait: null, water: 0, warming: true };
+  assert.equal(preferenceFactor(tench, { ...moment, plants: true }), preferenceFactor(tench, moment) * content.rules.plants.factor);
+  const roach = content.fish.roach;
+  assert.ok(roach.plants?.includes('spawns'));
+  // A spot with plants in its lists has plants.
+  const lake = content.locations.lake;
+  assert.ok(lake.spots.some((/** @type {any} */ s) => hasPlants(lake, s)));
+  // The marimo.
+  const s = /** @type {GameState} */ ({ ...game(), bags: [] });
+  assert.equal(luckOf(s), s.character.luck);
+  assert.equal(luckOf({ ...s, bags: [{ id: 'marimo', count: 3 }] }), s.character.luck + 1, 'one, however many');
 });
 
 test('white things come up as their own tier, more for a rogue (R19.1)', () => {

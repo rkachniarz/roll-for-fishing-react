@@ -55,7 +55,7 @@ is where the others may lead.
   marked placeholders. **The player isn't told**; a perk or an item may later let them know, and then the journal
   shows it. **The water's temperature** follows the air's with a lag, on the weather's own temperature scale; kept
   simple. The water is magical and never freezes.
-- [ ] **11.8** Plants and fish together: the plants on a spot draw certain fish (perch spawn on weed, tench live in
+- [x] **11.8** Plants and fish together (D150): the plants on a spot draw certain fish (perch spawn on weed, tench live in
   weed beds); marimo's luck from folklore.
   *The owner's answers (2026-11-15):* **a spot's own plants** (the ones in its lists) make the fish that like them
   likelier there; nothing for the player to do. Which fish like which plants **looked up** from what the real species
