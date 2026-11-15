@@ -85,7 +85,12 @@ is where the others may lead.
   time, weather and season, and a cast drawing from it. Touches the engine's core, the save, D63's rolling on the cast,
   and balance.
 
-**Where things stand (2026-11-14):** Phase 11 has begun: 11.1, taste (D138), and 11.13, the stocked pools and Look
+**Where things stand (2026-11-15, after a night's work):** 11.4 to 11.9 and 11.11 are in: weight from length (D146),
+how each fish swims (D147), the adjustable line (D148), spawning by the water's temperature (D149), plants and fish
+(D150), shoaling (D151), who eats whom (D152); every guess at the top of REVIEW.md. Still open in Phase 11: 11.10,
+folklore events, and 11.12, the simulation under the surface, neither answered yet.
+
+**Before that (2026-11-14):** Phase 11 began: 11.1, taste (D138), and 11.13, the stocked pools and Look
 Underwater (D139), are in, 11.2, endangered fish and the Conservationist (D140), and 11.3, how fish fight (D141), their guesses at the top of
 REVIEW.md; 11.4, weight from length, is next. Before it, Phase 10, the owner's brainstorm of the night, the town and the stew, was built
 overnight with placeholders (D123–D129; questions at the top of REVIEW.md): a town with an inn, a room and an

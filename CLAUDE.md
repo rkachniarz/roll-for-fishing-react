@@ -190,6 +190,16 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   `src/engine/pool.js` stocks and tops it up lazily, whenever it is looked at (`castLine`, the dive, the wizard's
   look, and `render` in `src/main.js` between casts), from the `pool` stream alone. A test that counts a pool must
   leave out the `wild` fish. The look itself (`looking` in `src/main.js`) is the page's, never saved.
+- **A fish's weight is worked out, never stored (D146):** `fishWeight` from its species' `lengthWeight` and its own
+  `condition`, rolled from the `condition` stream wherever a fish is rolled. Two fish of a different condition
+  don't stack (`sameFish`).
+- **The water has a temperature (`state.water`, D149),** stepped with the time in `stepTime`; who spawns is worked
+  out from it (`src/engine/spawning.js`) and reaches the tables through the moment (`momentOf`), like the
+  preferences. Plants at a spot (D150) reach them the same way (`hasPlants` in `src/engine/tables.js`).
+- **The action bar takes statuses that aren't perks (D148):** the adjustable line's depth button brings its own
+  `label` and `tip`; `useFromBar` sends `line-depth` to its window.
+- **The aquarium's meals happen on coming into the room (D152),** in `travel`, from the `tank` stream; never while
+  the player watches.
 - **A landed fish can still fight (D141):** `strikeLine` may return a cast in phase `fight` instead of `done`; the
   next strike, at or after `fightAt`, answers it. Anything that plays a cast (test helpers, the sim) must strike
   again then, and the page treats `fight` as a line still out. The scene is given it as `waiting`, then `bite`.
