@@ -439,3 +439,7 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
 - **11.5** Swimming (D147): `swim` on all 122 fish, written by a script from seven ways of swimming and per-species
   changes; `createShoal` (`src/scene/swim.js`) rests, bursts with the species' lunge, and winds. Measured: 249 unit
   tests, every browser check; the motion itself not seen.
+- **11.6** The adjustable line (D148): Fish Find per depth, `depthSources` in `valuesFor`, `setLineDepth`, a gear
+  button on the action bar (the bar now takes statuses that aren't perks, with their own label and tooltip) and its
+  window over the scene. A browser check plants the line in a save, opens the window and sets the bottom; the first
+  screenshot showed the button's tooltip covering the window, so opening it hides the tooltip. Measured: 251 unit tests.

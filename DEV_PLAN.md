@@ -38,7 +38,7 @@ is where the others may lead.
   a trout holding against the current, bleak darting), in `src/scene/swim.js`.
   *The owner's answers (2026-11-15):* everywhere fish swim (the aquarium, the dive, Look Underwater, the title, the
   shadows on the water); numbers per species, not a handful of kinds, unless that costs performance.
-- [ ] **11.6** Set your depth (the owner's idea): at some level a perk lets the player set their weights for one of
+- [x] **11.6** Set your depth (the owner's idea; D148): at some level a perk lets the player set their weights for one of
   the four depths (`swims`, D136), through Fish Find by depth (D137); the bottom depth also gives an extra chance of
   something that isn't a fish, being nearest the bottom. Needs a way to pick the depth, likely an action-bar button.
   *The owner's answers (2026-11-15):* **gear, not a perk:** a line in the line slot that can be adjusted, its tooltip

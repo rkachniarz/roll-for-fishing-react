@@ -24,6 +24,17 @@ Items with no note are left alone.
 
 Newest first.
 
+## The adjustable line (2026-11-15, D148, 11.6)
+
+- **How it's found:** in the common treasure at weight 2, like the other gear. Its name and text are placeholders.
+  Say if it should come from a vendor instead.
+- **The button sits on the action bar** after the abilities, with the depth's first letter (S, U, L, B; a dash when
+  unset). It isn't a perk, so it has no cooldown; it's greyed while the line is out.
+- **The window** draws the line as a dashed line with the four depths on it. There's no "unset" choice: once set, a
+  depth stays until another is picked. Say if you want a way back to "every depth alike".
+- **The numbers** are the plan's (+10, −10) and 5% for the bottom's extra non-fish, guesses.
+- **Kept when the line comes off:** the depth is remembered, and counts again when it goes back on.
+
 ## How each fish swims (2026-11-15, D147, 11.5)
 
 - **Claude's numbers, from what the fish do,** not looked up: there is no published "swimming speed in pixels".

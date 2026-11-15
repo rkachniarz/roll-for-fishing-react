@@ -101,6 +101,8 @@ export function tipFor(thing) {
   const lines = [];
   if (item.unique) lines.push({ text: t('tip.unique') });
   if (item.slot) lines.push({ text: t(`slot.${item.slot}`) });
+  // A line whose depth can be set (D148).
+  if (item.adjustable) lines.push({ text: t('tip.adjustable'), tone: 'good' });
   else if (item.category === 'consumable') lines.push({ text: t('tip.consumable') });
   for (const effect of item.effects ?? []) lines.push(effectLine(effect));
   if (item.bobber) lines.push({ text: t('effect.cosmetic') });

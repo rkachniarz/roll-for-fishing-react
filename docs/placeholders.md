@@ -172,10 +172,11 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | yellow-perch | stew |
 | zander | stew |
 
-## items (26)
+## items (27)
 
 | id | what is a placeholder |
 |---|---|
+| adjustable-line | name, flavor |
 | alchemists-vial | flavor |
 | calming-draught | all of it |
 | canadian-waterweed | flavor |
@@ -228,11 +229,12 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | look-underwater | description, cooldown |
 | sushi-enjoyer | description |
 
-## rules (4)
+## rules (5)
 
 | id | what is a placeholder |
 |---|---|
 | cold | all of it |
+| depth | all of it |
 | fight-styles | all of it |
 | pool | all of it |
 | stew | all of it |

@@ -14,7 +14,7 @@ import { diceFor } from './dice.js';
 import { content } from './generated/content.js';
 import { t, tParts } from './strings.js';
 import { newGame, levelFor } from './engine/state.js';
-import { MISS_LIMIT, cancelBuff, castLine, chooseTreasure, releaseFish, strikeLine, tick, tickBuffs, travel, useAbility, valuesFor } from './engine/game.js';
+import { DEPTHS, MISS_LIMIT, cancelBuff, castLine, chooseTreasure, lineAdjustable, releaseFish, setLineDepth, strikeLine, tick, tickBuffs, travel, useAbility, valuesFor } from './engine/game.js';
 import { abilityStatus, activePerks } from './engine/abilities.js';
 import { createActionBar } from './ui/actionbar.js';
 import { className, classes, generateName, rollStats } from './engine/character.js';
@@ -553,6 +553,11 @@ const actionBar = createActionBar($('actions'), useFromBar);
  */
 function useFromBar(id) {
   if (!state) return;
+  // Not an ability: the adjustable line's depth (D148).
+  if (id === 'line-depth') {
+    openDepthPicker();
+    return;
+  }
   // A look under the water takes the scene: not while a line is out on it (D139).
   if (id === 'look-underwater' && lineOut()) {
     showError($('errors'), t('error.ability.lineOut'));
@@ -591,7 +596,81 @@ function useFromBar(id) {
 /** The bar, from the state. */
 function renderActions() {
   if (!state) return;
-  actionBar.update(activePerks(state).map((id) => abilityStatus(/** @type {GameState} */ (state), id)));
+  const s = state;
+  /** @type {any[]} */
+  const statuses = activePerks(s).map((id) => abilityStatus(s, id));
+  // An adjustable line equipped: its depth button, after the abilities (D148).
+  if (lineAdjustable(s)) {
+    const depth = s.lineDepth;
+    statuses.push({
+      id: 'line-depth',
+      usable: !lineOut(),
+      cooldown: null,
+      lit: false,
+      armed: false,
+      working: true,
+      waiting: false,
+      needsLight: false,
+      label: depth ? t(`depth.${depth}.short`) : '–',
+      tip: {
+        title: t('depth.title'),
+        lines: [
+          { text: depth ? t('depth.setTo', { depth: t(`depth.${depth}`) }) : t('depth.unset') },
+          { text: t('depth.hint'), tone: 'flavor' },
+        ],
+      },
+    });
+  }
+  actionBar.update(statuses);
+}
+
+/**
+ * The adjustable line's depth (D148): a small window over the scene drawing
+ * the line from the float down, with its four depths as radio buttons.
+ */
+function openDepthPicker() {
+  if (!state || !lineAdjustable(state)) return;
+  if (lineOut()) {
+    showError($('errors'), t('error.depth.lineOut'));
+    return;
+  }
+  document.getElementById('depthPicker')?.remove();
+  // The button's tooltip would cover it.
+  hideTip();
+  const box = document.createElement('div');
+  box.id = 'depthPicker';
+  box.className = 'depth-picker';
+  box.setAttribute('role', 'dialog');
+  box.setAttribute('aria-label', t('depth.title'));
+  const title = document.createElement('h3');
+  title.textContent = t('depth.title');
+  const line = document.createElement('div');
+  line.className = 'depth-line';
+  for (const depth of DEPTHS) {
+    const label = document.createElement('label');
+    label.className = 'depth-spot';
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'line-depth';
+    input.id = `depth-${depth}`;
+    input.checked = state.lineDepth === depth;
+    input.addEventListener('change', () => {
+      changeState(setLineDepth(/** @type {GameState} */ (state), depth));
+      box.remove();
+    });
+    const span = document.createElement('span');
+    span.textContent = t(`depth.${depth}`);
+    label.append(input, span);
+    line.append(label);
+  }
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'depth-close';
+  close.textContent = t('depth.close');
+  close.addEventListener('click', () => box.remove());
+  box.append(title, line, close);
+  box.addEventListener('pointerdown', (e) => e.stopPropagation());
+  $('sceneWrap').append(box);
 }
 
 // ---------- The frame loop ----------
@@ -769,6 +848,8 @@ function describeEvent(e) {
     }
     case 'released':
       return tParts('log.released', { fish: fishLink(e.fish) });
+    case 'depth-set':
+      return [e.depth ? t('log.depth-set', { depth: t(`depth.${e.depth}`) }) : t('log.depth-cleared')];
     case 'conserved':
       // An endangered fish let go (D140): XP, or Luck, which is never shown (R5.2).
       return [e.xp ? t('log.conserved-xp', { xp: e.xp }) : t('log.conserved-luck')];

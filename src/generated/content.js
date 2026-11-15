@@ -6300,6 +6300,21 @@ export const content = {
     }
   },
   "items": {
+    "adjustable-line": {
+      "id": "adjustable-line",
+      "placeholder": [
+        "name",
+        "flavor"
+      ],
+      "category": "treasure",
+      "name": "item.adjustable-line.name",
+      "flavor": "item.adjustable-line.flavor",
+      "rarity": "uncommon",
+      "value": 3,
+      "slot": "line",
+      "adjustable": true,
+      "unique": true
+    },
     "alchemists-vial": {
       "id": "alchemists-vial",
       "category": "stuff",
@@ -9421,6 +9436,10 @@ export const content = {
         {
           "id": "paralysing-rod",
           "weight": 1
+        },
+        {
+          "id": "adjustable-line",
+          "weight": 2
         },
         {
           "id": "silk-line",
@@ -13325,6 +13344,13 @@ export const content = {
       "maxLuck": 2,
       "xpPercent": 25
     },
+    "depth": {
+      "id": "depth",
+      "placeholder": true,
+      "chosen": 10,
+      "others": -10,
+      "bottomNonFish": 5
+    },
     "fight-styles": {
       "id": "fight-styles",
       "placeholder": true,
@@ -15231,6 +15257,8 @@ export const strings = {
     "fish.yellow-perch.tasteLine": "Sweet, firm and mild; made for a lakeside fry.",
     "fish.zander.name": "Zander",
     "fish.zander.tasteLine": "Lean, white, tender and almost boneless.",
+    "item.adjustable-line.name": "Adjustable line",
+    "item.adjustable-line.flavor": "A sliding float and a string of shot: set it for the depth you want.",
     "item.alchemists-vial.name": "Alchemist's vial",
     "item.alchemists-vial.flavor": "A stoppered glass vial, empty, with a sigil scratched into the glass.",
     "item.ash-rod.name": "Ash rod",
@@ -16045,6 +16073,8 @@ export const placeholderKeys = [
   "fish.strange-perch.tasteLine",
   "fish.strange-shark.tasteLine",
   "fish.strange-tilapia.tasteLine",
+  "item.adjustable-line.flavor",
+  "item.adjustable-line.name",
   "item.alchemists-vial.flavor",
   "item.calming-draught.flavor",
   "item.calming-draught.name",

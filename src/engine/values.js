@@ -62,6 +62,12 @@ export const GAME_VALUES = {
   calmFish: { better: 'higher', base: 0 },
   /** Added to the roll on a fish that makes its manoeuvre (the Rogue's showmanship, D141). */
   manoeuvreBonus: { better: 'higher', base: 0 },
+  /** Fish Find for surface, upper and lower water fish (D148), as bottomFishFind is for bottom fish. */
+  surfaceFishFind: { better: 'higher', base: 0 },
+  upperFishFind: { better: 'higher', base: 0 },
+  lowerFishFind: { better: 'higher', base: 0 },
+  /** The chance, in percent, that a bite brings up something that isn't a fish instead (an adjustable line set to the bottom, D148). */
+  nonFishChance: { better: 'neither', base: 0, unit: '%' },
   /** The chance, in percent, that a fish is Greedy: something caught on it, junk or treasure (Greedy Fish, D106). */
   greedyChance: { better: 'higher', base: 0, unit: '%' },
   /** Above 0: treasure comes up two at a time, and the player keeps one (Fence, D106). */

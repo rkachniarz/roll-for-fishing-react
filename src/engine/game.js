@@ -105,10 +105,53 @@ export function valuesFor(state, extra = []) {
   for (const buff of state.buffs) sources.push({ label: buff.id, effects: buff.effects });
   // Class fish on this spot (D114).
   sources.push(...championSources(state));
+  // An adjustable line, set to a depth (D148).
+  sources.push(...depthSources(state));
   const values = deriveValues(state.character.stats, [...sources, ...extra]);
   // The cold and the night (R19.2, R19.3), which depend on the warmth the rest gives.
   const conditions = conditionSources(state, values.flat.warmth);
   return conditions.length ? deriveValues(state.character.stats, [...sources, ...conditions, ...extra]) : values;
+}
+
+/** The four depths fish keep to (D136), top to bottom. */
+export const DEPTHS = /** @type {const} */ (['surface', 'upper', 'lower', 'bottom']);
+
+/**
+ * Is the line in the line slot one whose depth can be set (D148)?
+ * @param {GameState} state
+ */
+export function lineAdjustable(state) {
+  const line = state.equipped.line;
+  return Boolean(line && content.items[line.id]?.adjustable);
+}
+
+/**
+ * What an adjustable line set to a depth gives (D148): Fish Find for that
+ * depth's fish, less for the others', and at the bottom a chance of something
+ * that isn't a fish. Nothing without the line, or with no depth set.
+ * @param {GameState} state
+ * @returns {import('./values.js').Source[]}
+ */
+export function depthSources(state) {
+  const depth = state.lineDepth;
+  if (!depth || !lineAdjustable(state)) return [];
+  const rules = content.rules.depth;
+  /** @type {import('./values.js').Effect[]} */
+  const effects = DEPTHS.map((d) => ({ value: `${d}FishFind`, add: d === depth ? rules.chosen : rules.others }));
+  if (depth === 'bottom' && rules.bottomNonFish) effects.push({ value: 'nonFishChance', add: rules.bottomNonFish });
+  return [{ label: `depth-${depth}`, effects }];
+}
+
+/**
+ * The player sets their adjustable line's depth (D148), or clears it. Not
+ * while the line is out (the page checks), as with equipment (D83).
+ * @param {GameState} state
+ * @param {typeof DEPTHS[number] | null} depth
+ * @returns {{ state: GameState, events: GameEvent[] }}
+ */
+export function setLineDepth(state, depth) {
+  if (!lineAdjustable(state) || (depth !== null && !DEPTHS.includes(depth)) || state.lineDepth === depth) return { state, events: [] };
+  return { state: { ...state, lineDepth: depth }, events: [{ type: 'depth-set', depth }] };
 }
 
 /**
@@ -309,16 +352,24 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
 
   // Abilities can make a fish certain, or rule one out (D96).
   const certain = values.flat.biteCertain;
-  // Fish Find by depth (D137): the same roll checked for bottom fish and for
-  // the rest, each with its own bonus; only fish whose check passes can bite.
-  // With neither bonus the two checks are one, and nothing else is drawn.
+  // Fish Find by depth (D137, D148): the same roll checked for each depth,
+  // each with its own bonus (and otherFishFind for all but the bottom); only
+  // fish whose check passes can bite. With no bonuses the checks are one, and
+  // nothing else is drawn.
   /** @param {number} bonus */
   const bites = (bonus) => certain > 0 || (certain === 0 && biteRoll + fishFind.total + bonus >= loc.biteThreshold);
-  const bottomBites = bites(values.flat.bottomFishFind);
-  const otherBites = bites(values.flat.otherFishFind);
+  const depthBites = {
+    surface: bites(values.flat.surfaceFishFind + values.flat.otherFishFind),
+    upper: bites(values.flat.upperFishFind + values.flat.otherFishFind),
+    lower: bites(values.flat.lowerFishFind + values.flat.otherFishFind),
+    bottom: bites(values.flat.bottomFishFind),
+  };
+  const allBite = Object.values(depthBites).every(Boolean);
   /** @param {string} species */
-  const canBite = (species) => (content.fish[species]?.swims === 'bottom' ? bottomBites : otherBites);
-  if (bottomBites || otherBites) {
+  const canBite = (species) => depthBites[/** @type {keyof typeof depthBites} */ (content.fish[species]?.swims ?? 'lower')] ?? depthBites.lower;
+  // Set to the bottom, now and then a bite is something else (D148); drawn only then.
+  const nonFish = values.flat.nonFishChance > 0 && dice.line.roll100() <= values.flat.nonFishChance;
+  if (Object.values(depthBites).some(Boolean) && !nonFish) {
     // A fish that got away here may come back: the more there are, the likelier (R3.6).
     const key = poolKey(state);
     const pool = (state.escaped[key] ?? []).filter((f) => canBite(f.species));
@@ -347,7 +398,7 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
         : feature?.fish
           ? listTable(feature.fish, 'fish', { moment: momentOf(state) })
           : locationTable(where, 'fish', { moment: momentOf(state) });
-      const species = pick(bottomBites && otherBites ? table : table.filter((e) => canBite(/** @type {string} */ (e.id))), dice.line);
+      const species = pick(allBite ? table : table.filter((e) => canBite(/** @type {string} */ (e.id))), dice.line);
       const minBand = feature?.minBand ? sizeBands().findIndex((/** @type {{ id: string }} */ b) => b.id === feature.minBand) : 0;
       if (species) {
         fish = rollFish(

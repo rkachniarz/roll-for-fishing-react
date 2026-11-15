@@ -1539,3 +1539,43 @@ button.perk[aria-pressed='true'] {
 .dive-die.missed {
   border-color: #ff5a5a;
 }
+
+/* The adjustable line's depth (D148): a small window over the scene, the line drawn from the float down with its
+   four depths as radio buttons along it. */
+.depth-picker {
+  position: absolute;
+  left: 12px;
+  bottom: calc(var(--button) + 20px);
+  z-index: 6;
+  min-width: calc(180px * var(--type));
+  padding: 10px 14px;
+  background: var(--pane-bg);
+  border: 2px solid var(--panel-edge);
+  color: var(--text);
+}
+
+.depth-picker h3 {
+  margin: 0 0 12px;
+  font-size: calc(16px * var(--type));
+}
+
+.depth-line {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 6px 0 6px 10px;
+  border-left: 2px dashed var(--muted);
+}
+
+.depth-spot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: -21px;
+  cursor: pointer;
+}
+
+.depth-close {
+  margin-top: 10px;
+}

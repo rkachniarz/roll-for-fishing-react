@@ -49,7 +49,7 @@ test("the spots hold the owner's spawn table (D101)", () => {
   // The prototype's junk and treasure, shared by both locations, with the placeholder gear (5.3, 5.7).
   const junk = result.all.tables['common-junk'].entries;
   assert.equal(junk.length, 38);
-  assert.equal(result.all.tables['common-treasure'].entries.length, 7 + 16 + 2, 'and the Heavyweight heavy weights (D137), the Paralysing rod (D141)');
+  assert.equal(result.all.tables['common-treasure'].entries.length, 7 + 16 + 3, "and the Heavyweight heavy weights (D137), the Paralysing rod (D141), the Adjustable line (D148)");
   assert.equal(junk.reduce((/** @type {number} */ t, /** @type {{ weight: number }} */ j) => t + j.weight, 0) + lake.emptyHook, 100);
 });
 

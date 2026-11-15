@@ -7,7 +7,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { content } from '../src/generated/content.js';
 import { deserialize, newGame, serialize } from '../src/engine/state.js';
-import { castLine, catchFish, useAbility, valuesFor } from '../src/engine/game.js';
+import { castLine, catchFish, lineAdjustable, setLineDepth, useAbility, valuesFor } from '../src/engine/game.js';
 import { lookStage, poolDue, tended } from '../src/engine/pool.js';
 import { offers } from '../src/engine/perks.js';
 import { arrive, choose, openSlide } from '../src/engine/events.js';
@@ -510,6 +510,52 @@ test('every fish has its own way of swimming (D147)', () => {
   assert.ok(pike.rest > bleak.rest && pike.lunge > bleak.lunge, 'a pike waits and lunges');
   assert.ok(bleak.cruise > pike.cruise, 'bleak dart about');
   assert.ok((content.fish['mainland-eel'].swim.wind ?? 0) > 0, 'an eel winds');
+});
+
+test('the adjustable line (D148): a depth set counts only with the line on; its fish bite more, the bottom brings up more that is not fish', () => {
+  const base = game();
+  const without = setLineDepth(base, 'bottom');
+  assert.equal(without.state, base, 'no adjustable line, no depth');
+  const lined = /** @type {GameState} */ ({ ...base, equipped: { ...base.equipped, line: { id: 'adjustable-line', count: 1 } } });
+  assert.ok(lineAdjustable(lined));
+  const set = setLineDepth(lined, 'surface');
+  assert.equal(set.state.lineDepth, 'surface');
+  assert.deepEqual(set.events, [{ type: 'depth-set', depth: 'surface' }]);
+  const rules = content.rules.depth;
+  const v = valuesFor(set.state).flat;
+  assert.equal(v.surfaceFishFind, rules.chosen);
+  assert.equal(v.bottomFishFind, rules.others);
+  assert.equal(v.nonFishChance, 0);
+  // Taken off, the depth no longer counts.
+  const off = /** @type {GameState} */ ({ ...set.state, equipped: { ...set.state.equipped, line: null } });
+  assert.equal(valuesFor(off).flat.surfaceFishFind, 0);
+  // Over many casts at the reedy shore, surface and upper fish come more when set to the surface than to the bottom.
+  /** @param {'surface' | 'bottom'} depth */
+  const share = (depth) => {
+    let top = 0;
+    let fish = 0;
+    let other = 0;
+    for (let seed = 1; seed <= 300; seed++) {
+      const g = /** @type {GameState} */ ({ ...game({ seed }), equipped: { ...game({ seed }).equipped, line: { id: 'adjustable-line', count: 1 } }, lineDepth: depth, features: [], champions: {}, escaped: {}, pools: {} });
+      g.pools = { 'lake/reedy-shore': { season: 'x', size: 0, at: g.time } };
+      const line = castLine(g, 0).cast.line;
+      if (line?.kind === 'fish') {
+        fish++;
+        if (['surface', 'upper'].includes(content.fish[line.fish.species].swims)) top++;
+      } else other++;
+    }
+    return { top: top / Math.max(1, fish), other };
+  };
+  const surface = share('surface');
+  const bottom = share('bottom');
+  assert.ok(surface.top > bottom.top, `surface fish: ${surface.top} set high, ${bottom.top} set low`);
+  assert.ok(bottom.other > surface.other, `not fish: ${bottom.other} at the bottom, ${surface.other} at the surface`);
+});
+
+test('a save from version 15 loads with no depth set (D148)', () => {
+  const v15 = /** @type {any} */ ({ ...game(), version: 15 });
+  delete v15.lineDepth;
+  assert.equal(deserialize(serialize(v15)).lineDepth, null);
 });
 
 test('white things come up as their own tier, more for a rogue (R19.1)', () => {

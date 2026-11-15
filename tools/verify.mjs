@@ -954,6 +954,26 @@ await check('look underwater: the wizard sees the pool (D139)', DESKTOP, '?seed=
   await page.screenshot({ path: 'dist/verify/pool-shadows.png' });
 });
 
+await check('the adjustable line: a depth button and its picker (D148)', DESKTOP, '?seed=1', async (page) => {
+  await page.evaluate(() => {
+    const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
+    save.equipped.line = { id: 'adjustable-line', count: 1 };
+    localStorage.setItem('roll-for-fishing:save:1', JSON.stringify(save));
+  });
+  await page.reload();
+  await loadFrom(page, 1);
+  await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+  const button = page.locator('[data-ability="line-depth"]');
+  report('the adjustable line: its button is on the bar', (await button.count()) === 1);
+  await button.click();
+  report('the adjustable line: the picker shows four depths', (await page.locator('#depthPicker input[type=radio]').count()) === 4);
+  await page.screenshot({ path: 'dist/verify/depth-picker.png' });
+  await page.click('#depth-bottom');
+  report('the adjustable line: set to the bottom, the picker closes', (await page.locator('#depthPicker').count()) === 0);
+  report('the adjustable line: the log says so', (await logText(page)).includes('You set your line for the Bottom.'), await logText(page));
+  report('the adjustable line: the button shows the depth', ((await button.textContent()) ?? '').includes('B'), (await button.textContent()) ?? '');
+});
+
 await check('a Tiny fish on the hook', PHONE, '?dev&seed=1', async (page) => {
   await openBench(page);
   await page.click('text=Tiny fish');

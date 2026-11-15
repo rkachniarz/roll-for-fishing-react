@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Setting the line's depth (D148): what an adjustable line gives at the depth it is set to",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "placeholder": {
+      "$ref": "common.schema.json#/definitions/placeholder"
+    },
+    "id": {
+      "const": "depth"
+    },
+    "chosen": {
+      "description": "Fish Find for fish of the depth the line is set to.",
+      "type": "integer"
+    },
+    "others": {
+      "description": "Fish Find for fish of the other depths.",
+      "type": "integer"
+    },
+    "bottomNonFish": {
+      "description": "Set to the bottom, the chance in a hundred that a bite brings up something that isn't a fish instead.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    }
+  },
+  "required": [
+    "id",
+    "chosen",
+    "others",
+    "bottomNonFish"
+  ],
+  "additionalProperties": false
+}

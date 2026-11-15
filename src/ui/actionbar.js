@@ -73,7 +73,8 @@ export function createActionBar(root, onUse) {
     el.dataset.ability = id;
     const icon = document.createElement('span');
     icon.className = 'action-icon';
-    icon.textContent = initials(t(content.perks[id].name));
+    // A perk's initials, or a gear button's own short label (the line's depth, D148).
+    icon.textContent = content.perks[id] ? initials(t(content.perks[id].name)) : '';
     const key = document.createElement('span');
     key.className = 'action-key';
     key.textContent = String(i + 1);
@@ -83,7 +84,7 @@ export function createActionBar(root, onUse) {
 
     const tip = () => {
       const s = shown.find((x) => x.id === id);
-      if (s) showTip(el, abilityTip(s));
+      if (s) showTip(el, s.tip ?? abilityTip(s));
     };
     el.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && tip());
     el.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && hideTip());
@@ -131,7 +132,12 @@ export function createActionBar(root, onUse) {
         const cd = /** @type {HTMLElement} */ (el.querySelector('.action-cd'));
         const text = s.cooldown ? left(s.cooldown) : '';
         if (cd.textContent !== text) cd.textContent = text;
-        el.setAttribute('aria-label', `${t(content.perks[s.id].name)}${text ? `, ${t('ability.cooling', { left: text })}` : ''}`);
+        // A gear button (D148) brings its own label and tooltip.
+        if (s.label !== undefined) {
+          const icon = /** @type {HTMLElement} */ (el.querySelector('.action-icon'));
+          if (icon.textContent !== s.label) icon.textContent = s.label;
+        }
+        el.setAttribute('aria-label', `${s.tip?.title ?? t(content.perks[s.id].name)}${text ? `, ${t('ability.cooling', { left: text })}` : ''}`);
       }
       root.hidden = statuses.length === 0;
       return !root.hidden;
