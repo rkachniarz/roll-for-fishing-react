@@ -30,6 +30,8 @@ const EPIC = RARITIES.indexOf('epic');
  * @property {boolean} [bent]  Made bigger and rarer by Bend Reality (D106); never stacks with a plain twin.
  * @property {boolean} [greedy]  Only on the fish in a log line: it had something caught on it (D106).
  * @property {string} [champion]  A class fish's class (D114), kept in the bucket; it goes when the fish is let go.
+ * @property {number} [condition]  How fat or thin it is against its species' length-weight formula, 0.9 to 1.1
+ *   (D146): its weight is that formula times this. Left out, 1.
  */
 
 /** The size bands, smallest first. */
@@ -43,11 +45,12 @@ export function sizeBands() {
  * @param {{ fishSizeBand: number, fishDifficulty: number, fishXp: number }} values
  *   The game values as they apply to this fish (already totalled).
  * @param {Dice} dice  The `line` stream.
- * @param {{ minBand?: number }} [options]  A size band it is at least (a big
- *   fish under the surface, R14).
+ * @param {{ minBand?: number, condition?: Dice }} [options]  A size band it is at least (a big
+ *   fish under the surface, R14); the `condition` stream, for how fat or thin it is (D146). Without it, the
+ *   fish is as the formula says.
  * @returns {FishInstance}
  */
-export function rollFish(species, values, dice, { minBand = 0 } = {}) {
+export function rollFish(species, values, dice, { minBand = 0, condition } = {}) {
   const s = content.fish[species];
   const bands = sizeBands();
   const subname = s.subnames?.length ? dice.getRandomNumber(0, s.subnames.length - 1) : -1;
@@ -66,7 +69,30 @@ export function rollFish(species, values, dice, { minBand = 0 } = {}) {
     difficulty,
     xp: Math.max(difficulty + values.fishXp, 1),
     rarity: fishRarity(s.rarity, bands[band].rarity),
+    ...(condition ? { condition: rollCondition(condition) } : {}),
   };
+}
+
+/**
+ * How fat or thin a fish is (D146): within the spread in rules/weight.json either side of the formula, in
+ * hundredths.
+ * @param {Dice} dice  The `condition` stream.
+ */
+export function rollCondition(dice) {
+  const spread = content.rules.weight?.spread ?? 10;
+  return dice.getRandomNumber(100 - spread, 100 + spread) / 100;
+}
+
+/**
+ * A fish's weight in grams (D146): its species' published length-weight formula, W = a × L^b (FishBase; grams
+ * and centimetres), times its condition. Null for a species with no formula.
+ * @param {{ species: string, size: number, condition?: number }} fish
+ * @returns {number | null}
+ */
+export function fishWeight(fish) {
+  const lw = content.fish[fish.species]?.lengthWeight;
+  if (!lw) return null;
+  return lw.a * fish.size ** lw.b * (fish.condition ?? 1);
 }
 
 /**
@@ -142,5 +168,13 @@ export function fishNameKeys(fish) {
  * @param {FishInstance} b
  */
 export function sameFish(a, b) {
-  return a.species === b.species && a.subname === b.subname && a.size === b.size && a.band === b.band && Boolean(a.bent) === Boolean(b.bent) && a.champion === b.champion;
+  return (
+    a.species === b.species &&
+    a.subname === b.subname &&
+    a.size === b.size &&
+    a.band === b.band &&
+    Boolean(a.bent) === Boolean(b.bent) &&
+    a.champion === b.champion &&
+    (a.condition ?? 1) === (b.condition ?? 1)
+  );
 }

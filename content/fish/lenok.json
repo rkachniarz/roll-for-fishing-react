@@ -7,6 +7,11 @@
     "min": 30,
     "max": 75
   },
+  "lengthWeight": {
+    "a": 0.00912,
+    "b": 3.07,
+    "from": "Brachymystax lenok"
+  },
   "difficulty": 0,
   "rarity": "rare",
   "swims": "upper",

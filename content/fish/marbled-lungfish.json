@@ -8,6 +8,11 @@
     "min": 60,
     "max": 200
   },
+  "lengthWeight": {
+    "a": 0.0038,
+    "b": 3.1,
+    "from": "Protopterus aethiopicus"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "swims": "bottom",

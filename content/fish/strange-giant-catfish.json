@@ -8,6 +8,11 @@
     "min": 100,
     "max": 300
   },
+  "lengthWeight": {
+    "a": 0.00631,
+    "b": 2.99,
+    "from": "Silurus glanis"
+  },
   "difficulty": 3,
   "rarity": "epic",
   "swims": "bottom",
@@ -38,6 +43,7 @@
     "stew",
     "taste",
     "tasteLine",
-    "fights"
+    "fights",
+    "lengthWeight"
   ]
 }

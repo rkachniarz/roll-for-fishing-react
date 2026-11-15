@@ -7,6 +7,11 @@
     "min": 8,
     "max": 20
   },
+  "lengthWeight": {
+    "a": 0.00562,
+    "b": 3.12,
+    "from": "Alburnus alburnus"
+  },
   "difficulty": -2,
   "rarity": "common",
   "swims": "surface",

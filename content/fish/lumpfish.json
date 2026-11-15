@@ -8,6 +8,11 @@
     "min": 20,
     "max": 60
   },
+  "lengthWeight": {
+    "a": 0.0263,
+    "b": 2.99,
+    "from": "Cyclopterus lumpus"
+  },
   "difficulty": 0,
   "rarity": "rare",
   "swims": "bottom",

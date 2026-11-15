@@ -7,6 +7,11 @@
     "min": 30,
     "max": 75
   },
+  "lengthWeight": {
+    "a": 0.00891,
+    "b": 3.1,
+    "from": "Hoplias malabaricus"
+  },
   "difficulty": 0,
   "rarity": "epic",
   "swims": "lower",

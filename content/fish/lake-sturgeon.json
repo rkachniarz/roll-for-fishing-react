@@ -7,6 +7,11 @@
     "min": 80,
     "max": 220
   },
+  "lengthWeight": {
+    "a": 0.00269,
+    "b": 3.19,
+    "from": "Acipenser fulvescens"
+  },
   "difficulty": 3,
   "rarity": "epic",
   "endangered": true,

@@ -7,6 +7,11 @@
     "min": 10,
     "max": 45
   },
+  "lengthWeight": {
+    "a": 0.01349,
+    "b": 3.04,
+    "from": "Carassius carassius"
+  },
   "difficulty": -1,
   "rarity": "common",
   "swims": "lower",

@@ -8,6 +8,11 @@
     "min": 15,
     "max": 35
   },
+  "lengthWeight": {
+    "a": 0.01445,
+    "b": 2.99,
+    "from": "Cyphotilapia frontosa"
+  },
   "difficulty": -1,
   "rarity": "rare",
   "swims": "bottom",

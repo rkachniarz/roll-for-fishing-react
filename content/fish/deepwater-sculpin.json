@@ -7,6 +7,11 @@
     "min": 5,
     "max": 23
   },
+  "lengthWeight": {
+    "a": 0.00603,
+    "b": 3.15,
+    "from": "Myoxocephalus thompsonii"
+  },
   "difficulty": -1,
   "rarity": "uncommon",
   "swims": "bottom",

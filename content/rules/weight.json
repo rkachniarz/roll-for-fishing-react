@@ -1,0 +1,5 @@
+{
+  "$schema": "../../schemas/weight.schema.json",
+  "id": "weight",
+  "spread": 10
+}

@@ -8,6 +8,11 @@
     "min": 15,
     "max": 60
   },
+  "lengthWeight": {
+    "a": 0.01778,
+    "b": 2.99,
+    "from": "Oreochromis niloticus"
+  },
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "lower",
@@ -39,6 +44,7 @@
     "stew",
     "taste",
     "tasteLine",
-    "fights"
+    "fights",
+    "lengthWeight"
   ]
 }

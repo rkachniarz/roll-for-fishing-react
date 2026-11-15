@@ -5,7 +5,7 @@
 
 import { content } from '../generated/content.js';
 import { t } from '../strings.js';
-import { fishNameKeys } from '../engine/fish.js';
+import { fishNameKeys, fishWeight } from '../engine/fish.js';
 import { RARITY_COLOURS, iconName, paintIcon } from '../scene/icons.js';
 import { bindTip } from './tooltip.js';
 import { effectLine } from './effects.js';
@@ -87,7 +87,8 @@ export function tipFor(thing) {
       icon: iconName({ kind: 'fish', id: thing.fish.species }),
       lines: [
         { text: t('tip.fish') },
-        { text: t('tip.size', { size: thing.fish.size }) },
+        // Its length, and its weight (D146).
+        { text: fishWeight(thing.fish) === null ? t('tip.size', { size: thing.fish.size }) : t('tip.sizeWeight', { size: thing.fish.size, weight: weightText(fishWeight(thing.fish)) }) },
         ...(content.fish[thing.fish.species]?.endangered && statusShown() ? [{ text: t('tip.endangered'), tone: /** @type {const} */ ('bad') }] : []),
         // What it adds to the stew, and gives eaten raw (R19.4, R21.1).
         ...(content.fish[thing.fish.species]?.stew?.length ? [{ text: t('tip.stew', { effects: effectsText(content.fish[thing.fish.species].stew) }), tone: /** @type {const} */ ('good') }] : []),
@@ -166,6 +167,17 @@ export function slot(thing, count = 1, hint) {
  */
 export function effectsText(effects) {
   return effects.map((e) => effectLine(e).text).join(', ');
+}
+
+/**
+ * A weight as words (D146): grams under a kilo, then kilos to one place, whole kilos from ten.
+ * @param {number | null} grams
+ */
+export function weightText(grams) {
+  if (grams === null) return '';
+  if (grams < 1000) return t('weight.grams', { n: Math.max(1, Math.round(grams)) });
+  const kg = grams / 1000;
+  return t('weight.kilos', { n: kg < 10 ? kg.toFixed(1) : String(Math.round(kg)) });
 }
 
 /**

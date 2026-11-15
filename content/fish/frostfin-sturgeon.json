@@ -7,6 +7,11 @@
     "min": 80,
     "max": 200
   },
+  "lengthWeight": {
+    "a": 0.00257,
+    "b": 3.28,
+    "from": "Acipenser baerii"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "swims": "bottom",

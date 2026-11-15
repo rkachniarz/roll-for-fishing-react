@@ -6,6 +6,11 @@
     "min": 40,
     "max": 130
   },
+  "lengthWeight": {
+    "a": 0.00095,
+    "b": 3.17,
+    "from": "Anguilla anguilla"
+  },
   "difficulty": 1,
   "rarity": "uncommon",
   "endangered": true,

@@ -7,6 +7,11 @@
     "min": 10,
     "max": 40
   },
+  "lengthWeight": {
+    "a": 0.00776,
+    "b": 3.16,
+    "from": "Scardinius erythrophthalmus"
+  },
   "difficulty": -1,
   "rarity": "common",
   "swims": "surface",

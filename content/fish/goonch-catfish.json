@@ -8,6 +8,11 @@
     "min": 60,
     "max": 200
   },
+  "lengthWeight": {
+    "a": 0.00646,
+    "b": 3.02,
+    "from": "Bagarius yarrelli"
+  },
   "difficulty": 2,
   "rarity": "uncommon",
   "swims": "bottom",

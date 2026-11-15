@@ -8,6 +8,11 @@
     "min": 40,
     "max": 90
   },
+  "lengthWeight": {
+    "a": 0.00417,
+    "b": 3.1,
+    "from": "Osteoglossum bicirrhosum"
+  },
   "difficulty": 1,
   "rarity": "epic",
   "swims": "surface",

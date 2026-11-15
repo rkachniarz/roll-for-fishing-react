@@ -8,6 +8,11 @@
     "min": 30,
     "max": 88
   },
+  "lengthWeight": {
+    "a": 0.03162,
+    "b": 3,
+    "from": "Piaractus brachypomus"
+  },
   "difficulty": 1,
   "rarity": "epic",
   "swims": "surface",

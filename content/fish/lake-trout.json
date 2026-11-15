@@ -7,6 +7,11 @@
     "min": 40,
     "max": 120
   },
+  "lengthWeight": {
+    "a": 0.00832,
+    "b": 3.02,
+    "from": "Salvelinus namaycush"
+  },
   "difficulty": 1,
   "rarity": "uncommon",
   "swims": "lower",

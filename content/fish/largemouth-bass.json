@@ -7,6 +7,11 @@
     "min": 25,
     "max": 75
   },
+  "lengthWeight": {
+    "a": 0.01047,
+    "b": 3.08,
+    "from": "Micropterus salmoides"
+  },
   "difficulty": 0,
   "rarity": "rare",
   "swims": "lower",

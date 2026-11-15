@@ -7,6 +7,11 @@
     "min": 25,
     "max": 80
   },
+  "lengthWeight": {
+    "a": 0.00589,
+    "b": 3.15,
+    "from": "Leuciscus idus"
+  },
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "upper",

@@ -7,6 +7,11 @@
     "min": 30,
     "max": 100
   },
+  "lengthWeight": {
+    "a": 0.00912,
+    "b": 2.97,
+    "from": "Barbus barbus"
+  },
   "difficulty": 1,
   "rarity": "uncommon",
   "swims": "bottom",

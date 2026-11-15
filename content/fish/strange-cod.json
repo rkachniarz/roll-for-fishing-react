@@ -8,6 +8,11 @@
     "min": 40,
     "max": 180
   },
+  "lengthWeight": {
+    "a": 0.00676,
+    "b": 3.08,
+    "from": "Gadus morhua"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "swims": "lower",
@@ -43,6 +48,7 @@
     "stew",
     "taste",
     "tasteLine",
-    "fights"
+    "fights",
+    "lengthWeight"
   ]
 }

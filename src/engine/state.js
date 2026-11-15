@@ -16,9 +16,10 @@ import { weatherAt } from './weather.js';
 import { clock, seasonOfMonth, startTime } from './time.js';
 import { emptyEquipment } from './equipment.js';
 import { knownKey, locationList } from './knowledge.js';
+import { fishWeight } from './fish.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 14;
+export const SAVE_VERSION = 15;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -28,9 +29,10 @@ export const SAVE_VERSION = 14;
  * events: the event meter and which event it picks · abilities: dice an
  * ability rolls when used (D96) · champions: class fish appearing and acting (D114) ·
  * taste: a raw fish sitting badly, and which fish a bowl of stew tastes of (D138) ·
- * pool: the fish a spot's pool is stocked with (D139) · fight: a fish's manoeuvre on the line (D141).
+ * pool: the fish a spot's pool is stocked with (D139) · fight: a fish's manoeuvre on the line (D141) ·
+ * condition: how fat or thin each fish is, for its weight (D146).
  */
-export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions', 'taste', 'pool', 'fight'];
+export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions', 'taste', 'pool', 'fight', 'condition'];
 
 /**
  * @typedef {import('./fish.js').FishInstance & { tries?: number, wild?: boolean, looks?: number }} PoolFish  A fish
@@ -112,14 +114,16 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  */
 
 /**
- * @typedef {{ size: number, location: string, spot: string | null, time: number,
- *   weather: { season: string, cell: number } }} BookRecord  A record, with where, when and in what weather.
+ * @typedef {{ size: number, weight?: number, location: string, spot: string | null, time: number,
+ *   weather: { season: string, cell: number } }} BookRecord  A record, with where, when and in what weather;
+ *   `weight` in grams (D146).
  *
  * @typedef {Object} BookEntry  One species in the book.
  * @property {number} caught
  * @property {number} totalSize  For the average.
  * @property {BookRecord} smallest
  * @property {BookRecord} largest
+ * @property {BookRecord} [heaviest]  By weight (D146): the fattest fish can beat the longest.
  * @property {number} mostTries  The most times one fish got away before it was caught (R3.6).
  */
 
@@ -319,6 +323,21 @@ const MIGRATIONS = {
   }),
   // 13 -> 14: fish fight their own way (D141), with a stream for their manoeuvres.
   13: (save) => ({ ...save, streams: { ...save.streams, fight: deriveSeed(save.seed, 'fight') } }),
+  // 14 -> 15: fish have a weight (D146), with a stream for their condition; each species' heaviest record is
+  // its longest, as the formula weighs it.
+  14: (save) => ({
+    ...save,
+    streams: { ...save.streams, condition: deriveSeed(save.seed, 'condition') },
+    book: {
+      ...save.book,
+      fish: Object.fromEntries(
+        Object.entries(save.book?.fish ?? {}).map(([species, e]) => {
+          const weight = fishWeight({ species, size: e.largest.size });
+          return [species, { ...e, heaviest: { ...e.largest, ...(weight !== null ? { weight } : {}) } }];
+        }),
+      ),
+    },
+  }),
 };
 
 /** @param {GameState} state */

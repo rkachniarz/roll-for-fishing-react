@@ -7,6 +7,11 @@
     "min": 25,
     "max": 60
   },
+  "lengthWeight": {
+    "a": 0.01096,
+    "b": 3,
+    "from": "Catostomus commersonii"
+  },
   "difficulty": 0,
   "rarity": "common",
   "swims": "bottom",

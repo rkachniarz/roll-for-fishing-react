@@ -8,7 +8,7 @@ import { t } from '../strings.js';
 import { levelFor } from '../engine/state.js';
 import { className } from '../engine/character.js';
 import { iconName, paintIcon } from '../scene/icons.js';
-import { bagTab, effectsText, hoursText, link, rarityColour, slot, tasteLines } from './links.js';
+import { bagTab, effectsText, hoursText, link, rarityColour, slot, tasteLines, weightText } from './links.js';
 import { bowlOf, canTrade, costStatus, offersFor } from '../engine/barter.js';
 import { vendorStatus } from '../engine/schedule.js';
 import { bindTip } from './tooltip.js';
@@ -243,6 +243,16 @@ function unknownItemSlot(id) {
 }
 
 /**
+ * Where a record was set: the spot's name, or the location's.
+ * @param {{ location: string, spot: string | null }} record
+ */
+function recordPlace(record) {
+  const loc = content.locations[record.location];
+  const spot = loc?.spots?.find((/** @type {{ id: string }} */ s) => s.id === record.spot);
+  return t(spot?.name ?? loc?.name ?? record.location);
+}
+
+/**
  * How a species fights, for its journal entry (D141): its style's line.
  * @param {string} id
  * @returns {import('./tooltip.js').Tip['lines']}
@@ -273,6 +283,10 @@ function speciesSlot(state, id, foundHere) {
         icon: iconName({ kind: 'fish', id }),
         lines: [
           { text: t('journal.entry', { caught: e.caught, smallest: e.smallest.size, largest: e.largest.size, average: Math.round(e.totalSize / e.caught) }) },
+          // The heaviest by weight, where and when (D146).
+          ...(e.heaviest?.weight !== undefined
+            ? [{ text: t('journal.heaviest', { weight: weightText(e.heaviest.weight), size: e.heaviest.size, place: recordPlace(e.heaviest) }) }]
+            : []),
           // How it fights, once caught (D141).
           ...fightLines(id),
           // How it eats, once the player has eaten one (D138).

@@ -8,6 +8,11 @@
     "min": 50,
     "max": 200
   },
+  "lengthWeight": {
+    "a": 0.00912,
+    "b": 3.11,
+    "from": "Perca fluviatilis"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "swims": "lower",
@@ -39,6 +44,7 @@
     "stew",
     "taste",
     "tasteLine",
-    "fights"
+    "fights",
+    "lengthWeight"
   ]
 }

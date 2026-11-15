@@ -8,6 +8,11 @@
     "min": 15,
     "max": 32
   },
+  "lengthWeight": {
+    "a": 0.00537,
+    "b": 3.18,
+    "from": "Anableps anableps"
+  },
   "difficulty": -1,
   "rarity": "rare",
   "swims": "surface",

@@ -431,3 +431,8 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   `fightFor` in `src/engine/game.js` drawing from a new `fight` stream (save version 14). Three test helpers and
   the sim strike again when a cast goes to `fight`. The scene sees the fight as a wait, then a bite, so it needed no
   change. Measured: 244 unit tests; the sim's catch rates unchanged within noise (it strikes fast).
+- **11.4** Weight (D146): the scientific names from the owner's reference lists, mapped back through D103's renames;
+  117 species looked up on FishBase by three helpers in parallel, reading the summary pages with curl so the numbers
+  weren't retyped; every fish checked at its largest size for anything absurd (the electric eel was). A `condition`
+  stream (save version 15), `fishWeight` in `src/engine/fish.js`, the heaviest record in the book. Seeded tests that
+  compared streams around the pool's stocking now leave the condition stream out too. Measured: 248 unit tests.

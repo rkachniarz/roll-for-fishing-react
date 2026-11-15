@@ -7,6 +7,11 @@
     "min": 50,
     "max": 140
   },
+  "lengthWeight": {
+    "a": 0.00933,
+    "b": 3.09,
+    "from": "Ctenopharyngodon idella"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "endangered": true,

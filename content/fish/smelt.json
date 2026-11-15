@@ -7,6 +7,11 @@
     "min": 10,
     "max": 30
   },
+  "lengthWeight": {
+    "a": 0.00417,
+    "b": 3.18,
+    "from": "Osmerus eperlanus"
+  },
   "difficulty": -1,
   "rarity": "common",
   "swims": "upper",

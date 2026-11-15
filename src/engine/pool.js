@@ -80,7 +80,7 @@ export function tendPool(state, extra = []) {
     for (let i = 0; i < n; i++) {
       const species = pick(table, dice.pool);
       if (!species?.id) continue;
-      const fish = rollFish(/** @type {string} */ (species.id), { fishSizeBand: values.fishSizeBand, fishDifficulty: values.fishDifficulty, fishXp: values.fishXp }, dice.pool);
+      const fish = rollFish(/** @type {string} */ (species.id), { fishSizeBand: values.fishSizeBand, fishDifficulty: values.fishDifficulty, fishXp: values.fishXp }, dice.pool, { condition: dice.condition });
       pool.push({ ...fish, wild: true });
     }
   };

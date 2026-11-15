@@ -7,6 +7,11 @@
     "min": 20,
     "max": 80
   },
+  "lengthWeight": {
+    "a": 0.00871,
+    "b": 3.03,
+    "from": "Salmo trutta"
+  },
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "lower",

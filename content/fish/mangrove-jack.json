@@ -8,6 +8,11 @@
     "min": 30,
     "max": 120
   },
+  "lengthWeight": {
+    "a": 0.01514,
+    "b": 2.96,
+    "from": "Lutjanus argentimaculatus"
+  },
   "difficulty": 1,
   "rarity": "epic",
   "swims": "lower",

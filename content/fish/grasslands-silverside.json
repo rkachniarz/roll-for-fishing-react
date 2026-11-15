@@ -6,6 +6,11 @@
     "min": 20,
     "max": 50
   },
+  "lengthWeight": {
+    "a": 0.00525,
+    "b": 3.05,
+    "from": "Odontesthes bonariensis"
+  },
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "surface",

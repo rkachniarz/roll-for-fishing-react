@@ -29,6 +29,17 @@
       "type": "array",
       "items": { "$ref": "common.schema.json#/definitions/effect" }
     },
+    "lengthWeight": {
+      "description": "Its weight from its length (D146): W = a × L^b, grams and centimetres of total length, from FishBase. `from`: the species the numbers are for, when a relative's were borrowed or for the record.",
+      "type": "object",
+      "properties": {
+        "a": { "type": "number", "exclusiveMinimum": 0 },
+        "b": { "type": "number", "minimum": 2, "maximum": 4 },
+        "from": { "type": "string" }
+      },
+      "required": ["a", "b"],
+      "additionalProperties": false
+    },
     "fights": {
       "description": "How it fights on the line (D141): its style in rules/fight-styles.json tilts the roll by how the player struck.",
       "enum": ["jumper", "head-shaker", "long-runner", "bottom-hugger", "roller"]

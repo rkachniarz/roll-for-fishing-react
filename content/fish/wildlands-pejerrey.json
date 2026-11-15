@@ -6,6 +6,11 @@
     "min": 20,
     "max": 45
   },
+  "lengthWeight": {
+    "a": 0.0055,
+    "b": 3.06,
+    "from": "Odontesthes hatcheri"
+  },
   "difficulty": -1,
   "rarity": "uncommon",
   "swims": "surface",

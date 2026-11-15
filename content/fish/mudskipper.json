@@ -8,6 +8,11 @@
     "min": 8,
     "max": 25
   },
+  "lengthWeight": {
+    "a": 0.01072,
+    "b": 3,
+    "from": "Periophthalmus barbarus"
+  },
   "difficulty": -1,
   "rarity": "uncommon",
   "swims": "surface",

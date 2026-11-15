@@ -7,6 +7,11 @@
     "min": 10,
     "max": 30
   },
+  "lengthWeight": {
+    "a": 0.00468,
+    "b": 3.21,
+    "from": "Coregonus albula"
+  },
   "difficulty": -1,
   "rarity": "common",
   "swims": "upper",

@@ -73,7 +73,7 @@ test('a new game: the Lake, the stick, a morning in year 1, every stream seeded'
   assert.equal(s.weather.season, c.season, "the weather is the start's season");
   assert.deepEqual(game(), s, 'the same seed, the same start');
   assert.equal(s.character.luck, 0, 'Luck starts at 0 (R6.7)');
-  assert.equal(Object.keys(s.streams).length, 14);
+  assert.equal(Object.keys(s.streams).length, 15);
   assert.deepEqual(s.features, []);
 });
 
@@ -260,7 +260,7 @@ test('"next n casts" buffs spend a charge when the line goes out, and cover that
   const out = castLine(state, 0);
   assert.equal(out.checkpoint.buffs.length, 0, 'the charge is spent, even if the cast is voided');
   // The pool is stocked as the first line goes out (D139), from its own stream.
-  assert.deepEqual({ ...out.checkpoint.streams, pool: 0 }, { ...state.streams, pool: 0 }, 'and nothing else changed in the checkpoint');
+  assert.deepEqual({ ...out.checkpoint.streams, pool: 0, condition: 0 }, { ...state.streams, pool: 0, condition: 0 }, 'and nothing else changed in the checkpoint');
   assert.ok(out.checkpoint.escaped[POOL].length >= 5);
   if (out.cast.line.kind === 'fish') assert.ok(out.cast.line.player.mods.some((m) => m.label === 'stew'));
 });

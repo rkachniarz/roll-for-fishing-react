@@ -8,6 +8,11 @@
     "min": 50,
     "max": 150
   },
+  "lengthWeight": {
+    "a": 0.01072,
+    "b": 3.02,
+    "from": "Hydrocynus goliath"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "swims": "upper",

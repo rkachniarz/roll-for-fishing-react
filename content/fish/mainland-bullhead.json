@@ -7,6 +7,11 @@
     "min": 6,
     "max": 18
   },
+  "lengthWeight": {
+    "a": 0.00871,
+    "b": 3.13,
+    "from": "Cottus gobio"
+  },
   "difficulty": -2,
   "rarity": "common",
   "swims": "bottom",

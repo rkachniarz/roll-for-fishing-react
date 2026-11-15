@@ -8,6 +8,11 @@
     "min": 60,
     "max": 300
   },
+  "lengthWeight": {
+    "a": 0.01023,
+    "b": 3.06,
+    "from": "Urogymnus polylepis"
+  },
   "difficulty": 3,
   "rarity": "rare",
   "endangered": true,

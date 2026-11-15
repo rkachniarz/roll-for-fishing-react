@@ -7,6 +7,11 @@
     "min": 20,
     "max": 60
   },
+  "lengthWeight": {
+    "a": 0.00912,
+    "b": 3.03,
+    "from": "Salvelinus fontinalis"
+  },
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "upper",

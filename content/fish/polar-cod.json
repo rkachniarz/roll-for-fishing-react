@@ -8,6 +8,11 @@
     "min": 10,
     "max": 40
   },
+  "lengthWeight": {
+    "a": 0.00457,
+    "b": 3.16,
+    "from": "Boreogadus saida"
+  },
   "difficulty": -1,
   "rarity": "rare",
   "swims": "upper",

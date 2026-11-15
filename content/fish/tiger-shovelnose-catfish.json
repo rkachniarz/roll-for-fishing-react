@@ -8,6 +8,11 @@
     "min": 40,
     "max": 100
   },
+  "lengthWeight": {
+    "a": 0.00794,
+    "b": 3.07,
+    "from": "Pseudoplatystoma fasciatum"
+  },
   "difficulty": 1,
   "rarity": "rare",
   "swims": "bottom",

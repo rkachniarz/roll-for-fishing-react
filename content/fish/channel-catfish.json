@@ -7,6 +7,11 @@
     "min": 35,
     "max": 120
   },
+  "lengthWeight": {
+    "a": 0.00525,
+    "b": 3.13,
+    "from": "Ictalurus punctatus"
+  },
   "difficulty": 1,
   "rarity": "uncommon",
   "swims": "bottom",

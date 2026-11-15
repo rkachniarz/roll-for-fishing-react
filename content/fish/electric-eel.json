@@ -8,6 +8,11 @@
     "min": 80,
     "max": 250
   },
+  "lengthWeight": {
+    "a": 0.00095,
+    "b": 3.17,
+    "from": "Anguilla anguilla"
+  },
   "difficulty": 3,
   "rarity": "epic",
   "swims": "bottom",

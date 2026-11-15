@@ -7,6 +7,11 @@
     "min": 20,
     "max": 70
   },
+  "lengthWeight": {
+    "a": 0.00813,
+    "b": 3.09,
+    "from": "Thymallus arcticus"
+  },
   "difficulty": 0,
   "rarity": "rare",
   "swims": "upper",

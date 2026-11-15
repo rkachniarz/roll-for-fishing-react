@@ -8,6 +8,11 @@
     "min": 40,
     "max": 150
   },
+  "lengthWeight": {
+    "a": 0.00977,
+    "b": 3.0,
+    "from": "Lates calcarifer"
+  },
   "difficulty": 2,
   "rarity": "uncommon",
   "swims": "lower",

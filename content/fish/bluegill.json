@@ -7,6 +7,11 @@
     "min": 8,
     "max": 30
   },
+  "lengthWeight": {
+    "a": 0.0138,
+    "b": 3.13,
+    "from": "Lepomis macrochirus"
+  },
   "difficulty": -1,
   "rarity": "uncommon",
   "swims": "lower",

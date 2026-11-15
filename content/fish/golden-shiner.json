@@ -7,6 +7,11 @@
     "min": 8,
     "max": 25
   },
+  "lengthWeight": {
+    "a": 0.01023,
+    "b": 3.07,
+    "from": "Notemigonus crysoleucas"
+  },
   "difficulty": -1,
   "rarity": "uncommon",
   "swims": "upper",

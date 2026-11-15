@@ -7,7 +7,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { content } from '../src/generated/content.js';
 import { deserialize, newGame, serialize } from '../src/engine/state.js';
-import { castLine, useAbility, valuesFor } from '../src/engine/game.js';
+import { castLine, catchFish, useAbility, valuesFor } from '../src/engine/game.js';
 import { lookStage, poolDue, tended } from '../src/engine/pool.js';
 import { offers } from '../src/engine/perks.js';
 import { arrive, choose, openSlide } from '../src/engine/events.js';
@@ -31,6 +31,12 @@ function game({ day = 0, hour = 10, seed = 1, classId = 'fish-fighter' } = {}) {
 }
 
 /** @param {string} species @param {string} rarity */
+/** Catches a fish into the bucket and the book (catchFish), with room made. @param {GameState} s @param {any} f */
+const castThenCatch = (s, f) => {
+  const next = structuredClone({ ...s, bucket: [] });
+  catchFish(next, f, 16);
+  return next;
+};
 const fish = (species, rarity, size = 30) => ({ species, subname: -1, band: 2, size, difficulty: 1, xp: 1, rarity });
 
 test('the clock has a weekday, and the first day is a Monday (R17.6)', () => {
@@ -277,7 +283,7 @@ test('the pool: stocked with 2d6+3 fish the first time it is looked at, from its
   assert.ok(pool.length >= 5 && pool.length <= 15, String(pool.length));
   assert.ok(pool.every((f) => f.wild && !f.tries));
   assert.equal(stocked.pools['lake/reedy-shore'].size, pool.length);
-  assert.deepEqual({ ...stocked.streams, pool: 0 }, { ...s.streams, pool: 0 }, 'only its own stream moves');
+  assert.deepEqual({ ...stocked.streams, pool: 0, condition: 0 }, { ...s.streams, pool: 0, condition: 0 }, 'only its own streams move: the fish, and how fat each is (D146)');
   assert.equal(tended(stocked), stocked, 'kept from then on');
   assert.deepEqual(tended(s), stocked, 'the same game stocks the same fish');
   assert.equal(castLine(s, 0).checkpoint.escaped['lake/reedy-shore'].length, pool.length, 'a cast looks too');
@@ -447,6 +453,52 @@ test('the Rogue shows off on a fish that makes its move; the rod and the draught
     return;
   }
   assert.fail('no manoeuvre in 400 casts');
+});
+
+test('weight (D146): every fish has a formula; a fish weighs it times its condition, within the spread', async () => {
+  const { fishWeight, rollCondition } = await import('../src/engine/fish.js');
+  for (const f of Object.values(content.fish)) assert.ok(f.lengthWeight?.a > 0 && f.lengthWeight.b > 2, f.id);
+  const pike = content.fish['northern-pike'].lengthWeight;
+  assert.equal(fishWeight({ species: 'northern-pike', size: 80 }), pike.a * 80 ** pike.b);
+  assert.equal(fishWeight({ species: 'northern-pike', size: 80, condition: 1.1 }), pike.a * 80 ** pike.b * 1.1);
+  const w = fishWeight({ species: 'northern-pike', size: 130 });
+  assert.ok(w > 10000 && w < 20000, `a 130 cm pike weighs ${w} g`);
+  const dice = diceFor(createRng(5));
+  for (let i = 0; i < 200; i++) {
+    const c = rollCondition(dice);
+    assert.ok(c >= 0.9 && c <= 1.1, String(c));
+  }
+});
+
+test('weight (D146): the fish on a cast has a condition from its own stream; the book keeps the heaviest', () => {
+  const s = game();
+  for (let seed = 1; seed <= 60; seed++) {
+    const out = castLine({ ...game({ seed }), features: [], champions: {} }, 0);
+    if (out.cast.line?.kind !== 'fish') continue;
+    const fish = out.cast.line.fish;
+    assert.ok(fish.condition >= 0.9 && fish.condition <= 1.1, 'rolled when the line goes out');
+    break;
+  }
+  // The book: a fat fish beats a longer, thin one for the heaviest.
+  let state = /** @type {GameState} */ (structuredClone(s));
+  const long = { ...fish('northern-pike', 'rare', 100), condition: 0.9 };
+  const fat = { ...fish('northern-pike', 'rare', 98), condition: 1.1 };
+  state = castThenCatch(state, long);
+  state = castThenCatch(state, fat);
+  const entry = state.book.fish['northern-pike'];
+  assert.equal(entry.largest.size, 100);
+  assert.equal(entry.heaviest?.size, 98);
+});
+
+test('a save from version 14 loads, the heaviest of each record its longest (D146)', () => {
+  const v14 = /** @type {any} */ ({ ...game(), version: 14 });
+  v14.streams = Object.fromEntries(Object.entries(v14.streams).filter(([k]) => k !== 'condition'));
+  const record = { size: 90, location: 'lake', spot: 'reedy-shore', time: 0, weather: { season: 'summer', cell: 0 } };
+  v14.book = { ...v14.book, fish: { 'northern-pike': { caught: 1, totalSize: 90, smallest: record, largest: record, mostTries: 0 } } };
+  const s = deserialize(serialize(v14));
+  assert.equal(s.streams.condition, game().streams.condition);
+  assert.equal(s.book.fish['northern-pike'].heaviest?.size, 90);
+  assert.ok((s.book.fish['northern-pike'].heaviest?.weight ?? 0) > 0);
 });
 
 test('white things come up as their own tier, more for a rogue (R19.1)', () => {

@@ -8,6 +8,11 @@
     "min": 15,
     "max": 33
   },
+  "lengthWeight": {
+    "a": 0.02138,
+    "b": 3.16,
+    "from": "Pygocentrus nattereri"
+  },
   "difficulty": -1,
   "rarity": "rare",
   "swims": "lower",

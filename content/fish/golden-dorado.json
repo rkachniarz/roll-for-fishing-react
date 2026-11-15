@@ -7,6 +7,11 @@
     "min": 40,
     "max": 100
   },
+  "lengthWeight": {
+    "a": 0.01,
+    "b": 3.09,
+    "from": "Salminus brasiliensis"
+  },
   "difficulty": 1,
   "rarity": "epic",
   "endangered": true,

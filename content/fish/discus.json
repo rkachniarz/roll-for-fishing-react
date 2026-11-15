@@ -8,6 +8,11 @@
     "min": 10,
     "max": 20
   },
+  "lengthWeight": {
+    "a": 0.02692,
+    "b": 3.03,
+    "from": "Symphysodon aequifasciatus"
+  },
   "difficulty": -2,
   "rarity": "epic",
   "swims": "lower",

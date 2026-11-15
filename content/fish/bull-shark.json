@@ -8,6 +8,11 @@
     "min": 150,
     "max": 350
   },
+  "lengthWeight": {
+    "a": 0.00501,
+    "b": 3.06,
+    "from": "Carcharhinus leucas"
+  },
   "difficulty": 3,
   "rarity": "epic",
   "swims": "upper",

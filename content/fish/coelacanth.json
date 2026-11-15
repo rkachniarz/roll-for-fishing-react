@@ -8,6 +8,11 @@
     "min": 100,
     "max": 200
   },
+  "lengthWeight": {
+    "a": 0.01202,
+    "b": 3.03,
+    "from": "Latimeria chalumnae"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "endangered": true,

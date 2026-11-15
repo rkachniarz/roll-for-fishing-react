@@ -8,6 +8,11 @@
     "min": 30,
     "max": 75
   },
+  "lengthWeight": {
+    "a": 0.01148,
+    "b": 3.07,
+    "from": "Cichla ocellaris"
+  },
   "difficulty": 0,
   "rarity": "rare",
   "swims": "lower",

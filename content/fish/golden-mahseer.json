@@ -8,6 +8,11 @@
     "min": 40,
     "max": 150
   },
+  "lengthWeight": {
+    "a": 0.00933,
+    "b": 3,
+    "from": "Tor putitora"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "endangered": true,

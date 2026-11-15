@@ -7,6 +7,11 @@
     "min": 15,
     "max": 45
   },
+  "lengthWeight": {
+    "a": 0.01349,
+    "b": 3.05,
+    "from": "Carassius gibelio"
+  },
   "difficulty": -1,
   "rarity": "common",
   "swims": "bottom",

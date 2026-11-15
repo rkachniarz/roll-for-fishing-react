@@ -8,6 +8,11 @@
     "min": 100,
     "max": 300
   },
+  "lengthWeight": {
+    "a": 0.01096,
+    "b": 2.94,
+    "from": "Arapaima gigas"
+  },
   "difficulty": 3,
   "rarity": "epic",
   "swims": "surface",

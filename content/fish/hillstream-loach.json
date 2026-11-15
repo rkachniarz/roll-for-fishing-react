@@ -8,6 +8,11 @@
     "min": 4,
     "max": 8
   },
+  "lengthWeight": {
+    "a": 0.00891,
+    "b": 3.07,
+    "from": "Beaufortia kweichowensis"
+  },
   "difficulty": -2,
   "rarity": "rare",
   "swims": "bottom",

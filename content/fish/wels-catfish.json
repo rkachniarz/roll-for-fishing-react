@@ -7,6 +7,11 @@
     "min": 80,
     "max": 270
   },
+  "lengthWeight": {
+    "a": 0.00631,
+    "b": 2.99,
+    "from": "Silurus glanis"
+  },
   "difficulty": 3,
   "rarity": "rare",
   "swims": "bottom",

@@ -13,6 +13,11 @@ export const content = {
         "min": 100,
         "max": 300
       },
+      "lengthWeight": {
+        "a": 0.01096,
+        "b": 2.94,
+        "from": "Arapaima gigas"
+      },
       "difficulty": 3,
       "rarity": "epic",
       "swims": "surface",
@@ -54,6 +59,11 @@ export const content = {
         "min": 10,
         "max": 30
       },
+      "lengthWeight": {
+        "a": 0.0166,
+        "b": 3,
+        "from": "Toxotes jaculatrix"
+      },
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
@@ -92,6 +102,11 @@ export const content = {
       "size": {
         "min": 40,
         "max": 110
+      },
+      "lengthWeight": {
+        "a": 0.00468,
+        "b": 3.14,
+        "from": "Leuciscus aspius"
       },
       "difficulty": 1,
       "rarity": "rare",
@@ -133,6 +148,11 @@ export const content = {
       "size": {
         "min": 30,
         "max": 100
+      },
+      "lengthWeight": {
+        "a": 0.00912,
+        "b": 2.97,
+        "from": "Barbus barbus"
       },
       "difficulty": 1,
       "rarity": "uncommon",
@@ -179,6 +199,11 @@ export const content = {
         "min": 40,
         "max": 150
       },
+      "lengthWeight": {
+        "a": 0.00977,
+        "b": 3,
+        "from": "Lates calcarifer"
+      },
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "lower",
@@ -218,6 +243,11 @@ export const content = {
       "size": {
         "min": 15,
         "max": 40
+      },
+      "lengthWeight": {
+        "a": 0.01072,
+        "b": 3.06,
+        "from": "Pomoxis nigromaculatus"
       },
       "difficulty": -1,
       "rarity": "uncommon",
@@ -260,6 +290,11 @@ export const content = {
         "min": 8,
         "max": 33
       },
+      "lengthWeight": {
+        "a": 0.00871,
+        "b": 3.1,
+        "from": "Dallia pectoralis"
+      },
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
@@ -299,6 +334,11 @@ export const content = {
       "size": {
         "min": 8,
         "max": 20
+      },
+      "lengthWeight": {
+        "a": 0.00562,
+        "b": 3.12,
+        "from": "Alburnus alburnus"
       },
       "difficulty": -2,
       "rarity": "common",
@@ -340,6 +380,11 @@ export const content = {
         "min": 8,
         "max": 30
       },
+      "lengthWeight": {
+        "a": 0.0138,
+        "b": 3.13,
+        "from": "Lepomis macrochirus"
+      },
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
@@ -380,6 +425,11 @@ export const content = {
         "min": 40,
         "max": 100
       },
+      "lengthWeight": {
+        "a": 0.00437,
+        "b": 3.12,
+        "from": "Amia calva"
+      },
       "difficulty": 1,
       "rarity": "rare",
       "swims": "lower",
@@ -418,6 +468,11 @@ export const content = {
       "size": {
         "min": 20,
         "max": 60
+      },
+      "lengthWeight": {
+        "a": 0.00912,
+        "b": 3.03,
+        "from": "Salvelinus fontinalis"
       },
       "difficulty": 0,
       "rarity": "uncommon",
@@ -458,6 +513,11 @@ export const content = {
       "size": {
         "min": 20,
         "max": 50
+      },
+      "lengthWeight": {
+        "a": 0.00832,
+        "b": 3.12,
+        "from": "Ameiurus nebulosus"
       },
       "difficulty": 0,
       "rarity": "uncommon",
@@ -502,6 +562,11 @@ export const content = {
         "min": 20,
         "max": 80
       },
+      "lengthWeight": {
+        "a": 0.00871,
+        "b": 3.03,
+        "from": "Salmo trutta"
+      },
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
@@ -544,6 +609,11 @@ export const content = {
         "min": 150,
         "max": 350
       },
+      "lengthWeight": {
+        "a": 0.00501,
+        "b": 3.06,
+        "from": "Carcharhinus leucas"
+      },
       "difficulty": 3,
       "rarity": "epic",
       "swims": "upper",
@@ -582,6 +652,11 @@ export const content = {
       "size": {
         "min": 30,
         "max": 100
+      },
+      "lengthWeight": {
+        "a": 0.00537,
+        "b": 3.04,
+        "from": "Lota lota"
       },
       "difficulty": 1,
       "rarity": "common",
@@ -623,6 +698,11 @@ export const content = {
         "min": 10,
         "max": 25
       },
+      "lengthWeight": {
+        "a": 0.00363,
+        "b": 3.21,
+        "from": "Mallotus villosus"
+      },
       "difficulty": -1,
       "rarity": "rare",
       "swims": "upper",
@@ -661,6 +741,11 @@ export const content = {
       "size": {
         "min": 30,
         "max": 110
+      },
+      "lengthWeight": {
+        "a": 0.00676,
+        "b": 3.05,
+        "from": "Esox reichertii"
       },
       "difficulty": 1,
       "rarity": "epic",
@@ -702,6 +787,11 @@ export const content = {
       "size": {
         "min": 8,
         "max": 25
+      },
+      "lengthWeight": {
+        "a": 0.01072,
+        "b": 3.08,
+        "from": "Perccottus glenii"
       },
       "difficulty": -1,
       "rarity": "uncommon",
@@ -747,6 +837,11 @@ export const content = {
         "min": 5,
         "max": 14
       },
+      "lengthWeight": {
+        "a": 0.00468,
+        "b": 3.14,
+        "from": "Umbra limi"
+      },
       "difficulty": -2,
       "rarity": "common",
       "swims": "lower",
@@ -783,6 +878,11 @@ export const content = {
       "size": {
         "min": 30,
         "max": 75
+      },
+      "lengthWeight": {
+        "a": 0.00468,
+        "b": 3.07,
+        "from": "Esox niger"
       },
       "difficulty": 0,
       "rarity": "epic",
@@ -823,6 +923,11 @@ export const content = {
         "min": 35,
         "max": 120
       },
+      "lengthWeight": {
+        "a": 0.00525,
+        "b": 3.13,
+        "from": "Ictalurus punctatus"
+      },
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "bottom",
@@ -862,6 +967,11 @@ export const content = {
         "min": 20,
         "max": 70
       },
+      "lengthWeight": {
+        "a": 0.00724,
+        "b": 3.13,
+        "from": "Squalius cephalus"
+      },
       "difficulty": 0,
       "rarity": "common",
       "swims": "upper",
@@ -900,6 +1010,11 @@ export const content = {
       "size": {
         "min": 20,
         "max": 55
+      },
+      "lengthWeight": {
+        "a": 0.00575,
+        "b": 3.15,
+        "from": "Coregonus artedi"
       },
       "difficulty": 0,
       "rarity": "uncommon",
@@ -942,6 +1057,11 @@ export const content = {
         "min": 40,
         "max": 100
       },
+      "lengthWeight": {
+        "a": 0.00468,
+        "b": 3.06,
+        "from": "Chitala ornata"
+      },
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
@@ -982,6 +1102,11 @@ export const content = {
         "min": 100,
         "max": 200
       },
+      "lengthWeight": {
+        "a": 0.01202,
+        "b": 3.03,
+        "from": "Latimeria chalumnae"
+      },
       "difficulty": 2,
       "rarity": "epic",
       "endangered": true,
@@ -1020,6 +1145,11 @@ export const content = {
       "size": {
         "min": 25,
         "max": 75
+      },
+      "lengthWeight": {
+        "a": 0.00759,
+        "b": 3.14,
+        "from": "Abramis brama"
       },
       "difficulty": 0,
       "rarity": "common",
@@ -1064,6 +1194,11 @@ export const content = {
       "size": {
         "min": 30,
         "max": 110
+      },
+      "lengthWeight": {
+        "a": 0.01778,
+        "b": 2.95,
+        "from": "Cyprinus carpio"
       },
       "difficulty": 1,
       "rarity": "common",
@@ -1111,6 +1246,11 @@ export const content = {
         "min": 10,
         "max": 45
       },
+      "lengthWeight": {
+        "a": 0.01349,
+        "b": 3.04,
+        "from": "Carassius carassius"
+      },
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
@@ -1151,6 +1291,11 @@ export const content = {
         "min": 12,
         "max": 30
       },
+      "lengthWeight": {
+        "a": 0.00631,
+        "b": 3.15,
+        "from": "Leuciscus leuciscus"
+      },
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
@@ -1186,6 +1331,11 @@ export const content = {
       "size": {
         "min": 5,
         "max": 23
+      },
+      "lengthWeight": {
+        "a": 0.00603,
+        "b": 3.15,
+        "from": "Myoxocephalus thompsonii"
       },
       "difficulty": -1,
       "rarity": "uncommon",
@@ -1225,6 +1375,11 @@ export const content = {
         "min": 10,
         "max": 20
       },
+      "lengthWeight": {
+        "a": 0.02692,
+        "b": 3.03,
+        "from": "Symphysodon aequifasciatus"
+      },
       "difficulty": -2,
       "rarity": "epic",
       "swims": "lower",
@@ -1261,6 +1416,11 @@ export const content = {
       "size": {
         "min": 80,
         "max": 250
+      },
+      "lengthWeight": {
+        "a": 0.00095,
+        "b": 3.17,
+        "from": "Anguilla anguilla"
       },
       "difficulty": 3,
       "rarity": "epic",
@@ -1300,6 +1460,11 @@ export const content = {
       "size": {
         "min": 6,
         "max": 12
+      },
+      "lengthWeight": {
+        "a": 0.01445,
+        "b": 2.99,
+        "from": "Labidochromis caeruleus"
       },
       "difficulty": -2,
       "rarity": "uncommon",
@@ -1341,6 +1506,11 @@ export const content = {
         "min": 15,
         "max": 45
       },
+      "lengthWeight": {
+        "a": 0.01349,
+        "b": 3.05,
+        "from": "Carassius gibelio"
+      },
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
@@ -1381,6 +1551,11 @@ export const content = {
       "size": {
         "min": 15,
         "max": 32
+      },
+      "lengthWeight": {
+        "a": 0.00537,
+        "b": 3.18,
+        "from": "Anableps anableps"
       },
       "difficulty": -1,
       "rarity": "rare",
@@ -1426,6 +1601,11 @@ export const content = {
         "min": 15,
         "max": 35
       },
+      "lengthWeight": {
+        "a": 0.01445,
+        "b": 2.99,
+        "from": "Cyphotilapia frontosa"
+      },
       "difficulty": -1,
       "rarity": "rare",
       "swims": "bottom",
@@ -1461,6 +1641,11 @@ export const content = {
       "size": {
         "min": 25,
         "max": 90
+      },
+      "lengthWeight": {
+        "a": 0.00708,
+        "b": 3.03,
+        "from": "Salvelinus alpinus"
       },
       "difficulty": 1,
       "rarity": "uncommon",
@@ -1503,6 +1688,11 @@ export const content = {
         "min": 20,
         "max": 70
       },
+      "lengthWeight": {
+        "a": 0.00813,
+        "b": 3.09,
+        "from": "Thymallus arcticus"
+      },
       "difficulty": 0,
       "rarity": "rare",
       "swims": "upper",
@@ -1541,6 +1731,11 @@ export const content = {
       "size": {
         "min": 80,
         "max": 200
+      },
+      "lengthWeight": {
+        "a": 0.00257,
+        "b": 3.28,
+        "from": "Acipenser baerii"
       },
       "difficulty": 2,
       "rarity": "epic",
@@ -1587,6 +1782,11 @@ export const content = {
         "min": 60,
         "max": 300
       },
+      "lengthWeight": {
+        "a": 0.01023,
+        "b": 3.06,
+        "from": "Urogymnus polylepis"
+      },
       "difficulty": 3,
       "rarity": "rare",
       "endangered": true,
@@ -1627,6 +1827,11 @@ export const content = {
       "size": {
         "min": 30,
         "max": 70
+      },
+      "lengthWeight": {
+        "a": 0.01698,
+        "b": 3.01,
+        "from": "Osphronemus goramy"
       },
       "difficulty": 0,
       "rarity": "uncommon",
@@ -1671,6 +1876,11 @@ export const content = {
         "min": 40,
         "max": 100
       },
+      "lengthWeight": {
+        "a": 0.01,
+        "b": 3.09,
+        "from": "Salminus brasiliensis"
+      },
       "difficulty": 1,
       "rarity": "epic",
       "endangered": true,
@@ -1713,6 +1923,11 @@ export const content = {
       "size": {
         "min": 40,
         "max": 150
+      },
+      "lengthWeight": {
+        "a": 0.00933,
+        "b": 3,
+        "from": "Tor putitora"
       },
       "difficulty": 2,
       "rarity": "epic",
@@ -1759,6 +1974,11 @@ export const content = {
         "min": 8,
         "max": 25
       },
+      "lengthWeight": {
+        "a": 0.01023,
+        "b": 3.07,
+        "from": "Notemigonus crysoleucas"
+      },
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "upper",
@@ -1799,6 +2019,11 @@ export const content = {
         "min": 50,
         "max": 150
       },
+      "lengthWeight": {
+        "a": 0.01072,
+        "b": 3.02,
+        "from": "Hydrocynus goliath"
+      },
       "difficulty": 2,
       "rarity": "epic",
       "swims": "upper",
@@ -1838,6 +2063,11 @@ export const content = {
         "min": 10,
         "max": 21
       },
+      "lengthWeight": {
+        "a": 0.00562,
+        "b": 3.14,
+        "from": "Comephorus baicalensis"
+      },
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
@@ -1875,6 +2105,11 @@ export const content = {
         "min": 60,
         "max": 200
       },
+      "lengthWeight": {
+        "a": 0.00646,
+        "b": 3.02,
+        "from": "Bagarius yarrelli"
+      },
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "bottom",
@@ -1909,6 +2144,11 @@ export const content = {
       "size": {
         "min": 50,
         "max": 140
+      },
+      "lengthWeight": {
+        "a": 0.00933,
+        "b": 3.09,
+        "from": "Ctenopharyngodon idella"
       },
       "difficulty": 2,
       "rarity": "epic",
@@ -1951,6 +2191,11 @@ export const content = {
         "min": 20,
         "max": 50
       },
+      "lengthWeight": {
+        "a": 0.00525,
+        "b": 3.05,
+        "from": "Odontesthes bonariensis"
+      },
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "surface",
@@ -1990,6 +2235,11 @@ export const content = {
       "size": {
         "min": 20,
         "max": 55
+      },
+      "lengthWeight": {
+        "a": 0.00741,
+        "b": 3.07,
+        "from": "Thymallus thymallus"
       },
       "difficulty": 0,
       "rarity": "uncommon",
@@ -2032,6 +2282,11 @@ export const content = {
         "min": 50,
         "max": 140
       },
+      "lengthWeight": {
+        "a": 0.01023,
+        "b": 3.03,
+        "from": "Salmo salar"
+      },
       "difficulty": 2,
       "rarity": "rare",
       "swims": "upper",
@@ -2072,6 +2327,11 @@ export const content = {
       "size": {
         "min": 8,
         "max": 20
+      },
+      "lengthWeight": {
+        "a": 0.00708,
+        "b": 3.12,
+        "from": "Gobio gobio"
       },
       "difficulty": -2,
       "rarity": "common",
@@ -2114,6 +2374,11 @@ export const content = {
         "min": 4,
         "max": 8
       },
+      "lengthWeight": {
+        "a": 0.00891,
+        "b": 3.07,
+        "from": "Beaufortia kweichowensis"
+      },
       "difficulty": -2,
       "rarity": "rare",
       "swims": "bottom",
@@ -2153,6 +2418,11 @@ export const content = {
       "size": {
         "min": 60,
         "max": 150
+      },
+      "lengthWeight": {
+        "a": 0.01202,
+        "b": 3.01,
+        "from": "Hucho hucho"
       },
       "difficulty": 2,
       "rarity": "epic",
@@ -2197,6 +2467,11 @@ export const content = {
         "min": 30,
         "max": 75
       },
+      "lengthWeight": {
+        "a": 0.00093,
+        "b": 3.48,
+        "from": "Chaenocephalus aceratus"
+      },
       "difficulty": 0,
       "rarity": "epic",
       "swims": "bottom",
@@ -2239,6 +2514,11 @@ export const content = {
         "min": 25,
         "max": 80
       },
+      "lengthWeight": {
+        "a": 0.00589,
+        "b": 3.15,
+        "from": "Leuciscus idus"
+      },
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
@@ -2279,6 +2559,11 @@ export const content = {
         "min": 35,
         "max": 100
       },
+      "lengthWeight": {
+        "a": 0.00871,
+        "b": 3.03,
+        "from": "Salmo trutta"
+      },
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
@@ -2318,6 +2603,11 @@ export const content = {
       "size": {
         "min": 80,
         "max": 220
+      },
+      "lengthWeight": {
+        "a": 0.00269,
+        "b": 3.19,
+        "from": "Acipenser fulvescens"
       },
       "difficulty": 3,
       "rarity": "epic",
@@ -2364,6 +2654,11 @@ export const content = {
         "min": 40,
         "max": 120
       },
+      "lengthWeight": {
+        "a": 0.00832,
+        "b": 3.02,
+        "from": "Salvelinus namaycush"
+      },
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "lower",
@@ -2404,6 +2699,11 @@ export const content = {
         "min": 30,
         "max": 80
       },
+      "lengthWeight": {
+        "a": 0.0055,
+        "b": 3.23,
+        "from": "Coregonus clupeaformis"
+      },
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
@@ -2443,6 +2743,11 @@ export const content = {
       "size": {
         "min": 40,
         "max": 90
+      },
+      "lengthWeight": {
+        "a": 0.01023,
+        "b": 3.03,
+        "from": "Salmo salar"
       },
       "difficulty": 1,
       "rarity": "epic",
@@ -2486,6 +2791,11 @@ export const content = {
         "min": 25,
         "max": 75
       },
+      "lengthWeight": {
+        "a": 0.01047,
+        "b": 3.08,
+        "from": "Micropterus salmoides"
+      },
       "difficulty": 0,
       "rarity": "rare",
       "swims": "lower",
@@ -2526,6 +2836,11 @@ export const content = {
       "size": {
         "min": 30,
         "max": 75
+      },
+      "lengthWeight": {
+        "a": 0.00912,
+        "b": 3.07,
+        "from": "Brachymystax lenok"
       },
       "difficulty": 0,
       "rarity": "rare",
@@ -2568,6 +2883,11 @@ export const content = {
         "min": 20,
         "max": 60
       },
+      "lengthWeight": {
+        "a": 0.0263,
+        "b": 2.99,
+        "from": "Cyclopterus lumpus"
+      },
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
@@ -2607,6 +2927,11 @@ export const content = {
         "min": 6,
         "max": 18
       },
+      "lengthWeight": {
+        "a": 0.00871,
+        "b": 3.13,
+        "from": "Cottus gobio"
+      },
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
@@ -2642,6 +2967,11 @@ export const content = {
       "size": {
         "min": 40,
         "max": 130
+      },
+      "lengthWeight": {
+        "a": 0.00095,
+        "b": 3.17,
+        "from": "Anguilla anguilla"
       },
       "difficulty": 1,
       "rarity": "uncommon",
@@ -2684,6 +3014,11 @@ export const content = {
         "min": 5,
         "max": 13
       },
+      "lengthWeight": {
+        "a": 0.00977,
+        "b": 3.12,
+        "from": "Umbra krameri"
+      },
       "difficulty": -2,
       "rarity": "epic",
       "endangered": true,
@@ -2723,6 +3058,11 @@ export const content = {
       "size": {
         "min": 25,
         "max": 70
+      },
+      "lengthWeight": {
+        "a": 0.00447,
+        "b": 3.2,
+        "from": "Coregonus lavaretus"
       },
       "difficulty": 0,
       "rarity": "uncommon",
@@ -2765,6 +3105,11 @@ export const content = {
         "min": 30,
         "max": 120
       },
+      "lengthWeight": {
+        "a": 0.01514,
+        "b": 2.96,
+        "from": "Lutjanus argentimaculatus"
+      },
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
@@ -2806,6 +3151,11 @@ export const content = {
         "min": 60,
         "max": 200
       },
+      "lengthWeight": {
+        "a": 0.0038,
+        "b": 3.1,
+        "from": "Protopterus aethiopicus"
+      },
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
@@ -2843,6 +3193,11 @@ export const content = {
       "size": {
         "min": 5,
         "max": 14
+      },
+      "lengthWeight": {
+        "a": 0.00708,
+        "b": 3.14,
+        "from": "Phoxinus phoxinus"
       },
       "difficulty": -2,
       "rarity": "common",
@@ -2885,6 +3240,11 @@ export const content = {
         "min": 8,
         "max": 25
       },
+      "lengthWeight": {
+        "a": 0.01072,
+        "b": 3,
+        "from": "Periophthalmus barbarus"
+      },
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
@@ -2923,6 +3283,11 @@ export const content = {
       "size": {
         "min": 70,
         "max": 170
+      },
+      "lengthWeight": {
+        "a": 0.0049,
+        "b": 3.08,
+        "from": "Esox masquinongy"
       },
       "difficulty": 2,
       "rarity": "epic",
@@ -2965,6 +3330,11 @@ export const content = {
         "min": 25,
         "max": 55
       },
+      "lengthWeight": {
+        "a": 0.00724,
+        "b": 3.12,
+        "from": "Chondrostoma nasus"
+      },
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
@@ -3004,6 +3374,11 @@ export const content = {
       "size": {
         "min": 40,
         "max": 130
+      },
+      "lengthWeight": {
+        "a": 0.00447,
+        "b": 3.08,
+        "from": "Esox lucius"
       },
       "difficulty": 1,
       "rarity": "rare",
@@ -3046,6 +3421,11 @@ export const content = {
         "min": 40,
         "max": 100
       },
+      "lengthWeight": {
+        "a": 0.00724,
+        "b": 3.01,
+        "from": "Channa argus"
+      },
       "difficulty": 1,
       "rarity": "rare",
       "swims": "surface",
@@ -3084,6 +3464,11 @@ export const content = {
       "size": {
         "min": 25,
         "max": 55
+      },
+      "lengthWeight": {
+        "a": 0.00407,
+        "b": 3.27,
+        "from": "Coregonus migratorius"
       },
       "difficulty": 0,
       "rarity": "rare",
@@ -3131,6 +3516,11 @@ export const content = {
         "min": 25,
         "max": 60
       },
+      "lengthWeight": {
+        "a": 0.00457,
+        "b": 3.05,
+        "from": "Polypterus ornatipinnis"
+      },
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
@@ -3166,6 +3556,11 @@ export const content = {
       "size": {
         "min": 15,
         "max": 35
+      },
+      "lengthWeight": {
+        "a": 0.03162,
+        "b": 3.02,
+        "from": "Astronotus ocellatus"
       },
       "difficulty": -1,
       "rarity": "rare",
@@ -3205,6 +3600,11 @@ export const content = {
       "size": {
         "min": 30,
         "max": 88
+      },
+      "lengthWeight": {
+        "a": 0.03162,
+        "b": 3,
+        "from": "Piaractus brachypomus"
       },
       "difficulty": 1,
       "rarity": "epic",
@@ -3250,6 +3650,11 @@ export const content = {
         "min": 30,
         "max": 117
       },
+      "lengthWeight": {
+        "a": 0.00661,
+        "b": 3.2,
+        "from": "Hydrolycus scomberoides"
+      },
       "difficulty": 1,
       "rarity": "epic",
       "swims": "upper",
@@ -3291,6 +3696,11 @@ export const content = {
         "min": 30,
         "max": 75
       },
+      "lengthWeight": {
+        "a": 0.01148,
+        "b": 3.07,
+        "from": "Cichla ocellaris"
+      },
       "difficulty": 0,
       "rarity": "rare",
       "swims": "lower",
@@ -3331,6 +3741,11 @@ export const content = {
         "min": 10,
         "max": 50
       },
+      "lengthWeight": {
+        "a": 0.00912,
+        "b": 3.11,
+        "from": "Perca fluviatilis"
+      },
       "difficulty": 0,
       "rarity": "common",
       "swims": "lower",
@@ -3368,6 +3783,11 @@ export const content = {
       "size": {
         "min": 10,
         "max": 40
+      },
+      "lengthWeight": {
+        "a": 0.00457,
+        "b": 3.16,
+        "from": "Boreogadus saida"
       },
       "difficulty": -1,
       "rarity": "rare",
@@ -3411,6 +3831,11 @@ export const content = {
         "min": 8,
         "max": 25
       },
+      "lengthWeight": {
+        "a": 0.01148,
+        "b": 3.11,
+        "from": "Lepomis gibbosus"
+      },
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
@@ -3450,6 +3875,11 @@ export const content = {
       "size": {
         "min": 25,
         "max": 90
+      },
+      "lengthWeight": {
+        "a": 0.00933,
+        "b": 3.03,
+        "from": "Oncorhynchus mykiss"
       },
       "difficulty": 1,
       "rarity": "uncommon",
@@ -3492,6 +3922,11 @@ export const content = {
         "min": 15,
         "max": 33
       },
+      "lengthWeight": {
+        "a": 0.02138,
+        "b": 3.16,
+        "from": "Pygocentrus nattereri"
+      },
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
@@ -3532,6 +3967,11 @@ export const content = {
         "min": 50,
         "max": 180
       },
+      "lengthWeight": {
+        "a": 0.00912,
+        "b": 3.07,
+        "from": "Phractocephalus hemioliopterus"
+      },
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "bottom",
@@ -3570,6 +4010,11 @@ export const content = {
         "min": 10,
         "max": 40
       },
+      "lengthWeight": {
+        "a": 0.00741,
+        "b": 3.16,
+        "from": "Rutilus rutilus"
+      },
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
@@ -3606,6 +4051,11 @@ export const content = {
       "size": {
         "min": 12,
         "max": 30
+      },
+      "lengthWeight": {
+        "a": 0.01288,
+        "b": 3.09,
+        "from": "Ambloplites rupestris"
       },
       "difficulty": -1,
       "rarity": "uncommon",
@@ -3646,6 +4096,11 @@ export const content = {
         "min": 10,
         "max": 40
       },
+      "lengthWeight": {
+        "a": 0.00776,
+        "b": 3.16,
+        "from": "Scardinius erythrophthalmus"
+      },
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
@@ -3685,6 +4140,11 @@ export const content = {
       "size": {
         "min": 8,
         "max": 25
+      },
+      "lengthWeight": {
+        "a": 0.00955,
+        "b": 3,
+        "from": "Gymnocephalus cernua"
       },
       "difficulty": -1,
       "rarity": "common",
@@ -3727,6 +4187,11 @@ export const content = {
         "min": 25,
         "max": 65
       },
+      "lengthWeight": {
+        "a": 0.00617,
+        "b": 3.14,
+        "from": "Sander canadensis"
+      },
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
@@ -3767,6 +4232,11 @@ export const content = {
         "min": 40,
         "max": 100
       },
+      "lengthWeight": {
+        "a": 0.00107,
+        "b": 3.03,
+        "from": "Petromyzon marinus"
+      },
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
@@ -3803,6 +4273,11 @@ export const content = {
       "size": {
         "min": 40,
         "max": 90
+      },
+      "lengthWeight": {
+        "a": 0.00417,
+        "b": 3.1,
+        "from": "Osteoglossum bicirrhosum"
       },
       "difficulty": 1,
       "rarity": "epic",
@@ -3842,6 +4317,11 @@ export const content = {
       "size": {
         "min": 15,
         "max": 35
+      },
+      "lengthWeight": {
+        "a": 0.00741,
+        "b": 3.15,
+        "from": "Blicca bjoerkna"
       },
       "difficulty": -1,
       "rarity": "common",
@@ -3883,6 +4363,11 @@ export const content = {
         "min": 50,
         "max": 120
       },
+      "lengthWeight": {
+        "a": 0.00891,
+        "b": 3.1,
+        "from": "Hypophthalmichthys molitrix"
+      },
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
@@ -3922,6 +4407,11 @@ export const content = {
       "size": {
         "min": 20,
         "max": 65
+      },
+      "lengthWeight": {
+        "a": 0.01072,
+        "b": 3.04,
+        "from": "Micropterus dolomieu"
       },
       "difficulty": 0,
       "rarity": "uncommon",
@@ -3964,6 +4454,11 @@ export const content = {
         "min": 10,
         "max": 30
       },
+      "lengthWeight": {
+        "a": 0.00417,
+        "b": 3.18,
+        "from": "Osmerus eperlanus"
+      },
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
@@ -4005,6 +4500,11 @@ export const content = {
         "min": 8,
         "max": 30
       },
+      "lengthWeight": {
+        "a": 0.00525,
+        "b": 3.15,
+        "from": "Liparis liparis"
+      },
       "difficulty": -1,
       "rarity": "rare",
       "swims": "bottom",
@@ -4040,6 +4540,11 @@ export const content = {
       "size": {
         "min": 15,
         "max": 45
+      },
+      "lengthWeight": {
+        "a": 0.01549,
+        "b": 2.99,
+        "from": "Schizothorax richardsonii"
       },
       "difficulty": -1,
       "rarity": "epic",
@@ -4084,6 +4589,11 @@ export const content = {
         "min": 30,
         "max": 100
       },
+      "lengthWeight": {
+        "a": 0.00138,
+        "b": 3.28,
+        "from": "Acipenser ruthenus"
+      },
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
@@ -4127,6 +4637,11 @@ export const content = {
         "min": 6,
         "max": 16
       },
+      "lengthWeight": {
+        "a": 0.01096,
+        "b": 2.96,
+        "from": "Barbatula barbatula"
+      },
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
@@ -4165,6 +4680,11 @@ export const content = {
         "min": 40,
         "max": 180
       },
+      "lengthWeight": {
+        "a": 0.00676,
+        "b": 3.08,
+        "from": "Gadus morhua"
+      },
       "difficulty": 2,
       "rarity": "epic",
       "swims": "lower",
@@ -4200,7 +4720,8 @@ export const content = {
         "stew",
         "taste",
         "tasteLine",
-        "fights"
+        "fights",
+        "lengthWeight"
       ]
     },
     "strange-giant-catfish": {
@@ -4211,6 +4732,11 @@ export const content = {
       "size": {
         "min": 100,
         "max": 300
+      },
+      "lengthWeight": {
+        "a": 0.00631,
+        "b": 2.99,
+        "from": "Silurus glanis"
       },
       "difficulty": 3,
       "rarity": "epic",
@@ -4242,7 +4768,8 @@ export const content = {
         "stew",
         "taste",
         "tasteLine",
-        "fights"
+        "fights",
+        "lengthWeight"
       ]
     },
     "strange-perch": {
@@ -4253,6 +4780,11 @@ export const content = {
       "size": {
         "min": 50,
         "max": 200
+      },
+      "lengthWeight": {
+        "a": 0.00912,
+        "b": 3.11,
+        "from": "Perca fluviatilis"
       },
       "difficulty": 2,
       "rarity": "epic",
@@ -4285,7 +4817,8 @@ export const content = {
         "stew",
         "taste",
         "tasteLine",
-        "fights"
+        "fights",
+        "lengthWeight"
       ]
     },
     "strange-shark": {
@@ -4296,6 +4829,11 @@ export const content = {
       "size": {
         "min": 200,
         "max": 640
+      },
+      "lengthWeight": {
+        "a": 0.00501,
+        "b": 3.06,
+        "from": "Carcharhinus leucas"
       },
       "difficulty": 3,
       "rarity": "epic",
@@ -4327,7 +4865,8 @@ export const content = {
         "stew",
         "taste",
         "tasteLine",
-        "fights"
+        "fights",
+        "lengthWeight"
       ]
     },
     "strange-tilapia": {
@@ -4338,6 +4877,11 @@ export const content = {
       "size": {
         "min": 15,
         "max": 60
+      },
+      "lengthWeight": {
+        "a": 0.01778,
+        "b": 2.99,
+        "from": "Oreochromis niloticus"
       },
       "difficulty": 0,
       "rarity": "uncommon",
@@ -4370,7 +4914,8 @@ export const content = {
         "stew",
         "taste",
         "tasteLine",
-        "fights"
+        "fights",
+        "lengthWeight"
       ]
     },
     "taimen": {
@@ -4380,6 +4925,11 @@ export const content = {
       "size": {
         "min": 70,
         "max": 180
+      },
+      "lengthWeight": {
+        "a": 0.00933,
+        "b": 3.04,
+        "from": "Hucho taimen"
       },
       "difficulty": 2,
       "rarity": "epic",
@@ -4423,6 +4973,11 @@ export const content = {
         "min": 20,
         "max": 65
       },
+      "lengthWeight": {
+        "a": 0.01122,
+        "b": 3.02,
+        "from": "Tinca tinca"
+      },
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
@@ -4464,6 +5019,11 @@ export const content = {
         "min": 40,
         "max": 100
       },
+      "lengthWeight": {
+        "a": 0.00794,
+        "b": 3.07,
+        "from": "Pseudoplatystoma fasciatum"
+      },
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
@@ -4502,6 +5062,11 @@ export const content = {
       "size": {
         "min": 30,
         "max": 75
+      },
+      "lengthWeight": {
+        "a": 0.00891,
+        "b": 3.1,
+        "from": "Hoplias malabaricus"
       },
       "difficulty": 0,
       "rarity": "epic",
@@ -4542,6 +5107,11 @@ export const content = {
       "size": {
         "min": 10,
         "max": 30
+      },
+      "lengthWeight": {
+        "a": 0.00468,
+        "b": 3.21,
+        "from": "Coregonus albula"
       },
       "difficulty": -1,
       "rarity": "common",
@@ -4587,6 +5157,11 @@ export const content = {
         "min": 30,
         "max": 80
       },
+      "lengthWeight": {
+        "a": 0.00631,
+        "b": 3.15,
+        "from": "Sander vitreus"
+      },
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
@@ -4626,6 +5201,11 @@ export const content = {
       "size": {
         "min": 15,
         "max": 30
+      },
+      "lengthWeight": {
+        "a": 0.00407,
+        "b": 3.1,
+        "from": "Misgurnus fossilis"
       },
       "difficulty": -1,
       "rarity": "uncommon",
@@ -4667,6 +5247,11 @@ export const content = {
         "min": 80,
         "max": 270
       },
+      "lengthWeight": {
+        "a": 0.00631,
+        "b": 2.99,
+        "from": "Silurus glanis"
+      },
       "difficulty": 3,
       "rarity": "rare",
       "swims": "bottom",
@@ -4707,6 +5292,11 @@ export const content = {
         "min": 25,
         "max": 60
       },
+      "lengthWeight": {
+        "a": 0.01096,
+        "b": 3,
+        "from": "Catostomus commersonii"
+      },
       "difficulty": 0,
       "rarity": "common",
       "swims": "bottom",
@@ -4746,6 +5336,11 @@ export const content = {
         "min": 20,
         "max": 45
       },
+      "lengthWeight": {
+        "a": 0.0055,
+        "b": 3.06,
+        "from": "Odontesthes hatcheri"
+      },
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
@@ -4784,6 +5379,11 @@ export const content = {
       "size": {
         "min": 20,
         "max": 45
+      },
+      "lengthWeight": {
+        "a": 0.01047,
+        "b": 3.01,
+        "from": "Percichthys trucha"
       },
       "difficulty": -1,
       "rarity": "rare",
@@ -4827,6 +5427,11 @@ export const content = {
         "min": 40,
         "max": 150
       },
+      "lengthWeight": {
+        "a": 0.00417,
+        "b": 3.19,
+        "from": "Anarhichas lupus"
+      },
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
@@ -4866,6 +5471,11 @@ export const content = {
         "min": 10,
         "max": 40
       },
+      "lengthWeight": {
+        "a": 0.01202,
+        "b": 3.05,
+        "from": "Perca flavescens"
+      },
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
@@ -4902,6 +5512,11 @@ export const content = {
       "size": {
         "min": 35,
         "max": 100
+      },
+      "lengthWeight": {
+        "a": 0.00589,
+        "b": 3.12,
+        "from": "Sander lucioperca"
       },
       "difficulty": 1,
       "rarity": "uncommon",
@@ -12355,6 +12970,10 @@ export const content = {
         "rules.weather-scales.precipitation.4",
         "rules.weather-scales.precipitation.5"
       ]
+    },
+    "weight": {
+      "id": "weight",
+      "spread": 10
     }
   },
   "events": {

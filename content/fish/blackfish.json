@@ -8,6 +8,11 @@
     "min": 8,
     "max": 33
   },
+  "lengthWeight": {
+    "a": 0.00871,
+    "b": 3.1,
+    "from": "Dallia pectoralis"
+  },
   "difficulty": -1,
   "rarity": "rare",
   "swims": "lower",

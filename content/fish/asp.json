@@ -7,6 +7,11 @@
     "min": 40,
     "max": 110
   },
+  "lengthWeight": {
+    "a": 0.00468,
+    "b": 3.14,
+    "from": "Leuciscus aspius"
+  },
   "difficulty": 1,
   "rarity": "rare",
   "swims": "upper",

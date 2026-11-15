@@ -8,6 +8,11 @@
     "min": 15,
     "max": 35
   },
+  "lengthWeight": {
+    "a": 0.03162,
+    "b": 3.02,
+    "from": "Astronotus ocellatus"
+  },
   "difficulty": -1,
   "rarity": "rare",
   "swims": "lower",

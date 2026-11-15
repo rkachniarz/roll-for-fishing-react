@@ -14,7 +14,7 @@
 import { content } from '../generated/content.js';
 import { applyValue, deriveValues } from './values.js';
 import { listTable, locationTable, pick } from './tables.js';
-import { bendFish, rollFish, sameFish, sizeBands } from './fish.js';
+import { bendFish, fishWeight, rollFish, sameFish, sizeBands } from './fish.js';
 import { featureAt, swimOff, updateFeatures, waterAt } from './features.js';
 import { fightStrike, startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
@@ -358,7 +358,7 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
             fishXp: value('fishXp').total,
           },
           dice.line,
-          { minBand },
+          { minBand, condition: dice.condition },
         );
       }
     }
@@ -892,6 +892,8 @@ export function useAbility(state, id, extra = []) {
       if (entry) {
         entry.totalSize += bent.size - before.size;
         if (bent.size > entry.largest.size) entry.largest = bookRecord(next, bent.size);
+        const heavier = fishWeight(bent);
+        if (heavier !== null && heavier > (entry.heaviest?.weight ?? -1)) entry.heaviest = { ...bookRecord(next, bent.size), weight: heavier };
         if (entry.caught === 1) entry.smallest = entry.largest;
       }
       next.character.xp += bent.xp - before.xp;
@@ -956,11 +958,14 @@ export function catchFish(state, fish, bucketSize) {
 
   state.book.catches++;
   learn(state, state.location, 'fish', fish.species, 'found');
-  const record = bookRecord(state, fish.size);
+  const weight = fishWeight(fish);
+  const record = { ...bookRecord(state, fish.size), ...(weight !== null ? { weight } : {}) };
   const entry = state.book.fish[fish.species];
   if (!entry) {
-    state.book.fish[fish.species] = { caught: 1, totalSize: fish.size, smallest: record, largest: record, mostTries: tries ?? 0 };
+    state.book.fish[fish.species] = { caught: 1, totalSize: fish.size, smallest: record, largest: record, heaviest: record, mostTries: tries ?? 0 };
   } else {
+    // The heaviest by weight (D146): a fat fish can beat the longest.
+    if (weight !== null && weight > (entry.heaviest?.weight ?? -1)) entry.heaviest = record;
     entry.caught++;
     entry.totalSize += fish.size;
     if (fish.size < entry.smallest.size) entry.smallest = record;

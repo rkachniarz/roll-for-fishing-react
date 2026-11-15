@@ -7,6 +7,11 @@
     "min": 40,
     "max": 100
   },
+  "lengthWeight": {
+    "a": 0.00724,
+    "b": 3.01,
+    "from": "Channa argus"
+  },
   "difficulty": 1,
   "rarity": "rare",
   "swims": "surface",

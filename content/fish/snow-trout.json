@@ -8,6 +8,11 @@
     "min": 15,
     "max": 45
   },
+  "lengthWeight": {
+    "a": 0.01549,
+    "b": 2.99,
+    "from": "Schizothorax richardsonii"
+  },
   "difficulty": -1,
   "rarity": "epic",
   "swims": "bottom",

@@ -8,6 +8,11 @@
     "min": 30,
     "max": 70
   },
+  "lengthWeight": {
+    "a": 0.01698,
+    "b": 3.01,
+    "from": "Osphronemus goramy"
+  },
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "upper",

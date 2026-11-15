@@ -7,6 +7,11 @@
     "min": 70,
     "max": 180
   },
+  "lengthWeight": {
+    "a": 0.00933,
+    "b": 3.04,
+    "from": "Hucho taimen"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "endangered": true,

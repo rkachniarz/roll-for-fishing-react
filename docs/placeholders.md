@@ -152,11 +152,11 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | snow-trout | stew |
 | sterlet | stew |
 | stone-loach | stew |
-| strange-cod | stew, taste, tasteLine, fights |
-| strange-giant-catfish | stew, taste, tasteLine, fights |
-| strange-perch | stew, taste, tasteLine, fights |
-| strange-shark | stew, taste, tasteLine, fights |
-| strange-tilapia | stew, taste, tasteLine, fights |
+| strange-cod | stew, taste, tasteLine, fights, lengthWeight |
+| strange-giant-catfish | stew, taste, tasteLine, fights, lengthWeight |
+| strange-perch | stew, taste, tasteLine, fights, lengthWeight |
+| strange-shark | stew, taste, tasteLine, fights, lengthWeight |
+| strange-tilapia | stew, taste, tasteLine, fights, lengthWeight |
 | taimen | stew |
 | tench | stew |
 | tiger-shovelnose-catfish | stew |

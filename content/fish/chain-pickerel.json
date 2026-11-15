@@ -7,6 +7,11 @@
     "min": 30,
     "max": 75
   },
+  "lengthWeight": {
+    "a": 0.00468,
+    "b": 3.07,
+    "from": "Esox niger"
+  },
   "difficulty": 0,
   "rarity": "epic",
   "swims": "lower",

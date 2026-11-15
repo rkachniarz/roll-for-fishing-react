@@ -7,6 +7,11 @@
     "min": 30,
     "max": 80
   },
+  "lengthWeight": {
+    "a": 0.0055,
+    "b": 3.23,
+    "from": "Coregonus clupeaformis"
+  },
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "lower",

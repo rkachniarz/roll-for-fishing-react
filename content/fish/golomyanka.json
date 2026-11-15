@@ -6,6 +6,11 @@
     "min": 10,
     "max": 21
   },
+  "lengthWeight": {
+    "a": 0.00562,
+    "b": 3.14,
+    "from": "Comephorus baicalensis"
+  },
   "difficulty": -1,
   "rarity": "rare",
   "swims": "lower",

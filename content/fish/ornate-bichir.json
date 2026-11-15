@@ -8,6 +8,11 @@
     "min": 25,
     "max": 60
   },
+  "lengthWeight": {
+    "a": 0.00457,
+    "b": 3.05,
+    "from": "Polypterus ornatipinnis"
+  },
   "difficulty": 0,
   "rarity": "rare",
   "swims": "bottom",

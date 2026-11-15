@@ -110,6 +110,7 @@ const UI_STRINGS = {
 
   // ---- The log ----
   'log.caught': 'You caught: {fish} ({size} cm). +{xp} XP.',
+  'log.caughtWeight': 'You caught: {fish} ({size} cm, {weight}). +{xp} XP.',
   'log.seenBefore': "You've seen this one before.",
   'log.escaped': 'The {fish} got away!',
   'log.missed': 'Too slow: the {fish} got away.',
@@ -308,6 +309,10 @@ const UI_STRINGS = {
   // ---- Tooltips ----
   'tip.fish': 'Fish',
   'tip.size': '{size} cm',
+  'tip.sizeWeight': '{size} cm, {weight}',
+  'weight.grams': '{n} g',
+  'weight.kilos': '{n} kg',
+  'journal.heaviest': 'Heaviest: {weight} ({size} cm), at {place}',
   'tip.unique': 'Unique',
   'tip.consumable': 'Consumable',
 

@@ -7,6 +7,11 @@
     "min": 5,
     "max": 14
   },
+  "lengthWeight": {
+    "a": 0.00708,
+    "b": 3.14,
+    "from": "Phoxinus phoxinus"
+  },
   "difficulty": -2,
   "rarity": "common",
   "swims": "upper",

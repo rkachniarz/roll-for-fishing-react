@@ -7,6 +7,11 @@
     "min": 60,
     "max": 150
   },
+  "lengthWeight": {
+    "a": 0.01202,
+    "b": 3.01,
+    "from": "Hucho hucho"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "endangered": true,

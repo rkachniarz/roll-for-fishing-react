@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A fish's weight (D146): how far its condition may take it from its species' length-weight formula",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "placeholder": {
+      "$ref": "common.schema.json#/definitions/placeholder"
+    },
+    "id": {
+      "const": "weight"
+    },
+    "spread": {
+      "description": "In percent, either side of the formula: 10 gives 0.9 to 1.1.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 50
+    }
+  },
+  "required": [
+    "id",
+    "spread"
+  ],
+  "additionalProperties": false
+}

@@ -7,6 +7,11 @@
     "min": 50,
     "max": 120
   },
+  "lengthWeight": {
+    "a": 0.00891,
+    "b": 3.1,
+    "from": "Hypophthalmichthys molitrix"
+  },
   "difficulty": 1,
   "rarity": "rare",
   "swims": "upper",

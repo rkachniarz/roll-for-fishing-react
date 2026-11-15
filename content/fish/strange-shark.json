@@ -8,6 +8,11 @@
     "min": 200,
     "max": 640
   },
+  "lengthWeight": {
+    "a": 0.00501,
+    "b": 3.06,
+    "from": "Carcharhinus leucas"
+  },
   "difficulty": 3,
   "rarity": "epic",
   "swims": "bottom",
@@ -38,6 +43,7 @@
     "stew",
     "taste",
     "tasteLine",
-    "fights"
+    "fights",
+    "lengthWeight"
   ]
 }

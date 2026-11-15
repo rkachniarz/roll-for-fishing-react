@@ -8,6 +8,11 @@
     "min": 6,
     "max": 12
   },
+  "lengthWeight": {
+    "a": 0.01445,
+    "b": 2.99,
+    "from": "Labidochromis caeruleus"
+  },
   "difficulty": -2,
   "rarity": "uncommon",
   "swims": "lower",

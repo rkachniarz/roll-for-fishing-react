@@ -7,6 +7,11 @@
     "min": 20,
     "max": 65
   },
+  "lengthWeight": {
+    "a": 0.01072,
+    "b": 3.04,
+    "from": "Micropterus dolomieu"
+  },
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "lower",

@@ -24,6 +24,22 @@ Items with no note are left alone.
 
 Newest first.
 
+## Weight from length (2026-11-15, D146, 11.4)
+
+- **The numbers are FishBase's,** read straight from each species' summary page (the raw pages are kept locally). Many
+  are FishBase's own estimates from relatives rather than measurements of the species; each fish's `from` says whose.
+- **Two look heavy for the real fish:** the **marbled lungfish** comes out at 52 kg at 2 m (the real one is nearer
+  17 kg), FishBase's estimate for its body shape; and the **electric eel** did too (118 kg at 2.5 m), so it borrows the
+  European eel's numbers instead and comes out near 20 kg. Say if the lungfish should borrow too.
+- **The Blackfish is read as the Alaska blackfish** (*Dallia pectoralis*), since it sits among the swamp's other
+  air-breathers in the rift. If you meant another blackfish, say which.
+- **The goonch** is listed on FishBase as *Bagarius bagarius*, whose page *B. yarrelli* opens; its numbers are that page's.
+- **The giant freshwater stingray** is weighed by total length, tail included, as FishBase gives it: 389 kg at 3 m.
+- **The strange fish weigh as their kin would**, so the 6.4 m Strange shark weighs nearly two tonnes. Marked
+  placeholders; the rift's magic may want them lighter or heavier.
+- **The spread, ±10%,** is a guess. A class fish is always at 1.
+- **Weights read** "850 g", "4.3 kg", "17 kg": grams under a kilo, one decimal under ten kilos.
+
 ## Obsidian and the background setting (2026-11-14, D144, D145)
 
 - **Pattern is the default** for both themes; Plain is the page's colour alone, as on the loading screen.

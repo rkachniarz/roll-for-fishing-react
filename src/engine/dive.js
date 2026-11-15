@@ -69,6 +69,7 @@ export function startDive(state, escapee, extra = []) {
         /** @type {string} */ (species.id),
         { fishSizeBand: values.flat.fishSizeBand, fishDifficulty: values.flat.fishDifficulty, fishXp: values.flat.fishXp },
         d,
+        { condition: dice.condition },
       ),
     );
   }

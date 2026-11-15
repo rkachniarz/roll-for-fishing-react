@@ -7,6 +7,11 @@
     "min": 30,
     "max": 100
   },
+  "lengthWeight": {
+    "a": 0.00138,
+    "b": 3.28,
+    "from": "Acipenser ruthenus"
+  },
   "difficulty": 1,
   "rarity": "rare",
   "swims": "bottom",

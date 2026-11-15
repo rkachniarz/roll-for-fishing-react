@@ -8,6 +8,11 @@
     "min": 40,
     "max": 150
   },
+  "lengthWeight": {
+    "a": 0.00417,
+    "b": 3.19,
+    "from": "Anarhichas lupus"
+  },
   "difficulty": 2,
   "rarity": "epic",
   "swims": "bottom",

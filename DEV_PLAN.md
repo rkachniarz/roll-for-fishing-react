@@ -28,7 +28,7 @@ is where the others may lead.
   for letting them go, Luck twice and then XP.
 - [x] **11.3** How they fight on the line (D141): five styles that tilt the roll, a rare manoeuvre to answer in time
   (likelier for famous fighters), the Rogue's showmanship, a calming draught and a paralysing rod.
-- [ ] **11.4** Weight from length: each species' published length-weight constants (FishBase); a caught fish has a
+- [x] **11.4** Weight from length (D146): each species' published length-weight constants (FishBase); a caught fish has a
   weight, and the journal and records show it.
   *The owner's answers (2026-11-15):* shown everywhere to start with (the catch log line, the fish tooltip, the
   journal with a heaviest-catch record beside the longest); each fish its own condition, a spread of about ±10%,

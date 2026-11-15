@@ -7,6 +7,11 @@
     "min": 6,
     "max": 16
   },
+  "lengthWeight": {
+    "a": 0.01096,
+    "b": 2.96,
+    "from": "Barbatula barbatula"
+  },
   "difficulty": -2,
   "rarity": "common",
   "swims": "bottom",

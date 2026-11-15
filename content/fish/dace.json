@@ -7,6 +7,11 @@
     "min": 12,
     "max": 30
   },
+  "lengthWeight": {
+    "a": 0.00631,
+    "b": 3.15,
+    "from": "Leuciscus leuciscus"
+  },
   "difficulty": -1,
   "rarity": "common",
   "swims": "surface",

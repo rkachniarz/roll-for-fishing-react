@@ -7,6 +7,11 @@
     "min": 15,
     "max": 35
   },
+  "lengthWeight": {
+    "a": 0.00741,
+    "b": 3.15,
+    "from": "Blicca bjoerkna"
+  },
   "difficulty": -1,
   "rarity": "common",
   "swims": "lower",

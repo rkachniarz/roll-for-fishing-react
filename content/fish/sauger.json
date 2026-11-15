@@ -7,6 +7,11 @@
     "min": 25,
     "max": 65
   },
+  "lengthWeight": {
+    "a": 0.00617,
+    "b": 3.14,
+    "from": "Sander canadensis"
+  },
   "difficulty": 0,
   "rarity": "rare",
   "swims": "bottom",

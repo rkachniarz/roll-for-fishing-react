@@ -8,6 +8,11 @@
     "min": 30,
     "max": 75
   },
+  "lengthWeight": {
+    "a": 0.00093,
+    "b": 3.48,
+    "from": "Chaenocephalus aceratus"
+  },
   "difficulty": 0,
   "rarity": "epic",
   "swims": "bottom",

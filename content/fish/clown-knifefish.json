@@ -8,6 +8,11 @@
     "min": 40,
     "max": 100
   },
+  "lengthWeight": {
+    "a": 0.00468,
+    "b": 3.06,
+    "from": "Chitala ornata"
+  },
   "difficulty": 1,
   "rarity": "epic",
   "swims": "lower",

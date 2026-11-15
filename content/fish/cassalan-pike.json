@@ -7,6 +7,11 @@
     "min": 30,
     "max": 110
   },
+  "lengthWeight": {
+    "a": 0.00676,
+    "b": 3.05,
+    "from": "Esox reichertii"
+  },
   "difficulty": 1,
   "rarity": "epic",
   "swims": "lower",

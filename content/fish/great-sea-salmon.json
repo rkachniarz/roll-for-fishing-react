@@ -7,6 +7,11 @@
     "min": 50,
     "max": 140
   },
+  "lengthWeight": {
+    "a": 0.01023,
+    "b": 3.03,
+    "from": "Salmo salar"
+  },
   "difficulty": 2,
   "rarity": "rare",
   "swims": "upper",

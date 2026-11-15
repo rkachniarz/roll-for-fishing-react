@@ -34,7 +34,8 @@ import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
 import { createLog } from './ui/log.js';
-import { bagTab, fishName, hoursText, itemName, link, rarityColour, showStatusWhen, showTasteWhen } from './ui/links.js';
+import { bagTab, fishName, hoursText, itemName, link, rarityColour, showStatusWhen, showTasteWhen, weightText } from './ui/links.js';
+import { fishWeight } from './engine/fish.js';
 import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settingsPane, shopPane } from './ui/panels.js';
 import { floatText } from './ui/floater.js';
 import { bindTip, hideTip } from './ui/tooltip.js';
@@ -672,7 +673,12 @@ const itemLink = (id) => link({ kind: 'item', id });
 function describeEvent(e) {
   switch (e.type) {
     case 'caught': {
-      const parts = tParts('log.caught', { fish: fishLink(e.fish), size: e.fish.size, xp: e.fish.xp });
+      // With its weight, if its species has a formula (D146).
+      const weight = fishWeight(e.fish);
+      const parts =
+        weight === null
+          ? tParts('log.caught', { fish: fishLink(e.fish), size: e.fish.size, xp: e.fish.xp })
+          : tParts('log.caughtWeight', { fish: fishLink(e.fish), size: e.fish.size, weight: weightText(weight), xp: e.fish.xp });
       return e.seenBefore ? [...parts, ' ' + t('log.seenBefore')] : parts;
     }
     case 'escaped':
