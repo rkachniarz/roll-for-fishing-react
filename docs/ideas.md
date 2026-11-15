@@ -4,6 +4,8 @@ The owner's loose ideas for events, characters and the story, kept so they aren'
 yet: an idea becomes one when it's built or decided (`docs/decisions.md`). The engine work they would need is in
 `DEV_PLAN.md` (7.7–7.10, 8.7–8.9); each idea below names its tasks.
 
+Item ideas, a hundred cut to twenty, are in [ideas/items.md](ideas/items.md).
+
 Newest first.
 
 ## The junk collector
