@@ -85,6 +85,27 @@ is where the others may lead.
 - [ ] **11.12** A simulation of what's under the surface at all times: each spot's living population moving with the
   time, weather and season, and a cast drawing from it. Touches the engine's core, the save, D63's rolling on the cast,
   and balance.
+  *The owner's answers (2026-11-15, polls; 11.14, D156, built the pool's size, its turning over and aiming):*
+  **Bites are mostly the pool's:** the fish that bites lives there; a passer-by from the spot's table fills the gap,
+  so the bite rate never drops when a pool is thin: a spot can't be fished out, only changed in what it gives.
+  **A pool that is fished thins and refills slowly:** 1d4 - 1 fish arrive with each part of the day, up to its
+  number (Claude to measure how many leave on their own and report, so an unfished pool holds near its number).
+  **Every visited pool lives, wherever the player is:** stepped at each new part of the day with that part's real
+  weather (about 0.1 ms a pool, measured). **Life in the pool, all four:** predators eat prey (seen on the water,
+  never a log line; how often, from what the real fish eat, being looked up), spawners gather, shoals form by
+  themselves, fish move about.
+  **Shoals:** three or more of a shoaling kind in a pool swim as one school to cast at; schools no longer come up
+  from a list. **Spawners** arrive 1d4 at a time, may go above the pool's number, and don't leave while they spawn.
+  **Movement:** each fish drifts a little with every cast, and deeper fish come up or go down with the part of the
+  day. **A predator's strike** shows as a lunge, a swirl and a splash, only when both shadows are showing.
+  *What real predators eat (looked up 2026-11-15; thin evidence, mostly abstracts):* a pike's stomach empties in
+  48 hours in summer and 12 days in winter (Diana 1979, 1,290 pike); its ration is about 1 to 3% of its weight a
+  day in the warm months and 0.2 to 0.8% at 7 °C (FishBase), so a 70 cm pike takes a 15 cm roach about every 1 to
+  2.5 days in summer and every 2 to 10 in winter. Prey is mostly 10 to 20% of the predator's length, at most
+  about half (Gaeta et al. 2018), which bears out D152's half. Nothing usable was found for zander, perch, bass,
+  wels, burbot or trout. *Claude's proposal from it:* one rule for all, tied to the water's temperature (D149): a
+  predator with prey under half its length takes one with a chance per part of the day of about 0.8% per point
+  of water temperature: about 1 in 10 in summer (a fish every day and a half), 1 in 40 in winter (one a week).
 
 - [x] **11.14** Fish leave the pool, and a shadow is a fish to aim at (D156; the owner, 2026-11-15: the pool, and so
   the fish seen under the water, gets too big).
