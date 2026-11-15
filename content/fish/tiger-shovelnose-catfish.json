@@ -16,6 +16,12 @@
   "difficulty": 1,
   "rarity": "rare",
   "swims": "bottom",
+  "swim": {
+    "cruise": 6,
+    "rest": 0.45,
+    "burst": 0.2,
+    "lunge": 2.5
+  },
   "fights": "long-runner",
   "stew": [
     {

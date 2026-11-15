@@ -15,6 +15,12 @@
   "difficulty": -1,
   "rarity": "uncommon",
   "swims": "upper",
+  "swim": {
+    "cruise": 14,
+    "rest": 0.05,
+    "burst": 0.45,
+    "lunge": 3.0
+  },
   "fights": "jumper",
   "stew": [
     {

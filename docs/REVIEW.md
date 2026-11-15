@@ -24,6 +24,18 @@ Items with no note are left alone.
 
 Newest first.
 
+## How each fish swims (2026-11-15, D147, 11.5)
+
+- **Claude's numbers, from what the fish do,** not looked up: there is no published "swimming speed in pixels".
+  Each fish starts from one of seven ways of swimming, then gets its own: the pike rests 75% of the time and lunges at
+  7× its cruise; bleak cruise at 22 px/s and dart; eels and lampreys wind 3 px; trout and grayling hold still half
+  the time, as if against the current. All in `swim` in each fish file.
+- **Not watched by eye:** the browser checks pass with no errors, but a still screenshot can't show motion. Worth a
+  look in the aquarium or the dive: whether the pike's lunge reads, and whether the resting fish look alive or stuck
+  (they drift a fin's worth while resting).
+- **The winding is drawn only:** an eel's body goes up and down on screen, but where it is (and what a tap hits)
+  follows its straight path.
+
 ## Weight from length (2026-11-15, D146, 11.4)
 
 - **The numbers are FishBase's,** read straight from each species' summary page (the raw pages are kept locally). Many

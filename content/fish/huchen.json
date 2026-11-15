@@ -16,6 +16,12 @@
   "rarity": "epic",
   "endangered": true,
   "swims": "lower",
+  "swim": {
+    "cruise": 5.95,
+    "rest": 0.5,
+    "burst": 0.3,
+    "lunge": 5
+  },
   "fights": "head-shaker",
   "fighter": true,
   "stew": [

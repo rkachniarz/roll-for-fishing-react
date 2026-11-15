@@ -29,6 +29,19 @@
       "type": "array",
       "items": { "$ref": "common.schema.json#/definitions/effect" }
     },
+    "swim": {
+      "description": "How it moves when drawn swimming (D147): its easy speed in pixels a second; the chance it holds still at each new goal (a pike waiting, a trout holding against the current); the chance of a burst, and how many times its easy speed a burst is; how far it winds up and down as it goes, in pixels (an eel).",
+      "type": "object",
+      "properties": {
+        "cruise": { "type": "number", "minimum": 0 },
+        "rest": { "type": "number", "minimum": 0, "maximum": 1 },
+        "burst": { "type": "number", "minimum": 0, "maximum": 1 },
+        "lunge": { "type": "number", "minimum": 1 },
+        "wind": { "type": "number", "minimum": 0 }
+      },
+      "required": ["cruise", "rest", "burst", "lunge"],
+      "additionalProperties": false
+    },
     "lengthWeight": {
       "description": "Its weight from its length (D146): W = a × L^b, grams and centimetres of total length, from FishBase. `from`: the species the numbers are for, when a relative's were borrowed or for the record.",
       "type": "object",

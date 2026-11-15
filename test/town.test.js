@@ -501,6 +501,17 @@ test('a save from version 14 loads, the heaviest of each record its longest (D14
   assert.ok((s.book.fish['northern-pike'].heaviest?.weight ?? 0) > 0);
 });
 
+test('every fish has its own way of swimming (D147)', () => {
+  for (const f of Object.values(content.fish)) {
+    assert.ok(f.swim && f.swim.cruise > 0 && f.swim.lunge >= 1, f.id);
+  }
+  const pike = content.fish['northern-pike'].swim;
+  const bleak = content.fish.bleak.swim;
+  assert.ok(pike.rest > bleak.rest && pike.lunge > bleak.lunge, 'a pike waits and lunges');
+  assert.ok(bleak.cruise > pike.cruise, 'bleak dart about');
+  assert.ok((content.fish['mainland-eel'].swim.wind ?? 0) > 0, 'an eel winds');
+});
+
 test('white things come up as their own tier, more for a rogue (R19.1)', () => {
   /** @param {string} classId */
   const count = (classId) => {

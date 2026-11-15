@@ -436,3 +436,6 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   weren't retyped; every fish checked at its largest size for anything absurd (the electric eel was). A `condition`
   stream (save version 15), `fishWeight` in `src/engine/fish.js`, the heaviest record in the book. Seeded tests that
   compared streams around the pool's stocking now leave the condition stream out too. Measured: 248 unit tests.
+- **11.5** Swimming (D147): `swim` on all 122 fish, written by a script from seven ways of swimming and per-species
+  changes; `createShoal` (`src/scene/swim.js`) rests, bursts with the species' lunge, and winds. Measured: 249 unit
+  tests, every browser check; the motion itself not seen.

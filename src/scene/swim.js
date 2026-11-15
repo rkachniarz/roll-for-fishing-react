@@ -153,7 +153,9 @@ export function swimSprite(species) {
  * @property {Sprite} sprite
  * @property {number} x @property {number} y @property {number} vx @property {number} vy
  * @property {{ x: number, y: number }} goal
- * @property {number} cruise  Its own easy speed, pixels a second.
+ * @property {number} cruise  Its own easy speed, pixels a second: its species', give or take a little (D147).
+ * @property {{ rest: number, burst: number, lunge: number, wind: number }} way  How its species moves (D147).
+ * @property {number} restUntil  Holding still until then.
  * @property {number} burstUntil
  * @property {number} nextGoal
  * @property {number} beat  Where the tail is in its beat, in frames.
@@ -196,8 +198,12 @@ export function createShoal(parent, rand) {
     const pad = Math.min(16, (b.x1 - b.x0) / 4);
     s.goal = { x: b.x0 + pad + rand() * Math.max(1, b.x1 - b.x0 - 2 * pad), y: depthIn(b, s.quarter) };
     s.nextGoal = now + 2500 + rand() * 4000;
-    // Now and then a burst, as a startled fish does.
-    if (rand() < 0.2) s.burstUntil = now + 500 + rand() * 400;
+    // Its species' way (D147): a pike waits, then lunges; a trout holds its place; bleak dart.
+    if (rand() < s.way.rest) {
+      s.restUntil = now + 1500 + rand() * 2500;
+      s.nextGoal = s.restUntil + 500;
+    }
+    if (rand() < s.way.burst) s.burstUntil = Math.max(now, s.restUntil) + 400 + rand() * 400;
   }
 
   return {
@@ -221,6 +227,8 @@ export function createShoal(parent, rand) {
         }
         const art = swimSprite(f.species);
         const look = f.look ?? 'own';
+        /** How its species moves (D147). */
+        const way = content.fish[f.species]?.swim ?? {};
         // Under the surface, in its patch, a fish goes anywhere; side on, it keeps to its quarter.
         const swims = /** @type {keyof typeof QUARTER | undefined} */ (content.fish[f.species]?.swims);
         const quarter = !f.box && swims ? QUARTER[swims] : null;
@@ -238,7 +246,9 @@ export function createShoal(parent, rand) {
           vx: (rand() - 0.5) * 10,
           vy: 0,
           goal: { x: 0, y: 0 },
-          cruise: 10 + rand() * 10,
+          cruise: (way.cruise ?? 12) * (0.85 + rand() * 0.3),
+          way: { rest: way.rest ?? 0.1, burst: way.burst ?? 0.2, lunge: way.lunge ?? 3.5, wind: way.wind ?? 0 },
+          restUntil: 0,
           burstUntil: 0,
           nextGoal: 0,
           beat: rand() * 6,
@@ -258,9 +268,11 @@ export function createShoal(parent, rand) {
       last = now;
       for (const s of swimmers) {
         if (now > s.nextGoal || Math.hypot(s.goal.x - s.x, s.goal.y - s.y) < 6) newGoal(s, now);
-        const bursting = now < s.burstUntil;
-        // Under the surface, in a small patch, they mill about slowly.
-        const speed = (bursting ? s.cruise * 3.5 : s.cruise) * (s.box ? 0.35 : 1);
+        const bursting = now < s.burstUntil && now >= s.restUntil;
+        const resting = now < s.restUntil;
+        // Under the surface, in a small patch, they mill about slowly. Resting, it hangs
+        // in the water, a fin's worth of drift; bursting, its species' lunge (D147).
+        const speed = (resting ? s.cruise * 0.08 : bursting ? s.cruise * s.way.lunge : s.cruise) * (s.box ? 0.35 : 1);
         const dx = s.goal.x - s.x;
         const dy = (s.goal.y - s.y) * 0.6; // fish swim mostly level
         const d = Math.hypot(dx, dy) || 1;
@@ -286,7 +298,9 @@ export function createShoal(parent, rand) {
         s.sprite.texture = frames[Math.floor(s.beat)];
         // The art faces left: facing right is a mirror, not a scaling (R7.3).
         s.sprite.scale.x = s.right ? -1 : 1;
-        s.sprite.position.set(Math.round(s.x), Math.round(s.y));
+        // Winding up and down as it goes, an eel's way (D147): drawn only, so it never leaves its box.
+        const wind = s.way.wind && !resting ? Math.sin(now / 260 + s.beat) * s.way.wind * Math.min(1, v / 6) : 0;
+        s.sprite.position.set(Math.round(s.x), Math.round(s.y + wind));
       }
     },
     /**

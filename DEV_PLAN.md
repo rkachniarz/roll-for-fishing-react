@@ -34,7 +34,7 @@ is where the others may lead.
   journal with a heaviest-catch record beside the longest); each fish its own condition, a spread of about ±10%,
   rolled hidden when the line goes out; only shown, no effect on the game; the constants looked up on FishBase per
   species with the source noted, a close relative's where none is found, listed in REVIEW.md.
-- [ ] **11.5** How they swim: a speed and burst rate per species (a pike still then lunging, an eel slow and winding,
+- [x] **11.5** How they swim (D147): a speed and burst rate per species (a pike still then lunging, an eel slow and winding,
   a trout holding against the current, bleak darting), in `src/scene/swim.js`.
   *The owner's answers (2026-11-15):* everywhere fish swim (the aquarium, the dive, Look Underwater, the title, the
   shadows on the water); numbers per species, not a handful of kinds, unless that costs performance.

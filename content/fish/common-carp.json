@@ -16,6 +16,12 @@
   "rarity": "common",
   "endangered": true,
   "swims": "bottom",
+  "swim": {
+    "cruise": 8,
+    "rest": 0.2,
+    "burst": 0.15,
+    "lunge": 3.0
+  },
   "fights": "long-runner",
   "fighter": true,
   "stew": [

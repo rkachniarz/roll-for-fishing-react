@@ -16,6 +16,13 @@
   "difficulty": 1,
   "rarity": "epic",
   "swims": "lower",
+  "swim": {
+    "cruise": 5,
+    "rest": 0.4,
+    "burst": 0.1,
+    "lunge": 2.0,
+    "wind": 2
+  },
   "fights": "roller",
   "stew": [
     {

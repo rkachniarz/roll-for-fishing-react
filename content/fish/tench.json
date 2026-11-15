@@ -15,6 +15,12 @@
   "difficulty": 0,
   "rarity": "uncommon",
   "swims": "bottom",
+  "swim": {
+    "cruise": 4,
+    "rest": 0.5,
+    "burst": 0.15,
+    "lunge": 2.5
+  },
   "fights": "bottom-hugger",
   "stew": [
     {

@@ -21,6 +21,12 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "surface",
+      "swim": {
+        "cruise": 5.95,
+        "rest": 0.3,
+        "burst": 0.15,
+        "lunge": 5
+      },
       "fights": "jumper",
       "fighter": true,
       "stew": [
@@ -67,6 +73,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
+      "swim": {
+        "cruise": 9,
+        "rest": 0.5,
+        "burst": 0.35,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -111,6 +123,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "swim": {
+        "cruise": 16,
+        "rest": 0.1,
+        "burst": 0.45,
+        "lunge": 4
+      },
       "fights": "jumper",
       "fighter": true,
       "stew": [
@@ -157,6 +175,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.45,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -207,6 +231,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 10.2,
+        "rest": 0.1,
+        "burst": 0.3,
+        "lunge": 4
+      },
       "fights": "jumper",
       "fighter": true,
       "stew": [
@@ -252,6 +282,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "upper",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.5,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -298,6 +334,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "swim": {
+        "cruise": 4,
+        "rest": 0.6,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -343,6 +385,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "surface",
+      "swim": {
+        "cruise": 22,
+        "rest": 0.05,
+        "burst": 0.45,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -388,6 +436,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.5,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -433,6 +487,13 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "lower",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.65,
+        "burst": 0.45,
+        "lunge": 6,
+        "wind": 0.8
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -477,6 +538,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.5,
+        "burst": 0.3,
+        "lunge": 4
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -522,6 +589,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.45,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -570,6 +643,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.5,
+        "burst": 0.3,
+        "lunge": 4
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -617,6 +696,12 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "upper",
+      "swim": {
+        "cruise": 8.5,
+        "rest": 0,
+        "burst": 0.2,
+        "lunge": 4
+      },
       "fights": "long-runner",
       "fighter": true,
       "stew": [
@@ -661,6 +746,13 @@ export const content = {
       "difficulty": 1,
       "rarity": "common",
       "swims": "bottom",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.4,
+        "burst": 0.1,
+        "lunge": 2,
+        "wind": 1.5
+      },
       "fights": "roller",
       "stew": [
         {
@@ -706,6 +798,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "upper",
+      "swim": {
+        "cruise": 20,
+        "rest": 0.05,
+        "burst": 0.45,
+        "lunge": 3
+      },
       "fights": "roller",
       "stew": [
         {
@@ -750,6 +848,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.7,
+        "burst": 0.45,
+        "lunge": 6
+      },
       "fights": "head-shaker",
       "fighter": true,
       "stew": [
@@ -796,6 +900,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.65,
+        "burst": 0.15,
+        "lunge": 4
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -845,6 +955,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "lower",
+      "swim": {
+        "cruise": 4,
+        "rest": 0.65,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -887,6 +1003,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "lower",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.65,
+        "burst": 0.45,
+        "lunge": 6
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -931,6 +1053,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.35,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -975,6 +1103,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "upper",
+      "swim": {
+        "cruise": 12,
+        "rest": 0.1,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -1019,6 +1153,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "swim": {
+        "cruise": 14,
+        "rest": 0.05,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -1065,6 +1205,13 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.4,
+        "burst": 0.1,
+        "lunge": 2,
+        "wind": 2
+      },
       "fights": "roller",
       "stew": [
         {
@@ -1111,6 +1258,13 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "bottom",
+      "swim": {
+        "cruise": 2.55,
+        "rest": 0.5,
+        "burst": 0.15,
+        "lunge": 2.5,
+        "wind": 0.5
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -1154,6 +1308,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.25,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -1204,6 +1364,12 @@ export const content = {
       "rarity": "common",
       "endangered": true,
       "swims": "bottom",
+      "swim": {
+        "cruise": 8,
+        "rest": 0.2,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "fighter": true,
       "stew": [
@@ -1254,6 +1420,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.5,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -1299,6 +1471,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
+      "swim": {
+        "cruise": 18,
+        "rest": 0.05,
+        "burst": 0.45,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -1340,6 +1518,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.6,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -1383,6 +1567,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "epic",
       "swims": "lower",
+      "swim": {
+        "cruise": 4,
+        "rest": 0.5,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -1425,6 +1615,13 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "bottom",
+      "swim": {
+        "cruise": 3.4,
+        "rest": 0.2,
+        "burst": 0.1,
+        "lunge": 2,
+        "wind": 3
+      },
       "fights": "roller",
       "stew": [
         {
@@ -1469,6 +1666,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.5,
+        "burst": 0.35,
+        "lunge": 3
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -1514,6 +1717,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
+      "swim": {
+        "cruise": 8,
+        "rest": 0.1,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -1560,6 +1769,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "surface",
+      "swim": {
+        "cruise": 12,
+        "rest": 0.3,
+        "burst": 0.45,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -1609,6 +1824,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "bottom",
+      "swim": {
+        "cruise": 4,
+        "rest": 0.5,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -1651,6 +1872,12 @@ export const content = {
       "rarity": "uncommon",
       "endangered": true,
       "swims": "lower",
+      "swim": {
+        "cruise": 8,
+        "rest": 0.35,
+        "burst": 0.3,
+        "lunge": 4
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -1696,6 +1923,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "upper",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.55,
+        "burst": 0.3,
+        "lunge": 4
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -1740,6 +1973,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
+      "swim": {
+        "cruise": 4.25,
+        "rest": 0.25,
+        "burst": 0.05,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "fighter": true,
       "stew": [
@@ -1791,6 +2030,12 @@ export const content = {
       "rarity": "rare",
       "endangered": true,
       "swims": "bottom",
+      "swim": {
+        "cruise": 3.4,
+        "rest": 0.55,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "bottom-hugger",
       "fighter": true,
       "stew": [
@@ -1836,6 +2081,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.5,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -1885,6 +2136,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "swim": {
+        "cruise": 15,
+        "rest": 0.1,
+        "burst": 0.35,
+        "lunge": 4
+      },
       "fights": "jumper",
       "fighter": true,
       "stew": [
@@ -1933,6 +2190,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "swim": {
+        "cruise": 11.05,
+        "rest": 0.1,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "fighter": true,
       "stew": [
@@ -1982,6 +2245,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "upper",
+      "swim": {
+        "cruise": 14,
+        "rest": 0.05,
+        "burst": 0.45,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -2027,6 +2296,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "upper",
+      "swim": {
+        "cruise": 10.2,
+        "rest": 0.1,
+        "burst": 0.4,
+        "lunge": 5
+      },
       "fights": "head-shaker",
       "fighter": true,
       "stew": [
@@ -2071,6 +2346,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.3,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -2113,6 +2394,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "bottom",
+      "swim": {
+        "cruise": 3.4,
+        "rest": 0.55,
+        "burst": 0.15,
+        "lunge": 4
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -2154,6 +2441,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "swim": {
+        "cruise": 7.65,
+        "rest": 0.1,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "fighter": true,
       "stew": [
@@ -2199,6 +2492,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "surface",
+      "swim": {
+        "cruise": 18,
+        "rest": 0.05,
+        "burst": 0.45,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -2244,6 +2543,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.55,
+        "burst": 0.3,
+        "lunge": 4
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -2290,6 +2595,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "rare",
       "swims": "upper",
+      "swim": {
+        "cruise": 12.75,
+        "rest": 0.1,
+        "burst": 0.25,
+        "lunge": 4
+      },
       "fights": "jumper",
       "fighter": true,
       "stew": [
@@ -2336,6 +2647,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.3,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -2382,6 +2699,13 @@ export const content = {
       "difficulty": -2,
       "rarity": "rare",
       "swims": "bottom",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.6,
+        "burst": 0.15,
+        "lunge": 2.5,
+        "wind": 0.5
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -2428,6 +2752,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "swim": {
+        "cruise": 5.95,
+        "rest": 0.5,
+        "burst": 0.3,
+        "lunge": 5
+      },
       "fights": "head-shaker",
       "fighter": true,
       "stew": [
@@ -2475,6 +2805,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "bottom",
+      "swim": {
+        "cruise": 4,
+        "rest": 0.6,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "roller",
       "stew": [
         {
@@ -2522,6 +2858,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "upper",
+      "swim": {
+        "cruise": 12,
+        "rest": 0.1,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -2567,6 +2909,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "swim": {
+        "cruise": 9,
+        "rest": 0.35,
+        "burst": 0.3,
+        "lunge": 4
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -2613,6 +2961,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "bottom",
+      "swim": {
+        "cruise": 4.25,
+        "rest": 0.25,
+        "burst": 0.05,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "fighter": true,
       "stew": [
@@ -2662,6 +3016,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 10,
+        "rest": 0.1,
+        "burst": 0.2,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -2707,6 +3067,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 12,
+        "rest": 0.1,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -2752,6 +3118,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "upper",
+      "swim": {
+        "cruise": 14,
+        "rest": 0.1,
+        "burst": 0.25,
+        "lunge": 4
+      },
       "fights": "jumper",
       "fighter": true,
       "stew": [
@@ -2799,6 +3171,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "lower",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.5,
+        "burst": 0.45,
+        "lunge": 6
+      },
       "fights": "jumper",
       "fighter": true,
       "stew": [
@@ -2845,6 +3223,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "upper",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.5,
+        "burst": 0.3,
+        "lunge": 4
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -2891,6 +3275,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
+      "swim": {
+        "cruise": 3,
+        "rest": 0.65,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -2935,6 +3325,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.6,
+        "burst": 0.3,
+        "lunge": 3
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -2977,6 +3373,13 @@ export const content = {
       "rarity": "uncommon",
       "endangered": true,
       "swims": "bottom",
+      "swim": {
+        "cruise": 5.1,
+        "rest": 0.2,
+        "burst": 0.1,
+        "lunge": 2,
+        "wind": 3
+      },
       "fights": "roller",
       "stew": [
         {
@@ -3023,6 +3426,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "swim": {
+        "cruise": 4,
+        "rest": 0.65,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -3068,6 +3477,12 @@ export const content = {
       "rarity": "uncommon",
       "endangered": true,
       "swims": "upper",
+      "swim": {
+        "cruise": 12,
+        "rest": 0.1,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -3113,6 +3528,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "lower",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.55,
+        "burst": 0.45,
+        "lunge": 6
+      },
       "fights": "bottom-hugger",
       "fighter": true,
       "stew": [
@@ -3159,6 +3580,13 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
+      "swim": {
+        "cruise": 3.4,
+        "rest": 0.4,
+        "burst": 0.1,
+        "lunge": 2,
+        "wind": 2
+      },
       "fights": "roller",
       "stew": [
         {
@@ -3202,6 +3630,12 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "upper",
+      "swim": {
+        "cruise": 15,
+        "rest": 0.05,
+        "burst": 0.45,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -3248,6 +3682,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.45,
+        "burst": 0.4,
+        "lunge": 4
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -3293,6 +3733,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "upper",
+      "swim": {
+        "cruise": 4.25,
+        "rest": 0.8,
+        "burst": 0.45,
+        "lunge": 7
+      },
       "fights": "head-shaker",
       "fighter": true,
       "stew": [
@@ -3338,6 +3784,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "swim": {
+        "cruise": 8,
+        "rest": 0.35,
+        "burst": 0.3,
+        "lunge": 4
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -3383,6 +3835,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "lower",
+      "swim": {
+        "cruise": 4.25,
+        "rest": 0.75,
+        "burst": 0.45,
+        "lunge": 7
+      },
       "fights": "head-shaker",
       "fighter": true,
       "stew": [
@@ -3429,6 +3887,13 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "surface",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.65,
+        "burst": 0.45,
+        "lunge": 6,
+        "wind": 0.8
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -3474,6 +3939,12 @@ export const content = {
       "rarity": "rare",
       "endangered": true,
       "swims": "upper",
+      "swim": {
+        "cruise": 13,
+        "rest": 0.1,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -3524,6 +3995,13 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.4,
+        "burst": 0.1,
+        "lunge": 2,
+        "wind": 1.5
+      },
       "fights": "roller",
       "stew": [
         {
@@ -3565,6 +4043,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.5,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -3609,6 +4093,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "surface",
+      "swim": {
+        "cruise": 9,
+        "rest": 0.1,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -3658,6 +4148,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "upper",
+      "swim": {
+        "cruise": 9,
+        "rest": 0.65,
+        "burst": 0.45,
+        "lunge": 7
+      },
       "fights": "jumper",
       "fighter": true,
       "stew": [
@@ -3704,6 +4200,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "lower",
+      "swim": {
+        "cruise": 8,
+        "rest": 0.4,
+        "burst": 0.45,
+        "lunge": 6
+      },
       "fights": "head-shaker",
       "fighter": true,
       "stew": [
@@ -3749,6 +4251,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "lower",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.5,
+        "burst": 0.35,
+        "lunge": 3
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -3792,6 +4300,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "upper",
+      "swim": {
+        "cruise": 10,
+        "rest": 0.1,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "roller",
       "stew": [
         {
@@ -3839,6 +4353,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.5,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -3884,6 +4404,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "upper",
+      "swim": {
+        "cruise": 8,
+        "rest": 0.5,
+        "burst": 0.35,
+        "lunge": 4
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -3930,6 +4456,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "lower",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.5,
+        "burst": 0.45,
+        "lunge": 5
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -3975,6 +4507,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "uncommon",
       "swims": "bottom",
+      "swim": {
+        "cruise": 5.1,
+        "rest": 0.45,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -4018,6 +4556,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "swim": {
+        "cruise": 12,
+        "rest": 0.05,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -4060,6 +4604,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.5,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -4104,6 +4654,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
+      "swim": {
+        "cruise": 13,
+        "rest": 0.05,
+        "burst": 0.3,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -4149,6 +4705,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.45,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -4195,6 +4757,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "rare",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.5,
+        "burst": 0.45,
+        "lunge": 6
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -4240,6 +4808,13 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.2,
+        "burst": 0.1,
+        "lunge": 2,
+        "wind": 3
+      },
       "fights": "roller",
       "stew": [
         {
@@ -4282,6 +4857,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "epic",
       "swims": "surface",
+      "swim": {
+        "cruise": 9,
+        "rest": 0.1,
+        "burst": 0.25,
+        "lunge": 5
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -4326,6 +4907,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "swim": {
+        "cruise": 8,
+        "rest": 0.1,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -4371,6 +4958,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "upper",
+      "swim": {
+        "cruise": 11.05,
+        "rest": 0.1,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "jumper",
       "fighter": true,
       "stew": [
@@ -4416,6 +5009,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 8,
+        "rest": 0.5,
+        "burst": 0.35,
+        "lunge": 4
+      },
       "fights": "jumper",
       "fighter": true,
       "stew": [
@@ -4462,6 +5061,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "swim": {
+        "cruise": 20,
+        "rest": 0.05,
+        "burst": 0.45,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -4508,6 +5113,13 @@ export const content = {
       "difficulty": -1,
       "rarity": "rare",
       "swims": "bottom",
+      "swim": {
+        "cruise": 3,
+        "rest": 0.2,
+        "burst": 0.1,
+        "lunge": 2,
+        "wind": 1.5
+      },
       "fights": "roller",
       "stew": [
         {
@@ -4549,6 +5161,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "epic",
       "swims": "bottom",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.5,
+        "burst": 0.3,
+        "lunge": 4
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -4597,6 +5215,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.2,
+        "burst": 0.05,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -4645,6 +5269,13 @@ export const content = {
       "difficulty": -2,
       "rarity": "common",
       "swims": "bottom",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.45,
+        "burst": 0.15,
+        "lunge": 2.5,
+        "wind": 1
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -4688,6 +5319,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "lower",
+      "swim": {
+        "cruise": 6.8,
+        "rest": 0.1,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "roller",
       "stew": [
         {
@@ -4741,6 +5378,12 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "bottom",
+      "swim": {
+        "cruise": 3.4,
+        "rest": 0.45,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -4789,6 +5432,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "lower",
+      "swim": {
+        "cruise": 5.1,
+        "rest": 0.5,
+        "burst": 0.35,
+        "lunge": 4
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -4838,6 +5487,12 @@ export const content = {
       "difficulty": 3,
       "rarity": "epic",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6.8,
+        "rest": 0,
+        "burst": 0.15,
+        "lunge": 3
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -4886,6 +5541,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.5,
+        "burst": 0.25,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -4935,6 +5596,12 @@ export const content = {
       "rarity": "epic",
       "endangered": true,
       "swims": "lower",
+      "swim": {
+        "cruise": 5.95,
+        "rest": 0.5,
+        "burst": 0.3,
+        "lunge": 5
+      },
       "fights": "head-shaker",
       "fighter": true,
       "stew": [
@@ -4981,6 +5648,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "bottom",
+      "swim": {
+        "cruise": 4,
+        "rest": 0.5,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "bottom-hugger",
       "stew": [
         {
@@ -5027,6 +5700,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "rare",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.45,
+        "burst": 0.2,
+        "lunge": 2.5
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -5071,6 +5750,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "epic",
       "swims": "lower",
+      "swim": {
+        "cruise": 5,
+        "rest": 0.65,
+        "burst": 0.45,
+        "lunge": 6
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -5116,6 +5801,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "upper",
+      "swim": {
+        "cruise": 18,
+        "rest": 0.05,
+        "burst": 0.45,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -5165,6 +5856,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.45,
+        "burst": 0.45,
+        "lunge": 6
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -5210,6 +5907,13 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.2,
+        "burst": 0.1,
+        "lunge": 2,
+        "wind": 2.5
+      },
       "fights": "roller",
       "stew": [
         {
@@ -5255,6 +5959,13 @@ export const content = {
       "difficulty": 3,
       "rarity": "rare",
       "swims": "bottom",
+      "swim": {
+        "cruise": 3.4,
+        "rest": 0.65,
+        "burst": 0.45,
+        "lunge": 6,
+        "wind": 1
+      },
       "fights": "long-runner",
       "fighter": true,
       "stew": [
@@ -5300,6 +6011,12 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "bottom",
+      "swim": {
+        "cruise": 6,
+        "rest": 0.45,
+        "burst": 0.15,
+        "lunge": 2.5
+      },
       "fights": "long-runner",
       "stew": [
         {
@@ -5344,6 +6061,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "uncommon",
       "swims": "surface",
+      "swim": {
+        "cruise": 16,
+        "rest": 0.05,
+        "burst": 0.45,
+        "lunge": 3
+      },
       "fights": "jumper",
       "stew": [
         {
@@ -5389,6 +6112,12 @@ export const content = {
       "rarity": "rare",
       "endangered": true,
       "swims": "lower",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.5,
+        "burst": 0.3,
+        "lunge": 3
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -5435,6 +6164,12 @@ export const content = {
       "difficulty": 2,
       "rarity": "epic",
       "swims": "bottom",
+      "swim": {
+        "cruise": 4.25,
+        "rest": 0.45,
+        "burst": 0.15,
+        "lunge": 4
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -5479,6 +6214,12 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.5,
+        "burst": 0.35,
+        "lunge": 3
+      },
       "fights": "head-shaker",
       "stew": [
         {
@@ -5521,6 +6262,12 @@ export const content = {
       "difficulty": 1,
       "rarity": "uncommon",
       "swims": "lower",
+      "swim": {
+        "cruise": 7,
+        "rest": 0.45,
+        "burst": 0.45,
+        "lunge": 6
+      },
       "fights": "head-shaker",
       "stew": [
         {
