@@ -414,6 +414,7 @@ const UI_STRINGS = {
   'depth.hint': 'Fish of that depth bite more, the others less; the bottom brings up more that isn\'t fish.',
   'depth.close': 'Close',
   'error.depth.lineOut': 'Not while your line is out.',
+  'error.export.lineOut': 'Not while your line is out.',
   'log.depth-set': 'You set your line for the {depth}.',
   'log.depth-cleared': 'Your line is no longer set for a depth.',
   'value.surfaceFishFind': 'Surface Fish Find',

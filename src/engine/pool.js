@@ -12,7 +12,7 @@
 //   - a pool down to fewer than two fish is rolled anew at once.
 //
 // All of it is worked out when the pool is next looked at, never on a clock
-// (D7), and drawn from the `pool` stream alone (D4). A stocked fish is `wild`
+// (D7), and drawn from the `pool` stream (D4), each fish's condition from `condition` (D146). A stocked fish is `wild`
 // until the player meets it; `looks` counts how many times the wizard has
 // looked at it (shape, then colours, then its name).
 
@@ -23,7 +23,7 @@ import { rollFish } from './fish.js';
 import { diceFrom } from './state.js';
 import { poolKey } from './champions.js';
 import { learn } from './knowledge.js';
-import { momentOf, valuesFor } from './game.js';
+import { momentOf } from './game.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./state.js').PoolFish} PoolFish */
@@ -61,17 +61,17 @@ export function poolDue(state) {
  * Tends the pool where the player is (see the top of the file). Changes
  * `state` in place (a copy the caller owns); draws only from `pool`.
  * @param {GameState} state
- * @param {import('./values.js').Source[]} [extra]  See valuesFor.
  * @returns {boolean}  Whether anything changed.
  */
-export function tendPool(state, extra = []) {
+export function tendPool(state) {
   if (!poolDue(state)) return false;
   const rules = content.rules.pool;
   const key = poolKey(state);
   const season = seasonKey(state);
-  const table = locationTable({ location: state.location, spot: state.spot }, 'fish', { moment: momentOf(state) });
+  // Who lives here is the water's business, not the player's (D153): the bait on the hook draws nobody in,
+  // and no perk, gear or buff makes the pool's fish bigger or harder.
+  const table = locationTable({ location: state.location, spot: state.spot }, 'fish', { moment: { ...momentOf(state), bait: null } });
   if (!table.length) return false;
-  const values = valuesFor(state, extra).flat;
   const { dice, commit } = diceFrom(state);
   /** @type {PoolFish[]} */
   let pool = [...(state.escaped[key] ?? [])];
@@ -80,7 +80,7 @@ export function tendPool(state, extra = []) {
     for (let i = 0; i < n; i++) {
       const species = pick(table, dice.pool);
       if (!species?.id) continue;
-      const fish = rollFish(/** @type {string} */ (species.id), { fishSizeBand: values.fishSizeBand, fishDifficulty: values.fishDifficulty, fishXp: values.fishXp }, dice.pool, { condition: dice.condition });
+      const fish = rollFish(/** @type {string} */ (species.id), { fishSizeBand: 0, fishDifficulty: 0, fishXp: 0 }, dice.pool, { condition: dice.condition });
       pool.push({ ...fish, wild: true });
     }
   };
@@ -112,13 +112,12 @@ export function tendPool(state, extra = []) {
 /**
  * The state with its pool tended: the same state if nothing was due.
  * @param {GameState} state
- * @param {import('./values.js').Source[]} [extra]
  * @returns {GameState}
  */
-export function tended(state, extra = []) {
+export function tended(state) {
   if (!poolDue(state)) return state;
   const next = structuredClone(state);
-  return tendPool(next, extra) ? next : state;
+  return tendPool(next) ? next : state;
 }
 
 /**
@@ -137,12 +136,11 @@ export function lookStage(looks) {
  * looked at once more; one looked at often enough is known to be here (R4.5).
  * Changes `state` in place.
  * @param {GameState} state
- * @param {import('./values.js').Source[]} [extra]
  * @returns {import('./game.js').GameEvent[]}  Empty if there's no water to look into.
  */
-export function lookUnderwater(state, extra = []) {
+export function lookUnderwater(state) {
   if (!hasWater(state)) return [];
-  tendPool(state, extra);
+  tendPool(state);
   const key = poolKey(state);
   const pool = (state.escaped[key] ?? []).map((f) => ({ ...f, looks: (f.looks ?? 0) + 1 }));
   state.escaped = { ...state.escaped, [key]: pool };

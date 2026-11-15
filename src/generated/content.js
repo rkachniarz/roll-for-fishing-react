@@ -863,7 +863,7 @@ export const content = {
       ],
       "spawn": {
         "min": 0,
-        "max": 1,
+        "max": 2,
         "trend": "cooling",
         "from": "0.6-1.7 °C"
       },
@@ -1565,6 +1565,7 @@ export const content = {
       "rarity": "common",
       "endangered": true,
       "swims": "bottom",
+      "shoals": true,
       "plants": [
         "lives",
         "spawns"
@@ -1631,6 +1632,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "lower",
+      "shoals": true,
       "plants": [
         "lives",
         "spawns"
@@ -1965,6 +1967,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
+      "shoals": true,
       "plants": [
         "lives",
         "spawns"
@@ -3179,7 +3182,7 @@ export const content = {
       "predator": true,
       "spawn": {
         "min": 0,
-        "max": 1,
+        "max": 2,
         "trend": "cooling",
         "from": "-0.4-1.5 °C"
       },
@@ -4868,7 +4871,7 @@ export const content = {
       "swims": "upper",
       "spawn": {
         "min": -2,
-        "max": 1,
+        "max": 2,
         "trend": "cooling",
         "from": "-4-0 °C"
       },
@@ -5280,6 +5283,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "surface",
+      "shoals": true,
       "plants": [
         "lives",
         "spawns"
@@ -5341,6 +5345,7 @@ export const content = {
       "difficulty": -1,
       "rarity": "common",
       "swims": "bottom",
+      "shoals": true,
       "plants": [
         "spawns"
       ],
@@ -6824,6 +6829,7 @@ export const content = {
       "difficulty": 0,
       "rarity": "common",
       "swims": "bottom",
+      "shoals": true,
       "spawn": {
         "min": 5,
         "max": 8,
@@ -8874,10 +8880,6 @@ export const content = {
               "weight": 4
             },
             {
-              "id": "central-mudminnow-school",
-              "weight": 3
-            },
-            {
               "id": "big-mainland-eel",
               "weight": 1
             },
@@ -9033,6 +9035,10 @@ export const content = {
             {
               "id": "big-wels-catfish",
               "weight": 1
+            },
+            {
+              "id": "big-ide",
+              "weight": 2
             }
           ],
           "rift": [
@@ -9181,16 +9187,20 @@ export const content = {
               "weight": 4
             },
             {
-              "id": "rock-bass-school",
-              "weight": 3
-            },
-            {
               "id": "big-lake-brown-trout",
               "weight": 2
             },
             {
               "id": "big-burbot",
               "weight": 1
+            },
+            {
+              "id": "big-rock-bass",
+              "weight": 3
+            },
+            {
+              "id": "big-smallmouth-bass",
+              "weight": 3
             }
           ],
           "rift": [
@@ -9403,10 +9413,6 @@ export const content = {
             {
               "id": "big-burbot",
               "weight": 4
-            },
-            {
-              "id": "deepwater-sculpin-school",
-              "weight": 3
             },
             {
               "id": "big-lake-trout",
@@ -9702,11 +9708,11 @@ export const content = {
               "weight": 5
             },
             {
-              "id": "mainland-bullhead-school",
+              "id": "grayling-school",
               "weight": 4
             },
             {
-              "id": "stone-loach-school",
+              "id": "frostfin-grayling-school",
               "weight": 3
             },
             {
@@ -9716,6 +9722,10 @@ export const content = {
             {
               "id": "big-taimen",
               "weight": 1
+            },
+            {
+              "id": "big-brown-trout",
+              "weight": 4
             }
           ],
           "rift": [
@@ -9838,15 +9848,15 @@ export const content = {
           ],
           "features": [
             {
-              "id": "chub-school",
+              "id": "dace-school",
               "weight": 5
             },
             {
-              "id": "dace-school",
+              "id": "gudgeon-school",
               "weight": 4
             },
             {
-              "id": "gudgeon-school",
+              "id": "roach-school",
               "weight": 3
             },
             {
@@ -9868,6 +9878,14 @@ export const content = {
             {
               "id": "big-golden-dorado",
               "weight": 1
+            },
+            {
+              "id": "big-chub",
+              "weight": 5
+            },
+            {
+              "id": "big-ide",
+              "weight": 2
             }
           ],
           "rift": [
@@ -10016,6 +10034,10 @@ export const content = {
             {
               "id": "big-sea-lamprey",
               "weight": 1
+            },
+            {
+              "id": "big-ide",
+              "weight": 4
             }
           ],
           "rift": [
@@ -12068,6 +12090,32 @@ export const content = {
       ],
       "minBand": "gigantic"
     },
+    "big-brown-trout": {
+      "id": "big-brown-trout",
+      "name": "feature.big-brown-trout.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "brown-trout",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic",
+      "placeholder": [
+        "name"
+      ]
+    },
     "big-burbot": {
       "id": "big-burbot",
       "name": "feature.big-burbot.name",
@@ -12160,6 +12208,32 @@ export const content = {
       ],
       "minBand": "gigantic"
     },
+    "big-chub": {
+      "id": "big-chub",
+      "name": "feature.big-chub.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "chub",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic",
+      "placeholder": [
+        "name"
+      ]
+    },
     "big-golden-dorado": {
       "id": "big-golden-dorado",
       "name": "feature.big-golden-dorado.name",
@@ -12228,6 +12302,32 @@ export const content = {
         }
       ],
       "minBand": "gigantic"
+    },
+    "big-ide": {
+      "id": "big-ide",
+      "name": "feature.big-ide.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "ide",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic",
+      "placeholder": [
+        "name"
+      ]
     },
     "big-lake-brown-trout": {
       "id": "big-lake-brown-trout",
@@ -12413,6 +12513,32 @@ export const content = {
       ],
       "minBand": "gigantic"
     },
+    "big-rock-bass": {
+      "id": "big-rock-bass",
+      "name": "feature.big-rock-bass.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "rock-bass",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic",
+      "placeholder": [
+        "name"
+      ]
+    },
     "big-sauger": {
       "id": "big-sauger",
       "name": "feature.big-sauger.name",
@@ -12458,6 +12584,32 @@ export const content = {
         }
       ],
       "minBand": "gigantic"
+    },
+    "big-smallmouth-bass": {
+      "id": "big-smallmouth-bass",
+      "name": "feature.big-smallmouth-bass.name",
+      "kind": "big-fish",
+      "radius": 8,
+      "uses": 1,
+      "lifetime": 10,
+      "swimsOff": 1,
+      "drift": 6,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 100
+        }
+      ],
+      "fish": [
+        {
+          "id": "smallmouth-bass",
+          "weight": 1
+        }
+      ],
+      "minBand": "gigantic",
+      "placeholder": [
+        "name"
+      ]
     },
     "big-taimen": {
       "id": "big-taimen",
@@ -12658,7 +12810,8 @@ export const content = {
           "id": "central-mudminnow",
           "weight": 1
         }
-      ]
+      ],
+      "retired": true
     },
     "chub-school": {
       "id": "chub-school",
@@ -12679,7 +12832,8 @@ export const content = {
           "id": "chub",
           "weight": 1
         }
-      ]
+      ],
+      "retired": true
     },
     "common-bream-school": {
       "id": "common-bream-school",
@@ -12763,7 +12917,8 @@ export const content = {
           "id": "deepwater-sculpin",
           "weight": 1
         }
-      ]
+      ],
+      "retired": true
     },
     "ferrstad-carp-school": {
       "id": "ferrstad-carp-school",
@@ -12786,6 +12941,30 @@ export const content = {
         }
       ]
     },
+    "frostfin-grayling-school": {
+      "id": "frostfin-grayling-school",
+      "name": "feature.frostfin-grayling-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "frostfin-grayling",
+          "weight": 1
+        }
+      ],
+      "placeholder": [
+        "name"
+      ]
+    },
     "glint": {
       "id": "glint",
       "name": "feature.glint.name",
@@ -12803,6 +12982,30 @@ export const content = {
           "value": "treasureFind",
           "add": 40
         }
+      ]
+    },
+    "grayling-school": {
+      "id": "grayling-school",
+      "name": "feature.grayling-school.name",
+      "kind": "school",
+      "radius": 14,
+      "uses": 4,
+      "lifetime": 24,
+      "drift": 4,
+      "effects": [
+        {
+          "value": "fishFind",
+          "add": 40
+        }
+      ],
+      "fish": [
+        {
+          "id": "grayling",
+          "weight": 1
+        }
+      ],
+      "placeholder": [
+        "name"
       ]
     },
     "gudgeon-school": {
@@ -12845,7 +13048,8 @@ export const content = {
           "id": "mainland-bullhead",
           "weight": 1
         }
-      ]
+      ],
+      "retired": true
     },
     "minnow-school": {
       "id": "minnow-school",
@@ -12929,7 +13133,8 @@ export const content = {
           "id": "rock-bass",
           "weight": 1
         }
-      ]
+      ],
+      "retired": true
     },
     "rudd-school": {
       "id": "rudd-school",
@@ -13034,7 +13239,8 @@ export const content = {
           "id": "stone-loach",
           "weight": 1
         }
-      ]
+      ],
+      "retired": true
     },
     "vendace-school": {
       "id": "vendace-school",
@@ -14534,6 +14740,7 @@ export const content = {
       "placeholder": true,
       "lag": 48,
       "minWater": 1,
+      "trendLag": 336,
       "gather": 3,
       "schools": 3
     },
@@ -16549,13 +16756,16 @@ export const strings = {
     "feature.big-asp.name": "a big asp just under the surface",
     "feature.big-black-crappie.name": "a big black crappie just under the surface",
     "feature.big-bowfin.name": "a big bowfin just under the surface",
+    "feature.big-brown-trout.name": "a big brown trout just under the surface",
     "feature.big-burbot.name": "a big burbot just under the surface",
     "feature.big-cassalan-pike.name": "a big Cassalan pike just under the surface",
     "feature.big-chain-pickerel.name": "a big chain pickerel just under the surface",
     "feature.big-channel-catfish.name": "a big channel catfish just under the surface",
+    "feature.big-chub.name": "a big chub just under the surface",
     "feature.big-golden-dorado.name": "a big golden dorado just under the surface",
     "feature.big-grasslands-silverside.name": "a big Grasslands silverside just under the surface",
     "feature.big-huchen.name": "a big huchen just under the surface",
+    "feature.big-ide.name": "a big ide just under the surface",
     "feature.big-lake-brown-trout.name": "a big lake brown trout just under the surface",
     "feature.big-lake-trout.name": "a big lake trout just under the surface",
     "feature.big-landlocked-great-sea-salmon.name": "a big landlocked Great Sea salmon just under the surface",
@@ -16564,8 +16774,10 @@ export const strings = {
     "feature.big-muskellunge.name": "a big muskellunge just under the surface",
     "feature.big-northern-snakehead.name": "a big northern snakehead just under the surface",
     "feature.big-pike.name": "a big pike just under the surface",
+    "feature.big-rock-bass.name": "a big rock bass just under the surface",
     "feature.big-sauger.name": "a big sauger just under the surface",
     "feature.big-sea-lamprey.name": "a big sea lamprey just under the surface",
+    "feature.big-smallmouth-bass.name": "a big smallmouth bass just under the surface",
     "feature.big-taimen.name": "a big taimen just under the surface",
     "feature.big-trahira.name": "a big trahira just under the surface",
     "feature.big-walleye.name": "a big walleye just under the surface",
@@ -16581,7 +16793,9 @@ export const strings = {
     "feature.dace-school.name": "a school of dace",
     "feature.deepwater-sculpin-school.name": "a school of deepwater sculpin",
     "feature.ferrstad-carp-school.name": "a school of Ferrstad carp",
+    "feature.frostfin-grayling-school.name": "a school of frostfin grayling",
     "feature.glint.name": "something glinting in the water",
+    "feature.grayling-school.name": "a school of grayling",
     "feature.gudgeon-school.name": "a school of gudgeon",
     "feature.mainland-bullhead-school.name": "a school of Mainland bullhead",
     "feature.minnow-school.name": "a school of minnow",
@@ -16959,6 +17173,13 @@ export const placeholderKeys = [
   "event.your-room.start.text.0",
   "event.your-room.start.text.1",
   "event.your-room.title",
+  "feature.big-brown-trout.name",
+  "feature.big-chub.name",
+  "feature.big-ide.name",
+  "feature.big-rock-bass.name",
+  "feature.big-smallmouth-bass.name",
+  "feature.frostfin-grayling-school.name",
+  "feature.grayling-school.name",
   "fish.blackfish.tasteLine",
   "fish.strange-cod.tasteLine",
   "fish.strange-giant-catfish.tasteLine",

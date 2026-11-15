@@ -45,6 +45,18 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | welcome | all of it |
 | your-room | all of it |
 
+## features (7)
+
+| id | what is a placeholder |
+|---|---|
+| big-brown-trout | name |
+| big-chub | name |
+| big-ide | name |
+| big-rock-bass | name |
+| big-smallmouth-bass | name |
+| frostfin-grayling-school | name |
+| grayling-school | name |
+
 ## fish (122)
 
 | id | what is a placeholder |

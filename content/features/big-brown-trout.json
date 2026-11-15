@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "big-brown-trout",
+  "name": "a big brown trout just under the surface",
+  "kind": "big-fish",
+  "radius": 8,
+  "uses": 1,
+  "lifetime": 10,
+  "swimsOff": 1,
+  "drift": 6,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 100
+    }
+  ],
+  "fish": [
+    {
+      "id": "brown-trout",
+      "weight": 1
+    }
+  ],
+  "minBand": "gigantic",
+  "placeholder": [
+    "name"
+  ]
+}

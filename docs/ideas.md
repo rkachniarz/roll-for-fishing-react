@@ -2,7 +2,7 @@
 
 The owner's loose ideas for events, characters and the story, kept so they aren't lost. None of this is a requirement
 yet: an idea becomes one when it's built or decided (`docs/decisions.md`). The engine work they would need is in
-`DEV_PLAN.md` (7.7–7.10, 8.7–8.9); each idea below names its tasks.
+`DEV_PLAN.md`; each idea below names its tasks. Most are built: of those, only 8.8 and 8.9 are still to do.
 
 Item ideas, a hundred cut to twenty, are in [ideas/items.md](ideas/items.md).
 
@@ -30,7 +30,7 @@ repeatedly make it your enemy it eventually starts bothering you in town: steali
 bucket, or scratching you for a debuff to your fishing.
 
 **Needs:** a count kept across events, not just a flag (trust up, trust down, 7.7); an event that takes a fish from
-the bucket, including "the rarest one" (7.8); a debuff as an event effect (in `docs/events.md`, "Not there yet");
+the bucket, including "the rarest one" (7.8); a debuff as an event effect (`buff:`, built);
 the town (8.3); a companion at the fishing spot (8.9).
 
 ## Raid supplies

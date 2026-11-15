@@ -9,7 +9,9 @@ numbers (`0.3`, `1.6`). Current work is in [DEV_PLAN.md](../DEV_PLAN.md).
 roll, fish with sizes and weather preferences, junk and treasure, a weather engine with four seasons, a record book,
 localStorage saves. Its review, and what carries over, are in [PORTING-NOTES.md](PORTING-NOTES.md).
 
-**Since Phase 0 (2026-10-28):** a new codebase without a framework or build step, seeded dice, the docs below, CI.
+**Since Phase 0 (2026-10-28):** a new codebase without a framework or build step, seeded dice, the docs below, CI (switched off
+since D133: `npm run check` runs locally before a push, and Pages runs `npm test`). Later phases are below, one
+section each.
 
 ---
 
@@ -400,11 +402,33 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   bucket's buttons.
 - **10.9–10.11, 10.13** Fish that swim (D129, `src/scene/swim.js`): side views turned level from the icons (a check on
   a synthetic diagonal showed the turn's direction, 29×5 one way, 17×27 the other), the aquarium, the dive (D128),
-  shadows under the surface, the hook pointer.
+  shadows under the surface, the hook pointer. The turned icons were replaced by fish drawn as code (D131).
 - **10.12** The haunted swamp and the Old torn doll; at weight 12 the doll turns up within 200 casts in 83% of
   simulated games with no Treasure Find (weight 9 gave 77%).
 - **10.14** Measured at the end: `npm run check` passes, with 226 unit tests and every browser check (a new one walks
   the town: the map, the innkeeper, the room, the inn, the stew); the artifact builds at 915.4 kB.
+- **10.15** The owner's answers (D130): the town hidden until nightfall, the cold from dark, no Release in town, the
+  Warm woolen hat at the inn (a placeholder).
+- **10.16** The title screen under the water (D134): the art sheet's tank across the scene, with fish caught in any
+  slot and the reedy shore's.
+- **10.17** The title's logo (D135, `src/scene/logo.js`): ROLL with the d20 as its O, "for fishing" under it.
+- **10.18** Fish keep to their depth (D136): every fish's `swims` quarter, used wherever fish swim side on.
+- **10.19** Fish Find by depth (D137): `bottomFishFind` and `otherFishFind`, and the Heavyweight heavy weights.
+
+## Alongside the tasks (2026-11-11 to 2026-11-14)
+
+Work that came from the owner's asks rather than a numbered task; the decisions hold the detail.
+
+- **Painted spots** (D115-D118): the pond trial became still water's scene, the reedy shore was painted from the
+  owner's sketch, then in four seasons; the original scene left the art sheet.
+- **The page** (D119-D121): tooltips on hover, the action bar on the scene's bottom left, the page 1.25 times larger
+  on a wide screen.
+- **Every fish drawn to swim** (D131, CR-17): shapes and colours as code, replacing D129's turned icons.
+- **The font** (9.7, D132): Alegreya Sans by default, Pixelify Sans as a setting.
+- **CI off, the branches swapped** (D133): `master` publishes.
+- **Event pictures** (D142): 64×64 icons in a round portrait, an old scroll by default.
+- **Backgrounds** (D143-D145): the first load shows only the background; a pine tabletop for the light theme,
+  obsidian for the dark, and a setting to turn them off.
 
 ## Phase 11: What the real species do (in progress)
 
@@ -443,8 +467,8 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   button on the action bar (the bar now takes statuses that aren't perks, with their own label and tooltip) and its
   window over the scene. A browser check plants the line in a save, opens the window and sets the bottom; the first
   screenshot showed the button's tooltip covering the window, so opening it hides the tooltip. Measured: 251 unit tests.
-- **11.7** Spawning (D149): three helpers looked up each species' spawning temperatures and seasons (78 with a
-  temperature, 30 with a season alone); a script turned them into windows on the scale. `src/engine/spawning.js`: the
+- **11.7** Spawning (D149): three helpers looked up each species' spawning temperatures and seasons (85 with a
+  temperature, 25 with a season alone); a script turned them into windows on the scale. `src/engine/spawning.js`: the
   water (stepped in `stepTime`), `spawningIn`, `spawningNow`; spawning fish weigh three times as much in
   `preferenceFactor`, and their schools in the feature pick. A migration crashed on a file that wasn't a save, before
   the loader could refuse it, so it reads the weather carefully. Measured: 254 unit tests, every browser check.
@@ -460,3 +484,41 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123), built with place
   `feedTank` in `src/engine/barter.js`, the meals on coming into the room; the warning through the fish's menu; hiding
   in `createShoal`. One full check failed when its local server stopped partway; the rerun passed. Measured: 258 unit
   tests, every browser check.
+
+## Review 3 (2026-11-15)
+
+A code and doc review of everything since Review 2 (D114 to D152), and a look at how the lake's rules meet. What
+the rules do together, where it may not be what was meant, is at the top of REVIEW.md for the owner; nothing there
+was changed. Fixed:
+
+- **The fight (D141):** a manoeuvre nobody answered never ran out in the real game, since `timingFrom` left out
+  `fightMs` (the test used the default timing); a double tap on the splash yanked the hook from a fish about to move.
+- **The line's depth (D148):** set to the bottom, the "something else" roll could replace a summoned fish or a class
+  fish cast by; the depth window stayed open after the line went out and could set a depth mid-cast.
+- **The aquarium (D152):** its meals ran only on walking to the room, never on going up by the inn's dialog, the usual
+  way, so in practice nobody was ever eaten; and a first walk there could then roll a week of meals on fish just
+  put in. An event's `go:` runs them now.
+- **The bucket:** fish taken back from the pot or the tank could fill it past its size.
+- **Barter:** a trade worked from anywhere, and the window stayed open on walking to another place in town.
+- **Saves:** a file saved while the line was out held the state with the line's dice spent, so reading it back rolled
+  the line anew; a release or a meal in the pause after a missed splash wasn't saved if the player then reeled in.
+- **The dive:** a failed dive set the fish's "got away" count back to one; leaving for the title mid-dive left the
+  breath timer on screen.
+- **The log:** "cast again" was written when an event had opened on the missed splash and no line went out.
+- **Swimming (D147, D151):** a fish in a small patch (a big fish's or a class fish's shadow) rolled a new goal every
+  frame and so barely moved; shoal-mates' places were rolled anew on every redraw, so a school drew together onto one
+  point; followers swam tail first; goals too near the glass left fish pressing on it; taking a fish out of the tank
+  moved every fish after it.
+- **Bubbles:** the title's carried into the room and rose outside the tank; their speed went by the frame.
+
+The docs were checked against the code and brought up to date: CLAUDE.md, README.md's file map, DEV_PLAN.md,
+decisions.md (earlier rows now say what refined or replaced them), spec.md where later decisions contradict it,
+this file's missing entries, art.md, events.md. Left for the owner: REVIEW.md's own length and its stale items, the
+content checker's gaps (ids the engine names that it never checks), and requirements for the systems spec.md doesn't
+cover.
+
+Then, at the owner's word, the three fixes Claude proposed (D153): the water's trend from its own slow average
+(`waterSlow`, save version 19), burbot, icefish and polar cod spawning up to 2, and pools stocked with no bait and
+none of the player's values. And the schools brought in step with the shoaling marks (D154): six fish marked, six
+schools retired, two new; and the big fish with the predator mark (D155): five new. Measured: 265 unit tests, every
+browser check.

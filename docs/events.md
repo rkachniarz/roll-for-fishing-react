@@ -215,8 +215,8 @@ class, for choices like the rogue's.
 
 ## Not there yet
 
-These are code work first (D42): starting another event as an effect, and a background that changes the
-character's stats.
+These are code work first (D42): starting another event as an effect. (A background never changes the character's
+stats, D130.)
 
 ## Vendors and their windows
 

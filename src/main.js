@@ -34,7 +34,7 @@ import { createBench } from './dev.js';
 import { createBuffBar } from './ui/buffbar.js';
 import { flyIcon } from './ui/flight.js';
 import { createLog } from './ui/log.js';
-import { bagTab, fishName, hoursText, itemName, link, rarityColour, showStatusWhen, showTasteWhen, weightText } from './ui/links.js';
+import { bagTab, fishName, hoursText, link, rarityColour, showStatusWhen, showTasteWhen, weightText } from './ui/links.js';
 import { fishWeight } from './engine/fish.js';
 import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settingsPane, shopPane } from './ui/panels.js';
 import { floatText } from './ui/floater.js';
@@ -186,9 +186,14 @@ function pausing() {
   );
 }
 
+/** A cast is in progress: the save stays its checkpoint (D74). */
+function castInProgress() {
+  return cast.phase === 'waiting' || cast.phase === 'bite' || cast.phase === 'fight';
+}
+
 /** The line is out, or about to go out again: no changing equipment (D83). */
 function lineOut() {
-  return cast.phase === 'waiting' || cast.phase === 'bite' || cast.phase === 'fight' || pausing();
+  return castInProgress() || pausing();
 }
 
 /**
@@ -237,7 +242,7 @@ function apply(out) {
   };
   // While a cast is in progress, only the checkpoint is saved (D74).
   if (out.checkpoint) save(out.checkpoint);
-  else if (changed && cast.phase !== 'waiting' && cast.phase !== 'bite' && cast.phase !== 'fight') save(state);
+  else if (changed && !castInProgress()) save(state);
   render();
   if (roll && cast.phase === 'done' && showDice(settings, reducedMotion.matches)) rollDice(cast.outcome.rolls[0], reveal, flights);
   else {
@@ -492,13 +497,16 @@ function act(now, point) {
     if (point) actInView(point);
     return;
   }
-  // A double tap on the splash shouldn't strike and then instantly recast.
-  if (cast.phase === 'done' && now - lastActAt < 500) return;
+  // A double tap on the splash shouldn't strike and then instantly recast,
+  // nor yank the hook from a fish about to make its move (D141).
+  if ((cast.phase === 'done' || cast.phase === 'fight') && now - lastActAt < 500) return;
   lastActAt = now;
   if (cast.phase === 'idle' || (cast.phase === 'done' && !pausing())) {
     // No casting with the game menu open; a strike still lands, so opening
     // it mid-cast never costs a fish (D94).
     if (menuOpen()) return;
+    // The depth is set before the line goes out (D148).
+    document.getElementById('depthPicker')?.remove();
     apply(castLine(state, now, { aim: point, bounds: waterAt(state.location, state.spot), extra: extraSources() }));
   } else {
     apply(strikeLine(state, cast, now));
@@ -539,7 +547,7 @@ const buffBar = createBuffBar($('buffBar'), (id) => {
   if (!state) return;
   state = cancelBuff(state, id);
   // Mid-cast, the resolved cast will save it (D74).
-  if (cast.phase !== 'waiting' && cast.phase !== 'bite' && cast.phase !== 'fight') save(state);
+  if (!castInProgress()) save(state);
   render();
 });
 
@@ -589,7 +597,7 @@ function useFromBar(id) {
     };
   }
   // Mid-cast the checkpoint stays the save (D74); the cast saves it when it ends.
-  if (cast.phase !== 'waiting' && cast.phase !== 'bite' && cast.phase !== 'fight') save(state);
+  if (!castInProgress()) save(state);
   logEvents(out.events);
   render();
   promptPlayer();
@@ -657,6 +665,7 @@ function openDepthPicker() {
     input.id = `depth-${depth}`;
     input.checked = state.lineDepth === depth;
     input.addEventListener('change', () => {
+      if (lineOut()) return box.remove();
       changeState(setLineDepth(/** @type {GameState} */ (state), depth));
       box.remove();
     });
@@ -1047,7 +1056,7 @@ function togglePane(name) {
 function leftShop() {
   if (pane === 'shop' || !state?.shop) return;
   state = { ...state, shop: null };
-  if (!lineOut()) save(state);
+  if (!castInProgress()) save(state);
 }
 
 function toggleBag() {
@@ -1188,7 +1197,9 @@ function travelTo(location, spot) {
   const out = travel(state, location, spot);
   if (out.error) showError($('errors'), t(`error.${out.error}`));
   if (out.state === state) return;
-  state = out.state;
+  // A barter window stays with its vendor (R18.2).
+  state = out.state.shop ? { ...out.state, shop: null } : out.state;
+  if (pane === 'shop') pane = null;
   const where = content.locations[location].spots.find((/** @type {{ id: string }} */ s) => s.id === spot);
   log.add(t('log.travel', { spot: t(where.name) }));
   logEvents(out.events);
@@ -1306,7 +1317,7 @@ function render() {
   // The fish under the surface here, stocked or topped up if it's time (D139):
   // between casts, so the save mid-cast stays the checkpoint (D74).
   if (state && !lineOut() && !state.dive && poolDue(state)) {
-    state = tended(state, extraSources());
+    state = tended(state);
     save(state);
   }
   if (looking && (!state || looking.where !== poolKey(state))) looking = null;
@@ -1362,7 +1373,7 @@ function learnPerk(id) {
   state = next;
   // Mid-cast the checkpoint stays the save (D74); the perk is saved when the
   // cast ends, and a reload before then only offers the choice again.
-  if (cast.phase !== 'waiting' && cast.phase !== 'bite' && cast.phase !== 'fight') save(state);
+  if (!castInProgress()) save(state);
   logEvents([{ type: 'perk', perk: id }]);
   render();
 }
@@ -1450,7 +1461,16 @@ function viewFor(s) {
   }
   if (!content.locations[s.location]?.town) return null;
   if (s.spot === 'room') {
-    return { kind: 'room', tank: hasPerk(s, 'aquarium') ? (s.aquarium ?? []).map((f, i) => ({ key: `tank-${i}-${f.species}-${f.size}`, species: f.species })) : null };
+    // Keyed by the fish, not by its place in the list, so taking one out leaves the others swimming on;
+    // twins are told apart by a count.
+    /** @type {Record<string, number>} */
+    const twins = {};
+    const tankKey = (/** @type {import('./engine/fish.js').FishInstance} */ f) => {
+      const id = `${f.species}-${f.size}-${f.condition ?? 1}`;
+      twins[id] = (twins[id] ?? 0) + 1;
+      return `tank-${id}-${twins[id]}`;
+    };
+    return { kind: 'room', tank: hasPerk(s, 'aquarium') ? (s.aquarium ?? []).map((f) => ({ key: tankKey(f), species: f.species })) : null };
   }
   const buildings = Object.entries(BUILDINGS)
     .filter(([id]) => spotKnown(s, s.location, id))
@@ -1574,10 +1594,13 @@ function finishDive() {
  * @param {{ state: GameState, events: GameEvent[] }} out
  */
 function changeState(out) {
-  if (!state || out.state === state) return;
+  if (!state) return;
+  // Refused, with a reason to tell (a full bucket): nothing else changes.
+  if (out.state === state) return logEvents(out.events);
   state = out.state;
   logEvents(out.events);
-  if (!lineOut()) save(state);
+  // In the pause after a missed splash too: reeling in changes nothing, and so saves nothing.
+  if (!castInProgress()) save(state);
   hideTip();
   render();
   promptPlayer();
@@ -1820,6 +1843,11 @@ function openCreation(chosen) {
  */
 function exportSave() {
   if (!state) return;
+  // Mid-cast the state has the line's dice spent: a file of it, read back, would roll the line anew (D63, D74).
+  if (castInProgress()) {
+    showError($('errors'), t('error.export.lineOut'));
+    return;
+  }
   const file = exportGame(state, new Date());
   const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([file.text], { type: 'application/json' })), download: file.name });
   a.click();
@@ -1985,7 +2013,10 @@ function titleScene() {
 
 /** Back to the title screen from the menu, between casts. The game is already saved. */
 function toTitle() {
-  if (!state || cast.phase === 'waiting' || cast.phase === 'bite' || cast.phase === 'fight') return;
+  if (!state || castInProgress()) return;
+  // Up from a dive first: its timer and dice would stay over the title.
+  finishDive();
+  document.getElementById('depthPicker')?.remove();
   // Dice still rolling would land their lines in the next game's log.
   dropDice();
   save(state);
@@ -2008,7 +2039,7 @@ const bench = DEV
       getState: () => state,
       // Only between casts, so a cast in progress keeps its checkpoint (D74).
       setState: (/** @type {GameState} */ next) => {
-        if (cast.phase === 'waiting' || cast.phase === 'bite' || cast.phase === 'fight') return;
+        if (castInProgress()) return;
         // A new level from the bench gives its level-1 perk as a cast would (D96).
         const settled = settlePerks(next);
         state = settled.state;

@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "grayling-school",
+  "name": "a school of grayling",
+  "kind": "school",
+  "radius": 14,
+  "uses": 4,
+  "lifetime": 24,
+  "drift": 4,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 40
+    }
+  ],
+  "fish": [
+    {
+      "id": "grayling",
+      "weight": 1
+    }
+  ],
+  "placeholder": [
+    "name"
+  ]
+}

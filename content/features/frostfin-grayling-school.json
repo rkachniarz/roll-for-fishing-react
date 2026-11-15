@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/feature.schema.json",
+  "id": "frostfin-grayling-school",
+  "name": "a school of frostfin grayling",
+  "kind": "school",
+  "radius": 14,
+  "uses": 4,
+  "lifetime": 24,
+  "drift": 4,
+  "effects": [
+    {
+      "value": "fishFind",
+      "add": 40
+    }
+  ],
+  "fish": [
+    {
+      "id": "frostfin-grayling",
+      "weight": 1
+    }
+  ],
+  "placeholder": [
+    "name"
+  ]
+}

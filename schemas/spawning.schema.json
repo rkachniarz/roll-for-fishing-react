@@ -21,6 +21,11 @@
       "description": "The coldest the water gets, on the weather's temperature scale: it never freezes.",
       "type": "number"
     },
+    "trendLag": {
+      "description": "Half-hour steps for the water's slow average to close its gap to the water. Warmer than that average, the water is warming (D153).",
+      "type": "number",
+      "minimum": 1
+    },
     "gather": {
       "description": "A spawning fish's weight in its spot's tables is multiplied by this.",
       "type": "integer",
@@ -36,6 +41,7 @@
     "id",
     "lag",
     "minWater",
+    "trendLag",
     "gather",
     "schools"
   ],

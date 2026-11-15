@@ -136,6 +136,8 @@ export function createViews(parent, rand) {
   let offset = 0;
   /** @type {{ x: number, y: number, speed: number }[]} */
   let bubbles = [];
+  /** When the bubbles last moved. */
+  let bubbledAt = 0;
   const bubbleLayer = new Graphics();
   play.addChild(bubbleLayer);
 
@@ -187,6 +189,8 @@ export function createViews(parent, rand) {
         if (view.here === b.id) back.rect(x + Math.round(b.w / 2) + 7, GROUND - 22, 3, 5).fill('#ffcf4a');
       }
     } else if (view.kind === 'room') {
+      // The tank's own bubbles, made in update: none carried in from the title or a dive.
+      bubbles = [];
       back.rect(0, 0, width, SIZE).fill('#6b4a33');
       back.rect(0, 190, width, SIZE - 190).fill('#4e3424');
       for (let x = 0; x < width; x += 24) back.rect(x, 0, 2, 190).fill('#5d3f2b');
@@ -353,8 +357,11 @@ export function createViews(parent, rand) {
       if (view.kind === 'dive' || view.kind === 'look' || view.kind === 'title' || (view.kind === 'room' && view.tank)) {
         if (!bubbles.length) bubbles = Array.from({ length: 6 }, () => ({ x: TANK.x0 + rand() * (TANK.x1 - TANK.x0), y: TANK.y1, speed: 8 + rand() * 8 }));
         const top = view.kind === 'room' ? TANK.y0 : 0;
+        // By the time gone, not by the frame: the same on a fast screen.
+        const dt = Math.min(0.1, bubbledAt ? (now - bubbledAt) / 1000 : 0);
+        bubbledAt = now;
         for (const b of bubbles) {
-          b.y -= b.speed / 60;
+          b.y -= b.speed * dt;
           if (b.y < top) b.y = view.kind === 'dive' ? 230 : view.kind === 'title' || view.kind === 'look' ? SIZE - SAND : TANK.y1;
           bubbleLayer.rect(Math.round(b.x), Math.round(b.y), 1, 1).fill({ color: '#e8fbff', alpha: 0.7 });
         }

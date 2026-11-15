@@ -10,7 +10,7 @@ the rules the art follows, then Claude's checklist.
    photo shows, a sketch instead (see "Drawing for this game" below).
 2. **Claude draws it** as code, keeping to the photo or sketch and to the style rules below.
 3. **Both look at the art sheet**, `http://localhost:8001/art.html` (with `npm run dev` running). It shows every
-   sprite enlarged, the scene in five different lights, and any open **trials**: two or three options side by side.
+   sprite and icon enlarged, the fish that swim, the painted spots in their seasons, and any open **trials**: two or three options side by side.
    Any scene on it can be saved as a PNG, to draw over.
 4. **The owner marks up what's wrong or picks an option.** Exporting Claude's version and marking it in Paint
    ("change this", "delete that") avoids misunderstandings; words work too. Claude changes it and the sheet shows the
@@ -96,6 +96,7 @@ places goes in the strips.
 | Waves | 5×2 far, 8×2 mid, 12×3 near; 2 frames each | |
 | Reeds | 26×110 a side, 2 frames | Drawn by code today: a real-size drawing would replace it. |
 | Icons | 32×32 | Items, fish, the button row, the weather (D98). Fish lie tilted about 30°, to fill the square. Older icons drawn at 16 show doubled until redrawn. |
+| Swimming fish | 18 to 62 long, from the species' size unless its shape sets `len`; 8 frames to a beat | Drawn as code (D131), not by hand: see "Swimming fish" below. |
 | Event pictures | 64×64 | Icons, `event/<name>` (D142), in a round portrait beside the event's title. Draw inside the circle: the corners are cut off. |
 
 Anything at two distances needs **one drawing per distance**. Nothing is shrunk in the game, because shrinking pixel
@@ -110,19 +111,27 @@ The look so far, from the owner's sketches. A change to a rule is a decision (`d
   colour almost like an existing one *is* that one. A small palette is most of what makes pixel art look like pixel
   art.
 - **Drawn for a clear spring noon.** Night, dusk, the seasons, cloud, rain and snow are tints and overlays the code
-  lays over the whole scene. Don't draw a night version; check the art sheet's five lights instead.
+  lays over the whole scene. Don't draw a night version. A painted spot is the exception: it is painted per season
+  (`PAINTINGS` in `src/scene/scene.js`, D118), and the art sheet shows each one.
 - **Depth by size, paleness and count** (R7.4). Far things are smaller and paler and there are more of them; near
   things are bigger, stronger in colour and fewer. Water bands blend through a dithered row (a checkerboard of the two
   colours), never a hard line.
 - **Outlines: icons yes, scene no.** Icons have a dark outline (`k`) so they read on the page. Weather icons don't,
   because they sit on the dark page as they are. Scene sprites have no outline; the bobber's rim is part of its
   design.
-- **The view is from the shore,** looking out, slightly from above. Things on the water lie flat: ripples are
+- **The view is from the shore,** looking out; a painted spot is seen from eye level (D117). Things on the water lie flat: ripples are
   squashed ovals, flatter further out.
 - **Little animation.** Two or three frames, flipped now and then: waves shimmer, reeds sway, the bobber bobs one
   pixel. Movement is in whole pixels.
 - **Random but repeatable.** Scattered things (waves, sand streaks, reed blades) are placed by the `scenery` stream
   (D4), so the same seed draws the same scene and screenshots can be compared.
+
+## Swimming fish
+
+Every fish that swims is drawn as code (D131): `src/scene/fish-art.js` paints it from its shape in
+`src/scene/fish-shapes.js` (a preset for its kind of body, its own fins, tail and pattern) and the colours of its
+icon. A new fish needs a shape there; `test/fish-art.test.js` checks. To draw over one, `npm run sprite export
+swim-<fish id>`. The art sheet's "Fish that swim" shows them all.
 
 ## Painting a spot from photos
 

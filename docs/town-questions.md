@@ -17,7 +17,8 @@ The owner's brainstorm (`docs/brainstorm-2026-11-14.md`, D123) settled several o
 what it needed with placeholders (REVIEW.md):
 
 - **1–2, 4:** a location of places (the inn, the room, the Alchemist's shop), a scene of buildings to tap; open from
-  the start, and at night an event points the way (R17.1, R17.3).
+  the start, and at night an event points the way (R17.1, R17.3). *Since D130 it is hidden until the nightfall
+  event opens it.*
 - **5:** time doesn't pass in town unless a choice says so: sleeping, waiting (R17.2).
 - **6–9:** Claude's call: fixed costs per offer, the counts shown, no hidden values to judge, no haggling (R18).
 - **12, 15–18:** the inn gives the stew and the room; fish go in, a bowl comes out, longer for more and rarer fish,

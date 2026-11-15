@@ -7,7 +7,8 @@
 //
 // The water's temperature follows the air's (the weather's own scale, 0 to
 // 15 and up) with a lag of about a day, and never freezes: it is magical.
-// Kept in the state (`water`), moved each half-hour step (passage.js).
+// Kept in the state (`water`), moved each half-hour step (passage.js), with a
+// slower average of itself (`waterSlow`) that says whether it is warming.
 
 import { content } from '../generated/content.js';
 
@@ -23,6 +24,9 @@ export function stepWater(state) {
   const water = state.water ?? state.weather.temperature;
   const next = water + (state.weather.temperature - water) / rules.lag;
   state.water = Math.max(rules.minWater, Math.round(next * 100) / 100);
+  // Its slow average, a week or so behind: what the water is measured against to say which way it is going.
+  const slow = state.waterSlow ?? water;
+  state.waterSlow = Math.round((slow + (state.water - slow) / rules.trendLag) * 10000) / 10000;
 }
 
 /**
@@ -39,12 +43,16 @@ export function spawningIn(fish, moment) {
 }
 
 /**
- * The water now, and whether it is warming: the air is warmer than it.
+ * The water now, and whether it is warming: warmer than its own slow average
+ * (`waterSlow`), so over days, not hours. The air against the water flips a
+ * few times a day, with every change of weather (Review 3). With nothing to
+ * tell yet, a new game, the air decides.
  * @param {GameState} state
  */
 export function waterNow(state) {
   const water = state.water ?? state.weather.temperature;
-  return { water, warming: state.weather.temperature > water };
+  const slow = state.waterSlow ?? water;
+  return { water, warming: water !== slow ? water > slow : state.weather.temperature > water };
 }
 
 /**

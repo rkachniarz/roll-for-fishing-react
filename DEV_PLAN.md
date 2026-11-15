@@ -70,7 +70,8 @@ is where the others may lead.
   **Looks only**, no change to the game. **The dive's scatter:** the rest bolt apart and swim fast for a moment, so
   they're harder to tap until they settle; their rolls stay as rolled.
 - [ ] **11.10** Folklore events: the carp leaping the dragon gate, the catfish that shakes the earth, the archerfish
-  spitting insects off leaves. Writing work, so placeholders until the creative track.
+  spitting insects off leaves. Writing work, so placeholders until the creative track. *The owner (2026-11-15):* to be used when
+  Legendary fish are worked on, somewhere down the line.
 - [x] **11.11** Who eats whom (D152): predators and prey in the aquarium (keeping them apart, small fish hiding from a passing
   pike, perhaps one going missing).
   *The owner's answers (2026-11-15):* **now and then** a predator in the room's aquarium eats a tank-mate small
@@ -84,6 +85,31 @@ is where the others may lead.
 - [ ] **11.12** A simulation of what's under the surface at all times: each spot's living population moving with the
   time, weather and season, and a cast drawing from it. Touches the engine's core, the save, D63's rolling on the cast,
   and balance.
+
+- [ ] **11.14** Fish leave the pool (the owner, 2026-11-15: the pool, and so the fish seen under the water, gets too
+  big). Requirements to come from the owner's answers to Claude's refinement questions.
+  *The owner so far (2026-11-15):* a watcher kept casting at the shadows, "to fish where the fish are", so **aiming
+  at a shadow should be rewarded**: a better chance of that very fish. **Schools, big fish and class fish should
+  show when looking underwater**, which probably means they join the pool, though they behave a little differently
+  when aimed at. **The shadows shown** stay few (12 keeps the water quiet) but shouldn't always be exactly 12.
+  *The owner's answers (2026-11-15, polls):* **Size:** a pool holds its stocked number and a few more, room for
+  fish that got away. **Who leaves first:** wild fish, before any the player has met. **Turnover by weather and
+  time:** fish that don't like the moment leave and ones that do arrive, checked **every few hours** (by the part of
+  the day), so dawn, noon and night pools differ. **Met fish** (got away, or let go) stay a few days, then swim off
+  like any other. **Aiming:** landing on a pool fish's shadow means that fish is the one on the line, if a fish
+  bites; the bite roll is as ever. **Schools, big fish and class fish are truly in the pool:** one population, seen
+  in Look Underwater and the dive. **Shadows shown by depth and light:** the fish near the top, a few deeper ones
+  now and then, fewer at night or in rain.
+  *Still to settle before building:* how many fish a school puts in the pool and what its +40 Fish Find becomes;
+  whether a big fish or class fish in the pool keeps its sure bite when cast at; what "a few" is for the room above
+  the stocked number and the days a met fish stays (Claude's guesses otherwise: +3, 3 days).
+- [ ] **11.15** Balance by simulation, later (the owner, 2026-11-15; Review 3's numbers are in history.md and D153):
+  how strongly preferences, spawning and plants stack (up to ×96 now, one fish up to 90% of a spot's bites); a new
+  bed of plants rolled now and then; seasons that turn gradually instead of in a step. The mechanics exist and are
+  knobs in `content/rules/`; the numbers wait for the simulations.
+
+**Review 3 (2026-11-15):** a code and doc review of D114 to D152, its fixes in history.md; how the lake's rules
+meet, and what may not be as meant, is at the top of REVIEW.md, three of them fixed already (D153).
 
 **Where things stand (2026-11-15, after a night's work):** 11.4 to 11.9 and 11.11 are in: weight from length (D146),
 how each fish swims (D147), the adjustable line (D148), spawning by the water's temperature (D149), plants and fish
@@ -118,7 +144,7 @@ feel (9.6) and an installable game (9.5). The creative track holds the art, writ
 | `R1.1`… `§C.1`… | Vision, requirements, catalogues | [docs/spec.md](docs/spec.md) |
 | `PORTING-NOTES §n` | What carries over from the prototype, and its lessons | [docs/PORTING-NOTES.md](docs/PORTING-NOTES.md) |
 | `0.1`… | Finished phases, task by task | [docs/history.md](docs/history.md) |
-| `Q-n`, `1.x`–`9.x` | Open questions, development still to do | here |
+| `Q-n`, `1.x`–`11.x` | Open questions, development still to do | here |
 | `CR-n` | Creative work: art, writing, sound | here, [Creative work](#creative-work) |
 | | The owner's loose ideas: events, people, the story | [docs/ideas.md](docs/ideas.md) |
 | | Claude's guesses and calls, for the owner to check | [docs/REVIEW.md](docs/REVIEW.md) |
@@ -251,7 +277,7 @@ Requirements R8.
   effect in the vocabulary and every slot; the "every upside has a downside" data test (R8.5), bait aside. Sixteen
   pieces of placeholder gear in the shared treasure list; names, texts and icons are CR-4.
 - [x] **5.4** Tooltips generated from effects (R8.6).
-- [x] **5.5** Fish bucket: fish only, identical twins stack, 16 fish to start; a full bucket asks which fish to release,
+- [x] **5.5** Fish bucket: fish only, identical twins stack (and, since D146, the same condition), 16 fish to start; a full bucket asks which fish to release,
   and the released fish joins the spot's escaped-fish pool (R8.3, R3.6, D24, D50, D57, D59).
 - [ ] **5.6** Review D8: plain DOM or Preact for the UI. *D8 put the review at the inventory, which is done (5.1,
   5.2, 5.4, 5.5); the review itself hasn't happened yet.*
@@ -266,7 +292,7 @@ Requirements R8.
 Requirements R5.2, R6.
 
 How it works is D96: perks at levels 1–8, a badge rather than a stop, cooldowns in casts that count only an
-attempt at a catch, the action bar under the button row, abilities that light up, crits.
+attempt at a catch, the action bar under the button row (now on the scene, D120), abilities that light up, crits.
 
 **Perks are development (D105).** What a perk does comes from the prototype's notes (§C.2) and D96. Where the notes
 leave a gap, Claude picks a stand-in rule and lists it in REVIEW.md rather than waiting. A perk's name, its text, its
@@ -275,7 +301,7 @@ icon and any new look it brings (a Greedy fish, a bent fish) are creative work (
 - [x] **6.6** Perks as content (`content/perks/`), the save's `character.perks`, passive perks feeding the game
   values; crits as D96 (6); the bench grants perks.
 - [x] **6.1** Choosing a perk at level-up: the badge, and the choice in the character pane (D96).
-- [x] **6.2** Active abilities with cooldowns; the action bar under the button row, keys 1–9.
+- [x] **6.2** Active abilities with cooldowns; the action bar under the button row (now on the scene, D120), keys 1–9.
 - [x] **6.7** Abilities that light up after something happens: the warrior's Jump In, the rogue's Gut, the mage's
   Bend Reality.
 - [x] **6.3** Each class's level 1, 3 and 5 perks working (the notes' level 6 moved to 5, D96): Rift Fishing,
@@ -298,7 +324,7 @@ writing replaces or joins (CR-10).
   vocabulary written down alongside the frog encounter, and parsed by `npm run content`; effects come from 2.15
   (R15.6, D45, D56, D84).
 - [x] **7.2** Triggers: event meter, world conditions, fished-up items, and hidden objectives on counters and flags
-  (R10.7, D51). *World conditions are season and time of day for now; the weather comes when an event needs it.*
+  (R10.7, D51).
 - [x] **7.3** The event dialog (with room for an illustration).
 - [x] **7.4** One short quest chain started by a quest item, as placeholders: the item, three events, a reward; it
   proves the engine can carry a chain. The message in a bottle (`content/events/quest-bottle*.md`); the owner's
@@ -332,6 +358,7 @@ Requirements R5.3, R11.
   stronger for rarer fish and longer for more fish (R11.5, R12.6, D24, D28, D37). Squares and triangles for the
   buildings and people, and plain lines for what they say, until CR-5 and CR-13. *The town, the inn, barter and the
   stew came with Phase 10 (D123); still to do: the scrap dealer, and the inn's upgrades (R10.4).*
+  - [ ] Bought knowledge (R4.5's tip at the inn): 8.5 left it for the town, and the town is built without it.
 - [x] **8.6** The Alchemist's recurring visit: buffing potions for sale, alchemical ingredients bought; the ingredients
   added to the junk tables (R10.6, R11.7, D30). Placeholder potions, ingredients and lines. *Came with Phase 10: a shop
   in town with hours (R17.6) rather than a visit; the ingredients are stuff in the spots' own lists (D125).*
@@ -339,7 +366,7 @@ Requirements R5.3, R11.
   R4.5, R5.3). In the journal per location; `learn:` in events (D109). Bought knowledge comes with the town.
 - [x] **8.4** The Mage Tower pool (the River is in, D101): the location and its spots, with a placeholder table of
   existing fish until the owner's list. `content/locations/mage-tower.json`: one pool, six fish, hidden until its
-  three map fragments are found (two in the Lake's junk, one in the River's).
+  three map fragments are found (two in the Lake's list, one in the River's; stuff, not junk, since D125).
 - [x] **8.7** Item sets and the strange people who collect them: a set id on each piece, progress per set, a reward
   for the whole set; the pieces unique and spread over the spots; a visitor who turns up once the player holds a
   piece; pages that can be read, for the story (`docs/ideas.md`). One placeholder set of three pieces, with
@@ -357,7 +384,7 @@ placeholders everywhere, marked as D124 says. Takes in 8.3 and 8.6. In order:
   `npm run content`, `?ph` in the game.
 - [x] **10.2** The clock and time: a weekday; buffs lasting game minutes; `wait:` and `sleep:` in events (time jumps,
   the weather steps, game-time buffs run down); an event's `go:` arrives when the event closes; event words for buffs
-  (`buff:`), vendors (`needs: vendor`, `shop:`), perks (`needs: perk`) and hours (`needs: hour`, `needs: weekday`).
+  (`buff:`), vendors (`needs: vendor`, `shop:`), perks (`needs: perk`), and hours through `needs: vendor … asleep`, `needs: time` and `needs: weekday`.
 - [x] **10.3** White items (R19.1): junk, stuff and treasure as three tiers, Stuff Find, the Rogue's bonus; the
   new stuff (Shiny pebble, Alchemist's vial, the eight plants from the owner's CSV, Shiny fish scales, Mysterious
   resin, the Old torn doll) in per-spot stuff lists.
@@ -425,14 +452,15 @@ placeholder, it's added here.
   autumn and summer) and the reedy shore (D117, D118; all four seasons).
 - [ ] **CR-2** Weather and life on the painted spots (D100; the art half of 8.11): clouds per weather (summer's heaped
   clouds, autumn's overcast so far), rain, wind, light, moving plants and water. *Replaces 4.7's flat shapes.*
-- [ ] **CR-3** Fish icons (D97, D98; was 9.7): the eyes, one by one, since they were placed by script (a 2×2 a tenth of
+- [ ] **CR-3** Fish icons (D97, D98; was an earlier 9.7, not the font's): the eyes, one by one, since they were placed by script (a 2×2 a tenth of
   the way in from the snout) and some look comedic or out of place; the weak icons on
   `docs/design/fish-image-hunt.md`; and the four with no icon yet: Mainland eel, golomyanka, Grasslands silverside,
   Wildlands pejerrey.
 - [ ] **CR-4** Item icons, and the items' names and texts: the placeholder items and rods (5.3, 5.7), the bait items
   (D101) and Small fish (5.8), the Alchemist's potions and ingredients (8.6), the set pieces (8.7). *From Phase 10:
-  the nine potions, the eight plants (the owner's names, Claude's flavour), the Shiny pebble, Alchemist's vial, Shiny
-  fish scales, Mysterious resin and the Old torn doll, all on default icons.*
+  the ten potions, the eight plants (the owner's names, Claude's flavour), the Shiny pebble, Alchemist's vial, Shiny
+  fish scales, Mysterious resin and the Old torn doll, all on default icons. From Phase 11: the Warm woolen hat, Heavyweight heavy
+  weights, the Paralysing rod and the Adjustable line.*
 - [ ] **CR-5** The town and its people (8.3, 8.6, 8.9): the inn, the scrap dealer, the Alchemist, the cat, and the
   portraits. *Replaces the squares and triangles: the town's buildings, the room and the aquarium, the dive's water
   (`src/scene/views.js`), and the dive's dice as labels.*
@@ -454,7 +482,9 @@ placeholder, it's added here.
   pages (8.7), and the story (`docs/ideas.md`).
 - [ ] **CR-11** Class-flavoured texts (R6.5): new lines for 6.5's mechanism, beyond the prototype's.
 - [ ] **CR-12** Names: the spots (placeholder names since D101), the "Greedy" and "Bent" marks on fish (D106), and the perks' names and texts (REVIEW.md lists them
-  as Claude's).
+  as Claude's). *From Phase 11: the Conservationist's and Look Underwater's descriptions, the Queasy debuff, the
+  fight styles' journal and manoeuvre lines (`content/rules/fight-styles.json`), and six placeholder taste lines
+  (`docs/placeholders.md` lists them).*
 - [ ] **CR-13** What the town's people say: the inn, the scrap dealer, the Alchemist, the raid orders (8.3, 8.6, 8.8).
   *From Phase 10: Claude's events (`welcome`, `nightfall`, `innkeeper-first`, `the-inn`, `your-room`, `alchemist`,
   `swamp-ghost`, all `placeholder: true`) and the new log lines (`PLACEHOLDER_UI` in `src/strings.js`); the

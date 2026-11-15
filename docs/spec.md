@@ -34,7 +34,7 @@ decides. *(D29)*
 ### R1: Sessions and saving
 
 - **R1.1** The game can be left at any time and resumed with nothing lost. Game time is frozen unless a cast is in
-  progress.
+  progress, or an event's choice waits or sleeps (R17.2).
 - **R1.2** Progress is saved after every resolved cast, and on any other change of state (equipping an item, an event
   choice).
 - **R1.3** A save holds the whole game state and a version number. Loading an older save migrates it. Saves keep
@@ -77,11 +77,13 @@ out; the splash only reveals the result. *(D63)*
 - **R3.1** **Bite or not:** whether a fish takes the bait at all. Fish Find (base plus modifiers) raises the chance. With no
   bite, the cast still resolves, via the non-fish table (R3.4). *(D20)*
 - **R3.2** **Which fish:** a weighted pick from the location and spot tables, each fish likelier when the time of day,
-  the weather, the season and the bait suit it (§C.4, D101).
+  the weather, the season and the bait suit it (§C.4, D101); then by depth (D137, D148), spawning (D149) and plants
+  (D150).
 - **R3.3** **Size:** a size band (Tiny, Small, Medium, Large, Gigantic, Humongous), then a size in centimetres within that
   band's slice of the species' range. Bigger bands are harder to land.
 - **R3.4** **Something else:** when no fish is found, a roll on the location's non-fish table: nothing, trash, a quest item,
-  a collectible, or treasure. Treasure Find (base plus modifiers) raises the better outcomes. *(D20)*
+  a collectible, or treasure. Treasure Find (base plus modifiers) raises the better outcomes. *(D20; now treasure, then
+  stuff, then junk, R19.1, D125)*
 - **R3.5** **The fish's resistance:** the fish's own d20 (with its own advantage or disadvantage) is added to its
   difficulty.
 - **R3.6** A fish that gets away can be met again later, marked as "seen before", and the catch record remembers how many
@@ -98,8 +100,10 @@ out; the splash only reveals the result. *(D63)*
 The game has no end goal; collecting is the long-term pull. *(D23)*
 
 - **R4.1** Each species has a name, optional subnames, a size range in cm, a base difficulty, a rarity, and what it
-  prefers: parts of the day, weather, season, bait (§C.4, D101). Its weight is per spot.
-- **R4.2** The accomplishments book keeps, per species: number caught, smallest, largest and average size, with where,
+  prefers: parts of the day, weather, season, bait (§C.4, D101). Its table weight is per spot; its weight in grams comes from its length (D146). Later fields are in the decisions
+  that added them (taste D138, depth D136, fight D141, swim D147, spawning D149, plants D150, shoals D151, predator
+  D152, endangered D140).
+- **R4.2** The accomplishments book keeps, per species: number caught, smallest, largest and average size, the heaviest (D146), with where,
   when and in what weather each record was set; per treasure: whether and where it was found, and how many; and overall
   casts and catch rate.
 - **R4.3** A collection view shows every species and treasure found so far, with silhouettes for those the player knows
@@ -130,7 +134,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R6.2** Fish and treasure give XP; levels follow the XP curve (§C.1).
 - **R6.3** Levels bring perks (§C.2): level 1 gives the class's first active ability; levels 3 and 5 offer a choice
   between the class's passive and active; levels 2, 4, 6 and 8 offer a choice of two universal perks; level 7 gives
-  nothing yet. Passive perks are bonuses; active abilities have cooldowns counted in attempts at a catch. *(D96)*
+  nothing yet. Passive perks are bonuses; active abilities have cooldowns counted in attempts at a catch. A class perk with no level
+  (Look Underwater) is offered among the universals (D139). *(D96)*
 - **R6.4** Abilities feel like the class: the Warrior overpowers fish, the Rogue goes after treasure, the Mage bends the
   odds.
 - **R6.5** Button and flavour texts vary by class (the prototype's lists are ported).
@@ -213,7 +218,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R10.3** Choices matter: each leads to a visible reward, cost or change.
 - **R10.4** Events drive meta progression: upgrading the inn, unlocking vendors.
 - **R10.5** The first event is the frog encounter (§C.6).
-- **R10.6** Events can recur. The first recurring one is the Alchemist's visit to town (R11.7). *(D30)*
+- **R10.6** Events can recur. The first recurring one is the Alchemist's visit to town (R11.7). *(D30; the Alchemist became a shop with hours,
+  R17.6, R18)*
 - **R10.7** Quests are events linked by flags. Their objectives are mostly hidden conditions on what the game counts
   (catches per species, records), which can trigger events: catch enough of one species and the minor deity who loves
   it turns up, angry. *(D51)*
@@ -240,7 +246,7 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   vendors. There is no money: trading is barter, and what an item is worth stays hidden. The first use of fish:
   putting them into the inn's perpetual stew for a buff (R12.6). *(D24, D28, D86)*
 - **R11.6** The game has no ending; it ends when the player stops. Collecting (R4) is the long-term goal. *(D23)*
-- **R11.7** **The Alchemist** visits town from time to time (R10.6). While in town, they sell buffing potions and buy
+- **R11.7** **The Alchemist** visits town from time to time (R10.6; now a shop with hours and barter, R17.6, R18). While in town, they sell buffing potions and buy
   alchemical ingredients, which are fished up as stuff (D112) and range from vials to rare magical goo. *(D30)*
 
 ### R12: Buffs and debuffs
@@ -250,7 +256,7 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R12.2** A buff or debuff lasts for one of two kinds of duration: **a number of casts** (charges spent when the line
   goes out, R1.5) or **a length of time**. Both kinds are needed. Cast-counted modifiers are the stronger ones. Timed
   ones count down in real time, but only while the game is open; game time (R11.4) is separate and still moves only with
-  the player's actions. *(D32)*
+  the player's actions. *(D32; four kinds now: casts, attempts (D96), real time and game minutes, R19.5)*
 - **R12.3** Active buffs and debuffs are shown as square icons in the **top right of the game area**: buffs in one row
   with a green border, debuffs in a separate row with a red border. *(D29)*
 - **R12.4** Each square shows its remaining duration in its **lower right corner**, clearly legible: the number of casts
@@ -260,7 +266,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R12.6** **The perpetual stew** (R11.5) gives a buff that is substantial in the early game. That creates the loop:
   fish while the buff lasts, then put the catch in the stew for the next one. The buff is stronger the rarer the fish
   added, measured against their location's table, and longer the more fish are added. It runs on time (R12.2); each
-  fish added is worth some extra buff time, with the amounts left for balancing. *(D28, D37)*
+  fish added is worth some extra buff time, with the amounts left for balancing. *(D28, D37; replaced by R19.4 and D127:
+  game minutes by each fish's own rarity)*
 - **R12.7** The player can cancel a buff early: right-click on desktop, long-press on touch. Debuffs can't be cancelled.
   *(D31)*
 
@@ -328,7 +335,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 - **R16.5** The log scrolls, oldest line at the top, and isn't numbered. Fish and items in it are links: the name in
   brackets in its rarity colour, showing its tooltip when tapped. *(D79)*
 - **R16.6** Settings belong to the device, not to a save. The first is the theme: dark, or light wooden planks, with
-  rarity colours that stay readable on each. *(D81)*
+  rarity colours that stay readable on each. *(D81; now also the background, the font, Show dice and the volume: D132,
+  D143-D145)*
 - **R16.7** How a strike went ("Fast strike!", "Too early!") floats up from the bobber and fades; no milliseconds. The
   roll goes in the log. *(D82)*
 - **R16.3** The player can keep fishing with a panel open; taps on a panel stay in it. On a phone the main view is the
@@ -382,7 +390,7 @@ From the owner's brainstorm of 2026-11-14 (`docs/brainstorm-2026-11-14.md`, D123
 ### R19: Cold, night and the stew
 
 - **R19.1** **White items** (stuff, D112) are the common non-fish: a non-fish is junk (gray), stuff (white) or
-  treasure (green and up). A third roll decides stuff, with **Stuff Find** as a game value; the Rogue has the most.
+  treasure (green and up). A second roll after the treasure roll decides stuff (D125), with **Stuff Find** as a game value; the Rogue has the most.
   Each spot has its own list of stuff; stuff is always findable, whether or not the player knows its use.
 - **R19.2** **Cold** has three levels, each a debuff worse than the last, worked out from the temperature, the time
   of day and the player's **warmth**, a game value. At first a night out is cold even in summer, and the inn is the
@@ -397,9 +405,9 @@ From the owner's brainstorm of 2026-11-14 (`docs/brainstorm-2026-11-14.md`, D123
 ### R20: Fish that swim
 
 - **R20.1** Fish can be shown swimming, in a way pleasant to watch and like fish: gliding, a beat of the tail, turns.
-  Seen from the side, made from their icons. Never scaled (R7.3).
+  Seen from the side, drawn as code from their shapes, with their icons' colours (D131). Never scaled (R7.3).
 - **R20.2** They swim in the aquarium, just under the surface (schools and big fish), and under the water in the
-  Fighter's dive.
+  Fighter's dive; also on the title screen (D134), in Look Underwater and as the pool's shadows (D139).
 - **R20.3** **The dive** (the Fighter's Jump In): the scene goes under the water for a few seconds; a few fish swim by,
   the one that got away among them. Each can be clicked for its own roll: the player's d20 above the fish, the fish's
   below, showing whether it's caught. While its dice show, the fish can't be clicked again. Time up, the dive ends.

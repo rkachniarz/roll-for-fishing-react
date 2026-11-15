@@ -46,7 +46,7 @@ import { tendPool } from './pool.js';
 export function startDive(state, escapee, extra = []) {
   // The pool first: it draws from its own stream and commits it, so the dive's
   // dice are taken after, or their commit would wind the pool's back (D53).
-  tendPool(state, extra);
+  tendPool(state);
   const values = valuesFor(state, extra);
   const { dice, commit } = diceFrom(state);
   const d = dice.abilities;
@@ -133,7 +133,8 @@ export function endDive(state) {
   const escapee = next.dive?.fish.find((f) => f.escapee);
   const key = poolKey(next);
   if (escapee && !(escapee.struck && escapee.caught)) {
-    next.escaped[key] = [...(next.escaped[key] ?? []), { ...escapee.fish, tries: 1 }];
+    // However many times it got away before, and once more (R3.6).
+    next.escaped[key] = [...(next.escaped[key] ?? []), { ...escapee.fish, tries: (/** @type {import('./state.js').PoolFish} */ (escapee.fish).tries ?? 0) + 1 }];
   }
   const back = (next.dive?.fish ?? []).filter((f) => f.pooled && !(f.struck && f.caught)).map((f) => f.fish);
   if (back.length) next.escaped[key] = [...(next.escaped[key] ?? []), ...back];

@@ -18,7 +18,7 @@
   "swims": "upper",
   "spawn": {
     "min": -2,
-    "max": 1,
+    "max": 2,
     "trend": "cooling",
     "from": "-4-0 °C"
   },

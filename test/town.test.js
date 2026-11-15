@@ -458,6 +458,35 @@ test('the Rogue shows off on a fish that makes its move; the rod and the draught
   assert.fail('no manoeuvre in 400 casts');
 });
 
+test('in a real cast a manoeuvre nobody answers runs out, and the fish is gone (D141)', async () => {
+  const { strikeLine, tick } = await import('../src/engine/game.js');
+  for (let seed = 1; seed <= 3000; seed++) {
+    const s = game({ seed });
+    const out = castLine({ ...s, features: [], champions: {} }, 0);
+    if (out.cast.line?.kind !== 'fish' || !out.cast.line.fight?.manoeuvre) continue;
+    const struck = strikeLine(out.state, out.cast, out.cast.biteAt + 100);
+    if (struck.cast.phase !== 'fight') continue;
+    const fightAt = /** @type {any} */ (struck.cast).fightAt;
+    const waiting = tick(struck.state, struck.cast, fightAt + 100);
+    assert.equal(waiting.cast.phase, 'fight', 'still time to answer');
+    const late = tick(struck.state, struck.cast, fightAt + 60000);
+    assert.equal(late.cast.phase, 'done');
+    assert.equal(/** @type {any} */ (late.cast).outcome.result, 'escaped');
+    assert.ok(late.events.some((e) => e.type === 'escaped' && e.thrown));
+    return;
+  }
+  assert.fail('no fish made its move in 3000 casts');
+});
+
+test('set to the bottom, a fish that is certain still comes up (D148, D96)', () => {
+  const base = game();
+  const s = { ...base, features: [], champions: {}, equipped: { ...base.equipped, line: { id: 'adjustable-line', count: 1 } }, lineDepth: /** @type {const} */ ('bottom') };
+  const always = [{ label: 'test', effects: [{ value: 'nonFishChance', add: 100 }] }];
+  assert.notEqual(castLine(s, 0, { extra: always }).cast.line.kind, 'fish', 'the bottom brings up something else');
+  const summoned = [...always, { label: 'summon', effects: [{ value: 'biteCertain', add: 1 }] }];
+  assert.equal(castLine(s, 0, { extra: summoned }).cast.line.kind, 'fish');
+});
+
 test('weight (D146): every fish has a formula; a fish weighs it times its condition, within the spread', async () => {
   const { fishWeight, rollCondition } = await import('../src/engine/fish.js');
   for (const f of Object.values(content.fish)) assert.ok(f.lengthWeight?.a > 0 && f.lengthWeight.b > 2, f.id);
@@ -594,6 +623,33 @@ test('spawning (D149): in its window and going its way; a spawning fish weighs m
   }
 });
 
+test('warming is the water against its own slow average, not the air of the hour (D153)', async () => {
+  const { waterNow } = await import('../src/engine/spawning.js');
+  const s = game();
+  // A cold snap in a warming spell: the water is above its average, so still warming.
+  assert.equal(waterNow({ ...s, water: 8, waterSlow: 6, weather: { ...s.weather, temperature: 3 } }).warming, true);
+  assert.equal(waterNow({ ...s, water: 5, waterSlow: 7, weather: { ...s.weather, temperature: 12 } }).warming, false);
+  // The average follows the water, far slower than the water follows the air.
+  const cold = /** @type {GameState} */ ({ ...s, water: 4, waterSlow: 4, weather: { ...s.weather, temperature: 12 } });
+  for (let i = 0; i < 48; i++) stepWater(cold);
+  assert.ok(cold.water > 8, `the water after a warm day: ${cold.water}`);
+  assert.ok(cold.waterSlow < 5, `its average: ${cold.waterSlow}`);
+  assert.equal(waterNow(cold).warming, true);
+  // An older save starts its average where the water is.
+  const old = JSON.parse(serialize(s));
+  delete old.waterSlow;
+  old.version = 18;
+  assert.equal(deserialize(JSON.stringify(old)).waterSlow, old.water);
+});
+
+test('who lives in a pool is not up to the player: no bait, no buffs (D153)', () => {
+  const s = game({ seed: 5 });
+  const plain = tended(s);
+  const baited = tended({ ...s, equipped: { ...s.equipped, bait: { id: 'worms', count: 5 } }, buffs: [{ id: 'big', source: 'test', effects: [{ value: 'fishSizeBand', add: 3 }, { value: 'fishDifficulty', add: 5 }] }] });
+  assert.ok(content.items.worms.bait, 'a bait some fish prefer');
+  assert.deepEqual(Object.values(baited.escaped), Object.values(plain.escaped));
+});
+
 test('a save from version 16 loads with the water as warm as the air (D149)', () => {
   const v16 = /** @type {any} */ ({ ...game(), version: 16 });
   delete v16.water;
@@ -647,6 +703,57 @@ test('who eats whom (D152): a predator eats a tank-mate well under its length, n
   const out = feedTank(bagged);
   assert.equal(out.state.bags[0].count, 1);
   assert.ok(out.state.tank.fedUntil > bagged.time);
+});
+
+test('the aquarium has its days whichever way the room is come into; a fish just put in is safe (D152)', () => {
+  const pike = { ...fish('northern-pike', 'rare', 90) };
+  const roach = { ...fish('roach', 'common', 20) };
+  // Up from the inn by its dialog, as most visits go, on day 100 of a new game: the tank's day is today's.
+  let s = /** @type {GameState} */ ({ ...game({ day: 100 }), location: 'town', spot: 'inn', event: { id: 'the-inn', slide: 'start' } });
+  s.character = { ...s.character, xp: content.rules.levels.xp[2], perks: { 2: 'aquarium' } };
+  const up = content.events['the-inn'].slides.start.choices.findIndex((/** @type {any} */ c) => (c.effects ?? []).some((/** @type {any} */ e) => e.kind === 'go' && e.spot === 'room'));
+  assert.ok(up >= 0, 'the inn has a way up to the room');
+  s = choose(s, up).state;
+  assert.equal(s.spot, 'room');
+  assert.equal(s.tank.day, 100);
+  // Both in the tank, down and straight back up: no day has passed, so nobody was eaten.
+  s = { ...s, aquarium: [pike, roach], location: 'town', spot: 'inn', event: { id: 'the-inn', slide: 'start' } };
+  assert.equal(choose(s, up).state.aquarium.length, 2);
+  // A week on, by the same dialog: over many games the roach is often gone.
+  let eaten = 0;
+  for (let seed = 1; seed <= 60; seed++) {
+    const later = /** @type {GameState} */ ({ ...s, streams: game({ seed }).streams, time: s.time + 7 * DAY });
+    if (choose(later, up).state.aquarium.length < 2) eaten++;
+  }
+  assert.ok(eaten > 20 && eaten < 60, `eaten in ${eaten} of 60 weeks`);
+});
+
+test('the pot and the tank give a fish back only to a bucket with room; a trade only where the vendor is', async () => {
+  const { takeFromStew, fromAquarium } = await import('../src/engine/barter.js');
+  const full = [{ fish: fish('roach', 'common'), count: valuesFor(game()).flat.bucketSize }];
+  const inn = /** @type {GameState} */ ({ ...game(), location: 'town', spot: 'inn', stewPot: [fish('perch', 'common')], bucket: full });
+  assert.equal(takeFromStew(inn, 0).state, inn);
+  assert.deepEqual(takeFromStew(inn, 0).events, [{ type: 'bucket-full' }]);
+  assert.equal(takeFromStew({ ...inn, bucket: [] }, 0).state.bucket.length, 1);
+  const room = /** @type {GameState} */ ({ ...game(), location: 'town', spot: 'room', aquarium: [fish('perch', 'common')], bucket: full });
+  room.character = { ...room.character, xp: content.rules.levels.xp[2], perks: { 2: 'aquarium' } };
+  assert.equal(fromAquarium(room, 0).state, room);
+  assert.equal(fromAquarium({ ...room, bucket: [] }, 0).state.bucket.length, 1);
+  const s = atAlchemist();
+  assert.equal(trade({ ...s, location: 'lake', spot: 'reedy-shore' }, 'alchemist', 'potion-of-breath').events.length, 0, 'not from the lake');
+});
+
+test('a school on the water is of a fish that shoals, and listed where that fish lives (D154)', () => {
+  for (const loc of Object.values(content.locations)) {
+    for (const spot of loc.spots ?? []) {
+      for (const e of spot.features ?? []) {
+        const f = content.features[e.id];
+        if (f.kind !== 'school') continue;
+        assert.ok(!f.retired, `${spot.id} lists the retired ${e.id}`);
+        assert.equal(content.fish[f.fish[0].id].shoals, true, `${e.id} at ${spot.id}`);
+      }
+    }
+  }
 });
 
 test('every fish FishBase calls a fish-eater is a predator; the small fish are not (D152)', () => {

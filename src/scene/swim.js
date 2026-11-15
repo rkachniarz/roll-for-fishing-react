@@ -201,11 +201,37 @@ export function createShoal(parent, rand) {
     return b.y0 + (from + rand() * (to - from)) * h;
   }
 
+  /**
+   * A goal the fish can get to: its middle stays half its own size from the
+   * edges (update keeps it there), so a goal nearer the glass would never be
+   * reached and the fish would press on it, tail beating. A shadow under the
+   * surface only keeps its middle in its patch.
+   * @param {Swimmer} s
+   * @param {{ x: number, y: number }} goal
+   */
+  function reach(s, goal) {
+    const b = s.box ?? box;
+    const art = swimSprite(s.species);
+    const halfW = s.box ? 0 : Math.min(art.w / 2, (b.x1 - b.x0) / 2);
+    const halfH = s.box ? 0 : Math.min(art.h / 2, (b.y1 - b.y0) / 2);
+    return { x: Math.min(b.x1 - halfW, Math.max(b.x0 + halfW, goal.x)), y: Math.min(b.y1 - halfH, Math.max(b.y0 + halfH, goal.y)) };
+  }
+
+  /**
+   * How near its goal counts as there: 6 pixels, less in a small patch, where
+   * every goal would be that near and a new one rolled every frame.
+   * @param {Swimmer} s
+   */
+  function near(s) {
+    const b = s.box ?? box;
+    return Math.min(6, (b.x1 - b.x0) / 8, Math.max(1, (b.y1 - b.y0) / 2));
+  }
+
   /** @param {Swimmer} s @param {number} now */
   function newGoal(s, now) {
     const b = s.box ?? box;
     const pad = Math.min(16, (b.x1 - b.x0) / 4);
-    s.goal = { x: b.x0 + pad + rand() * Math.max(1, b.x1 - b.x0 - 2 * pad), y: depthIn(b, s.quarter) };
+    s.goal = reach(s, { x: b.x0 + pad + rand() * Math.max(1, b.x1 - b.x0 - 2 * pad), y: depthIn(b, s.quarter) });
     s.nextGoal = now + 2500 + rand() * 4000;
     // Its species' way (D147): a pike waits, then lunges; a trout holds its place; bleak dart.
     if (rand() < s.way.rest) {
@@ -277,6 +303,7 @@ export function createShoal(parent, rand) {
       // Shoals (D151): the first of a shoaling kind in a box leads, the rest keep their place behind it.
       /** @type {Map<string, Swimmer>} */
       const leaders = new Map();
+      const was = new Map(swimmers.map((s) => [s, s.leader]));
       for (const s of swimmers) {
         s.leader = null;
         if (!content.fish[s.species]?.shoals) continue;
@@ -286,8 +313,9 @@ export function createShoal(parent, rand) {
           leaders.set(kind, s);
           continue;
         }
+        // A fish already behind this leader keeps its place: set is called on every redraw.
+        if (was.get(s) !== lead) s.place = { x: (rand() - 0.5) * 28, y: (rand() - 0.5) * 12 };
         s.leader = lead;
-        s.place = { x: (rand() - 0.5) * 28, y: (rand() - 0.5) * 12 };
       }
     },
     /**
@@ -304,8 +332,7 @@ export function createShoal(parent, rand) {
         const dx = s.x - struck.x || rand() - 0.5;
         const dy = s.y - struck.y || rand() - 0.5;
         const d = Math.hypot(dx, dy) || 1;
-        const b = s.box ?? box;
-        s.goal = { x: Math.min(b.x1, Math.max(b.x0, s.x + (dx / d) * 70)), y: Math.min(b.y1, Math.max(b.y0, s.y + (dy / d) * 30)) };
+        s.goal = reach(s, { x: s.x + (dx / d) * 70, y: s.y + (dy / d) * 30 });
         s.scatterUntil = now + SCATTER_MS;
         s.burstUntil = s.scatterUntil;
         s.restUntil = 0;
@@ -330,8 +357,7 @@ export function createShoal(parent, rand) {
             const dx = s.x - p.x;
             const dy = s.y - p.y;
             if (Math.abs(dx) > 40 || Math.abs(dy) > 18) continue;
-            const b = s.box ?? box;
-            s.goal = { x: Math.min(b.x1, Math.max(b.x0, s.x + Math.sign(dx || 1) * 60)), y: Math.min(b.y1, Math.max(b.y0, s.y + Math.sign(dy || 1) * 20)) };
+            s.goal = reach(s, { x: s.x + Math.sign(dx || 1) * 60, y: s.y + Math.sign(dy || 1) * 20 });
             s.fleeUntil = now + 1200;
             s.burstUntil = now + 500;
             s.restUntil = 0;
@@ -344,11 +370,11 @@ export function createShoal(parent, rand) {
         const scattering = now < s.scatterUntil || now < s.fleeUntil;
         // A shoal-mate keeps its place behind its leader and does as it does: rests, bursts, turns (D151).
         if (s.leader && !scattering && s.leader.scatterUntil <= now) {
-          s.goal = { x: s.leader.x + (s.leader.right ? -1 : 1) * Math.abs(s.place.x) * 0.6 + s.place.x * 0.4, y: s.leader.y + s.place.y };
+          s.goal = reach(s, { x: s.leader.x + (s.leader.right ? -1 : 1) * Math.abs(s.place.x) * 0.6 + s.place.x * 0.4, y: s.leader.y + s.place.y });
           s.restUntil = s.leader.restUntil;
           s.burstUntil = s.leader.burstUntil;
           s.nextGoal = now + 1000;
-        } else if (now > s.nextGoal || (!scattering && Math.hypot(s.goal.x - s.x, s.goal.y - s.y) < 6)) newGoal(s, now);
+        } else if (now > s.nextGoal || (!scattering && now >= s.restUntil && Math.hypot(s.goal.x - s.x, s.goal.y - s.y) < near(s))) newGoal(s, now);
         const bursting = (now < s.burstUntil && now >= s.restUntil) || now < s.scatterUntil;
         const resting = now < s.restUntil;
         // Under the surface, in a small patch, they mill about slowly. Resting, it hangs
@@ -376,7 +402,8 @@ export function createShoal(parent, rand) {
         if (s.vx > 3) s.right = true;
         else if (s.vx < -3) s.right = false;
         // Turning together: a shoal-mate near its leader faces as it does.
-        if (s.leader && Math.hypot(s.leader.x - s.x, s.leader.y - s.y) < 30 && now >= s.scatterUntil) s.right = s.leader.right;
+        // Only while it drifts: one swimming to its place faces the way it goes, never tail first.
+        if (s.leader && Math.abs(s.vx) <= 3 && Math.hypot(s.leader.x - s.x, s.leader.y - s.y) < 30 && now >= s.scatterUntil && now >= s.fleeUntil) s.right = s.leader.right;
         const frames = s.look === 'own' ? art.frames : s.look === 'shadow' ? art.shadows : art.small;
         s.sprite.texture = frames[Math.floor(s.beat)];
         // The art faces left: facing right is a mirror, not a scaling (R7.3).

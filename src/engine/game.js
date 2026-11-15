@@ -16,7 +16,7 @@ import { applyValue, deriveValues } from './values.js';
 import { listTable, locationTable, pick } from './tables.js';
 import { bendFish, fishWeight, rollFish, sameFish, sizeBands } from './fish.js';
 import { featureAt, swimOff, updateFeatures, waterAt } from './features.js';
-import { fightStrike, startCast, strike, tickCast } from './cast.js';
+import { TIMING, fightStrike, startCast, strike, tickCast } from './cast.js';
 import { diceFrom, levelFor } from './state.js';
 import { equippedIds } from './equipment.js';
 import { afterCast, arrive } from './events.js';
@@ -166,6 +166,8 @@ export function timingFrom(v) {
     fastMs: v.flat.reactionFast,
     okMs: v.flat.reactionOk,
     lateMs: v.flat.strikeLimit,
+    // Not a game value: without it a manoeuvre would never run out (D141).
+    fightMs: TIMING.fightMs,
   };
 }
 
@@ -225,7 +227,7 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
     return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'no-rod' }] };
   }
   // The fish under the surface here, stocked or topped up if it's time (D139).
-  state = tended(state, extra);
+  state = tended(state);
   // Ever-Summoning: Summon Fish by itself, every other cast (D106).
   const summoned = hasPerk(state, 'ever-summoning') && (state.book.casts + 1) % 2 === 0;
   const lineExtra = summoned ? [...extra, { label: 'ever-summoning', effects: [{ value: 'biteCertain', add: 1 }] }] : extra;
@@ -369,7 +371,8 @@ function rollLine(state, values, dice, feature = null, featureFish = null, champ
   /** @param {string} species */
   const canBite = (species) => depthBites[/** @type {keyof typeof depthBites} */ (content.fish[species]?.swims ?? 'lower')] ?? depthBites.lower;
   // Set to the bottom, now and then a bite is something else (D148); drawn only then.
-  const nonFish = values.flat.nonFishChance > 0 && dice.line.roll100() <= values.flat.nonFishChance;
+  // Never in place of a fish that is certain: a summoned one, a class fish cast by (D96, D114).
+  const nonFish = values.flat.nonFishChance > 0 && dice.line.roll100() <= values.flat.nonFishChance && certain <= 0;
   if (Object.values(depthBites).some(Boolean) && !nonFish) {
     // A fish that got away here may come back: the more there are, the likelier (R3.6).
     const key = poolKey(state);
@@ -612,7 +615,8 @@ export function tick(state, cast, now) {
     now >= next.endedAt + next.missPause
   ) {
     const recast = castLine(state, now, { landing: next.landing, extra: next.extra, recast: true });
-    return { ...recast, events: [{ type: 'recast' }, ...recast.events] };
+    // Refused (an event opened on the missed splash): no line went out, so the log doesn't say one did.
+    return recast.cast.phase === 'idle' ? recast : { ...recast, events: [{ type: 'recast' }, ...recast.events] };
   }
   return { state, cast: next, events: [] };
 }
@@ -920,7 +924,7 @@ export function useAbility(state, id, extra = []) {
       break;
     case 'look-underwater': {
       // The pool here, each fish looked at once more (D139).
-      const looked = lookUnderwater(next, extra);
+      const looked = lookUnderwater(next);
       if (!looked.length) return { state, events: [] };
       events.push(...looked);
       break;
@@ -964,8 +968,7 @@ export function useAbility(state, id, extra = []) {
       if (i < 0) return { state, events: [] };
       const escapee = pool[i];
       next.escaped[key] = pool.filter((_, j) => j !== i);
-      const { tries, ...plain } = escapee;
-      events.push(...startDive(next, plain, extra));
+      events.push(...startDive(next, escapee, extra));
       break;
     }
     case 'gut': {

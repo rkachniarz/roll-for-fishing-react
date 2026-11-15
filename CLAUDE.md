@@ -29,6 +29,8 @@ by number:
   writing events or content; the engine work they need is in DEV_PLAN.md.
 - `docs/PORTING-NOTES.md`: what to port from the React prototype (tag `legacy-prototype`; read old files with
   `git show legacy-prototype:src/Data/weather.js`) and the lessons it taught.
+- `docs/town-questions.md`, `docs/brainstorm-2026-11-14.md`, `docs/ideas/items.md`: dated records of questions and
+  ideas, not requirements.
 
 Pushing `master` publishes the game to GitHub Pages once `npm test` passes (D91, D133):
 https://rkachniarz.github.io/roll-for-fishing-react/ (and `art.html`). Push only when the owner asks.
@@ -65,7 +67,7 @@ npm run sim [casts=500 games=20 class=rogue-fisher strike=250..900 perks=first|p
 npm run planks [pine|oak]   # the light theme's tabletop tile, from docs/design/refs/, into styles.css (D143)
 npm run obsidian            # the dark theme's obsidian tile, drawn as code, into styles.css (D145)
 npm run prompts # record the owner's prompts per session in docs/prompts.json, and print the total
-# http://localhost:8001/art.html   the art sheet: trials, every sprite enlarged, the scene in five lights
+# http://localhost:8001/art.html   the art sheet: trials, fish that swim, the painted spots by season, every sprite and icon enlarged
 # http://localhost:8001/?ph          placeholder text marked with a ° (D124)
 # http://localhost:8001/?dev       dev bench; ?seed=N seeds a new game (a save wins); ?wait=MS fixes the bite delay
 # http://localhost:8001/editor.html   the content editor (7.5): forms from the schemas, saving into content/ (Chrome, Edge)
@@ -112,13 +114,14 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   written by `npm run planks` and `npm run obsidian` (D143, D145); don't edit them by hand. Background: plain
   turns them off (D144, `data-background`, read in `<head>`). It is on `body::before`, so its pixelated look isn't inherited.
   While `body[data-phase=loading]`, everything but the background is hidden.
-- **`index.html` has a small script in `<head>`** that reads the theme and the font (D132) from the settings key
-  before the page draws, so a light page doesn't flash dark. It duplicates `src/settings.js`'s key on purpose (D81).
+- **`index.html` has a small script in `<head>`** that reads the theme, the background (D144) and the font
+  (D132) from the settings key before the page draws, so a light page doesn't flash dark. It duplicates
+  `src/settings.js`'s key on purpose (D81).
 - **Event pictures are icons too, 64×64 (D142):** `event/<name>`, the scroll by default (`eventIcon`), in a round
   portrait on the event dialog; `paintIcon` sizes its canvas to the grid. Draw them inside the circle.
-- **Icons are 32×32 (D98), but most grids in `src/scene/icons.js` are 16 wide:** those were drawn before D98 and
-  `paintIcon` doubles them (`DRAWN_AT_16`). New icons go after that line, at 32. An icon can keep its own colours in
-  `OWN_KEYS`; always draw and export with `iconKeys(name)`, never `KEYS` alone.
+- **Icons are 32×32 (D98), but the first grids in `src/scene/icons.js` are 16 wide:** those above the
+  `DRAWN_AT_16` line were drawn before D98, and `paintIcon` doubles them. New icons go after that line, at 32.
+  An icon can keep its own colours in `OWN_KEYS`; always draw and export with `iconKeys(name)`, never `KEYS` alone.
 - **Rarity colours are CSS variables (`--rarity-*`),** not the hex values in `src/scene/icons.js`: each theme has its
   own, so use `rarityColour()` from `src/ui/links.js` for anything on the page (D81).
 - **`art.html` repeats `index.html`'s import map;** a test checks the two agree. It's the art sheet, not part of the
@@ -139,8 +142,8 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   and its cooldown is `pending` too, counting from the next line out (D113).
   Lit abilities (`state.lit`) go dark when the next line goes out (`castLine`).
 - **`src/ui/drag.js` reads `data-drag` / `data-drop` (`bag:3`, `bag:end`, `bag:pane`, `equip:rod`) off the elements;**
-  `main.js` decides what a drop does. A `contextmenu` from a long-press on a phone is swallowed; only a mouse's
-  right-click equips.
+  `main.js` decides what a drop does. A `contextmenu` from a long-press on a phone is swallowed (in `src/main.js`);
+  only a mouse's right-click equips. On a fish in the bucket it opens the fish's options menu instead (R21.1).
 - **Events are `.md`, not JSON (D45, D84).** `tools/event-text.mjs` reads them and owns the vocabulary;
   `docs/events.md` is the author's guide, so a new word goes in both. The engine imports only typedefs from it.
   Event text is a list of parts, each its own string key (D88); a new placeholder goes in `PLACEHOLDERS` there and
@@ -188,18 +191,20 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   than one kind to pick from.
 - **A spot's pool (`state.escaped`) is what lives there (D139),** not only the fish that got away:
   `src/engine/pool.js` stocks and tops it up lazily, whenever it is looked at (`castLine`, the dive, the wizard's
-  look, and `render` in `src/main.js` between casts), from the `pool` stream alone. A test that counts a pool must
+  look, and `render` in `src/main.js` between casts), from the `pool` stream (and `condition`), with no bait and
+  none of the player's values counted (D153). A test that counts a pool must
   leave out the `wild` fish. The look itself (`looking` in `src/main.js`) is the page's, never saved.
 - **A fish's weight is worked out, never stored (D146):** `fishWeight` from its species' `lengthWeight` and its own
   `condition`, rolled from the `condition` stream wherever a fish is rolled. Two fish of a different condition
   don't stack (`sameFish`).
 - **The water has a temperature (`state.water`, D149),** stepped with the time in `stepTime`; who spawns is worked
   out from it (`src/engine/spawning.js`) and reaches the tables through the moment (`momentOf`), like the
-  preferences. Plants at a spot (D150) reach them the same way (`hasPlants` in `src/engine/tables.js`).
+  preferences. Whether it is warming is the water against its own slow average (`state.waterSlow`, D153), never
+  the air against the water: that flips with every change of weather. Plants at a spot (D150) reach them the same way (`hasPlants` in `src/engine/tables.js`).
 - **The action bar takes statuses that aren't perks (D148):** the adjustable line's depth button brings its own
   `label` and `tip`; `useFromBar` sends `line-depth` to its window.
 - **The aquarium's meals happen on coming into the room (D152),** in `travel`, from the `tank` stream; never while
-  the player watches.
+  the player watches. An event's `go:` into the room runs them too (`src/engine/events.js`), as `travel` does.
 - **A landed fish can still fight (D141):** `strikeLine` may return a cast in phase `fight` instead of `done`; the
   next strike, at or after `fightAt`, answers it. Anything that plays a cast (test helpers, the sim) must strike
   again then, and the page treats `fight` as a line still out. The scene is given it as `waiting`, then `bite`.
@@ -212,3 +217,25 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   scaling (R7.3); facing right is a mirror. A fish with no shape falls back to its icon turned level (D129).
 - **`src/main.js`: a tap within 500 ms of the last action is ignored after a cast ends,** so a double tap on the splash
   strikes once instead of striking and instantly recasting.
+- **Fish Find by depth (D137, D148) is one d100, checked once per depth's bonus** (`rollLine` in `src/engine/game.js`).
+  With no bonus the checks are one and nothing more is drawn (a test checks). `state.lineDepth` stays set when the
+  line comes off; it counts only through `lineAdjustable` and `depthSources`.
+- **Luck is read through `luckOf(state)` (`src/engine/events.js`),** which adds the marimo's +1 (D150). Reading
+  `state.character.luck` skips it.
+- **Tend the pool before taking dice:** call `tendPool` or `tended` (`src/engine/pool.js`) before `diceFrom`, or
+  the commit writes the old stream positions back over the pool's draws.
+- **A new random stream means a new `SAVE_VERSION` and a migration that derives it** (`STREAMS` in
+  `src/engine/state.js`), or an old save has no position for it.
+- **Conservation (D140) counts in the flag `endangered-released`** through `conserve` (`src/engine/barter.js`), called
+  from both release paths, `letGo` and `releaseFish`. A test wants two endangered kinds per spot (one in the tower's
+  pool), so adding a fish to a spot or marking one endangered can fail it.
+- **A new fish needs `swims` (D136, a test checks) as well as a shape.** The schema requires only id, name, size,
+  difficulty and rarity; code falls back quietly when `swim`, `fights`, `taste` or `lengthWeight` is missing.
+- **Shoaling, swim styles and hiding (D147, D151, D152) are looks only,** in `createShoal` in `src/scene/swim.js`, on
+  scenery randomness. The dive's scatter changes what a tap hits, never the rolls.
+- **"Predator" means two things:** a surface feature's predator prefers predator bait (D102); the tank and hiding use
+  the fish's `predator` mark (D152).
+- **`timingFrom` in `src/engine/game.js` must carry `fightMs`:** it isn't a game value, and without it a manoeuvre
+  never runs out (D141).
+- **`src/main.js`: `castInProgress()` is not `lineOut()`.** Saves are held back only while a cast is in progress;
+  equipment can't change then, nor in the pause after a missed splash (`lineOut()`).

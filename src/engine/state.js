@@ -19,7 +19,7 @@ import { knownKey, locationList } from './knowledge.js';
 import { fishWeight } from './fish.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 18;
+export const SAVE_VERSION = 19;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -112,6 +112,7 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {{ day: number, fedUntil: number }} tank  The aquarium (D152): the game day its predators were last
  *   checked on, and the game minute a feeding lasts until.
  * @property {number} water  The water's temperature on the weather's scale (D149), following the air's.
+ * @property {number} waterSlow  The water's own slow average: warmer than it, the water is warming (D153).
  * @property {'surface' | 'upper' | 'lower' | 'bottom' | null} lineDepth  The depth an adjustable line is set to
  *   (D148); it counts only while such a line is equipped.
  * @property {Record<string, true>} tasted  Species the player has eaten, raw or in a bowl, and so
@@ -194,6 +195,7 @@ export function newGame({ seed, character, month }) {
     tasted: {},
     lineDepth: null,
     water: weather.temperature,
+    waterSlow: weather.temperature,
     tank: { day: 0, fedUntil: 0 },
   };
 }
@@ -333,6 +335,8 @@ const MIGRATIONS = {
   13: (save) => ({ ...save, streams: { ...save.streams, fight: deriveSeed(save.seed, 'fight') } }),
   // 15 -> 16: the line's depth (D148), unset.
   15: (save) => ({ ...save, lineDepth: null }),
+  // 18 -> 19: the water's slow average (D153), starting where the water is.
+  18: (save) => ({ ...save, waterSlow: save.water }),
   // 17 -> 18: who eats whom in the aquarium (D152), counted from today, with its own stream.
   17: (save) => ({
     ...save,

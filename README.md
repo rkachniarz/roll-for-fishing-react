@@ -21,6 +21,8 @@ npm run build    # single-file copy in dist/artifact.html
 npm run check    # all three in turn: test, verify, build (what ends a phase)
 npm run sim      # balance: seeded games per class (casts=500 games=20 class=rogue-fisher …)
 npm run prompts  # how many prompts this project has taken, kept in docs/prompts.json
+npm run planks   # the light theme's tabletop tile into styles.css (`pine` or `oak`, D143)
+npm run obsidian # the dark theme's obsidian tile into styles.css (`banded`: the art trial, D145)
 
 npm run sprite list                    # the sprites that can go out to MS Paint
 npm run sprite export bobber           # -> art/bobber.png, to draw on
@@ -43,27 +45,27 @@ and the art sheet at `/art.html` there.
 | Path | What |
 |---|---|
 | `index.html` | The page, and the import map pinning PixiJS |
-| `art.html` | The art sheet: trials, every sprite enlarged, the scene in five lights (`src/art.js`, `src/art-trials.js`; how we work: `docs/art.md`) |
+| `art.html` | The art sheet: trials, fish that swim, the painted spots by season, every sprite and icon enlarged (`src/art.js`, `src/art-trials.js`; how we work: `docs/art.md`) |
 | `art/` | The owner's real-size drawings, and sprites exported to draw on |
-| `styles.css` | Layout: scene above the panel on phones, beside it on wide screens |
-| `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, perks, sets, weather, surface features, tables, rules; events are text (`.md`) |
+| `styles.css` | Layout: scene above the panel on phones, beside it on wide screens; both themes' background patterns as data URLs (D143, D145) |
+| `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, perks, sets, weather, surface features, tables, buffs, vendors, rules; events are text (`.md`) |
 | `schemas/` | A JSON Schema per kind of content; VS Code uses them to check and complete content files |
 | `src/generated/content.js` | Built from `content/` by `npm run content`; don't edit |
 | `src/strings.js` | `t()`: all player-facing text goes through it |
 | `src/save.js` | The three save slots in the browser's storage |
-| `src/settings.js` | Settings, kept per device: the theme, Show dice, the volume |
+| `src/settings.js` | Settings, kept per device: the theme, the background (D144), the font (D132), Show dice, the volume |
 | `src/ui/buffbar.js` | The buff and debuff bar over the scene's top right |
-| `src/ui/actionbar.js` | The action bar on the scene's bottom left (D120): abilities, cooldowns, glows |
+| `src/ui/actionbar.js` | The action bar on the scene's bottom left (D120): abilities, cooldowns, glows; statuses such as the line's depth (D148) |
 | `src/dev.js` | The `?dev` bench: game values, world, character, inventory, buffs |
 | `src/main.js` | Wiring: input → engine → scene and page; character creation; saving |
 | `src/rng.js` | Seeded random streams (from SuperRollies) |
 | `src/dice.js` | The dice: `roll20`, `roll2d6`, `roll100`… |
-| `src/engine/cast.js` | One cast: waiting, bite, strike, reaction grade, the d20 roll |
+| `src/engine/cast.js` | One cast: waiting, bite, strike, reaction grade, the d20 roll; a landed fish's fight (`fightStrike`, D141) |
 | `src/engine/values.js` | Game values and the effect vocabulary |
-| `src/engine/tables.js` | Weighted tables from a location's and spot's lists; what fish prefer (D101) |
-| `src/engine/fish.js` | One fish: species, subname, size band, size, difficulty, rarity |
+| `src/engine/tables.js` | Weighted tables from a location's and spot's lists; what fish prefer (D101), who is spawning (D149), plants at a spot (D150) |
+| `src/engine/fish.js` | One fish: species, subname, size band, size, difficulty, rarity; condition and weight (`fishWeight`, D146) |
 | `src/engine/state.js` | The game state: new game, saves and their migrations, the random streams |
-| `src/engine/game.js` | One cast from the game's side: the line, the strike, what it changes; buffs |
+| `src/engine/game.js` | One cast from the game's side: the line, the strike, what it changes; buffs, abilities, travel, the line's depth (`setLineDepth`, D148) |
 | `src/engine/equipment.js` | The equipment slots; moving items between them and the bags |
 | `src/engine/events.js` | Events: requirements, choices and their effects, the event meter and other triggers |
 | `src/engine/character.js` | Character creation: names, classes, stat rolls |
@@ -74,7 +76,7 @@ and the art sheet at `/art.html` there.
 | `src/engine/champions.js` | Class fish (D114): appearing, their effects on the spot, spells, weather, the Rogue's loot |
 | `src/engine/passage.js` | Time passing in half-hour steps: casts, waiting and sleeping in town; buffs that last game time (R17.2, R19.5) |
 | `src/engine/schedule.js` | When a vendor is in: days, hours asleep, days away (R17.6) |
-| `src/engine/barter.js` | Barter (R18): offers and trades; the perpetual stew; a fish let go, eaten, put in the aquarium (R21) |
+| `src/engine/barter.js` | Barter (R18): offers and trades; the perpetual stew; a fish let go, eaten, put in the aquarium (R21); the Conservationist (`conserve`, D140); the tank's meals and feeding (D152) |
 | `src/engine/buffs.js` | Buffs from `content/buffs/`: potions, a night's rest; using a potion from the bags |
 | `src/engine/conditions.js` | The cold and night fishing, worked out from the state (R19.2, R19.3, D126) |
 | `src/engine/spawning.js` | The water's temperature, and who is spawning (D149) |
@@ -86,15 +88,15 @@ and the art sheet at `/art.html` there.
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
 | `src/scene/pond.js` | Still water's scene, painted as code from photos of a pond (D115, D116); also on the art sheet |
-| `src/scene/swim.js` | Fish that swim: the swimming motion, the tank's and the surface's shoals (D129, D131) |
+| `src/scene/swim.js` | Fish that swim: the swimming motion, the tank's and the surface's shoals (D129, D131); each species' swim style (D147), shoaling and scatter (D151), hiding (D152) |
 | `src/scene/fish-art.js` | Every fish drawn to swim, as code: side on and from the bank below the surface, its colours from its icon (D131) |
 | `src/scene/fish-shapes.js` | Each fish's shape for swimming: presets for kinds of body, and each fish's own fins, tail and pattern |
-| `src/scene/views.js` | What takes the water's place: the town, the room and its aquarium, the dive (placeholders, CR-5), the title screen's water (D134) |
+| `src/scene/views.js` | What takes the water's place: the town, the room and its aquarium, the dive (placeholders, CR-5), the title screen's water (D134), Look Underwater (D139) |
 | `src/scene/logo.js` | The title's logo: ROLL with the d20 as its O, "for fishing" under it (D135, CR-18) |
 | `src/scene/deep.js` | Under the water, side on: the bands, the sand and the shafts of light, for the art sheet's tank and the title (D134) |
 | `src/scene/reedy.js` | The reedy shore's scene, painted as code from a sketch and a photo of dense reeds (D117) |
 | `src/scene/dice.js` | The fight's d20s thrown over the scene, coming to rest on the numbers rolled (D99; `d20.js`: the die's shape and numbering) |
-| `src/scene/icons.js` | 32×32 icons (D98): items and fish (a default for each kind), the button row, the weather; rarity colours |
+| `src/scene/icons.js` | 32×32 icons (D98): items and fish (a default for each kind), the button row, the weather; the 64×64 event pictures (D142); rarity colours |
 | `src/ui/flight.js` | A catch's icon flying from the bobber to the bucket or bag |
 | `src/ui/floater.js` | How a strike went, floating up from the bobber |
 | `src/ui/log.js` | The log under the scene |
@@ -109,7 +111,7 @@ and the art sheet at `/art.html` there.
 | `src/ui/event-words.js` | The placeholders in event text (`{name}`, `{class}`…), and putting a slide's text together |
 | `src/ui/effects.js` | An item's effects as tooltip lines, green or red |
 | `src/ui/errors.js` | Red error text over the scene ("Must have a fishing pole equipped.") |
-| `src/ui/panels.js` | The panes: character (the paper doll), journal, map, bucket, bag (over the log), menu |
+| `src/ui/panels.js` | The panes: character (the paper doll), journal, map, bucket, bag (over the log), menu, settings; the barter, stew and aquarium window (`shopPane`) |
 | `test/` | Unit tests (`node:test`) |
 | `tools/content.mjs` | Checks content and builds the generated module, plus `dist/content-overview.html` |
 | `tools/event-text.mjs` | Reads the event text format (`content/events/*.md`) and holds its vocabulary |
@@ -122,4 +124,10 @@ and the art sheet at `/art.html` there.
 | `tools/commons.py` | Wikimedia Commons pictures: search to a contact sheet, fetch a pick with its licence |
 | `tools/py.mjs` | Runs the Python tools in their own environment, `.venv-cutout/` (`npm run cutout setup`); `tools/python-requirements.txt` lists what it installs |
 | `tools/build-artifact.mjs` | Builds `dist/artifact.html` |
-| `docs/` | Spec, decisions, history, porting notes; `docs/design/` holds sketches and photos, local only (D97); `docs/events.md` is how to write an event, `docs/art.md` how the art is made, `docs/ideas.md` the owner's ideas for events and the story, `docs/placeholders.md` every placeholder (generated, D124) |
+| `docs/` | Spec, decisions, history, porting notes; `docs/design/` holds sketches and photos, local only (D97); `docs/events.md` is how to write an event, `docs/art.md` how the art is made, `docs/ideas.md` the owner's ideas for events and the story, `docs/placeholders.md` every placeholder (generated, D124), `docs/REVIEW.md` calls the owner hasn't checked yet (D76), `docs/prompts.json` the prompt count; `docs/town-questions.md`, `docs/brainstorm-2026-11-14.md` and `docs/ideas/items.md` are dated records |
+| `.claude/skills/photo-to-icon/SKILL.md` | The photo-to-icon skill: a photo to a 32×32 icon (D97, D98) |
+| `.github/workflows/` | `pages.yml` publishes to GitHub Pages (D91); `ci.yml` is disabled on GitHub (D133) |
+| `assets/CREDITS.md` | Where outside pictures the art is drawn from came from, with their licences |
+| `OLD-CONCEPT.md` | The prototype's concept, kept for reference |
+| `jsconfig.json` | Type checking in the editor |
+| `drafts/` | Local drafts, ignored by git |

@@ -315,10 +315,6 @@
           "weight": 4
         },
         {
-          "id": "central-mudminnow-school",
-          "weight": 3
-        },
-        {
           "id": "big-mainland-eel",
           "weight": 1
         },
@@ -474,6 +470,10 @@
         {
           "id": "big-wels-catfish",
           "weight": 1
+        },
+        {
+          "id": "big-ide",
+          "weight": 2
         }
       ],
       "rift": [
@@ -622,16 +622,20 @@
           "weight": 4
         },
         {
-          "id": "rock-bass-school",
-          "weight": 3
-        },
-        {
           "id": "big-lake-brown-trout",
           "weight": 2
         },
         {
           "id": "big-burbot",
           "weight": 1
+        },
+        {
+          "id": "big-rock-bass",
+          "weight": 3
+        },
+        {
+          "id": "big-smallmouth-bass",
+          "weight": 3
         }
       ],
       "rift": [
@@ -844,10 +848,6 @@
         {
           "id": "big-burbot",
           "weight": 4
-        },
-        {
-          "id": "deepwater-sculpin-school",
-          "weight": 3
         },
         {
           "id": "big-lake-trout",

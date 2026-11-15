@@ -152,11 +152,11 @@
           "weight": 5
         },
         {
-          "id": "mainland-bullhead-school",
+          "id": "grayling-school",
           "weight": 4
         },
         {
-          "id": "stone-loach-school",
+          "id": "frostfin-grayling-school",
           "weight": 3
         },
         {
@@ -166,6 +166,10 @@
         {
           "id": "big-taimen",
           "weight": 1
+        },
+        {
+          "id": "big-brown-trout",
+          "weight": 4
         }
       ],
       "rift": [
@@ -288,15 +292,15 @@
       ],
       "features": [
         {
-          "id": "chub-school",
+          "id": "dace-school",
           "weight": 5
         },
         {
-          "id": "dace-school",
+          "id": "gudgeon-school",
           "weight": 4
         },
         {
-          "id": "gudgeon-school",
+          "id": "roach-school",
           "weight": 3
         },
         {
@@ -318,6 +322,14 @@
         {
           "id": "big-golden-dorado",
           "weight": 1
+        },
+        {
+          "id": "big-chub",
+          "weight": 5
+        },
+        {
+          "id": "big-ide",
+          "weight": 2
         }
       ],
       "rift": [
@@ -466,6 +478,10 @@
         {
           "id": "big-sea-lamprey",
           "weight": 1
+        },
+        {
+          "id": "big-ide",
+          "weight": 4
         }
       ],
       "rift": [

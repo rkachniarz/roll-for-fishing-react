@@ -26,6 +26,7 @@ import { vendorStatus } from './schedule.js';
 import { giveBuff } from './buffs.js';
 import { passTime } from './passage.js';
 import { minutesToMorning } from './time.js';
+import { tankMeals } from './barter.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./game.js').GameEvent} GameEvent */
@@ -329,7 +330,10 @@ function applyEffect(state, effect, dice) {
       state.location = effect.location;
       state.spot = effect.spot ?? loc.spots?.[0]?.id ?? null;
       state.features = [];
-      return [{ type: 'moved', location: state.location, spot: state.spot }];
+      // As with travel: a lit ability goes dark, and coming into the room the aquarium has had its days (D96, D152).
+      state.lit = {};
+      const meals = loc?.town && state.spot === 'room' ? tankMeals(state) : [];
+      return [{ type: 'moved', location: state.location, spot: state.spot }, ...meals];
     }
     case 'lock':
       // Held where they are until an event unlocks them (R10.8, D51).

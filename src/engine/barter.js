@@ -16,6 +16,7 @@ import { hasPerk } from './perks.js';
 import { poolKey } from './champions.js';
 import { diceFrom, levelFor } from './state.js';
 import { levelUp } from './perks.js';
+import { fishInBucket, valuesFor } from './game.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./fish.js').FishInstance} FishInstance */
@@ -67,6 +68,9 @@ export function costStatus(state, cost) {
  */
 export function canTrade(state, vendorId, offerId) {
   if (vendorStatus(state, vendorId) !== 'open') return false;
+  // Only where the vendor is (R18).
+  const vendor = content.vendors?.[vendorId];
+  if (vendor?.location && (state.location !== vendor.location || (vendor.spot && state.spot !== vendor.spot))) return false;
   const offer = offersFor(state, vendorId).find((o) => o.id === offerId);
   return Boolean(offer && offer.costs.every((c) => costStatus(state, c).met));
 }
@@ -288,6 +292,8 @@ export function addToStew(state, index) {
 export function takeFromStew(state, index) {
   const fish = state.stewPot?.[index];
   if (!fish || !atStew(state)) return { state, events: [] };
+  // Only into a bucket with room (D57): the pot isn't a second bucket.
+  if (fishInBucket(state) >= valuesFor(state).flat.bucketSize) return { state, events: [{ type: 'bucket-full' }] };
   const next = structuredClone(state);
   next.stewPot = next.stewPot.filter((_, i) => i !== index);
   const twin = next.bucket.find((b) => sameFish(b.fish, fish));
@@ -466,6 +472,7 @@ export function toAquarium(state, index) {
 export function fromAquarium(state, index) {
   const fish = state.aquarium?.[index];
   if (!fish || !atAquarium(state)) return { state, events: [] };
+  if (fishInBucket(state) >= valuesFor(state).flat.bucketSize) return { state, events: [{ type: 'bucket-full' }] };
   const next = structuredClone(state);
   next.aquarium = next.aquarium.filter((_, i) => i !== index);
   const twin = next.bucket.find((b) => sameFish(b.fish, fish));

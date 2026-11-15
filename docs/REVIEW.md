@@ -24,6 +24,58 @@ Items with no note are left alone.
 
 Newest first.
 
+## Review 3: how the lake's rules meet (2026-11-15)
+
+The bugs the review found are fixed and listed in history.md. These are not bugs: places where two of the lake's
+rules meet and the result may not be what was meant. The owner has answered most (2026-11-15): the stacking
+multipliers, the plants and the seasons' steps are knobs for the balance simulations later (DEV_PLAN, Phase 11);
+the adjustable line, Luck (events will roll with it and gate choices by it) and the one water temperature are
+fine as they are. What's left:
+
+- **A fish from the pool skips the moment (D139).** Since pools are stocked, 5 to 15% of bites are a pool fish
+  (a d100 at or under the pool's size), rolled when the pool was stocked: that day's weather, hour and bait, and
+  the size and difficulty values the player had then. It also skips the rift roll, so Rift Fishing is that much
+  weaker than its number. (The bait and the player's values no longer count when a pool is stocked, D153; the
+  weather and the hour of that day still do.)
+- **Weight touches nothing but the records (D146), by the owner's call,** with one side effect: twins must share a
+  condition, 21 steps, so fish almost never stack in the bucket now.
+- **The tank goes by the fish, hiding by the kind (D152).** A meal needs the prey under half the eater's own
+  length; hiding compares the species' middle lengths. A trophy roach hides from a small pike that can't eat it.
+  In the tank the hiding zone (80 by 36) covers most of the glass (96 by 66): small fish beside a pike are fleeing
+  about a third of the time.
+- **Smaller things:** a second twin is lost without a word when the bucket is full; a predator can eat an
+  endangered fish or a class fish in the tank; a Conservationist can let the same fish go, Recall it and let it go
+  again; a pool fish struck at in a dive and missed is still "new" to the player.
+
+Calls made while fixing, for a look:
+
+- **Big fish by the predator mark (D155).** New: big chub, rock bass, brown trout, smallmouth bass, ide (names
+  marked placeholders). **Kept, though the rule would not make them today:** the five without the mark (channel
+  catfish, landlocked salmon, eel, sea lamprey, pejerrey) and the two that shoal (black crappie, silverside); say
+  if any should go. Left out as too small: Cassalan sleeper, Wildlands perch.
+- **Schools follow shoaling now (D154).** Marked as shoaling **from common knowledge, not a source** (FishBase says
+  nothing either way): rudd, ruffe, crucian carp, common carp, Ferrstad carp, white sucker. Taken as keeping alone,
+  their schools retired: central mudminnow, deepwater sculpin, mainland bullhead, stone loach, chub, rock bass.
+  New schools: grayling and frostfin grayling (their names, "a school of grayling", are marked placeholders). The
+  swamp now has two schools, the deep water one, the rocky shore two: say if a spot should always have three.
+- **The three fixes the owner asked for (D153):** the water's trend from its own average of about a week
+  (`trendLag` 336 half-hours, a guess that measured well); burbot, icefish and polar cod spawning up to 2 on the
+  scale, wider than their sources (0.6 to 1.7 °C and colder), because the game's winter water averages 3; pools
+  stocked with no bait and none of the player's values, so a perk for bigger fish doesn't reach the 5 to 15% of
+  bites that come from the pool.
+- **A fish's manoeuvre runs out after 1.5 s (`fightMs`), as D141 meant.** Until now it never did in the real game,
+  so nobody has yet felt that timing in play.
+- **A second tap within half a second of the strike is ignored in a fight too,** so a double tap on the splash
+  doesn't yank the hook.
+- **Set to the bottom, a certain fish (summoned, a class fish cast by) is never turned into something else.**
+- **The pot and the tank give a fish back only to a bucket with room;** the pot itself still has no limit.
+- **Trades only where the vendor is;** walking off closes the barter window.
+- **No saving to a file while the line is out** ("Not while your line is out."): the file would have rolled the
+  line anew.
+- **A failed dive adds to the fish's "got away" count** instead of setting it back to one.
+- **Swimming:** a fish in a small patch (a big fish's shadow, a class fish) now moves; shoal-mates keep their
+  places instead of being reshuffled on every redraw, and face the way they swim. Worth a look in the game.
+
 ## Who eats whom (2026-11-15, D152, 11.11)
 
 - **Predators from FishBase's diet sentences** ("feed mainly on fishes", "piscivore", "voracious predator"), 44 of them,

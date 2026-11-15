@@ -4,6 +4,7 @@
   "placeholder": true,
   "lag": 48,
   "minWater": 1,
+  "trendLag": 336,
   "gather": 3,
   "schools": 3
 }
