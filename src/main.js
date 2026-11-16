@@ -147,10 +147,15 @@ function fit() {
   root.setProperty('--portrait', `${(64 * Math.max(1, Math.round(1.5 * ui * dpr))) / dpr}px`);
   // The slot fits its icon, with room for the border and the count.
   root.setProperty('--slot', `${Math.max(52, Math.ceil((32 * s) / dpr) + 20)}px`);
-  // The title's menu (D135): on a phone where the log starts, one button row
-  // below the scene; on a wide screen just under the scene, the HUD being beside it.
+  // The title's menu (D135): where the log is. On a phone that is one button row
+  // below the scene; on a wide screen the log's column beside it, so the menu
+  // takes the log's place and size.
   const log = /** @type {HTMLElement} */ (document.querySelector('.log-frame')).getBoundingClientRect();
-  root.setProperty('--title-top', `${Math.round(wide ? canvas.getBoundingClientRect().bottom + 2 + gutter : log.top)}px`);
+  root.setProperty('--title-top', `${Math.round(log.top)}px`);
+  for (const [name, value] of [['--title-left', log.left], ['--title-width', log.width], ['--title-height', log.height]]) {
+    if (wide) root.setProperty(name, `${Math.round(value)}px`);
+    else root.removeProperty(name);
+  }
 }
 fit();
 window.addEventListener('resize', fit);

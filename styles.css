@@ -1094,13 +1094,17 @@ body.is-dragging {
 
 /* ---------- The title screen (D80) ---------- */
 
-/* Under the scene, as WoW's login buttons are under its picture (D29): on a
-   phone one button row below it, where the log starts (`--title-top`, set by
-   fit in src/main.js). Only a light shade: the water is the title's picture. */
+/* Where the log is (`--title-*`, set by fit in src/main.js): on a phone one
+   button row below the scene, where the log starts; on a wide screen the log's
+   column beside the scene, at its size. Only a light shade: the water is the
+   title's picture. */
 .title {
   margin-top: var(--title-top, auto);
   margin-bottom: auto;
-  max-height: calc(100dvh - var(--title-top, 0px) - var(--gutter));
+  margin-left: var(--title-left, auto);
+  width: var(--title-width, min(calc(420px * var(--ui)), calc(100vw - 2 * var(--gutter))));
+  max-width: none;
+  max-height: var(--title-height, calc(100dvh - var(--title-top, 0px) - var(--gutter)));
 }
 
 .title::backdrop {
