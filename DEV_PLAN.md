@@ -11,7 +11,55 @@ a plain generic sentence, a stand-in rule. A town of placeholder squares is bett
 listed under the creative task that will replace it, so nothing is forgotten; a placeholder that fits no task gets a
 new one.
 
-## Next up: Phase 11, what the real species do
+## Next up: Phase 12, the map, the sun and moon, the sky
+
+The owner's ask of 2026-11-16 (D160): clouds that follow the weather on the painted spots, and before them, where
+the sun and moon are. **Done in this order, one task at a time**, with the owner's refinement questions before each.
+The map comes first because it gives every painting a compass facing, and the sun, the moon and the clouds' light
+all depend on which way the player looks.
+
+- [ ] **12.1** The map (was 8.1's map; the owner's hand drawing): the lake and the river with their spots on them,
+  in the map pane in place of today's plain list. Each spot gets a compass facing (`look.facing`, degrees), usually
+  looking across the water from the bank it is on, so spots on opposite shores look opposite ways. The river spots'
+  facings (across the river, or up or down it) wait on the owner's reference pictures (Q-42). A placeholder drawing
+  until CR-7.
+- [ ] **12.2** The sun and the moon as engine numbers, with tests: their height and bearing at every half hour, as
+  seen from Gdynia (54.52° N, 18.53° E), the latitude that already sets sunrise and sunset (`SUN` in
+  `src/engine/time.js`, D85); the moon's phase. Worked out from the clock, never stored, except the moon's start if
+  it is rolled (Q-41): a new random draw means a new stream, so a new `SAVE_VERSION` and a migration that rolls it
+  for old saves. Some numbers that follow: the sun stands about 59° up at midsummer noon and 12° at midwinter noon,
+  so a summer noon sun is far above the picture and a winter one crawls along the trees; at midsummer it rises in
+  the north-east and sets in the north-west; the full moon rides high in winter and low in summer.
+- [ ] **12.3** The moon counts for the fish (the owner: "you know I want it to count for fish"). How is for the
+  refinement questions: a preference like the weather's (`prefers`), feeding in the pools (D157), the light at
+  night, or the anglers' moon tables (solunar periods).
+- [ ] **12.4** The sky as its own layer, shared by every painted spot that shows sky (the pond and the reedy shore;
+  not the swamp, which has no sky, D160): back to front, the sky's colour, the sun or moon, the clouds, then a path of
+  glitter on the water when the sun or moon is low in front of the player. The paintings' own baked-in clouds go.
+  The land isn't relit (it is painted for a clear noon, docs/art.md); the tints do the light. Spots painted from now
+  on are painted without a sky, only their horizon, and their facing is settled before they are painted.
+- [ ] **12.5** Clouds that follow the weather (with CR-2):
+  - **A library of cloud types,** each with 2–3 patterns drawn as code: small fair-weather heaps, big towering heaps,
+    lumpy grey layers, high wisps, flat grey sheets, rain cloud. A table (`content/rules/sky.json`) lists, per season
+    and cloud level, which patterns can show, with the season's palette over them; that gives each level in each
+    season its 2–3 patterns without painting each one apart. The levels match the aviation words: a few, scattered,
+    broken (mostly cloudy), overcast.
+  - **Descriptions that name a sky are their own case** ("Scattered clouds rush through the sky", "Big, still
+    clouds…", "Sunlight breaks through in patches", "Low clouds hang heavy", "A grey blanket of cloud", "the sun
+    hides behind the clouds"): the same file maps a description's key to its pattern, over the table. The engine keeps
+    the description it picked (`src/engine/weather.js`), so the scene can tell. A test checks every description that
+    mentions cloud or sky has a case, and that the case suits every level its weather can roll (some roll a range).
+  - **Black (level 5) is an overcast of dark clouds that brings a dusk for as long as it lasts** (the night tint).
+    Nothing uses it yet; which weathers move up to it (Hail, Downpour, Heavy rainfall?) is the owner's call.
+  - **Fog and mist hide the sky,** whatever the cloud level ("Thick fog soup" is clouds 4).
+  - **"The sun hides behind the clouds"** needs the sun from 12.2: light that comes and goes.
+  - **The water:** the pond's still water mirrors the clouds; overcast flattens the glints.
+  - **Changes blend or drift in** rather than cut; drifting clouds wrap across the side strips (D93). The same sky
+    after a reload isn't needed: the patterns draw from the scenery stream.
+  - **The swamp:** no sky; the cloud level may darken its tint a little, nothing more.
+  - **Later:** clouds lit orange from below at dusk; the tints do for now.
+
+## Phase 11, what the real species do
 
 The owner's list of 2026-11-14, from what we know about the real fish and plants, **easiest first and done in this
 order**, one at a time. **How we work through it:** once a task is pushed to GitHub, Claude asks the owner its
@@ -189,6 +237,14 @@ Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D
 - **Q-40 How are hidden numbers revealed?** Hidden rolls stay hidden until something reveals them (R5.2). The number
   a fish needed shows from level 1 (D107). Still open: what reveals the bite and treasure rolls and Luck (a perk, an
   item, a class?), and where those rolls would show; the game values to reveal them are in.
+- **Q-41 How long is the moon's cycle? (12.2)** The game's year is 112 days, four seasons of 28. Either (a) a real
+  length, 28 days, the first full moon on day 10+1d10 of the year, so it is shifted against the seasons' starts and
+  comes four times a year; or (b) packed like the year: 29.5 days × 112/365 ≈ 9.1 days, about twelve full moons a
+  year. (b) changes the moon's shape visibly every night, keeps it full for about one night, and moves moonrise
+  about two and a half hours a day instead of fifty minutes; it plays, but reads less real. Which suits depends on
+  how many game days a player sees, and how rare a full-moon fish should be.
+- **Q-42 Which way do the river spots face? (12.1)** Across the river, or along it, up or downstream. The owner is
+  deciding from reference pictures.
 
 ---
 
@@ -292,7 +348,7 @@ The machinery the art plugs into. The art itself is in the creative track.
   class's colour) and placeholder log lines until CR-15.
 - [ ] **4.7** Weather and life on a spot (D100; was the engine half of 8.11): the scene picks each spot's sky from
   the weather (heaped clouds, overcast, rain, wind, light) and moves its plants and water. Placeholder clouds and
-  plants (flat shapes) until CR-2.
+  plants (flat shapes) until CR-2. *The sky and clouds are Phase 12 now (12.4, 12.5, D160).*
 
 ## Phase 5: Items and inventory
 
@@ -378,7 +434,7 @@ Requirements R5.3, R11.
 - [ ] **8.1** Location switcher; each location's spot map, switching spots at any time, spots learned about before
   they show; spot tables filled in (R11.8, D58). *The spot tables are filled in, and the map pane is a plain list of
   every spot known of to go to (D101); spots are learned by fishing at a location or from an event (D109); still to
-  do: a map of placeholder shapes (CR-7).*
+  do: a map of placeholder shapes (CR-7); now 12.1, from the owner's hand drawing.*
 - [x] **8.2** Unlocks through map fragments and quests; the discovery meter. A hidden location opens once its
   fragments are found, or by an event's `open:`; `close:` takes a quest's place away (D110). The discovery meter is
   each place's completion (D109).
@@ -482,6 +538,10 @@ placeholder, it's added here.
   water (D159); the pond's and the reedy shore's are still to do.
 - [ ] **CR-2** Weather and life on the painted spots (D100; the art half of 8.11): clouds per weather (summer's heaped
   clouds, autumn's overcast so far), rain, wind, light, moving plants and water. *Replaces 4.7's flat shapes.*
+  **The clouds (12.5, D160):** references from Wikimedia Commons first (`npm run commons search`, a contact sheet
+  per cloud type and cover: a few, scattered, broken, overcast, dark), since skies are photographed endlessly; the
+  owner's own photos of skies that looked particularly interesting go in beside them. References only, never traced
+  or shipped.
 - [ ] **CR-3** Fish icons (D97, D98; was an earlier 9.7, not the font's): the eyes, one by one, since they were placed by script (a 2×2 a tenth of
   the way in from the snout) and some look comedic or out of place; the weak icons on
   `docs/design/fish-image-hunt.md`; and the four with no icon yet: Mainland eel, golomyanka, Grasslands silverside,
@@ -498,7 +558,8 @@ placeholder, it's added here.
   made from photos like the item icons. An event names its own with `art:`. *Replaces the default, an old scroll
   (`event/scroll`), that every event shows until it has its own; the scroll itself is a first draft for the owner's
   markup.*
-- [ ] **CR-7** The map, each location's spots drawn on it (8.1). *Replaces the placeholder shapes.*
+- [ ] **CR-7** The map, each location's spots drawn on it (8.1, 12.1), from the owner's hand drawing. *Replaces the
+  placeholder shapes.*
 - [ ] **CR-8** Perk and ability icons (the action bar shows initials), and the look of a Greedy fish and a bent fish
   (6.3). *Also replaces the green eye around Look Underwater (D139), four flat rings in `src/scene/views.js`.*
 - [ ] **CR-9** The fixed palette (4.1) and the art sheet's open trials (`art.html`).
