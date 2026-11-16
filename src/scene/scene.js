@@ -13,6 +13,7 @@ import { createViews } from './views.js';
 import { createShoal } from './swim.js';
 import { paintPond, pondSeason } from './pond.js';
 import { paintReedy, reedySeason } from './reedy.js';
+import { paintSwamp, swampSeason } from './swamp.js';
 import {
   BOBBER,
   BOBBER_DIPPED,
@@ -49,6 +50,7 @@ const FAR_LINE = 95;
 const PAINTINGS = {
   pond: { paint: paintPond, season: pondSeason, farLine: 145 },
   reedy: { paint: paintReedy, season: reedySeason, farLine: 136 },
+  swamp: { paint: paintSwamp, season: swampSeason, farLine: 150 },
 };
 /** How far a painting (320 wide) reaches left of the play area. */
 const PAINTING_LEFT = 32;
@@ -75,8 +77,8 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
  * defaults; a knob whose option the owner picks becomes the default and
  * leaves this list.
  * @typedef {{ tint?: string, tintAlpha?: number, shapes?: { shape: 'rect' | 'ellipse' | 'triangle' | 'band', x?: number, y: number,
- *   w?: number, h: number, colour: string }[], painting?: 'pond' | 'reedy' }} SpotLook  A spot's placeholder look (4.2),
- *   or a painting in its place (`painting`: src/scene/pond.js, D115; src/scene/reedy.js, D117).
+ *   w?: number, h: number, colour: string }[], painting?: 'pond' | 'reedy' | 'swamp' }} SpotLook  A spot's placeholder look (4.2),
+ *   or a painting in its place (`painting`: src/scene/pond.js, D115; src/scene/reedy.js, D117; src/scene/swamp.js, D158).
  *
  * @typedef {Object} SceneLook
  * (None at the moment.)

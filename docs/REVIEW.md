@@ -24,6 +24,79 @@ Items with no note are left alone.
 
 Newest first.
 
+## Under the swamp's water (2026-11-16, D159)
+
+A picture under the water for each painted spot, shown for both Look Underwater and the dive; the swamp's first
+(`src/scene/swamp-under.js`, on the art sheet under "The swamp"). Calls Claude made:
+
+- **The same picture for the look and the dive.** The look keeps its eye round the edge and the spot's plants on
+  the mud; the dive has no plants, as before.
+- **The branch is in front of the fish** (the owner said foreground), so a fish low in the dive can pass behind
+  it; it is kept low and to the sides so the middle stays open. Its shape (a main limb rising left to right,
+  limbs down into the mud, boughs and crooked twigs curling up) is Claude's, after the photo; the growths are
+  lumps of tan, pale and green crust.
+- **The far tree** (the owner's second round): photo 3's foot, 20% bigger (168 wide), cut out of the leaves by
+  colour with the gaps they left closed up and the edge rounded off, and stretched down so every root reaches the
+  mud; photo 5's trunk above it, scaled to the foot's trunk, burl and all, from the picture's top. Claude's calls:
+  where the two meet (near photo 3's top, blended over 16 rows), the beech toned to the oak's spread of greys with
+  the oak's furrows run faintly down its roots, five tones of bark, and the tree's place (from column 156, so its
+  right edge runs a little into the strip). Mixed about three quarters into the water, as before. Baked by
+  `docs/design/swamp/bake-far-tree.py`. After the owner's markup: the stump on the left of the joint is shaved
+  to a straight edge; the moss on the foot (lit and shaded), which read as holes, is patched with the bark around
+  it, smoothed and given the oak's grain; the mud is heaped around the foot to the owner's lines (`MOUND` in
+  `src/scene/swamp-under.js`, Claude's points along them).
+- **The water's colours** (`SWAMP_UNDER`), the duckweed rafts on the surface's underside, five weak shafts of
+  light, the drifting silt: Claude's, for "more green and murky".
+- **One picture all year** for now; the seasons under the water (leaves sinking in autumn, darker in winter) are
+  not done.
+
+## The swamp, painted (2026-11-15, D158, CR-1)
+
+From the owner's eight photos (`docs/design/swamp/`, with `notes.md` on what each gives) and the owner's pick: the
+third trial composition, with the second's big mossy tree. On the art sheet under "The swamp", and in the game.
+Calls Claude made:
+
+- **Which tree gets which foot, moss and bark,** and where each stands, apart from the big mossy tree.
+- **The water is not black where the line lands.** Photo 8's black mirror is kept for under the trees and the
+  sides; the middle is a murky olive, because the fish below the surface are drawn dark and vanish on black.
+- **The swamp's `water` box** (where the line can land: 40–216 across, 128–204 down, in the play area) and where
+  the far bobber takes over (row 150). It is a little bigger than the other spots'. Nothing drawn over the bobber
+  reaches into it, in any frame.
+- **Photo 5's ridged oak bark** is on two trees beside the grey beech, not only for its burl.
+- **One burl,** on a middle-distance tree, so it stays odd.
+- **Mist** along the far bank and low over the water, as drifting streaks: not in any photo, added for the murk.
+- **All the colours** (`SWAMP` and the three other seasons, `src/scene/swamp-pixels.js`): taken by eye from photos
+  7 and 8 and darkened; trees further off are mixed towards the fog's colour, in three steps.
+- **The seasons,** worked out from the spring photos: summer darker and greener under the closed crowns, with more
+  weed and bigger rafts; autumn a warmer fog, the moss dull, the sedge and grass yellowed, beech leaves lying on the
+  water; winter a cold pale fog, the rafts gone, straw for sedge, snow on roots, logs, tussocks and the island but
+  never on the water. Moss stays green all year and changes only in brightness.
+- **How it moves:** the water shimmers in three slow frames, rings spread every 2–5 s (all over in rain), the two
+  mists drift to and fro, and gusts push the sedge and the grass a pixel or two. No glints: the water is still and
+  shaded.
+- **The swamp's old placeholder look** (a green tint and lily pads) is gone.
+- **After the owner's first markup** (`docs/design/swamp/markup-1.png`, and photo 9 of where trunk meets water):
+  where a trunk meets the water it bulges out over the surface in rounded lumps, black in the crease under each,
+  with its mirror image straight below. The buttress feet are now two chunky roots a side ending in round
+  knuckles, and the trunk comes down as photo 3's two toes. The two trees on legs are now two kinds: the big one
+  close up keeps photo 2's fingers (five thick legs bowing out at the knee, the arching root, the elbow); the one
+  on the right stands on spider legs (`roots: 'tall'`), from the owner's drawing (`markup-2.png`): six legs
+  humping up and out from under the trunk to rounded knees at different heights, then down into the water. Their
+  thickness (5 pixels at the trunk to 2 at the water) and the knees' heights are Claude's. The drawing is
+  their full length (`markup-3.png`): the tree stands in the water at row 117, its legs about 15 rows long.
+- **Winter's snow, from photo 10** (`docs/design/swamp/photo-10-winter.png`, ice left out): snow lies in thick
+  pillows, white with blue-grey shading underneath and to the right, overhanging a pixel at the ends, on whatever
+  is level (logs, the branch, the island, root knees and lobes, the far bank), and never on upright trunks or the
+  water. Each tussock becomes a white dome with its straw hanging out beneath and a few stalks through the top.
+  **Five low heaps of dead grass appear in winter only** (`hummocks` in the layout), white with snow like the
+  photo's many small humps; the rest of the year they lie under the weed, which is Claude's invention to explain
+  them. All outside the water the line lands on. The depths and the blue of the shadows (`snowBlue`) are guesses.
+- **Autumn's fallen leaves, after the owner's note and photo 11:** the open water keeps the leaves it had; more
+  now lie on the weed mats at the sides (about one pixel in twelve), on the tussocks and the grass (on top and
+  caught among the blades), the roots and lobes at the trees' feet, the logs, the branch and the island. Brown
+  beech leaves mostly, some orange, a few yellow. How thick each lies is Claude's guess. Each leg meets the water at its own row, nearest the viewer lowest, and the gaps
+  between legs are open water, with only a shadow under the crotch.
+
 ## The simulation under the surface (2026-11-15, D157, 11.12)
 
 - **Spawners are slow to leave, not certain to stay.** You chose "they arrive in groups and stay". With that, every

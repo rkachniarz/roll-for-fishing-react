@@ -477,7 +477,9 @@ placeholder, it's added here.
 - [ ] **CR-1** The spots painted from the owner's photos (D97, D100; was 8.10), working from the pond trial on the art
   sheet (`src/scene/pond.js`): a version per season for each of the nine spots, and the Mage Tower's pool. *Replaces
   4.2's placeholder looks (each spot's `look` in `content/locations/`).* Painted so far: still water (the pond, D115, D116;
-  autumn and summer) and the reedy shore (D117, D118; all four seasons).
+  autumn and summer) and the reedy shore (D117, D118; all four seasons). The swamp (D158; all four seasons,
+  from the photos in `docs/design/swamp/`), waiting on the owner's final pass, with the first picture under the
+  water (D159); the pond's and the reedy shore's are still to do.
 - [ ] **CR-2** Weather and life on the painted spots (D100; the art half of 8.11): clouds per weather (summer's heaped
   clouds, autumn's overcast so far), rain, wind, light, moving plants and water. *Replaces 4.7's flat shapes.*
 - [ ] **CR-3** Fish icons (D97, D98; was an earlier 9.7, not the font's): the eyes, one by one, since they were placed by script (a 2×2 a tenth of

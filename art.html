@@ -47,12 +47,21 @@
       cursor: pointer;
     }
     .save:hover { border-color: #ffd100; }
+    details { margin: 18px 0 0; border-top: 1px solid #2c3e46; }
+    summary { padding: 10px 0 4px; cursor: pointer; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary h2 { display: inline; margin: 0; }
+    summary h2::before { content: '\25B8'; display: inline-block; width: 1.1em; color: #a9b4b8; }
+    details[open] > summary h2::before { content: '\25BE'; }
+    summary:hover h2 { text-decoration: underline; }
+    details > .body { padding: 6px 0 12px; }
   </style>
 </head>
 <body>
   <h1>Art sheet</h1>
   <p class="intro">Every piece of the game's art in one place. How we work on it: <code>docs/art.md</code>.
-    Add <code>?seed=2</code> to the address for another layout of the scenery.</p>
+    Add <code>#seed=2</code> to the address for another layout of the scenery.
+    Each section opens on a click and builds only then; <code>#open=all</code> opens them all.</p>
   <main id="sheet"></main>
   <script type="module" src="./src/art.js"></script>
 </body>

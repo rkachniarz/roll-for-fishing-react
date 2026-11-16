@@ -3,7 +3,9 @@
 // places drawn as squares and triangles (a placeholder until CR-5); the
 // player's room with the aquarium; and under the water, for the Fighter's
 // dive; and the title screen's water, after the art sheet's tank. Each covers
-// the whole width, under the dice. Placeholder art (D105), all but the title's.
+// the whole width, under the dice. Placeholder art (D105), all but the title's
+// and the water under a painted spot (D159): a spot with its own picture under
+// the water (UNDER) shows it for a look under the water and for the dive.
 
 import { Container, Graphics, Sprite, Texture } from 'pixi.js';
 import { createShoal } from './swim.js';
@@ -11,13 +13,15 @@ import { paintShaft, paintWater, sandTop } from './deep.js';
 import { iconName, paintIcon } from './icons.js';
 import { createDice } from './dice.js';
 import { paintLogo } from './logo.js';
+import { textureOf } from './swamp.js';
+import { SILT_DRIFT, paintSwampUnder, underFloor } from './swamp-under.js';
 
 /**
  * @typedef {{ id: string, x: number, w: number, h: number, colour: string, roof: string }} Building
  * @typedef {{ kind: 'town', buildings: Building[], here: string | null, night?: boolean }
  *   | { kind: 'room', tank: { key: string, species: string }[] | null }
- *   | { kind: 'dive', fish: { key: string, species: string }[] }
- *   | { kind: 'look', fish: { key: string, species: string, look: 'own' | 'shadow' }[], plants: string[] }
+ *   | { kind: 'dive', fish: { key: string, species: string }[], under?: string }
+ *   | { kind: 'look', fish: { key: string, species: string, look: 'own' | 'shadow' }[], plants: string[], under?: string }
  *   | { kind: 'title', fish: { key: string, species: string }[] }} View
  */
 
@@ -37,6 +41,21 @@ const LOGO_DIE = 37;
 const HAZE = [0x16, 0x53, 0x5f];
 /** Where fish swim on the title screen: under the surface, down among the weed. */
 const TITLE_WATER = { x0: 12, y0: 24, x1: 244, y1: 224 };
+/**
+ * The pictures under the water of the painted spots that have one (D159), by
+ * the painting's name (a spot's `look.painting`): the water and what's far off
+ * (`back`), silt that drifts (`silt`, `drift` wider each side), what's close
+ * up, over the fish (`front`); where the bottom is at a column of the
+ * painting; and the colour of the water that hazes far plants.
+ * @type {Record<string, { paint: (rand: () => number) => { back: any, silt: any, front: any }, drift: number,
+ *   floor: (x: number) => number, haze: number[] }>}
+ */
+const UNDER = {
+  swamp: { paint: paintSwampUnder, drift: SILT_DRIFT, floor: underFloor, haze: [0x29, 0x3b, 0x26] },
+};
+/** How far a picture under the water (320 wide) reaches left of the play area, as the paintings do. */
+const UNDER_LEFT = 32;
+
 /** The plants that can be found in the water (content/items), growing on the title's sand. */
 export const PLANTS = ['canadian-waterweed', 'hornwort', 'quillwort', 'water-lobelia', 'marimo', 'floating-water-plantain', 'lace-plant', 'waterwheel-plant'];
 
@@ -48,8 +67,9 @@ export const PLANTS = ['canadian-waterweed', 'hornwort', 'quillwort', 'water-lob
  * since sprites are never scaled (R7.3).
  * @param {string} id
  * @param {number} haze
+ * @param {number[]} [into]  The water's colour to haze towards: the title's by default.
  */
-function plantFrames(id, haze) {
+function plantFrames(id, haze, into = HAZE) {
   const icon = paintIcon(iconName({ kind: 'item', id }));
   const w = icon.width;
   const h = icon.height;
@@ -63,7 +83,7 @@ function plantFrames(id, haze) {
       data.data[i + 1] = 0x44;
       data.data[i + 2] = 0x4f;
     }
-    for (let c = 0; c < 3; c++) data.data[i + c] = Math.round(data.data[i + c] + (HAZE[c] - data.data[i + c]) * haze);
+    for (let c = 0; c < 3; c++) data.data[i + c] = Math.round(data.data[i + c] + (into[c] - data.data[i + c]) * haze);
   }
   const half = Math.floor(h / 2);
   const frames = [0, 1].map((shift) => {
@@ -109,6 +129,9 @@ export function createViews(parent, rand) {
   let shafts = [];
   /** @type {{ sprite: Sprite, frames: Texture[], next: number }[]} */
   let weed = [];
+  /** The silt drifting in the water under a painted spot, and how far it may go. */
+  /** @type {{ sprite: Sprite, drift: number } | null} */
+  let silt = null;
   // The game's name over the water, and the d20 that rolls into its O,
   // behind the fish (D134).
   const logo = new Container();
@@ -150,6 +173,7 @@ export function createViews(parent, rand) {
     }
     shafts = [];
     weed = [];
+    silt = null;
     play.x = offset;
     logoFor++;
     if (view?.kind !== 'title') {
@@ -159,6 +183,13 @@ export function createViews(parent, rand) {
     if (!view) return;
     if (view.kind === 'title') {
       paintTitle(PLANTS, true);
+      return;
+    }
+    // Under a painted spot's water, its own picture (D159), for a look and the dive alike.
+    const under = (view.kind === 'look' || view.kind === 'dive') && view.under ? UNDER[view.under] : undefined;
+    if (under && (view.kind === 'look' || view.kind === 'dive')) {
+      paintUnder(under, view.kind === 'look' ? view.plants : []);
+      if (view.kind === 'look') paintEye();
       return;
     }
     // A look under the water (D139): the title's water, with only the plants
@@ -220,6 +251,43 @@ export function createViews(parent, rand) {
       for (let x = 8; x < 250; x += 17) front.rect(x, 200 + ((x * 7) % 20), 2, 40).fill('#2f6f3a');
       bubbles = Array.from({ length: 10 }, () => ({ x: 10 + rand() * 236, y: 40 + rand() * 200, speed: 10 + rand() * 20 }));
     }
+  }
+
+  /**
+   * A painted spot's picture under the water (D159), across the whole width:
+   * its water and what's far off behind the fish, its silt drifting, its near
+   * things in front of them; and, for a look, the plants that grow there,
+   * planted on its bottom at varied depths, the far ones hazed into its water.
+   * @param {(typeof UNDER)[string]} under @param {string[]} plants
+   */
+  function paintUnder(under, plants) {
+    const layers = under.paint(rand);
+    const x = offset - UNDER_LEFT;
+    const back = new Sprite(textureOf(layers.back));
+    back.position.set(x, 0);
+    title.addChild(back);
+    const drifting = new Sprite(textureOf(layers.silt));
+    drifting.position.set(x - under.drift, 0);
+    title.addChild(drifting);
+    silt = { sprite: drifting, drift: under.drift };
+    /** @type {{ x: number, depth: number, id: string }[]} */
+    const planted = [];
+    for (let px = Math.floor(rand() * 10) - 8; plants.length > 0 && px < width - 8; px += 14 + Math.floor(rand() * 18)) {
+      planted.push({ x: px, depth: rand(), id: plants[Math.floor(rand() * plants.length)] });
+    }
+    planted.sort((a, b) => a.depth - b.depth);
+    for (const p of planted) {
+      const { frames, foot } = plantFrames(p.id, p.depth < 1 / 3 ? 0.6 : p.depth < 2 / 3 ? 0.35 : 0.15, under.haze);
+      const sprite = new Sprite(frames[0]);
+      const ground = under.floor(p.x + 16 - offset + UNDER_LEFT) + 3 + Math.round(p.depth * (SIZE - 214));
+      sprite.position.set(p.x, ground - foot);
+      title.addChild(sprite);
+      weed.push({ sprite, frames, next: rand() * 1400 });
+    }
+    const front = new Sprite(textureOf(layers.front));
+    front.position.set(x, 0);
+    titleFront.addChild(front);
+    bubbles = Array.from({ length: 6 }, () => ({ x: 10 + rand() * 236, y: rand() * SIZE, speed: 4 + rand() * 6 }));
   }
 
   /**
@@ -336,7 +404,9 @@ export function createViews(parent, rand) {
       if (!view) return;
       shoal.update(now);
       bubbleLayer.clear();
-      if (view.kind === 'title' || view.kind === 'look') {
+      // The silt under a painted spot drifts slowly to and fro.
+      if (silt) silt.sprite.x = offset - UNDER_LEFT - silt.drift + Math.round(Math.sin(now / 11000) * silt.drift * 0.7);
+      if (view.kind === 'title' || view.kind === 'look' || silt) {
         logoDie.update(now);
         // The light flickers as the surface moves over it and drifts a pixel
         // or two; the weed sways a pixel now and then, each to its own time.

@@ -8774,50 +8774,13 @@ export const content = {
             "name"
           ],
           "look": {
-            "tint": "#2f4a2a",
-            "tintAlpha": 0.35,
-            "shapes": [
-              {
-                "shape": "ellipse",
-                "x": 60,
-                "y": 150,
-                "w": 14,
-                "h": 5,
-                "colour": "#3f6b35"
-              },
-              {
-                "shape": "ellipse",
-                "x": 90,
-                "y": 120,
-                "w": 10,
-                "h": 4,
-                "colour": "#3f6b35"
-              },
-              {
-                "shape": "ellipse",
-                "x": 170,
-                "y": 160,
-                "w": 16,
-                "h": 5,
-                "colour": "#3f6b35"
-              },
-              {
-                "shape": "ellipse",
-                "x": 200,
-                "y": 110,
-                "w": 9,
-                "h": 3,
-                "colour": "#3f6b35"
-              },
-              {
-                "shape": "ellipse",
-                "x": 130,
-                "y": 80,
-                "w": 8,
-                "h": 3,
-                "colour": "#3f6b35"
-              }
-            ]
+            "painting": "swamp"
+          },
+          "water": {
+            "x0": 40,
+            "y0": 128,
+            "x1": 216,
+            "y1": 204
           },
           "learnAfter": 15,
           "fish": [

@@ -95,6 +95,10 @@ and the art sheet at `/art.html` there.
 | `src/scene/logo.js` | The title's logo: ROLL with the d20 as its O, "for fishing" under it (D135, CR-18) |
 | `src/scene/deep.js` | Under the water, side on: the bands, the sand and the shafts of light, for the art sheet's tank and the title (D134) |
 | `src/scene/reedy.js` | The reedy shore's scene, painted as code from a sketch and a photo of dense reeds (D117) |
+| `src/scene/swamp.js` | The swamp's moving scene (D158): shimmer, rings, drifting mist, swaying sedge |
+| `src/scene/swamp-under.js` | Under the swamp's water (D159): murky water, the sunk branch, a far beech foot |
+| `src/scene/swamp-roots.js` | Photo 3's beech foot, baked into a grid of tones for the picture under the water |
+| `src/scene/swamp-pixels.js` | The swamp painted as code from the owner's photos, into plain pixel buffers: its layout, four seasons and palettes |
 | `src/scene/dice.js` | The fight's d20s thrown over the scene, coming to rest on the numbers rolled (D99; `d20.js`: the die's shape and numbering) |
 | `src/scene/icons.js` | 32×32 icons (D98): items and fish (a default for each kind), the button row, the weather; the 64×64 event pictures (D142); rarity colours |
 | `src/ui/flight.js` | A catch's icon flying from the bobber to the bucket or bag |

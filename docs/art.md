@@ -11,7 +11,9 @@ the rules the art follows, then Claude's checklist.
 2. **Claude draws it** as code, keeping to the photo or sketch and to the style rules below.
 3. **Both look at the art sheet**, `http://localhost:8001/art.html` (with `npm run dev` running). It shows every
    sprite and icon enlarged, the fish that swim, the painted spots in their seasons, and any open **trials**: two or three options side by side.
-   Any scene on it can be saved as a PNG, to draw over.
+   Any scene on it can be saved as a PNG, to draw over. Each section folds away and is built only when opened,
+   and the ones open last time open again; `#open=all` at the end of the address opens them all, `#seed=2`
+   lays the scenery out differently.
 4. **The owner marks up what's wrong or picks an option.** Exporting Claude's version and marking it in Paint
    ("change this", "delete that") avoids misunderstandings; words work too. Claude changes it and the sheet shows the
    new version.

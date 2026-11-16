@@ -4,12 +4,23 @@
 // side by side), then the painted spots, then each sprite enlarged with its
 // pixel grid, then the palettes. Nothing here is part of the game.
 //
-//   http://localhost:8001/art.html          ?seed=N for another layout of the scenery
+// Each section folds away, and builds what it shows only the first time it is
+// opened, so the sheet doesn't load everything at once; the sections open
+// last time open again (this browser only).
+//
+//   http://localhost:8001/art.html#seed=2   another layout of the scenery
+//   http://localhost:8001/art.html#open=all every section open (the browser checks use this)
+//
+// The options go after a #, not a ?: the server sends art.html on to /art and
+// drops a ? on the way, but the browser keeps the #. A ? still works on /art.
 
 import { Rectangle } from 'pixi.js';
 import { SIZE, createScene } from './scene/scene.js';
 import { POND, POND_SUMMER, createPondScene, paintPond } from './scene/pond.js';
 import { REEDY, REEDY_AUTUMN, REEDY_SPRING, REEDY_WINTER, paintReedy } from './scene/reedy.js';
+import { SWAMP, SWAMP_AUTUMN, SWAMP_H, SWAMP_SUMMER, SWAMP_W, SWAMP_WINTER, swampStill } from './scene/swamp-pixels.js';
+import { paintSwamp } from './scene/swamp.js';
+import { SWAMP_UNDER, swampUnderStill } from './scene/swamp-under.js';
 import { BOBBER, BOBBER_DIPPED, BOBBER_FAR, PALETTE, SPLASH, WAVES, bobberKeys, paintGrid } from './scene/sprites.js';
 import { ICONS, KEYS as ICON_KEYS, OWN_KEYS, paintIcon } from './scene/icons.js';
 import { TRIALS } from './art-trials.js';
@@ -18,7 +29,9 @@ import { content } from './generated/content.js';
 import { createRng, deriveSeed } from './rng.js';
 import { DEEP_BANDS, paintDeep } from './scene/deep.js';
 
-const seed = Number(new URLSearchParams(location.search).get('seed') ?? 1);
+/** The sheet's options, from after the # or the ? (see above). */
+const options = new URLSearchParams(location.hash.slice(1) || location.search);
+const seed = Number(options.get('seed') ?? 1);
 
 /** @param {string} tag @param {Record<string, string>} [attrs] @param {(Node | string)[]} [children] */
 function el(tag, attrs = {}, children = []) {
@@ -28,12 +41,50 @@ function el(tag, attrs = {}, children = []) {
   return node;
 }
 
+/** @param {string} text */
+const slug = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
 const sheet = /** @type {HTMLElement} */ (document.getElementById('sheet'));
-/** @param {string} title @param {string} [note] */
-function section(title, note) {
-  const s = el('section', {}, [el('h2', {}, [title]), ...(note ? [el('p', { class: 'note' }, [note])] : [])]);
-  sheet.append(s);
-  return s;
+const OPEN_ALL = options.get('open') === 'all';
+const OPEN_KEY = 'roll-for-fishing-art-sheet-open';
+/** @type {string[]} The sections open last time. */
+let remembered = [];
+try {
+  remembered = JSON.parse(localStorage.getItem(OPEN_KEY) ?? '[]');
+} catch {
+  remembered = [];
+}
+/** Sections build one after another, so the live scenes start in order. */
+let building = Promise.resolve();
+/**
+ * A section that folds away and builds its contents the first time it opens.
+ * @param {string} title @param {string} note @param {(body: HTMLElement) => void | Promise<void>} build
+ */
+function section(title, note, build) {
+  const body = el('div', { class: 'body' }, note ? [el('p', { class: 'note' }, [note])] : []);
+  const id = slug(title);
+  const details = /** @type {HTMLDetailsElement} */ (el('details', { 'data-section': id }, [el('summary', {}, [el('h2', {}, [title])]), body]));
+  sheet.append(details);
+  let built = false;
+  const open = () => {
+    if (built) return;
+    built = true;
+    building = building.then(() => build(body));
+  };
+  details.addEventListener('toggle', () => {
+    if (details.open) open();
+    if (OPEN_ALL) return;
+    try {
+      const now = [...sheet.querySelectorAll('details[open]')].map((d) => /** @type {HTMLElement} */ (d).dataset.section);
+      localStorage.setItem(OPEN_KEY, JSON.stringify(now));
+    } catch {
+      // Not remembered: the sheet works the same.
+    }
+  });
+  if (OPEN_ALL || remembered.includes(id)) {
+    details.open = true;
+    open();
+  }
 }
 
 // ---------- Scenes ----------
@@ -70,9 +121,6 @@ async function sceneCard(parent, caption, world, look, maxCss, width = SIZE) {
   save.addEventListener('click', () => saveScene(scene.app, `scene-${slug(caption)}-seed${seed}.png`));
 }
 
-/** @param {string} text */
-const slug = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-
 /**
  * Saves the scene as it is now, at its real size (256×256 unless widened), for the owner to draw
  * over in Paint (docs/art.md). Read back from the renderer, since a WebGL
@@ -92,22 +140,55 @@ async function saveScene(app, name) {
 
 const CLEAR = { temperature: 16, wind: 1, clouds: 0, precipitation: 0 };
 const NOON = { hour: 12, minute: 0, season: 'spring', sun: SUN, weather: CLEAR };
+const AS_DRAWN = { ...NOON, weather: { ...CLEAR, wind: 2 } };
+const SUMMER_DAY = { ...NOON, season: 'summer', hour: 13, weather: { temperature: 22, wind: 2, clouds: 0, precipitation: 0 } };
 
-const trials = section(
-  'Trials',
+section(
+  `Trials (${TRIALS.length})`,
   TRIALS.length
     ? 'Options to choose between. Tell Claude which one, or what you like about each.'
     : 'Nothing to choose between right now.',
+  async (trials) => {
+    for (const trial of TRIALS) {
+      const row = el('div', { class: 'row' });
+      trials.append(el('h3', {}, [trial.question]), row);
+      for (const option of trial.options) await sceneCard(row, option.label, NOON, option.look, 512);
+      if (trial.sprites) {
+        const sprites = el('div', { class: 'row sprites' });
+        trials.append(sprites);
+        for (const [name, rows] of trial.sprites) spriteCard(sprites, name, paintGrid(rows), PALETTE.waterMid);
+      }
+    }
+  },
 );
-for (const trial of TRIALS) {
-  const row = el('div', { class: 'row' });
-  trials.append(el('h3', {}, [trial.question]), row);
-  for (const option of trial.options) await sceneCard(row, option.label, NOON, option.look, 512);
-  if (trial.sprites) {
-    const sprites = el('div', { class: 'row sprites' });
-    trials.append(sprites);
-    for (const [name, rows] of trial.sprites) spriteCard(sprites, name, paintGrid(rows), PALETTE.waterMid);
-  }
+
+// ---------- Still pictures ----------
+
+/**
+ * A still picture at the painting's own size, shown enlarged, with a button
+ * to save it as it is (to draw over in Paint, docs/art.md).
+ * @param {HTMLElement} parent @param {string} caption @param {Uint8ClampedArray} pixels @param {string} file
+ */
+function stillCard(parent, caption, pixels, file) {
+  const canvas = /** @type {HTMLCanvasElement} */ (el('canvas', { width: String(SWAMP_W), height: String(SWAMP_H) }));
+  const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+  const image = ctx.createImageData(SWAMP_W, SWAMP_H);
+  image.data.set(pixels);
+  ctx.putImageData(image, 0, 0);
+  // Twice its size where there is room, in whole steps so the pixels stay square.
+  const scale = document.documentElement.clientWidth - 32 >= SWAMP_W * 2 ? 2 : 1;
+  canvas.style.width = `${SWAMP_W * scale}px`;
+  canvas.style.height = `${SWAMP_H * scale}px`;
+  const save = /** @type {HTMLButtonElement} */ (el('button', { type: 'button', class: 'save' }, ['Save as PNG']));
+  save.addEventListener('click', () =>
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const link = /** @type {HTMLAnchorElement} */ (el('a', { href: URL.createObjectURL(blob), download: file }));
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    }, 'image/png'),
+  );
+  parent.append(el('figure', {}, [canvas, el('figcaption', {}, [caption, ' ', save])]));
 }
 
 // ---------- Fish that swim (D131) ----------
@@ -273,40 +354,40 @@ function surfaceCard(parent, species) {
   requestAnimationFrame(draw);
 }
 
-{
-  const swim = section(
-    'Fish that swim',
-    'Every fish drawn to swim (D131), after the carp trial: its shape from a preset for its kind of body ' +
-      '(src/scene/fish-shapes.js), its colours read off its icon. Side on in the tank, the aquarium and the dive; ' +
-      'from the bank, darkened, as a class fish or a big fish under the surface. Export one to mark up: ' +
-      'npm run sprite export swim-common-carp.',
-  );
-  const live = el('div', { class: 'row' });
-  swim.append(live);
-  tankCard(live, 'A carp, a perch, a pike, a roach and a tench', ['common-carp', 'perch', 'northern-pike', 'roach', 'tench']);
-  tankCard(live, 'Further afield: an arowana, a discus, a piranha, a bichir and an eel', ['silver-arowana', 'discus', 'red-bellied-piranha', 'ornate-bichir', 'mainland-eel']);
-  surfaceCard(live, ['northern-pike', 'common-carp']);
-  swim.append(el('h3', {}, ['Every fish, side on and below the surface (near and far), on the dive\'s water']));
-  const all = el('div', { class: 'row sprites' });
-  swim.append(all);
-  // Drawn a few at a time, letting the page show itself between them: on a
-  // phone the whole lot at once kept everything below waiting.
-  const ids = Object.keys(content.fish).sort();
-  for (const [i, id] of ids.entries()) {
-    const f = fishFrames(id);
-    if (!f) continue;
-    spriteCard(all, `swim-${id}`, paint(f.side[0]), DEEP_BANDS[2]);
-    if (i % 8 === 7) await new Promise((r) => setTimeout(r));
-  }
-  swim.append(el('h3', {}, ['Below the surface, from the bank, on the scene\'s water']));
-  const below = el('div', { class: 'row sprites' });
-  swim.append(below);
-  for (const id of ids) {
-    const f = fishFrames(id);
-    if (!f) continue;
-    spriteCard(below, `below-${id}`, paint(f.near[0]), PALETTE.waterNear);
-  }
-}
+section(
+  'Fish that swim',
+  'Every fish drawn to swim (D131), after the carp trial: its shape from a preset for its kind of body ' +
+    '(src/scene/fish-shapes.js), its colours read off its icon. Side on in the tank, the aquarium and the dive; ' +
+    'from the bank, darkened, as a class fish or a big fish under the surface. Export one to mark up: ' +
+    'npm run sprite export swim-common-carp.',
+  async (swim) => {
+    const live = el('div', { class: 'row' });
+    swim.append(live);
+    tankCard(live, 'A carp, a perch, a pike, a roach and a tench', ['common-carp', 'perch', 'northern-pike', 'roach', 'tench']);
+    tankCard(live, 'Further afield: an arowana, a discus, a piranha, a bichir and an eel', ['silver-arowana', 'discus', 'red-bellied-piranha', 'ornate-bichir', 'mainland-eel']);
+    surfaceCard(live, ['northern-pike', 'common-carp']);
+    swim.append(el('h3', {}, ['Every fish, side on and below the surface (near and far), on the dive\'s water']));
+    const all = el('div', { class: 'row sprites' });
+    swim.append(all);
+    // Drawn a few at a time, letting the page show itself between them: on a
+    // phone the whole lot at once kept everything below waiting.
+    const ids = Object.keys(content.fish).sort();
+    for (const [i, id] of ids.entries()) {
+      const f = fishFrames(id);
+      if (!f) continue;
+      spriteCard(all, `swim-${id}`, paint(f.side[0]), DEEP_BANDS[2]);
+      if (i % 8 === 7) await new Promise((r) => setTimeout(r));
+    }
+    swim.append(el('h3', {}, ['Below the surface, from the bank, on the scene\'s water']));
+    const below = el('div', { class: 'row sprites' });
+    swim.append(below);
+    for (const id of ids) {
+      const f = fishFrames(id);
+      if (!f) continue;
+      spriteCard(below, `below-${id}`, paint(f.near[0]), PALETTE.waterNear);
+    }
+  },
+);
 
 // ---------- A trial: a whole scene painted from a photo ----------
 
@@ -332,45 +413,70 @@ async function pondCard(parent, caption, world, maxCss, width, season = 'autumn'
   save.addEventListener('click', () => saveScene(scene.app, `pond-${slug(caption)}-seed${seed}.png`));
 }
 
-const AS_DRAWN = { ...NOON, weather: { ...CLEAR, wind: 2 } };
-const pond = section(
-  'Trial: a scene from a photo',
-  'The whole scene painted as code from a photo of an autumn pond (docs/design/photo-autumn-pond.jpg), instead of from a sketch. Art sheet only: the game is unchanged. Drawn 320 wide; a square screen sees the middle 256. Gusts roll across the reeds, the birch twigs and the beech leaves; the reflection wobbles; rings spread now and then, all over in rain.',
+section(
+  'Still water (the pond)',
+  'The whole scene painted as code from a photo of an autumn pond (docs/design/photo-autumn-pond.jpg), instead of from a sketch (D115, D116). Drawn 320 wide; a square screen sees the middle 256. Gusts roll across the reeds, the birch twigs and the beech leaves; the reflection wobbles; rings spread now and then, all over in rain.',
+  async (pond) => {
+    const pondBig = el('div', { class: 'row' });
+    const pondLights = el('div', { class: 'row' });
+    const pondSummer = el('div', { class: 'row' });
+    pond.append(pondBig, pondLights, el('h3', {}, ['The same spot in summer (docs/design/photo-summer-pond.png)']), pondSummer);
+    await pondCard(pondBig, 'Pond, as drawn, breezy', AS_DRAWN, 640, 320);
+    await pondCard(pondBig, 'Pond, 256 wide', AS_DRAWN, 384, 256);
+    for (const [caption, world] of /** @type {const} */ ([
+      ['Pond, drizzle and wind, as in the photo', { ...NOON, season: 'autumn', hour: 14, weather: { temperature: 9, wind: 3, clouds: 4, precipitation: 3 } }],
+      ['Pond, sunset', { ...AS_DRAWN, hour: 20, minute: 30 }],
+      ['Pond, night', { ...AS_DRAWN, hour: 1 }],
+    ])) {
+      await pondCard(pondLights, caption, world, 300, 320);
+    }
+    await pondCard(pondSummer, 'Pond in summer, breezy', SUMMER_DAY, 640, 320, 'summer');
+    await pondCard(pondSummer, 'Pond in summer, 256 wide', SUMMER_DAY, 384, 256, 'summer');
+  },
 );
-const pondBig = el('div', { class: 'row' });
-const pondLights = el('div', { class: 'row' });
-const pondSummer = el('div', { class: 'row' });
-pond.append(pondBig, pondLights, el('h3', {}, ['The same spot in summer (docs/design/photo-summer-pond.png)']), pondSummer);
-await pondCard(pondBig, 'Pond, as drawn, breezy', AS_DRAWN, 640, 320);
-await pondCard(pondBig, 'Pond, 256 wide', AS_DRAWN, 384, 256);
-for (const [caption, world] of /** @type {const} */ ([
-  ['Pond, drizzle and wind, as in the photo', { ...NOON, season: 'autumn', hour: 14, weather: { temperature: 9, wind: 3, clouds: 4, precipitation: 3 } }],
-  ['Pond, sunset', { ...AS_DRAWN, hour: 20, minute: 30 }],
-  ['Pond, night', { ...AS_DRAWN, hour: 1 }],
-])) {
-  await pondCard(pondLights, caption, world, 300, 320);
-}
-const SUMMER_DAY = { ...NOON, season: 'summer', hour: 13, weather: { temperature: 22, wind: 2, clouds: 0, precipitation: 0 } };
-await pondCard(pondSummer, 'Pond in summer, breezy', SUMMER_DAY, 640, 320, 'summer');
-await pondCard(pondSummer, 'Pond in summer, 256 wide', SUMMER_DAY, 384, 256, 'summer');
 
 // The reedy shore (D117, D118), painted the same way from a sketch and photos
 // of the reeds, in all four seasons. The sheet keeps at most 16 live scenes
 // (docs/art.md).
-const reedy = section(
+section(
   'The reedy shore',
   'Painted as code from the owner’s sketch (docs/design/sketch-reedy-shore.png, markup-reedy-shore.png) and photos of the reeds in summer (photo-reeds-dense.jpg) and late November (photo-reedy-shore-november.jpg): open lake to a bare horizon, two banks of reeds close up with a channel between. Winter is the November photo; spring and autumn are worked out from summer and winter.',
+  async (reedy) => {
+    const reedyRow = el('div', { class: 'row' });
+    reedy.append(reedyRow);
+    for (const [caption, world, season] of /** @type {const} */ ([
+      ['Spring', { ...NOON, season: 'spring', hour: 11, weather: { temperature: 14, wind: 2, clouds: 1, precipitation: 0 } }, 'spring'],
+      ['Summer', SUMMER_DAY, 'summer'],
+      ['Autumn', { ...NOON, season: 'autumn', hour: 13, weather: { temperature: 10, wind: 2, clouds: 2, precipitation: 0 } }, 'autumn'],
+      ['Winter', { ...NOON, season: 'winter', hour: 12, weather: { temperature: 1, wind: 2, clouds: 2, precipitation: 0 } }, 'winter'],
+    ])) {
+      await pondCard(reedyRow, `Reedy shore in ${caption.toLowerCase()}`, world, 480, 320, season, paintReedy);
+    }
+  },
 );
-const reedyRow = el('div', { class: 'row' });
-reedy.append(reedyRow);
-for (const [caption, world, season] of /** @type {const} */ ([
-  ['Spring', { ...NOON, season: 'spring', hour: 11, weather: { temperature: 14, wind: 2, clouds: 1, precipitation: 0 } }, 'spring'],
-  ['Summer', SUMMER_DAY, 'summer'],
-  ['Autumn', { ...NOON, season: 'autumn', hour: 13, weather: { temperature: 10, wind: 2, clouds: 2, precipitation: 0 } }, 'autumn'],
-  ['Winter', { ...NOON, season: 'winter', hour: 12, weather: { temperature: 1, wind: 2, clouds: 2, precipitation: 0 } }, 'winter'],
-])) {
-  await pondCard(reedyRow, `Reedy shore in ${caption.toLowerCase()}`, world, 480, 320, season, paintReedy);
-}
+
+// The swamp (D158), painted the same way from the owner's eight photos: one
+// live scene, to see it move, and each season as a still picture, so the
+// sheet stays under its limit of live scenes (docs/art.md).
+section(
+  'The swamp',
+  'Painted as code from the owner’s photos (docs/design/swamp/, notes.md there says what each gives): a beech wood standing in dark water, the trees on gnarly roots, moss, a burl, weed and pale floating rafts, tussocks, a grass bed and a little island. The owner chose the third of three trial compositions, with the second’s big mossy tree. The live scene moves: the water shimmers, rings spread now and then (all over, in rain), the mists drift, gusts push the sedge. The seasons below are stills.',
+  async (swamp) => {
+    const swampLive = el('div', { class: 'row' });
+    const swampSeasons = el('div', { class: 'row' });
+    swamp.append(swampLive, el('h3', {}, ['The four seasons']), swampSeasons);
+    await pondCard(swampLive, 'Swamp in spring, breezy', { ...NOON, weather: { ...CLEAR, wind: 2 } }, 640, 320, 'spring', paintSwamp);
+    for (const season of ['spring', 'summer', 'autumn', 'winter']) {
+      const rand = createRng(deriveSeed(seed, 'scenery'));
+      stillCard(swampSeasons, `Swamp in ${season}`, swampStill(() => rand.next(), season), `swamp-${season}-seed${seed}.png`);
+    }
+    // Under its water (D159): what Look Underwater and the dive show here.
+    const under = el('div', { class: 'row' });
+    swamp.append(el('h3', {}, ['Under the water (src/scene/swamp-under.js): the branch from the owner’s photo close up, the beech foot from photo 3 far behind']), under);
+    const rand = createRng(deriveSeed(seed, 'scenery'));
+    stillCard(under, 'Under the swamp', swampUnderStill(() => rand.next()), `swamp-under-seed${seed}.png`);
+  },
+);
 
 /** @param {number} now */
 function frame(now) {
@@ -411,24 +517,33 @@ function spriteCard(parent, name, art, backing) {
   );
 }
 
-const sceneSprites = el('div', { class: 'row sprites' });
 section(
   'Scene sprites',
   'Enlarged, with the real size beside the name. Export one to draw on: node tools/sprite-png.mjs export <name>.',
-).append(sceneSprites);
-const water = PALETTE.waterMid;
-spriteCard(sceneSprites, 'bobber', paintGrid(BOBBER), water);
-spriteCard(sceneSprites, 'bobber, bitten', paintGrid(BOBBER_DIPPED), water);
-spriteCard(sceneSprites, 'bobber-far', paintGrid(BOBBER_FAR), PALETTE.waterFar);
-SPLASH.forEach((rows, i) => spriteCard(sceneSprites, `splash-${i + 1}`, paintGrid(rows), water));
-for (const [band, frames] of Object.entries(WAVES)) {
-  const backing = band === 'far' ? PALETTE.waterFar : band === 'mid' ? PALETTE.waterMid : PALETTE.waterNear;
-  frames.forEach((rows, i) => spriteCard(sceneSprites, `wave-${band}-${i + 1}`, paintGrid(rows), backing));
-}
+  (body) => {
+    const sceneSprites = el('div', { class: 'row sprites' });
+    body.append(sceneSprites);
+    const water = PALETTE.waterMid;
+    spriteCard(sceneSprites, 'bobber', paintGrid(BOBBER), water);
+    spriteCard(sceneSprites, 'bobber, bitten', paintGrid(BOBBER_DIPPED), water);
+    spriteCard(sceneSprites, 'bobber-far', paintGrid(BOBBER_FAR), PALETTE.waterFar);
+    SPLASH.forEach((rows, i) => spriteCard(sceneSprites, `splash-${i + 1}`, paintGrid(rows), water));
+    for (const [band, frames] of Object.entries(WAVES)) {
+      const backing = band === 'far' ? PALETTE.waterFar : band === 'mid' ? PALETTE.waterMid : PALETTE.waterNear;
+      frames.forEach((rows, i) => spriteCard(sceneSprites, `wave-${band}-${i + 1}`, paintGrid(rows), backing));
+    }
+  },
+);
 
-const icons = el('div', { class: 'row sprites' });
-section('Icons', '32×32, on the page rather than the scene (D98). The first ones were drawn at 16 and show doubled until redrawn. Export one to mark up: npm run sprite export icon-fish-carp.').append(icons);
-for (const name of Object.keys(ICONS)) spriteCard(icons, `icon-${name.replace('/', '-')}`, paintIcon(name), '#14232b');
+section(
+  'Icons',
+  '32×32, on the page rather than the scene (D98). The first ones were drawn at 16 and show doubled until redrawn. Export one to mark up: npm run sprite export icon-fish-carp.',
+  (body) => {
+    const icons = el('div', { class: 'row sprites' });
+    body.append(icons);
+    for (const name of Object.keys(ICONS)) spriteCard(icons, `icon-${name.replace('/', '-')}`, paintIcon(name), '#14232b');
+  },
+);
 
 // ---------- Palettes ----------
 
@@ -440,17 +555,24 @@ function palette(title, colours) {
   }
   return el('div', {}, [el('h3', {}, [title]), list]);
 }
-section('Palettes', 'Every colour the art uses. A new colour gets a name here before it is used.').append(
+section('Palettes', 'Every colour the art uses. A new colour gets a name here before it is used.', (body) => body.append(
   palette('Scene (PALETTE in src/scene/sprites.js)', PALETTE),
   palette('Scene sprite keys', bobberKeys(null)),
-  palette('Trial: the pond from a photo (POND in src/scene/pond.js)', POND),
-  palette('Trial: the pond in summer (POND_SUMMER in src/scene/pond.js)', POND_SUMMER),
+  palette('Still water, the pond (POND in src/scene/pond.js)', POND),
+  palette('Still water in summer (POND_SUMMER in src/scene/pond.js)', POND_SUMMER),
   palette('The reedy shore in spring (REEDY_SPRING in src/scene/reedy.js)', REEDY_SPRING),
   palette('The reedy shore in summer (REEDY in src/scene/reedy.js)', REEDY),
   palette('The reedy shore in autumn (REEDY_AUTUMN in src/scene/reedy.js)', REEDY_AUTUMN),
   palette('The reedy shore in winter (REEDY_WINTER in src/scene/reedy.js)', REEDY_WINTER),
+  palette('The swamp in spring (SWAMP in src/scene/swamp-pixels.js)', SWAMP),
+  palette('The swamp in summer (SWAMP_SUMMER)', SWAMP_SUMMER),
+  palette('The swamp in autumn (SWAMP_AUTUMN)', SWAMP_AUTUMN),
+  palette('The swamp in winter (SWAMP_WINTER)', SWAMP_WINTER),
+  palette('Under the swamp (SWAMP_UNDER in src/scene/swamp-under.js)', SWAMP_UNDER),
   palette('Icon keys (src/scene/icons.js)', ICON_KEYS),
   ...Object.entries(OWN_KEYS).map(([name, keys]) => palette(`The ${name} icon's own colours (OWN_KEYS)`, keys)),
-);
+));
 
+// Ready once the sections open at load have built.
+await building;
 document.body.dataset.ready = 'true';

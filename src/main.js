@@ -1435,12 +1435,16 @@ function poolShadows(s) {
  * @returns {import('./scene/views.js').View | null}
  */
 function viewFor(s) {
+  // Which painted spot's picture under the water shows (D159), for tools/verify.mjs.
+  document.body.dataset.under = '';
   if (looking && !s.dive) {
     // Only the weed that grows at this spot (the owner, D139): the plants in its own lists.
     const loc = content.locations[s.location];
     const spot = loc.spots?.find((/** @type {{ id: string }} */ x) => x.id === s.spot);
     const here = new Set([...(loc.stuff ?? []), ...(spot?.stuff ?? [])].map((/** @type {{ id?: string }} */ e) => e.id));
-    return { kind: 'look', fish: looking.fish, plants: PLANTS.filter((id) => here.has(id)) };
+    // A painted spot's own picture under the water, if it has one (D159).
+    document.body.dataset.under = spot?.look?.painting ?? '';
+    return { kind: 'look', fish: looking.fish, plants: PLANTS.filter((id) => here.has(id)), under: spot?.look?.painting };
   }
   if (s.dive) {
     diveMap = [];
@@ -1452,7 +1456,9 @@ function viewFor(s) {
       diveMap.push(i);
       fish.push({ key: `dive-${i}`, species: f.fish.species });
     });
-    return { kind: 'dive', fish };
+    const spot = content.locations[s.location]?.spots?.find((/** @type {{ id: string }} */ x) => x.id === s.spot);
+    document.body.dataset.under = spot?.look?.painting ?? '';
+    return { kind: 'dive', fish, under: spot?.look?.painting };
   }
   if (!content.locations[s.location]?.town) return null;
   if (s.spot === 'room') {

@@ -955,6 +955,31 @@ await check('look underwater: the wizard sees the pool (D139)', DESKTOP, '?seed=
   await page.screenshot({ path: 'dist/verify/pool-shadows.png' });
 });
 
+await check('look underwater at the swamp: its own picture (D159)', DESKTOP, '?seed=1', async (page) => {
+  // A wizard with Look Underwater, saved at the swamp, and loaded again.
+  await page.evaluate(() => {
+    const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
+    save.character.classId = 'fishing-wizard';
+    save.character.xp = 10;
+    save.character.perks = { 1: 'summon-fish', 2: 'look-underwater' };
+    save.location = 'lake';
+    save.spot = 'swamp';
+    localStorage.setItem('roll-for-fishing:save:1', JSON.stringify(save));
+  });
+  await page.reload();
+  await loadFrom(page, 1);
+  await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+  if (await page.isVisible('#event[open]')) {
+    await page.waitForTimeout(450);
+    await page.click('#eventChoices button:last-child');
+  }
+  await page.click('[data-ability="look-underwater"]');
+  report('look underwater at the swamp: under the water', (await page.getAttribute('body', 'data-place')) === 'look');
+  report('look underwater at the swamp: the swamp picture', (await page.getAttribute('body', 'data-under')) === 'swamp', (await page.getAttribute('body', 'data-under')) ?? 'none');
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: 'dist/verify/look-underwater-swamp.png' });
+});
+
 await check('the adjustable line: a depth button and its picker (D148)', DESKTOP, '?seed=1', async (page) => {
   await page.evaluate(() => {
     const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
@@ -1184,8 +1209,26 @@ if (!ONLY || 'art sheet'.includes(ONLY)) {
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   try {
+    // Folded at first: no section open, nothing built until one is.
     await page.goto(BASE + 'art.html');
     await page.waitForSelector('body[data-ready="true"]', { timeout: 20000 });
+    const folded = await page.evaluate(() => ({
+      sections: document.querySelectorAll('details').length,
+      open: document.querySelectorAll('details[open]').length,
+      canvases: document.querySelectorAll('canvas').length,
+    }));
+    report('art sheet: folded into sections, none built yet', folded.sections > 5 && folded.open === 0 && folded.canvases === 0, JSON.stringify(folded));
+    await page.click('summary:has-text("The swamp")');
+    await page.waitForSelector('details[data-section="the-swamp"] canvas', { timeout: 20000 });
+    report('art sheet: a section builds when opened', true);
+    // Opened again next time, and only that one.
+    await page.reload();
+    await page.waitForSelector('body[data-ready="true"]', { timeout: 20000 });
+    const again = await page.evaluate(() => [...document.querySelectorAll('details[open]')].map((d) => /** @type {HTMLElement} */ (d).dataset.section));
+    report('art sheet: remembers what was open', again.length === 1 && again[0] === 'the-swamp', again.join(', '));
+    // Everything open, as the screenshot and the checks below need it.
+    await page.goto(BASE + 'art.html#open=all');
+    await page.waitForSelector('body[data-ready="true"]', { timeout: 30000 });
     const counts = await page.evaluate(() => ({
       scenes: document.querySelectorAll('figure:not(.sprite) > canvas').length,
       sprites: document.querySelectorAll('figure.sprite').length,
@@ -1219,8 +1262,8 @@ if (!ONLY || 'art sheet on a phone'.includes(ONLY)) {
   const context = await browser.newContext(PHONE);
   const page = await context.newPage();
   try {
-    await page.goto(BASE + 'art.html');
-    await page.waitForSelector('body[data-ready="true"]', { timeout: 20000 });
+    await page.goto(BASE + 'art.html#open=all');
+    await page.waitForSelector('body[data-ready="true"]', { timeout: 30000 });
     const m = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, width: innerWidth }));
     report('art sheet on a phone: no sideways scrolling', m.scroll <= m.width, `${m.scroll} of ${m.width}`);
     await page.screenshot({ path: 'dist/verify/art-phone.png' });
