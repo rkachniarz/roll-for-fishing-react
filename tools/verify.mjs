@@ -978,6 +978,12 @@ await check('the town: the inn, the innkeeper, the room (R17)', DESKTOP, '?dev&s
   await page.click('#eventChoices button:has-text("Go back down")');
   await page.waitForSelector('#event[open]', { timeout: 2000 });
   report('the town: back down, the inn has its choices now', (await page.textContent('#eventTitle')) === 'The inn');
+  // A night's sleep, and the inn says good morning, the stew among its choices (D165).
+  await page.waitForTimeout(450);
+  await page.click('#eventChoices button:has-text("Sleep until morning")');
+  await page.waitForFunction(() => document.querySelector('#eventText')?.textContent?.includes('Mornin'), null, { timeout: 3000 }).catch(() => {});
+  report('the town: after sleeping, the inn says good morning', ((await page.textContent('#eventText')) ?? '').includes("Mornin'"));
+  await page.screenshot({ path: 'dist/verify/town-morning.png' });
   await page.waitForTimeout(450);
   await page.click('#eventChoices button:has-text("The perpetual stew")');
   report('the town: the stew opens in a pane', ((await page.textContent('#paneTitle')) ?? '') === 'The perpetual stew');

@@ -14644,6 +14644,7 @@ export const content = {
         }
       ],
       "flavours": 3,
+      "cookMinutes": 120,
       "eatCasts": 5,
       "taste": {
         "poor": 0.5,
@@ -14969,6 +14970,71 @@ export const content = {
           ]
         }
       }
+    },
+    "inn-morning": {
+      "id": "inn-morning",
+      "title": [
+        "event.inn-morning.title"
+      ],
+      "once": false,
+      "trigger": "arrive",
+      "needs": [
+        {
+          "kind": "location",
+          "id": "town"
+        },
+        {
+          "kind": "spot",
+          "id": "inn"
+        },
+        {
+          "kind": "flag",
+          "name": "inn-morning"
+        }
+      ],
+      "first": "start",
+      "slides": {
+        "start": {
+          "text": [
+            "event.inn-morning.start.text"
+          ],
+          "choices": [
+            {
+              "text": [
+                "event.inn-morning.start.0"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "inn-morning",
+                  "set": false
+                },
+                {
+                  "kind": "shop",
+                  "id": "stew"
+                }
+              ]
+            },
+            {
+              "text": [
+                "event.inn-morning.start.1"
+              ],
+              "to": "end",
+              "needs": [],
+              "effects": [
+                {
+                  "kind": "flag",
+                  "name": "inn-morning",
+                  "set": false
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "placeholder": true
     },
     "innkeeper-first": {
       "id": "innkeeper-first",
@@ -15516,6 +15582,10 @@ export const content = {
         {
           "kind": "flag",
           "name": "met-innkeeper"
+        },
+        {
+          "kind": "no-flag",
+          "name": "inn-morning"
         }
       ],
       "first": "start",
@@ -15583,6 +15653,16 @@ export const content = {
               "effects": [
                 {
                   "kind": "sleep"
+                },
+                {
+                  "kind": "flag",
+                  "name": "inn-morning",
+                  "set": true
+                },
+                {
+                  "kind": "go",
+                  "location": "town",
+                  "spot": "inn"
                 }
               ]
             },
@@ -15954,6 +16034,16 @@ export const content = {
               "effects": [
                 {
                   "kind": "sleep"
+                },
+                {
+                  "kind": "flag",
+                  "name": "inn-morning",
+                  "set": true
+                },
+                {
+                  "kind": "go",
+                  "location": "town",
+                  "spot": "inn"
                 }
               ]
             },
@@ -16875,6 +16965,10 @@ export const strings = {
     "event.frog.observe.0": "Thank you, frog",
     "event.frog.lunge.text": "You lunge forward and get wet, and it's like it was never there.",
     "event.frog.lunge.0": "Well, shit.",
+    "event.inn-morning.title": "The inn",
+    "event.inn-morning.start.text": "Morning light falls through the shutters. The innkeeper is stirring the great pot over the fire.\n\n\"Mornin'! Don't you go setting off on an empty stomach, now.\"",
+    "event.inn-morning.start.0": "The perpetual stew",
+    "event.inn-morning.start.1": "Leave",
     "event.innkeeper-first.title": "The innkeeper",
     "event.innkeeper-first.start.text": "The inn is warm and smells of smoke and stew. You ask the innkeeper for a room for the night.\n\nThe innkeeper gives you an odd look. \"In case it slipped your mind, friend, you already gave me every coin you had, for a room here that's yours for good. Go on up whenever you like. And if you'd eat first, mind the rule of this house: give something to take something.\"",
     "event.innkeeper-first.start.0": "Give something to take something?",
@@ -16988,6 +17082,10 @@ export const placeholderKeys = [
   "event.alchemist.start.text.5",
   "event.alchemist.start.text.6",
   "event.alchemist.title",
+  "event.inn-morning.start.0",
+  "event.inn-morning.start.1",
+  "event.inn-morning.start.text",
+  "event.inn-morning.title",
   "event.innkeeper-first.money.0",
   "event.innkeeper-first.money.1",
   "event.innkeeper-first.money.text",

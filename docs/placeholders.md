@@ -29,11 +29,12 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 |---|---|
 | rogue-fisher | effects |
 
-## events (11)
+## events (12)
 
 | id | what is a placeholder |
 |---|---|
 | alchemist | all of it |
+| inn-morning | all of it |
 | innkeeper-first | all of it |
 | nightfall | all of it |
 | quest-bottle-reward | all of it |

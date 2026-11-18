@@ -24,6 +24,31 @@ Items with no note are left alone.
 
 Newest first.
 
+## The stew cooks, and the inn says good morning (2026-11-18, D165, T.4)
+
+`dist/verify/town-morning.png` after `npm run verify town`. Calls Claude made:
+
+- **Your two lines, edited** in the innkeeper's voice:
+  - "Thank you for the contribution - come back in some time to taste it" is now, after "You put [fish] in the
+    stew.": *"Much obliged for the contribution," says the innkeeper. "Give it a while on the fire, then come back
+    for a taste."*
+  - "Mornin' - don't leave on an empty stomach!" is now: *"Mornin'! Don't you go setting off on an empty stomach,
+    now."*, after a line of Claude's: "Morning light falls through the shutters. The innkeeper is stirring the great
+    pot over the fire."
+- **Each fish keeps the time it went in;** a bowl takes only the fish cooked by then, and the rest stay cooking for
+  the next bowl. The taste learned is of a fish in the bowl.
+- **Nothing cooked yet:** the Eat button still works and the log says *"Not yet, friend," says the innkeeper. "It's
+  still cooking."* (a placeholder), rather than a greyed-out button that says nothing.
+- **The stew window:** a fish still cooking is dimmed, its tooltip ending "Cooking: ready in 1.5 hours". With none
+  cooked, "Nothing cooked yet: the first is ready in ..." in place of the bowl's line; with some, the bowl's line
+  counts the cooked ones and "Still cooking, not in this bowl: N." follows.
+- **Fish already in the pot in an old save count as cooked.**
+- **The morning page offers the stew and Leave,** nothing else; it has the inn's own title, "The inn".
+- **Sleeping at the inn now takes the player down to the inn too,** like the room's, so the log adds "You move to
+  the inn." after "You sleep until morning." The room's sleep wakes the player at the inn, not in the room.
+- **There is no "wait" at the inn,** so the stew's two hours pass by fishing elsewhere or sleeping. A "Wait an
+  hour" choice at the inn would be one line in `content/events/the-inn.md` if you want one.
+
 ## A slot's list, as WoW's flyout (2026-11-18, D164, T.3)
 
 On the phone and the desktop: `dist/verify/slot-list-phone.png`, `dist/verify/slot-list.png` after

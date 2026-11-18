@@ -227,6 +227,10 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   the air against the water: that flips with every change of weather. Plants at a spot (D150) reach them the same way (`hasPlants` in `src/engine/tables.js`).
 - **The action bar takes statuses that aren't perks (D148):** the adjustable line's depth button brings its own
   `label` and `tip`; `useFromBar` sends `line-depth` to its window.
+- **The stew cooks (D165):** a fish in the pot carries `stewedAt`, the game minute it went in; a bowl takes only those
+  `cookingFor` says are done. Strip `stewedAt` when a fish leaves the pot (`takeFromStew`). Sleeping at the inn or
+  in the room sets the flag `inn-morning` and goes to the inn, where the event `inn-morning` opens instead of
+  `the-inn`; each of its choices clears the flag.
 - **The aquarium's meals happen on coming into the room (D152),** in `travel`, from the `tank` stream; never while
   the player watches. An event's `go:` into the room runs them too (`src/engine/events.js`), as `travel` does.
 - **A landed fish can still fight (D141):** `strikeLine` may return a cast in phase `fight` instead of `done`; the

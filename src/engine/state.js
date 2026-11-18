@@ -19,7 +19,7 @@ import { knownKey, locationList } from './knowledge.js';
 import { fishWeight } from './fish.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 20;
+export const SAVE_VERSION = 21;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -110,7 +110,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, { fish?: import('./fish.js').FishInstance }>} lit  Abilities lit up by what
  *   just happened, and what they would act on, until the next cast goes out (D96).
  * @property {string | null} shop  The vendor whose barter window is open (R18.2), or the stew's.
- * @property {import('./fish.js').FishInstance[]} stewPot  Fish put in the stew since the last bowl (R19.4).
+ * @property {import('./fish.js').FishInstance[]} stewPot  Fish put in the stew and not yet eaten (R19.4), each with
+ *   the time it went in, for its cooking (D165).
  * @property {import('./fish.js').FishInstance[]} aquarium  Fish in the room's aquarium (R17.5).
  * @property {import('./dive.js').Dive | null} dive  The Fighter's dive under way (R20.3).
  * @property {{ day: number, fedUntil: number }} tank  The aquarium (D152): the game day its predators were last
@@ -339,6 +340,11 @@ const MIGRATIONS = {
   13: (save) => ({ ...save, streams: { ...save.streams, fight: deriveSeed(save.seed, 'fight') } }),
   // 15 -> 16: the line's depth (D148), unset.
   15: (save) => ({ ...save, lineDepth: null }),
+  // 20 -> 21: the stew cooks (D165). The fish already in the pot went in long enough ago to be cooked.
+  20: (save) => ({
+    ...save,
+    stewPot: (save.stewPot ?? []).map((/** @type {any} */ f) => ({ ...f, stewedAt: (save.time ?? 0) - content.rules.stew.cookMinutes })),
+  }),
   // 19 -> 20: the pool turns over (D156). Fish the player has met count their days from now; schools and big
   // fish are in the pool, so the ones on the water, which have none there, go; the pools take up their turning
   // over from now.
