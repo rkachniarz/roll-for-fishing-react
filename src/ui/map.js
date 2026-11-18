@@ -13,7 +13,7 @@
 import { content } from '../generated/content.js';
 import { MAP_PAPER, MAP_SIZE } from '../generated/map-paper.js';
 import { t } from '../strings.js';
-import { completion, mapMarks } from '../engine/knowledge.js';
+import { mapMarks } from '../engine/knowledge.js';
 
 /** @typedef {import('../engine/state.js').GameState} GameState */
 /** @typedef {import('../engine/knowledge.js').MapMark} MapMark */
@@ -80,9 +80,7 @@ export function createMap(root, on) {
   heading.setAttribute('aria-live', 'polite');
   const name = document.createElement('p');
   name.className = 'map-spot-name';
-  const place = document.createElement('p');
-  place.className = 'map-place';
-  heading.append(name, place);
+  heading.append(name);
   const marks = document.createElement('div');
   marks.className = 'map-marks';
   const note = document.createElement('p');
@@ -104,7 +102,6 @@ export function createMap(root, on) {
   let state = null;
   /** The marks as last drawn. @type {MapMark[]} */
   let shownMarks = [];
-  let showCompletion = false;
   /** The mark named at the top: hovered, or picked by a first tap. @type {string | null} */
   let named = null;
 
@@ -113,25 +110,17 @@ export function createMap(root, on) {
 
   /** @param {MapMark | undefined} m */
   function nameFor(m) {
-    if (!state || !m) return { spot: '', place: '' };
+    if (!state || !m) return '';
     const loc = content.locations[m.location];
     const spot = m.town ? t(loc.name) : t(loc.spots.find((/** @type {{ id: string }} */ s) => s.id === m.spot).name);
-    let where = m.town ? '' : t(loc.name);
-    if (showCompletion) {
-      const { found, total } = completion(state, m.location);
-      const percent = total ? Math.floor((100 * found) / total) : 0;
-      where = t('journal.placeShown', { place: t(loc.name), percent });
-    }
-    return { spot: capital(spot), place: where };
+    return capital(spot);
   }
 
   function renderName() {
     if (!state) return;
     const all = mapMarks(state);
     const shown = all.find((m) => keyOf(m) === named) ?? all.find((m) => m.here);
-    const words = nameFor(shown);
-    name.textContent = words.spot;
-    place.textContent = words.place;
+    name.textContent = nameFor(shown);
     for (const b of marks.querySelectorAll('button')) b.classList.toggle('named', b.dataset.mark === named);
   }
 
@@ -206,8 +195,7 @@ export function createMap(root, on) {
         b.dataset.mark = keyOf(m);
         b.style.setProperty('--x', String(m.x));
         b.style.setProperty('--y', String(m.y));
-        const words = nameFor(m);
-        b.setAttribute('aria-label', words.spot);
+        b.setAttribute('aria-label', nameFor(m));
         if (m.here) b.setAttribute('aria-current', 'location');
         // Somewhere an event holds the player: no other location (R10.8, 7.6).
         if (s.locked && s.locked !== m.location) b.classList.add('held');
@@ -245,14 +233,10 @@ export function createMap(root, on) {
   });
 
   return {
-    /**
-     * @param {GameState} next
-     * @param {boolean} completionShown  Each location's completion shows (R5.3).
-     */
-    show(next, completionShown) {
+    /** @param {GameState} next */
+    show(next) {
       const opening = root.hidden;
       state = next;
-      showCompletion = completionShown;
       if (opening) {
         named = null;
         fit();

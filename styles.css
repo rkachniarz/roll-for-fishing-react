@@ -1486,12 +1486,6 @@ button.perk[aria-pressed='true'] {
   min-height: 1.15em;
 }
 
-.map-place {
-  font-size: calc(10 * var(--map-px));
-  opacity: 0.8;
-  min-height: 1.15em;
-}
-
 .map-note {
   position: absolute;
   bottom: calc(26 * var(--map-px));

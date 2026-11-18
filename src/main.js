@@ -1144,7 +1144,7 @@ function renderPane() {
   renderBag();
   const box = $('pane');
   box.hidden = !pane || !state || pane === 'map';
-  if (pane === 'map' && state) mapView.show(state, completionShown(state, valuesFor(state, extraSources())));
+  if (pane === 'map' && state) mapView.show(state);
   else mapView.hide();
   box.classList.toggle('pane-center', menuOpen());
   for (const b of document.querySelectorAll('[data-pane]')) {
