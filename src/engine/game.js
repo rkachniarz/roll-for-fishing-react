@@ -29,6 +29,7 @@ import { conditionSources } from './conditions.js';
 import { startDive } from './dive.js';
 import { aimedAt, driftPool, joinPool, lookUnderwater, tended } from './pool.js';
 import { waterNow } from './spawning.js';
+import { moonNow } from './moon.js';
 import { conserve, tankMeals } from './barter.js';
 import { championAt, championClass, championSources, championsHere, findChampion, poolKey, removeChampion, updateChampions } from './champions.js';
 
@@ -562,8 +563,9 @@ export function travel(state, location, spot, { force = false } = {}) {
  */
 export function momentOf(state) {
   const bait = state.equipped.bait ? content.items[state.equipped.bait.id]?.bait ?? null : null;
-  // The water too, for who is spawning (D149).
-  return { weather: state.weather, partOfDay: clock(state.time).partOfDay, bait, ...waterNow(state) };
+  // The water too, for who is spawning (D149); and the moon (D168).
+  const moon = moonNow(state);
+  return { weather: state.weather, partOfDay: clock(state.time).partOfDay, bait, ...waterNow(state), ...(moon ? { moon: moon.words } : {}) };
 }
 
 /**

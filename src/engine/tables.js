@@ -21,6 +21,7 @@ import { spawningIn } from './spawning.js';
  * @property {number} [water]  The water's temperature (D149).
  * @property {boolean} [warming]  The water is warming: the air is warmer than it.
  * @property {boolean} [plants]  The spot has water plants (D150).
+ * @property {string[]} [moon]  The moon words that fit now (D168, src/engine/moon.js); none without a moon.
  */
 
 /**
@@ -113,7 +114,7 @@ export function listTable(list, kind, { moment, found = {} } = {}) {
  * How much likelier a fish is now (D101): the factor in
  * rules/fish-preferences.json, once for each of its preferences the moment
  * meets. A preference left out ("Any") never counts.
- * @param {{ prefers?: { time?: string[], weather?: string[], season?: string[], bait?: string[] } }} fish
+ * @param {{ prefers?: { time?: string[], weather?: string[], season?: string[], bait?: string[], moon?: string[] } }} fish
  * @param {Moment} moment
  */
 export function preferenceFactor(fish, moment) {
@@ -126,19 +127,21 @@ export function preferenceFactor(fish, moment) {
 
 /**
  * Which of a fish's preferences the moment meets.
- * @param {{ prefers?: { time?: string[], weather?: string[], season?: string[], bait?: string[] } }} fish
+ * @param {{ prefers?: { time?: string[], weather?: string[], season?: string[], bait?: string[], moon?: string[] } }} fish
  * @param {Moment} moment
- * @returns {('time' | 'weather' | 'season' | 'bait')[]}
+ * @returns {('time' | 'weather' | 'season' | 'bait' | 'moon')[]}
  */
 export function preferencesMet(fish, moment) {
   const p = fish.prefers ?? {};
   const words = weatherWords(moment.weather);
-  /** @type {('time' | 'weather' | 'season' | 'bait')[]} */
+  /** @type {('time' | 'weather' | 'season' | 'bait' | 'moon')[]} */
   const met = [];
   if (p.time?.includes(moment.partOfDay)) met.push('time');
   if (p.weather?.some((w) => words.includes(w))) met.push('weather');
   if (p.season?.includes(moment.weather.season)) met.push('season');
   if (moment.bait && p.bait?.includes(moment.bait)) met.push('bait');
+  // The full or new moon, a moonlit or a dark night (D168).
+  if (p.moon?.some((w) => moment.moon?.includes(w))) met.push('moon');
   return met;
 }
 

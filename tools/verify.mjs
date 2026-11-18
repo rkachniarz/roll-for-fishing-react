@@ -905,7 +905,9 @@ await check('the sky', PHONE, '?dev&seed=3', async (page) => {
   const shown = [await page.textContent('#timeOfDay'), await page.textContent('#seasonDay'), await page.getAttribute('#weather', 'data-icon')].join(' ');
   report('the sky: the time and weather are shown', /^Night \w{3}, \w+ \d+ weather\/snow$/.test(shown), shown);
   await page.click('#weather');
-  report('the sky: a tap on the weather names it', (await page.textContent('.tip')) === 'Blizzard', (await page.textContent('.tip')) ?? '');
+  report('the sky: a tap on the weather names it', (await page.textContent('.tip .tip-title')) === 'Blizzard', (await page.textContent('.tip')) ?? '');
+  // And the moon's phase under it (D168).
+  report('the sky: the weather tip names the moon', /^The moon: .+/.test((await page.textContent('.tip p:nth-child(2)')) ?? ''), (await page.textContent('.tip')) ?? '');
   await page.screenshot({ path: 'dist/verify/weather-name.png' });
 });
 

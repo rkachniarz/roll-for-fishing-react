@@ -24,6 +24,43 @@ Items with no note are left alone.
 
 Newest first.
 
+## The moon and the fish (2026-11-18, D168, 12.3)
+
+All four ways you asked for are in. The amounts are in `content/rules/moon.json` (marked placeholder) and the
+words in `content/rules/fish-preferences.json`. Calls Claude made:
+
+- **The moon words:** `full` when 90% or more of the disc is lit (about three days of the 14), `new` at 10% or less;
+  both count day and night, as the anglers' "fish the days around the full and new moon" has it. `moonlit`: a
+  moonlight of 0.4 or more; `dark`: a night with a moonlight of 0.1 or less (a new moon, or the moon down, or thick
+  cloud). Each counts as one preference, the same ×2 as the weather's.
+- **The moonlight** is the part lit, times the moon's height (whole from 20° up, fading to nothing at the
+  horizon), times what the clouds let through: clear 1, a few 0.9, scattered 0.7, mostly cloudy 0.4, overcast 0.1,
+  black 0. It counts only once the sun is 6° under the horizon (the end of the twilight). Fog doesn't dim it yet.
+- **The anglers' moon tables:** a major period while the moon is within an hour of due south (overhead) or due north
+  (underfoot), a minor one while moonrise or moonset is within half an hour, as the printed tables have them
+  (two hours and one). A major period wins where they meet. About a sixth of the time is major and a twelfth
+  minor. Outdoors each is a buff on the bar, "Moon feeding time" (+10 Fish Find) and "Moon stirring" (+5), both
+  names placeholders. Nothing in town.
+- **The pools in a period:** the predators eat twice as often in a major period, half again in a minor one, and a
+  major period brings one more fish on the move.
+- **A bright moon lightens the night:** the shadows seen from the bank at night come back towards the day's number
+  as the moonlight grows (at full light, as many as by day). Rain still dims them.
+- **Which fish, and why (guesses unless said):**
+  - *Dark nights or the new moon:* **eel** (new, dark: the best-grounded one; eels move and feed less under
+    moonlight, and the silver eels run on dark nights), **sea lamprey** (dark: it runs at night and shuns light),
+    **burbot** (dark), **wels catfish** (dark), **channel catfish** (new), **zander** (dark: it hunts in low light
+    with its reflecting eyes).
+  - *The full moon:* **bluegill** (its spawning beds follow the moon, the best-grounded of these), **black crappie**,
+    **largemouth bass**, **common carp**, **northern pike** and **muskellunge** (the last four are anglers' lore,
+    musky anglers' especially), and **walleye** (full and moonlit: walleye anglers swear by full-moon nights, the
+    opposite of its cousin the zander, on purpose).
+  - *Moonlit nights:* **brown trout** and **lake brown trout** (they feed at night when there's light to see by).
+- **The weather's tooltip names the moon's phase** ("The moon: full"), a placeholder line until the sky layer (12.4)
+  shows the moon itself.
+- **The balance** (`npm run sim`, 20 games of 500 casts per class, before → after): fish brought up 31.2% → 33.2%
+  (fish fighter), 29.4% → 30.3% (wizard), 22.4% → 23.4% (rogue); XP per cast 1.63 → 1.75, 0.96 → 0.99,
+  0.72 → 0.75. A little more fish, mostly from the periods' Fish Find.
+
 ## The sun and the moon (2026-11-18, D167, 12.2)
 
 Nothing shows them yet; the fish (12.3) and the sky layer (12.4) will. Calls Claude made:

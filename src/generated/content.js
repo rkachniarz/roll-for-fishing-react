@@ -360,6 +360,9 @@ export const content = {
         ],
         "bait": [
           "small-fish"
+        ],
+        "moon": [
+          "full"
         ]
       },
       "placeholder": [
@@ -539,6 +542,9 @@ export const content = {
         ],
         "bait": [
           "fly"
+        ],
+        "moon": [
+          "full"
         ]
       },
       "placeholder": [
@@ -777,6 +783,9 @@ export const content = {
         ],
         "bait": [
           "fly"
+        ],
+        "moon": [
+          "moonlit"
         ]
       },
       "placeholder": [
@@ -896,6 +905,9 @@ export const content = {
         ],
         "bait": [
           "small-fish"
+        ],
+        "moon": [
+          "dark"
         ]
       },
       "placeholder": [
@@ -1251,6 +1263,9 @@ export const content = {
         ],
         "bait": [
           "small-fish"
+        ],
+        "moon": [
+          "new"
         ]
       },
       "placeholder": [
@@ -1610,6 +1625,9 @@ export const content = {
         ],
         "bait": [
           "corn"
+        ],
+        "moon": [
+          "full"
         ]
       },
       "placeholder": [
@@ -3336,6 +3354,9 @@ export const content = {
         ],
         "bait": [
           "small-fish"
+        ],
+        "moon": [
+          "moonlit"
         ]
       },
       "placeholder": [
@@ -3631,6 +3652,9 @@ export const content = {
         ],
         "bait": [
           "frog"
+        ],
+        "moon": [
+          "full"
         ]
       },
       "placeholder": [
@@ -3857,6 +3881,10 @@ export const content = {
         ],
         "bait": [
           "small-fish"
+        ],
+        "moon": [
+          "new",
+          "dark"
         ]
       },
       "placeholder": [
@@ -4257,6 +4285,9 @@ export const content = {
         ],
         "bait": [
           "lure"
+        ],
+        "moon": [
+          "full"
         ]
       },
       "placeholder": [
@@ -4378,6 +4409,9 @@ export const content = {
         ],
         "bait": [
           "small-fish"
+        ],
+        "moon": [
+          "full"
         ]
       },
       "placeholder": [
@@ -5497,6 +5531,9 @@ export const content = {
         ],
         "bait": [
           "small-fish"
+        ],
+        "moon": [
+          "dark"
         ]
       },
       "placeholder": [
@@ -6687,6 +6724,10 @@ export const content = {
         ],
         "bait": [
           "small-fish"
+        ],
+        "moon": [
+          "full",
+          "moonlit"
         ]
       },
       "placeholder": [
@@ -6807,6 +6848,9 @@ export const content = {
         ],
         "bait": [
           "small-fish"
+        ],
+        "moon": [
+          "dark"
         ]
       },
       "placeholder": [
@@ -7155,6 +7199,9 @@ export const content = {
         ],
         "bait": [
           "small-fish"
+        ],
+        "moon": [
+          "dark"
         ]
       },
       "placeholder": [
@@ -14440,6 +14487,37 @@ export const content = {
           "name": "rules.fish-preferences.weatherWords.snow.name",
           "tag": "snow"
         }
+      ],
+      "moonWords": [
+        {
+          "id": "full",
+          "name": "rules.fish-preferences.moonWords.full.name",
+          "lit": {
+            "min": 0.9
+          }
+        },
+        {
+          "id": "new",
+          "name": "rules.fish-preferences.moonWords.new.name",
+          "lit": {
+            "max": 0.1
+          }
+        },
+        {
+          "id": "moonlit",
+          "name": "rules.fish-preferences.moonWords.moonlit.name",
+          "light": {
+            "min": 0.4
+          }
+        },
+        {
+          "id": "dark",
+          "name": "rules.fish-preferences.moonWords.dark.name",
+          "night": true,
+          "light": {
+            "max": 0.1
+          }
+        }
       ]
     },
     "levels": {
@@ -14466,6 +14544,48 @@ export const content = {
         "resistance": 1,
         "completion": 3
       }
+    },
+    "moon": {
+      "id": "moon",
+      "placeholder": true,
+      "dark": -6,
+      "fullLightAt": 20,
+      "cloudCover": [
+        1,
+        0.9,
+        0.7,
+        0.4,
+        0.1,
+        0
+      ],
+      "periods": [
+        {
+          "id": "major",
+          "name": "rules.moon.periods.major.name",
+          "hours": 1,
+          "effects": [
+            {
+              "value": "fishFind",
+              "add": 10
+            }
+          ],
+          "eat": 2,
+          "arrive": 1
+        },
+        {
+          "id": "minor",
+          "name": "rules.moon.periods.minor.name",
+          "hours": 0.5,
+          "effects": [
+            {
+              "value": "fishFind",
+              "add": 5
+            }
+          ],
+          "eat": 1.5,
+          "arrive": 0
+        }
+      ]
     },
     "names": {
       "id": "names",
@@ -16919,6 +17039,12 @@ export const strings = {
     "rules.fish-preferences.weatherWords.windy.name": "Windy",
     "rules.fish-preferences.weatherWords.fog.name": "Fog",
     "rules.fish-preferences.weatherWords.snow.name": "Snow",
+    "rules.fish-preferences.moonWords.full.name": "Full moon",
+    "rules.fish-preferences.moonWords.new.name": "New moon",
+    "rules.fish-preferences.moonWords.moonlit.name": "Moonlit night",
+    "rules.fish-preferences.moonWords.dark.name": "Dark night",
+    "rules.moon.periods.major.name": "Moon feeding time",
+    "rules.moon.periods.minor.name": "Moon stirring",
     "rules.size-bands.bands.tiny.name": "Tiny",
     "rules.size-bands.bands.small.name": "Small",
     "rules.size-bands.bands.medium.name": "Medium",
@@ -17269,6 +17395,8 @@ export const placeholderKeys = [
   "rules.fight-styles.styles.roller.journal",
   "rules.fight-styles.styles.roller.manoeuvre",
   "rules.fight-styles.styles.roller.name",
+  "rules.moon.periods.major.name",
+  "rules.moon.periods.minor.name",
   "rules.stew.name",
   "vendor.alchemist.name",
   "vendor.aquarium.name",

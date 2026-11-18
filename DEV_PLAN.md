@@ -86,7 +86,7 @@ all depend on which way the player looks.
   *Landed (D167):* `sunPosition`, `moonPosition`, `moonPhase`, `moonPhaseName`, `sunOf`, `moonOf`,
   `firstFullMoon`, `MOON`, `HORIZON` in `src/engine/sky.js`; `roll14` in `src/dice.js`; `state.fullMoonAt`
   (`SAVE_VERSION` 22, from the one-off stream `moon`); tests in `test/sky.test.js`.
-- [ ] **12.3** The moon counts for the fish (the owner: "you know I want it to count for fish"). How is for the
+- [x] **12.3** The moon counts for the fish (the owner: "you know I want it to count for fish"). How is for the
   refinement questions: a preference like the weather's (`prefers`), feeding in the pools (D157), the light at
   night, or the anglers' moon tables (solunar periods).
   *The owner's answers (2026-11-18):* **all four.** A phase preference like the weather's (`prefers`: full or new
@@ -94,6 +94,10 @@ all depend on which way the player looks.
   night (a bright moon lightens the night: some fish bite more under it, others less); and feeding in the pools
   (D157), the moon changing who moves or feeds when the time steps on. The amounts and which fish are Claude's
   calls, for REVIEW.md.
+  *Landed (D168):* `src/engine/moon.js` (`moonNow`, `moonWords`, `moonlight`, `solunarPeriod`), `moonHourAngle`
+  in `src/engine/sky.js`; `moonWords` and `prefers.moon` on fifteen fish; `content/rules/moon.json` (the periods'
+  buffs, their pull on the pools, the moonlight under clouds); the phase in the weather's tooltip;
+  `test/moon.test.js`.
 - [ ] **12.4** The sky as its own layer, shared by every painted spot that shows sky (the pond and the reedy shore;
   not the swamp, which has no sky, D160): back to front, the sky's colour, the sun or moon, the clouds, then a path of
   glitter on the water when the sun or moon is low in front of the player. The paintings' own baked-in clouds go.
@@ -123,8 +127,10 @@ all depend on which way the player looks.
 
 **Where things stand (2026-11-18):** 12.1 is done: the map (D161) and every spot that shows sky has its compass
 facing, with one 60° width of view for all (D166, `src/engine/sky.js`). 12.2 is done: the sun's and the moon's
-height and bearing, and the moon's 14-day phase, worked out from the clock (D167, `src/engine/sky.js`); nothing
-draws from them or the facings yet. 12.3, the moon counting for the fish, is next.
+height and bearing, and the moon's 14-day phase, worked out from the clock (D167, `src/engine/sky.js`). 12.3 is
+done: the moon counts for the fish, as a preference (full, new, moonlit, dark), the anglers' moon tables as buffs on
+the bar, the moonlight lifting the night's shadows, and the pools feeding and filling in the periods (D168,
+`src/engine/moon.js`). Nothing draws the sun or the moon yet: 12.4, the sky as its own layer, is next.
 
 ## Phase 11, what the real species do
 

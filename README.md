@@ -85,6 +85,7 @@ and the art sheet at `/art.html` there.
 | `src/engine/dive.js` | The Fighter's dive (R20.3, D128): the fish, their rolls, strikes, coming up |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
 | `src/engine/sky.js` | Which way each spot looks (`look.facing`) and the shared 60° width of view; where a compass bearing falls in the picture (D166); the sun's and the moon's height and bearing, and the moon's 14-day phase (D167) |
+| `src/engine/moon.js` | The moon and the fish (D168): moon words, the moonlight at night, the anglers' moon tables (solunar periods) |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |

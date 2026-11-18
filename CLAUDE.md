@@ -248,6 +248,10 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
 - **Fish Find by depth (D137, D148) is one d100, checked once per depth's bonus** (`rollLine` in `src/engine/game.js`).
   With no bonus the checks are one and nothing more is drawn (a test checks). `state.lineDepth` stays set when the
   line comes off; it counts only through `lineAdjustable` and `depthSources`.
+- **The moon counts for the fish but is never stored (D168):** `moonNow(state)` (`src/engine/moon.js`) works out its
+  words (into the moment, for `prefers.moon`), the moonlight and the anglers' period (a buff from `conditionBuffs`)
+  from the clock and `state.fullMoonAt`. A state without `fullMoonAt` (a fixture built by hand) has no moon at all;
+  a test that compares values or counts shadows at night can drop it to leave the moon out.
 - **Luck is read through `luckOf(state)` (`src/engine/events.js`),** which adds the marimo's +1 (D150). Reading
   `state.character.luck` skips it.
 - **Tend the pool before taking dice:** call `tendPool` or `tended` (`src/engine/pool.js`) before `diceFrom`, or

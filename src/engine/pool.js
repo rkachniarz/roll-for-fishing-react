@@ -12,7 +12,9 @@
 //     take a fish under half its length, the likelier the warmer the water;
 //     and 1d4 - 1 others come, drawn for the moment, up to the number first
 //     rolled. A kind that is spawning comes 1d4 at a time, over that number
-//     too, and is slow to leave while it spawns;
+//     too, and is slow to leave while it spawns. The moon counts (D168): its
+//     words are in the moment, and a period of the moon tables has the
+//     predators eat more and, a major one, brings one fish more;
 //   - a fish the player has met (it got away, or was let go) stays 1d4 game
 //     days, its own roll, then swims off. It has room above the stocked
 //     number, 1d4 fish, rolled with the pool; past that room a wild fish
@@ -40,6 +42,7 @@ import { championsHere, poolKey } from './champions.js';
 import { learn } from './knowledge.js';
 import { momentOf } from './game.js';
 import { waterAt } from './features.js';
+import { moonNow, periodRule } from './moon.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./state.js').PoolFish} PoolFish */
@@ -250,8 +253,9 @@ function turn(state, key, dice) {
   });
 
   // Who eats whom (D152, D157): a predator with a wild fish under half its length there may take one, the
-  // likelier the warmer the water; dice only when there is prey.
-  const chance = Math.round((state.water ?? state.weather.temperature) * rules.eat * 10);
+  // likelier the warmer the water, and in a period of the moon tables (D168); dice only when there is prey.
+  const period = periodRule(moonNow(state)?.period);
+  const chance = Math.round((state.water ?? state.weather.temperature) * rules.eat * 10 * (period?.eat ?? 1));
   for (const eater of pool.filter((f) => content.fish[f.species]?.predator)) {
     if (!pool.includes(eater)) continue;
     const prey = pool.filter((f) => f !== eater && f.wild && f.of === undefined && f.size < eater.size * content.rules.tank.preyRatio);
@@ -274,7 +278,8 @@ function turn(state, key, dice) {
     for (let i = 0; i < group && ownOf(pool).length < meta.size * rules.spawnCrowd; i++) pool.push(wildFish(species.id, dice));
   };
   if (table.length) {
-    const coming = dice.pool.roll4() - 1;
+    // The moon tables' major period brings fish on the move (D168): one more, drawn like the rest.
+    const coming = dice.pool.roll4() - 1 + (period?.arrive ?? 0);
     for (let i = 0; i < coming && ownOf(pool).length < meta.size; i++) arrive(pick(table, dice.pool));
     // A full pool still draws the spawners, until it is twice its number.
     const spawners = table.filter((e) => e.id && spawningIn(content.fish[e.id], moment));
@@ -358,7 +363,7 @@ export function joinPool(state, fish, at = null) {
 /**
  * The pool's fish that show as shadows from the bank (D156), each where it
  * is: those that swim near the top, a deeper one now and then, fewer at night
- * and in the rain, and never more than `shadows`. A school always shows
+ * (unless the moon is bright, D168) and in the rain, and never more than `shadows`. A school always shows
  * (D157). Not a big fish: its feature shows that. No dice: which deeper fish
  * come up changes with the part of the day, from a hash.
  * @param {GameState} state
@@ -370,7 +375,10 @@ export function shadowsOf(state) {
   const part = partKey(state);
   const pool = state.escaped[poolKey(state)] ?? [];
   const shoals = shoalsIn(pool);
-  const dim = clock(state.time).partOfDay === 'night' || state.weather.precipitation >= 2 ? rules.dim / 100 : 1;
+  const night = clock(state.time).partOfDay === 'night';
+  const rain = state.weather.precipitation >= 2;
+  // A bright moon lightens the night (D168): the shadows come back towards the day's, as its light grows.
+  const dim = night || rain ? rules.dim / 100 + (night && !rain ? (1 - rules.dim / 100) * (moonNow(state)?.light ?? 0) : 0) : 1;
   return pool
     .filter((f) => {
       if (f.of !== undefined || f.x === undefined || f.n === undefined) return false;

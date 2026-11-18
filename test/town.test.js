@@ -596,7 +596,9 @@ test('shadows from the bank: the fish near the top, a deeper one now and then, f
         if (shown.includes(f)) deepShown++;
       }
     }
-    night += shadowsOf(tended(game({ seed, hour: 1 }))).length;
+    // A night with no moon to light it (D168): moon.test.js has the moonlit ones.
+    const { fullMoonAt, ...moonless } = tended(game({ seed, hour: 1 }));
+    night += shadowsOf(/** @type {any} */ (moonless)).length;
   }
   assert.ok(deepShown > 0 && deepShown < deep * 0.6, `${deepShown} of ${deep} deeper fish showed`);
   assert.ok(night < day * 0.85, `${night} shadows at night, ${day} by day`);

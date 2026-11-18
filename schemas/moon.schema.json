@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "The moon and the fish (D168): the moonlight on the water, and the anglers' moon tables (solunar periods)",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
+    "id": { "const": "moon" },
+    "dark": {
+      "description": "The sun's height, in degrees (negative: under the horizon), below which the night is dark enough for the moonlight to count. Above it the moonlight is 0, and no night is dark.",
+      "type": "number",
+      "maximum": 0
+    },
+    "fullLightAt": {
+      "description": "The moon's height, in degrees, from which its light is whole; lower, it fades to nothing at the horizon.",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "cloudCover": {
+      "description": "How much of the moonlight gets through, by cloud level (0 clear up to 5 black, rules/weather-scales.json).",
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "number", "minimum": 0, "maximum": 1 }
+    },
+    "periods": {
+      "description": "The anglers' moon tables: `major` while the moon stands due south or due north under the earth, `minor` around moonrise and moonset, each `hours` either side. A major period wins over a minor one. Outdoors, each is a buff with its `effects`; while one lasts, a pool's turn (D157) has its predators eat `eat` times as often and brings `arrive` more fish.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "enum": ["major", "minor"] },
+          "name": { "$ref": "common.schema.json#/definitions/text" },
+          "hours": { "type": "number", "exclusiveMinimum": 0 },
+          "effects": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/effect" } },
+          "eat": { "type": "number", "minimum": 0 },
+          "arrive": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["id", "name", "hours", "effects", "eat", "arrive"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "dark", "fullLightAt", "cloudCover", "periods"],
+  "additionalProperties": false
+}

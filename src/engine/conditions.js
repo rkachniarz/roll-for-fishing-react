@@ -4,10 +4,12 @@
 // player's warmth, in three levels each a debuff; and night fishing's reward.
 // Like a class fish's effects (D114) they're never stored: they follow from
 // the state every time (D13). Indoors, in town, there's no cold and no night
-// on the water.
+// on the water. The anglers' moon tables (D168) are here too: a period is a
+// buff while it lasts, outdoors.
 
 import { content } from '../generated/content.js';
 import { clock } from './time.js';
+import { moonNow, periodRule } from './moon.js';
 
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./values.js').Source} Source */
@@ -56,7 +58,8 @@ export function conditionSources(state, warmth) {
 
 /**
  * The cold and the night as buffs for the bar (R12.3): a debuff for the cold
- * at its level, a buff at night on the water. They have no duration.
+ * at its level, a buff at night on the water, and one for a period of the
+ * moon tables (D168). They have no duration.
  * @param {GameState} state
  * @param {number} warmth
  * @returns {(import('./state.js').Buff & { label: string[] })[]}
@@ -74,5 +77,7 @@ export function conditionBuffs(state, warmth) {
   if (rules.night.times.includes(clock(state.time).partOfDay)) {
     out.push({ id: 'night-fishing', source: 'night', effects: rules.night.effects, label: [rules.night.name] });
   }
+  const period = periodRule(moonNow(state)?.period);
+  if (period) out.push({ id: `moon-${period.id}`, source: 'moon', effects: period.effects, label: [period.name] });
   return out;
 }

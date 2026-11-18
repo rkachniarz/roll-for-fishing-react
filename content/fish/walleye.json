@@ -51,6 +51,10 @@
     ],
     "bait": [
       "small-fish"
+    ],
+    "moon": [
+      "full",
+      "moonlit"
     ]
   },
   "placeholder": [

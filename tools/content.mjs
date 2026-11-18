@@ -68,6 +68,8 @@ const TEXT = {
     ['precipitation', '#'],
     ['baits', '@', 'name'],
     ['weatherWords', '@', 'name'],
+    ['moonWords', '@', 'name'],
+    ['periods', '@', 'name'],
     ['classes', '@', 'name'],
     ['classes', '@', 'note'],
     ['classes', '@', 'spells', '@', 'name'],
@@ -286,6 +288,7 @@ export async function buildContent(root = ROOT) {
   if (!preferences) errors.push('content/rules/fish-preferences.json: missing');
   const baits = new Set((preferences?.baits ?? []).map((/** @type {{ id: string }} */ b) => b.id));
   const weatherWords = new Set((preferences?.weatherWords ?? []).map((/** @type {{ id: string }} */ w) => w.id));
+  const moonWords = new Set((preferences?.moonWords ?? []).map((/** @type {{ id: string }} */ w) => w.id));
 
   for (const fish of Object.values(all.fish)) {
     const where = `content/fish/${fish.id}.json`;
@@ -294,6 +297,7 @@ export async function buildContent(root = ROOT) {
     for (const id of fish.prefers?.weather ?? []) if (!weatherWords.has(id)) errors.push(`${where}: no weather word "${id}"`);
     for (const id of fish.prefers?.season ?? []) if (!all.weather[id]) errors.push(`${where}: no season "${id}"`);
     for (const id of fish.prefers?.bait ?? []) if (!baits.has(id)) errors.push(`${where}: no bait "${id}"`);
+    for (const id of fish.prefers?.moon ?? []) if (!moonWords.has(id)) errors.push(`${where}: no moon word "${id}"`);
   }
 
   // What a vendor trades away is found there (R18).

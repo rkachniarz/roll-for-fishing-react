@@ -24,5 +24,11 @@
     { "id": "windy", "name": "Windy", "wind": { "min": 3 } },
     { "id": "fog", "name": "Fog", "tag": "fog" },
     { "id": "snow", "name": "Snow", "tag": "snow" }
+  ],
+  "moonWords": [
+    { "id": "full", "name": "Full moon", "lit": { "min": 0.9 } },
+    { "id": "new", "name": "New moon", "lit": { "max": 0.1 } },
+    { "id": "moonlit", "name": "Moonlit night", "light": { "min": 0.4 } },
+    { "id": "dark", "name": "Dark night", "night": true, "light": { "max": 0.1 } }
   ]
 }

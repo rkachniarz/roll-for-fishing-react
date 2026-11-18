@@ -6,6 +6,11 @@
       "type": "object",
       "properties": { "min": { "type": "integer" }, "max": { "type": "integer" } },
       "additionalProperties": false
+    },
+    "fraction": {
+      "type": "object",
+      "properties": { "min": { "type": "number", "minimum": 0, "maximum": 1 }, "max": { "type": "number", "minimum": 0, "maximum": 1 } },
+      "additionalProperties": false
     }
   },
   "type": "object",
@@ -14,7 +19,7 @@
     "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
     "id": { "const": "fish-preferences" },
     "factor": {
-      "description": "A fish's weight in a table is multiplied by this once for each of its preferences the moment meets: time of day, weather, season, bait.",
+      "description": "A fish's weight in a table is multiplied by this once for each of its preferences the moment meets: time of day, weather, season, bait, moon.",
       "type": "number",
       "exclusiveMinimum": 1
     },
@@ -45,6 +50,22 @@
           "precipitation": { "$ref": "#/definitions/range" },
           "tag": { "$ref": "common.schema.json#/definitions/id" },
           "without": { "$ref": "common.schema.json#/definitions/id" }
+        },
+        "required": ["id", "name"],
+        "additionalProperties": false
+      }
+    },
+    "moonWords": {
+      "description": "Words for the moon (D168), read off src/engine/moon.js. Every condition given must hold. `lit`: the part of the moon's disc lit, 0 at new moon, 1 at full, day or night. `light`: the moonlight on the water, 0 to 1 (the part lit, times how high the moon is, under the clouds; 0 by day and in the twilight). `night`: only when the sun is far enough down for the moon's light to count (rules/moon.json, `dark`).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/definitions/id" },
+          "name": { "$ref": "common.schema.json#/definitions/text" },
+          "lit": { "$ref": "#/definitions/fraction" },
+          "light": { "$ref": "#/definitions/fraction" },
+          "night": { "type": "boolean" }
         },
         "required": ["id", "name"],
         "additionalProperties": false

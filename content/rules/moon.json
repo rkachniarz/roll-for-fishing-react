@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/moon.schema.json",
+  "id": "moon",
+  "placeholder": true,
+  "dark": -6,
+  "fullLightAt": 20,
+  "cloudCover": [1, 0.9, 0.7, 0.4, 0.1, 0],
+  "periods": [
+    {
+      "id": "major",
+      "name": "Moon feeding time",
+      "hours": 1,
+      "effects": [{ "value": "fishFind", "add": 10 }],
+      "eat": 2,
+      "arrive": 1
+    },
+    {
+      "id": "minor",
+      "name": "Moon stirring",
+      "hours": 0.5,
+      "effects": [{ "value": "fishFind", "add": 5 }],
+      "eat": 1.5,
+      "arrive": 0
+    }
+  ]
+}

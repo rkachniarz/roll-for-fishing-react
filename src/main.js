@@ -51,6 +51,7 @@ import { useItem } from './engine/buffs.js';
 import { addToStew, atAquarium, atStew, eatFish, eatStew, feedTank, fromAquarium, letGo, takeFromStew, tankDanger, toAquarium, trade } from './engine/barter.js';
 import { diveStrike, endDive } from './engine/dive.js';
 import { conditionBuffs, indoors } from './engine/conditions.js';
+import { moonNow } from './engine/moon.js';
 import { showMenu } from './ui/menu.js';
 
 /** @typedef {import('./engine/state.js').GameState} GameState */
@@ -1018,7 +1019,12 @@ for (const [id, icon] of Object.entries(BAR_ICONS)) {
 }
 $('weather').setAttribute('aria-label', t('hud.weather'));
 $('actions').setAttribute('aria-label', t('hud.actions'));
-bindTip($('weather'), () => (state ? { title: t(weatherWords(state.weather).name), lines: [] } : null));
+// The moon's phase under the weather's name (D168), while there is a moon.
+bindTip($('weather'), () => {
+  if (!state) return null;
+  const moon = moonNow(state);
+  return { title: t(weatherWords(state.weather).name), lines: moon ? [{ text: t('hud.moon', { phase: t(`moon.${moon.name}`) }) }] : [] };
+});
 
 function renderHud() {
   if (!state) return;

@@ -242,13 +242,14 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | look-underwater | description, cooldown |
 | sushi-enjoyer | description |
 
-## rules (8)
+## rules (9)
 
 | id | what is a placeholder |
 |---|---|
 | cold | all of it |
 | depth | all of it |
 | fight-styles | all of it |
+| moon | all of it |
 | plants | factor |
 | pool | all of it |
 | spawning | all of it |

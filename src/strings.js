@@ -166,6 +166,16 @@ const UI_STRINGS = {
   'time.afternoon': 'Afternoon',
   'time.sunset': 'Sunset',
   'time.evening': 'Evening',
+  // The moon (D167, D168), in the weather's tooltip.
+  'hud.moon': 'The moon: {phase}',
+  'moon.new': 'new',
+  'moon.waxing-crescent': 'a waxing crescent',
+  'moon.first-quarter': 'the first quarter',
+  'moon.waxing-gibbous': 'waxing, nearly full',
+  'moon.full': 'full',
+  'moon.waning-gibbous': 'waning, past full',
+  'moon.last-quarter': 'the last quarter',
+  'moon.waning-crescent': 'a waning crescent',
 
   // ---- The panes ----
   'player.level': 'Level {level} {className}',
@@ -494,6 +504,7 @@ export const PLACEHOLDER_UI = new Set([
   'stew.title',
   'aquarium.title',
   'fishMenu.eat',
+  'hud.moon',
 ]);
 
 const table = { ...strings.en, ...UI_STRINGS };

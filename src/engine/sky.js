@@ -199,12 +199,25 @@ export function moonPhaseName(phase) {
  */
 export function moonPosition(minutes, fullMoonAt, time = TIME) {
   const phase = moonPhase(minutes, fullMoonAt);
-  const { yearFraction, hour } = dayOf(minutes, time);
-  const sun = sunAt(yearFraction);
+  const { yearFraction } = dayOf(minutes, time);
   const behind = 360 * phase; // degrees east of the sun along its path
   const declination = TILT * Math.cos(2 * Math.PI * (yearFraction - 0.307) + behind * RAD);
-  const place = placeOf(declination, wrap180(solarHour(hour, sun) - behind));
+  const place = placeOf(declination, moonHourAngle(minutes, fullMoonAt, time));
   return { ...place, phase, lit: (1 - Math.cos(2 * Math.PI * phase)) / 2, name: moonPhaseName(phase) };
+}
+
+/**
+ * The moon's hour angle at a game minute, in degrees, -180..180: 0 when it
+ * stands due south (overhead, as the anglers' tables say), 180 when it is due
+ * north under the earth (underfoot), growing westward 15 degrees an hour
+ * (12.3, D168). As `moonPosition` has it: `phase` of a turn behind the sun.
+ * @param {number} minutes
+ * @param {number} fullMoonAt
+ * @param {typeof TIME} [time]
+ */
+export function moonHourAngle(minutes, fullMoonAt, time = TIME) {
+  const { yearFraction, hour } = dayOf(minutes, time);
+  return wrap180(solarHour(hour, sunAt(yearFraction)) - 360 * moonPhase(minutes, fullMoonAt));
 }
 
 /**

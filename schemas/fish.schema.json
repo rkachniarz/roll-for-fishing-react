@@ -124,7 +124,8 @@
         },
         "weather": { "description": "Weather words from rules/fish-preferences.json.", "$ref": "#/definitions/ids" },
         "season": { "description": "Season ids.", "$ref": "#/definitions/ids" },
-        "bait": { "description": "Bait kinds from rules/fish-preferences.json.", "$ref": "#/definitions/ids" }
+        "bait": { "description": "Bait kinds from rules/fish-preferences.json.", "$ref": "#/definitions/ids" },
+        "moon": { "description": "Moon words from rules/fish-preferences.json (D168): the full or new moon, a moonlit or a dark night.", "$ref": "#/definitions/ids" }
       },
       "additionalProperties": false
     },
