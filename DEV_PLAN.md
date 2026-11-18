@@ -67,6 +67,10 @@ all depend on which way the player looks.
   *The map itself is in (D161, 2026-11-18): the owner's paper and outline over the whole screen, green and red
   circles, the name at the top; the button from two places on; the river opening with the town. Still to do here:
   the facings.*
+  *The owner's answers (2026-11-18), from their map with a V drawn at each spot, north up:* reedy shore 90° (E),
+  still water 35° (NE), rocky shore 335° (NNW), open water 270° (W), deep water 210° (SSW), river mouth 95° (E),
+  lower river 60° (ENE), upper river 25° (NNE), the tower's first pool 180° (S). The swamp and the town have none.
+  **One width of view for every spot**, Claude's pick 60° (REVIEW.md). Q-42 is settled by this.
 - [ ] **12.2** The sun and the moon as engine numbers, with tests: their height and bearing at every half hour, as
   seen from Gdynia (54.52° N, 18.53° E), the latitude that already sets sunrise and sunset (`SUN` in
   `src/engine/time.js`, D85); the moon's phase. Worked out from the clock, never stored, except the moon's start if
@@ -74,9 +78,17 @@ all depend on which way the player looks.
   for old saves. Some numbers that follow: the sun stands about 59° up at midsummer noon and 12° at midwinter noon,
   so a summer noon sun is far above the picture and a winter one crawls along the trees; at midsummer it rises in
   the north-east and sets in the north-west; the full moon rides high in winter and low in summer.
+  *The owner's answers (2026-11-18), Q-41:* **the moon's cycle is 14 game days,** two full moons a season, eight a
+  year. Claude's call (REVIEW.md): the first full moon falls on a rolled day (1d14), so it drifts against the
+  seasons' starts.
 - [ ] **12.3** The moon counts for the fish (the owner: "you know I want it to count for fish"). How is for the
   refinement questions: a preference like the weather's (`prefers`), feeding in the pools (D157), the light at
   night, or the anglers' moon tables (solunar periods).
+  *The owner's answers (2026-11-18):* **all four.** A phase preference like the weather's (`prefers`: full or new
+  moon); solunar periods (bites pick up around moonrise, moonset, and the moon overhead or underfoot); moonlight at
+  night (a bright moon lightens the night: some fish bite more under it, others less); and feeding in the pools
+  (D157), the moon changing who moves or feeds when the time steps on. The amounts and which fish are Claude's
+  calls, for REVIEW.md.
 - [ ] **12.4** The sky as its own layer, shared by every painted spot that shows sky (the pond and the reedy shore;
   not the swamp, which has no sky, D160): back to front, the sky's colour, the sun or moon, the clouds, then a path of
   glitter on the water when the sun or moon is low in front of the player. The paintings' own baked-in clouds go.
@@ -95,6 +107,7 @@ all depend on which way the player looks.
     mentions cloud or sky has a case, and that the case suits every level its weather can roll (some roll a range).
   - **Black (level 5) is an overcast of dark clouds that brings a dusk for as long as it lasts** (the night tint).
     Nothing uses it yet; which weathers move up to it (Hail, Downpour, Heavy rainfall?) is the owner's call.
+    *The owner's answer (2026-11-18):* **Downpour and Hail** move up to level 5; Heavy rainfall stays.
   - **Fog and mist hide the sky,** whatever the cloud level ("Thick fog soup" is clouds 4).
   - **"The sun hides behind the clouds"** needs the sun from 12.2: light that comes and goes.
   - **The water:** the pond's still water mirrors the clouds; overcast flattens the glints.
@@ -281,14 +294,7 @@ Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D
 - **Q-40 How are hidden numbers revealed?** Hidden rolls stay hidden until something reveals them (R5.2). The number
   a fish needed shows from level 1 (D107). Still open: what reveals the bite and treasure rolls and Luck (a perk, an
   item, a class?), and where those rolls would show; the game values to reveal them are in.
-- **Q-41 How long is the moon's cycle? (12.2)** The game's year is 112 days, four seasons of 28. Either (a) a real
-  length, 28 days, the first full moon on day 10+1d10 of the year, so it is shifted against the seasons' starts and
-  comes four times a year; or (b) packed like the year: 29.5 days × 112/365 ≈ 9.1 days, about twelve full moons a
-  year. (b) changes the moon's shape visibly every night, keeps it full for about one night, and moves moonrise
-  about two and a half hours a day instead of fifty minutes; it plays, but reads less real. Which suits depends on
-  how many game days a player sees, and how rare a full-moon fish should be.
-- **Q-42 Which way do the river spots face? (12.1)** Across the river, or along it, up or downstream. The owner is
-  deciding from reference pictures.
+- **Q-41** and **Q-42** were answered on 2026-11-18 (under 12.2 and 12.1); their decisions are recorded as those tasks land.
 
 ---
 
