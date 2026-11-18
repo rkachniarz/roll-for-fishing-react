@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "The clouds (12.5, D170): which cloud patterns can show per season and cloud level, the season's palette over them, and the weather descriptions that name a sky. The patterns are drawn as code in src/scene/clouds.js (CLOUD_PATTERNS).",
+  "type": "object",
+  "definitions": {
+    "colour": { "type": "string", "pattern": "^#[0-9a-f]{6}$" },
+    "patterns": {
+      "description": "Pattern ids from src/scene/clouds.js, such as heap-a. A full-sky pattern (sheet, rain, storm, fog) is the backdrop; the others are scattered over the sky (or over that backdrop) until they cover the level's `cover`.",
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z]+-[a-z]$" },
+      "uniqueItems": true
+    },
+    "level": { "type": "integer", "minimum": 0, "maximum": 5 }
+  },
+  "properties": {
+    "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
+    "id": { "const": "sky" },
+    "levels": {
+      "description": "Per cloud level, 0 clear to 5 black (rules/weather-scales.json): `cover`, how much of the sky the clouds fill (should agree with rules/moon.json's cloudCover); `veil`, how much of the sun, the moon and the stars shows between or through them; `glints`, how many of the water's glints still flick; `sunHides`, how much of the time a cloud is over the sun when the sun is off the picture (on it, the clouds drawn decide); `dusk`, how much of the night tint the clouds bring.",
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "properties": {
+          "cover": { "type": "number", "minimum": 0, "maximum": 1 },
+          "veil": { "type": "number", "minimum": 0, "maximum": 1 },
+          "glints": { "type": "number", "minimum": 0, "maximum": 1 },
+          "sunHides": { "type": "number", "minimum": 0, "maximum": 1 },
+          "dusk": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "required": ["cover", "veil", "glints", "sunHides", "dusk"],
+        "additionalProperties": false
+      }
+    },
+    "seasons": {
+      "description": "Per season (an id from content/weather/): the palette the patterns are drawn in, and per cloud level (0 to 5) the patterns that can show.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "palette": {
+            "description": "White clouds go light, cloud, shade, dark; grey ones cloud, shade, sheet, sheetDark; storm ones sheet, sheetDark, storm, stormDark.",
+            "type": "object",
+            "properties": {
+              "light": { "$ref": "#/definitions/colour" },
+              "cloud": { "$ref": "#/definitions/colour" },
+              "shade": { "$ref": "#/definitions/colour" },
+              "dark": { "$ref": "#/definitions/colour" },
+              "sheet": { "$ref": "#/definitions/colour" },
+              "sheetDark": { "$ref": "#/definitions/colour" },
+              "storm": { "$ref": "#/definitions/colour" },
+              "stormDark": { "$ref": "#/definitions/colour" }
+            },
+            "required": ["light", "cloud", "shade", "dark", "sheet", "sheetDark", "storm", "stormDark"],
+            "additionalProperties": false
+          },
+          "levels": { "type": "array", "minItems": 6, "maxItems": 6, "items": { "$ref": "#/definitions/patterns" } }
+        },
+        "required": ["palette", "levels"],
+        "additionalProperties": false
+      }
+    },
+    "wet": {
+      "description": "Rain cloud: at cloud `level` with precipitation at `precipitation` or more, these patterns show in place of the season's.",
+      "type": "object",
+      "properties": {
+        "precipitation": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "level": { "$ref": "#/definitions/level" },
+        "patterns": { "$ref": "#/definitions/patterns" }
+      },
+      "required": ["precipitation", "level", "patterns"],
+      "additionalProperties": false
+    },
+    "fog": {
+      "description": "A weather tagged fog hides the sky whatever the cloud level: the first entry whose min..max holds the level gives the patterns, and `veil`, how much of the sun shows through.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "min": { "$ref": "#/definitions/level" },
+          "max": { "$ref": "#/definitions/level" },
+          "patterns": { "$ref": "#/definitions/patterns" },
+          "veil": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "required": ["patterns", "veil"],
+        "additionalProperties": false
+      }
+    },
+    "descriptions": {
+      "description": "Weather descriptions that name a sky, by string key (weather.<season>.weathers.<n>.descriptions.<n>): their own patterns over the table, the cloud levels they suit (a test wants every level the weather can roll), and optionally `drift` (how fast, times the wind's), `low` (kept near the horizon) and `sunHides` (in place of the level's).",
+      "type": "object",
+      "propertyNames": { "pattern": "^weather\\.[a-z]+\\.weathers\\.\\d+\\.descriptions\\.\\d+$" },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "patterns": { "$ref": "#/definitions/patterns" },
+          "levels": {
+            "type": "object",
+            "properties": { "min": { "$ref": "#/definitions/level" }, "max": { "$ref": "#/definitions/level" } },
+            "additionalProperties": false
+          },
+          "drift": { "type": "number", "minimum": 0 },
+          "low": { "type": "boolean" },
+          "sunHides": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "required": ["patterns", "levels"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "levels", "seasons", "wet", "fog", "descriptions"],
+  "additionalProperties": false
+}

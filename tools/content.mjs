@@ -290,6 +290,17 @@ export async function buildContent(root = ROOT) {
   const weatherWords = new Set((preferences?.weatherWords ?? []).map((/** @type {{ id: string }} */ w) => w.id));
   const moonWords = new Set((preferences?.moonWords ?? []).map((/** @type {{ id: string }} */ w) => w.id));
 
+  // The clouds (12.5, D170): a season per weather map, and every described sky a real description.
+  const sky = all.rules.sky;
+  if (sky) {
+    for (const id of Object.keys(all.weather)) if (!sky.seasons[id]) errors.push(`content/rules/sky.json: no season "${id}"`);
+    for (const id of Object.keys(sky.seasons)) if (!all.weather[id]) errors.push(`content/rules/sky.json: "${id}" is no season`);
+    for (const key of Object.keys(sky.descriptions)) {
+      const [, season, , cell, , n] = key.split('.');
+      if (all.weather[season]?.weathers[Number(cell)]?.descriptions[Number(n)] === undefined) errors.push(`content/rules/sky.json: no weather description "${key}"`);
+    }
+  }
+
   for (const fish of Object.values(all.fish)) {
     const where = `content/fish/${fish.id}.json`;
     if (fish.size.min >= fish.size.max) errors.push(`${where}: size.min must be below size.max`);

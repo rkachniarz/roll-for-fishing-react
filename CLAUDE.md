@@ -185,8 +185,17 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   per column, which hides the sun and its glitter), `waterLayer` (a container in `back` just over the water, where
   the glitter hangs) and `isWater`. The sun's and the moon's height is 4 px a degree up from the horizon; across,
   the view's 60° over 256 px carried on over the strips. The still water's water still mirrors its photo's sky
-  (`paintMirrorSky`), never shown itself. Take the glitter off a painting (`attach(null)`) before destroying it:
-  it hangs on the painting's water. The scene needs `World.time` and `World.fullMoonAt` for the sun and the moon.
+  (`paintMirrorSky`), never shown itself; with `mirrorSky` the layer lays the live sky over it faintly (D170). Take
+  the glitter and the mirror off a painting (`attach(null)`) before destroying it: they hang on the painting's water.
+  The scene needs `World.time` and `World.fullMoonAt` for the sun and the moon.
+- **The clouds (D170) come from `content/rules/sky.json`, drawn by `src/scene/clouds.js`:** `skySpec` picks fog
+  first (a weather tagged `fog` hides the sky), then a description that names a sky (keyed by its string key, so
+  a description that mentions cloud or sky needs a case: a test checks), then rain cloud, then the season's table.
+  It reads the weather's `description` and `cell` as the engine keeps them; the art sheet passes `tags` instead.
+  A sky-wide pattern goes under the sun and the moon (they show through as much as `veil` says), single clouds over
+  them. Cloud grids depend only on the scenery stream and are cached per session; pattern ids are named in
+  `sky.json`, so never rename one without changing both. Black (clouds 5) brings `dusk` through the night tint
+  (`cloudDusk` in `src/scene/sky.js`).
 - **`styles.css`: `--text` is the text colour; `--type` is the text size factor** (`--ui`, 1.25 on a wide screen,
   D121, times the font's own factor: Alegreya Sans is set at 1.05, D132). Every `font-size` is `calc(Npx * var(--type))`. `fit` in
   `src/main.js` sets `--ui`, `--hud`, `--button`, `--slot`, `--slot-icon` and `--tip-icon`; the icons are whole device

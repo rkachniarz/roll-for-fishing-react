@@ -941,6 +941,35 @@ await check('the sky layer', PHONE, '?seed=1', async (page) => {
   await page.locator('#scene').screenshot({ path: 'dist/verify/sky-layer-moon.png' });
 });
 
+// Clouds that follow the weather (12.5, D170), behind the reedy shore: what the
+// sky layer drew (data-sky's clouds), and a screenshot of each.
+await check('the clouds', PHONE, '?seed=1', async (page) => {
+  /** Puts the save at spring noon in a weather; then loads it and reads what the sky drew. */
+  const under = async (weather) => {
+    await page.evaluate((weather) => {
+      const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
+      save.time = 6 * 1440 + 720;
+      save.weather = { ...save.weather, season: 'spring', temperature: 12, wind: 2, precipitation: 0, ...weather };
+      localStorage.setItem('roll-for-fishing:save:1', JSON.stringify(save));
+    }, weather);
+    await page.reload();
+    await loadFrom(page, 1);
+    await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+    await closePane(page);
+    await page.waitForTimeout(2500);
+    return JSON.parse((await page.getAttribute('#scene', 'data-sky')) ?? 'null');
+  };
+  const scattered = await under({ cell: 5, clouds: 2, description: 'weather.spring.weathers.5.descriptions.0' });
+  report('the clouds: "Scattered clouds rush through the sky" draws its own heaps', scattered?.clouds?.from === 'description' && scattered.clouds.count >= 3 && !scattered.clouds.backdrop, JSON.stringify(scattered));
+  await page.locator('#scene').screenshot({ path: 'dist/verify/clouds-scattered.png' });
+  const black = await under({ cell: 2, clouds: 5, precipitation: 4, description: 'weather.spring.weathers.2.descriptions.0' });
+  report('the clouds: Hail is black, a storm overcast over the whole sky, no sun', black?.clouds?.level === 5 && /^storm-/.test(black.clouds.backdrop ?? '') && !black.sun, JSON.stringify(black));
+  await page.locator('#scene').screenshot({ path: 'dist/verify/clouds-black.png' });
+  const fog = await under({ cell: 3, clouds: 0, precipitation: 2, description: 'weather.spring.weathers.3.descriptions.0' });
+  report('the clouds: mist hides the sky', fog?.clouds?.from === 'fog' && /^fog-/.test(fog.clouds.backdrop ?? ''), JSON.stringify(fog));
+  await page.locator('#scene').screenshot({ path: 'dist/verify/clouds-mist.png' });
+});
+
 await check('a full bucket', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
   await openBench(page);
   for (const [name, value] of [['fishingSkill', '100'], ['fishFind', '100']]) {

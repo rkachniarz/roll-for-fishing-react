@@ -242,7 +242,7 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | look-underwater | description, cooldown |
 | sushi-enjoyer | description |
 
-## rules (9)
+## rules (10)
 
 | id | what is a placeholder |
 |---|---|
@@ -252,6 +252,7 @@ placeholder, then take its mark away (or the field's name from the list). The ga
 | moon | all of it |
 | plants | factor |
 | pool | all of it |
+| sky | all of it |
 | spawning | all of it |
 | stew | all of it |
 | tank | all of it |

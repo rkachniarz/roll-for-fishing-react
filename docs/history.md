@@ -541,3 +541,23 @@ browser check.
   The bench has a section for the pool here (who is in it, its schools, who spawns, the predators' chance; add
   fish of a kind and size, stock anew, empty), a button to the next part of the day, and its time buttons now pass
   time as the game does, so the weather, the water and every pool move with them.
+
+## Phase 12: The map, the sun and the moon, the sky and its clouds (2026-11-18 to 2026-11-19)
+
+The owner's ask (D160): clouds that follow the weather, which first needed the map, the spots' facings and the sun
+and the moon. Task by task in DEV_PLAN.md's Phase 12, where each has its *Landed* note.
+
+- **12.1** The map from the owner's drawing (D161) and every spot that shows sky facing a compass bearing, one 60°
+  width of view for all (D166).
+- **12.2** The sun's and the moon's height and bearing for Gdynia, and a 14-day moon whose first full moon is rolled
+  (D167, `SAVE_VERSION` 22).
+- **12.3** The moon counts for the fish: phase preferences, solunar periods as buffs, moonlight at night, and the
+  pools feeding in the periods (D168).
+- **12.4** The sky as its own layer behind the still water and the reedy shore: its colour, the stars, the sun, the
+  moon in its phase, and a path of glitter under a low sun or moon (D169).
+- **12.5** Clouds that follow the weather (D170): references from Wikimedia Commons first (a contact sheet per cloud
+  type, local only), then a library of cloud types drawn as code and a table per season and cloud level in
+  `content/rules/sky.json`; descriptions that name a sky as their own case; fog hiding the sky; Downpour and Hail
+  moved up to black, a storm overcast that brings a dusk; the light coming and going with a cloud over the sun;
+  the still water mirroring the sky; fewer glints under cloud. Measured: every unit test and browser check pass,
+  with a new check, "the clouds", and its screenshots (`dist/verify/clouds-*.png`).

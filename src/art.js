@@ -18,7 +18,7 @@ import { Rectangle } from 'pixi.js';
 import { SIZE, createScene } from './scene/scene.js';
 import { POND, POND_SUMMER, createPondScene, paintPond, pondSeason } from './scene/pond.js';
 import { REEDY, REEDY_AUTUMN, REEDY_SPRING, REEDY_WINTER, paintReedy, reedySeason } from './scene/reedy.js';
-import { SKY_CLOUDS, SKY_DAY, SKY_LAYER, SKY_LOW } from './scene/sky-layer.js';
+import { SKY_DAY, SKY_LAYER, SKY_LOW } from './scene/sky-layer.js';
 import { facingOf } from './engine/sky.js';
 import { clock } from './engine/time.js';
 import { SWAMP, SWAMP_AUTUMN, SWAMP_H, SWAMP_SUMMER, SWAMP_W, SWAMP_WINTER, swampStill } from './scene/swamp-pixels.js';
@@ -29,6 +29,7 @@ import { ICONS, KEYS as ICON_KEYS, OWN_KEYS, paintIcon } from './scene/icons.js'
 import { TRIALS } from './art-trials.js';
 import { SWIM_FRAMES, fishFrames, paint } from './scene/fish-art.js';
 import { content } from './generated/content.js';
+import { t } from './strings.js';
 import { createRng, deriveSeed } from './rng.js';
 import { DEEP_BANDS, paintDeep } from './scene/deep.js';
 
@@ -480,7 +481,8 @@ function momentWorld(time, extra = {}) {
  * @param {HTMLElement} parent @param {string} name
  * @param {(rand: () => number, season: any) => import('./scene/pond.js').Pond} paint
  * @param {(season: string) => string} seasonOf  The painting's season for the game's.
- * @param {{ caption: string, world: ReturnType<typeof momentWorld> }[]} moments
+ * @param {{ caption: string, world: ReturnType<typeof momentWorld>, paint?: typeof paint, seasonOf?: typeof seasonOf }[]} moments
+ *   A moment may show another painting (`paint`, `seasonOf`), repainted into the same live scene.
  */
 async function skyCards(parent, name, paint, seasonOf, moments) {
   const live = el('div', { class: 'row' });
@@ -490,13 +492,16 @@ async function skyCards(parent, name, paint, seasonOf, moments) {
   live.append(el('figure', {}, [canvas, el('figcaption', {}, [`${name}: ${moments[0].caption} (live)`])]));
   const rand = createRng(deriveSeed(seed, 'scenery'));
   let painted = seasonOf(moments[0].world.season);
+  let painter = paint;
   const scene = await createPondScene(canvas, () => rand.next(), painted, paint);
   const fit = Math.min(640, document.documentElement.clientWidth - 32);
   scene.fit(fit, (fit * SIZE) / 320, 320);
   const zoom = Math.max(1, Math.min(2, Math.floor((document.documentElement.clientWidth - 32) / 320)));
-  for (const { caption, world } of moments) {
-    const season = seasonOf(world.season);
-    if (season !== painted) scene.repaint((painted = season));
+  for (const moment of moments) {
+    const { caption, world } = moment;
+    const season = (moment.seasonOf ?? seasonOf)(world.season);
+    const nextPaint = moment.paint ?? paint;
+    if (season !== painted || nextPaint !== painter) scene.repaint((painted = season), (painter = nextPaint));
     scene.setWorld(world);
     const still = scene.still(performance.now());
     still.style.width = `${still.width * zoom}px`;
@@ -515,14 +520,14 @@ async function skyCards(parent, name, paint, seasonOf, moments) {
   }
   // Live again at the first moment.
   const first = seasonOf(moments[0].world.season);
-  if (first !== painted) scene.repaint(first);
+  if (first !== painted || painter !== paint) scene.repaint(first, paint);
   scene.setWorld(moments[0].world);
   scenes.push(scene);
 }
 
 section(
   'The sky (12.4)',
-  'The sky as its own layer (D169), behind the still water and the reedy shore: its colour by the sun’s height, the sun and the moon where the engine puts them (4 px for each degree above the horizon; the 60° view across the middle 256 px, D166), the stars, and a path of glitter on the water under a low sun or moon. The land isn’t relit; the tints do the light. No clouds yet (12.5). “Turned” cards look another way than the spot faces, to show the scale: no painted spot faces south or west.',
+  'The sky as its own layer (D169), behind the still water and the reedy shore: its colour by the sun’s height, the sun and the moon where the engine puts them (4 px for each degree above the horizon; the 60° view across the middle 256 px, D166), the stars, and a path of glitter on the water under a low sun or moon. The land isn’t relit; the tints do the light. Clear skies here; the clouds are in the next section (12.5). “Turned” cards look another way than the spot faces, to show the scale: no painted spot faces south or west.',
   async (body) => {
     const reedy = facingOf('lake', 'reedy-shore');
     const pond = facingOf('lake', 'still-water');
@@ -544,6 +549,42 @@ section(
       { caption: 'summer, 00:30, turned south: the full moon 12° up, as low as a summer full moon goes', world: momentWorld(minuteOf(34, 24.5), { facing: 180, fullMoonAt: minuteOf(34, 24.5) }) },
       { caption: 'autumn night, 01:00: stars, a waning crescent not yet up', world: momentWorld(minuteOf(62, 1), { facing: pond, fullMoonAt: minuteOf(62, 1) - 5 * 1440 }) },
     ]);
+  },
+);
+
+// Clouds that follow the weather (12.5, D170): one live scene, the reedy
+// shore, and every cloud level in every season as stills from it; then the
+// still water's mirror, painted into the same scene (docs/art.md's limit).
+section(
+  'Clouds (12.5)',
+  'Clouds drawn as code from references on Wikimedia Commons (docs/REVIEW.md names them): fair-weather heaps, towering heaps, lumpy grey layers, high wisps, flat grey sheets, rain cloud and a storm’s dark overcast (src/scene/clouds.js), picked per season and cloud level by content/rules/sky.json, in the season’s palette. A description that names a sky has its own patterns; fog hides the sky; black brings a dusk. The live scene drifts with the wind; a new weather fades in over the old. Noon, facing the spot, unless the caption says otherwise.',
+  async (body) => {
+    const reedy = facingOf('lake', 'reedy-shore');
+    const pond = facingOf('lake', 'still-water');
+    const words = content.rules['weather-scales'].clouds.map((/** @type {string} */ k) => t(k));
+    const days = { spring: 20, summer: 48, autumn: 76, winter: 104 };
+    /** @param {string} season @param {object} weather @param {number} [hour] @param {number | null} [facing] */
+    const at = (season, weather, hour = 12, facing = reedy) =>
+      momentWorld(minuteOf(days[/** @type {keyof typeof days} */ (season)], hour), { facing, weather: /** @type {any} */ ({ temperature: 10, wind: 2, clouds: 0, precipitation: 0, ...weather }) });
+    /** @type {{ caption: string, world: ReturnType<typeof momentWorld>, paint?: any, seasonOf?: any }[]} */
+    const moments = [{ caption: 'summer, scattered (2)', world: at('summer', { clouds: 2 }) }];
+    for (const season of ['spring', 'summer', 'autumn', 'winter']) {
+      for (let level = 1; level <= 5; level++) moments.push({ caption: `${season}, ${words[level].toLowerCase()} (${level})`, world: at(season, { clouds: level }) });
+    }
+    moments.push(
+      { caption: 'autumn, overcast with steady rain: rain cloud', world: at('autumn', { clouds: 4, precipitation: 3 }) },
+      { caption: 'black at 16:00 in summer, turned west: the dusk it brings', world: at('summer', { clouds: 5, precipitation: 4 }, 16, 270) },
+      { caption: 'thick fog (autumn, clouds 4): the sky hidden', world: at('autumn', { clouds: 4, precipitation: 1, tags: ['fog'] }) },
+      { caption: 'cold mist (winter, clouds 1): the sky hidden', world: at('winter', { clouds: 1, precipitation: 1, tags: ['fog'] }) },
+      { caption: '“Big, still clouds…” (spring)', world: at('spring', { clouds: 2, description: 'weather.spring.weathers.5.descriptions.1' }) },
+      { caption: '“…the sun hides behind the clouds” (summer, 19:00, turned west to the sun)', world: at('summer', { clouds: 2, description: 'weather.summer.weathers.11.descriptions.0' }, 19, 290) },
+      { caption: '“A grey blanket of cloud…” (winter, clouds 3)', world: at('winter', { clouds: 3, description: 'weather.winter.weathers.3.descriptions.0' }) },
+      { caption: 'still water, summer, broken: the clouds mirrored', world: at('summer', { clouds: 3 }, 12, pond), paint: paintPond, seasonOf: pondSeason },
+      { caption: 'still water, autumn, black: no glints', world: at('autumn', { clouds: 5, precipitation: 4 }, 12, pond), paint: paintPond, seasonOf: pondSeason },
+      { caption: 'scattered at sunset, turned west', world: at('spring', { clouds: 2 }, 18.5, 270) },
+      { caption: 'broken at night under a full moon', world: momentWorld(minuteOf(20, 22), { facing: reedy, fullMoonAt: minuteOf(20, 22), weather: /** @type {any} */ ({ temperature: 8, wind: 2, clouds: 3, precipitation: 0 }) }) },
+    );
+    await skyCards(body, 'Reedy shore', paintReedy, reedySeason, moments);
   },
 );
 
@@ -660,9 +701,10 @@ section('Palettes', 'Every colour the art uses. A new colour gets a name here be
   palette('The sky, twilight', SKY_LOW.twilight),
   palette('The sky, night', SKY_LOW.night),
   palette('The sun, the moon, the stars, the glitter (SKY_LAYER)', SKY_LAYER),
-  palette('Clouds, summer (SKY_CLOUDS, for 12.5)', SKY_CLOUDS.summer),
-  palette('Clouds, autumn', SKY_CLOUDS.autumn),
-  palette('Clouds, winter', SKY_CLOUDS.winter),
+  palette('Clouds, spring (content/rules/sky.json, D170)', content.rules.sky.seasons.spring.palette),
+  palette('Clouds, summer', content.rules.sky.seasons.summer.palette),
+  palette('Clouds, autumn', content.rules.sky.seasons.autumn.palette),
+  palette('Clouds, winter', content.rules.sky.seasons.winter.palette),
   palette('The reedy shore in spring (REEDY_SPRING in src/scene/reedy.js)', REEDY_SPRING),
   palette('The reedy shore in summer (REEDY in src/scene/reedy.js)', REEDY),
   palette('The reedy shore in autumn (REEDY_AUTUMN in src/scene/reedy.js)', REEDY_AUTUMN),

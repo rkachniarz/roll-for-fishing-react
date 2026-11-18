@@ -313,7 +313,7 @@ export async function createScene(canvas, rand, look = {}) {
       paintingFront.addChild(painting.front);
       paintedKey = key;
       const p = painting;
-      skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater } : null);
+      skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater, mirrorSky: p.mirrorSky } : null);
     }
     paintingBack.visible = paintingFront.visible = painted;
     skyPainted.back.visible = painted && painting?.horizon !== undefined;
@@ -512,8 +512,11 @@ export async function createScene(canvas, rand, look = {}) {
     const sway = Math.floor((now * windy) / 900) % 2;
     reedsLeft.texture = reedFrames.left[sway];
     reedsRight.texture = reedFrames.right[sway];
-    if (painting && paintingBack.visible) painting.update(now, sky.wind(), PAINTING_LEFT - offset, raining);
-    if (skyPainted.back.visible) {
+    const skyShown = skyPainted.back.visible;
+    // The clouds dim the glints, and a cloud over the sun the light (D170); a painting with no sky keeps all its glints.
+    sky.setShade(skyShown ? skyPainted.shade() : 0);
+    if (painting && paintingBack.visible) painting.update(now, sky.wind(), PAINTING_LEFT - offset, raining, skyShown ? skyPainted.glints() : 1);
+    if (skyShown) {
       skyPainted.update(now, dt);
       // For tools/verify.mjs, which can't read a WebGL canvas back.
       const said = JSON.stringify(skyPainted.describe());

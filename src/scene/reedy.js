@@ -527,10 +527,12 @@ export function paintReedy(rand, season = 'summer') {
     waterLayer,
     // Open water: below the horizon and clear of the reed banks.
     isWater: (x, y) => y > HZ && topAt(x) > y + 1,
-    update(now, wind, crop, raining) {
+    update(now, wind, crop, raining, light = 1) {
       for (const [s, sprite] of reeds.entries()) sprite.texture = reedFrames[s][gust(now, wind, s * SECTION + SECTION / 2)];
       water.texture = waterFrames[Math.floor(now / (600 / (1 + wind * 0.4))) % 3];
-      for (const glint of glints) {
+      for (const [i, glint] of glints.entries()) {
+        // Fewer flick under cloud (D170): the rest lie flat.
+        glint.sprite.visible = i < Math.round(glints.length * light);
         if (now < glint.next) continue;
         glint.frame = 1 - glint.frame;
         glint.sprite.texture = glint.frames[glint.frame];

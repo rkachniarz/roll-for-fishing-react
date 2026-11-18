@@ -2,9 +2,12 @@
 // The sky as its own layer (12.4, D169), shared by every painted spot that
 // shows sky: the still water and the reedy shore, not the swamp (D160). Back to
 // front: the sky's colour by the sun's height, the stars, the sun or the moon
-// where the engine puts them (src/engine/sky.js), a place for the clouds
-// (12.5), and, on the painting's own open water, a path of glitter under a low
-// sun or moon in front of the player.
+// where the engine puts them (src/engine/sky.js), the clouds of the weather
+// (12.5, D170: src/scene/clouds.js), and, on the painting's own open water, a
+// path of glitter under a low sun or moon in front of the player. A sky-wide
+// backdrop of cloud (an overcast, fog) goes under the sun and the moon, which
+// show through it as much as its veil lets them; single clouds go over them.
+// Still water mirrors the sky and its clouds (`mirrorSky`).
 //
 // A painting that shows sky paints nothing above its horizon (`Pond` in
 // src/scene/pond.js: `horizon`, `waterLayer`, `isWater`). The land isn't relit:
@@ -23,6 +26,7 @@ import { VIEW, acrossView, moonPosition, sunPosition } from '../engine/sky.js';
 import { moonlight } from '../engine/moon.js';
 import { TIME } from '../engine/time.js';
 import { seasons } from '../engine/weather.js';
+import { CLOUD_PATTERNS, RAMPS, SKY_W, driftSpeed, layOutSky, skySpec } from './clouds.js';
 
 /** Pixels per degree of height above the horizon (Claude's pick, docs/REVIEW.md): about the width's 256 px per 60°. */
 export const SKY_SCALE = 4;
@@ -44,13 +48,6 @@ export const SKY_DAY = {
   summer: { top: '#5f95d6', mid: '#86b1e3', low: '#b5d0ec', haze: '#d3e2ef' },
   autumn: { top: '#8a9db4', mid: '#a4b4c7', low: '#c1cbd6', haze: '#d5dae0' },
   winter: { top: '#6f8fb8', mid: '#93abc9', low: '#bccada', haze: '#d9dfe6' },
-};
-/** The clouds' colours per season, for 12.5 (from the reedy shore's painted clouds). */
-export const SKY_CLOUDS = {
-  spring: { light: '#f4f7fa', cloud: '#dfe7ef', shade: '#c3d0de', dark: '#a9b8cb' },
-  summer: { light: '#f4f7fa', cloud: '#dfe7ef', shade: '#c3d0de', dark: '#a9b8cb' },
-  autumn: { light: '#e6e9ed', cloud: '#d1d6dd', shade: '#b6bec9', dark: '#9ba5b3' },
-  winter: { light: '#eef0f2', cloud: '#d2d7de', shade: '#a9b2bf', dark: '#858f9e' },
 };
 /** The sky past the day's, by the sun's height: golden (a low sun), twilight (just set), night. */
 export const SKY_LOW = {
@@ -100,16 +97,41 @@ const clamp01 = (x) => Math.max(0, Math.min(1, x));
 /** @param {number} deg */
 const wrap180 = (deg) => ((((deg % 360) + 540) % 360) - 180);
 
-/** What the clouds let through of the sun, the moon and the stars, by cloud level: a stand-in until 12.5 (CR-2). */
-const COVER = [1, 1, 0.85, 0.5, 0.1, 0];
+/** How long a new sky takes to fade in over the old one. */
+const SKY_FADE_MS = 5000;
+/** How much of the sky the still water mirrors over its own colour. */
+const MIRROR_ALPHA = 0.4;
+/** How much the light dims while a cloud is over the sun (Claude's pick, docs/REVIEW.md). */
+const SUN_SHADE = 0.12;
+/** The clouds' tint by the sun's height: day, low sun, twilight; the night's goes from dark to moonlit. */
+const CLOUD_TINT = { day: [255, 255, 255], low: [242, 214, 190], twilight: [140, 127, 153], night: [44, 53, 80], moonlit: [106, 117, 144] };
+
+/**
+ * The tint over the clouds for a sun that high and the moonlight: white by
+ * day, warm low down, purple-grey at twilight, dark at night, lifted by a
+ * bright moon.
+ * @param {number} altitude @param {number} light  The moonlight, 0 to 1.
+ */
+export function cloudTint(altitude, light) {
+  const night = mix(CLOUD_TINT.night, CLOUD_TINT.moonlit, clamp01(light));
+  let c;
+  if (altitude >= 6) c = CLOUD_TINT.day;
+  else if (altitude >= 0) c = mix(CLOUD_TINT.day, CLOUD_TINT.low, 1 - altitude / 6);
+  else if (altitude >= -6) c = mix(CLOUD_TINT.low, CLOUD_TINT.twilight, -altitude / 6);
+  else c = mix(CLOUD_TINT.twilight, night, clamp01((-altitude - 6) / 8));
+  return (c[0] << 16) | (c[1] << 8) | c[2];
+}
 
 /**
  * What the sky layer is given: the game minute, the season, the weather, the
  * spot's facing (null: no sky), and the minute of a full moon.
- * @typedef {{ time: number, season: string, weather: { clouds: number, wind: number }, facing: number | null,
- *   fullMoonAt?: number }} SkyWorld
- * @typedef {{ horizon: number, skyline: number[], waterLayer: Container, isWater: (x: number, y: number) => boolean }} SkyPainting
- *   `skyline`: the top of the painting's land in each column, which hides a sun or moon behind it from the water.
+ * @typedef {{ time: number, season: string, weather: { clouds: number, wind: number, precipitation?: number, description?: string,
+ *   season?: string, cell?: number, tags?: string[] }, facing: number | null, fullMoonAt?: number }} SkyWorld
+ *   The weather as the engine keeps it (src/engine/weather.js): its description and cell pick the clouds
+ *   (src/scene/clouds.js, `skySpec`); the art sheet may give `tags` instead of a cell.
+ * @typedef {{ horizon: number, skyline: number[], waterLayer: Container, isWater: (x: number, y: number) => boolean, mirrorSky?: boolean }} SkyPainting
+ *   `skyline`: the top of the painting's land in each column, which hides a sun or moon behind it from the water;
+ *   `mirrorSky`: still water, which mirrors the sky and the clouds where it doesn't mirror the land.
  */
 
 /**
@@ -295,9 +317,182 @@ export function createSkyLayer(rand) {
   const moon = new Sprite();
   const sun = new Sprite();
   const clouds = new Container();
-  back.addChild(colourNew, colourOld, stars, moon, sun, clouds);
+  clouds.label = 'clouds';
+  // A sky-wide backdrop of cloud (overcast, fog) under the sun and the moon, single clouds over them.
+  const backdrops = new Container();
+  back.addChild(colourNew, colourOld, stars, backdrops, moon, sun, clouds);
   moon.visible = sun.visible = colourOld.visible = false;
   const glitter = new Graphics();
+
+  // Still water's mirror of the sky (D170): the sky's colour and the clouds,
+  // turned over at the horizon, faint, and only where the water mirrors sky
+  // rather than land.
+  const mirror = new Container();
+  mirror.label = 'sky-mirror';
+  mirror.alpha = MIRROR_ALPHA;
+  const mirrorColour = new Sprite();
+  mirrorColour.scale.y = -1;
+  const mirrorClouds = new Container();
+  const mirrorMask = new Graphics();
+  mirror.addChild(mirrorColour, mirrorClouds, mirrorMask);
+  mirror.mask = mirrorMask;
+
+  // ---------- The clouds (12.5, D170) ----------
+
+  /** Painted grids, by pattern, band and variant (the full-sky ones by horizon): drawn once from the scenery stream. @type {Map<string, import('./clouds.js').CloudGrid>} */
+  const grids = new Map();
+  /** @param {string} pattern @param {import('./clouds.js').Band} band @param {number} variant */
+  const gridKey = (pattern, band, variant) => (CLOUD_PATTERNS[pattern].full ? `${pattern}@${horizon}` : `${pattern}:${band}:${variant}`);
+  /** @param {string} pattern @param {import('./clouds.js').Band} band @param {number} variant */
+  function gridOf(pattern, band, variant) {
+    const key = gridKey(pattern, band, variant);
+    let g = grids.get(key);
+    if (!g) {
+      g = CLOUD_PATTERNS[pattern].paint(rand, band, horizon);
+      grids.set(key, g);
+    }
+    return g;
+  }
+  /**
+   * A cloud's sprite texture in a season's palette, cached.
+   * @param {string} pattern @param {import('./clouds.js').Band} band @param {number} variant
+   * @param {Record<string, string>} palette @param {string} season
+   */
+  function cloudTexture(pattern, band, variant, palette, season) {
+    return cached(`cloud:${gridKey(pattern, band, variant)}:${season}`, () => {
+      const g = gridOf(pattern, band, variant);
+      const colours = RAMPS[CLOUD_PATTERNS[pattern].ramp].map((k) => rgb(palette[k]));
+      const canvas = document.createElement('canvas');
+      canvas.width = g.w;
+      canvas.height = g.h;
+      const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+      const img = ctx.createImageData(g.w, g.h);
+      for (let i = 0; i < g.data.length; i++) {
+        const t = g.data[i];
+        if (!t) continue;
+        const c = colours[t - 1];
+        img.data[i * 4] = c[0];
+        img.data[i * 4 + 1] = c[1];
+        img.data[i * 4 + 2] = c[2];
+        img.data[i * 4 + 3] = 255;
+      }
+      ctx.putImageData(img, 0, 0);
+      return canvas;
+    });
+  }
+
+  /**
+   * One sky of clouds: what shows for a weather, fading in over the last.
+   * @typedef {{ sprite: Sprite, twin: Sprite, x: number, y: number, w: number, h: number, speed: number, grid: import('./clouds.js').CloudGrid }} Drifting
+   * @typedef {{ key: string, spec: import('./clouds.js').SkySpec, parts: Container[], backdrop: { a: Sprite, b: Sprite, ta: Sprite, tb: Sprite, x: number } | null,
+   *   items: Drifting[], born: number, fade: boolean, backdropId: string | null }} CloudSky
+   */
+  /** @type {CloudSky | null} */
+  let sky = null;
+  /** @type {CloudSky | null} */
+  let oldSky = null;
+  /** @type {import('./clouds.js').SkySpec | null} */
+  let spec = null;
+  let specKey = '';
+  /** A cloud over the sun: shown light 1 in the sun, 0 in shade, eased. */
+  let sunLight = 1;
+  let sunHidden = false;
+  let spellUntil = 0;
+
+  /** @param {CloudSky} s */
+  function dropSky(s) {
+    for (const part of s.parts) part.destroy({ children: true });
+  }
+
+  /** Lays out and puts up the sky for the current spec. @param {number} now @param {boolean} fade */
+  function buildSky(now, fade) {
+    if (!spec || !world) return null;
+    const season = world.season;
+    const layout = layOutSky(spec, rand, horizon, gridOf);
+    const base = new Container();
+    const front = new Container();
+    const mirrorBase = new Container();
+    const mirrorFront = new Container();
+    backdrops.addChild(base);
+    clouds.addChild(front);
+    mirrorClouds.addChild(mirrorBase, mirrorFront);
+    /** @type {CloudSky} */
+    const s = { key: specKey, spec, parts: [base, front, mirrorBase, mirrorFront], backdrop: null, backdropId: layout.backdrop, items: [], born: now, fade };
+    /** @param {Sprite} t @param {number} y */
+    const turn = (t, y) => {
+      t.scale.y = -1;
+      t.y = 2 * horizon - y;
+    };
+    if (layout.backdrop) {
+      const tex = cloudTexture(layout.backdrop, 'mid', 0, spec.palette, season);
+      const [a, b, ta, tb] = [0, 1, 2, 3].map(() => new Sprite(tex));
+      base.addChild(a, b);
+      mirrorBase.addChild(ta, tb);
+      turn(ta, 0);
+      turn(tb, 0);
+      s.backdrop = { a, b, ta, tb, x: Math.floor(rand() * SKY_W) };
+    }
+    for (const c of layout.clouds) {
+      const tex = cloudTexture(c.pattern, c.band, c.variant, spec.palette, season);
+      const sprite = new Sprite(tex);
+      const twin = new Sprite(tex);
+      sprite.y = c.y;
+      turn(twin, c.y);
+      front.addChild(sprite);
+      mirrorFront.addChild(twin);
+      s.items.push({ sprite, twin, x: c.x, y: c.y, w: c.w, h: c.h, speed: c.speed, grid: gridOf(c.pattern, c.band, c.variant) });
+    }
+    placeSky(s, 0);
+    return s;
+  }
+
+  /** Drifts a sky on by `dx` pixels, wrapping across the whole painting, strips included (D93). @param {CloudSky} s @param {number} dx */
+  function placeSky(s, dx) {
+    if (s.backdrop) {
+      const b = s.backdrop;
+      b.x = (b.x + dx * 0.35) % SKY_W;
+      const x = Math.round(b.x);
+      b.a.x = b.ta.x = x - SKY_W;
+      b.b.x = b.tb.x = x;
+    }
+    for (const c of s.items) {
+      c.x += dx * c.speed;
+      if (c.x > SKY_W) c.x -= SKY_W + c.w;
+      c.sprite.x = c.twin.x = Math.round(c.x);
+    }
+  }
+
+  /** @param {CloudSky} s @param {number} alpha */
+  const fadeSky = (s, alpha) => {
+    for (const part of s.parts) part.alpha = alpha;
+  };
+
+  /** Whether a cloud drawn now covers the point (in the painting's pixels). @param {number} x @param {number} y */
+  function cloudAt(x, y) {
+    if (!sky) return false;
+    if (sky.backdrop) return true;
+    const px = Math.round(x);
+    const py = Math.round(y);
+    for (const c of sky.items) {
+      const lx = px - Math.round(c.x);
+      const ly = py - c.y;
+      if (lx >= 0 && ly >= 0 && lx < c.w && ly < c.h && c.grid.data[ly * c.w + lx]) return true;
+    }
+    return false;
+  }
+
+  /** Builds the mirror's mask: the water that mirrors sky, under where the land is mirrored. */
+  function maskMirror() {
+    mirrorMask.clear();
+    if (!painting) return;
+    for (let x = 0; x < W; x++) {
+      const top = Math.max(horizon + 1, 2 * horizon - 1 - (painting.skyline[x] ?? horizon));
+      let y = top;
+      while (y < H && !painting.isWater(x, y)) y++;
+      if (y < H) mirrorMask.rect(x, y, 1, H - y);
+    }
+    mirrorMask.fill(0xffffff);
+  }
 
   /** @type {SkyPainting | null} */
   let painting = null;
@@ -361,6 +556,8 @@ export function createSkyLayer(rand) {
     } else texNew?.destroy(true);
     texNew = Texture.from(paintSkyColour(horizon, { altitude: target.sunAlt, bearing: target.sunBearing }, world.facing, world.season));
     colourNew.texture = texNew;
+    mirrorColour.texture = texNew;
+    mirrorColour.y = 2 * horizon;
   }
 
   /** Works out where the sun and the moon are for the world given. */
@@ -370,7 +567,10 @@ export function createSkyLayer(rand) {
     target.sunAlt = s.altitude;
     target.sunBearing = s.bearing;
     target.sunOff = world.facing === null ? 999 : wrap180(s.bearing - world.facing);
-    target.cover = COVER[Math.max(0, Math.min(COVER.length - 1, world.weather.clouds ?? 0))];
+    // What shows of the sun, the moon and the stars between and through the clouds (D170).
+    spec = skySpec(world.weather, world.season);
+    specKey = JSON.stringify([world.season, spec.level, spec.patterns, spec.drift, spec.low, horizon]);
+    target.cover = spec.veil;
     if (typeof world.fullMoonAt === 'number') {
       const m = moonPosition(world.time, world.fullMoonAt);
       target.moonAlt = m.altitude;
@@ -402,18 +602,26 @@ export function createSkyLayer(rand) {
    */
   function attach(next) {
     glitter.removeFromParent();
+    mirror.removeFromParent();
     painting = next;
     if (!next) return;
     horizon = next.horizon;
+    if (next.mirrorSky) {
+      next.waterLayer.addChild(mirror);
+      maskMirror();
+    }
     next.waterLayer.addChild(glitter);
     colourKey = '';
     snapNext = true;
+    // The clouds again for this horizon.
+    if (world) aim();
   }
 
   /** @param {number} now @param {number} dt */
   function update(now, dt) {
     if (!world || !painting) return;
     if (starsFor !== horizon) scatterStars();
+    const snapping = snapNext;
     const rate = snapNext ? 1 : Math.min(1, 0.03 * (Math.min(dt, 100) / 16.7));
     repaintColour(now);
     snapNext = false;
@@ -469,6 +677,48 @@ export function createSkyLayer(rand) {
       }
     }
 
+    // ---------- The clouds: a new weather's fade in over the old; all drift with the wind ----------
+    if (spec && (!sky || sky.key !== specKey)) {
+      if (oldSky) dropSky(oldSky);
+      oldSky = null;
+      if (sky && !snapping) {
+        oldSky = sky;
+        oldSky.born = now;
+      } else if (sky) dropSky(sky);
+      sky = buildSky(now, Boolean(oldSky));
+    }
+    if (snapping && oldSky) {
+      dropSky(oldSky);
+      oldSky = null;
+    }
+    const dx = (driftSpeed(world.weather.wind ?? 0, spec?.drift ?? 1) * Math.min(dt, 100)) / 1000;
+    if (sky) {
+      placeSky(sky, dx);
+      fadeSky(sky, sky.fade && !snapping ? clamp01((now - sky.born) / SKY_FADE_MS) : 1);
+      if (snapping) sky.fade = false;
+    }
+    if (oldSky) {
+      placeSky(oldSky, dx);
+      const left = 1 - (now - oldSky.born) / SKY_FADE_MS;
+      if (left <= 0) {
+        dropSky(oldSky);
+        oldSky = null;
+      } else fadeSky(oldSky, left);
+    }
+    const tint = cloudTint(shown.sunAlt, target.light);
+    backdrops.tint = clouds.tint = mirrorClouds.tint = tint;
+
+    // A cloud over the sun: the clouds drawn decide while the sun is on the
+    // picture; off it, spells of shade come and go as often as the sky says.
+    const sunOnPicture = facing !== null && Math.abs(shown.sunOff) <= half && shown.sunAlt > -2;
+    if (!spec || !sky || sky.backdrop || shown.sunAlt <= 0) sunHidden = false;
+    else if (sunOnPicture) sunHidden = cloudAt(sunX, sunY);
+    else if (now >= spellUntil || snapping) {
+      sunHidden = rand() < spec.sunHides;
+      spellUntil = now + (sunHidden ? 4000 + rand() * 8000 : 6000 + rand() * 14000);
+    }
+    sunLight = snapping ? (sunHidden ? 0 : 1) : sunLight + ((sunHidden ? 0 : 1) - sunLight) * Math.min(1, 0.05 * (Math.min(dt, 100) / 16.7));
+
     // ---------- The glitter: a low sun, or a moon bright enough, in front ----------
     if (now >= nextGlitter) {
       nextGlitter = now + 170;
@@ -480,7 +730,7 @@ export function createSkyLayer(rand) {
         source = {
           x: sunX,
           alt: Math.max(0, shown.sunAlt),
-          strength: clamp01((20 - shown.sunAlt) / 20) * shown.cover,
+          strength: clamp01((20 - shown.sunAlt) / 20) * shown.cover * sunLight,
           bright: SKY_LAYER.glitterSun,
           dim: shown.sunAlt < 6 ? SKY_LAYER.glitterWarm : SKY_LAYER.glitterSun,
           narrow: false,
@@ -549,17 +799,25 @@ export function createSkyLayer(rand) {
       nextTwinkle = 0;
     },
     /**
-     * What 12.5's clouds need to know: the world, the horizon row, where the
-     * sun is (its column on the painting, or null, and its height) and the
-     * stand-in cloud cover.
+     * The world, the horizon row, where the sun is (its column on the
+     * painting, or null, and its height), and what the clouds are (their spec).
      */
     cloudContext() {
-      return { world, horizon, width: W, sun: { x: world ? columnOf(world.facing, target.sunBearing) : null, altitude: target.sunAlt } };
+      return { world, horizon, width: W, sun: { x: world ? columnOf(world.facing, target.sunBearing) : null, altitude: target.sunAlt }, spec };
+    },
+    /** How much the light dims for a cloud over the sun, for the tints (src/scene/sky.js): it comes and goes. */
+    shade() {
+      return sky && !sky.backdrop && shown.sunAlt > 0 ? (1 - sunLight) * SUN_SHADE : 0;
+    },
+    /** How many of the water's glints still flick: fewer under an overcast, and in a cloud's shade (D170). */
+    glints() {
+      return spec ? spec.glints * (0.55 + 0.45 * sunLight) : 1;
     },
     /** What is drawn, for tools/verify.mjs, which can't read a WebGL canvas back. */
     describe() {
       const at = (/** @type {Sprite} */ s) => (s.visible ? `${s.x + Math.floor(s.width / 2)},${s.y + Math.floor(s.height / 2)}` : null);
-      return { sun: at(sun), moon: at(moon), stars: stars.visible, glitter: lastDrawn || null, horizon };
+      const clouds = sky ? { from: sky.spec.from, level: sky.spec.level, backdrop: sky.backdropId, count: sky.items.length } : null;
+      return { sun: at(sun), moon: at(moon), stars: stars.visible, glitter: lastDrawn || null, horizon, clouds, mirror: Boolean(mirror.parent) };
     },
   };
 }

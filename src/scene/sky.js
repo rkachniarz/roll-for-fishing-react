@@ -11,6 +11,7 @@
 import { Graphics } from 'pixi.js';
 import { WATER } from '../engine/features.js';
 import { darkness, warmth } from './light.js';
+import { cloudDusk } from './clouds.js';
 
 /**
  * @typedef {Object} World  What the sky needs to know.
@@ -56,6 +57,8 @@ export function createSky(below, above, size, rand) {
   let world = null;
   /** Each tint's alpha as shown, easing towards the target. */
   const shown = { night: 0, warm: 0, overcast: 0, season: 0 };
+  /** A cloud over the sun, from the sky layer (src/scene/sky-layer.js, D170): the light comes and goes. */
+  let shade = 0;
 
   /** @type {{ x: number, y: number, w: number, h: number }[]} */
   const clouds = [];
@@ -138,9 +141,10 @@ export function createSky(below, above, size, rand) {
     first = false;
     const ease = (/** @type {keyof typeof shown} */ key, /** @type {number} */ target) => (shown[key] += (target - shown[key]) * rate);
     const season = ease('season', seasonTint?.alpha ?? 0);
-    const overcast = ease('overcast', weather.clouds * 0.045 + (weather.precipitation >= 3 ? 0.06 : 0));
+    const overcast = ease('overcast', weather.clouds * 0.045 + (weather.precipitation >= 3 ? 0.06 : 0) + shade);
     const warm = ease('warm', warmth(h, world.sun));
-    const night = ease('night', darkness(h, world.sun));
+    // Black cloud (level 5) brings a dusk while it lasts (D160, D170): the night tint, part way.
+    const night = ease('night', Math.max(darkness(h, world.sun), cloudDusk(weather.clouds)));
     if (seasonTint && season > 0.005) tint.rect(0, 0, width, size).fill({ color: seasonTint.color, alpha: season });
     if (overcast > 0.005) tint.rect(0, 0, width, size).fill({ color: OVERCAST, alpha: overcast });
     if (warm > 0.005) tint.rect(0, 0, width, size).fill({ color: WARM, alpha: warm });
@@ -158,6 +162,10 @@ export function createSky(below, above, size, rand) {
       for (const d of drops) d.x = (d.x / width) * next;
       for (const c of clouds) c.x = (c.x / width) * next;
       width = next;
+    },
+    /** How much a cloud over the sun dims the light now (0 when no painted sky says so). @param {number} next */
+    setShade(next) {
+      shade = next;
     },
     /** The wind's level, for the waves. */
     wind: () => world?.weather.wind ?? 0,

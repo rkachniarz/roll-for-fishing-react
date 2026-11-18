@@ -24,6 +24,50 @@ Items with no note are left alone.
 
 Newest first.
 
+## Clouds that follow the weather (2026-11-19, D170, 12.5)
+
+Have a look at the art sheet's new section, **Clouds (12.5)**: every cloud level in every season over the reedy
+shore, rain cloud, black, fog and mist, three skies named by a description, and the still water mirroring them. All
+of it is Claude's first go (CR-2); calls Claude made:
+
+- **References** (Wikimedia Commons, local only in `docs/design/commons/`, which git ignores; a contact sheet per type,
+  `cloud-fewcumulus.jpg`, `cloud-scattered.jpg`, `cloud-broken.jpg`, `cloud-towering.jpg`, `cloud-stratocumulus.jpg`,
+  `cloud-cirrus.jpg`, `cloud-stratus.jpg`, `cloud-nimbostratus.jpg`, `cloud-storm.jpg`; the ten fetched at size are in
+  `docs/design/commons/clouds/` with `credits.csv`). Used for shapes only, never traced: *Cumulus Humilis Clouds -
+  Tennessee, USA - July 7, 2014.jpg* and *Cumulus-humilis.jpg* (heaps), *Cumulus congestus cloud Finland.jpg* and
+  *2016 Chmura Cumulus congestus 02.jpg* (towers), *2020-10-01 17 27 08 Stratocumulus clouds above a field in the
+  Dulles section of Sterling, Loudoun County, Virginia.jpg* (layers), *Cirrus at evening 7th Brigade Park Chermside
+  P1080258.jpg* (wisps), *2018-05-18 18 27 21 Low stratiform clouds (base near 3,000 feet AGL) with wavy, bumpy base…*
+  (sheets), *Nimbostratus Forest.jpg* (rain cloud), *Dark clouds above the hilly valley (Unsplash).jpg* (storm),
+  *Fishing boy in Laos 2.jpg* (broken). Nothing fell back to a placeholder for want of a reference.
+- **The library** (`src/scene/clouds.js`): heaps 3 patterns, towers 2, layers 3, wisps 3, sheets 2, rain cloud 2,
+  storm 2, plus 2 of scud and 2 of fog. Three sizes by distance (0.6, 1 and 1.5 pixels to the unit), towers never in
+  the far one; up to three shapes of each per session. Lit from above and a little from the left whatever the sun.
+- **The table** (`content/rules/sky.json`, marked a placeholder): summer heaps and towers, autumn grey layers and
+  sheets, winter wisps on clear-ish days and sheets, spring heaps; overcast is a grey sheet in spring, autumn and
+  winter and rain cloud in summer; black is a storm overcast; rain cloud also at overcast with precipitation 3+.
+  The palettes start from the reedy shore's old painted clouds, with greys and storm colours added.
+- **How many**: a few is about 5 clouds, scattered 12, broken 24 (40 times the cover, ±20%); over a backdrop 2–5
+  scud or layer pieces. Cover per level 0, 0.12, 0.3, 0.6, 1, 1 (agrees with moon.json's `cloudCover` within 0.15, a
+  test checks).
+- **Veil** (what shows of the sun, the moon and the stars): 1, 1, 1, 0.85, 0.1, 0; mist 0.15, thick fog 0.
+  **Glints left**: 1, 1, 0.9, 0.6, 0.25, 0.1, and down to 55% more in a cloud's shade.
+- **The sun hides**: off the picture, a cloud is over it 15% / 30% / 50% of the time at a few / scattered / broken
+  (40% for "Numerous clouds…", 55% for "the sun hides behind the clouds", 50% for "Sunlight breaks through in
+  patches"), in spells of 4–12 s, clear spells 6–20 s; it dims the light by 0.12 of the overcast tint.
+- **Black's dusk**: 0.38 of the night tint (night is 0.55). **Heavy downpour** (autumn) went to 5 with Downpour,
+  since it is one; say if it should stay at 4.
+- **Each described sky's patterns** are in `sky.json`'s `descriptions`: "Scattered clouds rush…" fast heaps (3× the
+  wind's drift), "Big, still clouds…" towers hardly moving (0.2×), "Low clouds hang heavy" low grey rolls, "A grey
+  blanket of cloud" a flat sheet even at level 3, the clear skies none, and so on.
+- **Drift**: 0.3 px/s plus 0.55 per level of wind, slower far off (0.45×) and faster for wisps (1.3×) and scud (1.6×);
+  backdrops at 0.35×; always left to right. A new weather's sky fades in over 5 s.
+- **Clouds at night and dusk** take a tint: warm with a low sun, purple-grey at twilight, dark blue at night, lighter
+  under a bright moon. Clouds lit orange from below wait (DEV_PLAN "Later").
+- **The still water's mirror** is the live sky laid over the baked one at 40%, only where the water mirrors sky (from
+  the painting's skyline): a cheap stand-in, not a true reflection; the reedy shore's open water mirrors nothing.
+- **The swamp** gets only the overcast tint it already had, and black's dusk.
+
 ## The sky as its own layer (2026-11-19, D169, 12.4)
 
 Have a look at the art sheet's new section, **The sky (12.4)**: the reedy shore and the still water at dawn,

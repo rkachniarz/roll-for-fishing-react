@@ -39,7 +39,7 @@
           },
           "temperature": { "$ref": "#/definitions/level", "description": "0 to 15." },
           "wind": { "$ref": "#/definitions/level", "description": "0 to 5." },
-          "clouds": { "$ref": "#/definitions/level", "description": "0 to 4." },
+          "clouds": { "$ref": "#/definitions/level", "description": "0 (clear) to 5 (black: a dusk of dark cloud, D160, D170)." },
           "precipitation": { "$ref": "#/definitions/level", "description": "0 to 4." },
           "tags": {
             "description": "What the levels can't tell, for the weather words in rules/fish-preferences.json: fog, snow (D101).",

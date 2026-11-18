@@ -10800,7 +10800,7 @@ export const content = {
           ],
           "temperature": 7,
           "wind": 2,
-          "clouds": 4,
+          "clouds": 5,
           "precipitation": 4,
           "changeSet": [
             5,
@@ -10917,7 +10917,7 @@ export const content = {
           ],
           "temperature": 4,
           "wind": 3,
-          "clouds": 4,
+          "clouds": 5,
           "precipitation": 4,
           "changeSet": [
             9,
@@ -11397,7 +11397,7 @@ export const content = {
           ],
           "temperature": 12,
           "wind": 1,
-          "clouds": 4,
+          "clouds": 5,
           "precipitation": 4,
           "changeSet": [
             7,
@@ -11962,7 +11962,7 @@ export const content = {
           ],
           "temperature": 3,
           "wind": 2,
-          "clouds": 4,
+          "clouds": 5,
           "precipitation": 4,
           "changeSet": [
             18,
@@ -14744,6 +14744,449 @@ export const content = {
           "rarity": 3
         }
       ]
+    },
+    "sky": {
+      "id": "sky",
+      "placeholder": true,
+      "levels": [
+        {
+          "cover": 0,
+          "veil": 1,
+          "glints": 1,
+          "sunHides": 0,
+          "dusk": 0
+        },
+        {
+          "cover": 0.12,
+          "veil": 1,
+          "glints": 1,
+          "sunHides": 0.15,
+          "dusk": 0
+        },
+        {
+          "cover": 0.3,
+          "veil": 1,
+          "glints": 0.9,
+          "sunHides": 0.3,
+          "dusk": 0
+        },
+        {
+          "cover": 0.6,
+          "veil": 0.85,
+          "glints": 0.6,
+          "sunHides": 0.5,
+          "dusk": 0
+        },
+        {
+          "cover": 1,
+          "veil": 0.1,
+          "glints": 0.25,
+          "sunHides": 0,
+          "dusk": 0
+        },
+        {
+          "cover": 1,
+          "veil": 0,
+          "glints": 0.1,
+          "sunHides": 0,
+          "dusk": 0.38
+        }
+      ],
+      "seasons": {
+        "spring": {
+          "palette": {
+            "light": "#f4f7fa",
+            "cloud": "#dfe7ef",
+            "shade": "#c3d0de",
+            "dark": "#a9b8cb",
+            "sheet": "#9aa6b4",
+            "sheetDark": "#7f8b9b",
+            "storm": "#4f5866",
+            "stormDark": "#343b47"
+          },
+          "levels": [
+            [],
+            [
+              "heap-a",
+              "heap-c",
+              "wisp-a"
+            ],
+            [
+              "heap-a",
+              "heap-b",
+              "heap-c"
+            ],
+            [
+              "heap-b",
+              "layer-b",
+              "tower-a"
+            ],
+            [
+              "sheet-a",
+              "layer-a"
+            ],
+            [
+              "storm-a",
+              "scud-a"
+            ]
+          ]
+        },
+        "summer": {
+          "palette": {
+            "light": "#f8fafc",
+            "cloud": "#e3eaf2",
+            "shade": "#c6d2e0",
+            "dark": "#a6b5c9",
+            "sheet": "#9ba8b8",
+            "sheetDark": "#7e8b9d",
+            "storm": "#4a5465",
+            "stormDark": "#2f3644"
+          },
+          "levels": [
+            [],
+            [
+              "heap-a",
+              "heap-c"
+            ],
+            [
+              "heap-a",
+              "heap-b",
+              "tower-a"
+            ],
+            [
+              "tower-a",
+              "tower-b",
+              "heap-b"
+            ],
+            [
+              "rain-a",
+              "rain-b",
+              "scud-a"
+            ],
+            [
+              "storm-a",
+              "storm-b"
+            ]
+          ]
+        },
+        "autumn": {
+          "palette": {
+            "light": "#e6e9ed",
+            "cloud": "#d1d6dd",
+            "shade": "#b6bec9",
+            "dark": "#9ba5b3",
+            "sheet": "#8f98a4",
+            "sheetDark": "#757e8b",
+            "storm": "#4a5059",
+            "stormDark": "#30343b"
+          },
+          "levels": [
+            [],
+            [
+              "heap-c",
+              "wisp-b"
+            ],
+            [
+              "layer-b",
+              "heap-b",
+              "wisp-c"
+            ],
+            [
+              "layer-a",
+              "layer-b",
+              "layer-c"
+            ],
+            [
+              "sheet-a",
+              "sheet-b",
+              "scud-b"
+            ],
+            [
+              "storm-b",
+              "scud-a"
+            ]
+          ]
+        },
+        "winter": {
+          "palette": {
+            "light": "#eef0f2",
+            "cloud": "#d2d7de",
+            "shade": "#a9b2bf",
+            "dark": "#858f9e",
+            "sheet": "#959ca6",
+            "sheetDark": "#7a818c",
+            "storm": "#50565f",
+            "stormDark": "#353a42"
+          },
+          "levels": [
+            [],
+            [
+              "wisp-a",
+              "wisp-c"
+            ],
+            [
+              "layer-c",
+              "heap-b",
+              "wisp-b"
+            ],
+            [
+              "layer-a",
+              "layer-b",
+              "layer-c"
+            ],
+            [
+              "sheet-a",
+              "sheet-b",
+              "scud-b"
+            ],
+            [
+              "storm-a",
+              "storm-b"
+            ]
+          ]
+        }
+      },
+      "wet": {
+        "precipitation": 3,
+        "level": 4,
+        "patterns": [
+          "rain-a",
+          "rain-b",
+          "scud-a"
+        ]
+      },
+      "fog": [
+        {
+          "max": 2,
+          "patterns": [
+            "fog-b"
+          ],
+          "veil": 0.15
+        },
+        {
+          "min": 3,
+          "patterns": [
+            "fog-a"
+          ],
+          "veil": 0
+        }
+      ],
+      "descriptions": {
+        "weather.spring.weathers.0.descriptions.0": {
+          "patterns": [],
+          "levels": {
+            "max": 0
+          }
+        },
+        "weather.spring.weathers.2.descriptions.2": {
+          "patterns": [
+            "storm-a",
+            "scud-a"
+          ],
+          "levels": {
+            "min": 5
+          },
+          "drift": 1.5
+        },
+        "weather.spring.weathers.4.descriptions.0": {
+          "patterns": [],
+          "levels": {
+            "max": 0
+          }
+        },
+        "weather.spring.weathers.5.descriptions.0": {
+          "patterns": [
+            "heap-b",
+            "heap-c"
+          ],
+          "levels": {
+            "min": 2,
+            "max": 3
+          },
+          "drift": 3
+        },
+        "weather.spring.weathers.5.descriptions.1": {
+          "patterns": [
+            "tower-a",
+            "tower-b"
+          ],
+          "levels": {
+            "min": 2,
+            "max": 3
+          },
+          "drift": 0.2
+        },
+        "weather.spring.weathers.7.descriptions.0": {
+          "patterns": [
+            "tower-b",
+            "heap-b"
+          ],
+          "levels": {
+            "min": 2,
+            "max": 3
+          }
+        },
+        "weather.spring.weathers.8.descriptions.0": {
+          "patterns": [
+            "rain-a",
+            "scud-a"
+          ],
+          "levels": {
+            "min": 4
+          }
+        },
+        "weather.summer.weathers.1.descriptions.0": {
+          "patterns": [
+            "layer-a",
+            "heap-b"
+          ],
+          "levels": {
+            "min": 3,
+            "max": 3
+          },
+          "drift": 0.6
+        },
+        "weather.summer.weathers.2.descriptions.0": {
+          "patterns": [
+            "heap-b",
+            "layer-b"
+          ],
+          "levels": {
+            "min": 2,
+            "max": 3
+          },
+          "drift": 2
+        },
+        "weather.summer.weathers.5.descriptions.0": {
+          "patterns": [
+            "heap-a",
+            "heap-b",
+            "heap-c"
+          ],
+          "levels": {
+            "min": 2,
+            "max": 3
+          },
+          "sunHides": 0.4
+        },
+        "weather.summer.weathers.11.descriptions.0": {
+          "patterns": [
+            "heap-a",
+            "tower-a"
+          ],
+          "levels": {
+            "min": 1,
+            "max": 3
+          },
+          "sunHides": 0.55
+        },
+        "weather.summer.weathers.13.descriptions.0": {
+          "patterns": [],
+          "levels": {
+            "max": 0
+          }
+        },
+        "weather.autumn.weathers.0.descriptions.0": {
+          "patterns": [
+            "layer-c",
+            "layer-a"
+          ],
+          "levels": {
+            "min": 3,
+            "max": 4
+          },
+          "low": true,
+          "drift": 0.5
+        },
+        "weather.autumn.weathers.6.descriptions.0": {
+          "patterns": [
+            "layer-b",
+            "heap-b"
+          ],
+          "levels": {
+            "min": 2,
+            "max": 3
+          },
+          "sunHides": 0.5
+        },
+        "weather.autumn.weathers.11.descriptions.0": {
+          "patterns": [
+            "layer-a",
+            "layer-c"
+          ],
+          "levels": {
+            "min": 3,
+            "max": 4
+          }
+        },
+        "weather.autumn.weathers.12.descriptions.0": {
+          "patterns": [
+            "layer-a",
+            "layer-b"
+          ],
+          "levels": {
+            "min": 3,
+            "max": 4
+          }
+        },
+        "weather.autumn.weathers.13.descriptions.0": {
+          "patterns": [],
+          "levels": {
+            "max": 0
+          }
+        },
+        "weather.winter.weathers.3.descriptions.0": {
+          "patterns": [
+            "sheet-a"
+          ],
+          "levels": {
+            "min": 3,
+            "max": 4
+          },
+          "drift": 0.4
+        },
+        "weather.winter.weathers.6.descriptions.0": {
+          "patterns": [],
+          "levels": {
+            "max": 0
+          }
+        },
+        "weather.winter.weathers.7.descriptions.0": {
+          "patterns": [
+            "layer-a",
+            "layer-b"
+          ],
+          "levels": {
+            "min": 3,
+            "max": 4
+          }
+        },
+        "weather.winter.weathers.9.descriptions.0": {
+          "patterns": [
+            "sheet-b"
+          ],
+          "levels": {
+            "min": 3,
+            "max": 4
+          }
+        },
+        "weather.winter.weathers.12.descriptions.0": {
+          "patterns": [
+            "layer-a",
+            "layer-c"
+          ],
+          "levels": {
+            "min": 3,
+            "max": 4
+          }
+        },
+        "weather.winter.weathers.18.descriptions.0": {
+          "patterns": [],
+          "levels": {
+            "max": 0
+          }
+        }
+      }
     },
     "spawning": {
       "id": "spawning",

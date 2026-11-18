@@ -90,7 +90,8 @@ and the art sheet at `/art.html` there.
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
-| `src/scene/sky-layer.js` | The sky behind the painted spots that show sky (D169): its colour by the sun's height, the stars, the sun and the moon in its phase, a place for 12.5's clouds, and the glitter on the water under a low sun or moon |
+| `src/scene/sky-layer.js` | The sky behind the painted spots that show sky (D169): its colour by the sun's height, the stars, the sun and the moon in its phase, the clouds drifting and fading in (D170), the still water's mirror of it, and the glitter on the water under a low sun or moon |
+| `src/scene/clouds.js` | Clouds that follow the weather (D170): the library of cloud patterns drawn as code (heaps, towers, layers, wisps, sheets, rain cloud, storm, scud, fog), which show for a weather (`skySpec`, from `content/rules/sky.json`) and how they are laid out |
 | `src/scene/pond.js` | Still water's scene, painted as code from photos of a pond (D115, D116); also on the art sheet |
 | `src/scene/swim.js` | Fish that swim: the swimming motion, the tank's and the surface's shoals (D129, D131); each species' swim style (D147), shoaling and scatter (D151), hiding (D152) |
 | `src/scene/fish-art.js` | Every fish drawn to swim, as code: side on and from the bank below the surface, its colours from its icon (D131) |

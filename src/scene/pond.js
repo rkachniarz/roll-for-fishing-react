@@ -244,6 +244,8 @@ const pick = (rand, list) => list[Math.floor(rand() * list.length)];
 /**
  * The sky the water mirrors: the photo's, in three bands dithered into each
  * other, lightest at the horizon. Never shown itself: the sky layer is (D169).
+ * Baked into the water as its base; the sky layer mirrors the live sky and its
+ * clouds faintly over it (`mirrorSky`, D170), a cheap stand-in for a true mirror.
  */
 function paintMirrorSky() {
   const canvas = makeCanvas(W, WL);
@@ -1000,8 +1002,9 @@ function paintReedPlant(plant, reach) {
  * in `back` just over the water for the sky layer's glitter, and `isWater`,
  * which of its pixels are open water, and `skyline`, the top of its land in
  * each column; the sky layer goes under `back`.
- * @typedef {{ back: Container, front: Container, update: (now: number, wind: number, crop: number, raining: boolean) => void,
- *   horizon?: number, skyline?: number[], waterLayer?: Container, isWater?: (x: number, y: number) => boolean }} Pond
+ * @typedef {{ back: Container, front: Container, update: (now: number, wind: number, crop: number, raining: boolean, light?: number) => void,
+ *   horizon?: number, skyline?: number[], waterLayer?: Container, isWater?: (x: number, y: number) => boolean, mirrorSky?: boolean }} Pond
+ *   `light`: how many of the glints still flick under the clouds (D170); `mirrorSky`: still water, mirroring the sky.
  */
 
 /**
@@ -1115,7 +1118,9 @@ export function paintPond(rand, season = 'autumn') {
     skyline,
     waterLayer,
     isWater: (_x, y) => y > WL,
-    update(now, wind, crop, raining) {
+    // Still water mirrors the live sky and its clouds (D170).
+    mirrorSky: true,
+    update(now, wind, crop, raining, light = 1) {
       for (const [s, sprite] of reeds.entries()) sprite.texture = reedFrames[s][gust(now, wind, s * SECTION + SECTION / 2)];
       birch.texture = birchFrames[gust(now, wind, 60)];
       beech.texture = beechFrames[gust(now, wind, 290)];
@@ -1123,7 +1128,9 @@ export function paintPond(rand, season = 'autumn') {
       lone.texture = loneFrames[gust(now, wind, 305)];
       water.texture = waterFrames[Math.floor(now / (520 / (1 + wind * 0.3))) % 3];
 
-      for (const glint of glints) {
+      for (const [i, glint] of glints.entries()) {
+        // Fewer flick under cloud (D170): the rest lie flat.
+        glint.sprite.visible = i < Math.round(glints.length * light);
         if (now < glint.next) continue;
         glint.frame = 1 - glint.frame;
         glint.sprite.texture = glint.frames[glint.frame];
@@ -1187,7 +1194,7 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
   /** Hangs the sky layer on the painting, if it shows sky. */
   const mount = () => {
     const p = pond;
-    skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater } : null);
+    skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater, mirrorSky: p.mirrorSky } : null);
     skyPainted.back.visible = p.horizon !== undefined;
   };
   mount();
@@ -1205,7 +1212,8 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
     const dt = lastFrame ? now - lastFrame : 16;
     sky.update(now, dt);
     lastFrame = now;
-    pond.update(now, sky.wind(), -view.x, raining);
+    sky.setShade(skyPainted.back.visible ? skyPainted.shade() : 0);
+    pond.update(now, sky.wind(), -view.x, raining, skyPainted.back.visible ? skyPainted.glints() : 1);
     if (skyPainted.back.visible) skyPainted.update(now, dt);
     const bob = Math.floor(now / 650) % 2;
     bobber.position.set(Math.round(BOBBER_AT.x - bobber.width / 2), BOBBER_AT.y - WATERLINE.near + bob);
@@ -1224,10 +1232,12 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
       update(now);
     },
     /**
-     * Paints the painting again for another of its seasons.
+     * Paints the painting again for another of its seasons, or another painting.
      * @param {string} next
+     * @param {(rand: () => number, season: any) => Pond} [nextPaint]
      */
-    repaint(next) {
+    repaint(next, nextPaint = paint) {
+      paint = nextPaint;
       skyPainted.attach(null);
       for (const layer of [pond.back, pond.front]) {
         layer.removeFromParent();
