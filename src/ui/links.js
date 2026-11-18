@@ -161,6 +161,18 @@ export function bagSlot(id, count) {
 }
 
 /**
+ * An item in an equipment slot's list (T.3, D164): its slot, its tooltip
+ * ending with how to equip it from there, a click or a second tap.
+ * @param {string} id
+ * @param {number} count
+ */
+export function pickSlot(id, count) {
+  const base = tipFor({ kind: 'item', id });
+  const hint = () => ({ ...base, lines: [...base.lines, { text: t(usingTouch() ? 'tip.pickTouch' : 'tip.pickMouse'), tone: /** @type {const} */ ('hint') }] });
+  return slotButton({ kind: 'item', id }, count, base, hint);
+}
+
+/**
  * @param {Thing} thing
  * @param {number} count
  * @param {import('./tooltip.js').Tip} tip  What it is called and coloured by.

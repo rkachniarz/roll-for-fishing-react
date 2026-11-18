@@ -8,11 +8,11 @@ import { t } from '../strings.js';
 import { levelFor } from '../engine/state.js';
 import { className } from '../engine/character.js';
 import { iconName, paintIcon } from '../scene/icons.js';
-import { bagSlot, bagTab, effectsText, hoursText, link, rarityColour, slot, tasteLines, weightText } from './links.js';
+import { bagSlot, bagTab, effectsText, hoursText, link, pickSlot, rarityColour, slot, tasteLines, weightText } from './links.js';
 import { bowlOf, canTrade, costStatus, offersFor } from '../engine/barter.js';
 import { vendorStatus } from '../engine/schedule.js';
-import { bindTip } from './tooltip.js';
-import { EQUIPMENT_SLOTS } from '../engine/equipment.js';
+import { bindTip, usingTouch } from './tooltip.js';
+import { EQUIPMENT_SLOTS, fits } from '../engine/equipment.js';
 import { offers, owedLevels } from '../engine/perks.js';
 import { completion, knownKey, locationList } from '../engine/knowledge.js';
 import { setPieces } from '../engine/events.js';
@@ -49,6 +49,36 @@ function equipSlot(state, key) {
   node.dataset.drop = `equip:${key}`;
   node.dataset.slot = key;
   return node;
+}
+
+/**
+ * The list a slot on the paper doll opens (T.3, D164), as WoW's flyout: every
+ * item in the bags that fits it. A mouse sees an item's tooltip on hover and
+ * equips with a click; a finger sees it on the first tap and equips with a
+ * second tap on the same item. A key press equips at once.
+ * @param {GameState} state
+ * @param {string} key  The slot.
+ * @param {(index: number) => void} onPick  Called with the item's index into the bags.
+ */
+export function slotFlyout(state, key, onPick) {
+  const fitting = state.bags.map((b, i) => ({ ...b, i })).filter((b) => fits(b.id, key));
+  const box = el('div', { className: 'flyout' });
+  box.dataset.flyout = key;
+  if (!fitting.length) {
+    box.append(el('p', { className: 'flyout-none', textContent: t('slot.nothingFits') }));
+    return box;
+  }
+  /** The item a finger has tapped once: the next tap on it equips. */
+  let armed = -1;
+  for (const b of fitting) {
+    const node = pickSlot(b.id, b.count);
+    node.addEventListener('click', (e) => {
+      if (e.detail === 0 || !usingTouch() || armed === b.i) onPick(b.i);
+      else armed = b.i;
+    });
+    box.append(node);
+  }
+  return box;
 }
 
 /**

@@ -871,6 +871,7 @@ body {
 /* ---------- The paper doll and the bag (D83) ---------- */
 
 .doll {
+  position: relative;
   display: grid;
   grid-template-columns: var(--slot) 1fr var(--slot);
   gap: 8px;
@@ -887,9 +888,51 @@ body {
   margin-top: 0;
 }
 
-/* An empty slot says what goes in it, where WoW draws a silhouette. */
+/* An empty slot says what goes in it, where WoW draws a silhouette. A tap
+   opens its list all the same (D164). */
 .slot.equip-empty {
   border-style: dashed;
+  cursor: pointer;
+}
+
+/* A slot's list (D164), as WoW's flyout: beside the slot, over the stats, a
+   row that scrolls sideways when it doesn't fit. Its top and side come from
+   showFlyout in src/main.js. */
+.flyout {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  gap: 6px;
+  margin-top: -6px;
+  padding: 4px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  background: var(--tip-bg);
+  border: 2px solid var(--panel-edge);
+  border-radius: 3px;
+}
+
+.flyout .slot {
+  flex: none;
+}
+
+/* With a mouse there's room to wrap: a wheel doesn't scroll sideways. */
+@media (min-width: 900px) {
+  .flyout {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
+.flyout-none {
+  margin: 0;
+  padding: 0 4px;
+  min-height: var(--slot);
+  display: flex;
+  align-items: center;
+  font-size: calc(13px * var(--type));
+  font-style: italic;
+  color: var(--muted);
 }
 
 .slot-name {

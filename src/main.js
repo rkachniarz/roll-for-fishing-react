@@ -37,7 +37,7 @@ import { createLog } from './ui/log.js';
 import { bagTab, fishName, hoursText, link, rarityColour, showStatusWhen, showTasteWhen, weightText } from './ui/links.js';
 import { fishWeight } from './engine/fish.js';
 import { createMap } from './ui/map.js';
-import { bagPane, bucketPane, journalPane, menuPane, playerPane, settingsPane, shopPane } from './ui/panels.js';
+import { bagPane, bucketPane, journalPane, menuPane, playerPane, settingsPane, shopPane, slotFlyout } from './ui/panels.js';
 import { floatText } from './ui/floater.js';
 import { bindTip, hideTip } from './ui/tooltip.js';
 import { eventIcon, iconName, paintIcon, weatherIcon } from './scene/icons.js';
@@ -1050,6 +1050,8 @@ function renderHud() {
 /** @typedef {'player' | 'journal' | 'map' | 'bucket' | 'menu' | 'settings' | 'dev' | 'shop'} Pane */
 /** @type {Pane | null} */
 let pane = null;
+/** The paper doll's slot whose list is open (D164): kept across redraws, so it shows what the bags hold now. */
+let flyoutKey = /** @type {string | null} */ (null);
 /** The bag opens over the log, alongside any pane (D83). */
 let bagOpen = false;
 /** @type {import('./ui/panels.js').BagTab} */
@@ -1099,9 +1101,10 @@ function closedByTap() {
   return true;
 }
 
-/** Escape closes the pane over the scene first, then the bag. */
+/** Escape closes a slot's list first (D164), then the pane over the scene, then the bag. */
 function closePane() {
-  if (pane) pane = null;
+  if (flyoutKey) closeFlyout();
+  else if (pane) pane = null;
   else if (bagOpen) bagOpen = false;
   else return;
   leftShop();
@@ -1134,6 +1137,7 @@ const mapView = createMap($('mapPopup'), {
 });
 
 function renderPane() {
+  if (pane !== 'player') flyoutKey = null;
   renderBag();
   const box = $('pane');
   box.hidden = !pane || !state || pane === 'map';
@@ -1163,6 +1167,7 @@ function renderPane() {
   switch (pane) {
     case 'player':
       body.replaceChildren(...playerPane(s, valuesFor(s, extraSources()).flat, learnPerk));
+      if (flyoutKey) showFlyout(s);
       break;
     case 'journal':
       body.replaceChildren(...journalPane(s, completionShown(s, valuesFor(s, extraSources()))));
@@ -1354,6 +1359,79 @@ function quickMove(from) {
     changeItems(unequip(state, spot.key));
   }
 }
+
+// ---------- A slot's list, as WoW's flyout (T.3, D164) ----------
+
+/**
+ * Draws the open slot's list beside its slot on the paper doll, over the
+ * stats: to the right of the left column, to the left of the right one.
+ * @param {GameState} s
+ */
+function showFlyout(s) {
+  const doll = document.getElementById('doll');
+  const at = /** @type {HTMLElement | null} */ (doll?.querySelector(`[data-slot="${flyoutKey}"]`) ?? null);
+  if (!doll || !at || !flyoutKey) {
+    flyoutKey = null;
+    return;
+  }
+  doll.querySelector('.flyout')?.remove();
+  const box = slotFlyout(s, flyoutKey, (index) => pickFor(/** @type {string} */ (flyoutKey), index));
+  const gap = 4;
+  box.style.top = `${at.offsetTop}px`;
+  // Between the two columns, so the other column's slots stay in sight; it scrolls sideways.
+  box.style.maxWidth = `${doll.clientWidth - 2 * (at.offsetWidth + gap)}px`;
+  if (at.offsetLeft < doll.clientWidth / 2) box.style.left = `${at.offsetLeft + at.offsetWidth + gap}px`;
+  else box.style.right = `${doll.clientWidth - at.offsetLeft + gap}px`;
+  doll.append(box);
+}
+
+function closeFlyout() {
+  flyoutKey = null;
+  document.querySelector('.flyout')?.remove();
+}
+
+/**
+ * An item picked from a slot's list: equipped as anywhere else, never with
+ * the line out (D83).
+ * @param {string} key  The slot.
+ * @param {number} index  Into the bags.
+ */
+function pickFor(key, index) {
+  if (!state) return;
+  if (lineOut()) {
+    showError($('errors'), t('error.busy'));
+    return;
+  }
+  closeFlyout();
+  changeItems(equip(state, index, key));
+}
+
+// A tap or a left click on a slot on the paper doll opens its list, or closes
+// it again. A long press or a right-click is the quick move (D163): it fires
+// no click. The slot's own tooltip shows as before (bindTip).
+$('paneBody').addEventListener('click', (e) => {
+  const at = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest?.('#doll [data-slot]'));
+  if (!at || pane !== 'player' || !state) return;
+  const key = /** @type {string} */ (at.dataset.slot);
+  if (flyoutKey === key) {
+    closeFlyout();
+    return;
+  }
+  flyoutKey = key;
+  showFlyout(state);
+});
+
+// A press anywhere but the list and its own slot closes the list.
+document.addEventListener(
+  'pointerdown',
+  (e) => {
+    if (!flyoutKey) return;
+    const target = /** @type {Element} */ (e.target);
+    if (target.closest?.('.flyout') || target.closest?.(`#doll [data-slot="${flyoutKey}"]`)) return;
+    closeFlyout();
+  },
+  true,
+);
 
 // ---------- Drawing it all ----------
 

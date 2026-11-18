@@ -1266,6 +1266,71 @@ await check('equipment by touch: a long press equips (D163)', PHONE, '?dev&seed=
   await page.screenshot({ path: 'dist/verify/tooltip-effects.png' });
 });
 
+// ---------- A slot's list, as WoW's flyout (T.3, D164) ----------
+
+/** An item in the open slot's list, by its name. */
+const flyoutSlot = (name) => `.flyout .slot[aria-label^="${name}"]`;
+
+await check('slot list by touch: a tap opens it, a second tap equips (D164)', PHONE, '?dev&seed=1', async (page) => {
+  await closePane(page);
+  await page.click('#player');
+  // A new game's bags hold no hat: the list says so.
+  await page.tap('[data-slot="hat"]');
+  report('slot list by touch: nothing fits, and it says so', ((await page.textContent('.flyout')) ?? '') === 'Nothing in your bags fits here.', (await page.textContent('.flyout')) ?? '');
+  await page.tap('.who');
+  report('slot list by touch: a tap elsewhere closes it', (await page.locator('.flyout').count()) === 0);
+
+  await addEquippables(page);
+  await page.click('#player');
+  await page.tap('[data-slot="line"]');
+  report('slot list by touch: a tap on a slot opens its list', await page.isVisible('.flyout'));
+  const names = await page.locator('.flyout .slot').evaluateAll((els) => els.map((e) => e.getAttribute('aria-label')));
+  report('slot list by touch: every line in the bags, and only lines', names.length > 0 && names.some((n) => n?.startsWith('Horsehair line')) && !names.some((n) => n?.startsWith('Willow rod')), names.join(', '));
+  const box = await page.locator('.flyout').boundingBox();
+  report('slot list by touch: it fits the phone', Boolean(box && box.x >= 0 && box.x + box.width <= 390), JSON.stringify(box));
+  await page.screenshot({ path: 'dist/verify/slot-list-phone.png' });
+
+  await page.tap(flyoutSlot('Horsehair line'));
+  report('slot list by touch: the first tap shows the tooltip', ((await page.textContent('.tip')) ?? '').startsWith('Horsehair line'));
+  const hint = await page.locator('.tip .tip-hint').allTextContents();
+  report('slot list by touch: it says "Tap again to equip"', hint.join() === 'Tap again to equip', hint.join());
+  report('slot list by touch: and equips nothing yet', (await slotLabel(page, 'line')) === 'Line: Empty', await slotLabel(page, 'line'));
+  await page.tap(flyoutSlot('Horsehair line'));
+  report('slot list by touch: the second tap equips', (await slotLabel(page, 'line')) === 'Horsehair line', await slotLabel(page, 'line'));
+  report('slot list by touch: and closes the list', (await page.locator('.flyout').count()) === 0);
+  report('slot list by touch: out of the bags', (await page.locator('#bagBody .slot[aria-label^="Horsehair line"]').count()) === 0);
+});
+
+await check('slot list with a mouse: a click opens it, a click equips (D164)', DESKTOP, '?dev&seed=1&wait=6000', async (page, tap) => {
+  await addEquippables(page);
+  await page.click('#player');
+  await page.click('[data-slot="rod"]');
+  report('slot list with a mouse: a click on a slot opens its list', await page.isVisible('.flyout'));
+  await page.hover(flyoutSlot('Willow rod'));
+  report('slot list with a mouse: hover shows the tooltip', ((await page.textContent('.tip')) ?? '').startsWith('Willow rod'));
+  const hint = await page.locator('.tip .tip-hint').allTextContents();
+  report('slot list with a mouse: it says "Click to equip"', hint.join() === 'Click to equip', hint.join());
+  await page.screenshot({ path: 'dist/verify/slot-list.png' });
+  await page.click(flyoutSlot('Willow rod'));
+  report('slot list with a mouse: a click equips', (await slotLabel(page, 'rod')) === 'Willow rod', await slotLabel(page, 'rod'));
+  report('slot list with a mouse: and the old rod is in the list next time', await (async () => {
+    await page.click('[data-slot="rod"]');
+    return (await page.locator(flyoutSlot('A stick with some string tied to it')).count()) === 1;
+  })());
+  await page.click('[data-slot="rod"]');
+  report('slot list with a mouse: a second click on the slot closes it', (await page.locator('.flyout').count()) === 0);
+
+  // Not with the line out, as anywhere else.
+  await closePane(page);
+  await tap();
+  await page.waitForSelector('body[data-phase="waiting"]');
+  await page.click('#player');
+  await page.click('[data-slot="rod"]');
+  await page.click(flyoutSlot('A stick with some string tied to it'));
+  report('slot list with a mouse: not while the line is out', (await slotLabel(page, 'rod')) === 'Willow rod', await slotLabel(page, 'rod'));
+  report('slot list with a mouse: and says so', ((await page.textContent('#errors')) ?? '').includes("can't change equipment"));
+});
+
 // ---------- Events (7.1-7.3, D84) ----------
 
 await check('events: the frog, from the event meter', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {

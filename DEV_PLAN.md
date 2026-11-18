@@ -32,13 +32,14 @@ per task goes in docs/decisions.md.
   slightly greyed-out italics. Claude's call: with a mouse it reads "Right-click to equip" (on REVIEW.md); the tooltip
   goes by the last pointer used (`lastPointer` in `src/main.js`). *Landed (D163):* `hold` in `src/ui/drag.js`,
   `quickMove` in `src/main.js`, `bagSlot` in `src/ui/links.js`.
-- [ ] **T.3** Pick from a slot, as WoW's flyout. *The owner's words:* a tap or left click on a slot in the character
+- [x] **T.3** Pick from a slot, as WoW's flyout. *The owner's words:* a tap or left click on a slot in the character
   pane opens a list of every unequipped item in the bags that fits that slot; horizontally scrollable on a phone.
   *The owner's answers (2026-11-18):* **with a mouse,** hovering an item in the list shows its tooltip and a click
   equips it; **on a phone, the first tap shows the item's tooltip and a second tap on the same item equips it.** A tap
   elsewhere closes the list. Equipping from it follows the same rules as anywhere else (not with the line out,
   `error.busy`). Claude's calls, for REVIEW.md: what the list shows when nothing fits, and how the equipped item's own
-  tooltip is still reached on a phone.
+  tooltip is still reached on a phone. *Landed (D164):* `slotFlyout` in `src/ui/panels.js`, `showFlyout` and
+  `pickFor` in `src/main.js`, `pickSlot` in `src/ui/links.js`.
 - [ ] **T.4** The stew cooks, and the inn says good morning. *The owner's words:* fish put in the perpetual stew count
   for a bowl only **two game hours after they went in** (cooking); putting a fish in gives a message on the lines of
   "Thank you for the contribution - come back in some time to taste it", and **no longer leads to eating at once.**

@@ -24,6 +24,27 @@ Items with no note are left alone.
 
 Newest first.
 
+## A slot's list, as WoW's flyout (2026-11-18, D164, T.3)
+
+On the phone and the desktop: `dist/verify/slot-list-phone.png`, `dist/verify/slot-list.png` after
+`npm run verify "slot list"`. Calls Claude made:
+
+- **When nothing fits, the list still opens** and says "Nothing in your bags fits here." in muted italics, so a tap
+  never seems to do nothing.
+- **The equipped item's tooltip on a phone:** the same tap that opens the list shows it, as before, above the slot
+  while the list opens beside it. A second tap on the slot closes both; tapping an item in the list swaps to its
+  tooltip.
+- **Each item's tooltip ends with how to equip it from the list,** "Tap again to equip" / "Click to equip", like the
+  bags' "Long press to equip".
+- **Where it sits:** beside the slot, over the stats, between the two columns so the other column stays in sight. A
+  phone's row scrolls sideways; on a wide screen (900 px and up) it wraps into more rows instead, since a mouse
+  wheel doesn't scroll sideways.
+- **It closes** on a pick, on a second tap on its slot, on a press anywhere else (that press still does what it
+  does, e.g. a tap on a bag item shows its tooltip), and on Escape. With the line out a pick is refused with
+  "busy" and the list stays open.
+- **A key press on an item equips at once** (no tooltip step), as a keyboard has no hover.
+- **The list is in the tooltip's colours** (`--tip-bg`, `--panel-edge`), each theme its own.
+
 ## A long press equips, on a phone (2026-11-18, D163, T.2)
 
 Calls Claude made:

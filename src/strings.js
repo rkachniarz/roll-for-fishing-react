@@ -191,6 +191,7 @@ const UI_STRINGS = {
   'slot.trinket1': 'Trinket',
   'slot.trinket2': 'Trinket',
   'slot.none': 'Empty',
+  'slot.nothingFits': 'Nothing in your bags fits here.',
 
   // ---- Errors, in red over the scene, as WoW's (D83) ----
   'error.noRod': 'Must have a fishing pole equipped.',
@@ -431,6 +432,8 @@ const UI_STRINGS = {
   'tip.useTouch': 'Long press to use',
   'tip.equipMouse': 'Right-click to equip',
   'tip.equipTouch': 'Long press to equip',
+  'tip.pickMouse': 'Click to equip',
+  'tip.pickTouch': 'Tap again to equip',
   'duration.casts': '{n} casts',
   'duration.attempts': '{n} attempts',
   'duration.minutes': '{hours}',

@@ -148,6 +148,9 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   a right-click, or a long press on touch, is the quick move: equip, drink, or back to the bags. The long press is a
   timer and Android's `contextmenu` both, whichever comes first, once per press (iOS may send no `contextmenu`), and
   the click after it is swallowed. On a fish in the bucket a long press opens the fish's options menu instead (R21.1).
+- **A tap or left click on a paper-doll slot opens its list (D164),** as WoW's flyout: the slot is kept in
+  `flyoutKey` in `src/main.js` and the list redrawn with the pane, so it never shows stale bags. It relies on the
+  swallowed click above: a long press or right-click on a slot must fire no click, or it would open the list too.
   The hint at the foot of a bag item's tooltip goes by `usingTouch()` in `src/ui/tooltip.js`.
 - **Events are `.md`, not JSON (D45, D84).** `tools/event-text.mjs` reads them and owns the vocabulary;
   `docs/events.md` is the author's guide, so a new word goes in both. The engine imports only typedefs from it.
