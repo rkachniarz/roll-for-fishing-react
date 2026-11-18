@@ -8,6 +8,14 @@ Item ideas, a hundred cut to twenty, are in [ideas/items.md](ideas/items.md).
 
 Newest first.
 
+## Other guests at the stew (2026-11-18)
+
+The stew never spoils: it is perpetual (D165). What a player leaves in the pot runs out another way: other guests at
+the inn add their own catch and eat from it too, so a pot left for days isn't all the player's when they come back.
+
+**Needs:** guests at the inn, and a pot that changes while the player is away (likely with each part of the day, as
+the pools do in `stepTime`); not in the plan yet.
+
 ## The junk collector
 
 A seemingly crazy person approaches the player and offers to take their junk. If the player accepts, they lose all
