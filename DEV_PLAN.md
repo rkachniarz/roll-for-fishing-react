@@ -59,7 +59,7 @@ the sun and moon are. **Done in this order, one task at a time**, with the owner
 The map comes first because it gives every painting a compass facing, and the sun, the moon and the clouds' light
 all depend on which way the player looks.
 
-- [ ] **12.1** The map (was 8.1's map; the owner's hand drawing): the lake and the river with their spots on them,
+- [x] **12.1** The map (was 8.1's map; the owner's hand drawing): the lake and the river with their spots on them,
   in the map pane in place of today's plain list. Each spot gets a compass facing (`look.facing`, degrees), usually
   looking across the water from the bank it is on, so spots on opposite shores look opposite ways. The river spots'
   facings (across the river, or up or down it) wait on the owner's reference pictures (Q-42). A placeholder drawing
@@ -71,6 +71,8 @@ all depend on which way the player looks.
   still water 35° (NE), rocky shore 335° (NNW), open water 270° (W), deep water 210° (SSW), river mouth 95° (E),
   lower river 60° (ENE), upper river 25° (NNE), the tower's first pool 180° (S). The swamp and the town have none.
   **One width of view for every spot**, Claude's pick 60° (REVIEW.md). Q-42 is settled by this.
+  *Landed (D166):* `look.facing` on each spot in `content/locations/`, `VIEW`, `facingOf` and `acrossView` in
+  `src/engine/sky.js`, `test/sky.test.js`.
 - [ ] **12.2** The sun and the moon as engine numbers, with tests: their height and bearing at every half hour, as
   seen from Gdynia (54.52° N, 18.53° E), the latitude that already sets sunrise and sunset (`SUN` in
   `src/engine/time.js`, D85); the moon's phase. Worked out from the clock, never stored, except the moon's start if
@@ -115,6 +117,10 @@ all depend on which way the player looks.
     after a reload isn't needed: the patterns draw from the scenery stream.
   - **The swamp:** no sky; the cloud level may darken its tint a little, nothing more.
   - **Later:** clouds lit orange from below at dusk; the tints do for now.
+
+**Where things stand (2026-11-18):** 12.1 is done: the map (D161) and every spot that shows sky has its compass
+facing, with one 60° width of view for all (D166, `src/engine/sky.js`); nothing draws from the facings yet. 12.2,
+the sun and moon as engine numbers, is next.
 
 ## Phase 11, what the real species do
 
@@ -294,7 +300,7 @@ Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D
 - **Q-40 How are hidden numbers revealed?** Hidden rolls stay hidden until something reveals them (R5.2). The number
   a fish needed shows from level 1 (D107). Still open: what reveals the bite and treasure rolls and Luck (a perk, an
   item, a class?), and where those rolls would show; the game values to reveal them are in.
-- **Q-41** and **Q-42** were answered on 2026-11-18 (under 12.2 and 12.1); their decisions are recorded as those tasks land.
+- **Q-41** and **Q-42** were answered on 2026-11-18 (under 12.2 and 12.1); Q-42 → D166, Q-41's decision is recorded as 12.2 lands.
 
 ---
 

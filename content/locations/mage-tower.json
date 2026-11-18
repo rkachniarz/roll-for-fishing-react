@@ -35,6 +35,7 @@
       "name": "the first pool",
       "map": { "x": 221, "y": 56 },
       "look": {
+        "facing": 180,
         "tint": "#5a3f8a",
         "tintAlpha": 0.25,
         "shapes": [

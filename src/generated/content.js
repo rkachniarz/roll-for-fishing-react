@@ -8638,6 +8638,7 @@ export const content = {
             "name"
           ],
           "look": {
+            "facing": 90,
             "painting": "reedy"
           },
           "water": {
@@ -8915,6 +8916,7 @@ export const content = {
             "name"
           ],
           "look": {
+            "facing": 35,
             "painting": "pond"
           },
           "water": {
@@ -9072,6 +9074,7 @@ export const content = {
             "name"
           ],
           "look": {
+            "facing": 335,
             "tint": "#4b5a62",
             "tintAlpha": 0.15,
             "shapes": [
@@ -9226,6 +9229,7 @@ export const content = {
             "name"
           ],
           "look": {
+            "facing": 270,
             "tint": "#2a5a7a",
             "tintAlpha": 0.2,
             "shapes": []
@@ -9349,6 +9353,7 @@ export const content = {
             "name"
           ],
           "look": {
+            "facing": 210,
             "tint": "#0d2638",
             "tintAlpha": 0.4,
             "shapes": []
@@ -9492,6 +9497,7 @@ export const content = {
             "y": 56
           },
           "look": {
+            "facing": 180,
             "tint": "#5a3f8a",
             "tintAlpha": 0.25,
             "shapes": [
@@ -9613,6 +9619,7 @@ export const content = {
             "name"
           ],
           "look": {
+            "facing": 25,
             "tint": "#6aa0a8",
             "tintAlpha": 0.15,
             "shapes": [
@@ -9756,6 +9763,7 @@ export const content = {
             "name"
           ],
           "look": {
+            "facing": 60,
             "tint": "#5a5030",
             "tintAlpha": 0.22,
             "shapes": [
@@ -9932,6 +9940,7 @@ export const content = {
             "name"
           ],
           "look": {
+            "facing": 95,
             "tint": "#3a6f80",
             "tintAlpha": 0.15,
             "shapes": [

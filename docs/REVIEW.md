@@ -24,6 +24,20 @@ Items with no note are left alone.
 
 Newest first.
 
+## The spots' compass facings (2026-11-18, D166, 12.1)
+
+Nothing shows it yet; the sun, the moon and the sky (12.2, 12.4) will use it. Calls Claude made:
+
+- **One width of view for every spot: 60°** of compass across the play area (`VIEW` in `src/engine/sky.js`).
+  About what a phone camera sees across; wide enough that the sun or moon is in the picture for a good part of
+  its day at a spot facing its way, narrow enough that it isn't always there. A wider view (90°) would show the
+  sun and moon more often but squeeze their path across the picture.
+- **The facings are whole degrees,** as you gave them. A facing is the middle of the picture; the side strips
+  either side of the play area (D93) count as beyond the view's edges.
+- **Which spots must have one:** every painted spot but the swamp, and every spot on the map that isn't the town.
+  The placeholder spots (rocky shore, open and deep water, the river, the tower's pool) have theirs already, so
+  they are ready when painted.
+
 ## The stew cooks, and the inn says good morning (2026-11-18, D165, T.4)
 
 `dist/verify/town-morning.png` after `npm run verify town`. Calls Claude made:

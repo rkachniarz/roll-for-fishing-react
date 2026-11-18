@@ -84,6 +84,7 @@ and the art sheet at `/art.html` there.
 | `src/engine/pool.js` | The fish under the surface at a spot (D139, D156, D157): stocking its pool, every pool's turn with each part of the day (leaving, predators, arrivals, spawners), the drift and the shoals, its room, which fish show as shadows and the one a cast lands on, the wizard's Look Underwater |
 | `src/engine/dive.js` | The Fighter's dive (R20.3, D128): the fish, their rolls, strikes, coming up |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
+| `src/engine/sky.js` | Which way each spot looks (`look.facing`) and the shared 60° width of view; where a compass bearing falls in the picture (D166) |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |

@@ -70,6 +70,7 @@
         "name"
       ],
       "look": {
+        "facing": 90,
         "painting": "reedy"
       },
       "water": {
@@ -341,6 +342,7 @@
         "name"
       ],
       "look": {
+        "facing": 35,
         "painting": "pond"
       },
       "water": {
@@ -495,6 +497,7 @@
         "name"
       ],
       "look": {
+        "facing": 335,
         "tint": "#4b5a62",
         "tintAlpha": 0.15,
         "shapes": [
@@ -646,6 +649,7 @@
         "name"
       ],
       "look": {
+        "facing": 270,
         "tint": "#2a5a7a",
         "tintAlpha": 0.2,
         "shapes": []
@@ -766,6 +770,7 @@
         "name"
       ],
       "look": {
+        "facing": 210,
         "tint": "#0d2638",
         "tintAlpha": 0.4,
         "shapes": []
