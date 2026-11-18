@@ -1,18 +1,21 @@
 // @ts-check
-// Dragging items between the bags and the equipment slots (docs/spec.md,
-// R8.1, R8.7; D83). A mouse drags as soon as it moves; a finger has to hold
-// still for a moment first (a long-press), so a swipe still scrolls the pane.
-// A tap that never became a drag stays a tap: it shows the tooltip.
+// Dragging items between the bags and the equipment slots with a mouse
+// (docs/spec.md, R8.1, R8.7; D83), and the quick move: a right-click, or a
+// long press on a touch screen, which never drags (D163). A finger that moves
+// before the long press is a scroll; a tap stays a tap: it shows the tooltip.
 //
 // What can be dragged, and where to, is written on the elements:
-//   data-drag="bag:3" / "equip:rod"   a source: its icon follows the pointer
+//   data-drag="bag:3" / "equip:rod"   a source: its icon follows the mouse
 //   data-drop="bag:3" / "bag:end" / "equip:rod"   a target
-// The page decides what a drop does (onDrop).
+// The page decides what a drop does (onDrop), and what the quick move does (onUse).
 
 import { hideTip } from './tooltip.js';
 
-/** How long a finger holds still before it drags, in ms. */
-const LONG_PRESS = 350;
+/**
+ * How long a finger holds still for a long press, in ms. Android fires
+ * contextmenu about then too; iOS may not, so the timer is the sure way.
+ */
+const LONG_PRESS = 500;
 /** How far a pointer may wander before a press counts as a move, in CSS px. */
 const SLOP = { mouse: 4, touch: 10 };
 
@@ -20,15 +23,18 @@ const SLOP = { mouse: 4, touch: 10 };
  * @typedef {Object} DragOptions
  * @property {(from: string, to: string) => void} onDrop  Called with the two data values.
  * @property {(from: string) => string[]} [targetsFor]  Drop targets to light up while dragging.
+ * @property {(from: string) => void} [onUse]  A right-click, or a long press on touch (D163): once per press.
  */
 
 /** @type {DragOptions | null} */
 let options = null;
 /**
  * @type {{ el: HTMLElement, from: string, id: number, x: number, y: number, mouse: boolean,
- *   timer: number | null, ghost: HTMLElement | null, over: HTMLElement | null } | null}
+ *   timer: number | null, ghost: HTMLElement | null, over: HTMLElement | null, held: boolean } | null}
  */
 let press = null;
+/** Whether the last press was a mouse's: a right-click doesn't start a press. */
+let lastMouse = true;
 /** A drag just ended: the click that follows it isn't a tap. */
 let swallowClickUntil = 0;
 
@@ -43,14 +49,24 @@ export const dragging = () => Boolean(press?.ghost);
 document.addEventListener('pointerdown', (e) => {
   // A new press is never the tail of the last drag.
   swallowClickUntil = 0;
+  lastMouse = e.pointerType === 'mouse';
   const el = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest?.('[data-drag]'));
   if (!el || e.button !== 0 || !options) return;
   const mouse = e.pointerType === 'mouse';
-  press = { el, from: /** @type {string} */ (el.dataset.drag), id: e.pointerId, x: e.clientX, y: e.clientY, mouse, timer: null, ghost: null, over: null };
+  press = { el, from: /** @type {string} */ (el.dataset.drag), id: e.pointerId, x: e.clientX, y: e.clientY, mouse, timer: null, ghost: null, over: null, held: false };
   if (!mouse) {
     const p = press;
-    p.timer = window.setTimeout(() => press === p && begin(p.x, p.y), LONG_PRESS);
+    p.timer = window.setTimeout(() => press === p && hold(p), LONG_PRESS);
   }
+});
+
+// A right-click, or Android's long press: the quick move, never the browser's menu.
+document.addEventListener('contextmenu', (e) => {
+  const el = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest?.('[data-drag]'));
+  if (!el) return;
+  e.preventDefault();
+  if (press && !press.mouse) hold(press);
+  else if (lastMouse) options?.onUse?.(/** @type {string} */ (el.dataset.drag));
 });
 
 document.addEventListener('pointermove', (e) => {
@@ -61,7 +77,7 @@ document.addEventListener('pointermove', (e) => {
   }
   const far = Math.hypot(e.clientX - press.x, e.clientY - press.y) > (press.mouse ? SLOP.mouse : SLOP.touch);
   if (!far) return;
-  // A mouse that moves drags; a finger that moves before the long-press is a scroll.
+  // A mouse that moves drags; a finger that moves is a scroll.
   if (press.mouse) begin(e.clientX, e.clientY);
   else cancel();
 });
@@ -70,7 +86,7 @@ document.addEventListener('pointerup', (e) => {
   if (!press || e.pointerId !== press.id) return;
   if (press.ghost) {
     const from = press.from;
-    const target = targetAt(e.clientX, e.clientY - lift());
+    const target = targetAt(e.clientX, e.clientY);
     cancel();
     swallowClickUntil = performance.now() + 400;
     if (target) options?.onDrop(from, /** @type {string} */ (target.dataset.drop));
@@ -83,16 +99,7 @@ document.addEventListener('pointercancel', (e) => {
   if (press && e.pointerId === press.id) cancel();
 });
 
-// While dragging with a finger, the page mustn't scroll under it.
-document.addEventListener(
-  'touchmove',
-  (e) => {
-    if (press?.ghost && e.cancelable) e.preventDefault();
-  },
-  { passive: false },
-);
-
-// The click that ends a drag isn't a tap on whatever is under it.
+// The click that ends a drag or a long press isn't a tap on whatever is under it.
 document.addEventListener(
   'click',
   (e) => {
@@ -104,6 +111,21 @@ document.addEventListener(
   },
   true,
 );
+
+/**
+ * A finger held still: the quick move, once for the press, whichever of the
+ * timer and contextmenu comes first (D163).
+ * @param {NonNullable<typeof press>} p
+ */
+function hold(p) {
+  if (p.held) return;
+  p.held = true;
+  if (p.timer !== null) clearTimeout(p.timer);
+  p.timer = null;
+  hideTip();
+  if (navigator.vibrate) navigator.vibrate(15);
+  options?.onUse?.(p.from);
+}
 
 /** @param {number} x @param {number} y */
 function begin(x, y) {
@@ -126,7 +148,6 @@ function begin(x, y) {
     document.querySelector(`[data-drop="${key}"]`)?.classList.add('drop-ok');
   }
   document.body.classList.add('is-dragging');
-  if (!press.mouse && navigator.vibrate) navigator.vibrate(15);
   move(x, y);
 }
 
@@ -134,17 +155,14 @@ function begin(x, y) {
 function move(x, y) {
   if (!press?.ghost) return;
   press.ghost.style.left = `${Math.round(x)}px`;
-  press.ghost.style.top = `${Math.round(y - lift())}px`;
-  const target = targetAt(x, y - lift());
+  press.ghost.style.top = `${Math.round(y)}px`;
+  const target = targetAt(x, y);
   if (target !== press.over) {
     press.over?.classList.remove('drop-over');
     target?.classList.add('drop-over');
     press.over = target;
   }
 }
-
-/** Above a finger, so the finger doesn't hide what it carries. */
-const lift = () => (press && !press.mouse ? 36 : 0);
 
 /** @param {number} x @param {number} y */
 function targetAt(x, y) {
@@ -155,6 +173,7 @@ function targetAt(x, y) {
 function cancel() {
   if (!press) return;
   if (press.timer !== null) clearTimeout(press.timer);
+  if (press.held) swallowClickUntil = performance.now() + 400;
   press.ghost?.remove();
   press.el.classList.remove('drag-source');
   press.over?.classList.remove('drop-over');

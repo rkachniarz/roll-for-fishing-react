@@ -8,7 +8,7 @@ import { t } from '../strings.js';
 import { levelFor } from '../engine/state.js';
 import { className } from '../engine/character.js';
 import { iconName, paintIcon } from '../scene/icons.js';
-import { bagTab, effectsText, hoursText, link, rarityColour, slot, tasteLines, weightText } from './links.js';
+import { bagSlot, bagTab, effectsText, hoursText, link, rarityColour, slot, tasteLines, weightText } from './links.js';
 import { bowlOf, canTrade, costStatus, offersFor } from '../engine/barter.js';
 import { vendorStatus } from '../engine/schedule.js';
 import { bindTip } from './tooltip.js';
@@ -477,7 +477,7 @@ export function bagPane(state, tab, onTab) {
     ),
     el('div', { className: 'grid' }, [
       ...items.map((b) => {
-        const node = slot({ kind: 'item', id: b.id }, b.count);
+        const node = bagSlot(b.id, b.count);
         node.dataset.drag = `bag:${b.i}`;
         node.dataset.drop = `bag:${b.i}`;
         return node;

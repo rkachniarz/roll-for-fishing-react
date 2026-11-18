@@ -24,6 +24,19 @@ Items with no note are left alone.
 
 Newest first.
 
+## A long press equips, on a phone (2026-11-18, D163, T.2)
+
+Calls Claude made:
+
+- **With a mouse the hint reads "Right-click to equip"**, and "Long press to equip" on a touch screen, by the pointer
+  last used (a press, or a mouse hovering over a slot).
+- **A potion says "Long press to use" / "Right-click to use"** the same way, since a long press drinks it; the hint
+  is only on items in the bags, so a potion's link in the log no longer says "Right-click to use".
+- **Equipped items get no hint** ("to unequip"), as you asked only for items in the bags.
+- **The long press is half a second**, a little shorter than the bucket fish menu's 600 ms; a finger moving more than
+  10 px first is a scroll and equips nothing. A short buzz on the phones that can.
+- **The hint is in the muted text colour** (`--muted`), each theme its own.
+
 ## A tap on the scene closes a pane, on a phone (2026-11-18, D162, T.1)
 
 Calls Claude made:

@@ -24,13 +24,14 @@ per task goes in docs/decisions.md.
   900 px and up) nothing changes:** there is room for everything there, so a tap on the scene keeps working with a
   pane open. Any pane the button row opens and closes counts (character, bags, journal, perks…); the event dialog, the
   map and the barter window keep their own rules. *Landed (D162):* `closedByTap` in `src/main.js`; Space unchanged.
-- [ ] **T.2** A long press equips, on a phone, and every equippable item says how. *The owner's answers
+- [x] **T.2** A long press equips, on a phone, and every equippable item says how. *The owner's answers
   (2026-11-18):* **a long press always equips** on a phone, as a right-click does with a mouse: an item in the bags
   goes into its slot (a potion is drunk, as with the right-click), an equipped item goes back to the bags. **Dragging
   goes on phones** (`src/ui/drag.js`); a mouse still drags. A fish in the bucket keeps its long-press options menu
   (R21.1). **At the bottom of every equippable item's tooltip** while it is in the bags: "Long press to equip", in
   slightly greyed-out italics. Claude's call: with a mouse it reads "Right-click to equip" (on REVIEW.md); the tooltip
-  goes by the last pointer used (`lastPointer` in `src/main.js`).
+  goes by the last pointer used (`lastPointer` in `src/main.js`). *Landed (D163):* `hold` in `src/ui/drag.js`,
+  `quickMove` in `src/main.js`, `bagSlot` in `src/ui/links.js`.
 - [ ] **T.3** Pick from a slot, as WoW's flyout. *The owner's words:* a tap or left click on a slot in the character
   pane opens a list of every unequipped item in the bags that fits that slot; horizontally scrollable on a phone.
   *The owner's answers (2026-11-18):* **with a mouse,** hovering an item in the list shows its tooltip and a click

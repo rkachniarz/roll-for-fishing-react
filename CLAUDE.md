@@ -144,8 +144,11 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   and its cooldown is `pending` too, counting from the next line out (D113).
   Lit abilities (`state.lit`) go dark when the next line goes out (`castLine`).
 - **`src/ui/drag.js` reads `data-drag` / `data-drop` (`bag:3`, `bag:end`, `bag:pane`, `equip:rod`) off the elements;**
-  `main.js` decides what a drop does. A `contextmenu` from a long-press on a phone is swallowed (in `src/main.js`);
-  only a mouse's right-click equips. On a fish in the bucket it opens the fish's options menu instead (R21.1).
+  `main.js` decides what a drop and the quick move do (`onDrop`, `onUse` = `quickMove`). Only a mouse drags (D163);
+  a right-click, or a long press on touch, is the quick move: equip, drink, or back to the bags. The long press is a
+  timer and Android's `contextmenu` both, whichever comes first, once per press (iOS may send no `contextmenu`), and
+  the click after it is swallowed. On a fish in the bucket a long press opens the fish's options menu instead (R21.1).
+  The hint at the foot of a bag item's tooltip goes by `usingTouch()` in `src/ui/tooltip.js`.
 - **Events are `.md`, not JSON (D45, D84).** `tools/event-text.mjs` reads them and owns the vocabulary;
   `docs/events.md` is the author's guide, so a new word goes in both. The engine imports only typedefs from it.
   Event text is a list of parts, each its own string key (D88); a new placeholder goes in `PLACEHOLDERS` there and

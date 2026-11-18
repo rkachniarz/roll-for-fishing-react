@@ -1155,6 +1155,11 @@ await check('equipment: drag, right-click, no rod', DESKTOP, '?dev&seed=1', asyn
   await page.mouse.up();
   report('equipment: the wrong slot says so', ((await page.textContent('#errors')) ?? '').includes("doesn't go in that slot"));
 
+  // An item in the bags says how to equip it, by the pointer (D163).
+  await page.hover(bagSlot('Willow rod'));
+  const hint = await page.locator('.tip .tip-hint').allTextContents();
+  report('equipment: the tooltip says "Right-click to equip"', hint.join() === 'Right-click to equip', hint.join());
+
   // Right-click equips, and swaps with what was there.
   await page.click(bagSlot('Willow rod'), { button: 'right' });
   report('equipment: right-click equips', (await slotLabel(page, 'rod')) === 'Willow rod', await slotLabel(page, 'rod'));
@@ -1205,7 +1210,7 @@ await check('equipment: the bobber, and nothing changes while the line is out', 
   report('equipment: and says so', ((await page.textContent('#errors')) ?? '').includes("can't change equipment"));
 });
 
-await check('equipment by touch: long-press drag', PHONE, '?dev&seed=1', async (page) => {
+await check('equipment by touch: a long press equips (D163)', PHONE, '?dev&seed=1', async (page) => {
   await addEquippables(page);
   await page.click('#player');
   await page.click('#bag');
@@ -1213,21 +1218,42 @@ await check('equipment by touch: long-press drag', PHONE, '?dev&seed=1', async (
   await page.screenshot({ path: 'dist/verify/equipment-phone.png' });
   const cdp = await page.context().newCDPSession(page);
   const touch = (type, p) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: p ? [{ x: p.x, y: p.y }] : [] });
-  const from = await centre(page, bagSlot('Horsehair line'));
-  const to = await centre(page, '[data-slot="line"]');
+  const longPress = async (p) => {
+    await touch('touchStart', p);
+    await page.waitForTimeout(900);
+    await touch('touchEnd');
+    await page.waitForTimeout(100);
+  };
+  const lines = () => page.locator(bagSlot('Horsehair line')).count();
 
-  // A quick swipe is a scroll, not a drag.
+  // A tap on an item in the bags shows its tooltip, ending with how to equip it.
+  await page.tap(bagSlot('Horsehair line'));
+  const hint = await page.locator('.tip .tip-hint').allTextContents();
+  report('equipment by touch: the tooltip says "Long press to equip"', hint.join() === 'Long press to equip', hint.join());
+  await page.screenshot({ path: 'dist/verify/equip-hint-phone.png' });
+  await page.tap(bagSlot('Horsehair line'));
+
+  // A quick swipe is a scroll, not a long press.
+  const from = await centre(page, bagSlot('Horsehair line'));
   await touch('touchStart', from);
   await touch('touchMove', { x: from.x, y: from.y - 40 });
+  await page.waitForTimeout(900);
   await touch('touchEnd');
-  report('equipment by touch: a swipe doesn\'t drag', (await slotLabel(page, 'line')) === 'Line: Empty', await slotLabel(page, 'line'));
+  report('equipment by touch: a swipe does not equip', (await slotLabel(page, 'line')) === 'Line: Empty', await slotLabel(page, 'line'));
 
-  // Hold, then drag. The icon is carried above the finger, so the finger ends below the slot.
-  await touch('touchStart', from);
-  await page.waitForTimeout(500);
-  for (let i = 1; i <= 10; i++) await touch('touchMove', { x: from.x + ((to.x - from.x) * i) / 10, y: from.y + ((to.y + 36 - from.y) * i) / 10 });
-  await touch('touchEnd');
-  report('equipment by touch: long-press and drag equips', (await slotLabel(page, 'line')) === 'Horsehair line', await slotLabel(page, 'line'));
+  // A long press on an item in the bags puts it in its slot, once.
+  const bagged = await page.locator('#bagBody .slot[data-drag]').count();
+  await longPress(await centre(page, bagSlot('Horsehair line')));
+  report('equipment by touch: a long press equips', (await slotLabel(page, 'line')) === 'Horsehair line', await slotLabel(page, 'line'));
+  report('equipment by touch: once', (await page.locator('#bagBody .slot[data-drag]').count()) === bagged - 1 && (await lines()) === 0);
+  report('equipment by touch: no tooltip left from the long press', !(await page.isVisible('.tip')));
+
+  // A long press on an equipped item takes it off, into the bags.
+  await longPress(await centre(page, '[data-slot="line"]'));
+  report('equipment by touch: a long press on a slot takes it off', (await slotLabel(page, 'line')) === 'Line: Empty', await slotLabel(page, 'line'));
+  report('equipment by touch: back in the bags, once', (await lines()) === 1 && !((await page.textContent('#errors')) ?? '').trim(), `${await lines()}`);
+  await longPress(await centre(page, bagSlot('Horsehair line')));
+  report('equipment by touch: and on again', (await slotLabel(page, 'line')) === 'Horsehair line', await slotLabel(page, 'line'));
 
   // A tap still shows the tooltip.
   await page.tap('[data-slot="line"]');

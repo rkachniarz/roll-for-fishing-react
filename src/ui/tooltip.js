@@ -12,7 +12,7 @@ import { paintIcon } from '../scene/icons.js';
  * @property {string} title
  * @property {string} [colour]  The title's colour; plain text if missing.
  * @property {string} [icon]  An icon to show beside the words, twice its size in a slot (D119).
- * @property {{ text: string, tone?: 'flavor' | 'good' | 'bad' | 'page' }[]} lines
+ * @property {{ text: string, tone?: 'flavor' | 'good' | 'bad' | 'page' | 'hint' }[]} lines
  */
 
 /** @type {HTMLElement | null} */
@@ -21,6 +21,12 @@ let box = null;
 let anchor = null;
 /** What the last press was made with: a click doesn't say in every browser. */
 let lastPointer = '';
+
+/**
+ * Whether the player last used a touch screen rather than a mouse: a hint says
+ * "Long press" or "Right-click" by it (D163).
+ */
+export const usingTouch = () => lastPointer !== '' && lastPointer !== 'mouse';
 
 /**
  * @param {HTMLElement} at  What it belongs to: it opens above it, or below if there's no room.
@@ -95,6 +101,7 @@ export function bindTip(el, tip) {
   const get = typeof tip === 'function' ? tip : () => tip;
   el.addEventListener('pointerenter', (e) => {
     if (e.pointerType !== 'mouse' || document.body.classList.contains('is-dragging')) return;
+    lastPointer = 'mouse';
     const t = get();
     if (t) openTip(el, t);
   });

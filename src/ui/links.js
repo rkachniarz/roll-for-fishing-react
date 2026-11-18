@@ -7,7 +7,7 @@ import { content } from '../generated/content.js';
 import { t } from '../strings.js';
 import { fishNameKeys, fishWeight } from '../engine/fish.js';
 import { RARITY_COLOURS, iconName, paintIcon } from '../scene/icons.js';
-import { bindTip } from './tooltip.js';
+import { bindTip, usingTouch } from './tooltip.js';
 import { effectLine } from './effects.js';
 
 /** @typedef {import('../engine/fish.js').FishInstance} FishInstance */
@@ -112,10 +112,7 @@ export function tipFor(thing) {
   if (item.page) lines.push({ text: t(item.page), tone: 'page' });
   // A potion (R18.8): what it gives when used.
   const buff = item.use ? content.buffs?.[item.use.buff] : null;
-  if (buff) {
-    lines.push({ text: t('tip.use', { buff: t(buff.name), effects: effectsText(buff.effects), duration: durationText(buff.duration) }), tone: 'good' });
-    lines.push({ text: t('tip.useHint') });
-  }
+  if (buff) lines.push({ text: t('tip.use', { buff: t(buff.name), effects: effectsText(buff.effects), duration: durationText(buff.duration) }), tone: 'good' });
   // No sell price: there's no money, only barter (D85).
   return { title: itemName(thing.id), colour: rarityColour(item.rarity), lines };
 }
@@ -145,6 +142,31 @@ export function link(thing) {
 export function slot(thing, count = 1, hint) {
   const base = tipFor(thing);
   const tip = hint ? { ...base, lines: [...base.lines, { text: hint }] } : base;
+  return slotButton(thing, count, tip);
+}
+
+/**
+ * An item in the bags (D163): its slot, its tooltip ending with how to equip
+ * or use it, a long press or a right-click by what the player last used.
+ * @param {string} id
+ * @param {number} count
+ */
+export function bagSlot(id, count) {
+  const item = content.items[id];
+  const how = item.use ? 'use' : item.slot ? 'equip' : null;
+  const base = tipFor({ kind: 'item', id });
+  if (!how) return slotButton({ kind: 'item', id }, count, base);
+  const hint = () => ({ ...base, lines: [...base.lines, { text: t(`tip.${how}${usingTouch() ? 'Touch' : 'Mouse'}`), tone: /** @type {const} */ ('hint') }] });
+  return slotButton({ kind: 'item', id }, count, base, hint);
+}
+
+/**
+ * @param {Thing} thing
+ * @param {number} count
+ * @param {import('./tooltip.js').Tip} tip  What it is called and coloured by.
+ * @param {() => import('./tooltip.js').Tip} [shown]  What the tooltip shows, asked each time; the tip if missing.
+ */
+function slotButton(thing, count, tip, shown) {
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'slot';
@@ -159,7 +181,7 @@ export function slot(thing, count = 1, hint) {
     n.textContent = String(count);
     b.append(n);
   }
-  bindTip(b, tip);
+  bindTip(b, shown ?? tip);
   return b;
 }
 

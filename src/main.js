@@ -1321,6 +1321,7 @@ function moveItem(fromSpot, toSpot) {
 
 setupDrag({
   onDrop: moveItem,
+  onUse: quickMove,
   // While dragging, the slots it fits light up.
   targetsFor: (fromSpot) => {
     if (!state) return [];
@@ -1331,21 +1332,18 @@ setupDrag({
   },
 });
 
-// Right-click (desktop): a bag item into its slot, an equipped item back to
-// the bags, as WoW's. A long-press on a phone also fires contextmenu; there it
-// starts a drag instead (drag.js).
-let lastPointer = 'mouse';
-document.addEventListener('pointerdown', (e) => (lastPointer = e.pointerType), true);
-document.addEventListener('contextmenu', (e) => {
-  const node = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest?.('[data-drag]'));
-  if (!node) return;
-  e.preventDefault();
-  if (lastPointer !== 'mouse' || !state) return;
+/**
+ * A right-click, or a long press on a phone (drag.js, D163): a bag item into
+ * its slot, an equipped item back to the bags, as WoW's.
+ * @param {string} from  The slot's data-drag: "bag:3" / "equip:rod".
+ */
+function quickMove(from) {
+  if (!state) return;
   if (lineOut()) {
     showError($('errors'), t('error.busy'));
     return;
   }
-  const spot = parseSpot(/** @type {string} */ (node.dataset.drag));
+  const spot = parseSpot(from);
   const id = spot.kind === 'bag' && spot.index !== null ? state.bags[spot.index]?.id : null;
   // A potion is drunk (R18.8); anything else goes into its slot.
   if (id && content.items[id]?.use) changeState(useItem(state, id));
@@ -1355,7 +1353,7 @@ document.addEventListener('contextmenu', (e) => {
     if (stack) bagTabShown = bagTab(stack.id);
     changeItems(unequip(state, spot.key));
   }
-});
+}
 
 // ---------- Drawing it all ----------
 

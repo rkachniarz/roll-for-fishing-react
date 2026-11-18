@@ -916,7 +916,7 @@ body {
   z-index: 2;
 }
 
-/* Slots can be long-pressed to drag: no text selection or callout. */
+/* Slots can be long-pressed (D163): no text selection or callout. */
 .slot {
   -webkit-touch-callout: none;
   user-select: none;
@@ -1043,6 +1043,12 @@ body.is-dragging {
 
 .tip-bad {
   color: var(--bad);
+}
+
+/* How to equip or use an item in the bags (D163): set back from what it does. */
+.tip-hint {
+  color: var(--muted);
+  font-style: italic;
 }
 
 /* ---------- The strike, floating over the bobber (D82) ---------- */
