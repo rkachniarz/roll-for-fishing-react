@@ -24,6 +24,22 @@ Items with no note are left alone.
 
 Newest first.
 
+## The sun and the moon (2026-11-18, D167, 12.2)
+
+Nothing shows them yet; the fish (12.3) and the sky layer (12.4) will. Calls Claude made:
+
+- **The first full moon is 1d14 nights from the game's first day**, on the night of the rolled day (full at the
+  midnight that ends it). An old save rolls it from the day it is loaded on. The roll comes from its own stream,
+  drawn once and not kept (as the start day is), so the other dice are untouched.
+- **The sun keeps to `SUN`'s sunrise and sunset exactly.** At Gdynia's latitude the real winter day is about 25
+  minutes shorter than `SUN`'s, so the sun's hours are stretched a little to match the light the scene already
+  shows; its height at noon is the true one (about 59° at midsummer, 12° at midwinter).
+- **A simple moon:** it follows the sun's path, a share of a turn behind it, so the full moon rises at dusk and
+  rides high in winter and low in summer, and it rises about 1 h 51 min later each game day (24 hours spread over
+  13 rises in a 14-day cycle). The real moon's tilt and wobbles are left out.
+- **The eight phase names** (new, waxing crescent, first quarter, waxing gibbous, full, waning gibbous, last
+  quarter, waning crescent) each take an eighth of the cycle, so each lasts about a day and three quarters.
+
 ## The spots' compass facings (2026-11-18, D166, 12.1)
 
 Nothing shows it yet; the sun, the moon and the sky (12.2, 12.4) will use it. Calls Claude made:

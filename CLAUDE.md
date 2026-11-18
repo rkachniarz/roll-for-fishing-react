@@ -254,6 +254,9 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   the commit writes the old stream positions back over the pool's draws.
 - **A new random stream means a new `SAVE_VERSION` and a migration that derives it** (`STREAMS` in
   `src/engine/state.js`), or an old save has no position for it.
+- **The sun and moon are worked out from the clock (D167, `src/engine/sky.js`);** the one thing stored is
+  `state.fullMoonAt`, the first full moon, rolled once at a new game from the stream `moon`. Like `start`, that stream
+  is drawn once and isn't in `STREAMS`. The sun's hours are stretched to cross the horizon at exactly `SUN`'s times.
 - **Conservation (D140) counts in the flag `endangered-released`** through `conserve` (`src/engine/barter.js`), called
   from both release paths, `letGo` and `releaseFish`. A test wants two endangered kinds per spot (one in the tower's
   pool), so adding a fish to a spot or marking one endangered can fail it.

@@ -17,9 +17,10 @@ import { clock, seasonOfMonth, startTime } from './time.js';
 import { emptyEquipment } from './equipment.js';
 import { knownKey, locationList } from './knowledge.js';
 import { fishWeight } from './fish.js';
+import { firstFullMoon } from './sky.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 21;
+export const SAVE_VERSION = 22;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -120,6 +121,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {number} waterSlow  The water's own slow average: warmer than it, the water is warming (D153).
  * @property {'surface' | 'upper' | 'lower' | 'bottom' | null} lineDepth  The depth an adjustable line is set to
  *   (D148); it counts only while such a line is equipped.
+ * @property {number} fullMoonAt  The game minute of the first full moon (D167), rolled once at a new game from
+ *   its own stream, `moon`, which isn't kept; the moon's phase and place are worked out from it and the clock (sky.js).
  * @property {Record<string, true>} tasted  Species the player has eaten, raw or in a bowl, and so
  *   knows the taste of (D138).
  */
@@ -154,6 +157,8 @@ export function newGame({ seed, character, month }) {
   for (const label of STREAMS) streams[label] = deriveSeed(seed, label);
   // Once, at the start: its own stream, never stored (D4).
   const time = startTime(month === undefined ? start.weather.season : seasonOfMonth(month), diceFor(createRng(deriveSeed(seed, 'start'))));
+  // The first full moon, once, at the start: its own stream, not kept either (D167).
+  const fullMoonAt = firstFullMoon(time, diceFor(createRng(deriveSeed(seed, 'moon'))));
   const weatherRng = createRng(streams.weather);
   const weather = weatherAt(clock(time).season, start.weather.cell, diceFor(weatherRng));
   streams.weather = weatherRng.state;
@@ -202,6 +207,7 @@ export function newGame({ seed, character, month }) {
     water: weather.temperature,
     waterSlow: weather.temperature,
     tank: { day: 0, fedUntil: 0 },
+    fullMoonAt,
   };
 }
 
@@ -345,6 +351,8 @@ const MIGRATIONS = {
     ...save,
     stewPot: (save.stewPot ?? []).map((/** @type {any} */ f) => ({ ...f, stewedAt: (save.time ?? 0) - content.rules.stew.cookMinutes })),
   }),
+  // 21 -> 22: the moon (D167): the first full moon rolled from today, from the stream a new game rolls it from.
+  21: (save) => ({ ...save, fullMoonAt: firstFullMoon(save.time ?? 0, diceFor(createRng(deriveSeed(save.seed, 'moon')))) }),
   // 19 -> 20: the pool turns over (D156). Fish the player has met count their days from now; schools and big
   // fish are in the pool, so the ones on the water, which have none there, go; the pools take up their turning
   // over from now.

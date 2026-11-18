@@ -73,7 +73,7 @@ all depend on which way the player looks.
   **One width of view for every spot**, Claude's pick 60° (REVIEW.md). Q-42 is settled by this.
   *Landed (D166):* `look.facing` on each spot in `content/locations/`, `VIEW`, `facingOf` and `acrossView` in
   `src/engine/sky.js`, `test/sky.test.js`.
-- [ ] **12.2** The sun and the moon as engine numbers, with tests: their height and bearing at every half hour, as
+- [x] **12.2** The sun and the moon as engine numbers, with tests: their height and bearing at every half hour, as
   seen from Gdynia (54.52° N, 18.53° E), the latitude that already sets sunrise and sunset (`SUN` in
   `src/engine/time.js`, D85); the moon's phase. Worked out from the clock, never stored, except the moon's start if
   it is rolled (Q-41): a new random draw means a new stream, so a new `SAVE_VERSION` and a migration that rolls it
@@ -83,6 +83,9 @@ all depend on which way the player looks.
   *The owner's answers (2026-11-18), Q-41:* **the moon's cycle is 14 game days,** two full moons a season, eight a
   year. Claude's call (REVIEW.md): the first full moon falls on a rolled day (1d14), so it drifts against the
   seasons' starts.
+  *Landed (D167):* `sunPosition`, `moonPosition`, `moonPhase`, `moonPhaseName`, `sunOf`, `moonOf`,
+  `firstFullMoon`, `MOON`, `HORIZON` in `src/engine/sky.js`; `roll14` in `src/dice.js`; `state.fullMoonAt`
+  (`SAVE_VERSION` 22, from the one-off stream `moon`); tests in `test/sky.test.js`.
 - [ ] **12.3** The moon counts for the fish (the owner: "you know I want it to count for fish"). How is for the
   refinement questions: a preference like the weather's (`prefers`), feeding in the pools (D157), the light at
   night, or the anglers' moon tables (solunar periods).
@@ -119,8 +122,9 @@ all depend on which way the player looks.
   - **Later:** clouds lit orange from below at dusk; the tints do for now.
 
 **Where things stand (2026-11-18):** 12.1 is done: the map (D161) and every spot that shows sky has its compass
-facing, with one 60° width of view for all (D166, `src/engine/sky.js`); nothing draws from the facings yet. 12.2,
-the sun and moon as engine numbers, is next.
+facing, with one 60° width of view for all (D166, `src/engine/sky.js`). 12.2 is done: the sun's and the moon's
+height and bearing, and the moon's 14-day phase, worked out from the clock (D167, `src/engine/sky.js`); nothing
+draws from them or the facings yet. 12.3, the moon counting for the fish, is next.
 
 ## Phase 11, what the real species do
 
@@ -300,7 +304,7 @@ Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D
 - **Q-40 How are hidden numbers revealed?** Hidden rolls stay hidden until something reveals them (R5.2). The number
   a fish needed shows from level 1 (D107). Still open: what reveals the bite and treasure rolls and Luck (a perk, an
   item, a class?), and where those rolls would show; the game values to reveal them are in.
-- **Q-41** and **Q-42** were answered on 2026-11-18 (under 12.2 and 12.1); Q-42 → D166, Q-41's decision is recorded as 12.2 lands.
+- **Q-41** and **Q-42** were answered on 2026-11-18 (under 12.2 and 12.1); Q-41 → D167, Q-42 → D166.
 
 ---
 

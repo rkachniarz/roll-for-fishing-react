@@ -63,6 +63,11 @@ export function diceFor(rng) {
     return getRandomNumber(1, 100);
   }
 
+  /** A d14, for the day of the first full moon (D167). */
+  function roll14() {
+    return getRandomNumber(1, 14);
+  }
+
   function roll12() {
     return getRandomNumber(1, 12);
   }
@@ -79,5 +84,5 @@ export function diceFor(rng) {
     return getRandomNumber(1, 6) + getRandomNumber(1, 6);
   }
 
-  return { getRandomNumber, roll20, roll20Kept, roll100, roll12, roll6, roll4, roll2d6 };
+  return { getRandomNumber, roll20, roll20Kept, roll100, roll14, roll12, roll6, roll4, roll2d6 };
 }
