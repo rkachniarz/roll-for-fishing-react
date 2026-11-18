@@ -16,6 +16,7 @@
     "commons": "node tools/py.mjs commons",
     "planks": "node tools/py.mjs planks",
     "obsidian": "node tools/py.mjs obsidian",
+    "map": "node tools/py.mjs map",
     "sim": "node tools/sim.mjs",
     "prompts": "node tools/prompts.mjs",
     "check": "npm test && npm run verify && npm run build"

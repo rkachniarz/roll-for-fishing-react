@@ -33,6 +33,7 @@
     {
       "id": "the-first-pool",
       "name": "the first pool",
+      "map": { "x": 221, "y": 56 },
       "look": {
         "tint": "#5a3f8a",
         "tintAlpha": 0.25,

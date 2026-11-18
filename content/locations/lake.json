@@ -65,6 +65,7 @@
     {
       "id": "reedy-shore",
       "name": "the reedy shore",
+      "map": { "x": 34, "y": 121 },
       "placeholder": [
         "name"
       ],
@@ -205,6 +206,7 @@
     {
       "id": "swamp",
       "name": "the swamp",
+      "map": { "x": 92, "y": 86 },
       "placeholder": [
         "name"
       ],
@@ -334,6 +336,7 @@
     {
       "id": "still-water",
       "name": "still water",
+      "map": { "x": 81, "y": 157 },
       "placeholder": [
         "name"
       ],
@@ -487,6 +490,7 @@
     {
       "id": "rocky-shore",
       "name": "the rocky shore",
+      "map": { "x": 220, "y": 195 },
       "placeholder": [
         "name"
       ],
@@ -637,6 +641,7 @@
     {
       "id": "open-water",
       "name": "open water",
+      "map": { "x": 231, "y": 153 },
       "placeholder": [
         "name"
       ],
@@ -756,6 +761,7 @@
     {
       "id": "deep-water",
       "name": "deep water",
+      "map": { "x": 302, "y": 174 },
       "placeholder": [
         "name"
       ],

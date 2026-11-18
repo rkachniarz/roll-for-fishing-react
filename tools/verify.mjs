@@ -158,7 +158,8 @@ for (const [name, device] of [
 }
 
 await check('panes over the scene', PHONE, '?seed=1', async (page) => {
-  for (const id of ['player', 'journal', 'map', 'bucket', 'menu']) {
+  // The map isn't here yet: it shows once there are two places (12.1), checked below.
+  for (const id of ['player', 'journal', 'bucket', 'menu']) {
     await page.click(`#${id}`);
     const open = (await page.isVisible('#pane')) && (await page.getAttribute(`#${id}`, 'aria-pressed')) === 'true';
     report(`panes: ${id} opens`, open);
@@ -193,17 +194,66 @@ await check('panes over the scene', PHONE, '?seed=1', async (page) => {
   report('panes: the bag closes on its own', !(await page.isVisible('#bagPane')) && (await page.isVisible('#pane')));
 });
 
-await check('the map: going to another spot (D101)', PHONE, '?seed=1', async (page) => {
+await check('the map: going to another spot (D101, 12.1)', PHONE, '?seed=1', async (page) => {
+  // A new game knows only the reedy shore: no map button (12.1).
+  report('map: no button with one place to go', (await page.evaluate(() => getComputedStyle(/** @type {Element} */ (document.getElementById('map'))).visibility)) === 'hidden');
+  // The town opened, as the nightfall event does (D130), and the save loaded again.
+  await page.evaluate(() => {
+    const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
+    save.places = { ...save.places, town: 'open' };
+    localStorage.setItem('roll-for-fishing:save:1', JSON.stringify(save));
+  });
+  await page.reload();
+  await loadFrom(page, 1);
+  await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
   await page.click('#map');
-  report('map: the reedy shore is where a new game starts', (await page.textContent('.map-spot[aria-pressed="true"]')) === 'the reedy shore');
-  // A new game knows each location's first spot; the rest are noticed later (R11.8).
-  const shown = await page.locator('.map-spot').allTextContents();
-  // The town is on the map only once night has pointed the way (R17.3).
-  report('map: only the spots known of', shown.join(', ') === 'the reedy shore, the upper river', shown.join(', '));
-  await page.click('.map-spot:has-text("the upper river")');
-  report('map: a tap moves there', (await logText(page)).includes('You move to the upper river.'));
-  report('map: and the pane shows it', (await page.textContent('.map-spot[aria-pressed="true"]')) === 'the upper river');
+  report('map: opens over the screen', await page.isVisible('#mapPopup .map-sheet'));
+  const marks = await page.locator('.map-mark').evaluateAll((els) => els.map((e) => `${e.getAttribute('aria-label')}${e.classList.contains('here') ? '*' : ''}`));
+  report('map: the reedy shore, red, and the town', marks.join(', ') === 'The reedy shore*, The town', marks.join(', '));
+  report('map: names where the player is', ((await page.textContent('.map-spot-name')) ?? '') === 'The reedy shore');
+  const fits = await page.evaluate(() => {
+    const r = /** @type {Element} */ (document.querySelector('.map-sheet')).getBoundingClientRect();
+    return r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight && r.width > 0.8 * Math.min(innerWidth, innerHeight);
+  });
+  report('map: most of the screen, all on it', fits);
   await page.screenshot({ path: 'dist/verify/map.png' });
+  // On a touch screen the first tap names the spot, the second goes.
+  const town = /** @type {{ x: number, y: number, width: number, height: number }} */ (await page.locator('.map-mark[aria-label="The town"]').boundingBox());
+  // A little off the circle: a finger needn't be exact.
+  const tapTown = () => page.touchscreen.tap(town.x + town.width / 2 - 4, town.y + town.height / 2 + 6);
+  await tapTown();
+  report('map: a first tap names the spot', ((await page.textContent('.map-spot-name')) ?? '') === 'The town' && (await page.isVisible('#mapPopup')));
+  await tapTown();
+  await page.waitForTimeout(300);
+  report('map: a second tap goes there, and the map closes', (await logText(page)).includes('You move to the square.') && !(await page.isVisible('#mapPopup')), await logText(page));
+});
+
+await check('the map on a wide screen: a mouse over a spot names it (12.1)', DESKTOP, '?seed=1', async (page) => {
+  await page.evaluate(() => {
+    const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
+    save.places = { ...save.places, town: 'open', river: 'open' };
+    for (const spot of ['swamp', 'still-water', 'rocky-shore', 'open-water', 'deep-water']) save.known[`lake:spot:${spot}`] = 'heard';
+    save.known['river:spot:river-mouth'] = 'heard';
+    save.known['river:spot:lower-river'] = 'heard';
+    save.places['mage-tower'] = 'open';
+    localStorage.setItem('roll-for-fishing:save:1', JSON.stringify(save));
+  });
+  await page.reload();
+  await loadFrom(page, 1);
+  await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+  await page.click('#map');
+  report('map: every spot drawn on it', (await page.locator('.map-mark').count()) === 11, String(await page.locator('.map-mark').count()));
+  const box = /** @type {{ x: number, y: number, width: number, height: number }} */ (await page.locator('.map-mark[aria-label="The swamp"]').boundingBox());
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  report('map: the swamp named under the mouse', ((await page.textContent('.map-spot-name')) ?? '') === 'The swamp');
+  await page.screenshot({ path: 'dist/verify/map-wide.png' });
+  await page.keyboard.press('Escape');
+  report('map: Escape closes it', !(await page.isVisible('#mapPopup')));
+  await page.click('#map');
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await page.waitForTimeout(300);
+  report('map: a click goes there', (await logText(page)).includes('You move to the swamp.'));
 });
 
 await check('the content editor (7.5)', DESKTOP, null, async (page) => {

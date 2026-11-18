@@ -14,7 +14,7 @@ import { vendorStatus } from '../engine/schedule.js';
 import { bindTip } from './tooltip.js';
 import { EQUIPMENT_SLOTS } from '../engine/equipment.js';
 import { offers, owedLevels } from '../engine/perks.js';
-import { completion, knownKey, locationList, placeOpen, spotKnown } from '../engine/knowledge.js';
+import { completion, knownKey, locationList } from '../engine/knowledge.js';
 import { setPieces } from '../engine/events.js';
 
 /** @typedef {import('../engine/state.js').GameState} GameState */
@@ -313,39 +313,6 @@ function placeName(state, location, showCompletion) {
   if (!showCompletion) return t('journal.place', { place });
   const { found, total } = completion(state, location);
   return t('journal.placeShown', { place, percent: total ? Math.floor((100 * found) / total) : 0 });
-}
-
-/**
- * Every location's known spots to go to, the one the player is at pressed
- * (D101): a plain list until the real map (CR-7). A spot shows once the player
- * knows of it (R11.8).
- * @param {GameState} state
- * @param {(location: string, spot: string) => void} onTravel
- * @param {boolean} [showCompletion]  Each location's completion shows (R5.3).
- */
-export function mapPane(state, onTravel, showCompletion = false) {
-  /** @type {HTMLElement[]} */
-  const out = [];
-  for (const loc of Object.values(content.locations)) {
-    // Only the places on the map (8.2).
-    if (!placeOpen(state, loc.id)) continue;
-    out.push(el('p', { className: 'name', textContent: placeName(state, loc.id, showCompletion) }));
-    // Somewhere an event holds the player: no other location (R10.8, 7.6).
-    const held = Boolean(state.locked) && state.locked !== loc.id;
-    // Only the spots the player knows of (R11.8, D58).
-    const known = (loc.spots ?? []).filter((/** @type {{ id: string }} */ spot) => spotKnown(state, loc.id, spot.id));
-    const spots = known.map((/** @type {{ id: string, name: string }} */ spot) => {
-      const here = state.location === loc.id && state.spot === spot.id;
-      const b = el('button', { type: 'button', className: 'map-spot', textContent: t(spot.name), disabled: here || held });
-      b.setAttribute('aria-pressed', String(here));
-      b.addEventListener('click', () => onTravel(loc.id, spot.id));
-      return b;
-    });
-    out.push(el('div', { className: 'map-spots' }, spots));
-  }
-  if (state.locked) out.push(el('p', { className: 'muted', textContent: t('map.locked') }));
-  out.push(el('p', { className: 'muted', textContent: t('map.later') }));
-  return out;
 }
 
 /**

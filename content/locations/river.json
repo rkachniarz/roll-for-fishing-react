@@ -2,6 +2,7 @@
   "$schema": "../../schemas/location.schema.json",
   "id": "river",
   "name": "The River",
+  "hidden": true,
   "biteThreshold": 50,
   "treasureThreshold": 5,
   "stuffThreshold": 20,
@@ -57,6 +58,7 @@
     {
       "id": "upper-river",
       "name": "the upper river",
+      "map": { "x": 195, "y": 291 },
       "placeholder": [
         "name"
       ],
@@ -196,6 +198,7 @@
     {
       "id": "lower-river",
       "name": "the lower river",
+      "map": { "x": 189, "y": 247 },
       "placeholder": [
         "name"
       ],
@@ -368,6 +371,7 @@
     {
       "id": "river-mouth",
       "name": "the river mouth",
+      "map": { "x": 148, "y": 213 },
       "placeholder": [
         "name"
       ],

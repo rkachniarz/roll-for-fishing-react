@@ -69,6 +69,10 @@
       "description": "Not on the map until opened (R11.2, 8.2): by finding its map fragments, or an event's open:.",
       "type": "boolean"
     },
+    "map": {
+      "description": "A town's one mark on the map (12.1), in the map picture's pixels (src/generated/map-paper.js, 320 across): the whole town is one place there, and going to it arrives at its first spot. Lake and river spots have their own.",
+      "type": "object", "properties": { "x": { "type": "integer", "minimum": 0, "maximum": 319 }, "y": { "type": "integer", "minimum": 0, "maximum": 319 } }, "required": ["x", "y"], "additionalProperties": false
+    },
     "fragments": {
       "description": "How many of its map fragments (items with fragmentOf this location) open it once found (8.2).",
       "type": "integer",
@@ -117,6 +121,10 @@
             },
             "required": ["x0", "y0", "x1", "y1"],
             "additionalProperties": false
+          },
+          "map": {
+            "description": "The spot's mark on the map (12.1), in the map picture's pixels (src/generated/map-paper.js, 320 across). Left out, the spot isn't on the map and can't be gone to from it.",
+            "type": "object", "properties": { "x": { "type": "integer", "minimum": 0, "maximum": 319 }, "y": { "type": "integer", "minimum": 0, "maximum": 319 } }, "required": ["x", "y"], "additionalProperties": false
           },
           "learnAfter": {
             "description": "A spot the player doesn't know of at first (R11.8, D58): noticed after this many casts at the location, or pointed out by an event (learn: spot). Left out, it's known from the start.",

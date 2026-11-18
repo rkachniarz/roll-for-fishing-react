@@ -22,7 +22,7 @@ import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
 import { GAME_VALUES } from './engine/values.js';
 import { deleteSave, exportGame, importGame, lastSlot, listSlots, saveGame } from './save.js';
-import { completionShown, spotKnown } from './engine/knowledge.js';
+import { completionShown, mapMarks, spotKnown } from './engine/knowledge.js';
 import { createAudio } from './audio.js';
 import { applySettings, loadSettings, saveSettings, showDice } from './settings.js';
 import { createScene } from './scene/scene.js';
@@ -36,7 +36,8 @@ import { flyIcon } from './ui/flight.js';
 import { createLog } from './ui/log.js';
 import { bagTab, fishName, hoursText, link, rarityColour, showStatusWhen, showTasteWhen, weightText } from './ui/links.js';
 import { fishWeight } from './engine/fish.js';
-import { bagPane, bucketPane, journalPane, mapPane, menuPane, playerPane, settingsPane, shopPane } from './ui/panels.js';
+import { createMap } from './ui/map.js';
+import { bagPane, bucketPane, journalPane, menuPane, playerPane, settingsPane, shopPane } from './ui/panels.js';
 import { floatText } from './ui/floater.js';
 import { bindTip, hideTip } from './ui/tooltip.js';
 import { eventIcon, iconName, paintIcon, weatherIcon } from './scene/icons.js';
@@ -1028,6 +1029,10 @@ function renderHud() {
     weather.dataset.icon = icon;
   }
 
+  // The map only once there is somewhere else to go (12.1). Hidden, not
+  // removed, so the row keeps its squares.
+  $('map').style.visibility = mapMarks(state).length > 1 ? '' : 'hidden';
+
   const xp = state.character.xp;
   const curve = content.rules.levels.xp;
   const level = levelFor(xp);
@@ -1093,16 +1098,31 @@ $('bagClose').addEventListener('click', toggleBag);
 // Dropped on the bag button, an equipped item goes back to the bags.
 $('bag').dataset.drop = 'bag:pane';
 
+/** The map, over the whole screen (12.1): the pane called map, shown on its own. */
+const mapView = createMap($('mapPopup'), {
+  onTravel: (location, spot) => {
+    pane = null;
+    renderPane();
+    travelTo(location, spot);
+  },
+  onClose: () => {
+    pane = null;
+    renderPane();
+  },
+});
+
 function renderPane() {
   renderBag();
   const box = $('pane');
-  box.hidden = !pane || !state;
+  box.hidden = !pane || !state || pane === 'map';
+  if (pane === 'map' && state) mapView.show(state, completionShown(state, valuesFor(state, extraSources())));
+  else mapView.hide();
   box.classList.toggle('pane-center', menuOpen());
   for (const b of document.querySelectorAll('[data-pane]')) {
     const name = b.getAttribute('data-pane');
     b.setAttribute('aria-pressed', String(name === 'bag' ? bagOpen && Boolean(state) : name === pane));
   }
-  if (!pane || !state) return;
+  if (!pane || !state || pane === 'map') return;
   const s = state;
   const body = $('paneBody');
   // Another pane starts at its top, not where the last one was scrolled to.
@@ -1124,9 +1144,6 @@ function renderPane() {
       break;
     case 'journal':
       body.replaceChildren(...journalPane(s, completionShown(s, valuesFor(s, extraSources()))));
-      break;
-    case 'map':
-      body.replaceChildren(...mapPane(s, travelTo, completionShown(s, valuesFor(s, extraSources()))));
       break;
     case 'bucket':
       body.replaceChildren(...bucketPane(s, valuesFor(s, extraSources()).flat.bucketSize));

@@ -13,9 +13,12 @@ the inn's chimney is smoking.
 
 - Head into town -> end
   open: town
+  open: river
   go: town square
 - Go straight to the inn -> end
   open: town
+  open: river
   go: town inn
 - Stay out here and fish -> end
   open: town
+  open: river

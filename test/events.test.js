@@ -560,7 +560,8 @@ test('a visitor comes back only after so many casts or days (7.10)', () => {
 
 test('an event can move the player and hold them there until another lets them go (7.6, R10.8)', () => {
   withEvent(eventFrom(`---\nid: test-portal\ntitle: x\nonce: false\n---\n\n## a\nx\n\n- In -> end\n  go: river lower-river\n  lock:\n- Out -> end\n  unlock:\n`), () => {
-    const s = game();
+    // The river is hidden until it is on the map (12.1): opened here.
+    const s = { ...game(), places: { river: 'open' } };
     const moved = choose(startEvent(s, 'test-portal'), 0);
     assert.equal(moved.state.location, 'river');
     assert.equal(moved.state.spot, 'lower-river');
@@ -604,7 +605,8 @@ test('a version 7 save gets visitors and no hold', () => {
 test('the placeholder quest chain: a bottle, a hand-in at the river, a package (7.4)', () => {
   const roach = { species: 'roach', subname: -1, band: 2, size: 20, difficulty: 1, xp: 1, rarity: 'common' };
   const dice = diceFor(createRng(1));
-  let s = game();
+  // The river is hidden until it is on the map (12.1): opened here.
+  let s = { ...game(), places: { river: 'open' } };
   // Fishing up the bottle starts the first event.
   s = { ...s, bags: [{ id: 'message-in-a-bottle', count: 1 }] };
   assert.deepEqual(afterCast(s, dice, { found: 'message-in-a-bottle' }), [{ type: 'event-started', event: 'quest-bottle' }]);

@@ -255,7 +255,6 @@ const UI_STRINGS = {
   'error.unknownPlace': "You don't know the way there yet.",
   'error.unknownSpot': "You don't know of that place yet.",
   'error.choiceWaiting': 'Make your choice first.',
-  'map.later': 'The town comes later.',
   'log.travel': 'You move to {spot}.',
   'bucket.count': '{count} of {size} fish',
   'bucket.hook': 'On the hook: {fish}',

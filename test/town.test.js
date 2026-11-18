@@ -131,7 +131,9 @@ test('the pebble question shows after five trades (R18.4)', () => {
 test('night sends the player to town; arriving at the inn the first time, the innkeeper (R17.3, R17.4)', () => {
   let s = /** @type {GameState} */ ({ ...game({ hour: 23 }), event: { id: 'nightfall', slide: 'start' } });
   assert.ok(!placeOpen(s, 'town'), 'not on the map before nightfall');
+  assert.ok(!placeOpen(s, 'river'), 'nor the river (D161)');
   assert.ok(placeOpen(choose(s, 2).state, 'town'), 'on the map, even staying out');
+  assert.ok(placeOpen(choose(s, 2).state, 'river'), 'and the river with it (D161)');
   const out = choose(s, 1);
   assert.equal(out.state.location, 'town');
   assert.equal(out.state.spot, 'inn');

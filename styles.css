@@ -1379,30 +1379,149 @@ button.perk[aria-pressed='true'] {
   }
 }
 
-/* The map pane's spots (D101): a plain list until the real map (8.1). */
-.map-spots {
+/* ---------- The map (12.1) ---------- */
+
+/* Over everything but the dialogs; the paper as big as the screen allows, in
+   whole device pixels per picture pixel (--map-px, set by src/ui/map.js). */
+.map-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
   display: grid;
-  gap: 4px;
-  margin-bottom: 10px;
+  place-items: center;
+  background: rgb(0 0 0 / 0.55);
 }
 
-.map-spot {
-  min-height: calc(36px * var(--ui));
-  padding: 4px 8px;
-  text-align: left;
-  font: inherit;
+.map-overlay[hidden] {
+  display: none;
+}
+
+.map-sheet {
+  --map-ink: #4a3121;
+  position: relative;
+  width: calc(320 * var(--map-px));
+  height: calc(320 * var(--map-px));
+  filter: drop-shadow(0 calc(2 * var(--map-px)) calc(3 * var(--map-px)) rgb(0 0 0 / 0.45));
+}
+
+.map-paper {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* The name of the spot under the pointer, or of where the player is, inked
+   at the paper's top, above the lake's north shore. */
+.map-name {
+  position: absolute;
+  top: calc(18 * var(--map-px));
+  left: calc(60 * var(--map-px));
+  right: calc(60 * var(--map-px));
+  text-align: center;
+  color: var(--map-ink);
+  pointer-events: none;
+}
+
+.map-name p {
+  margin: 0;
+  line-height: 1.15;
   font-variant-ligatures: none;
-  color: var(--text);
-  background: var(--slot-bg);
-  border: 2px solid var(--panel-edge);
-  border-radius: 3px;
+}
+
+.map-spot-name {
+  font-size: calc(17 * var(--map-px));
+  font-weight: bold;
+  min-height: 1.15em;
+}
+
+.map-place {
+  font-size: calc(10 * var(--map-px));
+  opacity: 0.8;
+  min-height: 1.15em;
+}
+
+.map-note {
+  position: absolute;
+  bottom: calc(26 * var(--map-px));
+  left: calc(30 * var(--map-px));
+  right: calc(30 * var(--map-px));
+  margin: 0;
+  text-align: center;
+  font-size: calc(10 * var(--map-px));
+  color: #8a2a1c;
+  pointer-events: none;
+}
+
+/* A mark: 15 picture pixels square, centred on its place. Pointers are
+   the sheet's (src/ui/map.js picks the nearest mark); the buttons are for the
+   keyboard and screen readers. */
+.map-mark {
+  position: absolute;
+  left: calc((var(--x) - 7) * var(--map-px));
+  top: calc((var(--y) - 7) * var(--map-px));
+  width: calc(15 * var(--map-px));
+  height: calc(15 * var(--map-px));
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: none;
+}
+
+.map-sheet.pointing {
   cursor: pointer;
 }
 
-.map-spot[aria-pressed='true'] {
-  border-color: var(--accent);
-  color: var(--accent);
-  cursor: default;
+.map-mark canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.map-mark .ringed,
+.map-mark:focus-visible .plain,
+.map-mark.named .plain {
+  visibility: hidden;
+}
+
+.map-mark:focus-visible .ringed,
+.map-mark.named .ringed {
+  visibility: visible;
+}
+
+.map-mark:focus {
+  outline: none;
+}
+
+/* An event holds the player here (R10.8): the other places fade. */
+.map-mark.held {
+  opacity: 0.45;
+}
+
+.map-close {
+  position: absolute;
+  top: calc(20 * var(--map-px));
+  right: calc(14 * var(--map-px));
+  width: calc(20 * var(--map-px));
+  height: calc(20 * var(--map-px));
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--map-ink);
+  font: inherit;
+  font-size: calc(20 * var(--map-px));
+  line-height: 1;
+  cursor: pointer;
+}
+
+.map-close:hover,
+.map-close:focus-visible {
+  color: #8a2a1c;
+  outline: none;
 }
 
 /* ---------- The town, barter, the dive (R17-R21, D123) ---------- */

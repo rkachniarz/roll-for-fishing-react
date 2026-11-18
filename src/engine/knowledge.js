@@ -98,6 +98,43 @@ export function spotKnown(state, location, spot) {
 }
 
 /**
+ * @typedef {object} MapMark
+ * @property {string} location
+ * @property {string} spot  Where going there arrives: a town's first known place.
+ * @property {number} x  In the map picture's pixels (src/generated/map-paper.js).
+ * @property {number} y
+ * @property {boolean} here  The player is there (in a town: at any of its places).
+ * @property {boolean} town  The whole town, one mark.
+ */
+
+/**
+ * The marks on the map (12.1): every known spot with a place on it (`map`),
+ * at every location on the map; a town is one mark, at the town's `map`. A
+ * spot with no `map` can't be gone to from the map.
+ * @param {GameState} state
+ * @returns {MapMark[]}
+ */
+export function mapMarks(state) {
+  /** @type {MapMark[]} */
+  const marks = [];
+  for (const loc of Object.values(content.locations)) {
+    if (!placeOpen(state, loc.id)) continue;
+    const known = (loc.spots ?? []).filter((/** @type {{ id: string }} */ s) => spotKnown(state, loc.id, s.id));
+    if (loc.town) {
+      if (loc.map && known.length) {
+        marks.push({ location: loc.id, spot: known[0].id, x: loc.map.x, y: loc.map.y, here: state.location === loc.id, town: true });
+      }
+      continue;
+    }
+    for (const spot of known) {
+      if (!spot.map) continue;
+      marks.push({ location: loc.id, spot: spot.id, x: spot.map.x, y: spot.map.y, here: state.location === loc.id && state.spot === spot.id, town: false });
+    }
+  }
+  return marks;
+}
+
+/**
  * The player learns of something at a location. Found outranks heard of.
  * Changes `state` in place.
  * @param {GameState} state

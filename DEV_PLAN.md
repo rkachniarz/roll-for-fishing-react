@@ -23,6 +23,9 @@ all depend on which way the player looks.
   looking across the water from the bank it is on, so spots on opposite shores look opposite ways. The river spots'
   facings (across the river, or up or down it) wait on the owner's reference pictures (Q-42). A placeholder drawing
   until CR-7.
+  *The map itself is in (D161, 2026-11-18): the owner's paper and outline over the whole screen, green and red
+  circles, the name at the top; the button from two places on; the river opening with the town. Still to do here:
+  the facings.*
 - [ ] **12.2** The sun and the moon as engine numbers, with tests: their height and bearing at every half hour, as
   seen from Gdynia (54.52° N, 18.53° E), the latitude that already sets sunrise and sunset (`SUN` in
   `src/engine/time.js`, D85); the moon's phase. Worked out from the clock, never stored, except the moon's start if
@@ -558,8 +561,9 @@ placeholder, it's added here.
   made from photos like the item icons. An event names its own with `art:`. *Replaces the default, an old scroll
   (`event/scroll`), that every event shows until it has its own; the scroll itself is a first draft for the owner's
   markup.*
-- [ ] **CR-7** The map, each location's spots drawn on it (8.1, 12.1), from the owner's hand drawing. *Replaces the
-  placeholder shapes.*
+- [ ] **CR-7** The map, each location's spots drawn on it (8.1, 12.1), from the owner's hand drawing. *The paper and
+  the outline are the owner's (D161). Still placeholders: the green and red circles (`src/ui/map.js`), until the
+  owner's picture for each spot once it is discovered.*
 - [ ] **CR-8** Perk and ability icons (the action bar shows initials), and the look of a Greedy fish and a bent fish
   (6.3). *Also replaces the green eye around Look Underwater (D139), four flat rings in `src/scene/views.js`.*
 - [ ] **CR-9** The fixed palette (4.1) and the art sheet's open trials (`art.html`).

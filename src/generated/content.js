@@ -8630,6 +8630,10 @@ export const content = {
         {
           "id": "reedy-shore",
           "name": "location.lake.spots.reedy-shore.name",
+          "map": {
+            "x": 34,
+            "y": 121
+          },
           "placeholder": [
             "name"
           ],
@@ -8770,6 +8774,10 @@ export const content = {
         {
           "id": "swamp",
           "name": "location.lake.spots.swamp.name",
+          "map": {
+            "x": 92,
+            "y": 86
+          },
           "placeholder": [
             "name"
           ],
@@ -8899,6 +8907,10 @@ export const content = {
         {
           "id": "still-water",
           "name": "location.lake.spots.still-water.name",
+          "map": {
+            "x": 81,
+            "y": 157
+          },
           "placeholder": [
             "name"
           ],
@@ -9052,6 +9064,10 @@ export const content = {
         {
           "id": "rocky-shore",
           "name": "location.lake.spots.rocky-shore.name",
+          "map": {
+            "x": 220,
+            "y": 195
+          },
           "placeholder": [
             "name"
           ],
@@ -9202,6 +9218,10 @@ export const content = {
         {
           "id": "open-water",
           "name": "location.lake.spots.open-water.name",
+          "map": {
+            "x": 231,
+            "y": 153
+          },
           "placeholder": [
             "name"
           ],
@@ -9321,6 +9341,10 @@ export const content = {
         {
           "id": "deep-water",
           "name": "location.lake.spots.deep-water.name",
+          "map": {
+            "x": 302,
+            "y": 174
+          },
           "placeholder": [
             "name"
           ],
@@ -9463,6 +9487,10 @@ export const content = {
         {
           "id": "the-first-pool",
           "name": "location.mage-tower.spots.the-first-pool.name",
+          "map": {
+            "x": 221,
+            "y": 56
+          },
           "look": {
             "tint": "#5a3f8a",
             "tintAlpha": 0.25,
@@ -9521,6 +9549,7 @@ export const content = {
     "river": {
       "id": "river",
       "name": "location.river.name",
+      "hidden": true,
       "biteThreshold": 50,
       "treasureThreshold": 5,
       "stuffThreshold": 20,
@@ -9576,6 +9605,10 @@ export const content = {
         {
           "id": "upper-river",
           "name": "location.river.spots.upper-river.name",
+          "map": {
+            "x": 195,
+            "y": 291
+          },
           "placeholder": [
             "name"
           ],
@@ -9715,6 +9748,10 @@ export const content = {
         {
           "id": "lower-river",
           "name": "location.river.spots.lower-river.name",
+          "map": {
+            "x": 189,
+            "y": 247
+          },
           "placeholder": [
             "name"
           ],
@@ -9887,6 +9924,10 @@ export const content = {
         {
           "id": "river-mouth",
           "name": "location.river.spots.river-mouth.name",
+          "map": {
+            "x": 148,
+            "y": 213
+          },
           "placeholder": [
             "name"
           ],
@@ -10038,6 +10079,10 @@ export const content = {
       "id": "town",
       "placeholder": true,
       "name": "location.town.name",
+      "map": {
+        "x": 19,
+        "y": 120
+      },
       "town": true,
       "hidden": true,
       "biteThreshold": 200,
@@ -15123,6 +15168,11 @@ export const content = {
                   "open": true
                 },
                 {
+                  "kind": "place",
+                  "location": "river",
+                  "open": true
+                },
+                {
                   "kind": "go",
                   "location": "town",
                   "spot": "square"
@@ -15142,6 +15192,11 @@ export const content = {
                   "open": true
                 },
                 {
+                  "kind": "place",
+                  "location": "river",
+                  "open": true
+                },
+                {
                   "kind": "go",
                   "location": "town",
                   "spot": "inn"
@@ -15158,6 +15213,11 @@ export const content = {
                 {
                   "kind": "place",
                   "location": "town",
+                  "open": true
+                },
+                {
+                  "kind": "place",
+                  "location": "river",
                   "open": true
                 }
               ]

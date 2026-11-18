@@ -66,6 +66,7 @@ npm run commons search <slug> "<query>"   # Wikimedia Commons pictures on a cont
 npm run sim [casts=500 games=20 class=rogue-fisher strike=250..900 perks=first|passive|active]   # balance: seeded games per class (9.1)
 npm run planks [pine|oak]   # the light theme's tabletop tile, from docs/design/refs/, into styles.css (D143)
 npm run obsidian            # the dark theme's obsidian tile, drawn as code, into styles.css (D145)
+npm run map                 # the map's paper and outline, from docs/design/map/, into src/generated/map-paper.js (D161)
 npm run prompts # record the owner's prompts per session in docs/prompts.json, and print the total
 # http://localhost:8001/art.html   the art sheet: trials, fish that swim, the painted spots by season, every sprite and icon enlarged;
 #   each section folds and builds when opened; #seed=N, #open=all (a # not a ?: serve redirects art.html and drops a ?)
@@ -254,5 +255,10 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   the fish's `predator` mark (D152).
 - **`timingFrom` in `src/engine/game.js` must carry `fightMs`:** it isn't a game value, and without it a manoeuvre
   never runs out (D141).
+- **The map (D161) is the `map` pane drawn over the whole screen by `src/ui/map.js`,** not in the pane box. Its picture
+  is baked from the owner's photo and drawing (`docs/design/map/`, local only) into `src/generated/map-paper.js`; a
+  spot's `map` (a town's, for the whole town) is its place in that picture's 320 pixels, and a spot without one can't be
+  gone to from the map (a test wants every spot placed). `mapMarks` (`src/engine/knowledge.js`) lists them; the button shows from two marks on. A press
+  goes to the nearest mark in reach, since the circles are small on a phone.
 - **`src/main.js`: `castInProgress()` is not `lineOut()`.** Saves are held back only while a cast is in progress;
   equipment can't change then, nor in the pause after a missed splash (`lineOut()`).

@@ -3,6 +3,7 @@
   "id": "town",
   "placeholder": true,
   "name": "The town",
+  "map": { "x": 19, "y": 120 },
   "town": true,
   "hidden": true,
   "biteThreshold": 200,

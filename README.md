@@ -51,6 +51,7 @@ and the art sheet at `/art.html` there.
 | `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, perks, sets, weather, surface features, tables, buffs, vendors, rules; events are text (`.md`) |
 | `schemas/` | A JSON Schema per kind of content; VS Code uses them to check and complete content files |
 | `src/generated/content.js` | Built from `content/` by `npm run content`; don't edit |
+| `src/generated/map-paper.js` | The map's picture as a data URL, baked by `npm run map`; don't edit |
 | `src/strings.js` | `t()`: all player-facing text goes through it |
 | `src/save.js` | The three save slots in the browser's storage |
 | `src/settings.js` | Settings, kept per device: the theme, the background (D144), the font (D132), Show dice, the volume |
@@ -115,7 +116,8 @@ and the art sheet at `/art.html` there.
 | `src/ui/event-words.js` | The placeholders in event text (`{name}`, `{class}`…), and putting a slide's text together |
 | `src/ui/effects.js` | An item's effects as tooltip lines, green or red |
 | `src/ui/errors.js` | Red error text over the scene ("Must have a fishing pole equipped.") |
-| `src/ui/panels.js` | The panes: character (the paper doll), journal, map, bucket, bag (over the log), menu, settings; the barter, stew and aquarium window (`shopPane`) |
+| `src/ui/map.js` | The map over the whole screen (12.1, D161): the paper, a circle per spot, the name at the top |
+| `src/ui/panels.js` | The panes: character (the paper doll), journal, bucket, bag (over the log), menu, settings; the barter, stew and aquarium window (`shopPane`) |
 | `test/` | Unit tests (`node:test`) |
 | `tools/content.mjs` | Checks content and builds the generated module, plus `dist/content-overview.html` |
 | `tools/event-text.mjs` | Reads the event text format (`content/events/*.md`) and holds its vocabulary |
@@ -124,6 +126,7 @@ and the art sheet at `/art.html` there.
 | `tools/photo-icon.mjs` | A photo to a first-draft 32×32 icon, a fish's eye included (`eye=1`); the photo-to-icon skill |
 | `tools/cutout.py` | Cuts the subject out of a photo (rembg), onto magenta or transparent; run by `tools/py.mjs` |
 | `tools/planks.py` | The light theme's pine tabletop, from a photo, written into `styles.css` (`npm run planks`, D143) |
+| `tools/map.py` | The map's paper and the lake's outline, from the owner's photo and drawing, into `src/generated/map-paper.js` (`npm run map`, D161) |
 | `tools/obsidian.py` | The dark theme's obsidian, drawn as code, written into `styles.css` (`npm run obsidian`, D145) |
 | `tools/commons.py` | Wikimedia Commons pictures: search to a contact sheet, fetch a pick with its licence |
 | `tools/py.mjs` | Runs the Python tools in their own environment, `.venv-cutout/` (`npm run cutout setup`); `tools/python-requirements.txt` lists what it installs |

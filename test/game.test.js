@@ -13,6 +13,7 @@ import { TIME, clock } from '../src/engine/time.js';
 import { WATER, bringFeature, fishOf } from '../src/engine/features.js';
 import { diceFrom } from '../src/engine/state.js';
 import { content } from '../src/generated/content.js';
+import { MAP_SIZE } from '../src/generated/map-paper.js';
 
 /** @typedef {import('../src/engine/state.js').GameState} GameState */
 /** @typedef {import('../src/engine/game.js').GameCast} GameCast */
@@ -501,7 +502,7 @@ test('a new game starts at the reedy shore; travel moves between spots, between 
   const start = game(18);
   assert.deepEqual([start.location, start.spot], ['lake', 'reedy-shore']);
   // The river mouth is a spot found later (R11.8): known here, as if noticed.
-  const withFeature = { ...start, known: { 'river:spot:river-mouth': 'heard' }, features: [{ id: 'roach-school', x: 120, y: 100, uses: 2, castsLeft: 10, born: 0 }] };
+  const withFeature = { ...start, places: { river: 'open' }, known: { 'river:spot:river-mouth': 'heard' }, features: [{ id: 'roach-school', x: 120, y: 100, uses: 2, castsLeft: 10, born: 0 }] };
   const { state } = travel(withFeature, 'river', 'river-mouth');
   assert.deepEqual([state.location, state.spot], ['river', 'river-mouth']);
   assert.deepEqual(state.features, [], 'features stay with their water');
@@ -572,7 +573,7 @@ test('features appear on the water, drift, and go', () => {
 test("a spot's own schools and big fish come up there, and the location's glint (D102)", () => {
   const upper = content.locations.river.spots[0];
   const allowed = new Set([...upper.features, ...content.locations.river.features].map((/** @type {{ id: string }} */ f) => f.id));
-  let state = travel(game(24), 'river', 'upper-river').state;
+  let state = travel({ ...game(24), places: { river: 'open' } }, 'river', 'upper-river').state;
   const seen = new Set();
   for (let n = 0; n < 400; n++) {
     const out = castLine(state, 0);
@@ -767,11 +768,33 @@ test('Fish Find by depth: weights bring up bottom fish, and no bonus changes not
   }
 });
 
+test('the map: a mark per known spot with a place on it, the town as one, the one the player is at marked (12.1)', async () => {
+  const { mapMarks } = await import('../src/engine/knowledge.js');
+  const s = game(22);
+  const at = (/** @type {GameState} */ state) => mapMarks(state).map((m) => `${m.location}:${m.spot}${m.here ? '*' : ''}`);
+  assert.deepEqual(at(s), ['lake:reedy-shore*'], 'only the reedy shore at first, so no map button');
+  const town = { ...s, places: { town: 'open' } };
+  assert.deepEqual(at(town), ['lake:reedy-shore*', 'town:square'], 'the town is one mark, going to its first place');
+  assert.deepEqual(at({ ...town, location: 'town', spot: 'inn' }), ['lake:reedy-shore', 'town:square*'], 'anywhere in town is there');
+  const noticed = { ...s, known: { 'lake:spot:swamp': 'heard' } };
+  assert.deepEqual(at(noticed), ['lake:reedy-shore*', 'lake:swamp'], 'a spot learned shows');
+  assert.deepEqual(at({ ...s, places: { river: 'open' }, known: { 'river:spot:lower-river': 'heard' } }), ['lake:reedy-shore*', 'river:upper-river', 'river:lower-river']);
+  assert.deepEqual(at({ ...s, places: { river: 'open' } }), ['lake:reedy-shore*', 'river:upper-river'], 'the river, once open');
+  for (const loc of Object.values(content.locations)) {
+    // Every spot can be reached from the map: a town as a whole, every other spot on its own.
+    if (!loc.retired) assert.ok(loc.town ? loc.map : loc.spots.every((/** @type {any} */ sp) => sp.retired || sp.map), `${loc.id}: every spot on the map`);
+    for (const p of [loc.map, ...(loc.spots ?? []).map((/** @type {any} */ sp) => sp.map)].filter(Boolean)) {
+      assert.ok(p.x >= 0 && p.x < MAP_SIZE && p.y >= 0 && p.y < MAP_SIZE, `${loc.id}: on the paper`);
+    }
+  }
+});
+
 test('a hidden place opens once its map fragments are found, and a quest can close it (8.2, 8.4)', async () => {
   const { placeOpen } = await import('../src/engine/knowledge.js');
   const { startEvent } = await import('../src/engine/events.js');
   let s = game(22);
-  assert.ok(placeOpen(s, 'lake') && placeOpen(s, 'river'));
+  assert.ok(placeOpen(s, 'lake'));
+  assert.ok(!placeOpen(s, 'river'), 'hidden until it is on the map (12.1)');
   assert.ok(!placeOpen(s, 'mage-tower'), 'hidden at first');
   assert.equal(travel(s, 'mage-tower', 'the-first-pool').error, 'unknownPlace');
   // Two pieces found: not yet. The third comes up with the next cast's end.
