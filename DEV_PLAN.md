@@ -11,7 +11,45 @@ a plain generic sentence, a stand-in rule. A town of placeholder squares is bett
 listed under the creative task that will replace it, so nothing is forgotten; a placeholder that fits no task gets a
 new one.
 
-## Next up: Phase 12, the map, the sun and moon, the sky
+## Next up: the testers' fixes (2026-11-18)
+
+The owner's list after testing on phones, **built before Phase 12 goes on**, in this order, one task at a time (one
+fresh subagent per task). Every call Claude makes that isn't in the owner's words goes on docs/REVIEW.md; a decision
+per task goes in docs/decisions.md.
+
+- [ ] **T.1** A tap on the scene closes an open pane, on a phone. Every mobile tester found it odd that they could cast
+  from under the equipment pane. *The owner's words:* "It is the player's responsibility to not open the bag when they
+  have a bobber out, and they can click twice in this case." **On a phone only:** the tap that closes the pane does
+  nothing else (no cast, no strike, no move in town); a second tap does. **On a wide screen (`fit` in `src/main.js`,
+  900 px and up) nothing changes:** there is room for everything there, so a tap on the scene keeps working with a
+  pane open. Any pane the button row opens and closes counts (character, bags, journal, perks…); the event dialog, the
+  map and the barter window keep their own rules.
+- [ ] **T.2** A long press equips, on a phone, and every equippable item says how. *The owner's answers
+  (2026-11-18):* **a long press always equips** on a phone, as a right-click does with a mouse: an item in the bags
+  goes into its slot (a potion is drunk, as with the right-click), an equipped item goes back to the bags. **Dragging
+  goes on phones** (`src/ui/drag.js`); a mouse still drags. A fish in the bucket keeps its long-press options menu
+  (R21.1). **At the bottom of every equippable item's tooltip** while it is in the bags: "Long press to equip", in
+  slightly greyed-out italics. Claude's call: with a mouse it reads "Right-click to equip" (on REVIEW.md); the tooltip
+  goes by the last pointer used (`lastPointer` in `src/main.js`).
+- [ ] **T.3** Pick from a slot, as WoW's flyout. *The owner's words:* a tap or left click on a slot in the character
+  pane opens a list of every unequipped item in the bags that fits that slot; horizontally scrollable on a phone.
+  *The owner's answers (2026-11-18):* **with a mouse,** hovering an item in the list shows its tooltip and a click
+  equips it; **on a phone, the first tap shows the item's tooltip and a second tap on the same item equips it.** A tap
+  elsewhere closes the list. Equipping from it follows the same rules as anywhere else (not with the line out,
+  `error.busy`). Claude's calls, for REVIEW.md: what the list shows when nothing fits, and how the equipped item's own
+  tooltip is still reached on a phone.
+- [ ] **T.4** The stew cooks, and the inn says good morning. *The owner's words:* fish put in the perpetual stew count
+  for a bowl only **two game hours after they went in** (cooking); putting a fish in gives a message on the lines of
+  "Thank you for the contribution - come back in some time to taste it", and **no longer leads to eating at once.**
+  Why: testers ate the stew and then slept until morning, which used up the buff's hours at once. **After sleeping
+  (at the inn or in your room), the inn's dialog opens with a morning greeting**, "Mornin' - don't leave on an empty
+  stomach!", with the stew among its choices (the owner's answer, 2026-11-18). Claude's calls, for REVIEW.md: each fish
+  in the pot keeps the time it went in; a bowl takes only the cooked fish and leaves the rest cooking; with nothing
+  cooked yet the bowl is refused with a line saying it's still cooking; fish already in the pot in an old save count
+  as cooked (a new `SAVE_VERSION` and its migration). The owner's lines get an editing pass in the fantasy voice,
+  keeping "Mornin'".
+
+## Then: Phase 12, the map, the sun and moon, the sky
 
 The owner's ask of 2026-11-16 (D160): clouds that follow the weather on the painted spots, and before them, where
 the sun and moon are. **Done in this order, one task at a time**, with the owner's refinement questions before each.
