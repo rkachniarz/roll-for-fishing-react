@@ -6,7 +6,7 @@
 // how they look all winter. Four seasons (D118): spring's vivid green with last
 // year's stalks still standing, summer, autumn turning, winter's dark brown.
 //
-// Eye level, looking far out over the open lake: sky, a bare horizon at row
+// Eye level, looking far out over the open lake: a bare horizon at row
 // 110 (no far shore), then water to the bottom of the view. Two banks of
 // reeds fill the bottom corners, close up, with a channel of open water
 // between them where the line goes out. The reeds are a mix, as in the photo:
@@ -17,6 +17,9 @@
 // frames, glints flick, rings spread now and then (often, in rain), and gusts
 // roll across the reeds from the left. Everything scattered is placed by the
 // `rand` it's given (the scenery stream, D4).
+//
+// No sky of its own (12.4, D169): above the horizon the painting is empty, and
+// the shared sky layer (src/scene/sky-layer.js) shows through.
 
 import { Container, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { paintGrid, paintRing } from './sprites.js';
@@ -24,7 +27,7 @@ import { paintGrid, paintRing } from './sprites.js';
 /** The painting's size: the play area's 256 plus a strip either side (D93). */
 const W = 320;
 const H = 256;
-/** The horizon: where the still water's painting puts its water, too. */
+/** The horizon (D169): the sky layer fills everything above it; the still water's painting puts its water here too. */
 const HZ = 110;
 /** Reed sections, each swaying on its own as a gust passes, and how far a blade may lean past its section. */
 const SECTION = 40;
@@ -52,14 +55,6 @@ function topAt(x) {
 
 /** Every colour, by name (docs/art.md: a small, named palette). Summer, from the photo. */
 export const REEDY = {
-  skyTop: '#5f95d6',
-  sky: '#86b1e3',
-  skyLow: '#b5d0ec',
-  haze: '#d3e2ef',
-  cloudLight: '#f4f7fa',
-  cloud: '#dfe7ef',
-  cloudShade: '#c3d0de',
-  cloudDark: '#a9b8cb',
   waterHaze: '#c2d6e6',
   waterFar: '#9dbbd8',
   waterMid: '#7598c2',
@@ -94,10 +89,6 @@ export const REEDY = {
  */
 export const REEDY_SPRING = {
   ...REEDY,
-  skyTop: '#6aa2dd',
-  sky: '#93bde8',
-  skyLow: '#c0daf0',
-  haze: '#dceaf3',
   waterHaze: '#c8dbe9',
   waterFar: '#a3c0dc',
   waterMid: '#7b9ec6',
@@ -119,14 +110,6 @@ export const REEDY_SPRING = {
  */
 export const REEDY_AUTUMN = {
   ...REEDY,
-  skyTop: '#8a9db4',
-  sky: '#a4b4c7',
-  skyLow: '#c1cbd6',
-  haze: '#d5dae0',
-  cloudLight: '#e6e9ed',
-  cloud: '#d1d6dd',
-  cloudShade: '#b6bec9',
-  cloudDark: '#9ba5b3',
   waterHaze: '#c4cbd3',
   waterFar: '#a3afbd',
   waterMid: '#7f8fa3',
@@ -153,14 +136,6 @@ export const REEDY_AUTUMN = {
  */
 export const REEDY_WINTER = {
   ...REEDY,
-  skyTop: '#6f8fb8',
-  sky: '#93abc9',
-  skyLow: '#bccada',
-  haze: '#d9dfe6',
-  cloudLight: '#eef0f2',
-  cloud: '#d2d7de',
-  cloudShade: '#a9b2bf',
-  cloudDark: '#858f9e',
   waterHaze: '#c9d2dc',
   waterFar: '#a9b7c7',
   waterMid: '#8496ad',
@@ -196,20 +171,18 @@ const WINTER_GREENS = {
 };
 
 /**
- * What changes with the season besides the colours: clouds on the horizon;
- * how many blades are still green, drawn in `greens` rather than the season's
+ * What changes with the season besides the colours: how many blades are still green, drawn in `greens` rather than the season's
  * own reed colours; how many are dead stalks, and how many cattails show
  * their brown heads; glints on the water.
- * @typedef {{ palette: typeof REEDY, greens: typeof REEDY, clouds: number, green: number, dead: number, heads: number,
- *   glints: number }} ReedySeason  `clouds`: how big the clouds are, 0 for none.
+ * @typedef {{ palette: typeof REEDY, greens: typeof REEDY, green: number, dead: number, heads: number,
+ *   glints: number }} ReedySeason
  * @type {Record<'spring' | 'summer' | 'autumn' | 'winter', ReedySeason>}
  */
 export const REEDY_SEASONS = {
-  spring: { palette: REEDY_SPRING, greens: REEDY_SPRING, clouds: 0.8, green: 1, dead: 0.12, heads: 0.02, glints: 60 },
-  summer: { palette: REEDY, greens: REEDY, clouds: 1, green: 1, dead: 0.04, heads: 0.03, glints: 60 },
-  autumn: { palette: REEDY_AUTUMN, greens: REEDY, clouds: 0, green: 0.3, dead: 0.06, heads: 0.12, glints: 30 },
-  // Winter's clouds are the November photo's: big and heavy, up into the sky.
-  winter: { palette: REEDY_WINTER, greens: WINTER_GREENS, clouds: 2.2, green: 0.1, dead: 0.08, heads: 0.25, glints: 25 },
+  spring: { palette: REEDY_SPRING, greens: REEDY_SPRING, green: 1, dead: 0.12, heads: 0.02, glints: 60 },
+  summer: { palette: REEDY, greens: REEDY, green: 1, dead: 0.04, heads: 0.03, glints: 60 },
+  autumn: { palette: REEDY_AUTUMN, greens: REEDY, green: 0.3, dead: 0.06, heads: 0.12, glints: 30 },
+  winter: { palette: REEDY_WINTER, greens: WINTER_GREENS, green: 0.1, dead: 0.08, heads: 0.25, glints: 25 },
 };
 
 /**
@@ -257,51 +230,7 @@ function ramp(steps, t, x, y) {
   return f > (BAYER[y % 4][x % 4] + 0.5) / 16 ? steps[Math.min(i + 1, steps.length - 1)] : steps[i];
 }
 
-// ---------- Sky and water ----------
-
-/**
- * The sky, and in summer a few heaped clouds sitting low on the horizon:
- * bright on top, greyer and flat underneath, as clouds far off look.
- * @param {typeof REEDY} P @param {ReedySeason} S @param {() => number} rand
- */
-function paintSky(P, S, rand) {
-  const canvas = makeCanvas(W, HZ);
-  const g = ctxOf(canvas);
-  const sky = [P.skyTop, P.sky, P.skyLow, P.haze];
-  for (let y = 0; y < HZ; y++) for (let x = 0; x < W; x++) dot(g, x, y, ramp(sky, (y / HZ) ** 1.3, x, y));
-  if (!S.clouds) return canvas;
-  const size = S.clouds;
-  const shades = [P.cloudLight, P.cloud, P.cloudShade, P.cloudDark];
-  let x = -10 + rand() * 30;
-  while (x < W) {
-    const width = (34 + rand() * 46) * Math.sqrt(size);
-    const base = HZ - 3 - Math.floor(rand() * 8 * size);
-    const height = (14 + rand() * 14) * size;
-    const count = 4 + Math.floor(rand() * 3);
-    const puffs = Array.from({ length: count }, (_, i) => {
-      const px = x + (width * (i + 0.5)) / count + (rand() - 0.5) * 6;
-      const r = height * (0.55 + rand() * 0.5) * (1 - Math.abs(i / (count - 1) - 0.5));
-      return { x: px, y: base - r * 0.7, r: Math.max(r, 5) };
-    });
-    for (let py = Math.floor(base - height * 1.6); py < base; py++) {
-      for (let px = Math.floor(x - 6); px < x + width + 6; px++) {
-        if (px < 0 || px >= W || py < 0) continue;
-        // Shaded by height in the cloud, the edge dithered.
-        // Lit from above: shaded by how far down its own puff a pixel is.
-        let best = Infinity;
-        for (const p of puffs) {
-          const d = (px - p.x) ** 2 + ((py - p.y) * 1.2) ** 2;
-          if (d < p.r * p.r) best = Math.min(best, (py - (p.y - p.r)) / (2 * p.r));
-        }
-        if (best === Infinity) continue;
-        const flat = (py - (base - 4)) / 4;
-        dot(g, px, py, ramp(shades, Math.max(best * 0.75, flat), px, py));
-      }
-    }
-    x += width + (20 + rand() * 50) / size;
-  }
-  return canvas;
-}
+// ---------- The water ----------
 
 /**
  * Three frames of the open water: paler towards the horizon where it mirrors
@@ -502,8 +431,9 @@ function paintBank(P, S, rand) {
 
 /**
  * The reedy shore painted, in the same two layers as the pond (Pond in
- * pond.js): `back` (sky, water, ripples) goes under the bobber and the line,
- * `front` (the reed banks) over them.
+ * pond.js): `back` (water, ripples) goes under the bobber and the line,
+ * `front` (the reed banks) over them; the sky layer goes under `back`, its
+ * glitter in `waterLayer`.
  * @param {() => number} rand  Uniform [0, 1), the scenery stream.
  * @param {string} [season]  One of the game's seasons.
  * @returns {import('./pond.js').Pond}
@@ -515,11 +445,13 @@ export function paintReedy(rand, season = 'summer') {
   const tex = (/** @type {HTMLCanvasElement} */ c) => Texture.from(c);
 
   const back = new Container();
-  back.addChild(new Sprite(tex(paintSky(P, S, rand))));
   const waterFrames = paintWater(P, rand).map(tex);
   const water = new Sprite(waterFrames[0]);
   water.y = HZ;
   back.addChild(water);
+  // The sky layer's glitter goes here, on the water and under what floats (D169).
+  const waterLayer = new Container();
+  back.addChild(waterLayer);
 
   // Glints flicking on the water, more of them far out where the sky is mirrored.
   const glintKeys = { p: P.waveLight, g: P.glint };
@@ -589,6 +521,12 @@ export function paintReedy(rand, season = 'summer') {
   return {
     back,
     front,
+    horizon: HZ,
+    // Nothing stands on the horizon: open lake to the sky.
+    skyline: Array.from({ length: W }, () => HZ),
+    waterLayer,
+    // Open water: below the horizon and clear of the reed banks.
+    isWater: (x, y) => y > HZ && topAt(x) > y + 1,
     update(now, wind, crop, raining) {
       for (const [s, sprite] of reeds.entries()) sprite.texture = reedFrames[s][gust(now, wind, s * SECTION + SECTION / 2)];
       water.texture = waterFrames[Math.floor(now / (600 / (1 + wind * 0.4))) % 3];

@@ -180,6 +180,13 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   The swamp's comes from its layout (`SWAMP_LAYOUT`, 32 columns further right): change the two together.
   A painting can also have a picture under the water (`UNDER` in `src/scene/views.js`, D159), shown for Look
   Underwater and the dive; `body[data-under]` names the one showing, for `tools/verify.mjs`.
+- **The sky is its own layer (D169, `src/scene/sky-layer.js`):** a painting that shows sky paints nothing above its
+  `horizon` (row 110 for the still water and the reedy shore) and gives `horizon`, `skyline` (the top of its land
+  per column, which hides the sun and its glitter), `waterLayer` (a container in `back` just over the water, where
+  the glitter hangs) and `isWater`. The sun's and the moon's height is 4 px a degree up from the horizon; across,
+  the view's 60° over 256 px carried on over the strips. The still water's water still mirrors its photo's sky
+  (`paintMirrorSky`), never shown itself. Take the glitter off a painting (`attach(null)`) before destroying it:
+  it hangs on the painting's water. The scene needs `World.time` and `World.fullMoonAt` for the sun and the moon.
 - **`styles.css`: `--text` is the text colour; `--type` is the text size factor** (`--ui`, 1.25 on a wide screen,
   D121, times the font's own factor: Alegreya Sans is set at 1.05, D132). Every `font-size` is `calc(Npx * var(--type))`. `fit` in
   `src/main.js` sets `--ui`, `--hud`, `--button`, `--slot`, `--slot-icon` and `--tip-icon`; the icons are whole device

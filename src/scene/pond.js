@@ -5,7 +5,7 @@
 // the game as still water's scene (paintPond, D115, D116), with its own open
 // water in content/locations/lake.json.
 //
-// Eye level, as in the photo: overcast sky, a wooded hill, a bed of reeds,
+// Eye level, as in the photo: a wooded hill, a bed of reeds,
 // then dark still water with the hill mirrored in it, floating leaves, a
 // fallen log and a tangle of sticks. A birch leans in on the left and a
 // beech spray hangs in from the top right. Common reeds from a second photo
@@ -22,15 +22,20 @@
 // glints flick on the water, rings spread now and then (often, in rain), and
 // gusts roll across the reeds, the birch's twigs and the beech leaves. Every
 // scattered thing is placed by the `rand` it's given (the scenery stream, D4).
+//
+// No sky of its own (12.4, D169): above the hill the painting is empty, and the
+// shared sky layer (src/scene/sky-layer.js) shows through. The photo's overcast
+// is kept only as what the water mirrors (`paintMirrorSky`).
 
-import { Application, Container, Sprite, Texture, TextureStyle } from 'pixi.js';
+import { Application, Container, Rectangle, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { createSky } from './sky.js';
+import { createSkyLayer, minutesOf } from './sky-layer.js';
 import { BOBBER, WATERLINE, paintGrid, paintRing } from './sprites.js';
 
 /** The painting's size: the play area's 256 plus a strip either side (D93). */
 const W = 320;
 const H = 256;
-/** Where the reeds stand in the water: everything below is water. */
+/** Where the reeds stand in the water: everything below is water. It is the horizon, too (D169). */
 const WL = 110;
 /**
  * How far off the far shore is: everything on it is drawn this much smaller
@@ -113,16 +118,11 @@ export const POND = {
   reedLimeDark: '#5b7a3f',
   reedLime: '#88a656',
   reedLimePale: '#c4d68a',
-  // Fair-weather clouds, for summer (unused in autumn's overcast).
-  cloudWhite: '#f3f4f6',
-  cloudLight: '#dadee5',
-  cloudGrey: '#b6bdc8',
-  cloudShade: '#939cab',
 };
 
 /**
- * The same spot in summer (docs/design/photo-summer-pond.png): blue sky and
- * big white clouds, everything on the shore fresh green, the reed bed green to
+ * The same spot in summer (docs/design/photo-summer-pond.png): a blue sky for
+ * the water to mirror, everything on the shore fresh green, the reed bed green to
  * its tips, the water a dark slate blue broken up by the wind. The names stay
  * autumn's, so a "leafGold" here is a sunlit green.
  */
@@ -175,14 +175,14 @@ export const POND_SUMMER = {
 
 /**
  * What changes with the season besides the colours.
- * @typedef {{ palette: typeof POND, clouds: boolean, greenReeds: number, floating: number, glints: number, canopy: boolean }} PondSeason
+ * @typedef {{ palette: typeof POND, greenReeds: number, floating: number, glints: number, canopy: boolean }} PondSeason
  * @type {Record<'autumn' | 'summer', PondSeason>}
  */
 export const POND_SEASONS = {
-  autumn: { palette: POND, clouds: false, greenReeds: 0.3, floating: 190, glints: 34, canopy: false },
-  // Summer: clouds, a reed bed mostly green, few leaves on the water, the wind
+  autumn: { palette: POND, greenReeds: 0.3, floating: 190, glints: 34, canopy: false },
+  // Summer: a reed bed mostly green, few leaves on the water, the wind
   // catching the light in more places, and the trees in full leaf.
-  summer: { palette: POND_SUMMER, clouds: true, greenReeds: 0.85, floating: 24, glints: 70, canopy: true },
+  summer: { palette: POND_SUMMER, greenReeds: 0.85, floating: 24, glints: 70, canopy: true },
 };
 
 /**
@@ -239,63 +239,15 @@ function line(g, x0, y0, x1, y1, color) {
 /** @param {() => number} rand @param {T[]} list @template T */
 const pick = (rand, list) => list[Math.floor(rand() * list.length)];
 
-// ---------- The land: sky, wooded hill, bushes ----------
+// ---------- The land: wooded hill, bushes ----------
 
 /**
- * Summer's heaped-up clouds, as in the photo: bright where the sun is on
- * their tops, greying underneath, flat-bottomed, heavier on the right. Each
- * is a few round puffs; a pixel is shaded by where it sits in the puff that
- * covers it most, dithered at the edges between shades.
- * @param {CanvasRenderingContext2D} g @param {() => number} rand
+ * The sky the water mirrors: the photo's, in three bands dithered into each
+ * other, lightest at the horizon. Never shown itself: the sky layer is (D169).
  */
-function paintClouds(g, rand) {
-  /** @type {{ base: number, puffs: { x: number, y: number, r: number }[] }[]} */
-  const clouds = [];
-  for (let i = 0; i < 8; i++) {
-    const cx = -20 + rand() * (W + 40);
-    const width = 50 + rand() * 70 + (cx > W / 2 ? 40 : 0);
-    const base = 20 + rand() * 46;
-    const puffs = [];
-    for (let n = 0, count = 5 + Math.floor(width / 10); n < count; n++) {
-      const r = 6 + rand() * (8 + width / 10);
-      puffs.push({ x: cx + (rand() - 0.5) * width, y: base - r * (0.3 + rand() * 0.6), r });
-    }
-    clouds.push({ base, puffs });
-  }
-  // Back to front: the lower clouds are nearer, so they go on top.
-  clouds.sort((a, b) => a.base - b.base);
-  for (const { base, puffs } of clouds) {
-    for (let y = 0; y < Math.min(base, WL); y++) {
-      for (let x = 0; x < W; x++) {
-        let best = null;
-        let depth = 0;
-        for (const p of puffs) {
-          const d = p.r - Math.hypot(x - p.x, (y - p.y) * 1.25);
-          if (d > depth) {
-            depth = d;
-            best = p;
-          }
-        }
-        if (!best) continue;
-        // Lit from above and a little from the left; the bottom rows in shade.
-        const light = (y - best.y) / best.r + ((x - best.x) / best.r) * 0.3 + (base - y < 3 ? 0.6 : 0) + (BAYER[y % 4][x % 4] / 16 - 0.5) * 0.3;
-        // Heavier, greyer clouds to the right, as in the photo.
-        const heavy = light + (x / W) * 0.35;
-        dot(g, x, y, heavy < -0.45 ? P.cloudWhite : heavy < 0 ? P.cloudLight : heavy < 0.45 ? P.cloudGrey : P.cloudShade);
-      }
-    }
-  }
-}
-
-/** The top of the far trees at column x: low on the left, a hill right of middle. */
-const hill = (/** @type {number} */ x) => up(66 - 22 * Math.exp(-(((x - 200) / 75) ** 2)) - 5 * Math.exp(-(((x - 300) / 30) ** 2)) + 2 * Math.sin(x / 9));
-
-/** @param {() => number} rand */
-function paintLand(rand) {
+function paintMirrorSky() {
   const canvas = makeCanvas(W, WL);
   const g = ctxOf(canvas);
-
-  // Overcast sky in three bands, dithered into each other, lightest at the horizon.
   /** @type {[number, string][]} */
   const bands = [
     [0, P.skyTop],
@@ -311,19 +263,18 @@ function paintLand(rand) {
       if ((x + top) % 4 === 0) g.fillRect(x, top - 3, 1, 1);
     }
   });
-  if (S.clouds) paintClouds(g, rand);
-  // Overcast: long thin streaks of darker cloud, their ends broken up.
-  else for (let i = 0; i < 16; i++) {
-    const y = 3 + Math.floor(rand() * 56);
-    const x = Math.floor(rand() * W);
-    const len = 10 + Math.floor(rand() * 40);
-    const color = y < 50 ? P.skyTop : P.sky;
-    for (let n = 0; n < len; n++) {
-      const edge = n < 4 || n > len - 5;
-      if (!edge || n % 2 === 0) dot(g, x + n, y, color);
-    }
-  }
+  return canvas;
+}
 
+/** The top of the far trees at column x: low on the left, a hill right of middle. */
+const hill = (/** @type {number} */ x) => up(66 - 22 * Math.exp(-(((x - 200) / 75) ** 2)) - 5 * Math.exp(-(((x - 300) / 30) ** 2)) + 2 * Math.sin(x / 9));
+
+/** @param {() => number} rand */
+function paintLand(rand) {
+  const canvas = makeCanvas(W, WL);
+  const g = ctxOf(canvas);
+
+  // Nothing above the hill: the sky layer shows through (D169).
   // The wooded hill: a dark base, pines along the top, broadleaves in autumn
   // colours lower down, a few pale birch trunks showing through.
   for (let x = 0; x < W; x++) {
@@ -1041,11 +992,16 @@ function paintReedPlant(plant, reach) {
 // ---------- The painting ----------
 
 /**
- * The pond painted, in two layers: `back` (sky, land, water, the reed bed,
- * what floats) goes under the bobber and the line, `front` (the trees and the
+ * The pond painted, in two layers: `back` (land, water, the reed bed, what
+ * floats) goes under the bobber and the line, `front` (the trees and the
  * reeds in the front corners) over them. Both are 320 wide; `update` moves
- * them all, given how much of each side is cropped off.
- * @typedef {{ back: Container, front: Container, update: (now: number, wind: number, crop: number, raining: boolean) => void }} Pond
+ * them all, given how much of each side is cropped off. A painting that shows
+ * sky (D169) has none of its own: it gives its `horizon` row, a `waterLayer`
+ * in `back` just over the water for the sky layer's glitter, and `isWater`,
+ * which of its pixels are open water, and `skyline`, the top of its land in
+ * each column; the sky layer goes under `back`.
+ * @typedef {{ back: Container, front: Container, update: (now: number, wind: number, crop: number, raining: boolean) => void,
+ *   horizon?: number, skyline?: number[], waterLayer?: Container, isWater?: (x: number, y: number) => boolean }} Pond
  */
 
 /**
@@ -1064,10 +1020,18 @@ export function paintPond(rand, season = 'autumn') {
 
   // Painted once: the land, the reeds, the water, what floats on it, the trees.
   const land = paintLand(rand);
+  // The top of the land in each column: a sun behind the trees throws no glitter (D169).
+  const landPixels = ctxOf(land).getImageData(0, 0, W, WL).data;
+  const skyline = Array.from({ length: W }, (_, x) => {
+    for (let y = 0; y < WL; y++) if (landPixels[(y * W + x) * 4 + 3] > 0) return y;
+    return WL;
+  });
   const blades = growReeds(rand);
   const reedFrames = paintReeds(blades).map((frames) => frames.map(tex));
+  // What the water mirrors: the photo's sky behind the land and the reeds.
   const above = makeCanvas(W, WL);
   const ag = ctxOf(above);
+  ag.drawImage(paintMirrorSky(), 0, 0);
   ag.drawImage(land, 0, 0);
   for (const [s, frames] of paintReeds(blades).entries()) ag.drawImage(frames[0], s * SECTION - 2, WL - REED_H);
   const debris = paintDebris(rand);
@@ -1082,6 +1046,9 @@ export function paintPond(rand, season = 'autumn') {
   const water = new Sprite(waterFrames[0]);
   water.y = WL;
   back.addChild(water);
+  // The sky layer's glitter goes here, on the water and under what floats (D169).
+  const waterLayer = new Container();
+  back.addChild(waterLayer);
 
   // Glints flicking on the water, as the game's waves do.
   const ringColour = P.waterPale;
@@ -1144,6 +1111,10 @@ export function paintPond(rand, season = 'autumn') {
   return {
     back,
     front,
+    horizon: WL,
+    skyline,
+    waterLayer,
+    isWater: (_x, y) => y > WL,
     update(now, wind, crop, raining) {
       for (const [s, sprite] of reeds.entries()) sprite.texture = reedFrames[s][gust(now, wind, s * SECTION + SECTION / 2)];
       birch.texture = birchFrames[gust(now, wind, 60)];
@@ -1202,16 +1173,24 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
   TextureStyle.defaultOptions.scaleMode = 'nearest';
   const app = new Application();
   await app.init({ canvas, width: W, height: H, resolution: 1, autoDensity: false, antialias: false, background: POND.waterMid });
-  const pond = paint(rand, season);
+  let pond = paint(rand, season);
 
   // The whole painting sits in `view`, moved left to show its middle when the
-  // scene is narrower than the painting.
+  // scene is narrower than the painting; the sky layer under it, as in the
+  // game (D169).
   const view = new Container();
   app.stage.addChild(view);
-  view.addChild(pond.back);
+  const skyPainted = createSkyLayer(rand);
   // A bobber out on the water, to show the scale things are drawn at.
   const bobber = new Sprite(Texture.from(paintGrid(BOBBER)));
-  view.addChild(bobber, pond.front);
+  view.addChild(skyPainted.back, pond.back, bobber, pond.front);
+  /** Hangs the sky layer on the painting, if it shows sky. */
+  const mount = () => {
+    const p = pond;
+    skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater } : null);
+    skyPainted.back.visible = p.horizon !== undefined;
+  };
+  mount();
 
   // Rain and the light of the hour over it all, as in the game; no cloud
   // shadows, since the game's are placed on its own water.
@@ -1221,20 +1200,58 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
   let raining = false;
   let lastFrame = 0;
 
+  /** @param {number} now */
+  function update(now) {
+    const dt = lastFrame ? now - lastFrame : 16;
+    sky.update(now, dt);
+    lastFrame = now;
+    pond.update(now, sky.wind(), -view.x, raining);
+    if (skyPainted.back.visible) skyPainted.update(now, dt);
+    const bob = Math.floor(now / 650) % 2;
+    bobber.position.set(Math.round(BOBBER_AT.x - bobber.width / 2), BOBBER_AT.y - WATERLINE.near + bob);
+  }
+
   return {
     app,
     /** @param {import('./sky.js').World} world */
     setWorld(world) {
       raining = world.weather.precipitation >= 2 && world.weather.temperature > 2;
       sky.setWorld(world);
+      skyPainted.setWorld({ time: minutesOf(world), season: world.season, weather: world.weather, facing: world.facing ?? null, fullMoonAt: world.fullMoonAt });
     },
     /** @param {unknown} _cast  Ignored: the bobber just waits. @param {number} now */
     update(_cast, now) {
-      sky.update(now, lastFrame ? now - lastFrame : 16);
-      lastFrame = now;
-      pond.update(now, sky.wind(), -view.x, raining);
-      const bob = Math.floor(now / 650) % 2;
-      bobber.position.set(Math.round(BOBBER_AT.x - bobber.width / 2), BOBBER_AT.y - WATERLINE.near + bob);
+      update(now);
+    },
+    /**
+     * Paints the painting again for another of its seasons.
+     * @param {string} next
+     */
+    repaint(next) {
+      skyPainted.attach(null);
+      for (const layer of [pond.back, pond.front]) {
+        layer.removeFromParent();
+        layer.destroy({ children: true, texture: true, textureSource: true });
+      }
+      pond = paint(rand, next);
+      view.addChildAt(pond.back, view.getChildIndex(bobber));
+      view.addChild(pond.front);
+      mount();
+    },
+    /**
+     * The scene as it is at this moment, the light and the sky jumped to where
+     * they belong, on a plain canvas (for the art sheet's stills, which don't
+     * count against the browser's live scenes).
+     * @param {number} now
+     * @returns {HTMLCanvasElement}
+     */
+    still(now) {
+      skyPainted.snap();
+      sky.snap();
+      lastFrame = 0;
+      update(now);
+      app.renderer.render(app.stage);
+      return /** @type {HTMLCanvasElement} */ (app.renderer.extract.canvas({ target: app.stage, frame: new Rectangle(0, 0, app.renderer.width, app.renderer.height), resolution: 1 }));
     },
     /**
      * Sizes the canvas as the game's scene does (D10, D93): whole device

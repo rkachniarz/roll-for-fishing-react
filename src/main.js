@@ -1483,7 +1483,7 @@ function render() {
   const look = content.locations[state.location].spots?.find((/** @type {{ id: string }} */ s) => s.id === state.spot)?.look ?? null;
   scene.setSpot(look);
   document.body.dataset.spotLook = JSON.stringify(look);
-  scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, sun: now.sun, weather: state.weather });
+  scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, sun: now.sun, weather: state.weather, time: state.time, fullMoonAt: state.fullMoonAt });
   renderHud();
   // A perk to choose: the character button glows, as WoW's does for a talent
   // point, without stopping the game (D96).

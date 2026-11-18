@@ -911,6 +911,36 @@ await check('the sky', PHONE, '?dev&seed=3', async (page) => {
   await page.screenshot({ path: 'dist/verify/weather-name.png' });
 });
 
+// The sky as its own layer (12.4, D169), behind the reedy shore (facing east):
+// the scene notes what it drew on the canvas (data-sky), since a WebGL canvas
+// can't be read back.
+await check('the sky layer', PHONE, '?seed=1', async (page) => {
+  /** Puts the save at a game minute, under a clear sky, the moon full at `full`; then loads it. */
+  const at = async (time, full) => {
+    await page.evaluate(([time, full]) => {
+      const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
+      save.time = time;
+      save.fullMoonAt = full;
+      save.weather = { ...save.weather, clouds: 0, precipitation: 0 };
+      localStorage.setItem('roll-for-fishing:save:1', JSON.stringify(save));
+    }, [time, full]);
+    await page.reload();
+    await loadFrom(page, 1);
+    await page.waitForSelector('body[data-phase="idle"]', { timeout: 15000 });
+    await closePane(page);
+    await page.waitForTimeout(2500);
+    return JSON.parse((await page.getAttribute('#scene', 'data-sky')) ?? 'null');
+  };
+  const day = 6 * 1440; // the seventh day of spring, near the equinox: the sun rises in the east
+  const dawn = await at(day + 390, day - 7 * 1440);
+  report('the sky layer: a spring sunrise shows the sun in front, low, with glitter on the water', Boolean(dawn?.sun && dawn.glitter && !dawn.moon), JSON.stringify(dawn));
+  report('the sky layer: the sun stands over the horizon (row 110)', Boolean(dawn?.sun) && Number(dawn.sun.split(',')[1]) < dawn.horizon, JSON.stringify(dawn));
+  await page.locator('#scene').screenshot({ path: 'dist/verify/sky-layer-dawn.png' });
+  const night = await at(day + 1170, day + 1170);
+  report('the sky layer: a full moon rising in the evening, stars, its glitter', Boolean(night?.moon && night.stars && night.glitter && !night.sun), JSON.stringify(night));
+  await page.locator('#scene').screenshot({ path: 'dist/verify/sky-layer-moon.png' });
+});
+
 await check('a full bucket', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
   await openBench(page);
   for (const [name, value] of [['fishingSkill', '100'], ['fishFind', '100']]) {

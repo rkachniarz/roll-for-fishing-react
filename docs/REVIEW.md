@@ -24,6 +24,41 @@ Items with no note are left alone.
 
 Newest first.
 
+## The sky as its own layer (2026-11-19, D169, 12.4)
+
+Have a look at the art sheet's new section, **The sky (12.4)**: the reedy shore and the still water at dawn,
+morning, just after sunset, under a full moon, and turned south at a winter and a summer noon. Calls Claude made:
+
+- **The vertical scale: 4 px for each degree above the horizon,** about the same as across (the 60° view over 256
+  px is 4.3 px a degree), so the sky isn't stretched. The top of the picture is 27° up: a winter-noon sun (12°)
+  sits just over the pond's trees, a summer-noon one (58°) is far off the top, as DEV_PLAN asked.
+- **Both horizons are row 110:** the reedy shore's open-lake horizon, and the still water's water line (its far
+  shore stands on it). A sun or moon below the top of the land is hidden by it, and throws no glitter (a sun
+  behind the pond's trees at 04:30 in summer).
+- **The strips either side show sky too, at the same scale:** the painting's 320 px cover 75° of compass, so a sun a
+  little outside the 60° view still shows in a strip on a wide screen; on a square phone screen it is cut off at
+  the edge. The pond, facing north-east, sees the sun only on summer mornings, and mostly behind the beech leaves;
+  the reedy shore, facing east, sees it rise in spring, summer and autumn.
+- **The sun and the moon are both 9 px across;** the sun pale with a checkered ring of light high up, golden under
+  10°, orange-red under 2°. The moon is drawn in 28 phases, a waxing one lit on the right; by night its dark part
+  shows faintly and a moon past half has a faint checkered ring; by day it is a pale shape at 70%.
+- **The sky's colours:** the day's four per season are the reedy shore's old skies (`SKY_DAY`); under 8° the
+  bands blend towards a golden sky, under the horizon towards a twilight one with a red horizon, and from 6° to
+  14° under towards night (`SKY_LOW`, new colours, Claude's). A glow on the horizon round the sun while it is
+  within 10° of it. The night tint still darkens it all over, as before.
+- **The glitter:** under a sun lower than 20° (more dashes the lower), or a moon lower than 30° at night, weighted
+  by its moonlight (12.3), on the open water only. Gathered as far under the horizon as the sun stands above it,
+  spreading towards the viewer and wider nearer; the moon's narrower and fainter. Redrawn about six times a second
+  from the scenery stream.
+- **Stars:** 80, from the sun 7° under the horizon, a few flickering; gone under scattered cloud and more.
+- **Until 12.5 brings clouds the sky is clear in every weather.** As a stand-in, the sun, the moon and the stars
+  fade with the cloud level (gone at overcast). The pond's water still mirrors its photo's sky (overcast in autumn,
+  blue in summer), not the sky shown above it: 12.5 ("the water mirrors the clouds") is the place to change that.
+- **The pond's and the reedy shore's own clouds are gone,** with the reedy shore's sky colours (moved into the sky
+  layer). The reedy shore's cloud colours are kept for 12.5 (`SKY_CLOUDS`); the pond's summer cloud colours went.
+- **Easing:** the sun and the moon glide to each new half hour's place, and the sky's colour fades across in a
+  second and a half; a jump of more than an hour and a half (sleep, travel) or a new spot just cuts.
+
 ## The moon and the fish (2026-11-18, D168, 12.3)
 
 All four ways you asked for are in. The amounts are in `content/rules/moon.json` (marked placeholder) and the

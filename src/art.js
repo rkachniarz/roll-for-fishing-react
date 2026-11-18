@@ -16,8 +16,11 @@
 
 import { Rectangle } from 'pixi.js';
 import { SIZE, createScene } from './scene/scene.js';
-import { POND, POND_SUMMER, createPondScene, paintPond } from './scene/pond.js';
-import { REEDY, REEDY_AUTUMN, REEDY_SPRING, REEDY_WINTER, paintReedy } from './scene/reedy.js';
+import { POND, POND_SUMMER, createPondScene, paintPond, pondSeason } from './scene/pond.js';
+import { REEDY, REEDY_AUTUMN, REEDY_SPRING, REEDY_WINTER, paintReedy, reedySeason } from './scene/reedy.js';
+import { SKY_CLOUDS, SKY_DAY, SKY_LAYER, SKY_LOW } from './scene/sky-layer.js';
+import { facingOf } from './engine/sky.js';
+import { clock } from './engine/time.js';
 import { SWAMP, SWAMP_AUTUMN, SWAMP_H, SWAMP_SUMMER, SWAMP_W, SWAMP_WINTER, swampStill } from './scene/swamp-pixels.js';
 import { paintSwamp } from './scene/swamp.js';
 import { SWAMP_UNDER, swampUnderStill } from './scene/swamp-under.js';
@@ -408,7 +411,8 @@ async function pondCard(parent, caption, world, maxCss, width, season = 'autumn'
   const scene = await createPondScene(canvas, () => rand.next(), season, paint);
   const fit = Math.min(maxCss, ((document.documentElement.clientWidth - 32) * SIZE) / width);
   scene.fit((fit * width) / SIZE, fit, width);
-  scene.setWorld(world);
+  // The spot's own facing, so the sky layer puts the sun and moon where the game would (D166, D169).
+  scene.setWorld({ facing: paint === paintPond ? facingOf('lake', 'still-water') : paint === paintReedy ? facingOf('lake', 'reedy-shore') : null, ...world });
   scenes.push(scene);
   save.addEventListener('click', () => saveScene(scene.app, `pond-${slug(caption)}-seed${seed}.png`));
 }
@@ -452,6 +456,94 @@ section(
     ])) {
       await pondCard(reedyRow, `Reedy shore in ${caption.toLowerCase()}`, world, 480, 320, season, paintReedy);
     }
+  },
+);
+
+// The sky as its own layer (12.4, D169): one live scene per painting that
+// shows sky, and the moments below as stills taken from it, so the sheet stays
+// under its limit of live scenes (docs/art.md).
+
+/** A game minute: the day of the year (0, the first of spring) and the hour. @param {number} day @param {number} hour */
+const minuteOf = (day, hour) => day * 1440 + Math.round(hour * 60);
+/**
+ * The world at a game minute, as the game would give it.
+ * @param {number} time @param {{ facing?: number | null, fullMoonAt?: number, weather?: typeof CLEAR }} [extra]
+ */
+function momentWorld(time, extra = {}) {
+  const c = clock(time);
+  return { hour: c.hour, minute: c.minute, season: c.season, sun: c.sun, weather: CLEAR, time, ...extra };
+}
+
+/**
+ * A painting with the sky layer: live at the first moment, and every moment
+ * as a still beside it, each with Save as PNG.
+ * @param {HTMLElement} parent @param {string} name
+ * @param {(rand: () => number, season: any) => import('./scene/pond.js').Pond} paint
+ * @param {(season: string) => string} seasonOf  The painting's season for the game's.
+ * @param {{ caption: string, world: ReturnType<typeof momentWorld> }[]} moments
+ */
+async function skyCards(parent, name, paint, seasonOf, moments) {
+  const live = el('div', { class: 'row' });
+  const stills = el('div', { class: 'row' });
+  parent.append(live, stills);
+  const canvas = /** @type {HTMLCanvasElement} */ (el('canvas'));
+  live.append(el('figure', {}, [canvas, el('figcaption', {}, [`${name}: ${moments[0].caption} (live)`])]));
+  const rand = createRng(deriveSeed(seed, 'scenery'));
+  let painted = seasonOf(moments[0].world.season);
+  const scene = await createPondScene(canvas, () => rand.next(), painted, paint);
+  const fit = Math.min(640, document.documentElement.clientWidth - 32);
+  scene.fit(fit, (fit * SIZE) / 320, 320);
+  const zoom = Math.max(1, Math.min(2, Math.floor((document.documentElement.clientWidth - 32) / 320)));
+  for (const { caption, world } of moments) {
+    const season = seasonOf(world.season);
+    if (season !== painted) scene.repaint((painted = season));
+    scene.setWorld(world);
+    const still = scene.still(performance.now());
+    still.style.width = `${still.width * zoom}px`;
+    still.style.height = `${still.height * zoom}px`;
+    const save = /** @type {HTMLButtonElement} */ (el('button', { type: 'button', class: 'save' }, ['Save as PNG']));
+    save.addEventListener('click', () =>
+      still.toBlob((blob) => {
+        if (!blob) return;
+        const link = /** @type {HTMLAnchorElement} */ (el('a', { href: URL.createObjectURL(blob), download: `sky-${slug(name)}-${slug(caption)}-seed${seed}.png` }));
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      }, 'image/png'),
+    );
+    stills.append(el('figure', {}, [still, el('figcaption', {}, [caption, ' ', save])]));
+    await new Promise((r) => setTimeout(r));
+  }
+  // Live again at the first moment.
+  const first = seasonOf(moments[0].world.season);
+  if (first !== painted) scene.repaint(first);
+  scene.setWorld(moments[0].world);
+  scenes.push(scene);
+}
+
+section(
+  'The sky (12.4)',
+  'The sky as its own layer (D169), behind the still water and the reedy shore: its colour by the sun’s height, the sun and the moon where the engine puts them (4 px for each degree above the horizon; the 60° view across the middle 256 px, D166), the stars, and a path of glitter on the water under a low sun or moon. The land isn’t relit; the tints do the light. No clouds yet (12.5). “Turned” cards look another way than the spot faces, to show the scale: no painted spot faces south or west.',
+  async (body) => {
+    const reedy = facingOf('lake', 'reedy-shore');
+    const pond = facingOf('lake', 'still-water');
+    body.append(el('h3', {}, [`The reedy shore, facing ${reedy}° (east)`]));
+    const spring = minuteOf(6, 0);
+    await skyCards(body, 'Reedy shore', paintReedy, reedySeason, [
+      { caption: 'spring sunrise, 06:30: the sun low in front, glitter on the water', world: momentWorld(spring + 390, { facing: reedy }) },
+      { caption: 'spring, 05:30: before the sun, the glow', world: momentWorld(spring + 330, { facing: reedy }) },
+      { caption: 'spring, 07:30: the sun 12° up, the glitter fainter', world: momentWorld(spring + 450, { facing: reedy }) },
+      { caption: 'spring, 18:30, turned west: just after sunset', world: momentWorld(spring + 1110, { facing: 270 }) },
+      { caption: 'spring, 19:30: the full moon rising, its glitter', world: momentWorld(spring + 1170, { facing: reedy, fullMoonAt: spring + 1170 }) },
+      { caption: 'winter, 17:00: a full moon over the winter reeds', world: momentWorld(minuteOf(90, 17), { facing: reedy, fullMoonAt: minuteOf(90, 17) }) },
+    ]);
+    body.append(el('h3', {}, [`Still water, facing ${pond}° (north-east)`]));
+    await skyCards(body, 'Still water', paintPond, pondSeason, [
+      { caption: 'summer sunrise, 04:30: the sun still behind the trees, so no glitter (it shows here only on summer mornings)', world: momentWorld(minuteOf(34, 4.5), { facing: pond }) },
+      { caption: 'winter noon, turned south: the sun 12° up, low over the trees', world: momentWorld(minuteOf(90, 11.5), { facing: 180 }) },
+      { caption: 'summer noon, turned south: the sun 58° up, far over the top', world: momentWorld(minuteOf(34, 12), { facing: 180 }) },
+      { caption: 'summer, 00:30, turned south: the full moon 12° up, as low as a summer full moon goes', world: momentWorld(minuteOf(34, 24.5), { facing: 180, fullMoonAt: minuteOf(34, 24.5) }) },
+      { caption: 'autumn night, 01:00: stars, a waning crescent not yet up', world: momentWorld(minuteOf(62, 1), { facing: pond, fullMoonAt: minuteOf(62, 1) - 5 * 1440 }) },
+    ]);
   },
 );
 
@@ -560,6 +652,17 @@ section('Palettes', 'Every colour the art uses. A new colour gets a name here be
   palette('Scene sprite keys', bobberKeys(null)),
   palette('Still water, the pond (POND in src/scene/pond.js)', POND),
   palette('Still water in summer (POND_SUMMER in src/scene/pond.js)', POND_SUMMER),
+  palette('The sky by day, spring (SKY_DAY in src/scene/sky-layer.js)', SKY_DAY.spring),
+  palette('The sky by day, summer', SKY_DAY.summer),
+  palette('The sky by day, autumn', SKY_DAY.autumn),
+  palette('The sky by day, winter', SKY_DAY.winter),
+  palette('The sky, golden (SKY_LOW)', SKY_LOW.golden),
+  palette('The sky, twilight', SKY_LOW.twilight),
+  palette('The sky, night', SKY_LOW.night),
+  palette('The sun, the moon, the stars, the glitter (SKY_LAYER)', SKY_LAYER),
+  palette('Clouds, summer (SKY_CLOUDS, for 12.5)', SKY_CLOUDS.summer),
+  palette('Clouds, autumn', SKY_CLOUDS.autumn),
+  palette('Clouds, winter', SKY_CLOUDS.winter),
   palette('The reedy shore in spring (REEDY_SPRING in src/scene/reedy.js)', REEDY_SPRING),
   palette('The reedy shore in summer (REEDY in src/scene/reedy.js)', REEDY),
   palette('The reedy shore in autumn (REEDY_AUTUMN in src/scene/reedy.js)', REEDY_AUTUMN),

@@ -8,6 +8,7 @@
 
 import { Application, Container, Graphics, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { createSky } from './sky.js';
+import { createSkyLayer, minutesOf } from './sky-layer.js';
 import { createDice } from './dice.js';
 import { createViews } from './views.js';
 import { createShoal } from './swim.js';
@@ -77,7 +78,7 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
  * defaults; a knob whose option the owner picks becomes the default and
  * leaves this list.
  * @typedef {{ tint?: string, tintAlpha?: number, shapes?: { shape: 'rect' | 'ellipse' | 'triangle' | 'band', x?: number, y: number,
- *   w?: number, h: number, colour: string }[], painting?: 'pond' | 'reedy' | 'swamp' }} SpotLook  A spot's placeholder look (4.2),
+ *   w?: number, h: number, colour: string }[], painting?: 'pond' | 'reedy' | 'swamp', facing?: number }} SpotLook  A spot's placeholder look (4.2),
  *   or a painting in its place (`painting`: src/scene/pond.js, D115; src/scene/reedy.js, D117; src/scene/swamp.js, D158).
  *
  * @typedef {Object} SceneLook
@@ -174,7 +175,10 @@ export async function createScene(canvas, rand, look = {}) {
   // A painted spot (D115, D117): its back layer under the play area in place
   // of the water, the waves, the placeholder look, the cloud shadows and the
   // reeds; its front layer (trees, reeds) over the bobber. Painted when the
-  // spot or the season changes.
+  // spot or the season changes. Under a painting that shows sky, the sky
+  // layer (12.4, D169): the sky's colour, the sun or the moon, the clouds.
+  const skyPainted = createSkyLayer(rand);
+  app.stage.addChild(skyPainted.back);
   const paintingBack = new Container();
   app.stage.addChild(paintingBack);
   /** @type {import('./pond.js').Pond | null} */
@@ -183,6 +187,8 @@ export async function createScene(canvas, rand, look = {}) {
   /** @type {string | null} The game's season; null until the world is known, so nothing is painted twice. */
   let paintingSeason = null;
   let raining = false;
+  /** @type {import('./sky.js').World | null} */
+  let lastWorld = null;
   /** Where casts turn to the far-band sprites: a painting sees the water from lower down. */
   let farLine = FAR_LINE;
 
@@ -297,6 +303,8 @@ export async function createScene(canvas, rand, look = {}) {
     const season = which && paintingSeason ? which.season(paintingSeason) : null;
     const key = `${spotLook?.painting}:${season}`;
     if (which && season && paintedKey !== key) {
+      // The glitter hangs on the old painting's water: off it before it goes.
+      skyPainted.attach(null);
       for (const layer of [paintingBack, paintingFront]) {
         for (const child of layer.removeChildren()) child.destroy({ children: true, texture: true, textureSource: true });
       }
@@ -304,13 +312,25 @@ export async function createScene(canvas, rand, look = {}) {
       paintingBack.addChild(painting.back);
       paintingFront.addChild(painting.front);
       paintedKey = key;
+      const p = painting;
+      skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater } : null);
     }
     paintingBack.visible = paintingFront.visible = painted;
+    skyPainted.back.visible = painted && painting?.horizon !== undefined;
+    skyPainted.back.x = offset - PAINTING_LEFT;
+    tellSky();
     for (const layer of [backdrop, waveLayer, spotLayer, shadowLayer, reedsLeft, reedsRight]) layer.visible = !painted;
     paintingBack.x = paintingFront.x = offset - PAINTING_LEFT;
     farLine = painted && which ? which.farLine : FAR_LINE;
   }
   let lastFrame = 0;
+
+  /** Gives the sky layer the world and the spot's facing. */
+  function tellSky() {
+    if (!lastWorld) return;
+    const facing = typeof spotLook?.facing === 'number' ? spotLook.facing : null;
+    skyPainted.setWorld({ time: minutesOf(lastWorld), season: lastWorld.season, weather: lastWorld.weather, facing, fullMoonAt: lastWorld.fullMoonAt });
+  }
 
   // ---------- What the scene remembers between frames ----------
 
@@ -473,7 +493,8 @@ export async function createScene(canvas, rand, look = {}) {
     const phaseChanged = cast.phase !== lastPhase;
     lastPhase = cast.phase;
 
-    sky.update(now, lastFrame ? now - lastFrame : 16);
+    const dt = lastFrame ? now - lastFrame : 16;
+    sky.update(now, dt);
     lastFrame = now;
     dice.update(now);
     views.update(now);
@@ -492,6 +513,12 @@ export async function createScene(canvas, rand, look = {}) {
     reedsLeft.texture = reedFrames.left[sway];
     reedsRight.texture = reedFrames.right[sway];
     if (painting && paintingBack.visible) painting.update(now, sky.wind(), PAINTING_LEFT - offset, raining);
+    if (skyPainted.back.visible) {
+      skyPainted.update(now, dt);
+      // For tools/verify.mjs, which can't read a WebGL canvas back.
+      const said = JSON.stringify(skyPainted.describe());
+      if (canvas.dataset.sky !== said) canvas.dataset.sky = said;
+    } else if (canvas.dataset.sky) delete canvas.dataset.sky;
 
     drawFeatures(now);
 
@@ -617,6 +644,7 @@ export async function createScene(canvas, rand, look = {}) {
       sky.setWorld(world);
       raining = world.weather.precipitation >= 2 && world.weather.temperature > 2;
       paintingSeason = world.season;
+      lastWorld = world;
       showPainting();
     },
     /**

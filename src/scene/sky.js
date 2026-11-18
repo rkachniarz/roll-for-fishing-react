@@ -18,6 +18,11 @@ import { darkness, warmth } from './light.js';
  * @property {number} minute
  * @property {string} season
  * @property {{ temperature: number, wind: number, clouds: number, precipitation: number }} weather
+ * @property {{ rise: number, set: number }} sun  Today's sunrise and sunset (the clock's).
+ * @property {number} [time]  The game minute, for the sky layer's sun and moon (src/scene/sky-layer.js, D169);
+ *   without it, the middle of the season at that hour.
+ * @property {number} [fullMoonAt]  A game minute the moon is full (`state.fullMoonAt`); without it, no moon.
+ * @property {number | null} [facing]  The spot's compass facing, where the scene doesn't know it (the art sheet).
  */
 
 const NIGHT = 0x0b1a3a;
@@ -156,5 +161,9 @@ export function createSky(below, above, size, rand) {
     },
     /** The wind's level, for the waves. */
     wind: () => world?.weather.wind ?? 0,
+    /** The tints jump to where they belong on the next frame, with no easing (the art sheet's stills). */
+    snap() {
+      first = true;
+    },
   };
 }

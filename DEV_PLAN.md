@@ -98,11 +98,19 @@ all depend on which way the player looks.
   in `src/engine/sky.js`; `moonWords` and `prefers.moon` on fifteen fish; `content/rules/moon.json` (the periods'
   buffs, their pull on the pools, the moonlight under clouds); the phase in the weather's tooltip;
   `test/moon.test.js`.
-- [ ] **12.4** The sky as its own layer, shared by every painted spot that shows sky (the pond and the reedy shore;
+- [x] **12.4** The sky as its own layer, shared by every painted spot that shows sky (the pond and the reedy shore;
   not the swamp, which has no sky, D160): back to front, the sky's colour, the sun or moon, the clouds, then a path of
   glitter on the water when the sun or moon is low in front of the player. The paintings' own baked-in clouds go.
   The land isn't relit (it is painted for a clear noon, docs/art.md); the tints do the light. Spots painted from now
   on are painted without a sky, only their horizon, and their facing is settled before they are painted.
+  *Landed (D169):* `src/scene/sky-layer.js` (`createSkyLayer`: the sky's colour by the sun's height, the stars, the
+  sun and the moon with its phase, an empty `clouds` container for 12.5, the glitter); each sky-showing painting
+  gives `horizon` (row 110 for both), `skyline`, `waterLayer` and `isWater` and paints no sky; the scene passes the
+  game minute, `fullMoonAt` and the spot's facing; the art sheet's "The sky (12.4)" section; the verify check
+  "the sky layer". The numbers are on REVIEW.md. **For 12.5:** draw the clouds into the layer's `clouds`
+  container (over the sun and the moon, under the land); `cloudContext()` gives the world (time, season, weather,
+  facing), the horizon row, the painting's width and the sun's column and height; replace the stand-in `COVER`
+  (the sun, the moon and the stars fading with the cloud level).
 - [ ] **12.5** Clouds that follow the weather (with CR-2):
   - **A library of cloud types,** each with 2–3 patterns drawn as code: small fair-weather heaps, big towering heaps,
     lumpy grey layers, high wisps, flat grey sheets, rain cloud. A table (`content/rules/sky.json`) lists, per season
@@ -130,7 +138,9 @@ facing, with one 60° width of view for all (D166, `src/engine/sky.js`). 12.2 is
 height and bearing, and the moon's 14-day phase, worked out from the clock (D167, `src/engine/sky.js`). 12.3 is
 done: the moon counts for the fish, as a preference (full, new, moonlit, dark), the anglers' moon tables as buffs on
 the bar, the moonlight lifting the night's shadows, and the pools feeding and filling in the periods (D168,
-`src/engine/moon.js`). Nothing draws the sun or the moon yet: 12.4, the sky as its own layer, is next.
+`src/engine/moon.js`). 12.4 is done: the sky is its own layer behind the still water and the reedy shore, with the
+sun, the moon in its phase, the stars and a path of glitter under a low sun or moon (D169, `src/scene/sky-layer.js`);
+the paintings' own skies and clouds went. 12.5, clouds that follow the weather, is next.
 
 ## Phase 11, what the real species do
 
@@ -608,6 +618,10 @@ placeholder, it's added here.
   per cloud type and cover: a few, scattered, broken, overcast, dark), since skies are photographed endlessly; the
   owner's own photos of skies that looked particularly interesting go in beside them. References only, never traced
   or shipped.
+  *Placeholders from 12.4 (D169):* the sky is clear in every weather, and the sun, the moon and the stars only fade
+  with the cloud level (`COVER` in `src/scene/sky-layer.js`); the still water's water mirrors its photo's sky, not
+  the sky shown; the sky's twilight, golden and night colours (`SKY_LOW`) and the sun's and the moon's sprites are
+  Claude's first go.
 - [ ] **CR-3** Fish icons (D97, D98; was an earlier 9.7, not the font's): the eyes, one by one, since they were placed by script (a 2×2 a tenth of
   the way in from the snout) and some look comedic or out of place; the weak icons on
   `docs/design/fish-image-hunt.md`; and the four with no icon yet: Mainland eel, golomyanka, Grasslands silverside,
