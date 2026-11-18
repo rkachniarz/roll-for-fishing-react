@@ -102,8 +102,11 @@ const UI_WIDE = 1.25;
 /** On a phone, the room kept under the scene for the log, at least. */
 const LOG_MIN = 150;
 
+/** A wide screen: the button row and log beside the scene, not under it (as in styles.css). */
+const isWide = () => window.innerWidth >= 900;
+
 function fit() {
-  const wide = window.innerWidth >= 900;
+  const wide = isWide();
   const ui = wide ? UI_WIDE : 1;
   const hudWidth = Math.round(HUD_WIDTH * ui);
   const gutter = wide ? 16 : 2;
@@ -522,6 +525,7 @@ function act(now, point) {
 canvas.addEventListener('pointerdown', (e) => {
   if (e.button !== 0) return;
   e.preventDefault();
+  if (closedByTap()) return;
   act(e.timeStamp, scene.toScene(e.clientX, e.clientY));
 });
 
@@ -1075,6 +1079,24 @@ function toggleBag() {
   bagOpen = !bagOpen;
   hideTip();
   renderPane();
+}
+
+/**
+ * On a phone, a tap on the scene closes the panes the button row opened, the
+ * bag too, and does nothing else (D162); a second tap acts. On a wide screen
+ * there is room for both, so the tap acts with a pane open. The map covers
+ * the scene; with the barter window open, the bag beside it stays too.
+ * @returns {boolean} Whether the tap was spent closing.
+ */
+function closedByTap() {
+  if (isWide() || pane === 'map' || pane === 'shop') return false;
+  const closing = pane !== null;
+  if (!closing && !bagOpen) return false;
+  if (closing) pane = null;
+  bagOpen = false;
+  hideTip();
+  renderPane();
+  return true;
 }
 
 /** Escape closes the pane over the scene first, then the bag. */

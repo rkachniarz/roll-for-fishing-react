@@ -172,11 +172,15 @@ await check('panes over the scene', PHONE, '?seed=1', async (page) => {
     return Math.abs(p.left + p.width / 2 - (s.left + s.width / 2)) < 2 && Math.abs(p.top + p.height / 2 - (s.top + s.height / 2)) < 2;
   });
   report('panes: the menu sits in the middle of the scene', centred);
-  const box = await page.locator('#scene').boundingBox();
-  await page.touchscreen.tap(box.x + 12, box.y + 12);
   await page.keyboard.press('Space');
   await page.waitForTimeout(200);
   report('panes: no casting with the menu open', (await page.getAttribute('body', 'data-phase')) === 'idle');
+  // On a phone a tap on the scene closes it, and casts nothing (D162).
+  const box = await page.locator('#scene').boundingBox();
+  await page.touchscreen.tap(box.x + 12, box.y + 12);
+  await page.waitForTimeout(200);
+  report('panes: a tap on the scene closes the menu', !(await page.isVisible('#pane')) && (await page.getAttribute('body', 'data-phase')) === 'idle');
+  await page.click('#menu');
   await page.click('#menu');
   report('panes: a second tap closes it', !(await page.isVisible('#pane')));
   await page.click('#journal');
@@ -192,6 +196,38 @@ await check('panes over the scene', PHONE, '?seed=1', async (page) => {
   report('panes: the bag has its four tabs', names.join(',') === 'Equipment,Consumables,Stuff,Junk', names.join(','));
   await page.click('#bagClose');
   report('panes: the bag closes on its own', !(await page.isVisible('#bagPane')) && (await page.isVisible('#pane')));
+});
+
+/** Taps (or clicks) the scene's water to the right, clear of a pane down the left side. */
+const tapBeside = async (page, touch) => {
+  const box = await page.locator('#scene').boundingBox();
+  const x = box.x + box.width - 8;
+  const y = box.y + box.height * 0.6;
+  if (touch) await page.touchscreen.tap(x, y);
+  else await page.mouse.click(x, y);
+};
+
+await check('panes: on a phone a tap on the scene closes them first (D162)', PHONE, '?seed=1&wait=6000', async (page) => {
+  await page.click('#bucket');
+  await tapBeside(page, true);
+  await page.waitForTimeout(200);
+  report('pane tap: the pane closes', !(await page.isVisible('#pane')));
+  report('pane tap: no line goes out', (await page.getAttribute('body', 'data-phase')) === 'idle');
+  await page.click('#bag');
+  await tapBeside(page, true);
+  await page.waitForTimeout(200);
+  report('pane tap: the bag closes, and no line goes out', !(await page.isVisible('#bagPane')) && (await page.getAttribute('body', 'data-phase')) === 'idle');
+  await page.waitForTimeout(400);
+  await tapBeside(page, true);
+  await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });
+  report('pane tap: the next tap casts', true);
+});
+
+await check('panes: on a wide screen a click on the scene casts with a pane open (D162)', DESKTOP, '?seed=1&wait=6000', async (page) => {
+  await page.click('#bucket');
+  await tapBeside(page, false);
+  await page.waitForSelector('body[data-phase="waiting"]', { timeout: 2000 });
+  report('pane tap wide: the line goes out and the pane stays', await page.isVisible('#pane'));
 });
 
 await check('the map: going to another spot (D101, 12.1)', PHONE, '?seed=1', async (page) => {

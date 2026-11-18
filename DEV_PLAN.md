@@ -17,13 +17,13 @@ The owner's list after testing on phones, **built before Phase 12 goes on**, in 
 fresh subagent per task). Every call Claude makes that isn't in the owner's words goes on docs/REVIEW.md; a decision
 per task goes in docs/decisions.md.
 
-- [ ] **T.1** A tap on the scene closes an open pane, on a phone. Every mobile tester found it odd that they could cast
+- [x] **T.1** A tap on the scene closes an open pane, on a phone. Every mobile tester found it odd that they could cast
   from under the equipment pane. *The owner's words:* "It is the player's responsibility to not open the bag when they
   have a bobber out, and they can click twice in this case." **On a phone only:** the tap that closes the pane does
   nothing else (no cast, no strike, no move in town); a second tap does. **On a wide screen (`fit` in `src/main.js`,
   900 px and up) nothing changes:** there is room for everything there, so a tap on the scene keeps working with a
   pane open. Any pane the button row opens and closes counts (character, bags, journal, perks…); the event dialog, the
-  map and the barter window keep their own rules.
+  map and the barter window keep their own rules. *Landed (D162):* `closedByTap` in `src/main.js`; Space unchanged.
 - [ ] **T.2** A long press equips, on a phone, and every equippable item says how. *The owner's answers
   (2026-11-18):* **a long press always equips** on a phone, as a right-click does with a mouse: an item in the bags
   goes into its slot (a potion is drunk, as with the right-click), an equipped item goes back to the bags. **Dragging

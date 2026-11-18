@@ -24,6 +24,19 @@ Items with no note are left alone.
 
 Newest first.
 
+## A tap on the scene closes a pane, on a phone (2026-11-18, D162, T.1)
+
+Calls Claude made:
+
+- **One tap closes everything open:** a pane over the scene and the bag over the log go together, not one per tap.
+- **The game menu counts too,** with settings and the dev bench opened from it: a tap on the scene outside the menu
+  box closes it. Mid-cast that tap is no strike (D94 kept a strike landing with the menu open); you said a second
+  tap is the player's job.
+- **Space and Enter are unchanged:** with a pane open they still cast and strike, as before (the menu still blocks
+  a cast). A phone rarely has a keyboard, and Escape already closes a pane.
+- **The barter window keeps its rules:** with it open, a tap on the scene doesn't close the bag beside it either,
+  so a trade can be weighed against the bags.
+
 ## The map (2026-11-18, D161, 12.1)
 
 On the phone and the desktop: `dist/verify/map.png`, `dist/verify/map-wide.png` after `npm run verify map`; the
