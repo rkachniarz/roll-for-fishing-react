@@ -30,7 +30,6 @@ const EPIC = RARITIES.indexOf('epic');
  * @property {boolean} [bent]  Made bigger and rarer by Bend Reality (D106); never stacks with a plain twin.
  * @property {boolean} [greedy]  Only on the fish in a log line: it had something caught on it (D106).
  * @property {string} [champion]  A class fish's class (D114), kept in the bucket; it goes when the fish is let go.
- * @property {number} [stewedAt]  Only in the stew's pot: the game minute it went in, for its cooking (D165).
  * @property {number} [condition]  How fat or thin it is against its species' length-weight formula, 0.9 to 1.1
  *   (D146): its weight is that formula times this. Left out, 1.
  */

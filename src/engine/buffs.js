@@ -14,7 +14,8 @@ import { content } from '../generated/content.js';
  * @param {GameState} state
  * @param {{ id: string, debuff?: boolean, effects: import('./values.js').Effect[],
  *   duration: { casts?: number, attempts?: number, minutes?: number, ms?: number } }} def
- * @param {{ source?: string, label?: string[] }} [extra]
+ * @param {{ source?: string, label?: string[], holds?: boolean }} [extra]  `holds`: a buff in game minutes that
+ *   doesn't run down in town or asleep (D172).
  * @returns {Buff}
  */
 export function buffFrom(state, def, extra = {}) {
@@ -29,6 +30,7 @@ export function buffFrom(state, def, extra = {}) {
     ...(d.minutes !== undefined ? { until: state.time + d.minutes } : {}),
     ...(d.ms !== undefined ? { ms: d.ms } : {}),
     ...(extra.label ? { label: extra.label } : {}),
+    ...(extra.holds && d.minutes !== undefined ? { holds: true } : {}),
   };
 }
 

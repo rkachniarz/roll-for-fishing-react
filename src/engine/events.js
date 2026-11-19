@@ -356,7 +356,7 @@ function applyEffect(state, effect, dice) {
     case 'sleep': {
       // Until the next morning, waking rested (R17.4).
       const minutes = minutesToMorning(state.time);
-      return [{ type: 'slept', minutes }, ...passTime(state, minutes, dice), ...giveBuff(state, 'rested')];
+      return [{ type: 'slept', minutes }, ...passTime(state, minutes, dice, { asleep: true }), ...giveBuff(state, 'rested')];
     }
     case 'set':
       // Every piece of the set in the bags, handed in (8.7).

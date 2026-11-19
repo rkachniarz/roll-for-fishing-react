@@ -1631,11 +1631,6 @@ button.perk[aria-pressed='true'] {
   color: var(--bad);
 }
 
-/* A fish still cooking in the stew's pot (D165). */
-.slot.cooking {
-  opacity: 0.5;
-}
-
 .trade-button {
   padding: 4px 14px;
   font: inherit;

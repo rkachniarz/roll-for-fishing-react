@@ -21,7 +21,7 @@ import { firstFullMoon } from './sky.js';
 import { WATER } from './features.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 23;
+export const SAVE_VERSION = 24;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -57,6 +57,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {boolean} [pending]  Added while a line was out: that cast doesn't use it up.
  * @property {number} [ms]
  * @property {number} [until]  Lasts until this game minute (R19.5): the stew, a potion, a night's rest.
+ * @property {boolean} [holds]  With `until`: its time stands still while the player is in town or asleep (D172), the
+ *   stew's.
  * @property {string[]} [label]  String keys naming it on the bar, when its id isn't a perk's.
  *
  * @typedef {Object} GameState
@@ -112,8 +114,7 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, { fish?: import('./fish.js').FishInstance }>} lit  Abilities lit up by what
  *   just happened, and what they would act on, until the next cast goes out (D96).
  * @property {string | null} shop  The vendor whose barter window is open (R18.2), or the stew's.
- * @property {import('./fish.js').FishInstance[]} stewPot  Fish put in the stew and not yet eaten (R19.4), each with
- *   the time it went in, for its cooking (D165).
+ * @property {import('./fish.js').FishInstance[]} stewPot  Fish put in the stew since the last bowl (R19.4).
  * @property {import('./fish.js').FishInstance[]} aquarium  Fish in the room's aquarium (R17.5).
  * @property {import('./dive.js').Dive | null} dive  The Fighter's dive under way (R20.3).
  * @property {{ day: number, fedUntil: number }} tank  The aquarium (D152): the game day its predators were last
@@ -347,11 +348,8 @@ const MIGRATIONS = {
   13: (save) => ({ ...save, streams: { ...save.streams, fight: deriveSeed(save.seed, 'fight') } }),
   // 15 -> 16: the line's depth (D148), unset.
   15: (save) => ({ ...save, lineDepth: null }),
-  // 20 -> 21: the stew cooks (D165). The fish already in the pot went in long enough ago to be cooked.
-  20: (save) => ({
-    ...save,
-    stewPot: (save.stewPot ?? []).map((/** @type {any} */ f) => ({ ...f, stewedAt: (save.time ?? 0) - content.rules.stew.cookMinutes })),
-  }),
+  // 20 -> 21: was the stew's cooking (D165), taken back (D172); nothing to do.
+  20: (save) => save,
   // 21 -> 22: the moon (D167): the first full moon rolled from today, from the stream a new game rolls it from.
   21: (save) => ({ ...save, fullMoonAt: firstFullMoon(save.time ?? 0, diceFor(createRng(deriveSeed(save.seed, 'moon')))) }),
   // 22 -> 23: the open water is seen from eye level (D171), so a spot without its own water has it from row 118
@@ -375,6 +373,20 @@ const MIGRATIONS = {
       escaped: moveAll(save.escaped) ?? {},
       ...(save.champions ? { champions: moveAll(save.champions) } : {}),
       features: onDefault(here) ? (save.features ?? []).map(move) : save.features,
+    };
+  },
+  // 23 -> 24: the stew no longer cooks (D172, taking back D165): the fish in the pot lose their time, and the
+  // morning greeting at the inn is gone, its flag and an open page of it with it.
+  23: (save) => {
+    const { 'inn-morning': _, ...flags } = save.flags ?? {};
+    return {
+      ...save,
+      flags,
+      stewPot: (save.stewPot ?? []).map((/** @type {any} */ f) => {
+        const { stewedAt: _t, ...fish } = f;
+        return fish;
+      }),
+      ...(save.event?.id === 'inn-morning' ? { event: null } : {}),
     };
   },
   // 19 -> 20: the pool turns over (D156). Fish the player has met count their days from now; schools and big

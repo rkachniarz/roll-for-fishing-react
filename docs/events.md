@@ -47,6 +47,7 @@ You lunge forward and get wet, and it's like it was never there.
 | `needs` | any number of lines | Requirements for it to start at all, in the words below. |
 | `art` | a name | The picture in the round portrait beside the title: the 64×64 icon `event/<name>` in `src/scene/icons.js` (D142). Optional: without one, an old scroll. |
 | `placeholder` | `true` | Claude's stand-in, to be rewritten (D124): listed in `docs/placeholders.md`, marked with a ° under `?ph`. |
+| `retired` | `true` | No longer used: it never opens, but its id stays (D44). Never delete an event file. |
 
 A line in the front matter starting with `#` is a note to yourself; the game ignores it.
 

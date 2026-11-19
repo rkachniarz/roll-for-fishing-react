@@ -278,8 +278,7 @@ export function addToStew(state, index) {
   if (!atStew(state) || !state.bucket[index]) return { state, events: [] };
   const next = structuredClone(state);
   const fish = /** @type {FishInstance} */ (fromBucket(next, index));
-  // It cooks from now (D165): the bowl takes it once it's done.
-  next.stewPot = [...(next.stewPot ?? []), { ...fish, stewedAt: next.time }];
+  next.stewPot = [...(next.stewPot ?? []), fish];
   return { state: next, events: [{ type: 'stewed', fish }] };
 }
 
@@ -296,22 +295,10 @@ export function takeFromStew(state, index) {
   if (fishInBucket(state) >= valuesFor(state).flat.bucketSize) return { state, events: [{ type: 'bucket-full' }] };
   const next = structuredClone(state);
   next.stewPot = next.stewPot.filter((_, i) => i !== index);
-  const { stewedAt: _, ...plain } = fish;
-  const twin = next.bucket.find((b) => sameFish(b.fish, plain));
+  const twin = next.bucket.find((b) => sameFish(b.fish, fish));
   if (twin) twin.count++;
-  else next.bucket.push({ fish: plain, count: 1 });
+  else next.bucket.push({ fish, count: 1 });
   return { state: next, events: [] };
-}
-
-/**
- * Game minutes until a fish in the pot is cooked (D165), 0 once it is: the
- * stew's `cookMinutes` from when it went in. A fish with no time is cooked.
- * @param {GameState} state
- * @param {FishInstance} fish  In the pot.
- */
-export function cookingFor(state, fish) {
-  if (fish.stewedAt === undefined) return 0;
-  return Math.max(0, fish.stewedAt + content.rules.stew.cookMinutes - state.time);
 }
 
 /**
@@ -344,23 +331,20 @@ export function bowlOf(pot) {
 }
 
 /**
- * Eats a bowl (R19.4): a buff that lasts game time, from the cooked fish in
- * the pot (D165); those still cooking stay in it. With none cooked yet the
- * bowl is refused, with a line saying so. A new bowl replaces a running one.
- * The player learns the taste of one kind of fish in it, picked at random
- * from those they don't know yet, or from them all (D138).
+ * Eats a bowl (R19.4): a buff that lasts game time, from what went into the
+ * pot since the last bowl; the pot is empty again. A new bowl replaces a
+ * running one. The player learns the taste of one kind of fish in it, picked
+ * at random from those they don't know yet, or from them all (D138).
  * @param {GameState} state
  * @returns {{ state: GameState, events: GameEvent[] }}
  */
 export function eatStew(state) {
   if (!atStew(state) || !state.stewPot?.length) return { state, events: [] };
-  const cooked = state.stewPot.filter((f) => !cookingFor(state, f));
-  if (!cooked.length) return { state, events: [{ type: 'stew-cooking' }] };
   const next = structuredClone(state);
-  const bowl = bowlOf(cooked);
+  const bowl = bowlOf(next.stewPot);
   const rules = content.rules.stew;
-  addBuff(next, buffFrom(next, { id: 'perpetual-stew', effects: bowl.effects, duration: { minutes: Math.max(30, bowl.minutes) } }, { label: [rules.name] }));
-  const kinds = [...new Set(cooked.map((f) => f.species))].sort();
+  addBuff(next, buffFrom(next, { id: 'perpetual-stew', effects: bowl.effects, duration: { minutes: Math.max(30, bowl.minutes) } }, { label: [rules.name], holds: true }));
+  const kinds = [...new Set(next.stewPot.map((f) => f.species))].sort();
   const fresh = kinds.filter((k) => !next.tasted?.[k]);
   const from = fresh.length ? fresh : kinds;
   let taste = from[0];
@@ -370,7 +354,7 @@ export function eatStew(state) {
     next.streams = commit();
   }
   next.tasted = { ...next.tasted, [taste]: true };
-  next.stewPot = next.stewPot.filter((f) => cookingFor(next, f));
+  next.stewPot = [];
   return { state: next, events: [{ type: 'ate-stew', minutes: bowl.minutes, flavours: bowl.flavours, taste }] };
 }
 

@@ -16,7 +16,7 @@ import { offers } from '../src/engine/perks.js';
 import { arrive, choose, openSlide } from '../src/engine/events.js';
 import { clock, minutesToMorning } from '../src/engine/time.js';
 import { vendorStatus } from '../src/engine/schedule.js';
-import { addToStew, bowlOf, cookingFor, costStatus, eatFish, eatStew, eats, feedTank, letGo, offersFor, tankDanger, tankMeals, tasteFactor, toAquarium, trade } from '../src/engine/barter.js';
+import { addToStew, bowlOf, costStatus, eatFish, eatStew, eats, feedTank, letGo, offersFor, tankDanger, tankMeals, tasteFactor, toAquarium, trade } from '../src/engine/barter.js';
 import { coldLevel, coldPoints, conditionBuffs } from '../src/engine/conditions.js';
 import { passTime } from '../src/engine/passage.js';
 import { placeOpen } from '../src/engine/knowledge.js';
@@ -152,32 +152,7 @@ test('sleeping at the inn wakes the player in the morning, rested; no casting in
   s = choose(s, sleep.index).state;
   assert.equal(clock(s.time).partOfDay, 'morning');
   assert.ok(s.buffs.some((b) => b.id === 'rested' && b.until !== undefined));
-  assert.equal(castLine({ ...s, event: null }, 0).events[0]?.type, 'no-water', 'the morning greeting set aside');
-});
-
-test('after a night of sleep, at the inn or in the room, the inn says good morning, the stew among its choices (D165)', () => {
-  /** @param {GameState} s */
-  const sleepIn = (s) => {
-    arrive(s);
-    const choices = /** @type {any} */ (openSlide(s)).choices;
-    const slide = content.events[/** @type {any} */ (s.event).id].slides[/** @type {any} */ (s.event).slide];
-    const sleep = choices.find((/** @type {any} */ c) => slide.choices[c.index].effects.some((/** @type {any} */ e) => e.kind === 'sleep'));
-    return choose(s, sleep.index).state;
-  };
-  for (const spot of ['inn', 'room']) {
-    let s = sleepIn(/** @type {GameState} */ ({ ...game({ hour: 23 }), location: 'town', spot, flags: { 'met-innkeeper': true } }));
-    assert.equal(clock(s.time).partOfDay, 'morning', spot);
-    assert.equal(s.spot, 'inn', `down at the inn from the ${spot}`);
-    assert.equal(s.event?.id, 'inn-morning', spot);
-    const slide = content.events['inn-morning'].slides.start;
-    assert.ok(slide.choices.some((/** @type {any} */ c) => c.effects.some((/** @type {any} */ e) => e.kind === 'shop' && e.id === 'stew')), 'the stew');
-    // The last choice, as the sim and the checks take it: the morning is over, and the inn is as it was.
-    s = choose(s, slide.choices.length - 1).state;
-    assert.equal(s.event, null);
-    assert.ok(!s.flags['inn-morning']);
-    arrive(s);
-    assert.equal(s.event?.id, 'the-inn', 'an ordinary visit after');
-  }
+  assert.equal(castLine(s, 0).events[0]?.type, 'no-water');
 });
 
 test('the cold: three levels from the temperature and the time, less warmth; none indoors (R19.2)', () => {
@@ -206,7 +181,6 @@ test('the stew: 12 epic fish make a bowl of 24 hours, with warmth and the rarest
   s = addToStew(s, 0).state;
   assert.equal(s.stewPot.length, 2);
   assert.equal(s.bucket[0].count, 1);
-  s = { ...s, time: s.time + content.rules.stew.cookMinutes };
   const out = eatStew(s);
   const buff = /** @type {any} */ (out.state.buffs.find((b) => b.id === 'perpetual-stew'));
   assert.equal(buff.until, s.time + 60 + 15, 'a rare pike, plain, and a common roach, poor eating (D138)');
@@ -215,53 +189,40 @@ test('the stew: 12 epic fish make a bowl of 24 hours, with warmth and the rarest
   assert.equal(addToStew({ ...s, spot: 'square' }, 0).state.stewPot.length, 2, 'only at the inn');
 });
 
-test('the stew cooks: a fish counts for a bowl two game hours after it went in (D165)', () => {
-  assert.equal(content.rules.stew.cookMinutes, 120);
-  let s = /** @type {GameState} */ ({ ...game(), location: 'town', spot: 'inn', bucket: [{ fish: fish('northern-pike', 'rare'), count: 1 }, { fish: fish('roach', 'common'), count: 1 }] });
-  const added = addToStew(s, 0);
-  assert.deepEqual(added.events.map((e) => e.type), ['stewed'], 'putting a fish in eats nothing');
-  assert.ok(!added.state.buffs.some((b) => b.id === 'perpetual-stew'));
-  s = added.state;
-  assert.equal(s.stewPot[0].stewedAt, s.time, 'it keeps the time it went in');
-  assert.equal(cookingFor(s, s.stewPot[0]), 120);
-  assert.equal(cookingFor({ ...s, time: s.time + 90 }, s.stewPot[0]), 30);
-  assert.equal(cookingFor({ ...s, time: s.time + 120 }, s.stewPot[0]), 0);
-
-  // Nothing cooked yet: refused, with a line saying so, and nothing changes.
-  const early = eatStew({ ...s, time: s.time + 90 });
-  assert.deepEqual(early.events, [{ type: 'stew-cooking' }]);
-  assert.equal(early.state.stewPot.length, 1);
-  assert.ok(!early.state.buffs.some((b) => b.id === 'perpetual-stew'));
-
-  // An hour later the roach goes in; at two hours the pike is cooked and the roach isn't.
-  s = addToStew({ ...s, time: s.time + 60 }, 0).state;
-  const bowl = eatStew({ ...s, time: s.time + 60 });
-  const buff = /** @type {any} */ (bowl.state.buffs.find((b) => b.id === 'perpetual-stew'));
-  assert.equal(buff.until, s.time + 60 + 60, 'the rare pike only, plain eating: an hour');
-  assert.equal(bowl.state.stewPot.length, 1, 'the roach stays cooking');
-  assert.equal(bowl.state.stewPot[0].species, 'roach');
-  assert.deepEqual(bowl.state.tasted, { 'northern-pike': true }, 'the taste is of what was in the bowl');
+test("the stew's buff stands still in town and asleep, and runs down by the water (D172)", () => {
+  let s = /** @type {GameState} */ ({ ...game(), location: 'town', spot: 'inn', bucket: [{ fish: fish('northern-pike', 'rare'), count: 1 }] });
+  s = eatStew(addToStew(s, 0).state).state;
+  const left = (/** @type {GameState} */ g) => /** @type {number} */ (g.buffs.find((b) => b.id === 'perpetual-stew')?.until) - g.time;
+  assert.equal(left(s), 60, 'a rare pike, plain eating');
+  /** @param {GameState} from @param {number} minutes @param {{ asleep?: boolean }} [how] */
+  const pass = (from, minutes, how) => {
+    const g = structuredClone(from);
+    const { dice } = diceFrom(g);
+    passTime(g, minutes, dice, how);
+    return g;
+  };
+  assert.equal(left(pass(s, 180)), 60, 'three hours waiting in town');
+  const water = /** @type {GameState} */ ({ ...s, location: game().location, spot: game().spot });
+  assert.equal(left(pass(water, 30)), 30, 'half an hour by the water');
+  assert.equal(left(pass(water, 30, { asleep: true })), 60, 'asleep, wherever');
+  assert.ok(!pass(water, 60).buffs.some((b) => b.id === 'perpetual-stew'), 'and it ends there');
+  // A night at the inn: the stew is still there in the morning, the rest is new.
+  let night = /** @type {GameState} */ ({ ...s, time: s.time - 10 * 60 + 23 * 60, flags: { 'met-innkeeper': true } });
+  night = { ...night, buffs: night.buffs.map((b) => (b.id === 'perpetual-stew' ? { ...b, until: night.time + 60 } : b)) };
+  arrive(night);
+  const slide = content.events['the-inn'].slides[/** @type {any} */ (night.event).slide];
+  const sleep = /** @type {any} */ (openSlide(night)).choices.find((/** @type {any} */ c) => slide.choices[c.index].effects.some((/** @type {any} */ e) => e.kind === 'sleep'));
+  const morning = choose(night, sleep.index).state;
+  assert.equal(clock(morning.time).partOfDay, 'morning');
+  assert.equal(left(morning), 60);
 });
 
-test('a fish taken back out of the pot stacks in the bucket as it was (D165)', async () => {
-  const { takeFromStew } = await import('../src/engine/barter.js');
-  let s = /** @type {GameState} */ ({ ...game(), location: 'town', spot: 'inn', bucket: [{ fish: fish('roach', 'common'), count: 2 }] });
-  s = addToStew(s, 0).state;
-  s = takeFromStew(s, 0).state;
-  assert.deepEqual(s.bucket.map((b) => b.count), [2]);
-  assert.equal(s.bucket[0].fish.stewedAt, undefined);
-});
-
-test('a save from version 20 loads, the fish already in its pot cooked (D165)', () => {
-  const v20 = { ...game(), version: 20, stewPot: [fish('roach', 'common'), fish('northern-pike', 'rare')] };
-  const s = deserialize(serialize(/** @type {any} */ (v20)));
-  assert.equal(s.stewPot.length, 2);
-  for (const f of s.stewPot) {
-    assert.equal(typeof f.stewedAt, 'number');
-    assert.equal(cookingFor(s, f), 0);
-  }
-  const inn = { ...s, location: 'town', spot: 'inn' };
-  assert.deepEqual(eatStew(inn).state.stewPot, [], 'a whole bowl at once');
+test('a save from version 23 loads with the stew no longer cooking (D172)', () => {
+  const v23 = { ...game(), version: 23, flags: { 'inn-morning': true, 'met-innkeeper': true }, stewPot: [{ ...fish('roach', 'common'), stewedAt: 100 }] };
+  const s = deserialize(serialize(/** @type {any} */ (v23)));
+  assert.deepEqual(s.flags, { 'met-innkeeper': true });
+  assert.equal(/** @type {any} */ (s.stewPot[0]).stewedAt, undefined);
+  assert.equal(content.events['inn-morning'].retired, true, 'its event stays, retired (D44)');
 });
 
 test('every fish has a stew buff (R19.4)', () => {

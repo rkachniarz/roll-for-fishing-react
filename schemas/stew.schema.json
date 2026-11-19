@@ -23,7 +23,6 @@
     },
     "effects": { "description": "What every bowl gives, whatever went in: the warmth.", "type": "array", "items": { "$ref": "common.schema.json#/definitions/effect" } },
     "flavours": { "description": "How many fish's own stew buffs a bowl carries: the rarest kinds that went in.", "type": "integer", "minimum": 0 },
-    "cookMinutes": { "description": "Game minutes a fish cooks in the pot before a bowl takes it (D165).", "type": "integer", "minimum": 0 },
     "eatCasts": { "description": "How many casts a fish eaten raw gives its stew buff for (Sushi enjoyer).", "type": "integer", "minimum": 1 },
     "taste": {
       "description": "What a fish's taste grade does (D138): the minutes it adds to a bowl, and the casts its buff lasts eaten raw, are multiplied by this.",
@@ -50,6 +49,6 @@
     },
     "aquarium": { "description": "How many fish the room's aquarium holds.", "type": "integer", "minimum": 1 }
   },
-  "required": ["id", "name", "minutes", "effects", "flavours", "cookMinutes", "eatCasts", "taste", "parasites", "aquarium"],
+  "required": ["id", "name", "minutes", "effects", "flavours", "eatCasts", "taste", "parasites", "aquarium"],
   "additionalProperties": false
 }

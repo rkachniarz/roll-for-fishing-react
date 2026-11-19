@@ -15216,7 +15216,6 @@ export const content = {
         }
       ],
       "flavours": 3,
-      "cookMinutes": 120,
       "eatCasts": 5,
       "taste": {
         "poor": 0.5,
@@ -15606,7 +15605,8 @@ export const content = {
           ]
         }
       },
-      "placeholder": true
+      "placeholder": true,
+      "retired": true
     },
     "innkeeper-first": {
       "id": "innkeeper-first",
@@ -16154,10 +16154,6 @@ export const content = {
         {
           "kind": "flag",
           "name": "met-innkeeper"
-        },
-        {
-          "kind": "no-flag",
-          "name": "inn-morning"
         }
       ],
       "first": "start",
@@ -16225,16 +16221,6 @@ export const content = {
               "effects": [
                 {
                   "kind": "sleep"
-                },
-                {
-                  "kind": "flag",
-                  "name": "inn-morning",
-                  "set": true
-                },
-                {
-                  "kind": "go",
-                  "location": "town",
-                  "spot": "inn"
                 }
               ]
             },
@@ -16606,16 +16592,6 @@ export const content = {
               "effects": [
                 {
                   "kind": "sleep"
-                },
-                {
-                  "kind": "flag",
-                  "name": "inn-morning",
-                  "set": true
-                },
-                {
-                  "kind": "go",
-                  "location": "town",
-                  "spot": "inn"
                 }
               ]
             },

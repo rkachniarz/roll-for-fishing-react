@@ -40,7 +40,8 @@ per task goes in docs/decisions.md.
   `error.busy`). Claude's calls, for REVIEW.md: what the list shows when nothing fits, and how the equipped item's own
   tooltip is still reached on a phone. *Landed (D164):* `slotFlyout` in `src/ui/panels.js`, `showFlyout` and
   `pickFor` in `src/main.js`, `pickSlot` in `src/ui/links.js`.
-- [x] **T.4** The stew cooks, and the inn says good morning. *The owner's words:* fish put in the perpetual stew count
+- [x] **T.4** ~~The stew cooks, and the inn says good morning.~~ *Landed (D165), then taken back after testing
+  (D172): the stew's buff stands still in town and asleep instead; delayed effects wait for a busier town.* Was: *The owner's words:* fish put in the perpetual stew count
   for a bowl only **two game hours after they went in** (cooking); putting a fish in gives a message on the lines of
   "Thank you for the contribution - come back in some time to taste it", and **no longer leads to eating at once.**
   Why: testers ate the stew and then slept until morning, which used up the buff's hours at once. **After sleeping
@@ -49,8 +50,7 @@ per task goes in docs/decisions.md.
   in the pot keeps the time it went in; a bowl takes only the cooked fish and leaves the rest cooking; with nothing
   cooked yet the bowl is refused with a line saying it's still cooking; fish already in the pot in an old save count
   as cooked (a new `SAVE_VERSION` and its migration). The owner's lines get an editing pass in the fantasy voice,
-  keeping "Mornin'". *Landed (D165):* `cookingFor` in `src/engine/barter.js`,
-  `cookMinutes` in `content/rules/stew.json`, the event `inn-morning`, save version 21.
+  keeping "Mornin'".
 
 ## Then: Phase 12, the map, the sun and moon, the sky
 

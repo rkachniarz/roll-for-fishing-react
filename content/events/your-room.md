@@ -14,8 +14,6 @@ the corner.]
 
 - Sleep until morning -> end
   sleep:
-  set: inn-morning
-  go: town inn
 - Look at the aquarium -> end
   needs: perk aquarium
   shop: aquarium

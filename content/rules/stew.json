@@ -13,7 +13,6 @@
   },
   "effects": [{ "value": "warmth", "add": 2 }],
   "flavours": 3,
-  "cookMinutes": 120,
   "eatCasts": 5,
   "taste": { "poor": 0.5, "plain": 1, "good": 1.25, "delicacy": 1.5 },
   "parasites": { "low": 5, "high": 20, "buff": "queasy" },

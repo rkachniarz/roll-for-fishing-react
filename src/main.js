@@ -849,8 +849,6 @@ function describeEvent(e) {
       return [...tParts('log.ate-fish', { fish: fishLink(e.fish) }), ...(line ? [' ', t(line)] : []), ...(e.queasy ? [' ', t('log.queasy')] : [])];
     }
     case 'stewed':
-      // The innkeeper's thanks; it cooks before a bowl takes it (D165).
-      return [...tParts('log.stewed', { fish: fishLink(e.fish) }), ' ', t('log.stewed-thanks')];
     case 'to-aquarium':
     case 'twin':
       return tParts(`log.${e.type}`, { fish: fishLink(e.fish) });
@@ -923,7 +921,6 @@ function describeEvent(e) {
     case 'rift':
     case 'polished':
     case 'bucket-full':
-    case 'stew-cooking':
     case 'too-early':
     case 'empty':
     case 'reeled-in':

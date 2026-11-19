@@ -6,7 +6,8 @@ once: false
 needs: location town
 needs: spot inn
 needs: flag inn-morning
-# After a night's sleep, at the inn or in the room (D165): the sleep sets the flag and goes down to the inn.
+# After a night's sleep, at the inn or in the room (D165). Taken back (D172): nothing sets the flag now.
+retired: true
 placeholder: true
 ---
 

@@ -6,7 +6,6 @@ once: false
 needs: location town
 needs: spot inn
 needs: flag met-innkeeper
-needs: no-flag inn-morning
 placeholder: true
 ---
 
@@ -21,8 +20,6 @@ The fire crackles. The innkeeper nods at you from behind the counter.[time night
   go: town room
 - Sleep until morning -> end
   sleep:
-  set: inn-morning
-  go: town inn
 - Anything going on in town? -> town
 - Leave -> end
 

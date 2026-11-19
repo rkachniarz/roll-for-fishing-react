@@ -9,7 +9,7 @@ import { levelFor } from '../engine/state.js';
 import { className } from '../engine/character.js';
 import { iconName, paintIcon } from '../scene/icons.js';
 import { bagSlot, bagTab, effectsText, hoursText, link, pickSlot, rarityColour, slot, tasteLines, weightText } from './links.js';
-import { bowlOf, canTrade, cookingFor, costStatus, offersFor } from '../engine/barter.js';
+import { bowlOf, canTrade, costStatus, offersFor } from '../engine/barter.js';
 import { vendorStatus } from '../engine/schedule.js';
 import { bindTip, usingTouch } from './tooltip.js';
 import { EQUIPMENT_SLOTS, fits } from '../engine/equipment.js';
@@ -420,27 +420,17 @@ export function shopPane(state, id, on) {
  */
 function stewPane(state, on) {
   const pot = state.stewPot ?? [];
-  // A fish cooks before a bowl takes it (D165): those still cooking are dimmed, and their tooltip says when.
-  const left = pot.map((f) => cookingFor(state, f));
-  const cooked = pot.filter((_, i) => !left[i]);
-  const cooking = left.filter((m) => m > 0);
-  const bowl = bowlOf(cooked);
-  const potSlot = (/** @type {import('../engine/fish.js').FishInstance} */ f, /** @type {number} */ i) => {
-    const b = slot({ kind: 'fish', fish: f }, 1, left[i] ? t('stew.cooking', { time: hoursText(left[i]) }) : undefined);
-    if (left[i]) b.classList.add('cooking');
-    return clickSlot(b, () => on.unstew(i));
-  };
-  // Pressed with nothing cooked, it says it's still cooking.
+  const bowl = bowlOf(pot);
   const eat = el('button', { type: 'button', className: 'trade-button', textContent: t('stew.eat'), disabled: !pot.length });
   eat.addEventListener('click', on.eat);
   return [
     el('p', { className: 'muted', textContent: t('stew.bucket') }),
     el('div', { className: 'grid' }, state.bucket.map((b, i) => clickSlot(slot({ kind: 'fish', fish: b.fish }, b.count), () => on.stew(i)))),
     el('p', { className: 'muted', textContent: t('stew.pot') }),
-    pot.length ? el('div', { className: 'grid' }, pot.map(potSlot)) : el('p', { className: 'muted', textContent: t('stew.empty') }),
-    ...(cooked.length ? [el('p', { className: 'tip-good', textContent: t('stew.bowl', { hours: hoursText(Math.max(30, bowl.minutes)), effects: effectsText(bowl.effects) }) })] : []),
-    ...(cooking.length && !cooked.length ? [el('p', { className: 'muted', textContent: t('stew.notReady', { time: hoursText(Math.min(...cooking)) }) })] : []),
-    ...(cooking.length && cooked.length ? [el('p', { className: 'muted', textContent: t('stew.stillCooking', { count: cooking.length }) })] : []),
+    pot.length
+      ? el('div', { className: 'grid' }, pot.map((f, i) => clickSlot(slot({ kind: 'fish', fish: f }), () => on.unstew(i))))
+      : el('p', { className: 'muted', textContent: t('stew.empty') }),
+    ...(pot.length ? [el('p', { className: 'tip-good', textContent: t('stew.bowl', { hours: hoursText(Math.max(30, bowl.minutes)), effects: effectsText(bowl.effects) }) })] : []),
     eat,
   ];
 }
