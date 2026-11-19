@@ -8,6 +8,39 @@ Item ideas, a hundred cut to twenty, are in [ideas/items.md](ideas/items.md).
 
 Newest first.
 
+## The town and the lands around it (2026-11-19)
+
+The town stands at a crossroads older than anyone's memory. This is where the road into the elven valley began (see
+the story, below). The inn has no cellar for that reason: it is built on the old road itself, which runs on, overgrown
+and forgotten, until it vanishes into the river.
+
+**The kingdom.** These days the human kingdom of Kolradia (a placeholder name), a city state, lies to the north. The
+road from town runs straight north; the City itself lies to the north-east, on the shore of the Great Sea. The town
+belongs to the kingdom's Territories, though most days you would be hard pressed to find any sign of it.
+
+**The forest.** A dense and dangerous forest begins on the lake's northern shore. The Swamp is part of it.
+
+**The Breadbasket.** To the east lies the Breadbasket, where the kingdom's grain and livestock come from. Where it ends
+and the Wildlands begin is no easy question, but there is a clear line of forts and outposts, and beyond it only the
+bold and the desperate try to settle. Rumour has it that some of them find it easier to make peace with the nomads, and
+some even join them, becoming the Wild Folk.
+
+**The Wildlands.** Far to the east lie the Wildlands, so named by humans and dwarves, where the orc nomads roam. Long
+judged not worth the trouble by the civilisations of the coast, they remain a mystery to the common citizen.
+
+**Who passes through the town:**
+
+- **Settlers.** Those living nearby come often; those from further east come with the seasons: to bring their harvest
+  to the mills and markets, to buy supplies, to find help for their sick.
+- **Soldiers** on their way to and from the forts and outposts, penal units among them.
+- **Tax collectors.**
+- **Now and then, travellers from the Wildlands:** traders, adventurers and scholars; orcs, goblins and the Wild Folk.
+
+**What it gives the game:** a cast of visitors for the town's events, some tied to the seasons (the harvest, the
+settlers' trips), some passing once; a reason for the inn to stand on the old elven road, and so a way into the story.
+It fits the names the fish already use: the Great Sea, the Wildlands, the Grasslands, Cassalan, Ferrstad. Nothing the
+engine needs yet; the visitors would be events, as the junk collector is.
+
 ## Other guests at the stew (2026-11-18)
 
 The stew never spoils: it is perpetual (D165). What a player leaves in the pot runs out another way: other guests at
