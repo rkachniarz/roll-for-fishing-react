@@ -238,8 +238,9 @@ function ramp(steps, t, x, y) {
  * reeds. Its ripples are fixed marks that shift a pixel and change length from
  * frame to frame, so the water shimmers in place.
  * @param {typeof REEDY} P @param {() => number} rand
+ * @param {(x: number) => number} top  The top of the reeds at a column (`topAt`), or none.
  */
-function paintWater(P, rand) {
+function paintWater(P, rand, top) {
   const rows = H - HZ;
   const water = [P.waterHaze, P.waterFar, P.waterMid, P.waterNear, P.waterDeep, P.waterDark];
   const base = makeCanvas(W, rows);
@@ -251,7 +252,7 @@ function paintWater(P, rand) {
       // Beside the reeds the water mirrors them: a dark green edge.
       let near = 99;
       for (let k = 1; k <= 8 && near === 99; k++) {
-        if (topAt(x - k) <= y || topAt(x + k) <= y) near = k;
+        if (top(x - k) <= y || top(x + k) <= y) near = k;
       }
       if (near < 8 && (near < 4 || BAYER[d % 4][x % 4] < 8)) colour = P.waterReed;
       dot(g, x, d, colour);
@@ -271,7 +272,7 @@ function paintWater(P, rand) {
     for (const m of marks) {
       const x = m.x + [0, 1, 0][frame] * m.dir;
       const len = Math.max(1, m.len + [0, 1, -1][frame]);
-      if (topAt(x) <= HZ + m.d + 1 || topAt(x + len) <= HZ + m.d + 1) continue;
+      if (top(x) <= HZ + m.d + 1 || top(x + len) <= HZ + m.d + 1) continue;
       fg.fillStyle = m.d < 25 ? P.waveLight : P.waterHaze;
       fg.fillRect(x, m.d, len, 1);
       if (m.d > 40) {
@@ -436,16 +437,19 @@ function paintBank(P, S, rand) {
  * glitter in `waterLayer`.
  * @param {() => number} rand  Uniform [0, 1), the scenery stream.
  * @param {string} [season]  One of the game's seasons.
+ * @param {{ reeds?: boolean }} [options]  `reeds: false` paints the open water alone (`paintOpen`).
  * @returns {import('./pond.js').Pond}
  */
-export function paintReedy(rand, season = 'summer') {
+export function paintReedy(rand, season = 'summer', { reeds: withReeds = true } = {}) {
   TextureStyle.defaultOptions.scaleMode = 'nearest';
   const S = REEDY_SEASONS[reedySeason(season)];
   const P = S.palette;
   const tex = (/** @type {HTMLCanvasElement} */ c) => Texture.from(c);
+  // The top of the reeds at a column; below the picture where there are none.
+  const top = withReeds ? topAt : () => H + 20;
 
   const back = new Container();
-  const waterFrames = paintWater(P, rand).map(tex);
+  const waterFrames = paintWater(P, rand, top).map(tex);
   const water = new Sprite(waterFrames[0]);
   water.y = HZ;
   back.addChild(water);
@@ -464,7 +468,7 @@ export function paintReedy(rand, season = 'summer') {
   for (let i = 0; i < S.glints; i++) {
     const d = 2 + Math.floor(70 * rand() ** 1.5);
     const x = Math.floor(rand() * (W - 6));
-    if (topAt(x) <= HZ + d + 2 || topAt(x + 5) <= HZ + d + 2) continue;
+    if (top(x) <= HZ + d + 2 || top(x + 5) <= HZ + d + 2) continue;
     const frames = glintSets[d < 30 ? 0 : 1];
     const sprite = new Sprite(frames[0]);
     sprite.position.set(x, HZ + d);
@@ -487,9 +491,9 @@ export function paintReedy(rand, season = 'summer') {
 
   // The reeds: the bank, then the blades in sections, each in three frames of the wind.
   const front = new Container();
-  front.addChild(new Sprite(tex(paintBank(P, S, rand))));
-  const blades = growBlades(P, S, rand);
-  const sections = Math.ceil(W / SECTION);
+  if (withReeds) front.addChild(new Sprite(tex(paintBank(P, S, rand))));
+  const blades = withReeds ? growBlades(P, S, rand) : [];
+  const sections = withReeds ? Math.ceil(W / SECTION) : 0;
   const reedFrames = Array.from({ length: sections }, (_, s) => {
     const mine = blades.filter((b) => Math.min(Math.floor(b.x / SECTION), sections - 1) === s);
     return [0, 1, 2].map((frame) => {
@@ -526,7 +530,7 @@ export function paintReedy(rand, season = 'summer') {
     skyline: Array.from({ length: W }, () => HZ),
     waterLayer,
     // Open water: below the horizon and clear of the reed banks.
-    isWater: (x, y) => y > HZ && topAt(x) > y + 1,
+    isWater: (x, y) => y > HZ && top(x) > y + 1,
     update(now, wind, crop, raining, light = 1) {
       for (const [s, sprite] of reeds.entries()) sprite.texture = reedFrames[s][gust(now, wind, s * SECTION + SECTION / 2)];
       water.texture = waterFrames[Math.floor(now / (600 / (1 + wind * 0.4))) % 3];
@@ -542,7 +546,7 @@ export function paintReedy(rand, season = 'summer') {
       if (now >= nextRing) {
         const d = Math.floor(rand() * 70) + 4;
         const x = crop + 10 + Math.floor(rand() * (W - 2 * crop - 20));
-        if (topAt(x) > HZ + d + 6) rings.push({ x, y: HZ + d, born: now, life: 900, maxRx: d < 30 ? 4 : 7 });
+        if (top(x) > HZ + d + 6) rings.push({ x, y: HZ + d, born: now, life: 900, maxRx: d < 30 ? 4 : 7 });
         nextRing = now + (raining ? 90 + rand() * 120 : 1500 + rand() * 2500);
       }
       rings = rings.filter((r) => now - r.born < r.life);
@@ -558,4 +562,18 @@ export function paintReedy(rand, season = 'summer') {
       }
     },
   };
+}
+
+/**
+ * The open water (the default scene for a spot with no painting of its own):
+ * the reedy shore's lake, horizon and sky with no reeds, so nothing stands
+ * between the player and the sky in the way the spot faces (D166, D169). Its
+ * four seasons are the reedy shore's water. A placeholder until each spot is
+ * painted (CR-1).
+ * @param {() => number} rand  Uniform [0, 1), the scenery stream.
+ * @param {string} [season]  One of the game's seasons.
+ * @returns {import('./pond.js').Pond}
+ */
+export function paintOpen(rand, season = 'summer') {
+  return paintReedy(rand, season, { reeds: false });
 }

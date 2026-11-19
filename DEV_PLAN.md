@@ -151,6 +151,9 @@ sun, the moon in its phase, the stars and a path of glitter under a low sun or m
 the paintings' own skies and clouds went. 12.5 is done: clouds that follow the weather, from a library of cloud
 types drawn as code and a table per season and cloud level, descriptions that name a sky, fog hiding it, black
 bringing a dusk, and the still water mirroring it all (D170, `src/scene/clouds.js`, `content/rules/sky.json`).
+Since then, to test the sky in every facing: the open water (D171), the reedy shore's lake without the reeds, is the
+default scene for every spot without a painting of its own, each facing its own way, and the art sheet has a
+section to turn it by hand.
 
 ## Phase 11, what the real species do
 
@@ -622,6 +625,9 @@ placeholder, it's added here.
   autumn and summer) and the reedy shore (D117, D118; all four seasons). The swamp (D158; all four seasons,
   from the photos in `docs/design/swamp/`), waiting on the owner's final pass, with the first picture under the
   water (D159); the pond's and the reedy shore's are still to do.
+  *Placeholder (D171):* every other spot shows the open water (`paintOpen`), the reedy shore's lake without the
+  reeds, facing the spot's way, with its old `tint` over the water; the owner may make copies of it with slight
+  differences per spot first.
 - [ ] **CR-2** Weather and life on the painted spots (D100; the art half of 8.11): clouds per weather (summer's heaped
   clouds, autumn's overcast so far), rain, wind, light, moving plants and water. *Replaces 4.7's flat shapes.*
   **The clouds (12.5, D160):** references from Wikimedia Commons first (`npm run commons search`, a contact sheet

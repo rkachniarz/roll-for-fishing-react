@@ -337,9 +337,11 @@ await check('the content editor (7.5)', DESKTOP, null, async (page) => {
   await page.screenshot({ path: 'dist/verify/editor.png' });
 });
 
-await check('each spot looks different until painted (4.2)', PHONE, '?dev&seed=1', async (page) => {
+await check('each spot looks different until painted (4.2); the open water by default (D171)', PHONE, '?dev&seed=1', async (page) => {
   /** @type {string[]} */
   const looks = [];
+  /** @type {string[]} */
+  const paintings = [];
   for (const [location, spot] of [['lake', 'reedy-shore'], ['lake', 'swamp'], ['lake', 'rocky-shore'], ['lake', 'deep-water'], ['river', 'upper-river'], ['river', 'river-mouth'], ['mage-tower', 'the-first-pool']]) {
     await openBench(page);
     await page.selectOption('#dev-location', location);
@@ -347,6 +349,7 @@ await check('each spot looks different until painted (4.2)', PHONE, '?dev&seed=1
     await page.waitForTimeout(300);
     // The look painted, to compare (the water moves, so two pictures of one spot differ too).
     looks.push((await page.getAttribute('body', 'data-spot-look')) ?? 'null');
+    paintings.push(`${spot}:${(await page.getAttribute('canvas', 'data-painting')) ?? ''}`);
     // The swamp's ghost greets every arrival (owner's item 24): its dialog is
     // passed after the look is read, since backing away leaves the swamp.
     if (await page.isVisible('#event[open]')) {
@@ -364,6 +367,11 @@ await check('each spot looks different until painted (4.2)', PHONE, '?dev&seed=1
     // Reedy Shore is the plain scene: no look is its look, so null may come once.
     new Set(looks).size === looks.length,
     `${new Set(looks).size} different`,
+  );
+  report(
+    'a spot without a painting of its own shows the open water',
+    paintings.join(' ') === 'reedy-shore:reedy swamp:swamp rocky-shore:open deep-water:open upper-river:open river-mouth:open the-first-pool:open',
+    paintings.join(' '),
   );
 });
 

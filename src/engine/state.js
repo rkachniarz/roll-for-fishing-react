@@ -18,9 +18,10 @@ import { emptyEquipment } from './equipment.js';
 import { knownKey, locationList } from './knowledge.js';
 import { fishWeight } from './fish.js';
 import { firstFullMoon } from './sky.js';
+import { WATER } from './features.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 22;
+export const SAVE_VERSION = 23;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -353,6 +354,29 @@ const MIGRATIONS = {
   }),
   // 21 -> 22: the moon (D167): the first full moon rolled from today, from the stream a new game rolls it from.
   21: (save) => ({ ...save, fullMoonAt: firstFullMoon(save.time ?? 0, diceFor(createRng(deriveSeed(save.seed, 'moon')))) }),
+  // 22 -> 23: the open water is seen from eye level (D171), so a spot without its own water has it from row 118
+  // to 190, not 30 to 185. What lies on it there (pool fish, features, class fish) moves down in proportion.
+  22: (save) => {
+    const OLD = { y0: 30, y1: 185 };
+    /** Whether the pool at a key (`location/spot`) uses the default water. @param {string} key */
+    const onDefault = (key) => {
+      const [location, spot] = key.split('/');
+      const spots = content.locations[location]?.spots;
+      return !content.locations[location]?.town && !spots?.find((/** @type {{ id: string }} */ s) => s.id === spot)?.water;
+    };
+    /** @param {any} f */
+    const move = (f) =>
+      typeof f?.y === 'number' ? { ...f, y: Math.round(WATER.y0 + ((Math.min(Math.max(f.y, OLD.y0), OLD.y1) - OLD.y0) * (WATER.y1 - WATER.y0)) / (OLD.y1 - OLD.y0)) } : f;
+    /** @param {Record<string, any[]> | undefined} byKey */
+    const moveAll = (byKey) => byKey && Object.fromEntries(Object.entries(byKey).map(([k, list]) => [k, onDefault(k) ? list.map(move) : list]));
+    const here = save.spot ? `${save.location}/${save.spot}` : String(save.location);
+    return {
+      ...save,
+      escaped: moveAll(save.escaped) ?? {},
+      ...(save.champions ? { champions: moveAll(save.champions) } : {}),
+      features: onDefault(here) ? (save.features ?? []).map(move) : save.features,
+    };
+  },
   // 19 -> 20: the pool turns over (D156). Fish the player has met count their days from now; schools and big
   // fish are in the pool, so the ones on the water, which have none there, go; the pools take up their turning
   // over from now.

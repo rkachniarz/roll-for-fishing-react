@@ -17,10 +17,10 @@
 import { Rectangle } from 'pixi.js';
 import { SIZE, createScene } from './scene/scene.js';
 import { POND, POND_SUMMER, createPondScene, paintPond, pondSeason } from './scene/pond.js';
-import { REEDY, REEDY_AUTUMN, REEDY_SPRING, REEDY_WINTER, paintReedy, reedySeason } from './scene/reedy.js';
+import { REEDY, REEDY_AUTUMN, REEDY_SPRING, REEDY_WINTER, paintOpen, paintReedy, reedySeason } from './scene/reedy.js';
 import { SKY_DAY, SKY_LAYER, SKY_LOW } from './scene/sky-layer.js';
-import { facingOf } from './engine/sky.js';
-import { clock } from './engine/time.js';
+import { MOON, facingOf } from './engine/sky.js';
+import { TIME, clock } from './engine/time.js';
 import { SWAMP, SWAMP_AUTUMN, SWAMP_H, SWAMP_SUMMER, SWAMP_W, SWAMP_WINTER, swampStill } from './scene/swamp-pixels.js';
 import { paintSwamp } from './scene/swamp.js';
 import { SWAMP_UNDER, swampUnderStill } from './scene/swamp-under.js';
@@ -585,6 +585,81 @@ section(
       { caption: 'broken at night under a full moon', world: momentWorld(minuteOf(20, 22), { facing: reedy, fullMoonAt: minuteOf(20, 22), weather: /** @type {any} */ ({ temperature: 8, wind: 2, clouds: 3, precipitation: 0 }) }) },
     );
     await skyCards(body, 'Reedy shore', paintReedy, reedySeason, moments);
+  },
+);
+
+// The open water (D171): the default scene for every spot without a painting
+// of its own, the reedy shore's lake with no reeds. One live scene, turned by
+// hand, to try the sky in any facing; the spots' own facings are in the list.
+section(
+  'The open water (the default scene)',
+  'The reedy shore’s water, horizon and sky with no reeds (paintOpen in src/scene/reedy.js, D171): every spot without a painting of its own shows it, facing its own way (look.facing, D166), its tint washed over the water in the game (not here). Pick a spot or turn the view by hand; the day, the hour, the moon and the clouds move the sky as the game would.',
+  async (body) => {
+    const spots = Object.entries(content.locations).flatMap(([location, l]) =>
+      (/** @type {any[]} */ (l.spots ?? []))
+        .filter((s) => !l.town && typeof s.look?.facing === 'number')
+        .map((s) => ({ label: `${t(s.name)}${s.look.painting ? '' : ' (default scene)'}`, facing: s.look.facing })),
+    );
+    const POINTS = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+    const compass = (/** @type {number} */ deg) => POINTS[Math.round((((deg % 360) + 360) % 360) / 22.5) % 16];
+    const SEASONS = ['spring', 'summer', 'autumn', 'winter'];
+    const days = TIME.seasonDays * 4;
+
+    const pick = /** @type {HTMLSelectElement} */ (el('select', {}, [el('option', { value: '' }, ['(by hand)']), ...spots.map((s, i) => el('option', { value: String(i) }, [`${s.label}: ${s.facing}°`]))]));
+    /** @param {string} name @param {number} min @param {number} max @param {number} step @param {number} value */
+    const slider = (name, min, max, step, value) => {
+      const input = /** @type {HTMLInputElement} */ (el('input', { type: 'range', min: String(min), max: String(max), step: String(step), value: String(value) }));
+      const shown = el('span', { class: 'size' });
+      return { input, shown, row: el('label', { class: 'control' }, [el('span', { class: 'name' }, [name]), input, shown]) };
+    };
+    const facing = slider('Facing', 0, 355, 5, 90);
+    const day = slider('Day', 0, days - 1, 1, 6);
+    const hour = slider('Hour', 0, 23.75, 0.25, 6.5);
+    const moon = slider('Moon', 0, MOON.cycleDays - 1, 1, 0);
+    const clouds = slider('Clouds', 0, 5, 1, 0);
+    const controls = el('div', { class: 'controls' }, [el('label', { class: 'control' }, [el('span', { class: 'name' }, ['Spot']), pick]), facing.row, day.row, hour.row, moon.row, clouds.row]);
+
+    const canvas = /** @type {HTMLCanvasElement} */ (el('canvas'));
+    const caption = el('span');
+    const save = /** @type {HTMLButtonElement} */ (el('button', { type: 'button', class: 'save' }, ['Save as PNG']));
+    body.append(controls, el('div', { class: 'row' }, [el('figure', {}, [canvas, el('figcaption', {}, [caption, ' ', save])])]));
+    const rand = createRng(deriveSeed(seed, 'scenery'));
+    const seasonAt = () => SEASONS[Math.floor(Number(day.input.value) / TIME.seasonDays) % 4];
+    let painted = reedySeason(seasonAt());
+    const scene = await createPondScene(canvas, () => rand.next(), painted, paintOpen);
+    const fit = Math.min(640, document.documentElement.clientWidth - 32);
+    scene.fit(fit, (fit * SIZE) / 320, 320);
+    scenes.push(scene);
+
+    const show = () => {
+      const f = Number(facing.input.value);
+      const d = Number(day.input.value);
+      const h = Number(hour.input.value);
+      const time = minuteOf(d, h);
+      const season = reedySeason(seasonAt());
+      if (season !== painted) scene.repaint((painted = season));
+      const level = Number(clouds.input.value);
+      const weather = /** @type {any} */ ({ ...CLEAR, clouds: level, precipitation: level >= 5 ? 4 : 0 });
+      scene.setWorld(momentWorld(time, { facing: f, fullMoonAt: time - Number(moon.input.value) * 1440, weather }));
+      const c = clock(time);
+      facing.shown.textContent = `${f}° ${compass(f)}`;
+      day.shown.textContent = `${seasonAt()}, day ${(d % TIME.seasonDays) + 1}`;
+      hour.shown.textContent = `${String(c.hour).padStart(2, '0')}:${String(c.minute).padStart(2, '0')}`;
+      moon.shown.textContent = Number(moon.input.value) === 0 ? 'full' : `${moon.input.value} days after full`;
+      clouds.shown.textContent = t(content.rules['weather-scales'].clouds[level]);
+      caption.textContent = `Open water, facing ${f}° (${compass(f)}), ${seasonAt()} ${hour.shown.textContent}`;
+    };
+    pick.addEventListener('change', () => {
+      if (pick.value !== '') facing.input.value = String(spots[Number(pick.value)].facing);
+      show();
+    });
+    facing.input.addEventListener('input', () => {
+      pick.value = '';
+      show();
+    });
+    for (const s of [day, hour, moon, clouds]) s.input.addEventListener('input', show);
+    show();
+    save.addEventListener('click', () => saveScene(scene.app, `open-${slug(caption.textContent ?? '')}-seed${seed}.png`));
   },
 );
 

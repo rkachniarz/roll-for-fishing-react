@@ -24,6 +24,19 @@ Items with no note are left alone.
 
 Newest first.
 
+## The open water, the default scene (2026-11-19, D171)
+
+Have a look at the art sheet's new section, **The open water (the default scene)**: pick a spot or turn the view by
+hand, and move the day, the hour, the moon and the clouds.
+
+- **Its water is the reedy shore's**, season for season, with the reeds left out; nothing else differs.
+- **The spots keep their old `tint`, washed over the water only** (not the sky), so deep water reads darker and the
+  tower's pool purple. Their old `shapes` (rocks, far shores drawn from above) don't show: they were drawn for the
+  top-down view.
+- **The open water a cast lands on, at every spot without its own:** x 40-216, rows 118-190, from just under the
+  horizon to near the rod. Old saves have their pool fish and features moved into those rows in proportion.
+- **The far-band sprites start at row 136,** as on the reedy shore.
+
 ## Clouds that follow the weather (2026-11-19, D170, 12.5)
 
 Have a look at the art sheet's new section, **Clouds (12.5)**: every cloud level in every season over the reedy

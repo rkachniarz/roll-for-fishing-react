@@ -187,9 +187,9 @@ test('one cast in a hundred flies way off target (D85)', () => {
   let wild = 0;
   let state = game(40);
   for (let n = 0; n < 2000; n++) {
-    const out = castLine(state, 0, { aim: { x: 60, y: 40 }, bounds: WATER });
+    const out = castLine(state, 0, { aim: { x: 60, y: 140 }, bounds: WATER });
     const landing = /** @type {{ x: number, y: number }} */ (out.cast.landing);
-    const far = Math.hypot(landing.x - 60, landing.y - 40) > 20;
+    const far = Math.hypot(landing.x - 60, landing.y - 140) > 20;
     const flagged = out.events.some((e) => e.type === 'wild-cast');
     if (!flagged) assert.ok(!far, 'an ordinary cast stays within the scatter');
     if (flagged) wild++;
@@ -465,6 +465,25 @@ test('a save from version 1 gains surface features and their stream', () => {
   assert.equal(migrated.version, SAVE_VERSION);
   assert.deepEqual(migrated.features, []);
   assert.equal(migrated.streams.features, game(13).streams.features);
+});
+
+test('a save from version 22 moves what lies on the default water down to its eye-level rows (D171)', () => {
+  const old = {
+    ...game(13),
+    version: 22,
+    location: 'lake',
+    spot: 'open-water',
+    escaped: {
+      'lake/open-water': [{ species: 'roach', n: 1, x: 100, y: 30 }, { species: 'roach', n: 2, x: 100, y: 185 }],
+      'lake/reedy-shore': [{ species: 'roach', n: 3, x: 100, y: 130 }],
+    },
+    features: [{ id: 'f1', kind: 'ripples', x: 90, y: 60, uses: 1, born: 0 }],
+  };
+  const migrated = deserialize(JSON.stringify(old));
+  assert.deepEqual(migrated.escaped['lake/open-water'].map((f) => f.y), [WATER.y0, WATER.y1]);
+  assert.equal(migrated.escaped['lake/reedy-shore'][0].y, 130, 'a spot with its own water keeps its rows');
+  const y = migrated.features[0].y;
+  assert.ok(y > WATER.y0 && y < WATER.y1, `the feature at row ${y} is on the water`);
 });
 
 test('a save from version 2 gets the seven slots; equipped bait moves out of the bags', () => {

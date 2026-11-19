@@ -26,6 +26,9 @@
     .note, .intro { margin: 0 0 12px; color: #a9b4b8; max-width: 70ch; }
     .row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
     figure { margin: 0; }
+    .controls { display: grid; gap: 6px; margin: 0 0 14px; max-width: 640px; }
+    .control { display: grid; grid-template-columns: 5em minmax(0, 1fr) 11em; gap: 10px; align-items: center; font-size: 13px; }
+    .control select { grid-column: 2 / 4; max-width: 100%; }
     figcaption { margin-top: 6px; font-size: 13px; }
     canvas { display: block; image-rendering: pixelated; }
     .sprites { gap: 14px; }

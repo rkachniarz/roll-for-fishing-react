@@ -13,7 +13,7 @@ import { createDice } from './dice.js';
 import { createViews } from './views.js';
 import { createShoal } from './swim.js';
 import { paintPond, pondSeason } from './pond.js';
-import { paintReedy, reedySeason } from './reedy.js';
+import { paintOpen, paintReedy, reedySeason } from './reedy.js';
 import { paintSwamp, swampSeason } from './swamp.js';
 import {
   BOBBER,
@@ -42,6 +42,14 @@ const FLIGHT_MS = 450;
 /** Casts landing above this line use the far-band sprites. */
 const FAR_LINE = 95;
 /**
+ * The painting a spot shows: its own, or the open water (D171) for a spot
+ * with none. A null look (the title, the town) shows no painting.
+ * @param {SpotLook | null} look
+ */
+export function paintingOf(look) {
+  return look ? (look.painting ?? 'open') : null;
+}
+/**
  * The painted spots (D115, D117): how each is painted, which of its own
  * seasons shows in the game's (the pond has two, the reedy shore all four,
  * D118), and where its casts turn to the far-band sprites (seen from eye
@@ -51,6 +59,7 @@ const FAR_LINE = 95;
 const PAINTINGS = {
   pond: { paint: paintPond, season: pondSeason, farLine: 145 },
   reedy: { paint: paintReedy, season: reedySeason, farLine: 136 },
+  open: { paint: paintOpen, season: reedySeason, farLine: 136 },
   swamp: { paint: paintSwamp, season: swampSeason, farLine: 150 },
 };
 /** How far a painting (320 wide) reaches left of the play area. */
@@ -78,8 +87,9 @@ const ROD_TIP = { x: SIZE / 2, y: SIZE + 6 };
  * defaults; a knob whose option the owner picks becomes the default and
  * leaves this list.
  * @typedef {{ tint?: string, tintAlpha?: number, shapes?: { shape: 'rect' | 'ellipse' | 'triangle' | 'band', x?: number, y: number,
- *   w?: number, h: number, colour: string }[], painting?: 'pond' | 'reedy' | 'swamp', facing?: number }} SpotLook  A spot's placeholder look (4.2),
+ *   w?: number, h: number, colour: string }[], painting?: 'pond' | 'reedy' | 'swamp' | 'open', facing?: number }} SpotLook  A spot's placeholder look (4.2),
  *   or a painting in its place (`painting`: src/scene/pond.js, D115; src/scene/reedy.js, D117; src/scene/swamp.js, D158).
+ *   A spot without one shows the open water (`paintOpen`, D171), its `tint` washed over the water; the `shapes` don't show.
  *
  * @typedef {Object} SceneLook
  * (None at the moment.)
@@ -181,6 +191,9 @@ export async function createScene(canvas, rand, look = {}) {
   app.stage.addChild(skyPainted.back);
   const paintingBack = new Container();
   app.stage.addChild(paintingBack);
+  // The spot's tint over the open water's water (D171), the one thing that tells the unpainted spots apart.
+  const paintingTint = new Graphics();
+  app.stage.addChild(paintingTint);
   /** @type {import('./pond.js').Pond | null} */
   let painting = null;
   let paintedKey = '';
@@ -298,10 +311,11 @@ export async function createScene(canvas, rand, look = {}) {
 
   /** Shows the spot's painting, if it has one, painting it for this season first. */
   function showPainting() {
-    const which = spotLook?.painting ? PAINTINGS[spotLook.painting] : null;
+    const name = paintingOf(spotLook);
+    const which = name ? PAINTINGS[name] : null;
     const painted = Boolean(which) && paintingSeason !== null;
     const season = which && paintingSeason ? which.season(paintingSeason) : null;
-    const key = `${spotLook?.painting}:${season}`;
+    const key = `${name}:${season}`;
     if (which && season && paintedKey !== key) {
       // The glitter hangs on the old painting's water: off it before it goes.
       skyPainted.attach(null);
@@ -316,6 +330,12 @@ export async function createScene(canvas, rand, look = {}) {
       skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater, mirrorSky: p.mirrorSky } : null);
     }
     paintingBack.visible = paintingFront.visible = painted;
+    // For tools/verify.mjs, which can't read a WebGL canvas back.
+    canvas.dataset.painting = painted && name ? name : '';
+    paintingTint.clear();
+    if (painted && name === 'open' && spotLook?.tint && painting?.horizon !== undefined) {
+      paintingTint.rect(0, painting.horizon, width, SIZE - painting.horizon).fill({ color: spotLook.tint, alpha: spotLook.tintAlpha ?? 0.25 });
+    }
     skyPainted.back.visible = painted && painting?.horizon !== undefined;
     skyPainted.back.x = offset - PAINTING_LEFT;
     tellSky();

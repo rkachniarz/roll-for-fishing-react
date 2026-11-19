@@ -17,10 +17,11 @@ import { rollFish, sizeBands } from './fish.js';
 
 /**
  * The open water a cast may land on and a feature may drift over, in scene
- * pixels: clear of the view's edges and 30 pixels above the shore's highest
- * point. The scene draws to the same numbers (src/scene/scene.js).
+ * pixels: clear of the view's edges, from just under the open water's
+ * horizon (row 110, D171) to where the near water meets the rod. The default
+ * scene (`paintOpen`) is drawn to the same numbers.
  */
-export const WATER = { x0: 40, y0: 30, x1: 216, y1: 185 };
+export const WATER = { x0: 40, y0: 118, x1: 216, y1: 190 };
 
 /**
  * The open water at a spot (4.2): its own, if its data says, else WATER.

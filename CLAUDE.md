@@ -173,10 +173,12 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   travel clears the features but never them. Their effects reach a cast through `valuesFor` (`championSources`), so
   only at their own spot, and they draw only from the `champions` stream, so a game without them draws nothing more.
   A fish's `champion` mark stays in the bucket and comes off when it's let go.
-- **Painted spots (D115-D118, D158):** a spot's `look.painting` names a painting (`"pond"`: still water, `src/scene/pond.js`;
-  `"reedy"`: the reedy shore, `src/scene/reedy.js`; `"swamp"`: `src/scene/swamp.js`, painted in `swamp-pixels.js`), and `src/scene/scene.js` (`PAINTINGS`) hides its own water,
+- **Painted spots (D115-D118, D158, D171):** a spot's `look.painting` names a painting (`"pond"`: still water, `src/scene/pond.js`;
+  `"reedy"`: the reedy shore, `src/scene/reedy.js`; `"swamp"`: `src/scene/swamp.js`, painted in `swamp-pixels.js`;
+  `"open"`: the open water, the reedy shore without reeds, which every spot naming none shows, its `tint` over the water), and `src/scene/scene.js` (`PAINTINGS`) hides its own water,
   waves, cloud shadows and reeds there for the painting's back and front layers, repainted when the spot or the
-  painting's own season changes (the pond has two seasons, the reedy shore and the swamp four). A painting is seen from eye level, so each such spot has its own open water (`water`).
+  painting's own season changes (the pond has two seasons, the reedy shore and the swamp four). A painting is seen from eye level, so each such spot has its own open water (`water`),
+  or the default `WATER` (rows 118-190), which is the open water's.
   The swamp's comes from its layout (`SWAMP_LAYOUT`, 32 columns further right): change the two together.
   A painting can also have a picture under the water (`UNDER` in `src/scene/views.js`, D159), shown for Look
   Underwater and the dive; `body[data-under]` names the one showing, for `tools/verify.mjs`.
