@@ -18,19 +18,19 @@ and forgotten, until it vanishes into the river.
 road from town runs straight north; the City itself lies to the north-east, on the shore of the Great Sea. The town
 belongs to the kingdom's Territories, though most days you would be hard pressed to find any sign of it.
 
-**The forest.** A dense and dangerous forest begins on the lake's northern shore. The Swamp is part of it.
+**The lake and the forest.** The lake lies east of the town. A dense and dangerous forest begins on its northern shore. The Swamp is part of it.
 
-**The Breadbasket.** To the east lies the Breadbasket, where the kingdom's grain and livestock come from. Where it ends
+**The Breadbasket.** To the west lies the Breadbasket, where the kingdom's grain and livestock come from. Where it ends
 and the Wildlands begin is no easy question, but there is a clear line of forts and outposts, and beyond it only the
 bold and the desperate try to settle. Rumour has it that some of them find it easier to make peace with the nomads, and
 some even join them, becoming the Wild Folk.
 
-**The Wildlands.** Far to the east lie the Wildlands, so named by humans and dwarves, where the orc nomads roam. Long
+**The Wildlands.** Far to the west lie the Wildlands, so named by humans and dwarves, where the orc nomads roam. Long
 judged not worth the trouble by the civilisations of the coast, they remain a mystery to the common citizen.
 
 **Who passes through the town:**
 
-- **Settlers.** Those living nearby come often; those from further east come with the seasons: to bring their harvest
+- **Settlers.** Those living nearby come often; those from further west come with the seasons: to bring their harvest
   to the mills and markets, to buy supplies, to find help for their sick.
 - **Soldiers** on their way to and from the forts and outposts, penal units among them.
 - **Tax collectors.**
