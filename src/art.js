@@ -23,6 +23,7 @@ import { MOON, facingOf } from './engine/sky.js';
 import { TIME, clock } from './engine/time.js';
 import { SWAMP, SWAMP_AUTUMN, SWAMP_H, SWAMP_SUMMER, SWAMP_W, SWAMP_WINTER, swampStill } from './scene/swamp-pixels.js';
 import { paintSwamp } from './scene/swamp.js';
+import { skySpec } from './scene/clouds.js';
 import { SWAMP_UNDER, swampUnderStill } from './scene/swamp-under.js';
 import { BOBBER, BOBBER_DIPPED, BOBBER_FAR, PALETTE, SPLASH, WAVES, bobberKeys, paintGrid } from './scene/sprites.js';
 import { ICONS, KEYS as ICON_KEYS, OWN_KEYS, paintIcon } from './scene/icons.js';
@@ -593,7 +594,7 @@ section(
 // hand, to try the sky in any facing; the spots' own facings are in the list.
 section(
   'The open water (the default scene)',
-  'The reedy shore’s water, horizon and sky with no reeds (paintOpen in src/scene/reedy.js, D171): every spot without a painting of its own shows it, facing its own way (look.facing, D166), its tint washed over the water in the game (not here). Pick a spot or turn the view by hand; the day, the hour, the moon and the clouds move the sky as the game would.',
+  'The reedy shore’s water, horizon and sky with no reeds (paintOpen in src/scene/reedy.js, D171): every spot without a painting of its own shows it, facing its own way (look.facing, D166), its tint washed over the water in the game (not here). Pick a spot or turn the view by hand; the day, the hour, the moon, the clouds and the rain move the sky as the game would. Weather picks one of the descriptions that name a sky (content/rules/sky.json), with its own weather’s wind, rain and temperature, and moves to its season; its sky shows only at the cloud levels it suits, so the slider is put on one. “Sky from” says which rule picked the patterns (D170).',
   async (body) => {
     const spots = Object.entries(content.locations).flatMap(([location, l]) =>
       (/** @type {any[]} */ (l.spots ?? []))
@@ -617,7 +618,34 @@ section(
     const hour = slider('Hour', 0, 23.75, 0.25, 6.5);
     const moon = slider('Moon', 0, MOON.cycleDays - 1, 1, 0);
     const clouds = slider('Clouds', 0, 5, 1, 0);
-    const controls = el('div', { class: 'controls' }, [el('label', { class: 'control' }, [el('span', { class: 'name' }, ['Spot']), pick]), facing.row, day.row, hour.row, moon.row, clouds.row]);
+    const rainWords = content.rules['weather-scales'].precipitation;
+    const rain = slider('Rain', 0, rainWords.length - 1, 1, 0);
+    // The descriptions that name a sky, by season, and fog (D170).
+    const named = Object.keys(content.rules.sky.descriptions);
+    const weatherPick = /** @type {HTMLSelectElement} */ (
+      el('select', {}, [
+        el('option', { value: '' }, ['(by cloud level)']),
+        el('option', { value: 'fog' }, ['Fog (a weather tagged fog)']),
+        ...SEASONS.map((season) =>
+          el('optgroup', { label: season }, named.filter((k) => k.startsWith(`weather.${season}.`)).map((k) => el('option', { value: k }, [`${t(k.replace(/descriptions\.\d+$/, 'name'))}: “${t(k)}”`]))),
+        ),
+      ])
+    );
+    const from = el('span', { class: 'size' });
+    const controls = el('div', { class: 'controls' }, [
+      el('label', { class: 'control' }, [el('span', { class: 'name' }, ['Spot']), pick]),
+      facing.row, day.row, hour.row, moon.row,
+      el('label', { class: 'control' }, [el('span', { class: 'name' }, ['Weather']), weatherPick]),
+      clouds.row, rain.row,
+      el('div', { class: 'control' }, [el('span', { class: 'name' }, ['Sky from']), from]),
+    ]);
+    /** A weather's value: some are ranges the game rolls in when the weather turns; the testbed takes the middle. @param {number | { min: number, max: number }} v */
+    const mid = (v) => (typeof v === 'number' ? v : Math.round((v.min + v.max) / 2));
+    /** The weather's own cell, for a picked description: its season, cell and values. @param {string} key */
+    const cellOf = (key) => {
+      const [, season, , cell] = key.split('.');
+      return { season, cell: Number(cell), w: content.weather[season].weathers[Number(cell)] };
+    };
 
     const canvas = /** @type {HTMLCanvasElement} */ (el('canvas'));
     const caption = el('span');
@@ -639,7 +667,16 @@ section(
       const season = reedySeason(seasonAt());
       if (season !== painted) scene.repaint((painted = season));
       const level = Number(clouds.input.value);
-      const weather = /** @type {any} */ ({ ...CLEAR, clouds: level, precipitation: level >= 5 ? 4 : 0 });
+      const key = weatherPick.value;
+      /** @type {any} */
+      let weather = { ...CLEAR, clouds: level, precipitation: Number(rain.input.value) };
+      if (key === 'fog') weather = { ...weather, tags: ['fog'] };
+      else if (key) {
+        const { season: ws, cell, w } = cellOf(key);
+        weather = { ...weather, temperature: mid(w.temperature), wind: mid(w.wind), description: key, season: ws, cell };
+      }
+      const spec = skySpec(weather, seasonAt());
+      from.textContent = `${spec.from}: ${spec.patterns.join(', ') || 'clear'}`;
       scene.setWorld(momentWorld(time, { facing: f, fullMoonAt: time - Number(moon.input.value) * 1440, weather }));
       const c = clock(time);
       facing.shown.textContent = `${f}° ${compass(f)}`;
@@ -647,6 +684,7 @@ section(
       hour.shown.textContent = `${String(c.hour).padStart(2, '0')}:${String(c.minute).padStart(2, '0')}`;
       moon.shown.textContent = Number(moon.input.value) === 0 ? 'full' : `${moon.input.value} days after full`;
       clouds.shown.textContent = t(content.rules['weather-scales'].clouds[level]);
+      rain.shown.textContent = t(rainWords[Number(rain.input.value)]);
       caption.textContent = `Open water, facing ${f}° (${compass(f)}), ${seasonAt()} ${hour.shown.textContent}`;
     };
     pick.addEventListener('change', () => {
@@ -657,7 +695,20 @@ section(
       pick.value = '';
       show();
     });
-    for (const s of [day, hour, moon, clouds]) s.input.addEventListener('input', show);
+    weatherPick.addEventListener('change', () => {
+      const key = weatherPick.value;
+      if (key && key !== 'fog') {
+        // To the description's season, the same day in it; its weather's rain; a cloud level its sky suits.
+        const { season: ws, w } = cellOf(key);
+        day.input.value = String(SEASONS.indexOf(ws) * TIME.seasonDays + (Number(day.input.value) % TIME.seasonDays));
+        rain.input.value = String(mid(w.precipitation));
+        const range = content.rules.sky.descriptions[key].levels ?? {};
+        const own = typeof w.clouds === 'number' ? w.clouds : (w.clouds.min ?? 0);
+        clouds.input.value = String(Math.min(Math.max(own, range.min ?? 0), range.max ?? 5));
+      }
+      show();
+    });
+    for (const s of [day, hour, moon, clouds, rain]) s.input.addEventListener('input', show);
     show();
     save.addEventListener('click', () => saveScene(scene.app, `open-${slug(caption.textContent ?? '')}-seed${seed}.png`));
   },
