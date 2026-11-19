@@ -18,7 +18,15 @@ and forgotten, until it vanishes into the river.
 road from town runs straight north; the City itself lies to the north-east, on the shore of the Great Sea. The town
 belongs to the kingdom's Territories, though most days you would be hard pressed to find any sign of it.
 
-**The lake and the forest.** The lake lies east of the town. A dense and dangerous forest begins on its northern shore. The Swamp is part of it.
+**The lake and the forest.** The lake lies east of the town. A dense and dangerous forest begins on its northern
+shore; the Swamp is part of it.
+
+**Ferrstad.** South of the lake stands Ferrstad, the dwarven city state, carved wholly inside a mountain the dwarves
+call Eisernberg; to humans it is the tallest peak of the Iron Mountains. The Cassalan springs underground, and long
+before it sees daylight it is the dwarves' water. They are miners and crafters: they trade refined ore, glass, tools
+and instruments to the Kolradians for timber and food. Not long ago the two kingdoms were at war, a war that began
+with a grudge over tariffs. Soon enough everyone saw that living side by side made more sense than endless squabbling.
+Still, a dwarven grudge does not simply fade, and that is a conversation best left unstarted.
 
 **The Breadbasket.** To the west lies the Breadbasket, where the kingdom's grain and livestock come from. Where it ends
 and the Wildlands begin is no easy question, but there is a clear line of forts and outposts, and beyond it only the
@@ -32,14 +40,31 @@ judged not worth the trouble by the civilisations of the coast, they remain a my
 
 - **Settlers.** Those living nearby come often; those from further west come with the seasons: to bring their harvest
   to the mills and markets, to buy supplies, to find help for their sick.
+- **The villagers round about** come to put food by and to trade among themselves, so that every pantry stays full and
+  varied.
+- **The dwarven caravan,** twice a year, before winter and after it, on its way to the City.
 - **Soldiers** on their way to and from the forts and outposts, penal units among them.
 - **Tax collectors.**
 - **Now and then, travellers from the Wildlands:** traders, adventurers and scholars; orcs, goblins and the Wild Folk.
 
+**What goes into the stew.** The innkeeper always has onions and potatoes in good supply: the stew's foundation.
+The rest comes with whoever is passing:
+
+- **The dwarves** bring goat's milk and goat meat, mushrooms of every kind, and fish from the river; mead and distilled
+  spirits too. They love human beer and wine.
+- **The villagers** bring eggs, chicken and other fowl.
+- **A few shepherds** bring lamb and mutton.
+- **Fruit and vegetables** of every kind are traded, and go into the pot when they are in season.
+
+**The well.** Every drop of water in town comes from the well, and the well is fed by the lake. So the lake's magic
+works on anyone who lives here long enough.
+
 **What it gives the game:** a cast of visitors for the town's events, some tied to the seasons (the harvest, the
-settlers' trips), some passing once; a reason for the inn to stand on the old elven road, and so a way into the story.
-It fits the names the fish already use: the Great Sea, the Wildlands, the Grasslands, Cassalan, Ferrstad. Nothing the
-engine needs yet; the visitors would be events, as the junk collector is.
+settlers' trips, the caravan before and after winter), some passing once; a reason for the inn to stand on the old
+elven road, and so a way into the story. The stew's pot can change with who is in town and with the season (see
+"Other guests at the stew", below), and the well gives the lake's magic a way to touch the townsfolk, and perhaps the
+player who stays long enough. It fits the names the fish already use: the Great Sea, the Wildlands, the Grasslands,
+Cassalan, Ferrstad. Nothing the engine needs yet; the visitors would be events, as the junk collector is.
 
 ## Other guests at the stew (2026-11-18)
 
