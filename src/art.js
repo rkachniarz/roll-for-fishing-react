@@ -24,7 +24,7 @@ import { windFrom, windKind } from './engine/wind.js';
 import { TIME, clock } from './engine/time.js';
 import { SWAMP, SWAMP_AUTUMN, SWAMP_H, SWAMP_SUMMER, SWAMP_W, SWAMP_WINTER, swampStill } from './scene/swamp-pixels.js';
 import { paintSwamp } from './scene/swamp.js';
-import { skySpec } from './scene/clouds.js';
+import { CLOUD_PATTERNS, FILM, rampColours, skySpec } from './scene/clouds.js';
 import { SWAMP_UNDER, swampUnderStill } from './scene/swamp-under.js';
 import { BOBBER, BOBBER_DIPPED, BOBBER_FAR, PALETTE, SPLASH, WAVES, bobberKeys, paintGrid } from './scene/sprites.js';
 import { ICONS, KEYS as ICON_KEYS, OWN_KEYS, paintIcon } from './scene/icons.js';
@@ -597,6 +597,140 @@ section(
       { caption: 'broken at night under a full moon', world: momentWorld(minuteOf(20, 22), { facing: reedy, fullMoonAt: minuteOf(20, 22), weather: /** @type {any} */ ({ temperature: 8, wind: 2, clouds: 3, precipitation: 0 }) }) },
     );
     await skyCards(body, 'Reedy shore', paintReedy, reedySeason, moments);
+  },
+);
+
+// Every cloud pattern, drawn as many times as a session draws it: the single
+// clouds five times per band (VARIANTS in src/scene/clouds.js), the sky-wide
+// ones once. For hunting shapes that look wrong, such as a side cut straight.
+section(
+  'Every cloud pattern (12.5)',
+  'Each pattern in src/scene/clouds.js as one session draws it: a single cloud five times in each band (far, mid, near, left to right), a sky-wide one once, on a plain sky in the season’s palette. The game draws them in the order the sky asks for them, so these are the shapes a seed can give, not the exact ones a game with that seed shows. “Mark straight sides” paints in red any run of cloud 12 pixels or longer straight along the edge of its box: the place a cloud would look cut off. A heap’s, a tower’s and the low bank’s (mass-b) flat base is meant, so their bottom edge isn’t marked; a long flat streak’s top can be its own shape.',
+  (body) => {
+    const SEASONS = ['spring', 'summer', 'autumn', 'winter'];
+    const BANDS = /** @type {const} */ (['far', 'mid', 'near']);
+    const VARIANTS = 5;
+    const HORIZON = 110;
+    const STRAIGHT = 12;
+    const NIGHT = [22, 26, 44];
+    const seasonPick = /** @type {HTMLSelectElement} */ (el('select', {}, SEASONS.map((s) => el('option', { value: s }, [s]))));
+    seasonPick.value = 'summer';
+    const seedInput = /** @type {HTMLInputElement} */ (el('input', { type: 'number', min: '1', step: '1', value: String(seed) }));
+    const next = /** @type {HTMLButtonElement} */ (el('button', { type: 'button' }, ['Next seed']));
+    const zoomPick = /** @type {HTMLSelectElement} */ (el('select', {}, ['1', '2', '3'].map((z) => el('option', { value: z }, [`${z}×`]))));
+    const mark = /** @type {HTMLInputElement} */ (el('input', { type: 'checkbox' }));
+    const found = el('span', { class: 'size' });
+    body.append(
+      el('div', { class: 'controls' }, [
+        el('label', { class: 'control' }, [el('span', { class: 'name' }, ['Season']), seasonPick]),
+        el('div', { class: 'control' }, [el('span', { class: 'name' }, ['Seed']), seedInput, next]),
+        el('label', { class: 'control' }, [el('span', { class: 'name' }, ['Zoom']), zoomPick]),
+        el('label', { class: 'control' }, [el('span', { class: 'name' }, ['Mark']), el('span', {}, [mark, ' straight sides']), found]),
+      ]),
+    );
+    const out = el('div');
+    body.append(out);
+
+    /** @param {string} hex */
+    const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    /**
+     * The runs of cloud along each side of a grid at least STRAIGHT long, as [x, y] pixels.
+     * @param {import('./scene/clouds.js').CloudGrid} g @param {boolean} flatBase
+     */
+    const straightRuns = (g, flatBase) => {
+      /** @type {number[][]} */
+      const marked = [];
+      /** @param {number} n @param {(i: number) => [number, number]} at */
+      const side = (n, at) => {
+        let run = [];
+        for (let i = 0; i <= n; i++) {
+          const p = i < n ? at(i) : null;
+          if (p && g.data[p[1] * g.w + p[0]]) run.push(p);
+          else {
+            if (run.length >= STRAIGHT) marked.push(...run);
+            run = [];
+          }
+        }
+      };
+      side(g.h, (i) => [0, i]);
+      side(g.h, (i) => [g.w - 1, i]);
+      side(g.w, (i) => [i, 0]);
+      if (!flatBase) side(g.w, (i) => [i, g.h - 1]);
+      return marked;
+    };
+    /**
+     * A grid on a canvas, in a pattern's colours over the sky.
+     * @param {string} id @param {import('./scene/clouds.js').CloudGrid} g @param {string} season @param {number} zoom
+     * @returns {{ canvas: HTMLCanvasElement, straight: boolean }}
+     */
+    const gridCanvas = (id, g, season, zoom) => {
+      const p = CLOUD_PATTERNS[id];
+      const colours = rampColours(p.ramp, content.rules.sky.seasons[season].palette);
+      const back = p.glow ? NIGHT : rgb(SKY_DAY[/** @type {keyof typeof SKY_DAY} */ (season)].mid);
+      const canvas = /** @type {HTMLCanvasElement} */ (el('canvas', { width: String(g.w), height: String(g.h) }));
+      const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+      const image = ctx.createImageData(g.w, g.h);
+      for (let i = 0; i < g.w * g.h; i++) {
+        const tone = g.data[i];
+        let c = back;
+        if (tone && p.glow) {
+          const [r, gr, b, a] = FILM[tone - 1];
+          c = [r, gr, b].map((v, k) => Math.round((v * a + back[k] * (255 - a)) / 255));
+        } else if (tone) c = colours[Math.min(tone, 4) - 1];
+        image.data.set([...c, 255], i * 4);
+      }
+      const flatBase = p.kind === 'heap' || p.kind === 'tower' || id === 'mass-b';
+      const runs = mark.checked && !p.full ? straightRuns(g, flatBase) : [];
+      for (const [x, y] of runs) image.data.set([230, 40, 40, 255], (y * g.w + x) * 4);
+      ctx.putImageData(image, 0, 0);
+      canvas.style.width = `${g.w * zoom}px`;
+      canvas.style.height = `${g.h * zoom}px`;
+      canvas.style.imageRendering = 'pixelated';
+      if (runs.length) canvas.style.outline = '2px solid #e62828';
+      return { canvas, straight: runs.length > 0 };
+    };
+
+    const draw = () => {
+      const season = seasonPick.value;
+      const zoom = Number(zoomPick.value);
+      const s = Math.max(1, Math.floor(Number(seedInput.value) || 1));
+      const rng = createRng(deriveSeed(s, 'cloud-patterns'));
+      const rand = () => rng.next();
+      out.replaceChildren();
+      let straight = 0;
+      let all = 0;
+      const ids = Object.keys(CLOUD_PATTERNS);
+      for (const id of ids.filter((i) => !CLOUD_PATTERNS[i].full)) {
+        const bands = BANDS.map((band) => {
+          const cards = [];
+          for (let v = 0; v < VARIANTS; v++) {
+            const card = gridCanvas(id, CLOUD_PATTERNS[id].paint(rand, band, HORIZON), season, zoom);
+            all++;
+            if (card.straight) straight++;
+            cards.push(card.canvas);
+          }
+          return el('div', { style: 'display:flex;gap:4px;align-items:flex-end;flex-wrap:wrap' }, cards);
+        });
+        out.append(
+          el('div', { style: 'display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;margin:0 0 10px' }, [
+            el('span', { class: 'size', style: 'width:5em' }, [id]),
+            ...bands,
+          ]),
+        );
+      }
+      const backdrops = ids.filter((i) => CLOUD_PATTERNS[i].full).map((id) =>
+        el('figure', {}, [gridCanvas(id, CLOUD_PATTERNS[id].paint(rand, 'mid', HORIZON), season, zoom).canvas, el('figcaption', {}, [id])]),
+      );
+      out.append(el('div', { class: 'row', style: 'margin-top:16px' }, backdrops));
+      found.textContent = mark.checked ? `${straight} of ${all} single clouds` : '';
+    };
+    for (const input of [seasonPick, zoomPick, mark]) input.addEventListener('change', draw);
+    seedInput.addEventListener('change', draw);
+    next.addEventListener('click', () => {
+      seedInput.value = String(Math.max(1, Math.floor(Number(seedInput.value) || 1)) + 1);
+      draw();
+    });
+    draw();
   },
 );
 

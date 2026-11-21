@@ -24,6 +24,23 @@ Items with no note are left alone.
 
 Newest first.
 
+## Broken masses no longer cut off straight (2026-11-21, after D170)
+
+The owner saw clouds in the mostly cloudy sky cut off straight on one side. The broken masses (`mass-a`, `mass-b`,
+`mass-c`) are noise in an envelope, and the noise ran thick right up to the edge of their box, where a narrow fade cut
+them along the edge. Measured over 200 clouds a pattern: a third of mass-a and half of mass-b had a straight side,
+runs up to 51 px. Now about 1 in 100, none longer than 9 px. Calls Claude made:
+
+- **Room round each mass (`ROOM` = 10 units, `src/scene/clouds.js`):** the cloud is painted into a canvas 10 units
+  bigger on every side, so its own shape thins it out there; a fade spread over that room catches the rest, gently
+  at first so the outline keeps the noise's shape. The masses can now spread a little past the size they were shaped
+  in; every shape is new (the noise draws more numbers).
+- **The low bank (`mass-b`) stands on the horizon:** its flat base was meant to sit there, but it could float up to
+  22 px over it, showing the cut. Its base is now always on the horizon line.
+- **mass-c's long flat tops are left alone:** a long thin level streak is flat along its top by its own shape. The
+  art sheet's new "Every cloud pattern" section marks them in red with "Mark straight sides"; say if any look cut.
+- **A test** (`test/clouds.test.js`) holds the sides to 12 px and mass-a's top and bottom to 20.
+
 ## The wind's direction (2026-11-21, D176)
 
 Try it in the art sheet's open water: **Wind** (strength) and **Wind from** (a cell of the flower). Calls Claude made:

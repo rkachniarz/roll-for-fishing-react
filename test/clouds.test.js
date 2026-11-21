@@ -192,3 +192,41 @@ test('the special sky shows only when a weather asks for it, which nothing in th
   assert.ok(reachable.every((p) => !CLOUD_PATTERNS[p].glow));
   assert.notEqual(skySpec({ clouds: 3 }, 'autumn').from, 'special');
 });
+
+test('a broken mass is never cut off straight along a side of its box', () => {
+  /** The longest run of cloud along each side of a grid. @param {{ w: number, h: number, data: Uint8Array }} g */
+  const runs = (g) => {
+    const at = (/** @type {number} */ x, /** @type {number} */ y) => g.data[y * g.w + x] > 0;
+    /** @param {number} n @param {(i: number) => boolean} filled */
+    const longest = (n, filled) => {
+      let best = 0;
+      let run = 0;
+      for (let i = 0; i < n; i++) {
+        run = filled(i) ? run + 1 : 0;
+        best = Math.max(best, run);
+      }
+      return best;
+    };
+    return {
+      left: longest(g.h, (i) => at(0, i)),
+      right: longest(g.h, (i) => at(g.w - 1, i)),
+      top: longest(g.w, (i) => at(i, 0)),
+      bottom: longest(g.w, (i) => at(i, g.h - 1)),
+    };
+  };
+  for (const id of ['mass-a', 'mass-b', 'mass-c']) {
+    for (const band of /** @type {const} */ (['far', 'mid', 'near'])) {
+      const r = createRng(1);
+      for (let k = 0; k < 60; k++) {
+        const side = runs(CLOUD_PATTERNS[id].paint(() => r.next(), band, 110));
+        // Before the room round them (ROOM in src/scene/clouds.js) these ran to 19-32 pixels.
+        assert.ok(side.left <= 12 && side.right <= 12, `${id} (${band}): a side cut straight, ${side.left} and ${side.right} px`);
+        // The broken mass is round all over; the bank's base is flat on purpose, and a streak's top and base are long.
+        if (id === 'mass-a') assert.ok(side.top <= 20 && side.bottom <= 20, `${id} (${band}): top ${side.top}, bottom ${side.bottom} px`);
+      }
+    }
+  }
+  // The bank's flat base stands on the horizon, where the cut can't show.
+  const place = CLOUD_PATTERNS['mass-b'].place;
+  assert.ok(place && place.top === 1 && place.bottom === 1);
+});

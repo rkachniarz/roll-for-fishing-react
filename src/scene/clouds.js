@@ -462,19 +462,21 @@ function film(rand, h, o) {
 
 /**
  * Smooth value noise, -1 to 1, over a lattice `cx` by `cy` pixels a cell
- * (stretch one to streak it), from `rand`. For x and y from 0 to w and h.
+ * (stretch one to streak it), from `rand`. For x and y from -room to w + room
+ * and h + room; past that it holds its last value.
  * @param {() => number} rand @param {number} w @param {number} h @param {number} cx @param {number} cy
+ * @param {number} [room]  Pixels it reaches past each edge, for a cloud painted with room round it (paintDensity).
  * @returns {(x: number, y: number) => number}
  */
-function valueNoise(rand, w, h, cx, cy) {
-  const gw = Math.ceil(w / cx) + 2;
-  const gh = Math.ceil(h / cy) + 2;
+function valueNoise(rand, w, h, cx, cy, room = 0) {
+  const gw = Math.ceil((w + 2 * room) / cx) + 2;
+  const gh = Math.ceil((h + 2 * room) / cy) + 2;
   const g = Float32Array.from({ length: gw * gh }, () => rand() * 2 - 1);
   /** @param {number} t */
   const smooth = (t) => t * t * (3 - 2 * t);
   return (x, y) => {
-    const fx = Math.max(0, x / cx);
-    const fy = Math.max(0, y / cy);
+    const fx = Math.max(0, (x + room) / cx);
+    const fy = Math.max(0, (y + room) / cy);
     const ix = Math.min(gw - 2, Math.floor(fx));
     const iy = Math.min(gh - 2, Math.floor(fy));
     const tx = smooth(Math.min(1, fx - ix));
@@ -495,25 +497,36 @@ const REACH = [
 ];
 
 /**
+ * How much room, in units, a cloud from a density is painted with past the
+ * box it is shaped in. Its own shape thins it out there, and a fade spread
+ * over the room catches what is left, so no outline runs along an edge of the
+ * box: a broken mass whose noise ran thick to the edge was cut off straight.
+ */
+const ROOM = 10;
+
+/**
  * A cloud from a density, cloud wherever it is above 0: lit where the density
  * falls away towards the light (above and a little to the left), so tops and
  * upper rims shine and the undersides of thick parts go grey; darker towards
  * the bottom; frayed in a dither where the density is thin. Holes of sky open
  * wherever the density dips, as in a broken mass of cloud.
- * @param {number} w @param {number} h  In pixels.
- * @param {(x: number, y: number) => number} density  In pixels.
- * @param {number} scale  Pixels per unit, for the light's reach.
+ * @param {number} bw @param {number} bh  The box it is shaped in, in pixels; it may spread ROOM past it.
+ * @param {(x: number, y: number) => number} given  The density, in the box's pixels; asked for up to ROOM past its edges.
+ * @param {number} scale  Pixels per unit, for the light's reach and the room.
  * @param {{ under?: number, bright?: number, rag?: number, contrast?: number, openBottom?: boolean }} [opts]
- *   `openBottom`: the base may run to the grid's bottom edge (a bank on the horizon); other edges always fade out.
+ *   `openBottom`: the base runs to the box's bottom edge (a bank on the horizon); every other edge has room.
  * @returns {CloudGrid}
  */
-function paintDensity(w, h, given, scale, opts = {}) {
-  // Fade out near the grid's edges, so no outline is cut straight by them.
-  const margin = 2.5 * scale;
+function paintDensity(bw, bh, given, scale, opts = {}) {
+  const room = Math.ceil(ROOM * scale);
+  const w = bw + 2 * room;
+  const h = bh + (opts.openBottom ? room : 2 * room);
   /** @param {number} x @param {number} y */
   const density = (x, y) => {
+    // 0 a room's width in from the edge, rising to 3 at it: gentle at first, so the outline keeps the density's shape.
     const edge = Math.min(x, w - x, y, opts.openBottom ? Infinity : h - y);
-    return given(x, y) - Math.max(0, 1 - edge / margin) * 1.5;
+    const t = Math.max(0, 1 - edge / room);
+    return given(x - room, y - room) - t * t * 3;
   };
   const under = opts.under ?? 0.6;
   const bright = opts.bright ?? 0;
@@ -530,7 +543,7 @@ function paintDensity(w, h, given, scale, opts = {}) {
       // Shadowed by the cloud between it and the light: tops shine, bellies go grey.
       let shade = 0;
       for (const [k, wgt] of REACH) shade += wgt * Math.max(0, Math.min(1, density(x + 0.5 + lx * k, y + 0.5 + ly * k) * 3));
-      const depth = h > 1 ? y / (h - 1) : 0.5;
+      const depth = bh > 1 ? Math.max(0, Math.min(1, (y - room) / (bh - 1))) : 0.5;
       const s = 0.62 + bright - shade * contrast - depth * under + (dither(x, y) - 0.5) * 0.22;
       data[y * w + x] = s > 0.45 ? 1 : s > 0.05 ? 2 : s > -0.35 ? 3 : 4;
     }
@@ -715,9 +728,9 @@ function massBroken(rand, scale) {
   const H = between(rand, 15, 22) * scale;
   const w = Math.ceil(W);
   const h = Math.ceil(H);
-  const big = valueNoise(rand, w, h, 8 * scale, 6 * scale);
-  const small = valueNoise(rand, w, h, 3.2 * scale, 2.6 * scale);
-  const fine = valueNoise(rand, w, h, 1.5 * scale, 1.3 * scale);
+  const big = valueNoise(rand, w, h, 8 * scale, 6 * scale, ROOM * scale);
+  const small = valueNoise(rand, w, h, 3.2 * scale, 2.6 * scale, ROOM * scale);
+  const fine = valueNoise(rand, w, h, 1.5 * scale, 1.3 * scale, ROOM * scale);
   // The mass sits heavier on one side and its top rises and falls.
   const heavy = between(rand, 0.3, 0.7);
   const tilt = between(rand, -0.25, 0.25);
@@ -744,8 +757,8 @@ function massBank(rand, scale) {
   const H = between(rand, 12, 18) * scale;
   const w = Math.ceil(W);
   const h = Math.ceil(H);
-  const big = valueNoise(rand, w, h, 7 * scale, 5 * scale);
-  const small = valueNoise(rand, w, h, 3 * scale, 2.4 * scale);
+  const big = valueNoise(rand, w, h, 7 * scale, 5 * scale, ROOM * scale);
+  const small = valueNoise(rand, w, h, 3 * scale, 2.4 * scale, ROOM * scale);
   const peak = between(rand, 0.25, 0.75);
   return paintDensity(
     w,
@@ -772,8 +785,8 @@ function massShred(rand, scale) {
   const H = (between(rand, 6, 9) + Math.abs(slope) * 50) * scale;
   const w = Math.ceil(W);
   const h = Math.ceil(H);
-  const streak = valueNoise(rand, w, h, 9 * scale, 1.3 * scale);
-  const lump = valueNoise(rand, w, h, 3 * scale, 1.6 * scale);
+  const streak = valueNoise(rand, w, h, 9 * scale, 1.3 * scale, ROOM * scale);
+  const lump = valueNoise(rand, w, h, 3 * scale, 1.6 * scale, ROOM * scale);
   const y0 = slope < 0 ? H * 0.75 : H * 0.3;
   const bands = 1 + Math.floor(rand() * 2);
   const gap = between(rand, 2.2, 3.4) * scale;
@@ -927,7 +940,8 @@ export const CLOUD_PATTERNS = {
   // Broken masses: the mostly cloudy sky (the owner's photo), drawn from noise so no two outlines match.
   // Near ones at the mid size, or they would fill the sky alone.
   'mass-a': { kind: 'mass', ramp: 'white', paint: (rand, band) => massBroken(rand, SCALE[band === 'near' ? 'mid' : band] * (band === 'near' ? 1.25 : 1)) },
-  'mass-b': { kind: 'mass', ramp: 'grey', place: { top: 0.8, bottom: 1, speed: 0.6 }, paint: (rand, band) => massBank(rand, SCALE[band === 'near' ? 'mid' : band]) },
+  // Its base is cut flat, so it stands on the horizon, never over it, or the cut would show in the sky.
+  'mass-b': { kind: 'mass', ramp: 'grey', place: { top: 1, bottom: 1, speed: 0.6 }, paint: (rand, band) => massBank(rand, SCALE[band === 'near' ? 'mid' : band]) },
   'mass-c': { kind: 'mass', ramp: 'white', paint: (rand, band) => massShred(rand, SCALE[band]) },
   // Lumpy grey layers (stratocumulus).
   'layer-a': { kind: 'layer', ramp: 'grey', paint: (rand, band) => paintPuffs(layerRoll(rand), SCALE[band], { under: 0.65, bright: 0.05 }) },
