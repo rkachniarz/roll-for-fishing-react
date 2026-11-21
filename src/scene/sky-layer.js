@@ -134,8 +134,9 @@ export function cloudTint(altitude, light) {
  *   season?: string, cell?: number, tags?: string[] }, facing: number | null, fullMoonAt?: number }} SkyWorld
  *   The weather as the engine keeps it (src/engine/weather.js): its description and cell pick the clouds
  *   (src/scene/clouds.js, `skySpec`); the art sheet may give `tags` instead of a cell.
- * @typedef {{ horizon: number, skyline: number[], waterLayer: Container, isWater: (x: number, y: number) => boolean, mirrorSky?: boolean }} SkyPainting
+ * @typedef {{ horizon: number, skyline: number[], waterLayer: Container, isWater: (x: number, y: number) => boolean, mirrorSky?: boolean, front?: Container }} SkyPainting
  *   `skyline`: the top of the painting's land in each column, which hides a sun or moon behind it from the water;
+ *   `front`: the painting's front layer (its trees), whose sprites the special sky is cut around, frame by frame;
  *   `mirrorSky`: still water, which mirrors the sky and the clouds where it doesn't mirror the land.
  */
 
@@ -328,13 +329,17 @@ export function createSkyLayer(rand) {
   back.addChild(colourNew, colourOld, stars, backdrops, moon, sun, clouds);
   // The special sky (D173): the magic has its own light, so it hangs over the
   // light of the hour (the scene puts `over` above it), cut to the sky above
-  // the painting's land so it never covers the trees.
+  // the painting's land and round its front layer's trees, as they sway, so it
+  // never covers them.
   const over = new Container();
   over.label = 'sky-glow';
   const glows = new Container();
-  const overMask = new Graphics();
+  const overMask = new Sprite();
   over.addChild(glows, overMask);
   over.mask = overMask;
+  /** The cut, per set of front frames showing: painted when first needed. @type {Map<string, Texture>} */
+  const masks = new Map();
+  let maskKey = '';
   moon.visible = sun.visible = colourOld.visible = false;
   const glitter = new Graphics();
 
@@ -631,11 +636,10 @@ export function createSkyLayer(rand) {
     glitter.removeFromParent();
     mirror.removeFromParent();
     painting = next;
+    dropMasks();
     if (!next) return;
     horizon = next.horizon;
-    overMask.clear();
-    for (let x = 0; x < W; x++) overMask.rect(x, 0, 1, Math.min(horizon, next.skyline[x] ?? horizon));
-    overMask.fill(0xffffff);
+    cutGlow();
     if (next.mirrorSky) {
       next.waterLayer.addChild(mirror);
       maskMirror();
@@ -647,9 +651,63 @@ export function createSkyLayer(rand) {
     if (world) aim();
   }
 
+  function dropMasks() {
+    overMask.texture = Texture.EMPTY;
+    for (const t of masks.values()) t.destroy(true);
+    masks.clear();
+    maskKey = '';
+  }
+
+  /** The front layer's sprites showing, with where they are in the painting. */
+  function frontSprites() {
+    /** @type {{ sprite: Sprite, x: number, y: number }[]} */
+    const out = [];
+    const walk = (/** @type {Container} */ c, /** @type {number} */ x, /** @type {number} */ y) => {
+      for (const child of c.children) {
+        if (!child.visible) continue;
+        if (child instanceof Sprite) out.push({ sprite: child, x: x + child.x, y: y + child.y });
+        else walk(child, x + child.x, y + child.y);
+      }
+    };
+    if (painting?.front) walk(painting.front, 0, 0);
+    return out;
+  }
+
+  /** Cuts the special sky to the sky above the land and round the front's trees, as they show now. */
+  function cutGlow() {
+    if (!painting) return;
+    const sprites = frontSprites();
+    const key = sprites.map(({ sprite, x, y }) => `${sprite.texture.uid}@${x},${y}`).join('|');
+    if (key === maskKey && overMask.texture !== Texture.EMPTY) return;
+    let tex = masks.get(key);
+    if (!tex) {
+      const canvas = document.createElement('canvas');
+      canvas.width = W;
+      canvas.height = Math.max(1, horizon);
+      const g = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+      g.fillStyle = '#fff';
+      for (let x = 0; x < W; x++) g.fillRect(x, 0, 1, Math.min(horizon, painting.skyline[x] ?? horizon));
+      g.globalCompositeOperation = 'destination-out';
+      for (const { sprite, x, y } of sprites) {
+        const t = sprite.texture;
+        const source = /** @type {CanvasImageSource} */ (t.source.resource);
+        if (!source) continue;
+        const f = t.frame;
+        g.drawImage(source, f.x, f.y, f.width, f.height, Math.round(x - sprite.anchor.x * f.width), Math.round(y - sprite.anchor.y * f.height), f.width, f.height);
+      }
+      // Few sets of frames show, but a cap keeps a windy painting from piling them up.
+      if (masks.size >= 32) dropMasks();
+      tex = Texture.from(canvas);
+      masks.set(key, tex);
+    }
+    overMask.texture = tex;
+    maskKey = key;
+  }
+
   /** @param {number} now @param {number} dt */
   function update(now, dt) {
     if (!world || !painting) return;
+    if (over.visible && glows.children.length) cutGlow();
     if (starsFor !== horizon) scatterStars();
     const snapping = snapNext;
     const rate = snapNext ? 1 : Math.min(1, 0.03 * (Math.min(dt, 100) / 16.7));

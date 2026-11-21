@@ -1194,7 +1194,7 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
   /** Hangs the sky layer on the painting, if it shows sky. */
   const mount = () => {
     const p = pond;
-    skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater, mirrorSky: p.mirrorSky } : null);
+    skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater, mirrorSky: p.mirrorSky, front: p.front } : null);
     skyPainted.back.visible = skyPainted.over.visible = p.horizon !== undefined;
   };
   mount();

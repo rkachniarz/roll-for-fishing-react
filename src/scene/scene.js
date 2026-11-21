@@ -329,7 +329,7 @@ export async function createScene(canvas, rand, look = {}) {
       paintingFront.addChild(painting.front);
       paintedKey = key;
       const p = painting;
-      skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater, mirrorSky: p.mirrorSky } : null);
+      skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater, mirrorSky: p.mirrorSky, front: p.front } : null);
     }
     paintingBack.visible = paintingFront.visible = painted;
     // For tools/verify.mjs, which can't read a WebGL canvas back.
