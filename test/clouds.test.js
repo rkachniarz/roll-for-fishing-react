@@ -138,7 +138,8 @@ test('layOutSky fills about the cover asked, more clouds far off, a backdrop whe
   assert.ok(scattered.clouds.length >= 3);
   for (const c of scattered.clouds) assert.ok(c.y + c.h <= 110, 'a cloud sits over the horizon');
   const few = layOutSky(skySpec({ clouds: 1 }, 'summer'), rand, 110, gridOf);
-  assert.ok(few.clouds.length < scattered.clouds.length, 'a few is fewer than scattered');
+  const area = (/** @type {{ clouds: { w: number, h: number }[] }} */ sky) => sky.clouds.reduce((n, c) => n + c.w * c.h, 0);
+  assert.ok(area(few) < area(scattered), 'a few fills less than scattered');
   const overcast = layOutSky(skySpec({ clouds: 4 }, 'winter'), rand, 110, gridOf);
   assert.ok(overcast.backdrop && CLOUD_PATTERNS[overcast.backdrop].full);
   assert.deepEqual(layOutSky(skySpec({ clouds: 0 }, 'winter'), rand, 110, gridOf), { backdrop: null, clouds: [] });

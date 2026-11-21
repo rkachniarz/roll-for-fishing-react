@@ -34,6 +34,24 @@ The stew's cooking and the inn's morning page (D165) are taken back. Calls Claud
 - **The event `inn-morning` is kept, retired,** since content ids are permanent (D44); events now take
   `retired: true` in their front matter.
 
+## The sky drawn three times bigger (2026-11-21, after D169-D170)
+
+The owner: everything in the sky but the stars looked too small. One factor, `SKY_SIZE` in `src/scene/clouds.js`,
+now enlarges the sun, the moon and the clouds; calls Claude made:
+
+- **The factor, 3:** the still water's old summer clouds (before D169) were about 120 px wide and 35 tall over the
+  same 110 rows of sky, against 23×9 for a mid heap; the owner's photo of heaped cloud over distant trees, read at the
+  game's 4 px a degree, puts its towering heap near 100×85 and its small heaps near 30×17. Those come out at 3 to 5;
+  3 is the low end, so it errs small. One number to change if it should go further.
+- **The sun and the moon** are 25 px across (were 9), the ring round them and the rim widened in step.
+- **Clouds**: all three distances are 3× (1.8, 3 and 4.5 px to the unit). **Towers are never drawn near** any more
+  (they would stand 98 px, nearly the whole sky), only far or mid, up to about 64 px tall.
+- **The sky-wide patterns** (sheets, rain cloud, storm, fog) have lumps, rolls and rain curtains 3× wider too.
+- **How many**: counting clouds no longer meant the same cover, so they go up until their own pixels fill 35% of the
+  sky times the cover (±20%), at least one, at most 40. In practice a few now fills about 5% of the sky with 2-4
+  clouds, scattered about 9% with 4, broken about 16% with 5-7 (were 1%, 5% and 13% with 5, 12 and 24 small ones).
+  Over a backdrop, 1-2 pieces of scud or layer (were 2-5).
+
 ## The open water, the default scene (2026-11-19, D171)
 
 Have a look at the art sheet's new section, **The open water (the default scene)**: pick a spot or turn the view by

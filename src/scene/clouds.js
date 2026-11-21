@@ -40,8 +40,18 @@ const dither = (x, y) => (BAYER[y & 3][x & 3] + 0.5) / 16;
  * @typedef {{ x: number, y: number, r: number, ry?: number }} Puff  A round lump: centre and radius, in units.
  */
 
+/**
+ * How much bigger the sky's things are drawn than 12.4 and 12.5 first drew
+ * them: the clouds, the sky-wide patterns' lumps and rolls, the sun and the
+ * moon (the owner: "everything except the stars appears too small"). Derived
+ * from the still water's old summer clouds (about 120 x 35 px over the same
+ * 110 rows of sky) and the owner's photo of heaped cloud over distant trees;
+ * Claude's reading of both, docs/REVIEW.md.
+ */
+export const SKY_SIZE = 3;
+
 /** Pixels per unit, by band (each band is its own drawing, never a scaled one: R7.3). */
-const SCALE = { far: 0.6, mid: 1, near: 1.5 };
+const SCALE = { far: 0.6 * SKY_SIZE, mid: 1 * SKY_SIZE, near: 1.5 * SKY_SIZE };
 
 /** @param {() => number} rand @param {number} a @param {number} b */
 const between = (rand, a, b) => a + rand() * (b - a);
@@ -145,9 +155,10 @@ export function paintStrands(strands, scale) {
  * @param {boolean} [lumpy]
  */
 function waves(rand, count, across, down, h, lumpy = false) {
+  // Bigger lumps and rolls by SKY_SIZE: fewer periods across, slower down; still whole periods, so it wraps.
   const list = Array.from({ length: count }, () => ({
-    n: Math.round(between(rand, across[0], across[1])),
-    b: between(rand, down[0], down[1]),
+    n: Math.max(1, Math.round(between(rand, across[0], across[1]) / SKY_SIZE)),
+    b: between(rand, down[0], down[1]) / SKY_SIZE,
     phase: rand() * Math.PI * 2,
     phase2: rand() * Math.PI * 2,
     bend: between(rand, 0.6, 1.8),
@@ -388,9 +399,9 @@ export const CLOUD_PATTERNS = {
   'heap-a': { kind: 'heap', ramp: 'white', paint: (rand, band) => paintPuffs(heapDome(rand), SCALE[band], { flat: true, under: 0.75 }) },
   'heap-b': { kind: 'heap', ramp: 'white', paint: (rand, band) => paintPuffs(heapLong(rand), SCALE[band], { flat: true, under: 0.7 }) },
   'heap-c': { kind: 'heap', ramp: 'white', paint: (rand, band) => paintPuffs(heapPair(rand), SCALE[band], { flat: true, under: 0.7, ragged: 0.15 }) },
-  // Towering heaps (Cumulus congestus): bright tops, dark flat bases.
-  'tower-a': { kind: 'tower', ramp: 'white', paint: (rand, band) => paintPuffs(towerTall(rand), SCALE[band] * 0.85, { flat: true, under: 1.05, bright: 0.12 }) },
-  'tower-b': { kind: 'tower', ramp: 'white', paint: (rand, band) => paintPuffs(towerTwin(rand), SCALE[band] * 0.85, { flat: true, under: 1, bright: 0.1 }) },
+  // Towering heaps (Cumulus congestus): bright tops, dark flat bases; never drawn near, or they would stand taller than the sky.
+  'tower-a': { kind: 'tower', ramp: 'white', paint: (rand, band) => paintPuffs(towerTall(rand), SCALE[band === 'near' ? 'mid' : band] * 0.85, { flat: true, under: 1.05, bright: 0.12 }) },
+  'tower-b': { kind: 'tower', ramp: 'white', paint: (rand, band) => paintPuffs(towerTwin(rand), SCALE[band === 'near' ? 'mid' : band] * 0.85, { flat: true, under: 1, bright: 0.1 }) },
   // Lumpy grey layers (stratocumulus).
   'layer-a': { kind: 'layer', ramp: 'grey', paint: (rand, band) => paintPuffs(layerRoll(rand), SCALE[band], { under: 0.65, bright: 0.05 }) },
   'layer-b': { kind: 'layer', ramp: 'grey', paint: (rand, band) => paintPuffs(layerCells(rand), SCALE[band], { under: 0.6, bright: 0.1 }) },
@@ -433,10 +444,10 @@ export const CLOUD_PATTERNS = {
     full: true,
     paint: (rand, _band, h) => {
       const lumps = waves(rand, 3, [3, 6], [0.15, 0.3], h, true);
-      const shafts = Array.from({ length: 3 + Math.floor(rand() * 3) }, () => ({ x: rand() * SKY_W, w: between(rand, 10, 26), slant: between(rand, -0.12, 0.12) }));
+      const shafts = Array.from({ length: 3 + Math.floor(rand() * 3) }, () => ({ x: rand() * SKY_W, w: between(rand, 10, 26) * SKY_SIZE, slant: between(rand, -0.12, 0.12) }));
       return fullSky(h, (x, y) => {
         const v = y / h;
-        const base = 0.62 + 0.04 * Math.sin((2 * Math.PI * 3 * x) / SKY_W);
+        const base = 0.62 + 0.04 * Math.sin((2 * Math.PI * x) / SKY_W);
         let s = 0.5 + 0.18 * lumps(x, y) - 0.38 * Math.exp(-(((v - 0.55) / 0.2) ** 2));
         if (v > base) {
           for (const shaft of shafts) {
@@ -473,7 +484,7 @@ export const CLOUD_PATTERNS = {
       const bend = waves(rand, 2, [1, 3], [0, 0.05], h);
       const lumps = waves(rand, 3, [5, 9], [0.2, 0.35], h, true);
       return fullSky(h, (x, y) => {
-        const roll = Math.sin(y * 0.2 + 2.2 * bend(x, y));
+        const roll = Math.sin((y * 0.2) / SKY_SIZE + 2.2 * bend(x, y));
         return 0.12 + 0.2 * roll + 0.1 * lumps(x, y) + 0.08 * (y / h);
       });
     },
@@ -536,8 +547,13 @@ const PLACE = {
 };
 /** Slower further off. */
 const BAND_SPEED = { far: 0.45, mid: 0.7, near: 1 };
-/** How many single clouds a whole sky's cover would take. */
-const CLOUDS_PER_COVER = 40;
+/**
+ * How much of the sky a whole sky's cover fills with single clouds, counted as
+ * the clouds' own pixels on the painting (overlaps counted twice), and the most
+ * clouds laid out (Claude's scale, docs/REVIEW.md).
+ */
+const FILL_PER_COVER = 0.35;
+const MOST_CLOUDS = 40;
 
 /**
  * @typedef {Object} SkySpec  What the sky shows for a weather (the rules in content/rules/sky.json).
@@ -638,9 +654,11 @@ export function layOutSky(spec, rand, horizon, gridOf) {
   /** @type {PlacedCloud[]} */
   const clouds = [];
   if (!single.length) return { backdrop, clouds };
-  // As many as the cover asks: a few is a handful, broken two dozen (Claude's scale, docs/REVIEW.md).
-  const most = backdrop ? 2 + Math.floor(rand() * 4) : Math.round(spec.cover * CLOUDS_PER_COVER * between(rand, 0.8, 1.2));
-  for (let i = 0; i < most; i++) {
+  // Over a backdrop a couple, for movement; otherwise clouds until they fill what the cover asks.
+  const most = backdrop ? 1 + Math.floor(rand() * 2) : MOST_CLOUDS;
+  const fill = spec.cover * FILL_PER_COVER * between(rand, 0.8, 1.2) * SKY_W * horizon;
+  let filled = 0;
+  for (let i = 0; i < most && (backdrop || filled < fill); i++) {
     const pattern = single[Math.floor(rand() * single.length)];
     const place = PLACE[CLOUD_PATTERNS[pattern].kind];
     let top = place.top;
@@ -650,11 +668,12 @@ export function layOutSky(spec, rand, horizon, gridOf) {
     const f = top + (bottom - top) * rand() ** 0.75;
     /** @type {Band} */
     let band = f > 0.72 ? 'far' : f > 0.42 ? 'mid' : 'near';
-    // A towering heap is big even far off: shrunk to the far band it reads as a little tree.
-    if (CLOUD_PATTERNS[pattern].kind === 'tower') band = band === 'near' || rand() < 0.4 ? 'near' : 'mid';
+    // A towering heap is big even far off: never near, or it would stand taller than the sky.
+    if (CLOUD_PATTERNS[pattern].kind === 'tower') band = band === 'far' && rand() < 0.5 ? 'far' : 'mid';
     const variant = Math.floor(rand() * 3);
     const grid = gridOf(pattern, band, variant);
     const baseY = Math.round(f * horizon);
+    filled += grid.data.reduce((n, t) => n + (t > 0 ? 1 : 0), 0);
     clouds.push({
       pattern,
       band,

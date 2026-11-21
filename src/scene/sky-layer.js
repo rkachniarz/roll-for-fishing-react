@@ -26,7 +26,7 @@ import { VIEW, acrossView, moonPosition, sunPosition } from '../engine/sky.js';
 import { moonlight } from '../engine/moon.js';
 import { TIME } from '../engine/time.js';
 import { seasons } from '../engine/weather.js';
-import { CLOUD_PATTERNS, RAMPS, SKY_W, driftSpeed, layOutSky, skySpec } from './clouds.js';
+import { CLOUD_PATTERNS, RAMPS, SKY_SIZE, SKY_W, driftSpeed, layOutSky, skySpec } from './clouds.js';
 
 /** Pixels per degree of height above the horizon (Claude's pick, docs/REVIEW.md): about the width's 256 px per 60°. */
 export const SKY_SCALE = 4;
@@ -36,8 +36,13 @@ const H = 256;
 const MIDDLE = 160;
 /** The degrees of compass across the whole painting, strips included: the view's 60 over 256 px, carried on. */
 const SPAN = (VIEW.width * W) / 256;
-/** Half the sun's and the moon's size: both are 9 px across (their sprites 15, for the ring round them). */
-const R = 4;
+/** Half the sun's and the moon's size: 9 px across at first, SKY_SIZE times that now. */
+const R = 4 * SKY_SIZE;
+/** The ring of light round a high sun or a bright moon, beyond its rim; the rim's own width. */
+const HALO = 2.4 * SKY_SIZE;
+const RIM = 0.8 * Math.max(1, SKY_SIZE / 2);
+/** The sprites' margin round the disc, room for the ring. */
+const PAD = Math.ceil(HALO) + 1;
 
 /**
  * The day sky per season, top to horizon (the reedy shore's skies, moved here
@@ -223,24 +228,24 @@ export function paintSkyColour(horizon, sun, facing, season) {
 }
 
 /**
- * The sun, 9 px across: pale and haloed high up, golden low, orange-red as it
+ * The sun, 2R + 1 px across: pale and haloed high up, golden low, orange-red as it
  * sets (Claude's picks, docs/REVIEW.md).
  * @param {'high' | 'low' | 'set'} kind
  */
 export function paintSun(kind) {
-  const size = 2 * (R + 3) + 1;
+  const size = 2 * (R + PAD) + 1;
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = size;
   const g = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-  const c = R + 3;
+  const c = R + PAD;
   const [core, rim] = kind === 'high' ? [SKY_LAYER.sunCore, SKY_LAYER.sunRim] : kind === 'low' ? [SKY_LAYER.sunLowCore, SKY_LAYER.sunLowRim] : [SKY_LAYER.sunSetCore, SKY_LAYER.sunSetRim];
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const d = Math.hypot(x - c, y - c);
       let colour = null;
-      if (d <= R + 0.3) colour = d > R - 0.8 ? rim : core;
+      if (d <= R + 0.3) colour = d > R - RIM ? rim : core;
       // High up, a ring of light round it in a checkerboard: hard pixels, no soft edge.
-      else if (kind === 'high' && d <= R + 2.4 && (x + y) % 2 === 0) colour = SKY_LAYER.sunHalo;
+      else if (kind === 'high' && d <= R + HALO && (x + y) % 2 === 0) colour = SKY_LAYER.sunHalo;
       if (!colour) continue;
       g.fillStyle = colour;
       g.fillRect(x, y, 1, 1);
@@ -250,15 +255,15 @@ export function paintSun(kind) {
 }
 
 /**
- * The moon, 9 px across, lit as its phase says: a waxing moon (phase under
+ * The moon, 2R + 1 px across, lit as its phase says: a waxing moon (phase under
  * 0.5) lit on the right, as seen from the north. By night the dark part shows
  * faintly against the sky; by day only the lit part shows, pale.
  * @param {number} phase  0 new, 0.5 full.
  * @param {boolean} night
  */
 export function paintMoon(phase, night) {
-  const size = 2 * (R + 3) + 1;
-  const c = R + 3;
+  const size = 2 * (R + PAD) + 1;
+  const c = R + PAD;
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = size;
   const g = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
@@ -275,9 +280,9 @@ export function paintMoon(phase, night) {
         const v = (y - c) / (R + 0.5);
         const edge = k * Math.sqrt(Math.max(0, 1 - v * v));
         const lit = waxing ? u > edge : u < -edge;
-        if (lit) colour = night ? (d > R - 0.8 ? SKY_LAYER.moonEdge : SKY_LAYER.moonLit) : d > R - 0.8 ? SKY_LAYER.moonDayEdge : SKY_LAYER.moonDay;
+        if (lit) colour = night ? (d > R - RIM ? SKY_LAYER.moonEdge : SKY_LAYER.moonLit) : d > R - RIM ? SKY_LAYER.moonDayEdge : SKY_LAYER.moonDay;
         else if (night) colour = SKY_LAYER.moonDark;
-      } else if (halo && d <= R + 2.4 && (x + y) % 2 === 0) colour = SKY_LAYER.moonHalo;
+      } else if (halo && d <= R + HALO && (x + y) % 2 === 0) colour = SKY_LAYER.moonHalo;
       if (!colour) continue;
       g.fillStyle = colour;
       g.fillRect(x, y, 1, 1);
@@ -646,7 +651,7 @@ export function createSkyLayer(rand) {
     if (sun.visible) {
       const kind = shown.sunAlt > 10 ? 'high' : shown.sunAlt > 2 ? 'low' : 'set';
       sun.texture = cached(`sun:${kind}`, () => paintSun(kind));
-      sun.position.set(Math.round(sunX) - R - 3, Math.round(sunY) - R - 3);
+      sun.position.set(Math.round(sunX) - R - PAD, Math.round(sunY) - R - PAD);
       sun.alpha = shown.cover;
     }
     // ---------- The moon ----------
@@ -657,7 +662,7 @@ export function createSkyLayer(rand) {
     if (moon.visible) {
       const step = Math.round(target.phase * PHASE_STEPS) % PHASE_STEPS;
       moon.texture = cached(`moon:${step}:${night}`, () => paintMoon(step / PHASE_STEPS, night));
-      moon.position.set(Math.round(moonX) - R - 3, Math.round(moonY) - R - 3);
+      moon.position.set(Math.round(moonX) - R - PAD, Math.round(moonY) - R - PAD);
       // By day the moon is faint, a pale shape on the blue.
       moon.alpha = shown.cover * (night ? 1 : 0.7);
     }
