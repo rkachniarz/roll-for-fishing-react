@@ -484,13 +484,14 @@ function momentWorld(time, extra = {}) {
  * @param {(season: string) => string} seasonOf  The painting's season for the game's.
  * @param {{ caption: string, world: ReturnType<typeof momentWorld>, paint?: typeof paint, seasonOf?: typeof seasonOf }[]} moments
  *   A moment may show another painting (`paint`, `seasonOf`), repainted into the same live scene.
+ * @param {{ live?: boolean }} [options]  `live: false`: stills only, the scene destroyed after (docs/art.md's limit).
  */
-async function skyCards(parent, name, paint, seasonOf, moments) {
+async function skyCards(parent, name, paint, seasonOf, moments, { live: keepLive = true } = {}) {
   const live = el('div', { class: 'row' });
   const stills = el('div', { class: 'row' });
   parent.append(live, stills);
   const canvas = /** @type {HTMLCanvasElement} */ (el('canvas'));
-  live.append(el('figure', {}, [canvas, el('figcaption', {}, [`${name}: ${moments[0].caption} (live)`])]));
+  if (keepLive) live.append(el('figure', {}, [canvas, el('figcaption', {}, [`${name}: ${moments[0].caption} (live)`])]));
   const rand = createRng(deriveSeed(seed, 'scenery'));
   let painted = seasonOf(moments[0].world.season);
   let painter = paint;
@@ -518,6 +519,11 @@ async function skyCards(parent, name, paint, seasonOf, moments) {
     );
     stills.append(el('figure', {}, [still, el('figcaption', {}, [caption, ' ', save])]));
     await new Promise((r) => setTimeout(r));
+  }
+  // Stills only: the scene goes, so it doesn't count against the sheet's live scenes (docs/art.md).
+  if (!keepLive) {
+    scene.app.destroy(true, { children: true, texture: true, textureSource: true });
+    return;
   }
   // Live again at the first moment.
   const first = seasonOf(moments[0].world.season);
@@ -621,6 +627,33 @@ section(
   },
 );
 
+// The blood moon (D174): a full moon gone blood red, its light over everything.
+// Only here for now, as the special sky; the game never asks for it.
+section(
+  'The blood moon (D174)',
+  'A full moon gone blood red: the whole disc very red, darkest blood red in the middle, lighter and coppery towards the rim, with a dark red ring round it, and its red glitter on the water (paintBloodMoon in src/scene/sky-layer.js). While it is up at night a red tint lies over the whole scene, sky and all, coming in as the sun goes down (bloodLight in src/scene/light.js; src/scene/sky.js). Only a full moon can be a blood moon: any other phase shows the moon as it always is. Not in the game yet: only a weather with sky: blood shows it, and nothing in the game sets that. Stills only, to keep the sheet under its live scenes: to see it move, the open water below can show it (Weather: Blood moon, with the Moon slider on full).',
+  async (body) => {
+    const reedy = facingOf('lake', 'reedy-shore');
+    /** @param {number} day @param {number} hour @param {{ facing?: number, moon?: number, clouds?: number }} [o] */
+    const at = (day, hour, o = {}) => {
+      const time = minuteOf(day, hour);
+      return momentWorld(time, {
+        facing: o.facing ?? reedy,
+        fullMoonAt: time - (o.moon ?? 0) * 1440,
+        weather: /** @type {any} */ ({ temperature: 8, wind: 1, clouds: o.clouds ?? 0, precipitation: 0, sky: 'blood' }),
+      });
+    };
+    await skyCards(body, 'Blood moon', paintReedy, reedySeason, [
+      { caption: 'spring, 19:30: the blood moon over the reeds', world: at(6, 19.5) },
+      { caption: 'spring, 21:00, turned south-east: rising in the dusk, the tint coming in', world: at(20, 21, { facing: 130 }) },
+      { caption: 'winter, 17:00: over the winter reeds', world: at(90, 17) },
+      { caption: 'spring, 22:30, turned south-east, scattered cloud (2): the clouds reddened', world: at(20, 22.5, { facing: 150, clouds: 2 }) },
+      { caption: 'still water, summer, 00:30, turned south: low, as a summer full moon is, mirrored', world: at(34, 24.5, { facing: 180 }), paint: paintPond, seasonOf: pondSeason },
+      { caption: 'spring, 23:00, turned south-east, a day after full: no blood moon, only a full moon can be one', world: at(6, 23, { facing: 135, moon: 1 }) },
+    ], { live: false });
+  },
+);
+
 // The open water (D171): the default scene for every spot without a painting
 // of its own, the reedy shore's lake with no reeds. One live scene, turned by
 // hand, to try the sky in any facing; the spots' own facings are in the list.
@@ -659,6 +692,7 @@ section(
         el('option', { value: '' }, ['(by cloud level)']),
         el('option', { value: 'fog' }, ['Fog (a weather tagged fog)']),
         el('option', { value: 'special' }, ['Special (the magic of the land, D173)']),
+        el('option', { value: 'blood' }, ['Blood moon (at full moon only, D174)']),
         ...SEASONS.map((season) =>
           el('optgroup', { label: season }, named.filter((k) => k.startsWith(`weather.${season}.`)).map((k) => el('option', { value: k }, [`${t(k.replace(/descriptions\.\d+$/, 'name'))}: “${t(k)}”`]))),
         ),
@@ -705,6 +739,7 @@ section(
       let weather = { ...CLEAR, clouds: level, precipitation: Number(rain.input.value) };
       if (key === 'fog') weather = { ...weather, tags: ['fog'] };
       else if (key === 'special') weather = { ...weather, sky: 'special' };
+      else if (key === 'blood') weather = { ...weather, sky: 'blood' };
       else if (key) {
         const { season: ws, cell, w } = cellOf(key);
         weather = { ...weather, temperature: mid(w.temperature), wind: mid(w.wind), description: key, season: ws, cell };
@@ -731,7 +766,7 @@ section(
     });
     weatherPick.addEventListener('change', () => {
       const key = weatherPick.value;
-      if (key && key !== 'fog' && key !== 'special') {
+      if (key && key !== 'fog' && key !== 'special' && key !== 'blood') {
         // To the description's season, the same day in it; its weather's rain; a cloud level its sky suits.
         const { season: ws, w } = cellOf(key);
         day.input.value = String(SEASONS.indexOf(ws) * TIME.seasonDays + (Number(day.input.value) % TIME.seasonDays));

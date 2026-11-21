@@ -6,6 +6,8 @@
 // an hour before sunrise to an hour after, and darkens from an hour before
 // sunset to two hours after.
 
+import { moonPosition, sunPosition } from '../engine/sky.js';
+
 /** @typedef {{ rise: number, set: number }} Sun  Sunrise and sunset, in hours. */
 
 /** How dark the night is. */
@@ -32,4 +34,32 @@ export function darkness(h, sun) {
 export function warmth(h, sun) {
   const peak = (/** @type {number} */ at) => Math.max(0, 1 - Math.abs(h - at) / 1.5);
   return 0.2 * Math.max(peak(sun.rise), peak(sun.set));
+}
+
+// ---------- The blood moon (D174) ----------
+
+/**
+ * Whether a world shows a blood moon (D174): a weather with `sky: 'blood'`
+ * (only the art sheet sets it) and a full moon. Any other phase is a moon
+ * like any other.
+ * @param {{ time?: number, fullMoonAt?: number, weather: { sky?: string } }} world
+ */
+export function isBloodMoon(world) {
+  if (world.weather.sky !== 'blood' || typeof world.time !== 'number' || typeof world.fullMoonAt !== 'number') return false;
+  return moonPosition(world.time, world.fullMoonAt).name === 'full';
+}
+
+/**
+ * How strong the blood moon's red tint over the whole scene is, 0 to 1: none
+ * by day, in as the sun goes down (from 2° under the horizon to 10° under),
+ * and only while the moon is up (from 2° under it to 4° over).
+ * @param {{ time?: number, fullMoonAt?: number, weather: { sky?: string } }} world
+ */
+export function bloodLight(world) {
+  if (!isBloodMoon(world)) return 0;
+  const time = /** @type {number} */ (world.time);
+  const moon = moonPosition(time, /** @type {number} */ (world.fullMoonAt));
+  const sun = sunPosition(time);
+  const clamp01 = (/** @type {number} */ v) => Math.max(0, Math.min(1, v));
+  return clamp01((-sun.altitude - 2) / 8) * clamp01((moon.altitude + 2) / 6);
 }

@@ -177,3 +177,22 @@ test('night is dark, midday is not, dawn and dusk are warm, all by the sun', asy
   assert.equal(darkness(21, winter), NIGHT);
   assert.ok(darkness(7, winter) > NIGHT / 2);
 });
+
+test('a blood moon is only ever a full moon, and reddens the night only while it is up (D174)', async () => {
+  const { isBloodMoon, bloodLight } = await import('../src/scene/light.js');
+  const at = (/** @type {number} */ day, /** @type {number} */ hour) => day * 1440 + Math.round(hour * 60);
+  const blood = { sky: 'blood' };
+  // Spring, 19:30 on day 6, the moon full and 11 degrees up, the sun 10 under.
+  const t = at(6, 19.5);
+  assert.equal(isBloodMoon({ time: t, fullMoonAt: t, weather: blood }), true);
+  assert.equal(bloodLight({ time: t, fullMoonAt: t, weather: blood }), 1);
+  // A day either side of full: no blood moon.
+  assert.equal(isBloodMoon({ time: t, fullMoonAt: t - 1440, weather: blood }), false);
+  assert.equal(isBloodMoon({ time: t, fullMoonAt: t + 1440, weather: blood }), false);
+  // No blood sky, no moon at all: none.
+  assert.equal(isBloodMoon({ time: t, fullMoonAt: t, weather: {} }), false);
+  assert.equal(isBloodMoon({ time: t, weather: blood }), false);
+  // By day the full moon is down and the sun up: no tint.
+  const noon = at(6, 12);
+  assert.equal(bloodLight({ time: noon, fullMoonAt: noon, weather: blood }), 0);
+});

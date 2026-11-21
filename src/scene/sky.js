@@ -10,7 +10,7 @@
 
 import { Graphics } from 'pixi.js';
 import { WATER } from '../engine/features.js';
-import { darkness, warmth } from './light.js';
+import { bloodLight, darkness, warmth } from './light.js';
 import { cloudDusk } from './clouds.js';
 
 /**
@@ -18,7 +18,7 @@ import { cloudDusk } from './clouds.js';
  * @property {number} hour
  * @property {number} minute
  * @property {string} season
- * @property {{ temperature: number, wind: number, clouds: number, precipitation: number }} weather
+ * @property {{ temperature: number, wind: number, clouds: number, precipitation: number, sky?: 'special' | 'blood' }} weather
  * @property {{ rise: number, set: number }} sun  Today's sunrise and sunset (the clock's).
  * @property {number} [time]  The game minute, for the sky layer's sun and moon (src/scene/sky-layer.js, D169);
  *   without it, the middle of the season at that hour.
@@ -30,6 +30,9 @@ const NIGHT = 0x0b1a3a;
 const WARM = 0xff9a4d;
 const OVERCAST = 0x5d6b73;
 const SHADOW = 0x1d4a66;
+/** The blood moon's light over everything (D174), at its full strength (Claude's pick, docs/REVIEW.md). */
+const BLOOD = 0x8a0a12;
+const BLOOD_ALPHA = 0.3;
 /** A faint cast per season; spring is the palette as drawn. */
 const SEASON_TINT = {
   spring: null,
@@ -56,7 +59,9 @@ export function createSky(below, above, size, rand) {
   /** @type {World | null} */
   let world = null;
   /** Each tint's alpha as shown, easing towards the target. */
-  const shown = { night: 0, warm: 0, overcast: 0, season: 0 };
+  const shown = { night: 0, warm: 0, overcast: 0, season: 0, blood: 0 };
+  /** The blood moon's tint as it should be (D174), worked out when the world changes. */
+  let bloodTarget = 0;
   /** A cloud over the sun, from the sky layer (src/scene/sky-layer.js, D170): the light comes and goes. */
   let shade = 0;
 
@@ -68,6 +73,7 @@ export function createSky(below, above, size, rand) {
   /** @param {World} w */
   function setWorld(w) {
     world = w;
+    bloodTarget = bloodLight(w);
     // One shadow per level of cloud past "a few", up to three.
     const want = Math.max(0, Math.min(3, w.weather.clouds - 1));
     while (clouds.length < want) {
@@ -149,6 +155,9 @@ export function createSky(below, above, size, rand) {
     if (overcast > 0.005) tint.rect(0, 0, width, size).fill({ color: OVERCAST, alpha: overcast });
     if (warm > 0.005) tint.rect(0, 0, width, size).fill({ color: WARM, alpha: warm });
     if (night > 0.005) tint.rect(0, 0, width, size).fill({ color: NIGHT, alpha: night });
+    // A blood moon (D174) reddens the night, sky and all.
+    const blood = ease('blood', bloodTarget);
+    if (blood > 0.005) tint.rect(0, 0, width, size).fill({ color: BLOOD, alpha: blood * BLOOD_ALPHA });
   }
 
   return {

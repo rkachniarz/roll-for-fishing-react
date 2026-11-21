@@ -199,7 +199,8 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   `sky.json`, so never rename one without changing both. Black (clouds 5) brings `dusk` through the night tint
   (`cloudDusk` in `src/scene/sky.js`). The special sky (D173, `glow` patterns, colours in `FILM`) shows only for a
   weather with `sky: 'special'`, which only the art sheet sets; it hangs in the layer's `over`, which each scene puts
-  over the light of the hour.
+  over the light of the hour. The blood moon (D174) is `sky: 'blood'`, art sheet only too, and only at a full moon
+  (`isBloodMoon` in `src/scene/light.js`): the sky layer paints the moon red, `src/scene/sky.js` tints the scene.
 - **`styles.css`: `--text` is the text colour; `--type` is the text size factor** (`--ui`, 1.25 on a wide screen,
   D121, times the font's own factor: Alegreya Sans is set at 1.05, D132). Every `font-size` is `calc(Npx * var(--type))`. `fit` in
   `src/main.js` sets `--ui`, `--hud`, `--button`, `--slot`, `--slot-icon` and `--tip-icon`; the icons are whole device

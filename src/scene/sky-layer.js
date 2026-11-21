@@ -26,6 +26,7 @@ import { VIEW, acrossView, moonPosition, sunPosition } from '../engine/sky.js';
 import { moonlight } from '../engine/moon.js';
 import { TIME } from '../engine/time.js';
 import { seasons } from '../engine/weather.js';
+import { isBloodMoon } from './light.js';
 import { CLOUD_PATTERNS, FILM, SKY_SIZE, SKY_W, driftSpeed, layOutSky, rampColours, skySpec } from './clouds.js';
 
 /** Pixels per degree of height above the horizon (Claude's pick, docs/REVIEW.md): about the width's 256 px per 60°. */
@@ -81,6 +82,15 @@ export const SKY_LAYER = {
   starDim: '#9caed6',
   glitterSun: '#fff4cc',
   glitterWarm: '#ffc46c',
+  // The blood moon (D174): blood red in the middle, a coppery red towards the rim.
+  bloodCore: '#4e0207',
+  bloodInner: '#6e050b',
+  bloodMid: '#8f0c10',
+  bloodOuter: '#ad2116',
+  bloodRim: '#c4401f',
+  bloodHalo: '#4a0d16',
+  glitterBlood: '#b8281a',
+  glitterBloodDim: '#6e1014',
   glitterMoon: '#e2e8f4',
   glitterMoonDim: '#a3b0ca',
 };
@@ -131,7 +141,7 @@ export function cloudTint(altitude, light) {
  * What the sky layer is given: the game minute, the season, the weather, the
  * spot's facing (null: no sky), and the minute of a full moon.
  * @typedef {{ time: number, season: string, weather: { clouds: number, wind: number, precipitation?: number, description?: string,
- *   season?: string, cell?: number, tags?: string[] }, facing: number | null, fullMoonAt?: number }} SkyWorld
+ *   season?: string, cell?: number, tags?: string[], sky?: 'special' | 'blood' }, facing: number | null, fullMoonAt?: number }} SkyWorld
  *   The weather as the engine keeps it (src/engine/weather.js): its description and cell pick the clouds
  *   (src/scene/clouds.js, `skySpec`); the art sheet may give `tags` instead of a cell.
  * @typedef {{ horizon: number, skyline: number[], waterLayer: Container, isWater: (x: number, y: number) => boolean, mirrorSky?: boolean, front?: Container }} SkyPainting
@@ -247,6 +257,46 @@ export function paintSun(kind) {
       if (d <= R + 0.3) colour = d > R - RIM ? rim : core;
       // High up, a ring of light round it in a checkerboard: hard pixels, no soft edge.
       else if (kind === 'high' && d <= R + HALO && (x + y) % 2 === 0) colour = SKY_LAYER.sunHalo;
+      if (!colour) continue;
+      g.fillStyle = colour;
+      g.fillRect(x, y, 1, 1);
+    }
+  }
+  return canvas;
+}
+
+/** The blood moon's colours from the middle out (D174), by how far out, 0 to 1. */
+const BLOOD_BANDS = /** @type {const} */ ([
+  [0.3, 'bloodCore'],
+  [0.55, 'bloodInner'],
+  [0.76, 'bloodMid'],
+  [0.92, 'bloodOuter'],
+  [Infinity, 'bloodRim'],
+]);
+
+/**
+ * A blood moon (D174), always full: the whole disc very red, blood red in the
+ * middle and lighter, coppery, towards the rim, in bands with a checkerboard
+ * where they meet; a dark red ring round it by night.
+ * @param {boolean} night
+ */
+export function paintBloodMoon(night) {
+  const size = 2 * (R + PAD) + 1;
+  const c = R + PAD;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  const g = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const d = Math.hypot(x - c, y - c);
+      /** @type {string | null} */
+      let colour = null;
+      if (d <= R + 0.3) {
+        // A little off-centre, low and to the left, as the earth's shadow lies over it.
+        const r = Math.hypot(x - c + R * 0.12, y - c - R * 0.1) / (R + 0.5) + ((x + y) % 2 === 0 ? 0.04 : -0.04);
+        const band = BLOOD_BANDS.find(([edge]) => r < edge) ?? BLOOD_BANDS[BLOOD_BANDS.length - 1];
+        colour = SKY_LAYER[band[1]];
+      } else if (night && d <= R + HALO && (x + y) % 2 === 0) colour = SKY_LAYER.bloodHalo;
       if (!colour) continue;
       g.fillStyle = colour;
       g.fillRect(x, y, 1, 1);
@@ -538,7 +588,7 @@ export function createSkyLayer(rand) {
 
   /** Where the sun and the moon are, eased towards where the engine puts them: height and offset from the facing, in degrees. */
   const shown = { sunAlt: 0, sunOff: 0, moonAlt: 0, moonOff: 0, cover: 1 };
-  const target = { sunAlt: 0, sunOff: 0, moonAlt: 0, moonOff: 0, cover: 1, sunBearing: 0, phase: 0, light: 0, moonUp: false };
+  const target = { sunAlt: 0, sunOff: 0, moonAlt: 0, moonOff: 0, cover: 1, sunBearing: 0, phase: 0, light: 0, moonUp: false, blood: false };
   let snapNext = true;
 
   /** @type {{ x: number, y: number, bright: boolean }[]} */
@@ -610,9 +660,11 @@ export function createSkyLayer(rand) {
       target.phase = m.phase;
       target.moonUp = m.lit > 0.03;
       target.light = moonlight(world.time, world.fullMoonAt, world.weather.clouds ?? 0);
+      target.blood = isBloodMoon(world);
     } else {
       target.moonUp = false;
       target.light = 0;
+      target.blood = false;
     }
   }
 
@@ -744,7 +796,9 @@ export function createSkyLayer(rand) {
     moon.visible = facing !== null && target.moonUp && Math.abs(shown.moonOff) <= half && shown.moonAlt > -2 && shown.cover > 0.05;
     if (moon.visible) {
       const step = Math.round(target.phase * PHASE_STEPS) % PHASE_STEPS;
-      moon.texture = cached(`moon:${step}:${night}`, () => paintMoon(step / PHASE_STEPS, night));
+      moon.texture = target.blood
+        ? cached(`blood:${night}`, () => paintBloodMoon(night))
+        : cached(`moon:${step}:${night}`, () => paintMoon(step / PHASE_STEPS, night));
       moon.position.set(Math.round(moonX) - R - PAD, Math.round(moonY) - R - PAD);
       // By day the moon is faint, a pale shape on the blue.
       moon.alpha = shown.cover * (night ? 1 : 0.7);
@@ -829,8 +883,8 @@ export function createSkyLayer(rand) {
           alt: Math.max(0, shown.moonAlt),
           strength: target.light * clamp01((30 - shown.moonAlt) / 12) * 0.8,
           narrow: true,
-          bright: SKY_LAYER.glitterMoon,
-          dim: SKY_LAYER.glitterMoonDim,
+          bright: target.blood ? SKY_LAYER.glitterBlood : SKY_LAYER.glitterMoon,
+          dim: target.blood ? SKY_LAYER.glitterBloodDim : SKY_LAYER.glitterMoonDim,
         };
       }
       drawGlitter(source, world.weather.wind ?? 0);

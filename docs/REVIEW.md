@@ -24,6 +24,24 @@ Items with no note are left alone.
 
 Newest first.
 
+## The blood moon (2026-11-21, D174)
+
+Have a look at the art sheet's new section, **The blood moon (D174)**, and the open water's Weather list (Blood
+moon, with the Moon slider on full). Calls Claude made:
+
+- **Only the phase named full counts:** about a day either side of the full moon (an eighth of the 14-day cycle).
+  A day after, it is a plain moon again.
+- **The moon's colours (`bloodCore` to `bloodRim` in `src/scene/sky-layer.js`):** five reds from a very dark blood
+  red (#4e0207) in the middle to a coppery red (#c4401f) at the rim, the dark middle a little low and to the left,
+  as the earth's shadow lies in a real eclipse. A dark red checkered ring round it by night, in place of the pale
+  one; red glitter on the water.
+- **The tint over everything:** #8a0a12 at 30% at full strength, over the night's blue. It comes in as the sun goes
+  from 2° to 10° under the horizon and fades as the moon sets (from 4° up to 2° under). By day, with the moon up
+  before sunset, there is no tint, only the red moon.
+- **The clouds** aren't redrawn: they go red under the tint like everything else.
+- **The moonlight the fish feel** is left as a full moon's; a real eclipsed moon is much dimmer. Say if a blood moon
+  should be darker for the fish, or do anything else, once the game brings one.
+
 ## The special sky, the magic of the land (2026-11-21, D173)
 
 Have a look at the art sheet's new section, **The special sky (D173)**, and the open water's Weather list (Special),
