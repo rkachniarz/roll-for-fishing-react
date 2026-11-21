@@ -63,3 +63,26 @@ export function bloodLight(world) {
   const clamp01 = (/** @type {number} */ v) => Math.max(0, Math.min(1, v));
   return clamp01((-sun.altitude - 2) / 8) * clamp01((moon.altitude + 2) / 6);
 }
+
+// ---------- The green sun (D175) ----------
+
+/**
+ * Whether a world shows a green sun (D175): a weather with `sky: 'green'`
+ * (only the art sheet sets it) in summer, with no cloud and no rain at all.
+ * Any other day the sun is the sun.
+ * @param {{ season?: string, weather: { sky?: string, clouds?: number, precipitation?: number } }} world
+ */
+export function isGreenSun(world) {
+  const { weather } = world;
+  return weather.sky === 'green' && world.season === 'summer' && (weather.clouds ?? 0) === 0 && (weather.precipitation ?? 0) === 0;
+}
+
+/**
+ * How strong the green sun's tint over the whole scene is, 0 to 1: only while
+ * the sun is up, in as it rises from 2° under the horizon to 4° over.
+ * @param {{ time?: number, season?: string, weather: { sky?: string, clouds?: number, precipitation?: number } }} world
+ */
+export function greenLight(world) {
+  if (typeof world.time !== 'number' || !isGreenSun(world)) return 0;
+  return Math.max(0, Math.min(1, (sunPosition(world.time).altitude + 2) / 6));
+}

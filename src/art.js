@@ -484,7 +484,7 @@ function momentWorld(time, extra = {}) {
  * @param {(season: string) => string} seasonOf  The painting's season for the game's.
  * @param {{ caption: string, world: ReturnType<typeof momentWorld>, paint?: typeof paint, seasonOf?: typeof seasonOf }[]} moments
  *   A moment may show another painting (`paint`, `seasonOf`), repainted into the same live scene.
- * @param {{ live?: boolean }} [options]  `live: false`: stills only, the scene destroyed after (docs/art.md's limit).
+ * @param {{ live?: boolean }} [options]  `live: false`: stills only, the scene stopped and its WebGL context let go after (docs/art.md's limit).
  */
 async function skyCards(parent, name, paint, seasonOf, moments, { live: keepLive = true } = {}) {
   const live = el('div', { class: 'row' });
@@ -522,7 +522,9 @@ async function skyCards(parent, name, paint, seasonOf, moments, { live: keepLive
   }
   // Stills only: the scene goes, so it doesn't count against the sheet's live scenes (docs/art.md).
   if (!keepLive) {
-    scene.app.destroy(true, { children: true, texture: true, textureSource: true });
+    // Stopped and its context let go, not destroyed: destroying a Pixi app beside others breaks their next render.
+    scene.app.stop();
+    /** @type {any} */ (scene.app.renderer).gl?.getExtension('WEBGL_lose_context')?.loseContext();
     return;
   }
   // Live again at the first moment.
@@ -654,6 +656,31 @@ section(
   },
 );
 
+// The green sun (D175): the blood moon's daytime twin, a summer sun gone green.
+// Only here for now; the game never asks for it.
+section(
+  'The green sun (D175)',
+  'A strong summer sun gone green, drawn as the blood moon is: the whole disc green, darkest in the middle, a bright yellow-green towards the rim, with a green ring of light round it, and its green glitter on the water (paintGreenSun in src/scene/sky-layer.js). While it is up a green tint lies over the whole scene, sky and all, coming in as it rises (greenLight in src/scene/light.js; src/scene/sky.js). Only in summer, with no cloud and no rain at all: any other day the sun is the sun. Not in the game yet: only a weather with sky: green shows it, and nothing in the game sets that. Stills only, to keep the sheet under its live scenes: to see it move, the open water below can show it (Weather: Green sun, in summer with Clouds and Rain at 0).',
+  async (body) => {
+    const reedy = facingOf('lake', 'reedy-shore');
+    /** @param {number} day @param {number} hour @param {{ facing?: number, clouds?: number }} [o] */
+    const at = (day, hour, o = {}) =>
+      momentWorld(minuteOf(day, hour), {
+        facing: o.facing ?? reedy,
+        weather: /** @type {any} */ ({ temperature: 24, wind: 1, clouds: o.clouds ?? 0, precipitation: 0, sky: 'green' }),
+      });
+    await skyCards(body, 'Green sun', paintReedy, reedySeason, [
+      { caption: 'summer, 06:30: the green sun over the reeds, its glitter', world: at(34, 6.5) },
+      { caption: 'summer, 05:30, turned north-east: just risen, the tint coming in', world: at(34, 5.5, { facing: 60 }) },
+      { caption: 'summer noon: the sun far overhead, the day all green', world: at(48, 12) },
+      { caption: 'summer, 19:00, turned west: low in the evening', world: at(48, 19, { facing: 283 }) },
+      { caption: 'still water, summer, 07:00, turned east: over the trees, mirrored', world: at(34, 7, { facing: 78 }), paint: paintPond, seasonOf: pondSeason },
+      { caption: 'summer, 06:30, a few clouds (1): no green sun, only a cloudless day can have one', world: at(34, 6.5, { clouds: 1 }) },
+      { caption: 'spring, 06:30: no green sun, only summer has one', world: at(20, 6.5) },
+    ], { live: false });
+  },
+);
+
 // The open water (D171): the default scene for every spot without a painting
 // of its own, the reedy shore's lake with no reeds. One live scene, turned by
 // hand, to try the sky in any facing; the spots' own facings are in the list.
@@ -693,6 +720,7 @@ section(
         el('option', { value: 'fog' }, ['Fog (a weather tagged fog)']),
         el('option', { value: 'special' }, ['Special (the magic of the land, D173)']),
         el('option', { value: 'blood' }, ['Blood moon (at full moon only, D174)']),
+        el('option', { value: 'green' }, ['Green sun (summer, no cloud or rain, D175)']),
         ...SEASONS.map((season) =>
           el('optgroup', { label: season }, named.filter((k) => k.startsWith(`weather.${season}.`)).map((k) => el('option', { value: k }, [`${t(k.replace(/descriptions\.\d+$/, 'name'))}: “${t(k)}”`]))),
         ),
@@ -740,6 +768,7 @@ section(
       if (key === 'fog') weather = { ...weather, tags: ['fog'] };
       else if (key === 'special') weather = { ...weather, sky: 'special' };
       else if (key === 'blood') weather = { ...weather, sky: 'blood' };
+      else if (key === 'green') weather = { ...weather, sky: 'green' };
       else if (key) {
         const { season: ws, cell, w } = cellOf(key);
         weather = { ...weather, temperature: mid(w.temperature), wind: mid(w.wind), description: key, season: ws, cell };
@@ -766,7 +795,7 @@ section(
     });
     weatherPick.addEventListener('change', () => {
       const key = weatherPick.value;
-      if (key && key !== 'fog' && key !== 'special' && key !== 'blood') {
+      if (key && key !== 'fog' && key !== 'special' && key !== 'blood' && key !== 'green') {
         // To the description's season, the same day in it; its weather's rain; a cloud level its sky suits.
         const { season: ws, w } = cellOf(key);
         day.input.value = String(SEASONS.indexOf(ws) * TIME.seasonDays + (Number(day.input.value) % TIME.seasonDays));

@@ -26,7 +26,7 @@ import { VIEW, acrossView, moonPosition, sunPosition } from '../engine/sky.js';
 import { moonlight } from '../engine/moon.js';
 import { TIME } from '../engine/time.js';
 import { seasons } from '../engine/weather.js';
-import { isBloodMoon } from './light.js';
+import { isBloodMoon, isGreenSun } from './light.js';
 import { CLOUD_PATTERNS, FILM, SKY_SIZE, SKY_W, driftSpeed, layOutSky, rampColours, skySpec } from './clouds.js';
 
 /** Pixels per degree of height above the horizon (Claude's pick, docs/REVIEW.md): about the width's 256 px per 60°. */
@@ -89,6 +89,15 @@ export const SKY_LAYER = {
   bloodOuter: '#ad2116',
   bloodRim: '#c4401f',
   bloodHalo: '#4a0d16',
+  // The green sun (D175): a deep green in the middle, a bright yellow-green towards the rim.
+  greenCore: '#0a3a12',
+  greenInner: '#0f5419',
+  greenMid: '#197322',
+  greenOuter: '#33942b',
+  greenRim: '#6abd3a',
+  greenHalo: '#3c8a34',
+  glitterGreen: '#9ae66a',
+  glitterGreenDim: '#3f9a34',
   glitterBlood: '#b8281a',
   glitterBloodDim: '#6e1014',
   glitterMoon: '#e2e8f4',
@@ -141,7 +150,7 @@ export function cloudTint(altitude, light) {
  * What the sky layer is given: the game minute, the season, the weather, the
  * spot's facing (null: no sky), and the minute of a full moon.
  * @typedef {{ time: number, season: string, weather: { clouds: number, wind: number, precipitation?: number, description?: string,
- *   season?: string, cell?: number, tags?: string[], sky?: 'special' | 'blood' }, facing: number | null, fullMoonAt?: number }} SkyWorld
+ *   season?: string, cell?: number, tags?: string[], sky?: 'special' | 'blood' | 'green' }, facing: number | null, fullMoonAt?: number }} SkyWorld
  *   The weather as the engine keeps it (src/engine/weather.js): its description and cell pick the clouds
  *   (src/scene/clouds.js, `skySpec`); the art sheet may give `tags` instead of a cell.
  * @typedef {{ horizon: number, skyline: number[], waterLayer: Container, isWater: (x: number, y: number) => boolean, mirrorSky?: boolean, front?: Container }} SkyPainting
@@ -274,6 +283,15 @@ const BLOOD_BANDS = /** @type {const} */ ([
   [Infinity, 'bloodRim'],
 ]);
 
+/** The green sun's colours from the middle out (D175), as the blood moon's. */
+const GREEN_BANDS = /** @type {const} */ ([
+  [0.3, 'greenCore'],
+  [0.55, 'greenInner'],
+  [0.76, 'greenMid'],
+  [0.92, 'greenOuter'],
+  [Infinity, 'greenRim'],
+]);
+
 /**
  * A blood moon (D174), always full: the whole disc very red, blood red in the
  * middle and lighter, coppery, towards the rim, in bands with a checkerboard
@@ -281,6 +299,25 @@ const BLOOD_BANDS = /** @type {const} */ ([
  * @param {boolean} night
  */
 export function paintBloodMoon(night) {
+  return paintBandedDisc(BLOOD_BANDS, night ? 'bloodHalo' : null);
+}
+
+/**
+ * A green sun (D175), painted as the blood moon is, in greens: deep green in
+ * the middle, a bright yellow-green at the rim, and its ring of light always.
+ */
+export function paintGreenSun() {
+  return paintBandedDisc(GREEN_BANDS, 'greenHalo');
+}
+
+/**
+ * A disc in bands of colour from the middle out, with a checkerboard where
+ * they meet, the darkest a little off-centre (low, to the left), and a
+ * checkered ring round it if `halo` names its colour.
+ * @param {typeof BLOOD_BANDS | typeof GREEN_BANDS} bands
+ * @param {'bloodHalo' | 'greenHalo' | null} halo
+ */
+function paintBandedDisc(bands, halo) {
   const size = 2 * (R + PAD) + 1;
   const c = R + PAD;
   const canvas = document.createElement('canvas');
@@ -292,11 +329,11 @@ export function paintBloodMoon(night) {
       /** @type {string | null} */
       let colour = null;
       if (d <= R + 0.3) {
-        // A little off-centre, low and to the left, as the earth's shadow lies over it.
+        // A little off-centre, low and to the left, as the earth's shadow lies over a blood moon.
         const r = Math.hypot(x - c + R * 0.12, y - c - R * 0.1) / (R + 0.5) + ((x + y) % 2 === 0 ? 0.04 : -0.04);
-        const band = BLOOD_BANDS.find(([edge]) => r < edge) ?? BLOOD_BANDS[BLOOD_BANDS.length - 1];
+        const band = /** @type {readonly [number, keyof typeof SKY_LAYER]} */ (bands.find(([edge]) => r < edge) ?? bands[bands.length - 1]);
         colour = SKY_LAYER[band[1]];
-      } else if (night && d <= R + HALO && (x + y) % 2 === 0) colour = SKY_LAYER.bloodHalo;
+      } else if (halo && d <= R + HALO && (x + y) % 2 === 0) colour = SKY_LAYER[halo];
       if (!colour) continue;
       g.fillStyle = colour;
       g.fillRect(x, y, 1, 1);
@@ -588,7 +625,7 @@ export function createSkyLayer(rand) {
 
   /** Where the sun and the moon are, eased towards where the engine puts them: height and offset from the facing, in degrees. */
   const shown = { sunAlt: 0, sunOff: 0, moonAlt: 0, moonOff: 0, cover: 1 };
-  const target = { sunAlt: 0, sunOff: 0, moonAlt: 0, moonOff: 0, cover: 1, sunBearing: 0, phase: 0, light: 0, moonUp: false, blood: false };
+  const target = { sunAlt: 0, sunOff: 0, moonAlt: 0, moonOff: 0, cover: 1, sunBearing: 0, phase: 0, light: 0, moonUp: false, blood: false, green: false };
   let snapNext = true;
 
   /** @type {{ x: number, y: number, bright: boolean }[]} */
@@ -653,6 +690,7 @@ export function createSkyLayer(rand) {
     spec = skySpec(world.weather, world.season);
     specKey = JSON.stringify([world.season, spec.level, spec.patterns, spec.drift, spec.low, horizon]);
     target.cover = spec.veil;
+    target.green = isGreenSun(world);
     if (typeof world.fullMoonAt === 'number') {
       const m = moonPosition(world.time, world.fullMoonAt);
       target.moonAlt = m.altitude;
@@ -785,7 +823,7 @@ export function createSkyLayer(rand) {
     sun.visible = facing !== null && Math.abs(shown.sunOff) <= half && shown.sunAlt > -2 && shown.cover > 0.05;
     if (sun.visible) {
       const kind = shown.sunAlt > 10 ? 'high' : shown.sunAlt > 2 ? 'low' : 'set';
-      sun.texture = cached(`sun:${kind}`, () => paintSun(kind));
+      sun.texture = target.green ? cached('sun:green', paintGreenSun) : cached(`sun:${kind}`, () => paintSun(kind));
       sun.position.set(Math.round(sunX) - R - PAD, Math.round(sunY) - R - PAD);
       sun.alpha = shown.cover;
     }
@@ -873,8 +911,8 @@ export function createSkyLayer(rand) {
           x: sunX,
           alt: Math.max(0, shown.sunAlt),
           strength: clamp01((20 - shown.sunAlt) / 20) * shown.cover * sunLight,
-          bright: SKY_LAYER.glitterSun,
-          dim: shown.sunAlt < 6 ? SKY_LAYER.glitterWarm : SKY_LAYER.glitterSun,
+          bright: target.green ? SKY_LAYER.glitterGreen : SKY_LAYER.glitterSun,
+          dim: target.green ? SKY_LAYER.glitterGreenDim : shown.sunAlt < 6 ? SKY_LAYER.glitterWarm : SKY_LAYER.glitterSun,
           narrow: false,
         };
       } else if (moon.visible && night && shown.moonAlt < 30 && clear(moonX, moonY)) {

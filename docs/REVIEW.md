@@ -24,6 +24,20 @@ Items with no note are left alone.
 
 Newest first.
 
+## The green sun (2026-11-21, D175)
+
+Have a look at the art sheet's new section, **The green sun (D175)**, and the open water's Weather list (Green sun,
+in summer with Clouds and Rain at 0). Calls Claude made:
+
+- **"Strong sun" read as summer with clouds 0 and rain 0,** at any height the sun is up. Say if it should need the
+  sun high too (it is off the top of the picture from about 27° up, so a high-sun rule would hide the disc).
+- **The sun's colours (`greenCore` to `greenRim` in `src/scene/sky-layer.js`):** five greens from a deep #0a3a12 in
+  the middle to a yellow-green #6abd3a at the rim, the dark middle a little off-centre as on the blood moon. Its
+  checkered ring is always there (#3c8a34), as a high sun's is; the glitter is green.
+- **The tint over everything:** #1f8a2a at 28% at full strength, coming in as the sun rises from 2° under the
+  horizon to 4° over, and gone at night.
+- **The sky's own colour** isn't changed, only tinted; the clouds can't show, since it needs a cloudless day.
+
 ## The blood moon (2026-11-21, D174)
 
 Have a look at the art sheet's new section, **The blood moon (D174)**, and the open water's Weather list (Blood

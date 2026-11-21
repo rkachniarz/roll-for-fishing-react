@@ -196,3 +196,20 @@ test('a blood moon is only ever a full moon, and reddens the night only while it
   const noon = at(6, 12);
   assert.equal(bloodLight({ time: noon, fullMoonAt: noon, weather: blood }), 0);
 });
+
+test('a green sun is only ever a cloudless, dry summer sun, and greens the scene only while it is up (D175)', async () => {
+  const { isGreenSun, greenLight } = await import('../src/scene/light.js');
+  const at = (/** @type {number} */ day, /** @type {number} */ hour) => day * 1440 + Math.round(hour * 60);
+  const green = { sky: 'green', clouds: 0, precipitation: 0 };
+  // Summer, 06:30 on day 34: the sun 16 degrees up.
+  const t = at(34, 6.5);
+  assert.equal(isGreenSun({ season: 'summer', weather: green }), true);
+  assert.equal(greenLight({ time: t, season: 'summer', weather: green }), 1);
+  // A cloud, a drop of rain, another season, no green sky: none.
+  assert.equal(isGreenSun({ season: 'summer', weather: { ...green, clouds: 1 } }), false);
+  assert.equal(isGreenSun({ season: 'summer', weather: { ...green, precipitation: 1 } }), false);
+  assert.equal(isGreenSun({ season: 'spring', weather: green }), false);
+  assert.equal(isGreenSun({ season: 'summer', weather: { clouds: 0, precipitation: 0 } }), false);
+  // At night the sun is down: no tint.
+  assert.equal(greenLight({ time: at(34, 1), season: 'summer', weather: green }), 0);
+});

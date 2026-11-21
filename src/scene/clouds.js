@@ -1163,7 +1163,7 @@ const holds = (range, level) => level >= (range.min ?? 0) && level <= (range.max
  * the weather asks for it (D173: only the art sheet does yet), fog (it hides
  * the sky whatever the level), then a description that names a sky, then rain
  * cloud, then the grey ceiling of a rainy overcast, then the season's table.
- * @param {{ clouds: number, precipitation?: number, wind?: number, description?: string, season?: string, cell?: number, tags?: string[], sky?: 'special' | 'blood' }} weather
+ * @param {{ clouds: number, precipitation?: number, wind?: number, description?: string, season?: string, cell?: number, tags?: string[], sky?: 'special' | 'blood' | 'green' }} weather
  * @param {string} season
  * @returns {SkySpec}
  */

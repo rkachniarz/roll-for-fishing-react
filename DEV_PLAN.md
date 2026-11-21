@@ -136,6 +136,8 @@ all depend on which way the player looks.
     (a weather, an event, a place?), and how it looks by day.
   - **Later:** the blood moon (D174), on the art sheet only so far: how often the game brings one, and whether it
     does anything beyond the look.
+  - **Later:** the green sun (D175), on the art sheet only so far: how the game brings one on a cloudless, dry summer
+    day, and whether it does anything beyond the look.
   *Landed (D170):* `src/scene/clouds.js` (the library, `CLOUD_PATTERNS`: heaps, towers, layers, wisps, sheets,
   rain cloud, storm, scud, fog; `skySpec`, `layOutSky`); `content/rules/sky.json` with `schemas/sky.schema.json`
   (per season and level the patterns and the palette; per level cover, veil, glints, how often the sun hides, the

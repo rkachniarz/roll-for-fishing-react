@@ -201,6 +201,7 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   weather with `sky: 'special'`, which only the art sheet sets; it hangs in the layer's `over`, which each scene puts
   over the light of the hour. The blood moon (D174) is `sky: 'blood'`, art sheet only too, and only at a full moon
   (`isBloodMoon` in `src/scene/light.js`): the sky layer paints the moon red, `src/scene/sky.js` tints the scene.
+  The green sun (D175) is its daytime twin, `sky: 'green'`, only in summer with clouds and rain at 0 (`isGreenSun`).
 - **`styles.css`: `--text` is the text colour; `--type` is the text size factor** (`--ui`, 1.25 on a wide screen,
   D121, times the font's own factor: Alegreya Sans is set at 1.05, D132). Every `font-size` is `calc(Npx * var(--type))`. `fit` in
   `src/main.js` sets `--ui`, `--hud`, `--button`, `--slot`, `--slot-icon` and `--tip-icon`; the icons are whole device
