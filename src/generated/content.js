@@ -14554,7 +14554,7 @@ export const content = {
         1,
         0.9,
         0.7,
-        0.4,
+        0.25,
         0.1,
         0
       ],
@@ -14751,6 +14751,7 @@ export const content = {
       "levels": [
         {
           "cover": 0,
+          "fill": 0,
           "veil": 1,
           "glints": 1,
           "sunHides": 0,
@@ -14758,6 +14759,7 @@ export const content = {
         },
         {
           "cover": 0.12,
+          "fill": 0.042,
           "veil": 1,
           "glints": 1,
           "sunHides": 0.15,
@@ -14765,20 +14767,23 @@ export const content = {
         },
         {
           "cover": 0.3,
+          "fill": 0.105,
           "veil": 1,
           "glints": 0.9,
           "sunHides": 0.3,
           "dusk": 0
         },
         {
-          "cover": 0.6,
+          "cover": 0.75,
+          "fill": 1.2,
           "veil": 0.85,
-          "glints": 0.6,
-          "sunHides": 0.5,
+          "glints": 0.45,
+          "sunHides": 0.7,
           "dusk": 0
         },
         {
           "cover": 1,
+          "fill": 0.35,
           "veil": 0.1,
           "glints": 0.25,
           "sunHides": 0,
@@ -14786,6 +14791,7 @@ export const content = {
         },
         {
           "cover": 1,
+          "fill": 0.35,
           "veil": 0,
           "glints": 0.1,
           "sunHides": 0,
@@ -14817,9 +14823,10 @@ export const content = {
               "heap-c"
             ],
             [
+              "mass-a",
               "heap-b",
-              "layer-b",
-              "tower-a"
+              "tower-c",
+              "mass-c"
             ],
             [
               "sheet-a",
@@ -14851,12 +14858,14 @@ export const content = {
             [
               "heap-a",
               "heap-b",
-              "tower-a"
+              "tower-a",
+              "tower-c"
             ],
             [
+              "mass-a",
               "tower-a",
               "tower-b",
-              "heap-b"
+              "mass-b"
             ],
             [
               "rain-a",
@@ -14892,9 +14901,10 @@ export const content = {
               "wisp-c"
             ],
             [
+              "mass-a",
+              "mass-b",
               "layer-a",
-              "layer-b",
-              "layer-c"
+              "layer-b"
             ],
             [
               "sheet-a",
@@ -14930,8 +14940,9 @@ export const content = {
               "wisp-b"
             ],
             [
+              "mass-a",
+              "mass-b",
               "layer-a",
-              "layer-b",
               "layer-c"
             ],
             [

@@ -35,8 +35,8 @@ const dither = (x, y) => (BAYER[y & 3][x & 3] + 0.5) / 16;
 /**
  * @typedef {{ w: number, h: number, data: Uint8Array }} CloudGrid  Tones row by row: 0 nothing, 1 lightest to 4 darkest.
  * @typedef {'far' | 'mid' | 'near'} Band  How far off a cloud is: far ones sit low over the horizon, small and flat.
- * @typedef {'white' | 'grey' | 'storm'} Ramp
- * @typedef {'heap' | 'tower' | 'layer' | 'wisp' | 'scud' | 'sheet' | 'rain' | 'storm' | 'fog'} Kind
+ * @typedef {'white' | 'grey' | 'ceiling' | 'storm'} Ramp
+ * @typedef {'heap' | 'tower' | 'mass' | 'layer' | 'wisp' | 'scud' | 'sheet' | 'rain' | 'storm' | 'fog'} Kind
  * @typedef {{ x: number, y: number, r: number, ry?: number }} Puff  A round lump: centre and radius, in units.
  */
 
@@ -146,53 +146,259 @@ export function paintStrands(strands, scale) {
 }
 
 /**
- * A pattern across the full width that wraps seamlessly (whole periods across
- * the 320 pixels), for the sheets, -1 to 1: level bands that bend gently, or
- * (`lumpy`) rows of lumps. Rows are counted in depth, so bands and lumps
- * crowd together towards the horizon as a ceiling of cloud does.
- * @param {() => number} rand @param {number} count @param {[number, number]} across  Periods across the width.
- * @param {[number, number]} down  Radians per row (of depth). @param {number} h  The sky's rows.
- * @param {boolean} [lumpy]
- */
-function waves(rand, count, across, down, h, lumpy = false) {
-  // Bigger lumps and rolls by SKY_SIZE: fewer periods across, slower down; still whole periods, so it wraps.
-  const list = Array.from({ length: count }, () => ({
-    n: Math.max(1, Math.round(between(rand, across[0], across[1]) / SKY_SIZE)),
-    b: between(rand, down[0], down[1]) / SKY_SIZE,
-    phase: rand() * Math.PI * 2,
-    phase2: rand() * Math.PI * 2,
-    bend: between(rand, 0.6, 1.8),
-  }));
-  /** @param {number} y */
-  const depth = (y) => -0.45 * h * Math.log(1 - (0.9 * Math.min(y, h - 1)) / h);
-  /** @param {number} x @param {number} y */
-  return (x, y) => {
-    const d = depth(y);
-    let sum = 0;
-    for (const w of list) {
-      const ax = (2 * Math.PI * w.n * x) / SKY_W + w.phase;
-      sum += lumpy ? Math.sin(ax) * Math.sin(w.b * d + w.phase2) : Math.sin(w.b * d + w.bend * Math.sin(ax) + w.phase2);
-    }
-    return sum / count;
-  };
-}
-
-/**
  * A sky-wide grid from a function giving each pixel a lightness (higher is
- * lighter): tones by threshold, dithered at their seams.
- * @param {number} h @param {(x: number, y: number) => number} light
+ * lighter): tones by threshold, dithered at their seams by `seam` (0: clean
+ * edges, no scattered pixels at all).
+ * @param {number} h @param {(x: number, y: number) => number} light @param {number} [seam]
  * @returns {CloudGrid}
  */
-function fullSky(h, light) {
+function fullSky(h, light, seam = 0.18) {
   const w = SKY_W;
   const data = new Uint8Array(w * h);
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
-      const s = light(x, y) + (dither(x, y) - 0.5) * 0.18;
+      const s = light(x, y) + (dither(x, y) - 0.5) * seam;
       data[y * w + x] = s > 0.62 ? 1 : s > 0.36 ? 2 : s > 0.1 ? 3 : 4;
     }
   }
   return { w, h, data };
+}
+
+/**
+ * Smooth value noise across the sky's full width that wraps seamlessly at its
+ * edges, -1 to 1: `across` cells over the 320 pixels, `cy` pixels a cell down.
+ * @param {() => number} rand @param {number} across @param {number} cy @param {number} h  Rows it must cover.
+ * @returns {(x: number, y: number) => number}
+ */
+function wrapNoise(rand, across, cy, h) {
+  const gw = across;
+  const gh = Math.ceil(h / cy) + 2;
+  const g = Float32Array.from({ length: gw * gh }, () => rand() * 2 - 1);
+  const cx = SKY_W / across;
+  /** @param {number} t */
+  const smooth = (t) => t * t * (3 - 2 * t);
+  return (x, y) => {
+    const fx = (((x / cx) % gw) + gw) % gw;
+    const fy = Math.max(0, Math.min(gh - 1.001, y / cy));
+    const ix = Math.floor(fx);
+    const iy = Math.floor(fy);
+    const tx = smooth(fx - ix);
+    const ty = smooth(fy - iy);
+    const jx = (ix + 1) % gw;
+    const at = (/** @type {number} */ i, /** @type {number} */ j) => g[j * gw + i];
+    const top = at(ix, iy) + (at(jx, iy) - at(ix, iy)) * tx;
+    const bottom = at(ix, iy + 1) + (at(jx, iy + 1) - at(ix, iy + 1)) * tx;
+    return top + (bottom - top) * ty;
+  };
+}
+
+/**
+ * Layers of wrapping noise, each twice as fine and half as strong, -1 to 1
+ * (about): soft, irregular, with nothing that repeats across the sky.
+ * @param {() => number} rand @param {number} across  The coarsest layer's cells over the width.
+ * @param {number} cy  Its cells' height. @param {number} h @param {number} octaves
+ * @returns {(x: number, y: number) => number}
+ */
+function fbm(rand, across, cy, h, octaves) {
+  const layers = Array.from({ length: octaves }, (_, i) => wrapNoise(rand, across * 2 ** i, cy / 2 ** i, h));
+  const total = layers.reduce((sum, _, i) => sum + 0.5 ** i, 0);
+  return (x, y) => layers.reduce((sum, n, i) => sum + n(x, y) * 0.5 ** i, 0) / total;
+}
+
+/** How far the sky-wide patterns dither where two tones meet: a little, never a spray (the owner). */
+const SEAM = 0.06;
+
+/**
+ * The noise under every sky-wide pattern (the owner's photo of an overcast
+ * sky): soft blotches and the pale ridges between them, warped so no wave
+ * shows, wrapping across the 320 pixels. Rows are counted in depth, a gentle
+ * perspective (up to twice as squashed at the horizon). Each gives -1 to 1
+ * (`blotch`) and 0 to 1 (`ridge`).
+ * @param {() => number} rand @param {number} h @param {number} cells  The coarsest cells across.
+ * @param {number} [stretch]  How much wider than tall the cells are: more for long rolls.
+ * @returns {(x: number, y: number) => { blotch: number, ridge: number }}
+ */
+function skyNoise(rand, h, cells, stretch = 2.2) {
+  const deep = 1.5 * h;
+  /** @param {number} y */
+  const depth = (y) => y + (0.5 * y * y) / h;
+  const cy = SKY_W / cells / stretch;
+  const warpX = fbm(rand, 3, deep / 2, deep, 2);
+  const warpY = fbm(rand, 4, deep / 3, deep, 2);
+  const blotch = fbm(rand, cells, cy, deep, 2);
+  const vein = fbm(rand, cells + 1, cy * 0.8, deep, 2);
+  const slant = between(rand, -0.6, 0.6);
+  return (x, y) => {
+    const d = depth(y);
+    const wx = x + 14 * warpX(x, d) + slant * d;
+    const wy = d + 5 * warpY(x, d);
+    return { blotch: blotch(wx, wy), ridge: Math.max(0, 1 - Math.abs(vein(wx, wy)) * 2.5) };
+  };
+}
+
+/**
+ * A grey ceiling of cloud (the owner's photo of an overcast sky): broad soft
+ * blotches of darker and paler grey, pale veins wandering through them on a
+ * slant, darker low down.
+ * @param {() => number} rand @param {number} h @param {{ veins: number, blotch: number, cells: number }} o
+ *   `veins`: how strong the pale veins are; `blotch`: the dark blotches; `cells`: the coarsest cells across.
+ * @returns {CloudGrid}
+ */
+function overcast(rand, h, o) {
+  const noise = skyNoise(rand, h, o.cells);
+  return fullSky(
+    h,
+    (x, y) => {
+      const n = noise(x, y);
+      return 0.4 + o.veins * n.ridge + o.blotch * n.blotch - 0.2 * (y / h) ** 1.5;
+    },
+    SEAM,
+  );
+}
+
+/**
+ * Smooth value noise, -1 to 1, over a lattice `cx` by `cy` pixels a cell
+ * (stretch one to streak it), from `rand`. For x and y from 0 to w and h.
+ * @param {() => number} rand @param {number} w @param {number} h @param {number} cx @param {number} cy
+ * @returns {(x: number, y: number) => number}
+ */
+function valueNoise(rand, w, h, cx, cy) {
+  const gw = Math.ceil(w / cx) + 2;
+  const gh = Math.ceil(h / cy) + 2;
+  const g = Float32Array.from({ length: gw * gh }, () => rand() * 2 - 1);
+  /** @param {number} t */
+  const smooth = (t) => t * t * (3 - 2 * t);
+  return (x, y) => {
+    const fx = Math.max(0, x / cx);
+    const fy = Math.max(0, y / cy);
+    const ix = Math.min(gw - 2, Math.floor(fx));
+    const iy = Math.min(gh - 2, Math.floor(fy));
+    const tx = smooth(Math.min(1, fx - ix));
+    const ty = smooth(Math.min(1, fy - iy));
+    const at = (/** @type {number} */ i, /** @type {number} */ j) => g[j * gw + i];
+    const top = at(ix, iy) + (at(ix + 1, iy) - at(ix, iy)) * tx;
+    const bottom = at(ix, iy + 1) + (at(ix + 1, iy + 1) - at(ix, iy + 1)) * tx;
+    return top + (bottom - top) * ty;
+  };
+}
+
+/** How far towards the light a cloud's shade is looked for (in light steps), and how much each counts. */
+const REACH = [
+  [1, 0.4],
+  [2, 0.3],
+  [4, 0.2],
+  [7, 0.1],
+];
+
+/**
+ * A cloud from a density, cloud wherever it is above 0: lit where the density
+ * falls away towards the light (above and a little to the left), so tops and
+ * upper rims shine and the undersides of thick parts go grey; darker towards
+ * the bottom; frayed in a dither where the density is thin. Holes of sky open
+ * wherever the density dips, as in a broken mass of cloud.
+ * @param {number} w @param {number} h  In pixels.
+ * @param {(x: number, y: number) => number} density  In pixels.
+ * @param {number} scale  Pixels per unit, for the light's reach.
+ * @param {{ under?: number, bright?: number, rag?: number, contrast?: number, openBottom?: boolean }} [opts]
+ *   `openBottom`: the base may run to the grid's bottom edge (a bank on the horizon); other edges always fade out.
+ * @returns {CloudGrid}
+ */
+function paintDensity(w, h, given, scale, opts = {}) {
+  // Fade out near the grid's edges, so no outline is cut straight by them.
+  const margin = 2.5 * scale;
+  /** @param {number} x @param {number} y */
+  const density = (x, y) => {
+    const edge = Math.min(x, w - x, y, opts.openBottom ? Infinity : h - y);
+    return given(x, y) - Math.max(0, 1 - edge / margin) * 1.5;
+  };
+  const under = opts.under ?? 0.6;
+  const bright = opts.bright ?? 0;
+  const rag = opts.rag ?? 0.12;
+  const contrast = opts.contrast ?? 0.6;
+  const lx = -0.5 * scale;
+  const ly = -1.2 * scale;
+  const data = new Uint8Array(w * h);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const d = density(x + 0.5, y + 0.5);
+      if (d <= 0) continue;
+      if (d < rag && dither(x, y) > d / rag) continue;
+      // Shadowed by the cloud between it and the light: tops shine, bellies go grey.
+      let shade = 0;
+      for (const [k, wgt] of REACH) shade += wgt * Math.max(0, Math.min(1, density(x + 0.5 + lx * k, y + 0.5 + ly * k) * 3));
+      const depth = h > 1 ? y / (h - 1) : 0.5;
+      const s = 0.62 + bright - shade * contrast - depth * under + (dither(x, y) - 0.5) * 0.22;
+      data[y * w + x] = s > 0.45 ? 1 : s > 0.05 ? 2 : s > -0.35 ? 3 : 4;
+    }
+  }
+  // Trim empty rows and columns, so the cloud's size is what shows.
+  let left = w;
+  let right = -1;
+  let top = h;
+  let bottom = -1;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (!data[y * w + x]) continue;
+      left = Math.min(left, x);
+      right = Math.max(right, x);
+      top = Math.min(top, y);
+      bottom = Math.max(bottom, y);
+    }
+  }
+  if (right < 0) return { w: 1, h: 1, data: new Uint8Array([2]) };
+  const tw = right - left + 1;
+  const th = bottom - top + 1;
+  const out = new Uint8Array(tw * th);
+  for (let y = 0; y < th; y++) out.set(data.subarray((y + top) * w + left, (y + top) * w + left + tw), y * tw);
+  return { w: tw, h: th, data: out };
+}
+
+/**
+ * Grows lumps on lumps, upwards, as a heap boils up: each new one sits on the
+ * upper side of one already there, chosen among the highest near the
+ * column's core, a little smaller. Lopsided by nature: the core sits off
+ * centre and leans, and no two growths are alike.
+ * @param {() => number} rand @param {Puff[]} puffs  The base, grown in place; y up is negative, the base at 0.
+ * @param {{ count: number, core: number, lean: number, shrink: [number, number], tallest: number, spread?: number, least?: number }} o
+ *   `core`: x where the column rises; `lean`: how far it drifts sideways per unit up;
+ *   `tallest`: no lump reaches higher; `spread`: how wide the angles of growth; `least`: the smallest radius.
+ */
+function growLumps(rand, puffs, o) {
+  const spread = o.spread ?? 0.9;
+  for (let k = 0, tries = 0; k < o.count && tries < o.count * 6; tries++) {
+    // Two candidates; the higher near the (leaning) column wins, with chance enough that lumps fill out the sides too.
+    let parent = puffs[Math.floor(rand() * puffs.length)];
+    let best = Infinity;
+    for (let c = 0; c < 2; c++) {
+      const p = puffs[Math.floor(rand() * puffs.length)];
+      const off = Math.abs(p.x - (o.core - o.lean * p.y));
+      const score = p.y - p.r + off * 0.9 + rand() * 5;
+      if (score < best) {
+        best = score;
+        parent = p;
+      }
+    }
+    const angle = -Math.PI / 2 + Math.atan(o.lean) + between(rand, -spread, spread);
+    const r = Math.max(o.least ?? 1.6, parent.r * between(rand, o.shrink[0], o.shrink[1]));
+    const dist = parent.r * between(rand, 0.5, 0.85);
+    const child = { x: parent.x + Math.cos(angle) * dist, y: Math.min(-r * 0.5, parent.y + Math.sin(angle) * dist), r };
+    if (child.y - child.r < -o.tallest) continue;
+    puffs.push(child);
+    k++;
+  }
+  return puffs;
+}
+
+/** A row of uneven lumps on a flat base, `n` of them from x 0. @param {() => number} rand @param {number} n @param {[number, number]} size @param {[number, number]} step */
+function baseRow(rand, n, size, step) {
+  const puffs = [];
+  let x = 0;
+  for (let i = 0; i < n; i++) {
+    const r = between(rand, size[0], size[1]) * (i === 0 || i === n - 1 ? 0.75 : 1);
+    puffs.push({ x, y: -r * 0.45, r });
+    x += between(rand, step[0], step[1]);
+  }
+  return puffs;
 }
 
 // ---------- The puffs of each heaped pattern, in units ----------
@@ -211,17 +417,19 @@ function heapDome(rand) {
   return puffs;
 }
 
-/** A long low heap of even bumps on a flat base. @param {() => number} rand @returns {Puff[]} */
+/** A broad heap on a flat base, its top boiled up into uneven bumps, higher on one side. @param {() => number} rand @returns {Puff[]} */
 function heapLong(rand) {
   const n = 4 + Math.floor(rand() * 3);
-  const puffs = [];
-  let x = 0;
-  for (let i = 0; i < n; i++) {
-    const r = between(rand, 2.4, 3.8) * (i === 0 || i === n - 1 ? 0.75 : 1);
-    puffs.push({ x, y: -r * 0.4, r, ry: r * 0.85 });
-    x += between(rand, 3.2, 4.6);
-  }
-  return puffs;
+  const puffs = baseRow(rand, n, [2.6, 4], [3.2, 4.4]);
+  const width = puffs[puffs.length - 1].x;
+  return growLumps(rand, puffs, {
+    count: 4 + Math.floor(rand() * 5),
+    core: width * between(rand, 0.2, 0.8),
+    lean: between(rand, -0.3, 0.3),
+    shrink: [0.75, 1],
+    tallest: between(rand, 8, 12),
+    spread: 1.2,
+  });
 }
 
 /** Two small heaps joined by a low bridge, ragged. @param {() => number} rand @returns {Puff[]} */
@@ -239,48 +447,150 @@ function heapPair(rand) {
   ];
 }
 
-/** A towering heap: a wide base and a column of lumps, narrowing upwards (Cumulus congestus). @param {() => number} rand @returns {Puff[]} */
+/**
+ * A towering heap (Cumulus congestus): an uneven base and one column boiled
+ * up off centre, leaning, cauliflower lumps on lumps. @param {() => number} rand @returns {Puff[]}
+ */
 function towerTall(rand) {
-  const puffs = [];
-  for (let i = 0; i < 4; i++) {
-    const r = between(rand, 4, 5.2);
-    puffs.push({ x: (i - 1.5) * 5.2, y: -r * 0.45, r });
-  }
-  const levels = 3 + Math.floor(rand() * 2);
-  let x = between(rand, -2, 2);
-  for (let i = 0; i < levels; i++) {
-    const r = 6 - i * 0.7;
-    const y = -6 - i * 5.2;
-    x += between(rand, -1.5, 1.5);
-    puffs.push({ x, y, r });
-    puffs.push({ x: x - r * between(rand, 0.7, 1), y: y + r * 0.35, r: r * 0.6 });
-    puffs.push({ x: x + r * between(rand, 0.7, 1), y: y + r * 0.3, r: r * 0.55 });
-  }
-  return puffs;
+  const puffs = baseRow(rand, 3 + Math.floor(rand() * 3), [4, 6], [4, 6]);
+  const width = puffs[puffs.length - 1].x;
+  return growLumps(rand, puffs, {
+    count: 22 + Math.floor(rand() * 14),
+    core: width * between(rand, 0.25, 0.75),
+    lean: between(rand, -0.35, 0.35),
+    shrink: [0.82, 1.02],
+    tallest: between(rand, 19, 25),
+    spread: 0.85,
+    least: 2.6,
+  });
 }
 
-/** A broad towering heap with two turrets of different heights. @param {() => number} rand @returns {Puff[]} */
+/** A broad towering heap with two turrets of different heights, each leaning its own way. @param {() => number} rand @returns {Puff[]} */
 function towerTwin(rand) {
-  const puffs = [];
-  for (let i = 0; i < 6; i++) {
-    const r = between(rand, 3.6, 4.8);
-    puffs.push({ x: (i - 2.5) * 5, y: -r * 0.45, r });
-  }
-  for (const [x0, levels] of [[-7, 2 + Math.floor(rand() * 2)], [7, 3 + Math.floor(rand() * 2)]]) {
-    let x = x0;
-    for (let i = 0; i < levels; i++) {
-      const r = 5 - i * 0.6;
-      x += between(rand, -1.2, 1.2);
-      puffs.push({ x, y: -5 - i * 4.6, r });
-      puffs.push({ x: x + r * 0.8, y: -3.5 - i * 4.6, r: r * 0.55 });
-    }
+  const puffs = baseRow(rand, 5 + Math.floor(rand() * 3), [3.6, 5.2], [3.8, 5.4]);
+  const width = puffs[puffs.length - 1].x;
+  const first = between(rand, 0.1, 0.4);
+  for (const [at, tallest, count] of [
+    [first, between(rand, 11, 17), 10 + Math.floor(rand() * 6)],
+    [first + between(rand, 0.35, 0.55), between(rand, 16, 23), 14 + Math.floor(rand() * 8)],
+  ]) {
+    growLumps(rand, puffs, { count, core: width * at, lean: between(rand, -0.35, 0.35), shrink: [0.82, 1.02], tallest, spread: 0.8, least: 2.4 });
   }
   return puffs;
 }
 
-/** A lumpy grey roll: many flattened lumps in a row, lumpy above and below (stratocumulus). @param {() => number} rand @returns {Puff[]} */
+/**
+ * A lopsided towering heap: a short base, the column sheared over to one side
+ * by the wind higher up, a shoulder of smaller lumps on the other. @param {() => number} rand @returns {Puff[]}
+ */
+function towerSheared(rand) {
+  const side = rand() < 0.5 ? -1 : 1;
+  const puffs = baseRow(rand, 3 + Math.floor(rand() * 2), [3.2, 4.8], [3.4, 5]);
+  const width = puffs[puffs.length - 1].x;
+  growLumps(rand, puffs, { count: 5 + Math.floor(rand() * 4), core: side < 0 ? width : 0, lean: 0, shrink: [0.7, 0.9], tallest: between(rand, 7, 10), spread: 1.1, least: 2 });
+  return growLumps(rand, puffs, {
+    count: 18 + Math.floor(rand() * 10),
+    core: width * (side < 0 ? 0.65 : 0.35),
+    lean: side * between(rand, 0.5, 0.8),
+    shrink: [0.84, 1.02],
+    tallest: between(rand, 16, 22),
+    spread: 0.7,
+    least: 2.6,
+  });
+}
+
+// ---------- The broken masses, as densities (the owner's photo of a mostly cloudy sky) ----------
+
+/**
+ * A broad broken mass of heaped cloud, ragged all round, with holes of sky
+ * through it and lumps breaking off its edges: the mostly cloudy sky's main
+ * cloud. @param {() => number} rand @param {number} scale @returns {CloudGrid}
+ */
+function massBroken(rand, scale) {
+  const W = between(rand, 34, 56) * scale;
+  const H = between(rand, 15, 22) * scale;
+  const w = Math.ceil(W);
+  const h = Math.ceil(H);
+  const big = valueNoise(rand, w, h, 8 * scale, 6 * scale);
+  const small = valueNoise(rand, w, h, 3.2 * scale, 2.6 * scale);
+  const fine = valueNoise(rand, w, h, 1.5 * scale, 1.3 * scale);
+  // The mass sits heavier on one side and its top rises and falls.
+  const heavy = between(rand, 0.3, 0.7);
+  const tilt = between(rand, -0.25, 0.25);
+  return paintDensity(
+    w,
+    h,
+    (x, y) => {
+      const u = (x / W - heavy) / (x / W < heavy ? heavy : 1 - heavy);
+      const v = (y / H - 0.55 - tilt * (x / W - 0.5)) / 0.5;
+      const envelope = 1 - u * u - v * v;
+      return 0.6 * envelope + 0.45 * big(x, y) + 0.24 * small(x, y) + 0.1 * fine(x, y) - 0.14;
+    },
+    scale,
+    { under: 0.45, bright: 0.12 },
+  );
+}
+
+/**
+ * A low grey bank, tall and dark, its top lumpy and lit, its base fraying
+ * into the haze over the horizon (the photo's lower right). @param {() => number} rand @param {number} scale @returns {CloudGrid}
+ */
+function massBank(rand, scale) {
+  const W = between(rand, 36, 56) * scale;
+  const H = between(rand, 12, 18) * scale;
+  const w = Math.ceil(W);
+  const h = Math.ceil(H);
+  const big = valueNoise(rand, w, h, 7 * scale, 5 * scale);
+  const small = valueNoise(rand, w, h, 3 * scale, 2.4 * scale);
+  const peak = between(rand, 0.25, 0.75);
+  return paintDensity(
+    w,
+    h,
+    (x, y) => {
+      const u = (x / W - peak) / (x / W < peak ? peak : 1 - peak);
+      const v = 1 - y / H;
+      // A dome on the horizon: full at the base, its top falling off to the sides.
+      const envelope = 1 - u * u * 0.9 - v * v * 1.5;
+      return 0.75 * envelope + 0.35 * big(x, y) + 0.12 * small(x, y) - 0.05;
+    },
+    scale,
+    { under: 0.2, bright: 0.05, contrast: 0.75, openBottom: true },
+  );
+}
+
+/**
+ * Wind-torn streaks: low heaps pulled out long and thin on a slant, fraying
+ * at both ends (the photo's lower left). @param {() => number} rand @param {number} scale @returns {CloudGrid}
+ */
+function massShred(rand, scale) {
+  const W = between(rand, 34, 56) * scale;
+  const slope = between(rand, -0.22, 0.06);
+  const H = (between(rand, 6, 9) + Math.abs(slope) * 50) * scale;
+  const w = Math.ceil(W);
+  const h = Math.ceil(H);
+  const streak = valueNoise(rand, w, h, 9 * scale, 1.3 * scale);
+  const lump = valueNoise(rand, w, h, 3 * scale, 1.6 * scale);
+  const y0 = slope < 0 ? H * 0.75 : H * 0.3;
+  const bands = 1 + Math.floor(rand() * 2);
+  const gap = between(rand, 2.2, 3.4) * scale;
+  return paintDensity(
+    w,
+    h,
+    (x, y) => {
+      const u = (x / W - 0.5) * 2;
+      let near = Infinity;
+      for (let b = 0; b < bands; b++) near = Math.min(near, Math.abs(y - (y0 + slope * x - b * gap)));
+      const across = 1 - (near / (2.2 * scale)) ** 2;
+      return 0.5 * across + 0.4 * streak(x, y) + 0.25 * lump(x, y) - 0.25 * u * u - 0.05;
+    },
+    scale,
+    { under: 0.3, bright: 0.15, rag: 0.18 },
+  );
+}
+
+/** A lumpy grey roll: flattened lumps in a row, piled up two or three deep in places (stratocumulus). @param {() => number} rand @returns {Puff[]} */
 function layerRoll(rand) {
-  const n = 10 + Math.floor(rand() * 7);
+  const n = 7 + Math.floor(rand() * 5);
   const puffs = [];
   let x = 0;
   for (let i = 0; i < n; i++) {
@@ -288,37 +598,41 @@ function layerRoll(rand) {
     puffs.push({ x, y: between(rand, -1, 1), r, ry: r * 0.72 });
     x += between(rand, 3.2, 4.6);
   }
-  return puffs;
+  return growLumps(rand, puffs, { count: n, core: x * between(rand, 0.3, 0.7), lean: between(rand, -0.3, 0.3), shrink: [0.8, 1.05], tallest: between(rand, 9, 13), spread: 1.3, least: 2.4 });
 }
 
-/** Grey cells in a row with gaps of sky between. @param {() => number} rand @returns {Puff[]} */
+/** Grey cells in a row with gaps of sky between, each a little heap of its own height. @param {() => number} rand @returns {Puff[]} */
 function layerCells(rand) {
-  const cells = 4 + Math.floor(rand() * 3);
+  const cells = 3 + Math.floor(rand() * 3);
   const puffs = [];
   let x = 0;
   for (let c = 0; c < cells; c++) {
     const lumps = 2 + Math.floor(rand() * 2);
+    const cell = [];
     for (let i = 0; i < lumps; i++) {
       const r = between(rand, 2.8, 4.2);
-      puffs.push({ x, y: between(rand, -0.8, 0.8), r, ry: r * 0.72 });
+      cell.push({ x, y: between(rand, -0.8, 0.8), r, ry: r * 0.8 });
       x += between(rand, 2.8, 3.8);
     }
+    const left = cell[0].x;
+    growLumps(rand, cell, { count: 1 + Math.floor(rand() * 4), core: between(rand, left, x), lean: 0, shrink: [0.7, 0.95], tallest: between(rand, 5, 10), spread: 1.2, least: 2 });
+    puffs.push(...cell);
     x += between(rand, 2.5, 4.5);
   }
   return puffs;
 }
 
-/** A long thin low roll, dark beneath. @param {() => number} rand @returns {Puff[]} */
+/** A low roll, dark beneath, thicker in the middle than at its ends. @param {() => number} rand @returns {Puff[]} */
 function layerLow(rand) {
-  const n = 12 + Math.floor(rand() * 9);
+  const n = 9 + Math.floor(rand() * 7);
   const puffs = [];
   let x = 0;
   for (let i = 0; i < n; i++) {
-    const r = between(rand, 2.2, 3.2);
-    puffs.push({ x, y: between(rand, -0.5, 0.5), r, ry: r * 0.6 });
+    const r = between(rand, 2.2, 3.4) * (0.7 + 0.5 * Math.sin((Math.PI * (i + 0.5)) / n));
+    puffs.push({ x, y: between(rand, -0.5, 0.5), r, ry: r * 0.7 });
     x += between(rand, 2.6, 3.4);
   }
-  return puffs;
+  return growLumps(rand, puffs, { count: Math.floor(n / 2), core: x / 2, lean: between(rand, -0.2, 0.2), shrink: [0.75, 1], tallest: between(rand, 6, 9), spread: 1.4, least: 1.8 });
 }
 
 /** A ragged fragment of low dark cloud (scud). @param {() => number} rand @param {number} n @returns {Puff[]} */
@@ -388,9 +702,10 @@ function wispFan(rand) {
 // ---------- The library ----------
 
 /**
- * @typedef {{ kind: Kind, ramp: Ramp, full?: boolean,
+ * @typedef {{ kind: Kind, ramp: Ramp, full?: boolean, place?: { top: number, bottom: number, speed: number },
  *   paint: (rand: () => number, band: Band, h: number) => CloudGrid }} CloudPattern
  *   `full`: a backdrop over the whole sky, `h` rows tall; the others are single clouds, `h` unused.
+ *   `place`: where it sits, if not where its kind does (PLACE).
  */
 
 /** Every cloud pattern, by id. A new pattern is a new entry, named <kind>-<letter>. @type {Record<string, CloudPattern>} */
@@ -402,6 +717,12 @@ export const CLOUD_PATTERNS = {
   // Towering heaps (Cumulus congestus): bright tops, dark flat bases; never drawn near, or they would stand taller than the sky.
   'tower-a': { kind: 'tower', ramp: 'white', paint: (rand, band) => paintPuffs(towerTall(rand), SCALE[band === 'near' ? 'mid' : band] * 0.85, { flat: true, under: 1.05, bright: 0.12 }) },
   'tower-b': { kind: 'tower', ramp: 'white', paint: (rand, band) => paintPuffs(towerTwin(rand), SCALE[band === 'near' ? 'mid' : band] * 0.85, { flat: true, under: 1, bright: 0.1 }) },
+  'tower-c': { kind: 'tower', ramp: 'white', paint: (rand, band) => paintPuffs(towerSheared(rand), SCALE[band === 'near' ? 'mid' : band] * 0.85, { flat: true, under: 1.05, bright: 0.12 }) },
+  // Broken masses: the mostly cloudy sky (the owner's photo), drawn from noise so no two outlines match.
+  // Near ones at the mid size, or they would fill the sky alone.
+  'mass-a': { kind: 'mass', ramp: 'white', paint: (rand, band) => massBroken(rand, SCALE[band === 'near' ? 'mid' : band] * (band === 'near' ? 1.25 : 1)) },
+  'mass-b': { kind: 'mass', ramp: 'grey', place: { top: 0.8, bottom: 1, speed: 0.6 }, paint: (rand, band) => massBank(rand, SCALE[band === 'near' ? 'mid' : band]) },
+  'mass-c': { kind: 'mass', ramp: 'white', paint: (rand, band) => massShred(rand, SCALE[band]) },
   // Lumpy grey layers (stratocumulus).
   'layer-a': { kind: 'layer', ramp: 'grey', paint: (rand, band) => paintPuffs(layerRoll(rand), SCALE[band], { under: 0.65, bright: 0.05 }) },
   'layer-b': { kind: 'layer', ramp: 'grey', paint: (rand, band) => paintPuffs(layerCells(rand), SCALE[band], { under: 0.6, bright: 0.1 }) },
@@ -413,29 +734,19 @@ export const CLOUD_PATTERNS = {
   // Ragged low fragments, drifting fast under an overcast (fractus).
   'scud-a': { kind: 'scud', ramp: 'storm', paint: (rand, band) => paintPuffs(scudBits(rand, 4 + Math.floor(rand() * 3)), SCALE[band], { under: 0.4, bright: 0.25, ragged: 0.35 }) },
   'scud-b': { kind: 'scud', ramp: 'grey', paint: (rand, band) => paintPuffs(scudBits(rand, 2 + Math.floor(rand() * 2)), SCALE[band], { under: 0.4, bright: 0.1, ragged: 0.4 }) },
-  // Flat grey sheets (stratus): a long faint streaking, lighter towards the horizon.
+  // Flat grey sheets (stratus), the owner's photo of an overcast sky: broad soft blotches, pale streaks, darker low down.
   'sheet-a': {
     kind: 'sheet',
-    ramp: 'grey',
+    ramp: 'ceiling',
     full: true,
-    paint: (rand, _band, h) => {
-      const streak = waves(rand, 3, [1, 3], [0.25, 0.6], h);
-      return fullSky(h, (x, y) => 0.18 + 0.32 * (y / h) + 0.09 * streak(x, y));
-    },
+    paint: (rand, _band, h) => overcast(rand, h, { veins: 0.22, blotch: 0.4, cells: 4 }),
   },
-  // A sheet with a lumpy, wavy base, the lumps smaller towards the horizon.
+  // The same ceiling in smaller, busier blotches, with fewer pale streaks.
   'sheet-b': {
     kind: 'sheet',
-    ramp: 'grey',
+    ramp: 'ceiling',
     full: true,
-    paint: (rand, _band, h) => {
-      const big = waves(rand, 3, [4, 7], [0.18, 0.3], h, true);
-      const small = waves(rand, 3, [10, 16], [0.4, 0.6], h, true);
-      return fullSky(h, (x, y) => {
-        const far = y / h;
-        return 0.22 + 0.3 * far + (1 - far) * 0.2 * big(x, y) + far * 0.14 * small(x, y);
-      });
-    },
+    paint: (rand, _band, h) => overcast(rand, h, { veins: 0.15, blotch: 0.45, cells: 5 }),
   },
   // Rain cloud (nimbostratus): a dark base, curtains of rain hanging from it to the horizon.
   'rain-a': {
@@ -443,12 +754,14 @@ export const CLOUD_PATTERNS = {
     ramp: 'storm',
     full: true,
     paint: (rand, _band, h) => {
-      const lumps = waves(rand, 3, [3, 6], [0.15, 0.3], h, true);
+      const noise = skyNoise(rand, h, 4, 3);
+      const edge = wrapNoise(rand, 5, 1, 1);
       const shafts = Array.from({ length: 3 + Math.floor(rand() * 3) }, () => ({ x: rand() * SKY_W, w: between(rand, 10, 26) * SKY_SIZE, slant: between(rand, -0.12, 0.12) }));
       return fullSky(h, (x, y) => {
         const v = y / h;
-        const base = 0.62 + 0.04 * Math.sin((2 * Math.PI * x) / SKY_W);
-        let s = 0.5 + 0.18 * lumps(x, y) - 0.38 * Math.exp(-(((v - 0.55) / 0.2) ** 2));
+        const n = noise(x, y);
+        const base = 0.62 + 0.04 * edge(x, 0);
+        let s = 0.5 + 0.2 * n.blotch + 0.06 * n.ridge - 0.38 * Math.exp(-(((v - 0.55) / 0.2) ** 2));
         if (v > base) {
           for (const shaft of shafts) {
             let dx = Math.abs(x - shaft.x - (y - base * h) * shaft.slant);
@@ -458,7 +771,7 @@ export const CLOUD_PATTERNS = {
           }
         }
         return s;
-      });
+      }, SEAM);
     },
   },
   // Rain cloud in heavy rolls, ragged underneath, no curtains.
@@ -467,12 +780,12 @@ export const CLOUD_PATTERNS = {
     ramp: 'storm',
     full: true,
     paint: (rand, _band, h) => {
-      const rolls = waves(rand, 3, [2, 5], [0.12, 0.22], h);
-      const rag = waves(rand, 2, [12, 20], [0.6, 1], h);
+      const rolls = skyNoise(rand, h, 3, 3.5);
       return fullSky(h, (x, y) => {
         const v = y / h;
-        return 0.38 + 0.22 * rolls(x, y) + 0.08 * rag(x, y) * v - 0.12 * v + 0.25 * Math.max(0, v - 0.85) * 4;
-      });
+        const n = rolls(x, y);
+        return 0.38 + 0.24 * n.blotch + 0.1 * n.ridge * v - 0.12 * v + 0.25 * Math.max(0, v - 0.85) * 4;
+      }, SEAM);
     },
   },
   // A storm's dark overcast: heavy rolls with paler rims.
@@ -481,12 +794,12 @@ export const CLOUD_PATTERNS = {
     ramp: 'storm',
     full: true,
     paint: (rand, _band, h) => {
-      const bend = waves(rand, 2, [1, 3], [0, 0.05], h);
-      const lumps = waves(rand, 3, [5, 9], [0.2, 0.35], h, true);
+      // Long rolls: cells far wider than tall, their ridges the paler rims.
+      const rolls = skyNoise(rand, h, 3, 3.5);
       return fullSky(h, (x, y) => {
-        const roll = Math.sin((y * 0.2) / SKY_SIZE + 2.2 * bend(x, y));
-        return 0.12 + 0.2 * roll + 0.1 * lumps(x, y) + 0.08 * (y / h);
-      });
+        const n = rolls(x, y);
+        return 0.08 + 0.12 * n.ridge + 0.3 * n.blotch + 0.08 * (y / h);
+      }, SEAM);
     },
   },
   // A storm's dark overcast with a pale band of light under its edge, low at the horizon.
@@ -495,13 +808,13 @@ export const CLOUD_PATTERNS = {
     ramp: 'storm',
     full: true,
     paint: (rand, _band, h) => {
-      const lumps = waves(rand, 3, [3, 7], [0.15, 0.3], h, true);
-      const edge = waves(rand, 2, [2, 5], [0, 0.02], h);
+      const lumps = skyNoise(rand, h, 5);
+      const edge = wrapNoise(rand, 4, 1, 1);
       return fullSky(h, (x, y) => {
         const v = y / h;
-        const gap = 0.84 + 0.05 * edge(x, y);
-        return v > gap ? 0.5 + (v - gap) * 3 : 0.1 + 0.16 * lumps(x, y) - 0.08 * v;
-      });
+        const gap = 0.84 + 0.05 * edge(x, 0);
+        return v > gap ? 0.5 + (v - gap) * 3 : 0.1 + 0.2 * lumps(x, y).blotch - 0.08 * v;
+      }, SEAM);
     },
   },
   // Thick fog: the sky gone to a flat pale grey, palest low down.
@@ -510,8 +823,8 @@ export const CLOUD_PATTERNS = {
     ramp: 'white',
     full: true,
     paint: (rand, _band, h) => {
-      const drift = waves(rand, 2, [1, 3], [0.1, 0.2], h);
-      return fullSky(h, (x, y) => 0.32 + 0.3 * (y / h) + 0.05 * drift(x, y));
+      const drift = skyNoise(rand, h, 3, 3);
+      return fullSky(h, (x, y) => 0.32 + 0.3 * (y / h) + 0.07 * drift(x, y).blotch, SEAM);
     },
   },
   // Mist: banks of it in streaks, the sky hidden behind.
@@ -520,18 +833,37 @@ export const CLOUD_PATTERNS = {
     ramp: 'white',
     full: true,
     paint: (rand, _band, h) => {
-      const banks = waves(rand, 3, [1, 4], [0.2, 0.4], h);
-      return fullSky(h, (x, y) => 0.42 + 0.3 * (y / h) + 0.16 * banks(x, y));
+      const banks = skyNoise(rand, h, 3, 4);
+      return fullSky(h, (x, y) => 0.42 + 0.3 * (y / h) + 0.18 * banks(x, y).blotch, SEAM);
     },
   },
 };
 
-/** The four colours of each ramp, lightest first, from a season's palette. */
+/**
+ * The four colours of each ramp, lightest first, from a season's palette;
+ * `a/b` is halfway between two of its colours. The overcast's ceiling steps
+ * half as far as the grey clouds, so its greys differ only subtly.
+ */
 export const RAMPS = {
   white: ['light', 'cloud', 'shade', 'dark'],
   grey: ['cloud', 'shade', 'sheet', 'sheetDark'],
+  ceiling: ['shade', 'shade/sheet', 'sheet', 'sheet/sheetDark'],
   storm: ['sheet', 'sheetDark', 'storm', 'stormDark'],
 };
+
+/**
+ * A ramp's colours as [r, g, b], lightest first, in a season's palette.
+ * @param {Ramp} ramp @param {Record<string, string>} palette
+ * @returns {number[][]}
+ */
+export function rampColours(ramp, palette) {
+  /** @param {string} hex */
+  const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  return RAMPS[ramp].map((key) => {
+    const [a, b] = key.split('/').map((k) => rgb(palette[k]));
+    return b ? a.map((v, i) => Math.round((v + b[i]) / 2)) : a;
+  });
+}
 
 /**
  * Where each kind of single cloud may sit: its base, as a share of the way
@@ -540,6 +872,7 @@ export const RAMPS = {
  */
 const PLACE = {
   heap: { top: 0.12, bottom: 0.95, speed: 1 },
+  mass: { top: 0.2, bottom: 1, speed: 0.9 },
   tower: { top: 0.7, bottom: 1, speed: 0.6 },
   layer: { top: 0.15, bottom: 0.95, speed: 0.9 },
   wisp: { top: 0.08, bottom: 0.5, speed: 1.3 },
@@ -547,20 +880,18 @@ const PLACE = {
 };
 /** Slower further off. */
 const BAND_SPEED = { far: 0.45, mid: 0.7, near: 1 };
-/**
- * How much of the sky a whole sky's cover fills with single clouds, counted as
- * the clouds' own pixels on the painting (overlaps counted twice), and the most
- * clouds laid out (Claude's scale, docs/REVIEW.md).
- */
-const FILL_PER_COVER = 0.35;
+/** The most single clouds laid out in one sky. */
 const MOST_CLOUDS = 40;
+/** How many shapes of each pattern, per band, a session draws: more is less repetition. */
+const VARIANTS = 5;
 
 /**
  * @typedef {Object} SkySpec  What the sky shows for a weather (the rules in content/rules/sky.json).
  * @property {number} level  The cloud level, 0 to 5.
  * @property {string[]} patterns
  * @property {Record<string, string>} palette
- * @property {number} cover  How much of the sky the clouds fill.
+ * @property {number} cover  How much of the sky the clouds hide.
+ * @property {number} fill  How many single clouds to lay out: their own pixels, overlaps counted twice, as a share of the sky.
  * @property {number} veil  How much of the sun, the moon and the stars shows.
  * @property {number} glints  How much of the water's glints flick.
  * @property {number} sunHides  How much of the time a cloud is over the sun.
@@ -601,6 +932,7 @@ export function skySpec(weather, season) {
     level,
     palette: seasonRules.palette,
     cover: row.cover,
+    fill: row.fill,
     veil: row.veil,
     glints: row.glints,
     sunHides: row.sunHides,
@@ -656,11 +988,11 @@ export function layOutSky(spec, rand, horizon, gridOf) {
   if (!single.length) return { backdrop, clouds };
   // Over a backdrop a couple, for movement; otherwise clouds until they fill what the cover asks.
   const most = backdrop ? 1 + Math.floor(rand() * 2) : MOST_CLOUDS;
-  const fill = spec.cover * FILL_PER_COVER * between(rand, 0.8, 1.2) * SKY_W * horizon;
+  const fill = spec.fill * between(rand, 0.8, 1.2) * SKY_W * horizon;
   let filled = 0;
   for (let i = 0; i < most && (backdrop || filled < fill); i++) {
     const pattern = single[Math.floor(rand() * single.length)];
-    const place = PLACE[CLOUD_PATTERNS[pattern].kind];
+    const place = CLOUD_PATTERNS[pattern].place ?? PLACE[CLOUD_PATTERNS[pattern].kind];
     let top = place.top;
     let bottom = place.bottom;
     if (spec.low) top = Math.max(top, 0.6);
@@ -670,7 +1002,7 @@ export function layOutSky(spec, rand, horizon, gridOf) {
     let band = f > 0.72 ? 'far' : f > 0.42 ? 'mid' : 'near';
     // A towering heap is big even far off: never near, or it would stand taller than the sky.
     if (CLOUD_PATTERNS[pattern].kind === 'tower') band = band === 'far' && rand() < 0.5 ? 'far' : 'mid';
-    const variant = Math.floor(rand() * 3);
+    const variant = Math.floor(rand() * VARIANTS);
     const grid = gridOf(pattern, band, variant);
     const baseY = Math.round(f * horizon);
     filled += grid.data.reduce((n, t) => n + (t > 0 ? 1 : 0), 0);

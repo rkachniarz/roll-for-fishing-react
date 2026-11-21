@@ -3,12 +3,12 @@
   "id": "sky",
   "placeholder": true,
   "levels": [
-    { "cover": 0, "veil": 1, "glints": 1, "sunHides": 0, "dusk": 0 },
-    { "cover": 0.12, "veil": 1, "glints": 1, "sunHides": 0.15, "dusk": 0 },
-    { "cover": 0.3, "veil": 1, "glints": 0.9, "sunHides": 0.3, "dusk": 0 },
-    { "cover": 0.6, "veil": 0.85, "glints": 0.6, "sunHides": 0.5, "dusk": 0 },
-    { "cover": 1, "veil": 0.1, "glints": 0.25, "sunHides": 0, "dusk": 0 },
-    { "cover": 1, "veil": 0, "glints": 0.1, "sunHides": 0, "dusk": 0.38 }
+    { "cover": 0, "fill": 0, "veil": 1, "glints": 1, "sunHides": 0, "dusk": 0 },
+    { "cover": 0.12, "fill": 0.042, "veil": 1, "glints": 1, "sunHides": 0.15, "dusk": 0 },
+    { "cover": 0.3, "fill": 0.105, "veil": 1, "glints": 0.9, "sunHides": 0.3, "dusk": 0 },
+    { "cover": 0.75, "fill": 1.2, "veil": 0.85, "glints": 0.45, "sunHides": 0.7, "dusk": 0 },
+    { "cover": 1, "fill": 0.35, "veil": 0.1, "glints": 0.25, "sunHides": 0, "dusk": 0 },
+    { "cover": 1, "fill": 0.35, "veil": 0, "glints": 0.1, "sunHides": 0, "dusk": 0.38 }
   ],
   "seasons": {
     "spring": {
@@ -20,7 +20,7 @@
         [],
         ["heap-a", "heap-c", "wisp-a"],
         ["heap-a", "heap-b", "heap-c"],
-        ["heap-b", "layer-b", "tower-a"],
+        ["mass-a", "heap-b", "tower-c", "mass-c"],
         ["sheet-a", "layer-a"],
         ["storm-a", "scud-a"]
       ]
@@ -33,8 +33,8 @@
       "levels": [
         [],
         ["heap-a", "heap-c"],
-        ["heap-a", "heap-b", "tower-a"],
-        ["tower-a", "tower-b", "heap-b"],
+        ["heap-a", "heap-b", "tower-a", "tower-c"],
+        ["mass-a", "tower-a", "tower-b", "mass-b"],
         ["rain-a", "rain-b", "scud-a"],
         ["storm-a", "storm-b"]
       ]
@@ -48,7 +48,7 @@
         [],
         ["heap-c", "wisp-b"],
         ["layer-b", "heap-b", "wisp-c"],
-        ["layer-a", "layer-b", "layer-c"],
+        ["mass-a", "mass-b", "layer-a", "layer-b"],
         ["sheet-a", "sheet-b", "scud-b"],
         ["storm-b", "scud-a"]
       ]
@@ -62,7 +62,7 @@
         [],
         ["wisp-a", "wisp-c"],
         ["layer-c", "heap-b", "wisp-b"],
-        ["layer-a", "layer-b", "layer-c"],
+        ["mass-a", "mass-b", "layer-a", "layer-c"],
         ["sheet-a", "sheet-b", "scud-b"],
         ["storm-a", "storm-b"]
       ]

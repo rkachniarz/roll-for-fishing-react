@@ -17,7 +17,7 @@
     "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
     "id": { "const": "sky" },
     "levels": {
-      "description": "Per cloud level, 0 clear to 5 black (rules/weather-scales.json): `cover`, how much of the sky the clouds fill (should agree with rules/moon.json's cloudCover); `veil`, how much of the sun, the moon and the stars shows between or through them; `glints`, how many of the water's glints still flick; `sunHides`, how much of the time a cloud is over the sun when the sun is off the picture (on it, the clouds drawn decide); `dusk`, how much of the night tint the clouds bring.",
+      "description": "Per cloud level, 0 clear to 5 black (rules/weather-scales.json): `cover`, how much of the sky the clouds hide (should agree with rules/moon.json's cloudCover); `fill`, how many single clouds are laid out, counted as their own pixels (overlaps twice) over the sky's, so over 1 to hide most of it; `veil`, how much of the sun, the moon and the stars shows between or through them; `glints`, how many of the water's glints still flick; `sunHides`, how much of the time a cloud is over the sun when the sun is off the picture (on it, the clouds drawn decide); `dusk`, how much of the night tint the clouds bring.",
       "type": "array",
       "minItems": 6,
       "maxItems": 6,
@@ -25,12 +25,13 @@
         "type": "object",
         "properties": {
           "cover": { "type": "number", "minimum": 0, "maximum": 1 },
+          "fill": { "type": "number", "minimum": 0, "maximum": 3 },
           "veil": { "type": "number", "minimum": 0, "maximum": 1 },
           "glints": { "type": "number", "minimum": 0, "maximum": 1 },
           "sunHides": { "type": "number", "minimum": 0, "maximum": 1 },
           "dusk": { "type": "number", "minimum": 0, "maximum": 1 }
         },
-        "required": ["cover", "veil", "glints", "sunHides", "dusk"],
+        "required": ["cover", "fill", "veil", "glints", "sunHides", "dusk"],
         "additionalProperties": false
       }
     },
@@ -41,7 +42,7 @@
         "type": "object",
         "properties": {
           "palette": {
-            "description": "White clouds go light, cloud, shade, dark; grey ones cloud, shade, sheet, sheetDark; storm ones sheet, sheetDark, storm, stormDark.",
+            "description": "White clouds go light, cloud, shade, dark; grey ones cloud, shade, sheet, sheetDark; the overcast's ceiling shade, shade/sheet, sheet, sheet/sheetDark (a slash: halfway between the two), half the grey steps; storm ones sheet, sheetDark, storm, stormDark.",
             "type": "object",
             "properties": {
               "light": { "$ref": "#/definitions/colour" },

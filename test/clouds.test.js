@@ -61,7 +61,7 @@ test('the library has every cloud type, each with two or three patterns', () => 
   /** @type {Record<string, number>} */
   const kinds = {};
   for (const p of Object.values(CLOUD_PATTERNS)) kinds[p.kind] = (kinds[p.kind] ?? 0) + 1;
-  for (const kind of ['heap', 'tower', 'layer', 'wisp', 'sheet', 'rain', 'storm']) {
+  for (const kind of ['heap', 'tower', 'mass', 'layer', 'wisp', 'sheet', 'rain', 'storm']) {
     assert.ok(kinds[kind] >= 2 && kinds[kind] <= 3, `${kind}: ${kinds[kind] ?? 0} patterns`);
   }
 });

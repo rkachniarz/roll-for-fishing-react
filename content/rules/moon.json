@@ -4,7 +4,7 @@
   "placeholder": true,
   "dark": -6,
   "fullLightAt": 20,
-  "cloudCover": [1, 0.9, 0.7, 0.4, 0.1, 0],
+  "cloudCover": [1, 0.9, 0.7, 0.25, 0.1, 0],
   "periods": [
     {
       "id": "major",

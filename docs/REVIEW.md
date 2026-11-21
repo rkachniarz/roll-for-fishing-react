@@ -24,6 +24,53 @@ Items with no note are left alone.
 
 Newest first.
 
+## The overcast redrawn from the owner's photo (2026-11-21, after D170)
+
+The owner: the overcast showed a sine-wave pattern, and too much spray-can scatter. Calls Claude made:
+
+- **Both sheets (`sheet-a`, `sheet-b`) are drawn from noise** that wraps across the 320 pixels, gently warped,
+  instead of sine waves, so nothing repeats across the sky. Cells about twice as wide as tall, with a mild
+  perspective (up to twice as squashed at the horizon); pale soft streaks run through broad blotches, and it
+  darkens low down, as in the photo.
+- **The sheets' greys step half as far** (the owner: subtler differences): a ramp of their own, `ceiling` in
+  `RAMPS` (`src/scene/clouds.js`), from the season's `shade` down to halfway between `sheet` and `sheetDark`,
+  with the halfway colours worked out in code, so no new palette keys.
+- **A little dither, only where two tones meet** (`SEAM`, 0.06; it was 0.18 everywhere).
+- **Every sky-wide pattern went the same way** (the owner asked for them in line): rain, storm and fog are drawn
+  from the overcast's noise (`skyNoise`) with the same little dither, and the sine waves are gone from the sky.
+  What each keeps: `rain-a` its dark band and slanting curtains of rain (still streaked every other column), its
+  base's edge now uneven by noise; `rain-b` its heavy rolls; `storm-a` long dark rolls, the pale rims now only
+  here and there; `storm-b` its pale band at the horizon, its edge by noise; `fog-a` and `fog-b` their pale
+  gradient, with faint banks. Their colours are unchanged: the storm ramp still steps far, from pale `sheetDark`
+  to `stormDark`, which suits a storm to Claude; say if it should be subtler like the overcast.
+- **`sheet-b` is no longer a lumpy, wavy base:** it's the same ceiling in smaller, busier blotches.
+
+## Mostly cloudy, taller clouds, lopsided towers (2026-11-21, after D170)
+
+The owner: mostly cloudy wasn't cloudy enough (their photo of a mostly cloudy sky is the yardstick), its clouds
+looked like long caterpillars, and towers were too symmetrical and repeated. Calls Claude made:
+
+- **Mostly cloudy now hides about 55-75% of the sky** (was 14-28%). Each level has its own `fill` in
+  `content/rules/sky.json`: how many single clouds are laid out, as their own pixels over the sky's (overlaps
+  counted twice). A few and scattered keep what they had (0.042 and 0.105); mostly cloudy is 1.2. Its `cover` went
+  0.6 → 0.75, the sun hides 70% of the time off the picture (was 50%), glints left 0.45 (was 0.6).
+- **The moon under mostly cloudy:** `rules/moon.json`'s light through went 0.4 → 0.25, to agree with the new cover
+  (a test keeps them within 0.15). That makes the moonlit nights a little rarer under mostly cloudy.
+- **A new kind of cloud, the broken mass,** drawn from noise instead of round lumps, so no two outlines match and
+  holes of sky open inside them. Three patterns, all from the owner's photo: `mass-a` the big broken mass,
+  `mass-b` a tall grey bank low over the horizon with a lit, lumpy top (the photo's lower right), `mass-c`
+  wind-torn streaks on a slant (its lower left). They're lit by self-shadowing: the more cloud between a pixel and
+  the light, the greyer, so tops shine and bellies go grey.
+- **Mostly cloudy per season:** spring broken masses, tall heaps, sheared towers and streaks; summer masses,
+  towers and a grey bank; autumn and winter masses, banks and grey layers. Summer's scattered sky can now show a
+  sheared tower too.
+- **The caterpillars are gone:** the long heap (`heap-b`) boils up into uneven bumps, higher on one side; the
+  grey layers pile two or three deep in places, and their cells are each a little heap of their own height.
+- **Towers grow** lump on lump from an uneven base, up a column off centre that leans, so each one is lopsided.
+  A third, `tower-c`, is sheared over by the wind with a low shoulder on the other side.
+- **Five shapes of each pattern per session** (was three), so the same cloud comes round less often.
+- **More photos would help with towers:** towering cumulus seen side on, whole, from a distance, if you have any.
+
 ## The stew's buff stands still in town and asleep (2026-11-19, D172)
 
 The stew's cooking and the inn's morning page (D165) are taken back. Calls Claude made:

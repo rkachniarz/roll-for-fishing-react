@@ -26,7 +26,7 @@ import { VIEW, acrossView, moonPosition, sunPosition } from '../engine/sky.js';
 import { moonlight } from '../engine/moon.js';
 import { TIME } from '../engine/time.js';
 import { seasons } from '../engine/weather.js';
-import { CLOUD_PATTERNS, RAMPS, SKY_SIZE, SKY_W, driftSpeed, layOutSky, skySpec } from './clouds.js';
+import { CLOUD_PATTERNS, SKY_SIZE, SKY_W, driftSpeed, layOutSky, rampColours, skySpec } from './clouds.js';
 
 /** Pixels per degree of height above the horizon (Claude's pick, docs/REVIEW.md): about the width's 256 px per 60°. */
 export const SKY_SCALE = 4;
@@ -366,7 +366,7 @@ export function createSkyLayer(rand) {
   function cloudTexture(pattern, band, variant, palette, season) {
     return cached(`cloud:${gridKey(pattern, band, variant)}:${season}`, () => {
       const g = gridOf(pattern, band, variant);
-      const colours = RAMPS[CLOUD_PATTERNS[pattern].ramp].map((k) => rgb(palette[k]));
+      const colours = rampColours(CLOUD_PATTERNS[pattern].ramp, palette);
       const canvas = document.createElement('canvas');
       canvas.width = g.w;
       canvas.height = g.h;
