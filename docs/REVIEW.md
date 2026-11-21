@@ -28,22 +28,26 @@ Newest first.
 
 Try it in the art sheet's open water: **Wind** (strength) and **Wind from** (a cell of the flower). Calls Claude made:
 
-- **Gdynia's prevailing wind, from the mean only:** no wind rose with shares per direction was found for Gdynia or
-  Gdańsk. Windfinder's mean directions are about 277°–281° at Gdańsk (Port, Stogi) and about 295° at Gdynia (one
-  summer's partial data), so Claude took 280°. A mean can hide a real easterly share (spring easterlies on this coast
-  are common), so the easterly ~20% below is a guess too.
-- **The sea correction, +20°:** Gdynia's shore faces about 65°–75° (Claude's own estimate from coordinates, not from
-  a source or a map check), so its wind was turned 20° clockwise for our sea lying due east: about 300°, WNW.
-- **The wind's own 2d6 table, not the weather's.** The weather's (D26) pulls so hard that on the wind's flower it
-  parked the wind in W–NNW 78% of the time, with easterlies about 1%. The wind's table (`steps` in
-  `content/rules/wind.json`) leans only a little, and over a long run gives: W 15%, NNW 15%, NNE 10%, SSW 10%, WNW 8%,
-  WSW 7%, E 7%, SSE 7%, N 6%, variable 5%, ENE 4%, S 4%, ESE 3%; mean from 297°. The 12 directions alternate high and
-  low because the six corner cells of the flower hold more often (three of their moves fall off the edge).
-- **It changes as often as the weather:** roll12 at or under 3 each half-hour step, then 2d6, where 7 stays.
+- **The shares were measured off a chart, by code:** the University of Gdańsk's seasonal wind roses for a point
+  just north of Gdynia and Hel (55.00N 18.33E, 1951-2010, page 4 of
+  https://klimat.ug.edu.pl/wp-content/uploads/2013/01/geostrof_1951-2010.pdf), 12 sectors of 30°, each sector's
+  length read against the chart's own scale. Every season came to 100.7–101.1%, so the reading is close; they are
+  rounded to 100 in `content/rules/wind.json` (`seasons`, from N round by 30°). West and WNW lead all year
+  (14–17% each in summer, autumn and winter); spring is the flattest, with E to SSE about 9% each.
+- **It is the wind above the ground (geostrophic), not the surface wind,** and no turn is applied. Over the sea the
+  surface wind is turned back (anticlockwise) from it by roughly 10°–20° (a textbook figure, not measured here),
+  and the sea correction would turn it 20° clockwise (Gdynia's shore faces about 65°–75°, Claude's own estimate
+  from coordinates, not a map check). The two about cancel, so the rose's directions are used as they are.
+- **The centre cell, a wind with no set direction, is 4% of the time** in every season: the rose has no such
+  category, so this is Claude's pick. The strength stays the weather's. A variable wind's clouds swing slowly from
+  one side to the other, at most half a cross wind's speed; the inner ring's unsettled wind gusts, its drift
+  speeding up and slowing down by up to 40%.
+- **The rule that makes the shares come out:** the 2d6 picks a neighbouring cell even-handedly, and a move towards a
+  direction that blows less often is kept only on a d100 at or under 100 × new share / old share. A season's change
+  takes over at once, from wherever the wind is.
+- **It changes about as often as the weather offers to:** roll12 at or under 3 each half-hour step, then 2d6, where
+  7 stays, then the d100 above, so somewhat less often than the weather.
 - **A new game, and an old save, start on cell 12:** a steady west wind.
-- **The centre cell only means "no set direction":** the strength stays the weather's, as before. A variable wind's
-  clouds swing slowly from one side to the other, at most half a cross wind's speed. The inner ring's unsettled wind
-  gusts: its drift speeds up and slows down by up to 40%.
 - **Nothing moves in depth:** only the wind's share across the view drifts the clouds, their shadows on the water
   and the rain's slant. A wind at your back or in your face leaves the clouds nearly still.
 - **Not changed:** the painted trees and reeds still lean and sway one way, and the waves don't care which way the

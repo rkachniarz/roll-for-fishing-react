@@ -21,7 +21,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { GAME_VALUES, EFFECT_DICE, effectSign } from '../src/engine/values.js';
-import { HEX_NEIGHBOURS, OPPOSITE } from '../src/engine/hexmap.js';
+import { DIRECTIONS, HEX_NEIGHBOURS, OPPOSITE } from '../src/engine/hexmap.js';
 import { PLACEHOLDERS, parseEvent, parseNeed } from './event-text.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -339,7 +339,7 @@ export async function buildContent(root = ROOT) {
 
   checkPerks(all, errors, warnings);
   checkSeasons(all.weather, errors);
-  if (all.rules.wind) checkWind(all.rules.wind, errors);
+  if (all.rules.wind) checkWind(all.rules.wind, all.weather, errors);
   checkEvents(all, errors, warnings, root);
 
   // Champions (D114): their size band and the weathers the shaman calls up.
@@ -522,12 +522,22 @@ function checkSeasons(seasons, errors) {
 
 /**
  * The wind's hexflower (D176): each move goes to the hex map's neighbour or stays put, every move can be made
- * back, and only the centre has no direction.
+ * back, only the centre has no direction, every season has its shares, and the 2d6 table is even-handed (each
+ * direction as likely as its opposite, or the shares wouldn't come out as written).
  * @param {any} wind
+ * @param {Record<string, any>} seasons
  * @param {string[]} errors
  */
-function checkWind(wind, errors) {
+function checkWind(wind, seasons, errors) {
   const where = 'content/rules/wind.json';
+  for (const id of Object.keys(seasons)) if (!wind.seasons[id]) errors.push(`${where}: no shares for "${id}"`);
+  for (const id of Object.keys(wind.seasons)) if (!seasons[id]) errors.push(`${where}: "${id}" is no season`);
+  /** @type {Record<string, number>} */
+  const odds = {};
+  wind.steps.forEach((/** @type {string} */ way, /** @type {number} */ i) => (odds[way] = (odds[way] ?? 0) + Math.min(i + 1, 11 - i)));
+  for (const [dir, back] of DIRECTIONS.map((d, i) => [d, DIRECTIONS[OPPOSITE[i]]])) {
+    if ((odds[dir] ?? 0) !== (odds[back] ?? 0)) errors.push(`${where}: steps go ${dir} as ${odds[dir] ?? 0}/36 but ${back} as ${odds[back] ?? 0}/36`);
+  }
   wind.cells.forEach((/** @type {{ from: number | null, changeSet: number[] }} */ w, /** @type {number} */ cell) => {
     if ((w.from === null) !== (cell === 0)) errors.push(`${where}: cell ${cell} ${cell === 0 ? 'is the centre, with no direction' : 'needs a direction'}`);
     w.changeSet.forEach((to, dir) => {

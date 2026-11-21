@@ -19,11 +19,26 @@
       "maximum": 12
     },
     "steps": {
-      "description": "Which way the wind moves on the flower for each total of 2d6, from 2 to 12: a direction on the flower (src/engine/hexmap.js) or \"stay\". The bias of this table is what makes the prevailing wind.",
+      "description": "Which way the wind would move on the flower for each total of 2d6, from 2 to 12: a direction on the flower (src/engine/hexmap.js) or \"stay\". Keep it even-handed (each direction as likely as its opposite): the seasons' shares, not this table, make the prevailing wind.",
       "type": "array",
       "minItems": 11,
       "maxItems": 11,
       "items": { "enum": ["n", "ne", "se", "s", "sw", "nw", "stay"] }
+    },
+    "variable": {
+      "description": "How often, in %, the wind has no set direction (the centre cell), in every season.",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "seasons": {
+      "description": "Per season, how often (%) the wind blows from each of the 12 directions, from N (0°) round by 30° to 330°. A move the 2d6 picks is kept outright towards a direction blowing at least as often, else on a d100 at or under 100 × the new share / the old one, so in the long run the wind blows as these say. From the University of Gdańsk's seasonal wind roses for 55.00N 18.33E, 1951-2010 (docs/decisions.md, D176).",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 12,
+        "maxItems": 12,
+        "items": { "type": "number", "exclusiveMinimum": 0 }
+      }
     },
     "cells": {
       "description": "The 19 cells, in the hex map's order (src/engine/hexmap.js): 0 the centre, 1-6 the inner ring, 7-18 the outer.",
@@ -52,6 +67,6 @@
       }
     }
   },
-  "required": ["id", "start", "changeOn", "steps", "cells"],
+  "required": ["id", "start", "changeOn", "steps", "variable", "seasons", "cells"],
   "additionalProperties": false
 }

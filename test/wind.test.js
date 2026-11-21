@@ -27,15 +27,15 @@ test('the centre has no direction, the rings are unsettled and steady', () => {
 
 test('a roll12 over its change number keeps the wind, and 7 on 2d6 stays', () => {
   const steer = (/** @type {number} */ r12, /** @type {number} */ r2d6) => ({ ...dice(), roll12: () => r12, roll2d6: () => r2d6 });
-  assert.equal(stepWind(12, steer(content.rules.wind.changeOn + 1, 2)), 12);
-  assert.equal(stepWind(12, steer(1, 7)), 12);
+  assert.equal(stepWind(12, 'spring', steer(content.rules.wind.changeOn + 1, 2)), 12);
+  assert.equal(stepWind(12, 'spring', steer(1, 7)), 12);
 });
 
 test('the wind veers or backs a cell at a time, and never swings round at once', () => {
   const d = dice(5);
   let cell = windStart();
   for (let i = 0; i < 5000; i++) {
-    const next = stepWind(cell, d);
+    const next = stepWind(cell, 'winter', d);
     const a = windFrom(cell);
     const b = windFrom(next);
     if (a !== null && b !== null) assert.ok(apart(a, b) <= 60, `${cell} -> ${next}: ${a}° to ${b}°`);
@@ -43,28 +43,29 @@ test('the wind veers or backs a cell at a time, and never swings round at once',
   }
 });
 
-test("over a long run the wind is mostly westerly, Gdynia's turned for our sea (D176)", () => {
-  const d = dice(9);
-  let cell = windStart();
-  let x = 0;
-  let y = 0;
-  let west = 0;
-  let east = 0;
-  const steps = 200000;
-  for (let i = 0; i < steps; i++) {
-    cell = stepWind(cell, d);
-    const from = windFrom(cell);
-    if (from === null) continue;
-    x += Math.sin((from * Math.PI) / 180);
-    y += Math.cos((from * Math.PI) / 180);
-    if (from >= 240 && from <= 330) west++;
-    if (from >= 60 && from <= 150) east++;
-  }
-  const mean = ((Math.atan2(x, y) * 180) / Math.PI + 360) % 360;
-  assert.ok(apart(mean, 300) <= 20, `mean wind from ${mean.toFixed(0)}°`);
-  assert.ok(west / steps > 0.35 && west / steps < 0.6, `westerly ${((100 * west) / steps).toFixed(0)}%`);
-  assert.ok(east / steps > 0.1, `easterlies still come: ${((100 * east) / steps).toFixed(0)}%`);
-});
+for (const season of ['spring', 'summer', 'autumn', 'winter']) {
+  test(`over a long run the ${season} wind blows as its rose says (D176)`, () => {
+    const d = dice(9);
+    let cell = windStart();
+    /** @type {number[]} */
+    const count = Array(12).fill(0);
+    let variable = 0;
+    const steps = 300000;
+    for (let i = 0; i < steps; i++) {
+      cell = stepWind(cell, season, d);
+      const from = windFrom(cell);
+      if (from === null) variable++;
+      else count[from / 30]++;
+    }
+    const wind = content.rules.wind;
+    const total = wind.variable + wind.seasons[season].reduce((/** @type {number} */ a, /** @type {number} */ b) => a + b, 0);
+    count.forEach((n, k) => {
+      const want = (100 * wind.seasons[season][k]) / total;
+      assert.ok(Math.abs((100 * n) / steps - want) < 1.5, `${season} from ${k * 30}°: ${((100 * n) / steps).toFixed(1)}%, the rose says ${want.toFixed(1)}%`);
+    });
+    assert.ok(Math.abs((100 * variable) / steps - (100 * wind.variable) / total) < 1.5, `variable ${((100 * variable) / steps).toFixed(1)}%`);
+  });
+}
 
 test('a new game starts at the start cell; each half-hour step takes the wind stream only', () => {
   const g = newGame({ seed: 3, character });

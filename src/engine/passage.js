@@ -50,7 +50,7 @@ export function stepTime(state, dice, how = {}) {
     }
   }
   // The wind veers and backs on its own flower (D176).
-  state.wind = stepWind(state.wind ?? windStart(), dice.wind);
+  state.wind = stepWind(state.wind ?? windStart(), clock(state.time).season, dice.wind);
   // The water follows the air, a day behind (D149).
   stepWater(state);
   // A new part of the day: every pool the player has been to lives on (D157).
