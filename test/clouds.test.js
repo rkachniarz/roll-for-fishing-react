@@ -6,7 +6,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { content, strings as allStrings } from '../src/generated/content.js';
-import { CLOUD_PATTERNS, RAMPS, SKY_W, cloudDusk, layOutSky, skySpec } from '../src/scene/clouds.js';
+import { CLOUD_PATTERNS, FILM, RAMPS, SKY_W, cloudDusk, layOutSky, skySpec } from '../src/scene/clouds.js';
 import { createRng } from '../src/rng.js';
 
 const sky = content.rules.sky;
@@ -113,10 +113,17 @@ test('every pattern paints in every band, in its ramp\'s four tones, the same fo
       assert.equal(g1.data.length, g1.w * g1.h);
       const filled = g1.data.filter((t) => t > 0).length;
       assert.ok(filled > 3, `${id} (${band}): nearly empty`);
-      assert.ok(g1.data.every((t) => t <= 4));
+      // A glowing pattern (the special sky) has FILM's tones, not a ramp's four.
+      const tones = p.glow ? FILM.length : 4;
+      assert.ok(g1.data.every((t) => t <= tones));
       if (p.full) {
         assert.equal(g1.w, SKY_W, `${id}: a backdrop spans the painting`);
-        if (p.open) {
+        if (p.glow) {
+          // The special sky: a film over much of the sky, the night showing between, some of it in colour.
+          const coloured = g1.data.filter((t) => t > 3).length;
+          assert.ok(filled > 0.25 * g1.w * g1.h && filled < 0.95 * g1.w * g1.h, `${id}: ${filled} of ${g1.w * g1.h} pixels film`);
+          assert.ok(coloured > 0.03 * g1.w * g1.h, `${id}: only ${coloured} pixels in colour`);
+        } else if (p.open) {
           // A deck: mostly cloud, the sky showing here and there.
           assert.ok(filled > 0.7 * g1.w * g1.h && filled < g1.w * g1.h, `${id} (${band}): ${filled} of ${g1.w * g1.h} pixels cloud`);
         } else assert.equal(filled, g1.w * g1.h, `${id}: a backdrop hides the whole sky`);
@@ -167,4 +174,21 @@ test('a dry overcast in spring and summer is a deck with sky showing; a rainy on
       assert.ok(full.every((p) => CLOUD_PATTERNS[p].open) || full.every((p) => !CLOUD_PATTERNS[p].open), `${id}, level ${level}`);
     });
   }
+});
+
+test('the special sky shows only when a weather asks for it, which nothing in the game does yet (D173)', () => {
+  const special = skySpec({ clouds: 3, sky: 'special' }, 'autumn');
+  assert.equal(special.from, 'special');
+  assert.deepEqual(special.patterns, sky.special.patterns);
+  assert.ok(special.patterns.every((p) => CLOUD_PATTERNS[p].glow && CLOUD_PATTERNS[p].full));
+  // No season, rain rule, fog or description lists a glowing pattern: the game can't reach it.
+  const reachable = [
+    ...Object.values(sky.seasons).flatMap((/** @type {{ levels: string[][] }} */ s) => s.levels.flat()),
+    ...sky.wet.patterns,
+    ...sky.rainy.patterns,
+    ...sky.fog.flatMap((/** @type {{ patterns: string[] }} */ f) => f.patterns),
+    ...Object.values(sky.descriptions).flatMap((/** @type {{ patterns: string[] }} */ d) => d.patterns),
+  ];
+  assert.ok(reachable.every((p) => !CLOUD_PATTERNS[p].glow));
+  assert.notEqual(skySpec({ clouds: 3 }, 'autumn').from, 'special');
 });

@@ -591,6 +591,36 @@ section(
   },
 );
 
+// The special sky (D173): the magic of the land in the sky, from the owner's
+// photo of alcohol drying on a guitar. Only here for now; the game never asks
+// for it. Night first, as the photo is on black.
+section(
+  'The special sky (D173)',
+  'The magic of the land reaching into the sky, from the owner’s photo of isopropyl alcohol drying on a guitar’s black finish: long smears brushed across on a slant with a grey sheen along them, and where the film pools, bands of colour ring on ring (the colours of a thin film as it thickens), here and there dried in a speckle (special-a: broad pools; special-b: thin ribbons and the speckle; src/scene/clouds.js, film). See-through, so the stars and the moon show behind, and never darkened by the night tint: it gives its own light. Not in the game yet: only a weather with sky: special shows it (content/rules/sky.json, special), and nothing in the game sets that. Night first; the day isn’t tuned. The open water below can show it at any hour too (Weather: Special).',
+  async (body) => {
+    const reedy = facingOf('lake', 'reedy-shore');
+    const pond = facingOf('lake', 'still-water');
+    /** @param {number} day @param {number} hour @param {{ facing?: number, moon?: number, wind?: number }} [o] */
+    const at = (day, hour, o = {}) => {
+      const time = minuteOf(day, hour);
+      return momentWorld(time, {
+        facing: o.facing ?? reedy,
+        fullMoonAt: time - (o.moon ?? 14) * 1440,
+        weather: /** @type {any} */ ({ temperature: 8, wind: o.wind ?? 1, clouds: 0, precipitation: 0, sky: 'special' }),
+      });
+    };
+    await skyCards(body, 'Special sky', paintReedy, reedySeason, [
+      { caption: 'spring, 23:00, no moon: the film over the stars', world: at(20, 23) },
+      { caption: 'summer, 01:00, no moon', world: at(48, 1) },
+      { caption: 'autumn, 22:00, under a full moon', world: at(76, 22, { moon: 0 }) },
+      { caption: 'winter, 21:00, no moon', world: at(104, 21) },
+      { caption: 'still water, summer, 00:30: mirrored', world: at(48, 0.5, { facing: pond }), paint: paintPond, seasonOf: pondSeason },
+      { caption: 'spring, 20:30, turned west: the last of the dusk', world: at(20, 20.5, { facing: 270 }) },
+      { caption: 'summer noon, by day (not tuned yet)', world: at(48, 12) },
+    ]);
+  },
+);
+
 // The open water (D171): the default scene for every spot without a painting
 // of its own, the reedy shore's lake with no reeds. One live scene, turned by
 // hand, to try the sky in any facing; the spots' own facings are in the list.
@@ -628,6 +658,7 @@ section(
       el('select', {}, [
         el('option', { value: '' }, ['(by cloud level)']),
         el('option', { value: 'fog' }, ['Fog (a weather tagged fog)']),
+        el('option', { value: 'special' }, ['Special (the magic of the land, D173)']),
         ...SEASONS.map((season) =>
           el('optgroup', { label: season }, named.filter((k) => k.startsWith(`weather.${season}.`)).map((k) => el('option', { value: k }, [`${t(k.replace(/descriptions\.\d+$/, 'name'))}: “${t(k)}”`]))),
         ),
@@ -673,6 +704,7 @@ section(
       /** @type {any} */
       let weather = { ...CLEAR, clouds: level, precipitation: Number(rain.input.value) };
       if (key === 'fog') weather = { ...weather, tags: ['fog'] };
+      else if (key === 'special') weather = { ...weather, sky: 'special' };
       else if (key) {
         const { season: ws, cell, w } = cellOf(key);
         weather = { ...weather, temperature: mid(w.temperature), wind: mid(w.wind), description: key, season: ws, cell };
@@ -699,7 +731,7 @@ section(
     });
     weatherPick.addEventListener('change', () => {
       const key = weatherPick.value;
-      if (key && key !== 'fog') {
+      if (key && key !== 'fog' && key !== 'special') {
         // To the description's season, the same day in it; its weather's rain; a cloud level its sky suits.
         const { season: ws, w } = cellOf(key);
         day.input.value = String(SEASONS.indexOf(ws) * TIME.seasonDays + (Number(day.input.value) % TIME.seasonDays));

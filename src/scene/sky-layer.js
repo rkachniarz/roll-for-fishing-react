@@ -26,7 +26,7 @@ import { VIEW, acrossView, moonPosition, sunPosition } from '../engine/sky.js';
 import { moonlight } from '../engine/moon.js';
 import { TIME } from '../engine/time.js';
 import { seasons } from '../engine/weather.js';
-import { CLOUD_PATTERNS, SKY_SIZE, SKY_W, driftSpeed, layOutSky, rampColours, skySpec } from './clouds.js';
+import { CLOUD_PATTERNS, FILM, SKY_SIZE, SKY_W, driftSpeed, layOutSky, rampColours, skySpec } from './clouds.js';
 
 /** Pixels per degree of height above the horizon (Claude's pick, docs/REVIEW.md): about the width's 256 px per 60°. */
 export const SKY_SCALE = 4;
@@ -326,6 +326,15 @@ export function createSkyLayer(rand) {
   // A sky-wide backdrop of cloud (overcast, fog) under the sun and the moon, single clouds over them.
   const backdrops = new Container();
   back.addChild(colourNew, colourOld, stars, backdrops, moon, sun, clouds);
+  // The special sky (D173): the magic has its own light, so it hangs over the
+  // light of the hour (the scene puts `over` above it), cut to the sky above
+  // the painting's land so it never covers the trees.
+  const over = new Container();
+  over.label = 'sky-glow';
+  const glows = new Container();
+  const overMask = new Graphics();
+  over.addChild(glows, overMask);
+  over.mask = overMask;
   moon.visible = sun.visible = colourOld.visible = false;
   const glitter = new Graphics();
 
@@ -338,8 +347,9 @@ export function createSkyLayer(rand) {
   const mirrorColour = new Sprite();
   mirrorColour.scale.y = -1;
   const mirrorClouds = new Container();
+  const mirrorGlows = new Container();
   const mirrorMask = new Graphics();
-  mirror.addChild(mirrorColour, mirrorClouds, mirrorMask);
+  mirror.addChild(mirrorColour, mirrorClouds, mirrorGlows, mirrorMask);
   mirror.mask = mirrorMask;
 
   // ---------- The clouds (12.5, D170) ----------
@@ -366,7 +376,8 @@ export function createSkyLayer(rand) {
   function cloudTexture(pattern, band, variant, palette, season) {
     return cached(`cloud:${gridKey(pattern, band, variant)}:${season}`, () => {
       const g = gridOf(pattern, band, variant);
-      const colours = rampColours(CLOUD_PATTERNS[pattern].ramp, palette);
+      // A glowing pattern has its own colours, see-through (FILM); the others their ramp's in the season's palette.
+      const colours = CLOUD_PATTERNS[pattern].glow ? FILM : rampColours(CLOUD_PATTERNS[pattern].ramp, palette);
       const canvas = document.createElement('canvas');
       canvas.width = g.w;
       canvas.height = g.h;
@@ -379,7 +390,7 @@ export function createSkyLayer(rand) {
         img.data[i * 4] = c[0];
         img.data[i * 4 + 1] = c[1];
         img.data[i * 4 + 2] = c[2];
-        img.data[i * 4 + 3] = 255;
+        img.data[i * 4 + 3] = c[3] ?? 255;
       }
       ctx.putImageData(img, 0, 0);
       return canvas;
@@ -420,9 +431,11 @@ export function createSkyLayer(rand) {
     const front = new Container();
     const mirrorBase = new Container();
     const mirrorFront = new Container();
+    const glow = Boolean(layout.backdrop && CLOUD_PATTERNS[layout.backdrop].glow);
     backdrops.addChild(base);
-    clouds.addChild(front);
-    mirrorClouds.addChild(mirrorBase, mirrorFront);
+    (glow ? glows : clouds).addChild(front);
+    mirrorClouds.addChild(mirrorBase);
+    (glow ? mirrorGlows : mirrorClouds).addChild(mirrorFront);
     /** @type {CloudSky} */
     const open = Boolean(layout.backdrop && CLOUD_PATTERNS[layout.backdrop].open);
     const s = { key: specKey, spec, parts: [base, front, mirrorBase, mirrorFront], backdrop: null, backdropId: layout.backdrop, items: [], born: now, fade, open };
@@ -620,6 +633,9 @@ export function createSkyLayer(rand) {
     painting = next;
     if (!next) return;
     horizon = next.horizon;
+    overMask.clear();
+    for (let x = 0; x < W; x++) overMask.rect(x, 0, 1, Math.min(horizon, next.skyline[x] ?? horizon));
+    overMask.fill(0xffffff);
     if (next.mirrorSky) {
       next.waterLayer.addChild(mirror);
       maskMirror();
@@ -801,6 +817,8 @@ export function createSkyLayer(rand) {
 
   return {
     back,
+    /** The special sky's glow (D173): the scene puts it over the light of the hour, at the same place as `back`. */
+    over,
     clouds,
     glitter,
     setWorld,

@@ -14978,6 +14978,16 @@ export const content = {
         "sunHides": 0.75,
         "glints": 0.45
       },
+      "special": {
+        "patterns": [
+          "special-a",
+          "special-b"
+        ],
+        "veil": 1,
+        "glints": 0.9,
+        "sunHides": 0,
+        "drift": 0.25
+      },
       "fog": [
         {
           "max": 2,

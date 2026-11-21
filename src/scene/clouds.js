@@ -39,7 +39,7 @@ const dither = (x, y) => (BAYER[y & 3][x & 3] + 0.5) / 16;
  * @typedef {{ w: number, h: number, data: Uint8Array }} CloudGrid  Tones row by row: 0 nothing, 1 lightest to 4 darkest.
  * @typedef {'far' | 'mid' | 'near'} Band  How far off a cloud is: far ones sit low over the horizon, small and flat.
  * @typedef {'white' | 'grey' | 'ceiling' | 'storm'} Ramp
- * @typedef {'heap' | 'tower' | 'mass' | 'layer' | 'wisp' | 'scud' | 'sheet' | 'deck' | 'rain' | 'storm' | 'fog'} Kind
+ * @typedef {'heap' | 'tower' | 'mass' | 'layer' | 'wisp' | 'scud' | 'sheet' | 'deck' | 'rain' | 'storm' | 'fog' | 'special'} Kind
  * @typedef {{ x: number, y: number, r: number, ry?: number }} Puff  A round lump: centre and radius, in units.
  */
 
@@ -331,6 +331,130 @@ function deck(rand, h, o) {
       const haze = Math.max(0, (v - 0.8) / 0.2);
       s = s + (0.3 - s) * haze * haze + (dither(x, y) - 0.5) * SEAM * 2;
       data[y * w + x] = s > 0.45 ? 1 : s > 0.05 ? 2 : s > -0.35 ? 3 : 4;
+    }
+  }
+  return { w, h, data };
+}
+
+/**
+ * The special sky's colours, [r, g, b, alpha], by tone (tone 1 first): three
+ * greys of thin film, faint to a bright sheen, then the colours of a thin
+ * film thickening (Newton's series), first order to third, paler as they go.
+ * Partly see-through, so the sky and the stars show behind; drawn untinted,
+ * as the magic has its own light.
+ */
+export const FILM = [
+  [150, 160, 186, 60],
+  [186, 194, 214, 110],
+  [226, 232, 244, 175],
+  // First order: straw, orange, red, magenta.
+  [206, 178, 112, 200],
+  [224, 130, 60, 210],
+  [198, 64, 70, 215],
+  [168, 54, 132, 215],
+  // Second order: violet, blue, sky blue, green, yellow, orange, rose.
+  [110, 64, 176, 215],
+  [60, 102, 208, 215],
+  [64, 170, 200, 210],
+  [98, 192, 112, 205],
+  [214, 206, 98, 200],
+  [228, 140, 84, 200],
+  [200, 84, 154, 205],
+  // Third order, paler: purple, teal, green, pink.
+  [136, 96, 190, 190],
+  [86, 170, 178, 185],
+  [126, 200, 150, 180],
+  [222, 144, 180, 180],
+];
+/** Where the film's colour starts: a tone of FILM past the three greys. */
+const FILM_HUES = 3;
+/** How much thicker the film gets from one colour to the next. */
+const FILM_STEP = 0.07;
+
+/**
+ * The magic of the land in the sky (the special sky, D173): a film like
+ * isopropyl alcohol drying on a guitar's black finish (the owner's photo).
+ * Long smears brushed across the sky on a slant, the slant bending slowly;
+ * hairline streaks along them in a grey sheen; and where the film pools,
+ * bands of colour ring on ring as it thickens, striped along the smears.
+ * In `mottle`'s patches the film has dried in spots, a speckle of colour.
+ * Wraps across the 320 pixels: every noise wraps, and the slant only shears.
+ * @param {() => number} rand @param {number} h
+ * @param {{ pools: number, size: [number, number], cover: number, mottle: number, thick: number }} o
+ *   `pools`: how many places the film pools; `size`: their length along the smear and width across it, in pixels;
+ *   `cover`: how much of the sky the film covers (about, -1 to 1); `mottle`: how many speckled patches;
+ *   `thick`: how far into the colours the pools go.
+ * @returns {CloudGrid}
+ */
+function film(rand, h, o) {
+  const side = rand() < 0.5 ? -1 : 1;
+  const k0 = side * between(rand, 1.1, 1.8);
+  const bend = fbm(rand, 2, h, h, 2);
+  /** The smear's shear at a pixel: x + shear * y is constant along a smear. @param {number} x @param {number} y */
+  const shear = (x, y) => k0 + 0.7 * bend(x, y);
+  const streak = fbm(rand, 44, h * 0.9, h, 2);
+  const hair = wrapNoise(rand, 120, h * 0.6, h);
+  const broad = fbm(rand, 3, h * 0.7, h, 2);
+  const speck = wrapNoise(rand, 70, 4, h);
+  const speckFine = wrapNoise(rand, 150, 2, h);
+  // Along a smear, and across it: unit vectors.
+  const len = Math.hypot(k0, 1);
+  const along = [-k0 / len, 1 / len];
+  const across = [1 / len, k0 / len];
+  /** @param {number} n */
+  const blobs = (n) =>
+    Array.from({ length: n }, () => ({
+      x: rand() * SKY_W,
+      y: between(rand, 0.1, 0.75) * h,
+      a: between(rand, o.size[0] * 0.6, o.size[0]),
+      b: between(rand, o.size[1] * 0.6, o.size[1]),
+      peak: between(rand, 0.75, 1.1),
+    }));
+  const pools = blobs(o.pools);
+  const spots = blobs(o.mottle).map((s) => ({ ...s, a: s.a * 0.6, b: Math.max(14, s.b * 1.6) }));
+  /** How far into a list of blobs a pixel lies, 0 to about 1. @param {ReturnType<typeof blobs>} list @param {number} x @param {number} y */
+  const inside = (list, x, y) => {
+    let most = 0;
+    for (const p of list) {
+      let dx = (((x - p.x) % SKY_W) + SKY_W) % SKY_W;
+      if (dx > SKY_W / 2) dx -= SKY_W;
+      const dy = y - p.y;
+      const u = (dx * along[0] + dy * along[1]) / p.a;
+      const v = (dx * across[0] + dy * across[1]) / p.b;
+      most = Math.max(most, p.peak * Math.exp(-(u * u + v * v)));
+    }
+    return most;
+  };
+  const w = SKY_W;
+  const data = new Uint8Array(w * h);
+  const hues = FILM.length - FILM_HUES;
+  for (let y = 0; y < h; y++) {
+    const v = y / h;
+    // The film thins out over the horizon, so it never sits flat on the land.
+    const low = Math.max(0, (v - 0.78) / 0.22);
+    for (let x = 0; x < w; x++) {
+      const sx = x + shear(x, y) * y;
+      const s = streak(sx, y);
+      const ridge = Math.max(0, 1 - Math.abs(s) * 3.2);
+      const fine = Math.max(0, 1 - Math.abs(hair(sx, y)) * 4);
+      const pool = inside(pools, x, y) * (0.8 + 0.3 * ridge + 0.08 * s);
+      const there = o.cover + 0.55 * broad(x + 0.4 * shear(x, y) * y, y) + 0.35 * s + 0.6 * pool - 1.2 * low * low;
+      if (there <= 0) continue;
+      const spot = inside(spots, x, y);
+      let t = o.thick * pool + 0.08 * ridge;
+      if (spot > 0.12) t += Math.min(1, spot * 1.4) * (0.45 * speck(x, y) + 0.25 * speckFine(x, y) + 0.3);
+      t += (dither(x, y) - 0.5) * 0.02;
+      let tone;
+      if (t < 0.3) {
+        const sheen = 0.6 * ridge + 0.45 * fine + 0.4 * Math.min(1, there * 2);
+        tone = sheen > 0.95 ? 3 : sheen > 0.6 ? 2 : 1;
+      } else {
+        // Past the first two orders the colours come round again, the third order's.
+        let i = Math.floor((t - 0.3) / FILM_STEP);
+        if (i >= hues) i = hues - 4 + ((i - hues) % 4);
+        tone = FILM_HUES + 1 + i;
+      }
+      data[y * w + x] = tone;
     }
   }
   return { w, h, data };
@@ -782,10 +906,11 @@ function wispFan(rand) {
 // ---------- The library ----------
 
 /**
- * @typedef {{ kind: Kind, ramp: Ramp, full?: boolean, open?: boolean, place?: { top: number, bottom: number, speed: number },
+ * @typedef {{ kind: Kind, ramp: Ramp, full?: boolean, open?: boolean, glow?: boolean, place?: { top: number, bottom: number, speed: number },
  *   paint: (rand: () => number, band: Band, h: number) => CloudGrid }} CloudPattern
  *   `full`: a backdrop over the whole sky, `h` rows tall; the others are single clouds, `h` unused.
  *   `open`: a backdrop with sky showing through it, drawn over the sun and the moon like a single cloud.
+ *   `glow`: its own light: drawn in FILM's colours by tone (not its ramp's), see-through, never tinted by the hour.
  *   `place`: where it sits, if not where its kind does (PLACE).
  */
 
@@ -915,6 +1040,26 @@ export const CLOUD_PATTERNS = {
       }, SEAM);
     },
   },
+  // The magic of the land in the sky (D173, the owner's photo of alcohol drying on a guitar): a film of smears
+  // with a sheen, bands of colour where it pools. Its own colours (FILM), see-through and untinted.
+  // One broad pool and a smaller one, the smears wide apart.
+  'special-a': {
+    kind: 'special',
+    ramp: 'white',
+    full: true,
+    open: true,
+    glow: true,
+    paint: (rand, _band, h) => film(rand, h, { pools: 2 + Math.floor(rand() * 2), size: [70, 18], cover: -0.05, mottle: 0, thick: 0.95 }),
+  },
+  // Thin ribbons of colour along many smears, and patches dried in a speckle.
+  'special-b': {
+    kind: 'special',
+    ramp: 'white',
+    full: true,
+    open: true,
+    glow: true,
+    paint: (rand, _band, h) => film(rand, h, { pools: 5 + Math.floor(rand() * 3), size: [55, 7], cover: 0.05, mottle: 2, thick: 0.8 }),
+  },
   // Thick fog: the sky gone to a flat pale grey, palest low down.
   'fog-a': {
     kind: 'fog',
@@ -996,7 +1141,7 @@ const VARIANTS = 5;
  * @property {number} dusk  How much of the night tint the clouds bring.
  * @property {number} drift  How fast the clouds go, times the wind's.
  * @property {boolean} low  Kept low over the horizon.
- * @property {'fog' | 'description' | 'wet' | 'rainy' | 'table'} from  Which rule picked the patterns.
+ * @property {'special' | 'fog' | 'description' | 'wet' | 'rainy' | 'table'} from  Which rule picked the patterns.
  */
 
 /**
@@ -1014,10 +1159,11 @@ export function weatherTags(weather) {
 const holds = (range, level) => level >= (range.min ?? 0) && level <= (range.max ?? 5);
 
 /**
- * Which patterns show, and how, for a weather in a season: fog first (it hides
+ * Which patterns show, and how, for a weather in a season: the special sky if
+ * the weather asks for it (D173: only the art sheet does yet), fog (it hides
  * the sky whatever the level), then a description that names a sky, then rain
  * cloud, then the grey ceiling of a rainy overcast, then the season's table.
- * @param {{ clouds: number, precipitation?: number, wind?: number, description?: string, season?: string, cell?: number, tags?: string[] }} weather
+ * @param {{ clouds: number, precipitation?: number, wind?: number, description?: string, season?: string, cell?: number, tags?: string[], sky?: 'special' }} weather
  * @param {string} season
  * @returns {SkySpec}
  */
@@ -1038,6 +1184,10 @@ export function skySpec(weather, season) {
     drift: 1,
     low: false,
   };
+  if (weather.sky === 'special') {
+    const m = rules.special;
+    return { ...base, patterns: m.patterns, cover: 0, veil: m.veil, glints: m.glints, sunHides: m.sunHides, dusk: 0, drift: m.drift, from: 'special' };
+  }
   if (weatherTags(weather).includes('fog')) {
     const fog = rules.fog.find((/** @type {{ min?: number, max?: number }} */ f) => holds(f, level));
     if (fog) return { ...base, patterns: fog.patterns, cover: 1, veil: fog.veil, glints: Math.min(row.glints, 0.4), sunHides: 0, from: 'fog' };

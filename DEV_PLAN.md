@@ -132,6 +132,8 @@ all depend on which way the player looks.
     after a reload isn't needed: the patterns draw from the scenery stream.
   - **The swamp:** no sky; the cloud level may darken its tint a little, nothing more.
   - **Later:** clouds lit orange from below at dusk; the tints do for now.
+  - **Later:** the special sky (D173), the magic of the land, on the art sheet only so far: how the game brings it
+    (a weather, an event, a place?), and how it looks by day.
   *Landed (D170):* `src/scene/clouds.js` (the library, `CLOUD_PATTERNS`: heaps, towers, layers, wisps, sheets,
   rain cloud, storm, scud, fog; `skySpec`, `layOutSky`); `content/rules/sky.json` with `schemas/sky.schema.json`
   (per season and level the patterns and the palette; per level cover, veil, glints, how often the sun hides, the

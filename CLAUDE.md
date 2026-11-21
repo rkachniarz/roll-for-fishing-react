@@ -197,7 +197,9 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   A sky-wide pattern goes under the sun and the moon (they show through as much as `veil` says), single clouds over
   them. Cloud grids depend only on the scenery stream and are cached per session; pattern ids are named in
   `sky.json`, so never rename one without changing both. Black (clouds 5) brings `dusk` through the night tint
-  (`cloudDusk` in `src/scene/sky.js`).
+  (`cloudDusk` in `src/scene/sky.js`). The special sky (D173, `glow` patterns, colours in `FILM`) shows only for a
+  weather with `sky: 'special'`, which only the art sheet sets; it hangs in the layer's `over`, which each scene puts
+  over the light of the hour.
 - **`styles.css`: `--text` is the text colour; `--type` is the text size factor** (`--ui`, 1.25 on a wide screen,
   D121, times the font's own factor: Alegreya Sans is set at 1.05, D132). Every `font-size` is `calc(Npx * var(--type))`. `fit` in
   `src/main.js` sets `--ui`, `--hud`, `--button`, `--slot`, `--slot-icon` and `--tip-icon`; the icons are whole device

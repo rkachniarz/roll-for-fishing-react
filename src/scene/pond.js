@@ -1195,7 +1195,7 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
   const mount = () => {
     const p = pond;
     skyPainted.attach(p.horizon !== undefined && p.waterLayer && p.isWater ? { horizon: p.horizon, skyline: p.skyline ?? [], waterLayer: p.waterLayer, isWater: p.isWater, mirrorSky: p.mirrorSky } : null);
-    skyPainted.back.visible = p.horizon !== undefined;
+    skyPainted.back.visible = skyPainted.over.visible = p.horizon !== undefined;
   };
   mount();
 
@@ -1204,6 +1204,8 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
   const skyLayer = new Container();
   app.stage.addChild(skyLayer);
   const sky = createSky(new Container(), skyLayer, H, rand);
+  // The special sky's glow over the light of the hour, as in the game (D173), moved with the view.
+  app.stage.addChild(skyPainted.over);
   let raining = false;
   let lastFrame = 0;
 
@@ -1273,7 +1275,7 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
       const dpr = window.devicePixelRatio || 1;
       const scale = Math.max(1, Math.floor(Math.min((maxCssWidth * dpr) / width, (maxCssHeight * dpr) / H)));
       app.renderer.resize(width, H);
-      view.x = -Math.floor((W - width) / 2);
+      view.x = skyPainted.over.x = -Math.floor((W - width) / 2);
       sky.setWidth(width);
       canvas.style.width = `${(width * scale) / dpr}px`;
       canvas.style.height = `${(H * scale) / dpr}px`;

@@ -96,6 +96,19 @@
       "required": ["veil", "sunHides", "glints"],
       "additionalProperties": false
     },
+    "special": {
+      "description": "The special sky (D173), the magic of the land in the sky: shown only for a weather with `sky: \"special\"`, which the game never sets yet (the art sheet does). Its patterns, how much of the sun, the moon and the stars shows (`veil`), the water's glints, how often it is over the sun with the sun off the picture, and how fast it drifts, times the wind's.",
+      "type": "object",
+      "properties": {
+        "patterns": { "$ref": "#/definitions/patterns" },
+        "veil": { "type": "number", "minimum": 0, "maximum": 1 },
+        "glints": { "type": "number", "minimum": 0, "maximum": 1 },
+        "sunHides": { "type": "number", "minimum": 0, "maximum": 1 },
+        "drift": { "type": "number", "minimum": 0 }
+      },
+      "required": ["patterns", "veil", "glints", "sunHides", "drift"],
+      "additionalProperties": false
+    },
     "fog": {
       "description": "A weather tagged fog hides the sky whatever the cloud level: the first entry whose min..max holds the level gives the patterns, and `veil`, how much of the sun shows through.",
       "type": "array",
@@ -133,6 +146,6 @@
       }
     }
   },
-  "required": ["id", "levels", "seasons", "wet", "rainy", "open", "fog", "descriptions"],
+  "required": ["id", "levels", "seasons", "wet", "rainy", "open", "special", "fog", "descriptions"],
   "additionalProperties": false
 }

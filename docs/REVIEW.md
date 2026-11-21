@@ -24,6 +24,29 @@ Items with no note are left alone.
 
 Newest first.
 
+## The special sky, the magic of the land (2026-11-21, D173)
+
+Have a look at the art sheet's new section, **The special sky (D173)**, and the open water's Weather list (Special),
+to try it at any hour and facing. Calls Claude made:
+
+- **Read off the photo:** long smears brushed on a slant (a random way, left or right, bending slowly across the
+  sky), a grey sheen of hairline streaks along them, and colour only where the film pools: bands ring on ring,
+  striped along the smears. The speckled patch (the photo's lower middle) is in `special-b` only, so the broad pools
+  of `special-a` stay calm. The black guitar shows through as the night sky.
+- **The colours (`FILM` in `src/scene/clouds.js`):** three greys of film, then the colours a thin film shows as it
+  thickens, first order (straw, orange, red, magenta), second (violet, blue, sky blue, green, yellow, orange, rose),
+  and a paler third (purple, teal, green, pink) that comes round again in the thickest pools. All partly
+  see-through: the greys mostly (60-175 of 255), the colours a little (180-215).
+- **It gives its own light:** never darkened by the night tint, and drawn over the light of the hour, cut to the sky
+  above the land. The still water's mirror of it is tinted like the rest of the mirror.
+- **It barely moves** (`drift` 0.25, a quarter of the wind's), lets the moon and the stars through (`veil` 1), and
+  leaves most of the water's glints (0.9).
+- **Two shapes a session:** like the other sky-wide patterns it is painted once per session and cached, so every
+  card shows special-a or special-b in the same shape.
+- **By day it isn't tuned:** the same colours over the blue look like an oil slick. Say how the day should look
+  (paler, fainter, only at dusk?) when you get to it.
+- **How the game would reach it** is open: nothing sets `sky: "special"` yet (DEV_PLAN "Later").
+
 ## A dry overcast in spring and summer shows blue (2026-11-21, after D170)
 
 The owner: the overcast photo was of a rainy day; a dry spring or summer overcast (their two new photos) is not all

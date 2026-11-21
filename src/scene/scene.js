@@ -280,6 +280,8 @@ export async function createScene(canvas, rand, look = {}) {
   const skyLayer = new Container();
   app.stage.addChild(skyLayer);
   const sky = createSky(shadowLayer, skyLayer, SIZE, rand);
+  // The special sky (D173) gives its own light: over the light of the hour, cut to the sky.
+  app.stage.addChild(skyPainted.over);
 
   // The town, the room, the dive: in the water's place when there is one (R17.1, R20.3).
   const views = createViews(app.stage, rand);
@@ -336,8 +338,8 @@ export async function createScene(canvas, rand, look = {}) {
     if (painted && name === 'open' && spotLook?.tint && painting?.horizon !== undefined) {
       paintingTint.rect(0, painting.horizon, width, SIZE - painting.horizon).fill({ color: spotLook.tint, alpha: spotLook.tintAlpha ?? 0.25 });
     }
-    skyPainted.back.visible = painted && painting?.horizon !== undefined;
-    skyPainted.back.x = offset - PAINTING_LEFT;
+    skyPainted.back.visible = skyPainted.over.visible = painted && painting?.horizon !== undefined;
+    skyPainted.back.x = skyPainted.over.x = offset - PAINTING_LEFT;
     tellSky();
     for (const layer of [backdrop, waveLayer, spotLayer, shadowLayer, reedsLeft, reedsRight]) layer.visible = !painted;
     paintingBack.x = paintingFront.x = offset - PAINTING_LEFT;

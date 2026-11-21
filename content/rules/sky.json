@@ -71,6 +71,7 @@
   "wet": { "precipitation": 3, "level": 4, "patterns": ["rain-a", "rain-b", "scud-a"] },
   "rainy": { "precipitation": 2, "level": 4, "patterns": ["sheet-a", "sheet-b"] },
   "open": { "veil": 1, "sunHides": 0.75, "glints": 0.45 },
+  "special": { "patterns": ["special-a", "special-b"], "veil": 1, "glints": 0.9, "sunHides": 0, "drift": 0.25 },
   "fog": [
     { "max": 2, "patterns": ["fog-b"], "veil": 0.15 },
     { "min": 3, "patterns": ["fog-a"], "veil": 0 }
