@@ -20,6 +20,7 @@ import { createActionBar } from './ui/actionbar.js';
 import { className, classes, generateName, rollStats } from './engine/character.js';
 import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
+import { windFrom, windKind } from './engine/wind.js';
 import { GAME_VALUES } from './engine/values.js';
 import { deleteSave, exportGame, importGame, lastSlot, listSlots, saveGame } from './save.js';
 import { completionShown, mapMarks, spotKnown } from './engine/knowledge.js';
@@ -1480,7 +1481,9 @@ function render() {
   const look = content.locations[state.location].spots?.find((/** @type {{ id: string }} */ s) => s.id === state.spot)?.look ?? null;
   scene.setSpot(look);
   document.body.dataset.spotLook = JSON.stringify(look);
-  scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, sun: now.sun, weather: state.weather, time: state.time, fullMoonAt: state.fullMoonAt });
+  // The wind's direction rides beside the weather's strength (D176).
+  const weather = { ...state.weather, windFrom: windFrom(state.wind), windKind: windKind(state.wind) };
+  scene.setWorld({ hour: now.hour, minute: now.minute, season: now.season, sun: now.sun, weather, time: state.time, fullMoonAt: state.fullMoonAt });
   renderHud();
   // A perk to choose: the character button glows, as WoW's does for a talent
   // point, without stopping the game (D96).

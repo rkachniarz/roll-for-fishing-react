@@ -13,6 +13,7 @@ import { travel, valuesFor } from './engine/game.js';
 import { weatherWords } from './engine/tables.js';
 import { diceFrom, levelFor } from './engine/state.js';
 import { weatherAt } from './engine/weather.js';
+import { windFrom, windKind } from './engine/wind.js';
 import { clock, TIME } from './engine/time.js';
 import { EQUIPMENT_SLOTS, quickEquip } from './engine/equipment.js';
 import { METER_FIRES, startEvent } from './engine/events.js';
@@ -396,7 +397,7 @@ export function createBench(root, { getState, setState, overrides, extraSources,
       const c = clock(s.time);
       clockLine.textContent =
         `Year ${c.year}, ${c.season} day ${c.day}, ${String(c.hour).padStart(2, '0')}:${String(c.minute).padStart(2, '0')} (${c.partOfDay}). ` +
-        `Weather: ${s.weather.season} #${s.weather.cell}, temperature ${s.weather.temperature}, wind ${s.weather.wind}, ` +
+        `Weather: ${s.weather.season} #${s.weather.cell}, temperature ${s.weather.temperature}, wind ${s.weather.wind} ${windFrom(s.wind) === null ? 'variable' : `from ${windFrom(s.wind)}°, ${windKind(s.wind)}`} (cell ${s.wind}), ` +
         `clouds ${s.weather.clouds}, precipitation ${s.weather.precipitation} (${weatherWords(s.weather).join(', ') || 'no weather words'}).`;
 
       const pool = s.escaped[poolKey(s)] ?? [];

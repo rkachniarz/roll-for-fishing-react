@@ -20,6 +20,7 @@ import { POND, POND_SUMMER, createPondScene, paintPond, pondSeason } from './sce
 import { REEDY, REEDY_AUTUMN, REEDY_SPRING, REEDY_WINTER, paintOpen, paintReedy, reedySeason } from './scene/reedy.js';
 import { SKY_DAY, SKY_LAYER, SKY_LOW } from './scene/sky-layer.js';
 import { MOON, facingOf } from './engine/sky.js';
+import { windFrom, windKind } from './engine/wind.js';
 import { TIME, clock } from './engine/time.js';
 import { SWAMP, SWAMP_AUTUMN, SWAMP_H, SWAMP_SUMMER, SWAMP_W, SWAMP_WINTER, swampStill } from './scene/swamp-pixels.js';
 import { paintSwamp } from './scene/swamp.js';
@@ -712,6 +713,16 @@ section(
     const clouds = slider('Clouds', 0, 5, 1, 0);
     const rainWords = content.rules['weather-scales'].precipitation;
     const rain = slider('Rain', 0, rainWords.length - 1, 1, 0);
+    const windLevel = slider('Wind', 0, content.rules['weather-scales'].wind.length - 1, 1, 1);
+    // The wind's direction (D176): a cell of its hexflower, or the scene as first drawn, blowing from the left.
+    const windPick = /** @type {HTMLSelectElement} */ (
+      el('select', {}, [
+        el('option', { value: '' }, ['(as drawn: from the left of the view)']),
+        ...content.rules.wind.cells.map((/** @type {{ from: number | null }} */ c, /** @type {number} */ i) =>
+          el('option', { value: String(i) }, [c.from === null ? `cell ${i}: variable` : `cell ${i}: from ${c.from}° ${compass(c.from)}, ${windKind(i)}`]),
+        ),
+      ])
+    );
     // The descriptions that name a sky, by season, and fog (D170).
     const named = Object.keys(content.rules.sky.descriptions);
     const weatherPick = /** @type {HTMLSelectElement} */ (
@@ -731,7 +742,8 @@ section(
       el('label', { class: 'control' }, [el('span', { class: 'name' }, ['Spot']), pick]),
       facing.row, day.row, hour.row, moon.row,
       el('label', { class: 'control' }, [el('span', { class: 'name' }, ['Weather']), weatherPick]),
-      clouds.row, rain.row,
+      clouds.row, rain.row, windLevel.row,
+      el('label', { class: 'control' }, [el('span', { class: 'name' }, ['Wind from']), windPick]),
       el('div', { class: 'control' }, [el('span', { class: 'name' }, ['Sky from']), from]),
     ]);
     /** A weather's value: some are ranges the game rolls in when the weather turns; the testbed takes the middle. @param {number | { min: number, max: number }} v */
@@ -764,14 +776,15 @@ section(
       const level = Number(clouds.input.value);
       const key = weatherPick.value;
       /** @type {any} */
-      let weather = { ...CLEAR, clouds: level, precipitation: Number(rain.input.value) };
+      let weather = { ...CLEAR, clouds: level, precipitation: Number(rain.input.value), wind: Number(windLevel.input.value) };
+      if (windPick.value !== '') weather = { ...weather, windFrom: windFrom(Number(windPick.value)), windKind: windKind(Number(windPick.value)) };
       if (key === 'fog') weather = { ...weather, tags: ['fog'] };
       else if (key === 'special') weather = { ...weather, sky: 'special' };
       else if (key === 'blood') weather = { ...weather, sky: 'blood' };
       else if (key === 'green') weather = { ...weather, sky: 'green' };
       else if (key) {
         const { season: ws, cell, w } = cellOf(key);
-        weather = { ...weather, temperature: mid(w.temperature), wind: mid(w.wind), description: key, season: ws, cell };
+        weather = { ...weather, temperature: mid(w.temperature), description: key, season: ws, cell };
       }
       const spec = skySpec(weather, seasonAt());
       from.textContent = `${spec.from}: ${spec.patterns.join(', ') || 'clear'}`;
@@ -783,6 +796,7 @@ section(
       moon.shown.textContent = Number(moon.input.value) === 0 ? 'full' : `${moon.input.value} days after full`;
       clouds.shown.textContent = t(content.rules['weather-scales'].clouds[level]);
       rain.shown.textContent = t(rainWords[Number(rain.input.value)]);
+      windLevel.shown.textContent = t(content.rules['weather-scales'].wind[Number(windLevel.input.value)]);
       caption.textContent = `Open water, facing ${f}° (${compass(f)}), ${seasonAt()} ${hour.shown.textContent}`;
     };
     pick.addEventListener('change', () => {
@@ -800,13 +814,15 @@ section(
         const { season: ws, w } = cellOf(key);
         day.input.value = String(SEASONS.indexOf(ws) * TIME.seasonDays + (Number(day.input.value) % TIME.seasonDays));
         rain.input.value = String(mid(w.precipitation));
+        windLevel.input.value = String(mid(w.wind));
         const range = content.rules.sky.descriptions[key].levels ?? {};
         const own = typeof w.clouds === 'number' ? w.clouds : (w.clouds.min ?? 0);
         clouds.input.value = String(Math.min(Math.max(own, range.min ?? 0), range.max ?? 5));
       }
       show();
     });
-    for (const s of [day, hour, moon, clouds, rain]) s.input.addEventListener('input', show);
+    for (const s of [day, hour, moon, clouds, rain, windLevel]) s.input.addEventListener('input', show);
+    windPick.addEventListener('change', show);
     show();
     save.addEventListener('click', () => saveScene(scene.app, `open-${slug(caption.textContent ?? '')}-seed${seed}.png`));
   },

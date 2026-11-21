@@ -278,6 +278,10 @@ Screenshots from `verify` land in `dist/verify/` (untracked).
   the commit writes the old stream positions back over the pool's draws.
 - **A new random stream means a new `SAVE_VERSION` and a migration that derives it** (`STREAMS` in
   `src/engine/state.js`), or an old save has no position for it.
+- **The wind's direction is its own hexflower (D176, `src/engine/wind.js`):** `state.wind` is a cell; the strength
+  stays `weather.wind`. The page hands the scene both on the weather (`windFrom`, `windKind`), and only the share
+  across the view moves anything (`windAcross` in `src/scene/wind.js`); a weather without `windFrom` (the art
+  sheet's old trials) blows from the left as first drawn. Anything that drifts with the wind must wrap both ways.
 - **The sun and moon are worked out from the clock (D167, `src/engine/sky.js`);** the one thing stored is
   `state.fullMoonAt`, the first full moon, rolled once at a new game from the stream `moon`. Like `start`, that stream
   is drawn once and isn't in `STREAMS`. The sun's hours are stretched to cross the horizon at exactly `SUN`'s times.

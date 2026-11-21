@@ -28,6 +28,7 @@ import { TIME } from '../engine/time.js';
 import { seasons } from '../engine/weather.js';
 import { isBloodMoon, isGreenSun } from './light.js';
 import { CLOUD_PATTERNS, FILM, SKY_SIZE, SKY_W, driftSpeed, layOutSky, rampColours, skySpec } from './clouds.js';
+import { windAcross } from './wind.js';
 
 /** Pixels per degree of height above the horizon (Claude's pick, docs/REVIEW.md): about the width's 256 px per 60°. */
 export const SKY_SCALE = 4;
@@ -150,7 +151,7 @@ export function cloudTint(altitude, light) {
  * What the sky layer is given: the game minute, the season, the weather, the
  * spot's facing (null: no sky), and the minute of a full moon.
  * @typedef {{ time: number, season: string, weather: { clouds: number, wind: number, precipitation?: number, description?: string,
- *   season?: string, cell?: number, tags?: string[], sky?: 'special' | 'blood' | 'green' }, facing: number | null, fullMoonAt?: number }} SkyWorld
+ *   season?: string, cell?: number, tags?: string[], sky?: 'special' | 'blood' | 'green' } & import('./wind.js').WindLook, facing: number | null, fullMoonAt?: number }} SkyWorld
  *   The weather as the engine keeps it (src/engine/weather.js): its description and cell pick the clouds
  *   (src/scene/clouds.js, `skySpec`); the art sheet may give `tags` instead of a cell.
  * @typedef {{ horizon: number, skyline: number[], waterLayer: Container, isWater: (x: number, y: number) => boolean, mirrorSky?: boolean, front?: Container }} SkyPainting
@@ -564,7 +565,7 @@ export function createSkyLayer(rand) {
   function placeSky(s, dx) {
     if (s.backdrop) {
       const b = s.backdrop;
-      b.x = (b.x + dx * 0.35) % SKY_W;
+      b.x = (((b.x + dx * 0.35) % SKY_W) + SKY_W) % SKY_W;
       const x = Math.round(b.x);
       b.a.x = b.ta.x = x - SKY_W;
       b.b.x = b.tb.x = x;
@@ -572,6 +573,7 @@ export function createSkyLayer(rand) {
     for (const c of s.items) {
       c.x += dx * c.speed;
       if (c.x > SKY_W) c.x -= SKY_W + c.w;
+      else if (c.x < -c.w) c.x += SKY_W + c.w;
       c.sprite.x = c.twin.x = Math.round(c.x);
     }
   }
@@ -871,7 +873,8 @@ export function createSkyLayer(rand) {
       dropSky(oldSky);
       oldSky = null;
     }
-    const dx = (driftSpeed(world.weather.wind ?? 0, spec?.drift ?? 1) * Math.min(dt, 100)) / 1000;
+    // Only the wind's share across the view drifts them sideways (D176).
+    const dx = (driftSpeed(world.weather.wind ?? 0, spec?.drift ?? 1) * windAcross(world.weather, world.facing, now) * Math.min(dt, 100)) / 1000;
     if (sky) {
       placeSky(sky, dx);
       fadeSky(sky, sky.fade && !snapping ? clamp01((now - sky.born) / SKY_FADE_MS) : 1);

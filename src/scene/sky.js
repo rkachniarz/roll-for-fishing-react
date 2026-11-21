@@ -12,13 +12,15 @@ import { Graphics } from 'pixi.js';
 import { WATER } from '../engine/features.js';
 import { bloodLight, darkness, greenLight, warmth } from './light.js';
 import { cloudDusk } from './clouds.js';
+import { windAcross } from './wind.js';
 
 /**
  * @typedef {Object} World  What the sky needs to know.
  * @property {number} hour
  * @property {number} minute
  * @property {string} season
- * @property {{ temperature: number, wind: number, clouds: number, precipitation: number, sky?: 'special' | 'blood' | 'green' }} weather
+ * @property {{ temperature: number, wind: number, clouds: number, precipitation: number, sky?: 'special' | 'blood' | 'green' } & import('./wind.js').WindLook} weather
+ *   With the wind's direction beside its strength (D176).
  * @property {{ rise: number, set: number }} sun  Today's sunrise and sunset (the clock's).
  * @property {number} [time]  The game minute, for the sky layer's sun and moon (src/scene/sky-layer.js, D169);
  *   without it, the middle of the season at that hour.
@@ -94,20 +96,25 @@ export function createSky(below, above, size, rand) {
   /**
    * @param {number} now
    * @param {number} dt  Milliseconds since the last frame.
+   * @param {number | null} [facing]  The spot's compass facing, for the wind's share across the view (D176);
+   *   without it, the world's.
    */
-  function update(now, dt) {
+  function update(now, dt, facing) {
     shadows.clear();
     weatherLayer.clear();
     tint.clear();
     if (!world) return;
     const { weather } = world;
     const step = Math.min(dt, 100) / 16.7;
+    // Only the wind's share across the view moves things sideways (D176).
+    const across = windAcross(weather, facing ?? world.facing, now);
 
     // ---------- Cloud shadows, carried by the wind ----------
-    const drift = (0.03 + weather.wind * 0.05) * step;
+    const drift = (0.03 + weather.wind * 0.05) * across * step;
     for (const c of clouds) {
       c.x += drift;
       if (c.x - c.w / 2 > width) c.x = -c.w / 2;
+      else if (c.x + c.w / 2 < 0) c.x = width + c.w / 2;
       // A flattened blob of rows, narrower at the top and bottom.
       for (let row = 0; row < c.h; row++) {
         const t = (row / (c.h - 1)) * 2 - 1;
@@ -122,7 +129,7 @@ export function createSky(below, above, size, rand) {
     const want = weather.precipitation >= 2 ? (weather.precipitation - 1) * (snowing ? 50 : 40) : 0;
     while (drops.length < want) drops.push({ x: rand() * width, y: rand() * size, speed: 0.8 + rand() * 0.6, sway: rand() * 6 });
     drops.length = want;
-    const slant = weather.wind * (snowing ? 0.25 : 0.4);
+    const slant = weather.wind * (snowing ? 0.25 : 0.4) * across;
     for (const d of drops) {
       if (snowing) {
         d.y += d.speed * 0.6 * step;
@@ -136,6 +143,7 @@ export function createSky(below, above, size, rand) {
         d.x = rand() * width;
       }
       if (d.x > width) d.x -= width;
+      else if (d.x < 0) d.x += width;
       const x = Math.round(d.x);
       const y = Math.round(d.y);
       if (snowing) weatherLayer.rect(x, y, 1, 1).fill({ color: 0xffffff, alpha: 0.85 });

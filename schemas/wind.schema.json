@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "The wind's direction (D176): a hexflower laid out as a compass, drifting a cell at a time like the weather's maps",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
+    "id": { "const": "wind" },
+    "start": {
+      "description": "The cell a new game starts in (and an old save, the first time it loads).",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 18
+    },
+    "changeOn": {
+      "description": "Each half-hour step, roll12: at or under this, the wind moves (then 2d6 picks which way); over it, it stays.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 12
+    },
+    "steps": {
+      "description": "Which way the wind moves on the flower for each total of 2d6, from 2 to 12: a direction on the flower (src/engine/hexmap.js) or \"stay\". The bias of this table is what makes the prevailing wind.",
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "items": { "enum": ["n", "ne", "se", "s", "sw", "nw", "stay"] }
+    },
+    "cells": {
+      "description": "The 19 cells, in the hex map's order (src/engine/hexmap.js): 0 the centre, 1-6 the inner ring, 7-18 the outer.",
+      "type": "array",
+      "minItems": 19,
+      "maxItems": 19,
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "description": "The compass bearing the wind blows from, in degrees; null for a wind with no set direction (the centre). The outer ring is a steady wind, the inner ring the same direction unsettled.",
+            "type": ["number", "null"],
+            "minimum": 0,
+            "exclusiveMaximum": 360
+          },
+          "changeSet": {
+            "description": "The cell each direction (n, ne, se, s, sw, nw) leads to: the hex map's neighbour, or this cell itself where the move would wrap round the flower's edge, so the wind never swings round in one step.",
+            "type": "array",
+            "minItems": 6,
+            "maxItems": 6,
+            "items": { "type": "integer", "minimum": 0, "maximum": 18 }
+          }
+        },
+        "required": ["from", "changeSet"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "start", "changeOn", "steps", "cells"],
+  "additionalProperties": false
+}

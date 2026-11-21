@@ -1,5 +1,5 @@
 // @ts-check
-// Time passing: the clock, the season and the weather moving on by half-hour
+// Time passing: the clock, the season, the weather and the wind moving on by half-hour
 // steps (R11.4), and buffs that last game time running out (R19.5). A cast
 // that went out and ended takes one step; waiting or sleeping in town takes
 // as many as it lasts (R17.2), and nothing else of a cast happens then. The
@@ -8,6 +8,7 @@
 import { advanceTime, clock, TIME } from './time.js';
 import { changeSeason, stepWeather } from './weather.js';
 import { stepWater } from './spawning.js';
+import { stepWind, windStart } from './wind.js';
 import { partKey, stepPools } from './pool.js';
 import { content } from '../generated/content.js';
 
@@ -18,8 +19,8 @@ import { content } from '../generated/content.js';
 /**
  * One half-hour step. Changes `state` in place (a copy the caller owns).
  * @param {GameState} state
- * @param {Record<string, Dice>} dice  The state's dice (diceFrom): the weather from `weather`, the pools from
- *   `pool` and `condition`.
+ * @param {Record<string, Dice>} dice  The state's dice (diceFrom): the weather from `weather`, its direction from
+ *   `wind`, the pools from `pool` and `condition`.
  * @param {{ asleep?: boolean }} [how]  Asleep, buffs that hold (D172) don't run down, wherever the player is.
  * @returns {GameEvent[]}
  */
@@ -48,6 +49,8 @@ export function stepTime(state, dice, how = {}) {
       events.push({ type: 'weather', weather: state.weather });
     }
   }
+  // The wind veers and backs on its own flower (D176).
+  state.wind = stepWind(state.wind ?? windStart(), dice.wind);
   // The water follows the air, a day behind (D149).
   stepWater(state);
   // A new part of the day: every pool the player has been to lives on (D157).

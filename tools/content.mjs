@@ -339,6 +339,7 @@ export async function buildContent(root = ROOT) {
 
   checkPerks(all, errors, warnings);
   checkSeasons(all.weather, errors);
+  if (all.rules.wind) checkWind(all.rules.wind, errors);
   checkEvents(all, errors, warnings, root);
 
   // Champions (D114): their size band and the weathers the shaman calls up.
@@ -517,6 +518,26 @@ function checkSeasons(seasons, errors) {
       }
     });
   }
+}
+
+/**
+ * The wind's hexflower (D176): each move goes to the hex map's neighbour or stays put, every move can be made
+ * back, and only the centre has no direction.
+ * @param {any} wind
+ * @param {string[]} errors
+ */
+function checkWind(wind, errors) {
+  const where = 'content/rules/wind.json';
+  wind.cells.forEach((/** @type {{ from: number | null, changeSet: number[] }} */ w, /** @type {number} */ cell) => {
+    if ((w.from === null) !== (cell === 0)) errors.push(`${where}: cell ${cell} ${cell === 0 ? 'is the centre, with no direction' : 'needs a direction'}`);
+    w.changeSet.forEach((to, dir) => {
+      if (to !== cell && to !== HEX_NEIGHBOURS[cell][dir]) {
+        errors.push(`${where}: cell ${cell} direction ${dir} goes to ${to}, not its neighbour ${HEX_NEIGHBOURS[cell][dir]} or itself`);
+      } else if (to !== cell && wind.cells[to].changeSet[OPPOSITE[dir]] !== cell) {
+        errors.push(`${where}: cell ${cell} goes to ${to}, but ${to} doesn't come back`);
+      }
+    });
+  });
 }
 
 /**

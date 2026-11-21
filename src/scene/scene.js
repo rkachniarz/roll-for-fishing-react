@@ -516,7 +516,7 @@ export async function createScene(canvas, rand, look = {}) {
     lastPhase = cast.phase;
 
     const dt = lastFrame ? now - lastFrame : 16;
-    sky.update(now, dt);
+    sky.update(now, dt, typeof spotLook?.facing === 'number' ? spotLook.facing : null);
     lastFrame = now;
     dice.update(now);
     views.update(now);

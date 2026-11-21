@@ -87,6 +87,7 @@ and the art sheet at `/art.html` there.
 | `src/engine/sky.js` | Which way each spot looks (`look.facing`) and the shared 60° width of view; where a compass bearing falls in the picture (D166); the sun's and the moon's height and bearing, and the moon's 14-day phase (D167) |
 | `src/engine/moon.js` | The moon and the fish (D168): moon words, the moonlight at night, the anglers' moon tables (solunar periods) |
 | `src/engine/weather.js` | Weather drifting over each season's hex map (`hexmap.js`: the layout) |
+| `src/engine/wind.js` | The wind's direction (D176): a compass hexflower drifting like the weather (`content/rules/wind.json`) |
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |

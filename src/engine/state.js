@@ -19,9 +19,10 @@ import { knownKey, locationList } from './knowledge.js';
 import { fishWeight } from './fish.js';
 import { firstFullMoon } from './sky.js';
 import { WATER } from './features.js';
+import { windStart } from './wind.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 24;
+export const SAVE_VERSION = 25;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -32,9 +33,10 @@ export const SAVE_VERSION = 24;
  * ability rolls when used (D96) · champions: class fish appearing and acting (D114) ·
  * taste: a raw fish sitting badly, and which fish a bowl of stew tastes of (D138) ·
  * pool: the fish a spot's pool is stocked with (D139) · fight: a fish's manoeuvre on the line (D141) ·
- * condition: how fat or thin each fish is, for its weight (D146) · tank: who eats whom in the aquarium (D152).
+ * condition: how fat or thin each fish is, for its weight (D146) · tank: who eats whom in the aquarium (D152) ·
+ * wind: which way the wind blows (D176).
  */
-export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions', 'taste', 'pool', 'fight', 'condition', 'tank'];
+export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 'scatter', 'bait', 'features', 'events', 'abilities', 'champions', 'taste', 'pool', 'fight', 'condition', 'tank', 'wind'];
 
 /**
  * @typedef {import('./fish.js').FishInstance & { tries?: number, wild?: boolean, looks?: number, since?: number,
@@ -73,6 +75,7 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {string | null} spot
  * @property {number} time  Game minutes (time.js).
  * @property {import('./weather.js').Weather} weather
+ * @property {number} wind  The wind's cell on its hexflower (wind.js, D176): which way it blows. How strong is the weather's.
  * @property {Record<string, { id: string, count: number } | null>} equipped  Slot -> what is in it
  *   (equipment.js, D83). Equipped items aren't in the bags.
  * @property {{ id: string, count: number }[]} bags
@@ -173,6 +176,7 @@ export function newGame({ seed, character, month }) {
     spot: start.spot,
     time,
     weather,
+    wind: windStart(),
     equipped: {
       ...emptyEquipment(),
       ...Object.fromEntries(Object.entries(start.equipped).map(([slot, id]) => [slot, { id, count: 1 }])),
@@ -252,6 +256,8 @@ export function levelFor(xp) {
  * @type {Record<number, (save: any) => any>}
  */
 const MIGRATIONS = {
+  // 24 -> 25: the wind's direction (D176), from its start cell, with its own stream.
+  24: (save) => ({ ...save, wind: windStart(), streams: { ...save.streams, wind: deriveSeed(save.seed, 'wind') } }),
   // 1 -> 2: surface features (R14), with their own stream.
   1: (save) => ({ ...save, features: [], streams: { ...save.streams, features: deriveSeed(save.seed, 'features') } }),
   // 2 -> 3: seven equipment slots holding stacks (D83). Equipped bait used to
