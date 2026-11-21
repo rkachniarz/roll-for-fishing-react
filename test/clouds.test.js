@@ -61,7 +61,7 @@ test('the library has every cloud type, each with two or three patterns', () => 
   /** @type {Record<string, number>} */
   const kinds = {};
   for (const p of Object.values(CLOUD_PATTERNS)) kinds[p.kind] = (kinds[p.kind] ?? 0) + 1;
-  for (const kind of ['heap', 'tower', 'mass', 'layer', 'wisp', 'sheet', 'rain', 'storm']) {
+  for (const kind of ['heap', 'tower', 'mass', 'layer', 'wisp', 'sheet', 'deck', 'rain', 'storm']) {
     assert.ok(kinds[kind] >= 2 && kinds[kind] <= 3, `${kind}: ${kinds[kind] ?? 0} patterns`);
   }
 });
@@ -116,7 +116,10 @@ test('every pattern paints in every band, in its ramp\'s four tones, the same fo
       assert.ok(g1.data.every((t) => t <= 4));
       if (p.full) {
         assert.equal(g1.w, SKY_W, `${id}: a backdrop spans the painting`);
-        assert.equal(filled, g1.w * g1.h, `${id}: a backdrop hides the whole sky`);
+        if (p.open) {
+          // A deck: mostly cloud, the sky showing here and there.
+          assert.ok(filled > 0.7 * g1.w * g1.h && filled < g1.w * g1.h, `${id} (${band}): ${filled} of ${g1.w * g1.h} pixels cloud`);
+        } else assert.equal(filled, g1.w * g1.h, `${id}: a backdrop hides the whole sky`);
       } else assert.ok(g1.w < SKY_W && g1.h < 80, `${id} (${band}): ${g1.w}×${g1.h}`);
       assert.ok(a.w > 0);
     }
@@ -143,4 +146,25 @@ test('layOutSky fills about the cover asked, more clouds far off, a backdrop whe
   const overcast = layOutSky(skySpec({ clouds: 4 }, 'winter'), rand, 110, gridOf);
   assert.ok(overcast.backdrop && CLOUD_PATTERNS[overcast.backdrop].full);
   assert.deepEqual(layOutSky(skySpec({ clouds: 0 }, 'winter'), rand, 110, gridOf), { backdrop: null, clouds: [] });
+});
+
+test('a dry overcast in spring and summer is a deck with sky showing; a rainy one the grey ceiling', () => {
+  for (const season of ['spring', 'summer']) {
+    const dry = skySpec({ clouds: 4, precipitation: 0 }, season);
+    assert.equal(dry.from, 'table');
+    assert.ok(dry.patterns.some((p) => CLOUD_PATTERNS[p].open), `${season}: no deck`);
+    assert.equal(dry.veil, sky.open.veil, 'the deck hides the sun by its own pixels');
+    const rainy = skySpec({ clouds: 4, precipitation: 2 }, season);
+    assert.equal(rainy.from, 'rainy');
+    assert.ok(rainy.patterns.every((p) => CLOUD_PATTERNS[p].kind === 'sheet'));
+    assert.equal(rainy.veil, sky.levels[4].veil);
+    assert.equal(skySpec({ clouds: 4, precipitation: 3 }, season).from, 'wet');
+  }
+  // No level mixes an open backdrop with a closed one: the veil would suit only one of them.
+  for (const [id, season] of Object.entries(sky.seasons)) {
+    season.levels.forEach((/** @type {string[]} */ patterns, level) => {
+      const full = patterns.filter((p) => CLOUD_PATTERNS[p].full);
+      assert.ok(full.every((p) => CLOUD_PATTERNS[p].open) || full.every((p) => !CLOUD_PATTERNS[p].open), `${id}, level ${level}`);
+    });
+  }
 });

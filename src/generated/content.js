@@ -14829,8 +14829,8 @@ export const content = {
               "mass-c"
             ],
             [
-              "sheet-a",
-              "layer-a"
+              "deck-a",
+              "deck-b"
             ],
             [
               "storm-a",
@@ -14868,9 +14868,8 @@ export const content = {
               "mass-b"
             ],
             [
-              "rain-a",
-              "rain-b",
-              "scud-a"
+              "deck-b",
+              "deck-a"
             ],
             [
               "storm-a",
@@ -14965,6 +14964,19 @@ export const content = {
           "rain-b",
           "scud-a"
         ]
+      },
+      "rainy": {
+        "precipitation": 2,
+        "level": 4,
+        "patterns": [
+          "sheet-a",
+          "sheet-b"
+        ]
+      },
+      "open": {
+        "veil": 1,
+        "sunHides": 0.75,
+        "glints": 0.45
       },
       "fog": [
         {

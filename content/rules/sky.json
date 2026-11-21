@@ -21,7 +21,7 @@
         ["heap-a", "heap-c", "wisp-a"],
         ["heap-a", "heap-b", "heap-c"],
         ["mass-a", "heap-b", "tower-c", "mass-c"],
-        ["sheet-a", "layer-a"],
+        ["deck-a", "deck-b"],
         ["storm-a", "scud-a"]
       ]
     },
@@ -35,7 +35,7 @@
         ["heap-a", "heap-c"],
         ["heap-a", "heap-b", "tower-a", "tower-c"],
         ["mass-a", "tower-a", "tower-b", "mass-b"],
-        ["rain-a", "rain-b", "scud-a"],
+        ["deck-b", "deck-a"],
         ["storm-a", "storm-b"]
       ]
     },
@@ -69,6 +69,8 @@
     }
   },
   "wet": { "precipitation": 3, "level": 4, "patterns": ["rain-a", "rain-b", "scud-a"] },
+  "rainy": { "precipitation": 2, "level": 4, "patterns": ["sheet-a", "sheet-b"] },
+  "open": { "veil": 1, "sunHides": 0.75, "glints": 0.45 },
   "fog": [
     { "max": 2, "patterns": ["fog-b"], "veil": 0.15 },
     { "min": 3, "patterns": ["fog-a"], "veil": 0 }

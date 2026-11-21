@@ -24,6 +24,26 @@ Items with no note are left alone.
 
 Newest first.
 
+## A dry overcast in spring and summer shows blue (2026-11-21, after D170)
+
+The owner: the overcast photo was of a rainy day; a dry spring or summer overcast (their two new photos) is not all
+cloud, blue shows here and there. Calls Claude made:
+
+- **Two new patterns, a new kind, `deck`** (`src/scene/clouds.js`): rows of cells over the whole sky, each lit from
+  above and a little from the left, smaller and flatter row by row towards the horizon, running into a pale haze
+  over it; where a broad noise thins the deck, the sky shows, mostly in the gaps between cells. `deck-a` (the grey
+  photo): big soft grey cells, low contrast, broad paler and darker stretches, a few larger holes. `deck-b` (the
+  white photo): small bright white cells, grey between them, more small blue gaps. Their numbers (cell sizes, how
+  much opens, contrast) are Claude's tuning by eye against the photos.
+- **Which shows when:** spring and summer at clouds 4 list both (before: spring a grey sheet and a layer, summer rain
+  cloud). Autumn and winter keep the grey ceiling. **A new rule, `rainy`** in `content/rules/sky.json`: at clouds 4
+  with light rain (precipitation 2) any season shows the grey ceiling (`sheet-a`, `sheet-b`); steady rain (3) and
+  more is still rain cloud. Moist air (1) counts as dry: say if it should be the ceiling.
+- **The sun in the holes:** a deck is drawn over the sun and the moon, which show only through its holes, so they are
+  not veiled as well (`open.veil` 1). With the sun off the picture, a cloud is over it 75% of the time
+  (`open.sunHides`); the water's glints flick at 45% (`open.glints`, between mostly cloudy's and overcast's).
+  The moonlight on the water still goes by the level, as before.
+
 ## The overcast redrawn from the owner's photo (2026-11-21, after D170)
 
 The owner: the overcast showed a sine-wave pattern, and too much spray-can scatter. Calls Claude made:

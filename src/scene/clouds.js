@@ -11,7 +11,10 @@
 // towering heaps stacked like cauliflower over a dark base; lumpy grey layers
 // (stratocumulus); high wisps and hooked mares' tails (cirrus); flat grey
 // sheets (stratus); rain cloud with curtains of rain under a dark base
-// (nimbostratus); and the heavy dark rolls of a storm overcast.
+// (nimbostratus); and the heavy dark rolls of a storm overcast. The owner's
+// photos give the overcast of a dry spring or summer day: a deck of soft
+// grey or bright white cells, smaller towards the horizon, with blue here and
+// there between them.
 //
 // A grid holds tones, 0 for nothing and 1 (lightest) to 4 (darkest); the
 // season's palette over a pattern's ramp gives the colours. Randomness comes
@@ -36,7 +39,7 @@ const dither = (x, y) => (BAYER[y & 3][x & 3] + 0.5) / 16;
  * @typedef {{ w: number, h: number, data: Uint8Array }} CloudGrid  Tones row by row: 0 nothing, 1 lightest to 4 darkest.
  * @typedef {'far' | 'mid' | 'near'} Band  How far off a cloud is: far ones sit low over the horizon, small and flat.
  * @typedef {'white' | 'grey' | 'ceiling' | 'storm'} Ramp
- * @typedef {'heap' | 'tower' | 'mass' | 'layer' | 'wisp' | 'scud' | 'sheet' | 'rain' | 'storm' | 'fog'} Kind
+ * @typedef {'heap' | 'tower' | 'mass' | 'layer' | 'wisp' | 'scud' | 'sheet' | 'deck' | 'rain' | 'storm' | 'fog'} Kind
  * @typedef {{ x: number, y: number, r: number, ry?: number }} Puff  A round lump: centre and radius, in units.
  */
 
@@ -254,6 +257,83 @@ function overcast(rand, h, o) {
     },
     SEAM,
   );
+}
+
+/**
+ * A deck of cloud cells over the whole sky, blue showing through here and
+ * there (the owner's photos of a dry overcast in spring and summer): rows of
+ * soft cells, each lit from above and a little from the left, smaller and
+ * flatter row by row towards the horizon; between them the deck's shaded
+ * underside, or, where a broad noise thins the deck, the sky. Rows wrap
+ * across the 320 pixels, each a whole number of cells.
+ * @param {() => number} rand @param {number} h
+ * @param {{ top: number, bottom: number, aspect: number, holes: number, solid: number, contrast: number, bright: number, gap: number, cells: number, broad: number }} o
+ *   `top`, `bottom`: a row's height at the top of the sky and at the horizon, in pixels; `aspect`: a cell's width over
+ *   its row's height; `holes`: how much of the deck opens to the sky (-1 none, 1 all); `solid`: how far into a cell a
+ *   hole can eat (less is further); `contrast`: how much the light shapes a cell; `bright`: lifts every tone;
+ *   `gap`: the shaded underside's lightness; `cells`: the hole noise's coarsest cells across; `broad`: how much broad
+ *   paler and darker stretches show across the deck.
+ * @returns {CloudGrid}
+ */
+function deck(rand, h, o) {
+  /** @type {{ y: number, rh: number, puffs: { x: number, y: number, rx: number, ry: number }[] }[]} */
+  const rows = [];
+  for (let y = -o.top * 0.4; y < h + o.bottom; ) {
+    const v = Math.max(0, y / h);
+    const rh = o.bottom + (o.top - o.bottom) * (1 - v) ** 1.6;
+    const n = Math.max(3, Math.round(SKY_W / (rh * o.aspect)));
+    const cw = SKY_W / n;
+    const shift = rand() * cw;
+    const puffs = Array.from({ length: n }, (_, i) => ({
+      x: shift + i * cw + (rand() - 0.5) * cw * 0.5,
+      y: y + rh / 2 + (rand() - 0.5) * rh * 0.35,
+      rx: cw * between(rand, 0.5, 0.72),
+      ry: rh * between(rand, 0.55, 0.8),
+    }));
+    rows.push({ y: y + rh / 2, rh, puffs });
+    y += rh * between(rand, 0.75, 0.95);
+  }
+  const thin = skyNoise(rand, h, o.cells, 1.6);
+  const broad = skyNoise(rand, h, 3, 2);
+  const grain = wrapNoise(rand, 40, 3, h);
+  const w = SKY_W;
+  const data = new Uint8Array(w * h);
+  for (let y = 0; y < h; y++) {
+    const near = rows.filter((r) => Math.abs(r.y - y) < r.rh * 1.3);
+    // Low down the deck closes up and its cells go too small for grain.
+    const v = y / h;
+    const close = 0.6 * v * v;
+    const fine = 0.12 * (1 - v);
+    for (let x = 0; x < w; x++) {
+      let best = null;
+      let bestD = Infinity;
+      for (const row of near) {
+        for (const p of row.puffs) {
+          let dx = (((x + 0.5 - p.x) % w) + w) % w;
+          if (dx > w / 2) dx -= w;
+          const d = Math.hypot(dx / p.rx, (y + 0.5 - p.y) / p.ry);
+          if (d < bestD) {
+            bestD = d;
+            best = { nx: dx / p.rx, ny: (y + 0.5 - p.y) / p.ry };
+          }
+        }
+      }
+      const inCell = best && bestD < 1;
+      const open = thin(x, y).blotch + close + (inCell ? (1 - bestD) * o.solid : 0) + (dither(x, y) - 0.5) * 0.05;
+      if (open < o.holes) continue;
+      const tone = o.broad * broad(x, y).blotch + fine * grain(x, y);
+      let s;
+      if (inCell && best) {
+        const lit = -best.ny * 0.75 - best.nx * 0.35;
+        s = 0.55 + o.bright + lit * o.contrast - bestD * bestD * 0.25 + tone;
+      } else s = o.gap + 0.35 * v + tone;
+      // Over the horizon the cells run together into a pale haze.
+      const haze = Math.max(0, (v - 0.8) / 0.2);
+      s = s + (0.3 - s) * haze * haze + (dither(x, y) - 0.5) * SEAM * 2;
+      data[y * w + x] = s > 0.45 ? 1 : s > 0.05 ? 2 : s > -0.35 ? 3 : 4;
+    }
+  }
+  return { w, h, data };
 }
 
 /**
@@ -702,9 +782,10 @@ function wispFan(rand) {
 // ---------- The library ----------
 
 /**
- * @typedef {{ kind: Kind, ramp: Ramp, full?: boolean, place?: { top: number, bottom: number, speed: number },
+ * @typedef {{ kind: Kind, ramp: Ramp, full?: boolean, open?: boolean, place?: { top: number, bottom: number, speed: number },
  *   paint: (rand: () => number, band: Band, h: number) => CloudGrid }} CloudPattern
  *   `full`: a backdrop over the whole sky, `h` rows tall; the others are single clouds, `h` unused.
+ *   `open`: a backdrop with sky showing through it, drawn over the sun and the moon like a single cloud.
  *   `place`: where it sits, if not where its kind does (PLACE).
  */
 
@@ -747,6 +828,23 @@ export const CLOUD_PATTERNS = {
     ramp: 'ceiling',
     full: true,
     paint: (rand, _band, h) => overcast(rand, h, { veins: 0.15, blotch: 0.45, cells: 5 }),
+  },
+  // A dry overcast, blue here and there (the owner's photos, spring and summer). Soft grey cells, large and
+  // low in contrast, the deck thinning to blue-grey holes in a few places.
+  'deck-a': {
+    kind: 'deck',
+    ramp: 'grey',
+    full: true,
+    open: true,
+    paint: (rand, _band, h) => deck(rand, h, { top: 13 * SKY_SIZE, bottom: 2.5, aspect: 2.4, holes: -0.42, solid: 0.7, contrast: 0.25, bright: -0.05, gap: 0.05, cells: 3, broad: 0.45 }),
+  },
+  // Bright white cells in rows (altocumulus), shaded grey between, tiny towards the horizon, more blue between them.
+  'deck-b': {
+    kind: 'deck',
+    ramp: 'white',
+    full: true,
+    open: true,
+    paint: (rand, _band, h) => deck(rand, h, { top: 7 * SKY_SIZE, bottom: 1.6, aspect: 1.9, holes: -0.22, solid: 0.9, contrast: 0.7, bright: 0, gap: -0.3, cells: 6, broad: 0.2 }),
   },
   // Rain cloud (nimbostratus): a dark base, curtains of rain hanging from it to the horizon.
   'rain-a': {
@@ -898,7 +996,7 @@ const VARIANTS = 5;
  * @property {number} dusk  How much of the night tint the clouds bring.
  * @property {number} drift  How fast the clouds go, times the wind's.
  * @property {boolean} low  Kept low over the horizon.
- * @property {'fog' | 'description' | 'wet' | 'table'} from  Which rule picked the patterns.
+ * @property {'fog' | 'description' | 'wet' | 'rainy' | 'table'} from  Which rule picked the patterns.
  */
 
 /**
@@ -918,7 +1016,7 @@ const holds = (range, level) => level >= (range.min ?? 0) && level <= (range.max
 /**
  * Which patterns show, and how, for a weather in a season: fog first (it hides
  * the sky whatever the level), then a description that names a sky, then rain
- * cloud, then the season's table.
+ * cloud, then the grey ceiling of a rainy overcast, then the season's table.
  * @param {{ clouds: number, precipitation?: number, wind?: number, description?: string, season?: string, cell?: number, tags?: string[] }} weather
  * @param {string} season
  * @returns {SkySpec}
@@ -955,8 +1053,23 @@ export function skySpec(weather, season) {
       from: 'description',
     };
   }
-  if (level === rules.wet.level && (weather.precipitation ?? 0) >= rules.wet.precipitation) return { ...base, patterns: rules.wet.patterns, from: 'wet' };
-  return { ...base, patterns: seasonRules.levels[level], from: 'table' };
+  const rain = weather.precipitation ?? 0;
+  if (level === rules.wet.level && rain >= rules.wet.precipitation) return { ...base, patterns: rules.wet.patterns, from: 'wet' };
+  if (level === rules.rainy.level && rain >= rules.rainy.precipitation) return { ...base, patterns: rules.rainy.patterns, from: 'rainy' };
+  return openSky({ ...base, patterns: seasonRules.levels[level], from: 'table' });
+}
+
+/**
+ * A sky whose backdrops all let the sky through (a dry overcast's deck): the
+ * sun, the moon and the stars show in its holes and hide behind its cloud,
+ * as behind single clouds, so they aren't veiled as well.
+ * @param {SkySpec} spec @returns {SkySpec}
+ */
+function openSky(spec) {
+  const full = spec.patterns.filter((id) => CLOUD_PATTERNS[id]?.full);
+  if (!full.length || !full.every((id) => CLOUD_PATTERNS[id].open)) return spec;
+  const o = content.rules.sky.open;
+  return { ...spec, veil: o.veil, sunHides: o.sunHides, glints: o.glints };
 }
 
 /** The dusk a cloud level brings (black's, D160), for the tints. @param {number} clouds */

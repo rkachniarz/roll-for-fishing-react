@@ -558,7 +558,7 @@ section(
 // still water's mirror, painted into the same scene (docs/art.md's limit).
 section(
   'Clouds (12.5)',
-  'Clouds drawn as code from references on Wikimedia Commons (docs/REVIEW.md names them): fair-weather heaps, towering heaps, lumpy grey layers, high wisps, flat grey sheets, rain cloud and a storm’s dark overcast (src/scene/clouds.js), picked per season and cloud level by content/rules/sky.json, in the season’s palette. A description that names a sky has its own patterns; fog hides the sky; black brings a dusk. The live scene drifts with the wind; a new weather fades in over the old. Noon, facing the spot, unless the caption says otherwise.',
+  'Clouds drawn as code from references on Wikimedia Commons (docs/REVIEW.md names them): fair-weather heaps, towering heaps, lumpy grey layers, high wisps, flat grey sheets (a rainy overcast), decks of cells with blue between (a dry one, the owner’s photos), rain cloud and a storm’s dark overcast (src/scene/clouds.js), picked per season and cloud level by content/rules/sky.json, in the season’s palette. A description that names a sky has its own patterns; fog hides the sky; black brings a dusk. The live scene drifts with the wind; a new weather fades in over the old. Noon, facing the spot, unless the caption says otherwise.',
   async (body) => {
     const reedy = facingOf('lake', 'reedy-shore');
     const pond = facingOf('lake', 'still-water');
@@ -574,6 +574,8 @@ section(
     }
     moments.push(
       { caption: 'autumn, overcast with steady rain: rain cloud', world: at('autumn', { clouds: 4, precipitation: 3 }) },
+      { caption: 'spring, overcast with light rain: the grey ceiling (a dry one shows blue)', world: at('spring', { clouds: 4, precipitation: 2 }) },
+      { caption: 'summer, overcast at 17:00, turned west: the sun in the deck’s holes', world: at('summer', { clouds: 4 }, 17, 270) },
       { caption: 'black at 16:00 in summer, turned west: the dusk it brings', world: at('summer', { clouds: 5, precipitation: 4 }, 16, 270) },
       { caption: 'thick fog (autumn, clouds 4): the sky hidden', world: at('autumn', { clouds: 4, precipitation: 1, tags: ['fog'] }) },
       { caption: 'cold mist (winter, clouds 1): the sky hidden', world: at('winter', { clouds: 1, precipitation: 1, tags: ['fog'] }) },

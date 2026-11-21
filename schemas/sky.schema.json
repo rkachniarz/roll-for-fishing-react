@@ -5,7 +5,7 @@
   "definitions": {
     "colour": { "type": "string", "pattern": "^#[0-9a-f]{6}$" },
     "patterns": {
-      "description": "Pattern ids from src/scene/clouds.js, such as heap-a. A full-sky pattern (sheet, rain, storm, fog) is the backdrop; the others are scattered over the sky (or over that backdrop) until they cover the level's `cover`.",
+      "description": "Pattern ids from src/scene/clouds.js, such as heap-a. A full-sky pattern (sheet, deck, rain, storm, fog) is the backdrop; the others are scattered over the sky (or over that backdrop) until they cover the level's `cover`.",
       "type": "array",
       "items": { "type": "string", "pattern": "^[a-z]+-[a-z]$" },
       "uniqueItems": true
@@ -74,6 +74,28 @@
       "required": ["precipitation", "level", "patterns"],
       "additionalProperties": false
     },
+    "rainy": {
+      "description": "The grey ceiling of a rainy day: at cloud `level` with precipitation at `precipitation` or more (and less than wet's), these patterns show in place of the season's.",
+      "type": "object",
+      "properties": {
+        "precipitation": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "level": { "$ref": "#/definitions/level" },
+        "patterns": { "$ref": "#/definitions/patterns" }
+      },
+      "required": ["precipitation", "level", "patterns"],
+      "additionalProperties": false
+    },
+    "open": {
+      "description": "A sky whose backdrops let the sky through (deck, the dry overcast): the sun, the moon and the stars show in its holes and hide behind its cloud, so these replace the level's `veil`, `sunHides` (when the sun is off the picture) and `glints`.",
+      "type": "object",
+      "properties": {
+        "veil": { "type": "number", "minimum": 0, "maximum": 1 },
+        "sunHides": { "type": "number", "minimum": 0, "maximum": 1 },
+        "glints": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "required": ["veil", "sunHides", "glints"],
+      "additionalProperties": false
+    },
     "fog": {
       "description": "A weather tagged fog hides the sky whatever the cloud level: the first entry whose min..max holds the level gives the patterns, and `veil`, how much of the sun shows through.",
       "type": "array",
@@ -111,6 +133,6 @@
       }
     }
   },
-  "required": ["id", "levels", "seasons", "wet", "fog", "descriptions"],
+  "required": ["id", "levels", "seasons", "wet", "rainy", "open", "fog", "descriptions"],
   "additionalProperties": false
 }

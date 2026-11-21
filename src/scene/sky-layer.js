@@ -389,8 +389,10 @@ export function createSkyLayer(rand) {
   /**
    * One sky of clouds: what shows for a weather, fading in over the last.
    * @typedef {{ sprite: Sprite, twin: Sprite, x: number, y: number, w: number, h: number, speed: number, grid: import('./clouds.js').CloudGrid }} Drifting
-   * @typedef {{ key: string, spec: import('./clouds.js').SkySpec, parts: Container[], backdrop: { a: Sprite, b: Sprite, ta: Sprite, tb: Sprite, x: number } | null,
-   *   items: Drifting[], born: number, fade: boolean, backdropId: string | null }} CloudSky
+   * @typedef {{ key: string, spec: import('./clouds.js').SkySpec, parts: Container[],
+   *   backdrop: { a: Sprite, b: Sprite, ta: Sprite, tb: Sprite, x: number, grid: import('./clouds.js').CloudGrid } | null,
+   *   items: Drifting[], born: number, fade: boolean, backdropId: string | null, open: boolean }} CloudSky
+   *   `open`: the backdrop lets the sky through (a deck), so it goes over the sun and the moon and covers only where drawn.
    */
   /** @type {CloudSky | null} */
   let sky = null;
@@ -422,7 +424,8 @@ export function createSkyLayer(rand) {
     clouds.addChild(front);
     mirrorClouds.addChild(mirrorBase, mirrorFront);
     /** @type {CloudSky} */
-    const s = { key: specKey, spec, parts: [base, front, mirrorBase, mirrorFront], backdrop: null, backdropId: layout.backdrop, items: [], born: now, fade };
+    const open = Boolean(layout.backdrop && CLOUD_PATTERNS[layout.backdrop].open);
+    const s = { key: specKey, spec, parts: [base, front, mirrorBase, mirrorFront], backdrop: null, backdropId: layout.backdrop, items: [], born: now, fade, open };
     /** @param {Sprite} t @param {number} y */
     const turn = (t, y) => {
       t.scale.y = -1;
@@ -431,11 +434,12 @@ export function createSkyLayer(rand) {
     if (layout.backdrop) {
       const tex = cloudTexture(layout.backdrop, 'mid', 0, spec.palette, season);
       const [a, b, ta, tb] = [0, 1, 2, 3].map(() => new Sprite(tex));
-      base.addChild(a, b);
-      mirrorBase.addChild(ta, tb);
+      // A deck goes over the sun and the moon, which show only in its holes.
+      (open ? front : base).addChild(a, b);
+      (open ? mirrorFront : mirrorBase).addChild(ta, tb);
       turn(ta, 0);
       turn(tb, 0);
-      s.backdrop = { a, b, ta, tb, x: Math.floor(rand() * SKY_W) };
+      s.backdrop = { a, b, ta, tb, x: Math.floor(rand() * SKY_W), grid: gridOf(layout.backdrop, 'mid', 0) };
     }
     for (const c of layout.clouds) {
       const tex = cloudTexture(c.pattern, c.band, c.variant, spec.palette, season);
@@ -475,9 +479,14 @@ export function createSkyLayer(rand) {
   /** Whether a cloud drawn now covers the point (in the painting's pixels). @param {number} x @param {number} y */
   function cloudAt(x, y) {
     if (!sky) return false;
-    if (sky.backdrop) return true;
+    if (sky.backdrop && !sky.open) return true;
     const px = Math.round(x);
     const py = Math.round(y);
+    if (sky.backdrop) {
+      const g = sky.backdrop.grid;
+      const lx = (((px - Math.round(sky.backdrop.x)) % SKY_W) + SKY_W) % SKY_W;
+      if (py >= 0 && py < g.h && g.data[py * g.w + lx]) return true;
+    }
     for (const c of sky.items) {
       const lx = px - Math.round(c.x);
       const ly = py - c.y;
@@ -716,7 +725,7 @@ export function createSkyLayer(rand) {
     // A cloud over the sun: the clouds drawn decide while the sun is on the
     // picture; off it, spells of shade come and go as often as the sky says.
     const sunOnPicture = facing !== null && Math.abs(shown.sunOff) <= half && shown.sunAlt > -2;
-    if (!spec || !sky || sky.backdrop || shown.sunAlt <= 0) sunHidden = false;
+    if (!spec || !sky || (sky.backdrop && !sky.open) || shown.sunAlt <= 0) sunHidden = false;
     else if (sunOnPicture) sunHidden = cloudAt(sunX, sunY);
     else if (now >= spellUntil || snapping) {
       sunHidden = rand() < spec.sunHides;
@@ -812,7 +821,7 @@ export function createSkyLayer(rand) {
     },
     /** How much the light dims for a cloud over the sun, for the tints (src/scene/sky.js): it comes and goes. */
     shade() {
-      return sky && !sky.backdrop && shown.sunAlt > 0 ? (1 - sunLight) * SUN_SHADE : 0;
+      return sky && (!sky.backdrop || sky.open) && shown.sunAlt > 0 ? (1 - sunLight) * SUN_SHADE : 0;
     },
     /** How many of the water's glints still flick: fewer under an overcast, and in a cloud's shade (D170). */
     glints() {
