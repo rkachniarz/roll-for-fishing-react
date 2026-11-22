@@ -9,6 +9,67 @@ Item ideas, a hundred cut to twenty, are in [ideas/items.md](ideas/items.md).
 
 Newest first.
 
+## Simulating who comes to town (2026-11-19)
+
+The owner's question: the lands around the town are a device to bring interesting people into town and food into the
+perpetual stew. Everyone could simply follow a slightly randomised schedule, but what more could be simulated? The
+weather already is, so it could tell how good a harvest the nearby farmers have had. Below is Claude's outline in
+answer; nothing here is decided.
+
+**In short:** not many simulated people, but a handful of slow-moving numbers about the world. Each is pushed by
+something the game already simulates; each group of visitors comes by its calendar and reacts to those numbers; the
+stew is where it all ends up.
+
+**What there is to build on:**
+
+- **The weather** drifts every half hour over a 19-cell map per season (`src/engine/weather.js`), with temperature,
+  rain, wind and clouds; seasons are 28 days.
+- **Things that live on while the player is away:** the pools take a turn with each part of the day in `stepTime`
+  (`src/engine/passage.js`, `stepPools`). A world ledger would take its turn the same way, once a day.
+- **Schedules that store nothing:** a vendor's days and days away are drawn from the seed per day
+  (`src/engine/schedule.js`). That covers the "simple, slightly random schedule" already.
+- **The player can change the weather:** the Shaman calls weather up (D114), so a player could in principle save a dry
+  summer's harvest.
+
+**The shape:**
+
+1. **A world ledger.** A few numbers, stepped daily and kept in the save. They must be stored: the weather is a chain,
+   so a season's harvest can't be worked out from the clock afterwards. For example:
+   - the local harvest outlook, tallied from the weather over spring and summer (rain, heat, frost, hail);
+   - flocks and poultry, hit by hard winters;
+   - the river, from the water's temperature (already in the game), setting how much river fish the dwarves bring;
+   - the roads: snow and mud slow travellers, so the caravan can be late, and a late caravan before winter means no
+     mushrooms in the stew;
+   - unrest on the frontier: mostly a random walk, nudged by bad harvests; it moves soldiers, penal units and how wary
+     the Wild Folk are.
+2. **Groups, not individuals,** each with a calendar and reacting to the ledger. Settlers come with more sick and less
+   to trade after a poor harvest; tax collectors come after the harvest and take a share of it, so a lean year makes
+   for ugly scenes; the caravan leaves Ferrstad on fixed dates and the roads decide when it arrives.
+3. **A few named people with a memory:** the cat and the junk collector, using the counters those ideas need anyway.
+4. **The stew as a pantry:** kinds of ingredient with amounts, the groups putting food in and the guests eating it
+   ("Other guests at the stew", below, made general).
+
+**Distance as a delay.** News from far away arrives only with the people who carry it: how things stand in the
+Wildlands is learned when someone from there walks in. It costs nothing and makes the world feel big. A cheap guess
+for the far west's weather, Claude's and not the weather's: the Breadbasket has today what the town has tomorrow.
+
+**The catch: the player must be able to read it.** A simulation the player can't see just looks random. Every number
+in the ledger needs a voice: what the innkeeper grumbles about, what is in the stew today, a notice on the board, what
+travellers say over their bowls. That is where the writing goes, and what makes the simulation worth having.
+
+**What it would need from the owner:**
+
+1. The groups: for each, when they come, what they bring, what they want, and what changes them.
+2. Which numbers matter in the world (the list above is a guess to start from).
+3. The calendar, in 28-day seasons: the harvest, the caravan's dates, tax time.
+4. How the player hears of it: gossip, the board, the stew, or all three.
+5. What the player can change: selling fish in a lean year, the Shaman's rain, stocking the stew.
+
+**Where to start:** one chain from end to end. The weather tallies the local harvest, the harvest decides what the
+villagers put in the stew, and the innkeeper says one line about it. Small, it shows whether the idea is fun, and the
+caravan can follow. It would need a new random stream, so a new `SAVE_VERSION` and its migration, and `npm run sim`
+could run years of the world to check the numbers don't run away.
+
 ## The town and the lands around it (2026-11-19)
 
 The town stands at a crossroads older than anyone's memory. This is where the road into the elven valley began (see
