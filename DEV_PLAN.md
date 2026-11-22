@@ -12,8 +12,8 @@ a plain generic sentence, a stand-in rule. A town of placeholder squares is bett
 listed under the creative task that will replace it, so nothing is forgotten; a placeholder that fits no task gets a
 new one.
 
-**Where things stand (2026-11-22):** Phases 1, 2, 3, 4, 5, 7, 10 and 12 are done, and so are the testers' fixes (T.1–T.4);
-Phases 6, 8, 9 and 11 have a few tasks each still open, listed below. Since Phase 12: the open water as the
+**Where things stand (2026-11-22):** Phases 1 to 7, 10 and 12 are done, and so are the testers' fixes (T.1–T.4);
+Phases 8, 9 and 11 have a few tasks each still open, listed below. Since Phase 12: the open water as the
 default scene (D171), three skies on the art sheet only (the special sky, the blood moon, the green sun, D173–D175),
 the wind's direction (D176) and waves that follow it (D177). Nothing is scheduled next; the open tasks below and the
 ideas under [From our talks](#from-our-talks-not-yet-planned) are the owner's to pick from. Claude's guesses are on
@@ -27,7 +27,7 @@ ideas under [From our talks](#from-our-talks-not-yet-planned) are the owner's to
 | `R1.1`… `§C.1`… | Vision, requirements, catalogues | [docs/spec.md](docs/spec.md) |
 | `PORTING-NOTES §n` | What carries over from the prototype, and its lessons | [docs/PORTING-NOTES.md](docs/PORTING-NOTES.md) |
 | `0.1`…, `T.n` | Finished phases and tasks, task by task | [docs/history.md](docs/history.md) |
-| `Q-n`, `6.x`–`11.x` | Open questions, development still to do | here |
+| `Q-n`, `8.x`–`11.x` | Open questions, development still to do | here |
 | `CR-n` | Creative work: art, writing, sound | here, [Creative work](#creative-work) |
 | | The owner's loose ideas: events, people, the story | [docs/ideas.md](docs/ideas.md), [docs/ideas/items.md](docs/ideas/items.md) |
 | | Questions about the town, many still open | [docs/town-questions.md](docs/town-questions.md) |
@@ -56,15 +56,8 @@ Building the requirements and the owner's ideas. Anything the creative track has
 
 **Done, in [docs/history.md](docs/history.md):** Phase 1, the feel trial; Phase 2, the engine core and the port;
 Phase 3, the core loop, playable on GitHub Pages; Phase 4, the art pipeline and the living scene; Phase 5, items
-and inventory; Phase 7, events; Phase 10, the night, the town and the stew; Phase 12, the map, the sun and the moon,
-the sky and its clouds; the testers' fixes, T.1–T.4. The done tasks of the phases below are there too.
-
-## Phase 6: Classes, levels, abilities, knowledge
-
-Done: 6.1–6.4, 6.6–6.8 (D96, D106, D107).
-
-- [ ] **6.5** Class-flavoured texts (R6.5): a string can have a version per class, falling back to the plain one;
-  the prototype's lists ported. New writing is CR-11.
+and inventory; Phase 6, classes, levels, abilities and knowledge; Phase 7, events; Phase 10, the night, the town and
+the stew; Phase 12, the map, the sun and the moon, the sky and its clouds; the testers' fixes, T.1–T.4. The done tasks of the phases below are there too.
 
 ## Phase 8: World and town
 
@@ -210,7 +203,6 @@ placeholder, it's added here.
 
 - [ ] **CR-10** Events: about ten more after the frog, the real quest chain (in place of 7.4's placeholder), the set
   pages (8.7), and the story (`docs/ideas.md`), with the town's visitors when they come.
-- [ ] **CR-11** Class-flavoured texts (R6.5): new lines for 6.5's mechanism, beyond the prototype's.
 - [ ] **CR-12** Names: the spots (placeholder names since D101), the "Greedy" and "Bent" marks on fish (D106), and the
   perks' names and texts (REVIEW.md lists them as Claude's). *From Phase 11: the Conservationist's and Look
   Underwater's descriptions, the Queasy debuff, the fight styles' journal and manoeuvre lines

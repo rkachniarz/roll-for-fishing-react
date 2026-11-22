@@ -138,7 +138,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   (Look Underwater) is offered among the universals (D139). *(D96)*
 - **R6.4** Abilities feel like the class: the Warrior overpowers fish, the Rogue goes after treasure, the Mage bends the
   odds.
-- **R6.5** Button and flavour texts vary by class (the prototype's lists are ported).
+- **R6.5** *Dropped (D181).* Was: button and flavour texts vary by class. Events and dialogue vary by class
+  themselves (`needs: class`, `{class}`).
 - **R6.6** Every number used in a calculation (stats, chances, timings, thresholds, table weights, cooldowns) is a game
   value that modifiers can change: items, consumables, buffs, perks, events, weather. Stats are base values; the
   modifiers on top are always derived from the state. *(D13, D20)*

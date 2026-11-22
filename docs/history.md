@@ -281,7 +281,7 @@ section each.
   went, and the content check keeps junk grey and without a use.
 - **5.6** The review of D8 (D179): the UI stays plain DOM; what is ahead for it is more of the same kind.
 
-## Phase 6: Classes, levels, abilities, knowledge (in progress)
+## Phase 6: Classes, levels, abilities, knowledge (done 2026-11-22)
 
 How it works is D96.
 
@@ -302,6 +302,7 @@ How it works is D96.
   a level in `rules/levels.json` or a perk or item with `revealResistance`, `revealBite` or `revealTreasure`.
 - **6.8** The fish's dice on the desk (D99, D107): once its roll shows, its d20s come in from the top right in teal;
   the resistance roll records its dropped dice from the same draws.
+- **6.5** Class-flavoured texts, dropped (D181): events and dialogue vary by class themselves.
 
 ## Phase 7: Events (done 2026-11-10)
 
