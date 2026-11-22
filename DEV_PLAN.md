@@ -2,7 +2,8 @@
 
 What's left to do. Tick boxes as work lands; record decisions in [docs/decisions.md](docs/decisions.md) rather than
 silently changing requirements. Within a phase, tasks are listed in the order they should be done; their numbers are
-only ids, so a task added later keeps its number wherever it lands.
+only ids, so a task added later keeps its number wherever it lands. Once a phase is done, its tasks move out of here
+into [docs/history.md](docs/history.md), and the owner's answers that shaped them are in the decisions they cite.
 
 **Two tracks (D105).** The plan is split in two: **development**, which builds the requirements and the owner's ideas,
 and **creative work**, the art, writing and sound. Development never waits for creative work. Where a task needs a
@@ -11,307 +12,11 @@ a plain generic sentence, a stand-in rule. A town of placeholder squares is bett
 listed under the creative task that will replace it, so nothing is forgotten; a placeholder that fits no task gets a
 new one.
 
-## Next up: the testers' fixes (2026-11-18)
-
-The owner's list after testing on phones, **built before Phase 12 goes on**, in this order, one task at a time (one
-fresh subagent per task). Every call Claude makes that isn't in the owner's words goes on docs/REVIEW.md; a decision
-per task goes in docs/decisions.md.
-
-- [x] **T.1** A tap on the scene closes an open pane, on a phone. Every mobile tester found it odd that they could cast
-  from under the equipment pane. *The owner's words:* "It is the player's responsibility to not open the bag when they
-  have a bobber out, and they can click twice in this case." **On a phone only:** the tap that closes the pane does
-  nothing else (no cast, no strike, no move in town); a second tap does. **On a wide screen (`fit` in `src/main.js`,
-  900 px and up) nothing changes:** there is room for everything there, so a tap on the scene keeps working with a
-  pane open. Any pane the button row opens and closes counts (character, bags, journal, perks…); the event dialog, the
-  map and the barter window keep their own rules. *Landed (D162):* `closedByTap` in `src/main.js`; Space unchanged.
-- [x] **T.2** A long press equips, on a phone, and every equippable item says how. *The owner's answers
-  (2026-11-18):* **a long press always equips** on a phone, as a right-click does with a mouse: an item in the bags
-  goes into its slot (a potion is drunk, as with the right-click), an equipped item goes back to the bags. **Dragging
-  goes on phones** (`src/ui/drag.js`); a mouse still drags. A fish in the bucket keeps its long-press options menu
-  (R21.1). **At the bottom of every equippable item's tooltip** while it is in the bags: "Long press to equip", in
-  slightly greyed-out italics. Claude's call: with a mouse it reads "Right-click to equip" (on REVIEW.md); the tooltip
-  goes by the last pointer used (`lastPointer` in `src/main.js`). *Landed (D163):* `hold` in `src/ui/drag.js`,
-  `quickMove` in `src/main.js`, `bagSlot` in `src/ui/links.js`.
-- [x] **T.3** Pick from a slot, as WoW's flyout. *The owner's words:* a tap or left click on a slot in the character
-  pane opens a list of every unequipped item in the bags that fits that slot; horizontally scrollable on a phone.
-  *The owner's answers (2026-11-18):* **with a mouse,** hovering an item in the list shows its tooltip and a click
-  equips it; **on a phone, the first tap shows the item's tooltip and a second tap on the same item equips it.** A tap
-  elsewhere closes the list. Equipping from it follows the same rules as anywhere else (not with the line out,
-  `error.busy`). Claude's calls, for REVIEW.md: what the list shows when nothing fits, and how the equipped item's own
-  tooltip is still reached on a phone. *Landed (D164):* `slotFlyout` in `src/ui/panels.js`, `showFlyout` and
-  `pickFor` in `src/main.js`, `pickSlot` in `src/ui/links.js`.
-- [x] **T.4** ~~The stew cooks, and the inn says good morning.~~ *Landed (D165), then taken back after testing
-  (D172): the stew's buff stands still in town and asleep instead; delayed effects wait for a busier town.* Was: *The owner's words:* fish put in the perpetual stew count
-  for a bowl only **two game hours after they went in** (cooking); putting a fish in gives a message on the lines of
-  "Thank you for the contribution - come back in some time to taste it", and **no longer leads to eating at once.**
-  Why: testers ate the stew and then slept until morning, which used up the buff's hours at once. **After sleeping
-  (at the inn or in your room), the inn's dialog opens with a morning greeting**, "Mornin' - don't leave on an empty
-  stomach!", with the stew among its choices (the owner's answer, 2026-11-18). Claude's calls, for REVIEW.md: each fish
-  in the pot keeps the time it went in; a bowl takes only the cooked fish and leaves the rest cooking; with nothing
-  cooked yet the bowl is refused with a line saying it's still cooking; fish already in the pot in an old save count
-  as cooked (a new `SAVE_VERSION` and its migration). The owner's lines get an editing pass in the fantasy voice,
-  keeping "Mornin'".
-
-## Then: Phase 12, the map, the sun and moon, the sky
-
-The owner's ask of 2026-11-16 (D160): clouds that follow the weather on the painted spots, and before them, where
-the sun and moon are. **Done in this order, one task at a time**, with the owner's refinement questions before each.
-The map comes first because it gives every painting a compass facing, and the sun, the moon and the clouds' light
-all depend on which way the player looks.
-
-- [x] **12.1** The map (was 8.1's map; the owner's hand drawing): the lake and the river with their spots on them,
-  in the map pane in place of today's plain list. Each spot gets a compass facing (`look.facing`, degrees), usually
-  looking across the water from the bank it is on, so spots on opposite shores look opposite ways. The river spots'
-  facings (across the river, or up or down it) wait on the owner's reference pictures (Q-42). A placeholder drawing
-  until CR-7.
-  *The map itself is in (D161, 2026-11-18): the owner's paper and outline over the whole screen, green and red
-  circles, the name at the top; the button from two places on; the river opening with the town. Still to do here:
-  the facings.*
-  *The owner's answers (2026-11-18), from their map with a V drawn at each spot, north up:* reedy shore 90° (E),
-  still water 35° (NE), rocky shore 335° (NNW), open water 270° (W), deep water 210° (SSW), river mouth 95° (E),
-  lower river 60° (ENE), upper river 25° (NNE), the tower's first pool 180° (S). The swamp and the town have none.
-  **One width of view for every spot**, Claude's pick 60° (REVIEW.md). Q-42 is settled by this.
-  *Landed (D166):* `look.facing` on each spot in `content/locations/`, `VIEW`, `facingOf` and `acrossView` in
-  `src/engine/sky.js`, `test/sky.test.js`.
-- [x] **12.2** The sun and the moon as engine numbers, with tests: their height and bearing at every half hour, as
-  seen from Gdynia (54.52° N, 18.53° E), the latitude that already sets sunrise and sunset (`SUN` in
-  `src/engine/time.js`, D85); the moon's phase. Worked out from the clock, never stored, except the moon's start if
-  it is rolled (Q-41): a new random draw means a new stream, so a new `SAVE_VERSION` and a migration that rolls it
-  for old saves. Some numbers that follow: the sun stands about 59° up at midsummer noon and 12° at midwinter noon,
-  so a summer noon sun is far above the picture and a winter one crawls along the trees; at midsummer it rises in
-  the north-east and sets in the north-west; the full moon rides high in winter and low in summer.
-  *The owner's answers (2026-11-18), Q-41:* **the moon's cycle is 14 game days,** two full moons a season, eight a
-  year. Claude's call (REVIEW.md): the first full moon falls on a rolled day (1d14), so it drifts against the
-  seasons' starts.
-  *Landed (D167):* `sunPosition`, `moonPosition`, `moonPhase`, `moonPhaseName`, `sunOf`, `moonOf`,
-  `firstFullMoon`, `MOON`, `HORIZON` in `src/engine/sky.js`; `roll14` in `src/dice.js`; `state.fullMoonAt`
-  (`SAVE_VERSION` 22, from the one-off stream `moon`); tests in `test/sky.test.js`.
-- [x] **12.3** The moon counts for the fish (the owner: "you know I want it to count for fish"). How is for the
-  refinement questions: a preference like the weather's (`prefers`), feeding in the pools (D157), the light at
-  night, or the anglers' moon tables (solunar periods).
-  *The owner's answers (2026-11-18):* **all four.** A phase preference like the weather's (`prefers`: full or new
-  moon); solunar periods (bites pick up around moonrise, moonset, and the moon overhead or underfoot); moonlight at
-  night (a bright moon lightens the night: some fish bite more under it, others less); and feeding in the pools
-  (D157), the moon changing who moves or feeds when the time steps on. The amounts and which fish are Claude's
-  calls, for REVIEW.md.
-  *Landed (D168):* `src/engine/moon.js` (`moonNow`, `moonWords`, `moonlight`, `solunarPeriod`), `moonHourAngle`
-  in `src/engine/sky.js`; `moonWords` and `prefers.moon` on fifteen fish; `content/rules/moon.json` (the periods'
-  buffs, their pull on the pools, the moonlight under clouds); the phase in the weather's tooltip;
-  `test/moon.test.js`.
-- [x] **12.4** The sky as its own layer, shared by every painted spot that shows sky (the pond and the reedy shore;
-  not the swamp, which has no sky, D160): back to front, the sky's colour, the sun or moon, the clouds, then a path of
-  glitter on the water when the sun or moon is low in front of the player. The paintings' own baked-in clouds go.
-  The land isn't relit (it is painted for a clear noon, docs/art.md); the tints do the light. Spots painted from now
-  on are painted without a sky, only their horizon, and their facing is settled before they are painted.
-  *Landed (D169):* `src/scene/sky-layer.js` (`createSkyLayer`: the sky's colour by the sun's height, the stars, the
-  sun and the moon with its phase, an empty `clouds` container for 12.5, the glitter); each sky-showing painting
-  gives `horizon` (row 110 for both), `skyline`, `waterLayer` and `isWater` and paints no sky; the scene passes the
-  game minute, `fullMoonAt` and the spot's facing; the art sheet's "The sky (12.4)" section; the verify check
-  "the sky layer". The numbers are on REVIEW.md. **For 12.5:** draw the clouds into the layer's `clouds`
-  container (over the sun and the moon, under the land); `cloudContext()` gives the world (time, season, weather,
-  facing), the horizon row, the painting's width and the sun's column and height; replace the stand-in `COVER`
-  (the sun, the moon and the stars fading with the cloud level).
-- [x] **12.5** Clouds that follow the weather (with CR-2):
-  - **A library of cloud types,** each with 2–3 patterns drawn as code: small fair-weather heaps, big towering heaps,
-    lumpy grey layers, high wisps, flat grey sheets, rain cloud. A table (`content/rules/sky.json`) lists, per season
-    and cloud level, which patterns can show, with the season's palette over them; that gives each level in each
-    season its 2–3 patterns without painting each one apart. The levels match the aviation words: a few, scattered,
-    broken (mostly cloudy), overcast.
-  - **Descriptions that name a sky are their own case** ("Scattered clouds rush through the sky", "Big, still
-    clouds…", "Sunlight breaks through in patches", "Low clouds hang heavy", "A grey blanket of cloud", "the sun
-    hides behind the clouds"): the same file maps a description's key to its pattern, over the table. The engine keeps
-    the description it picked (`src/engine/weather.js`), so the scene can tell. A test checks every description that
-    mentions cloud or sky has a case, and that the case suits every level its weather can roll (some roll a range).
-  - **Black (level 5) is an overcast of dark clouds that brings a dusk for as long as it lasts** (the night tint).
-    Nothing uses it yet; which weathers move up to it (Hail, Downpour, Heavy rainfall?) is the owner's call.
-    *The owner's answer (2026-11-18):* **Downpour and Hail** move up to level 5; Heavy rainfall stays.
-  - **Fog and mist hide the sky,** whatever the cloud level ("Thick fog soup" is clouds 4).
-  - **"The sun hides behind the clouds"** needs the sun from 12.2: light that comes and goes.
-  - **The water:** the pond's still water mirrors the clouds; overcast flattens the glints.
-  - **Changes blend or drift in** rather than cut; drifting clouds wrap across the side strips (D93). The same sky
-    after a reload isn't needed: the patterns draw from the scenery stream.
-  - **The swamp:** no sky; the cloud level may darken its tint a little, nothing more.
-  - **Later:** clouds lit orange from below at dusk; the tints do for now.
-  - **Later:** the special sky (D173), the magic of the land, on the art sheet only so far: how the game brings it
-    (a weather, an event, a place?), and how it looks by day.
-  - **Later:** the blood moon (D174), on the art sheet only so far: how often the game brings one, and whether it
-    does anything beyond the look.
-  - **Later:** the green sun (D175), on the art sheet only so far: how the game brings one on a cloudless, dry summer
-    day, and whether it does anything beyond the look.
-  *Landed (D170):* `src/scene/clouds.js` (the library, `CLOUD_PATTERNS`: heaps, towers, layers, wisps, sheets,
-  rain cloud, storm, scud, fog; `skySpec`, `layOutSky`); `content/rules/sky.json` with `schemas/sky.schema.json`
-  (per season and level the patterns and the palette; per level cover, veil, glints, how often the sun hides, the
-  dusk; rain cloud; fog; the 23 descriptions that name a sky); the clouds drawn, drifting and fading in
-  `src/scene/sky-layer.js` in place of `COVER`, the light coming and going with a cloud over the sun
-  (`src/scene/sky.js`'s `setShade`), black's dusk, the still water mirroring the sky (`mirrorSky`), fewer glints
-  under cloud; Downpour, Heavy downpour and Hail at clouds 5; the art sheet's "Clouds (12.5)"; the verify check
-  "the clouds"; `test/clouds.test.js`. The numbers are on REVIEW.md.
-
-**Where things stand (2026-11-19):** Phase 12 is complete. 12.1 is done: the map (D161) and every spot that shows sky has its compass
-facing, with one 60° width of view for all (D166, `src/engine/sky.js`). 12.2 is done: the sun's and the moon's
-height and bearing, and the moon's 14-day phase, worked out from the clock (D167, `src/engine/sky.js`). 12.3 is
-done: the moon counts for the fish, as a preference (full, new, moonlit, dark), the anglers' moon tables as buffs on
-the bar, the moonlight lifting the night's shadows, and the pools feeding and filling in the periods (D168,
-`src/engine/moon.js`). 12.4 is done: the sky is its own layer behind the still water and the reedy shore, with the
-sun, the moon in its phase, the stars and a path of glitter under a low sun or moon (D169, `src/scene/sky-layer.js`);
-the paintings' own skies and clouds went. 12.5 is done: clouds that follow the weather, from a library of cloud
-types drawn as code and a table per season and cloud level, descriptions that name a sky, fog hiding it, black
-bringing a dusk, and the still water mirroring it all (D170, `src/scene/clouds.js`, `content/rules/sky.json`).
-Since then, to test the sky in every facing: the open water (D171), the reedy shore's lake without the reeds, is the
-default scene for every spot without a painting of its own, each facing its own way, and the art sheet has a
-section to turn it by hand.
-
-## Phase 11, what the real species do
-
-The owner's list of 2026-11-14, from what we know about the real fish and plants, **easiest first and done in this
-order**, one at a time. **How we work through it:** once a task is pushed to GitHub, Claude asks the owner its
-refinement questions for the next one before starting it. The last task, a simulation of what's under the surface,
-is where the others may lead.
-
-- [x] **11.1** Taste (D138): a grade and a line per fish on how it eats, learned by eating it; the grade makes a bowl
-  and a raw fish's buff last longer or shorter; a parasite risk from raw freshwater fish.
-- [x] **11.13** The fish under the surface, and the wizard's Look Underwater (D139; the owner's addition, a first
-  step towards 11.12): each spot's pool is stocked with 2d6+3 fish when first looked at and kept (a fish a day, a
-  new roll each season and under two fish); the pool's fish are the shadows on the water and the dive's fish; the
-  look shows them, a shadow, then colours, then by name.
-- [x] **11.2** Conservation status (D140): two endangered fish per spot; the Conservationist perk shows it and pays
-  for letting them go, Luck twice and then XP.
-- [x] **11.3** How they fight on the line (D141): five styles that tilt the roll, a rare manoeuvre to answer in time
-  (likelier for famous fighters), the Rogue's showmanship, a calming draught and a paralysing rod.
-- [x] **11.4** Weight from length (D146): each species' published length-weight constants (FishBase); a caught fish has a
-  weight, and the journal and records show it.
-  *The owner's answers (2026-11-15):* shown everywhere to start with (the catch log line, the fish tooltip, the
-  journal with a heaviest-catch record beside the longest); each fish its own condition, a spread of about ±10%,
-  rolled hidden when the line goes out; only shown, no effect on the game; the constants looked up on FishBase per
-  species with the source noted, a close relative's where none is found, listed in REVIEW.md.
-- [x] **11.5** How they swim (D147): a speed and burst rate per species (a pike still then lunging, an eel slow and winding,
-  a trout holding against the current, bleak darting), in `src/scene/swim.js`.
-  *The owner's answers (2026-11-15):* everywhere fish swim (the aquarium, the dive, Look Underwater, the title, the
-  shadows on the water); numbers per species, not a handful of kinds, unless that costs performance.
-- [x] **11.6** Set your depth (the owner's idea; D148): at some level a perk lets the player set their weights for one of
-  the four depths (`swims`, D136), through Fish Find by depth (D137); the bottom depth also gives an extra chance of
-  something that isn't a fish, being nearest the bottom. Needs a way to pick the depth, likely an action-bar button.
-  *The owner's answers (2026-11-15):* **gear, not a perk:** a line in the line slot that can be adjusted, its tooltip
-  saying so in green ("Adjustable"). With one equipped, a button shows like a class skill's; it opens a small popup
-  drawing the line with its four depths as radio buttons. The chosen depth gets +10 Fish Find and the others −10 (as
-  the Heavyweight heavy weights), and the bottom adds a few % more non-fish. If the popup is too complicated, a bar
-  button that cycles the depths instead.
-- [x] **11.7** Spawning seasons (D149): each fish's breeding season (gathering, breeding colours, perhaps closed seasons or a
-  reward for letting a spawning fish go).
-  *The owner's answers (2026-11-15):* spawning fish **gather**: likelier at the spots they spawn in, their schools
-  showing as surface features more often (no breeding colours, release reward or closed season for now). **Weather-
-  driven:** a species spawns when the water passes its temperature, read from the weather's temperature, not by a
-  fixed season. The temperatures and timing **looked up** (FishBase or similar), the source noted; made-up fish get
-  marked placeholders. **The player isn't told**; a perk or an item may later let them know, and then the journal
-  shows it. **The water's temperature** follows the air's with a lag, on the weather's own temperature scale; kept
-  simple. The water is magical and never freezes.
-- [x] **11.8** Plants and fish together (D150): the plants on a spot draw certain fish (perch spawn on weed, tench live in
-  weed beds); marimo's luck from folklore.
-  *The owner's answers (2026-11-15):* **a spot's own plants** (the ones in its lists) make the fish that like them
-  likelier there; nothing for the player to do. Which fish like which plants **looked up** from what the real species
-  do, only the clear cases, the source noted. **Marimo:** +1 Luck while one is in the bags (not more for several),
-  hidden like all Luck. **Shown in the journal** once the fish is caught ("Lives in weed beds"), like the fight
-  style's line.
-- [x] **11.9** Shoaling (D151): shoal fish swim together and turn together, solitary ones alone; in the dive a shoal
-  scatters when one is struck.
-  *The owner's answers (2026-11-15):* **everywhere fish swim**, as 11.5, which it builds on. Which fish shoal
-  **looked up** from the real species (roach, bream, bleak, perch, whitefish, smelt shoal; pike, wels, burbot keep
-  alone), a mark per fish, the source noted; a species whose young shoal but adults don't counts as solitary.
-  **Looks only**, no change to the game. **The dive's scatter:** the rest bolt apart and swim fast for a moment, so
-  they're harder to tap until they settle; their rolls stay as rolled.
-- [ ] **11.10** Folklore events: the carp leaping the dragon gate, the catfish that shakes the earth, the archerfish
-  spitting insects off leaves. Writing work, so placeholders until the creative track. *The owner (2026-11-15):* to be used when
-  Legendary fish are worked on, somewhere down the line.
-- [x] **11.11** Who eats whom (D152): predators and prey in the aquarium (keeping them apart, small fish hiding from a passing
-  pike, perhaps one going missing).
-  *The owner's answers (2026-11-15):* **now and then** a predator in the room's aquarium eats a tank-mate small
-  enough for it (checked when the player comes back to the room, or by the game day), with a log line; rare enough to
-  sting, not punish. **A predator mark per species, looked up** from what it eats in the wild, the source noted; it
-  can eat only fish well under its own length (less than half, a guess). **Keeping them apart:** putting a fish in
-  the tank beside one that would eat it, or that it would eat, **warns first**, as WoW's "are you sure"; and **fed fish
-  don't hunt**: a bait item used on the tank keeps the predators from eating for a few days. **Hiding everywhere fish
-  swim**: in the tank, the dive and Look Underwater, small fish keep away from a predator swimming near (built on 11.5
-  and 11.9).
-- [x] **11.12** A simulation of what's under the surface at all times (D157): each spot's living population moving with the
-  time, weather and season, and a cast drawing from it. Touches the engine's core, the save, D63's rolling on the cast,
-  and balance.
-  *The owner's answers (2026-11-15, polls; 11.14, D156, built the pool's size, its turning over and aiming):*
-  **Bites are mostly the pool's:** the fish that bites lives there; a passer-by from the spot's table fills the gap,
-  so the bite rate never drops when a pool is thin: a spot can't be fished out, only changed in what it gives.
-  **A pool that is fished thins and refills slowly:** 1d4 - 1 fish arrive with each part of the day, up to its
-  number (Claude to measure how many leave on their own and report, so an unfished pool holds near its number).
-  **Every visited pool lives, wherever the player is:** stepped at each new part of the day with that part's real
-  weather (about 0.1 ms a pool, measured). **Life in the pool, all four:** predators eat prey (seen on the water,
-  never a log line; how often, from what the real fish eat, being looked up), spawners gather, shoals form by
-  themselves, fish move about.
-  **Shoals:** three or more of a shoaling kind in a pool swim as one school to cast at; schools no longer come up
-  from a list. **Spawners** arrive 1d4 at a time, may go above the pool's number, and don't leave while they spawn.
-  **Movement:** each fish drifts a little with every cast, and deeper fish come up or go down with the part of the
-  day. **A predator's strike** shows as a lunge, a swirl and a splash, only when both shadows are showing.
-  *What real predators eat (looked up 2026-11-15; thin evidence, mostly abstracts):* a pike's stomach empties in
-  48 hours in summer and 12 days in winter (Diana 1979, 1,290 pike); its ration is about 1 to 3% of its weight a
-  day in the warm months and 0.2 to 0.8% at 7 °C (FishBase), so a 70 cm pike takes a 15 cm roach about every 1 to
-  2.5 days in summer and every 2 to 10 in winter. Prey is mostly 10 to 20% of the predator's length, at most
-  about half (Gaeta et al. 2018), which bears out D152's half. Nothing usable was found for zander, perch, bass,
-  wels, burbot or trout. *Claude's proposal from it:* one rule for all, tied to the water's temperature (D149): a
-  predator with prey under half its length takes one with a chance per part of the day of about 0.8% per point
-  of water temperature: about 1 in 10 in summer (a fish every day and a half), 1 in 40 in winter (one a week).
-
-- [x] **11.14** Fish leave the pool, and a shadow is a fish to aim at (D156; the owner, 2026-11-15: the pool, and so
-  the fish seen under the water, gets too big).
-  *The owner so far (2026-11-15):* a watcher kept casting at the shadows, "to fish where the fish are", so **aiming
-  at a shadow should be rewarded**: a better chance of that very fish. **Schools, big fish and class fish should
-  show when looking underwater**, which probably means they join the pool, though they behave a little differently
-  when aimed at. **The shadows shown** stay few (12 keeps the water quiet) but shouldn't always be exactly 12.
-  *The owner's answers (2026-11-15, polls):* **Size:** a pool holds its stocked number and a few more, room for
-  fish that got away. **Who leaves first:** wild fish, before any the player has met. **Turnover by weather and
-  time:** fish that don't like the moment leave and ones that do arrive, checked **every few hours** (by the part of
-  the day), so dawn, noon and night pools differ. **Met fish** (got away, or let go) stay a few days, then swim off
-  like any other. **Aiming:** landing on a pool fish's shadow means that fish is the one on the line, if a fish
-  bites; the bite roll is as ever. **Schools, big fish and class fish are truly in the pool:** one population, seen
-  in Look Underwater and the dive. **Shadows shown by depth and light:** the fish near the top, a few deeper ones
-  now and then, fewer at night or in rain.
-  *And (2026-11-15):* a school puts 3 to 5 fish in the pool and its Fish Find is replaced by "one of these, if a
-  fish bites"; a big fish and a class fish keep their sure bite; the room is 1d4 fish, rolled per pool, and a met fish stays 1d4 days, rolled per fish ("if 1d4 isn't an over
-  complication, we are doing it").
-- [ ] **11.15** Balance by simulation, later (the owner, 2026-11-15; Review 3's numbers are in history.md and D153):
-  how strongly preferences, spawning and plants stack (up to ×96 now, one fish up to 90% of a spot's bites); a new
-  bed of plants rolled now and then; seasons that turn gradually instead of in a step. The mechanics exist and are
-  knobs in `content/rules/`; the numbers wait for the simulations.
-
-**11.12 (2026-11-15):** the pools live wherever the player is, a turn with each part of the day: fish leave and
-arrive, predators eat, spawners gather, shoals form by themselves, and the cast fishes the pool (D157). Phase 11 has
-only 11.10 (with the Legendary fish) and 11.15 (balance by simulation) left.
-
-**11.14 (2026-11-15):** the pool turns over and has a size, a shadow can be aimed at, and schools and big fish are
-in the pool (D156); its guesses at the top of REVIEW.md.
-
-**Review 3 (2026-11-15):** a code and doc review of D114 to D152, its fixes in history.md; how the lake's rules
-meet, and what may not be as meant, is at the top of REVIEW.md, three of them fixed already (D153).
-
-**Where things stand (2026-11-15, after a night's work):** 11.4 to 11.9 and 11.11 are in: weight from length (D146),
-how each fish swims (D147), the adjustable line (D148), spawning by the water's temperature (D149), plants and fish
-(D150), shoaling (D151), who eats whom (D152); every guess at the top of REVIEW.md. Still open in Phase 11: 11.10,
-folklore events, and 11.12, the simulation under the surface, neither answered yet.
-
-**Before that (2026-11-14):** Phase 11 began: 11.1, taste (D138), and 11.13, the stocked pools and Look
-Underwater (D139), are in, 11.2, endangered fish and the Conservationist (D140), and 11.3, how fish fight (D141), their guesses at the top of
-REVIEW.md; 11.4, weight from length, is next. Before it, Phase 10, the owner's brainstorm of the night, the town and the stew, was built
-overnight with placeholders (D123–D129; questions at the top of REVIEW.md): a town with an inn, a room and an
-Alchemist who keeps hours; barter; the perpetual stew and every fish's stew buff; cold and night fishing; white items
-as their own tier; a fish's options menu; fish that swim (the aquarium, the dive, shadows under the surface); the
-haunted swamp. Placeholders are listed in `docs/placeholders.md`.
-
-**Before that (2026-11-11):** Phases 1–3 and 7 are done: the game is playable on GitHub Pages (D91), and
-events have every word the owner's ideas need so far (D108), with a placeholder quest chain and a content editor.
-The fish are the owner's (D101–D104): 80 over nine spots and 42 rift fish. Every class perk works (D106), the number
-a fish needed shows from level 1 with its own dice (D107), and gear, rods and Tiny-fish bait are in (5.3, 5.7, 5.8).
-Places are learned (D109): spots are noticed by fishing, each place has its list and a hidden completion, and the
-Mage Tower pools open from map fragments (D110). Sets and readable pages (D111), sound, saves to a file, the
-collection and a balance simulation are in. Junk is apart from stuff, the things used for something (D112). Class fish come up now and then and hold their spot until caught (D114). Still
-open in development: the scrap dealer and the inn's upgrades (8.3), raid orders (8.8), the cat (8.9), the spot map (8.1),
-the atlas (4.1), weather and life on a spot (4.7), class-flavoured texts (6.5), the review of D8 (5.6), the dice's
-feel (9.6) and an installable game (9.5). The creative track holds the art, writing and sound. Claude's guesses are on
+**Where things stand (2026-11-22):** Phases 1, 2, 3, 7, 10 and 12 are done, and so are the testers' fixes (T.1–T.4);
+Phases 4, 5, 6, 8, 9 and 11 have a few tasks each still open, listed below. Since Phase 12: the open water as the
+default scene (D171), three skies on the art sheet only (the special sky, the blood moon, the green sun, D173–D175),
+the wind's direction (D176) and waves that follow it (D177). Nothing is scheduled next; the open tasks below and the
+ideas under [From our talks](#from-our-talks-not-yet-planned) are the owner's to pick from. Claude's guesses are on
 [docs/REVIEW.md](docs/REVIEW.md).
 
 ## Where things are
@@ -321,10 +26,11 @@ feel (9.6) and an installable game (9.5). The creative track holds the art, writ
 | `D1`… | Decisions and their reasons | [docs/decisions.md](docs/decisions.md) |
 | `R1.1`… `§C.1`… | Vision, requirements, catalogues | [docs/spec.md](docs/spec.md) |
 | `PORTING-NOTES §n` | What carries over from the prototype, and its lessons | [docs/PORTING-NOTES.md](docs/PORTING-NOTES.md) |
-| `0.1`… | Finished phases, task by task | [docs/history.md](docs/history.md) |
-| `Q-n`, `1.x`–`11.x` | Open questions, development still to do | here |
+| `0.1`…, `T.n` | Finished phases and tasks, task by task | [docs/history.md](docs/history.md) |
+| `Q-n`, `4.x`–`11.x` | Open questions, development still to do | here |
 | `CR-n` | Creative work: art, writing, sound | here, [Creative work](#creative-work) |
-| | The owner's loose ideas: events, people, the story | [docs/ideas.md](docs/ideas.md) |
+| | The owner's loose ideas: events, people, the story | [docs/ideas.md](docs/ideas.md), [docs/ideas/items.md](docs/ideas/items.md) |
+| | Questions about the town, many still open | [docs/town-questions.md](docs/town-questions.md) |
 | | Claude's guesses and calls, for the owner to check | [docs/REVIEW.md](docs/REVIEW.md) |
 
 ---
@@ -334,12 +40,12 @@ feel (9.6) and an installable game (9.5). The creative track holds the art, writ
 Answered ones move into decisions.md (Q-1 → D9, Q-2 → D10, Q-3 → D19, Q-4 → D20/D21, Q-5 → D11, Q-6 → D22,
 Q-7 → D12, Q-8 → D23, Q-9 → D1, Q-10 → D24, Q-11 → D25, Q-12 → D26, Q-13 → D2/D3/D8, Q-14 → "Ideas for later",
 Q-15 → D27, Q-16 → D37, Q-17 → D32, Q-18 → D38, Q-19 → D39, Q-20 → D40, Q-21 → D41, Q-24 → D48, Q-25 → D49,
-Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59, Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66, Q-38 → D79, Q-39 → D70).
+Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D57, Q-32 → D55, Q-33 → D58, Q-34 → D59,
+Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66, Q-38 → D79, Q-39 → D70, Q-41 → D167, Q-42 → D166).
 
 - **Q-40 How are hidden numbers revealed?** Hidden rolls stay hidden until something reveals them (R5.2). The number
   a fish needed shows from level 1 (D107). Still open: what reveals the bite and treasure rolls and Luck (a perk, an
   item, a class?), and where those rolls would show; the game values to reveal them are in.
-- **Q-41** and **Q-42** were answered on 2026-11-18 (under 12.2 and 12.1); Q-41 → D167, Q-42 → D166.
 
 ---
 
@@ -348,272 +54,116 @@ Q-26 → D50, Q-27 → D51, Q-28 → D52, Q-29 → D53, Q-30 → D54, Q-31 → D
 Building the requirements and the owner's ideas. Anything the creative track hasn't delivered yet is a placeholder
 (D105), named in the task and listed under its `CR-n`.
 
-## Phase 1: Feel trial
-
-The riskiest part first: the reflex loop and the scene tech, before anything is built on them. Requirements R2, R7.
-
-- [x] **1.1** Pixi scene laid out like the sketch, in placeholder pixel art: water bands, waves, shore, reeds, bobber,
-  line, ripples, splash (R7.1, R7.4).
-- [x] **1.2** 256×256, scaled by whole device pixels, phone and desktop layouts; checked at devicePixelRatio 1, 2.625
-  and 3 (R7.2, R7.3).
-- [x] **1.3** Sprites as code (D9): `src/scene/sprites.js`.
-- [x] **1.4** Try the timings on a real phone with the `?dev` presets and pick defaults: Normal, for now (D27).
-- [x] **1.5** Check 60 fps on a mid-range phone, and that the splash-to-tap delay feels fair (no sense of lag).
-- [x] **1.6** Cast engine with reaction grades, pure and tested (`src/engine/cast.js`, R2.2–R2.6).
-- [x] **1.7** Write the trial up in history.md, with what was measured.
-
-## Phase 2: Engine core and the port
-
-Requirements R1, R3, R4, R5, R9, R11.3–R11.4, R15. Port from `legacy-prototype` (PORTING-NOTES). Ported data lands in
-`content/` (D42), not in code.
-
-- [x] **2.14** The content pipeline: `content/` laid out one file per entity, a JSON Schema per kind, `npm run content`
-  (checks, bundle, string table, missing-art report, overview page), the same checks in `npm test`, and a test that the
-  committed bundle is up to date (R15.1–R15.3, R15.5, R15.7, D42, D43, D46).
-- [x] **2.1** `GameState` and save v1 in localStorage: versioned, saved after every resolved cast, New game (R1). The
-  save holds ids only; retired content still resolves; a test loads an old save against new content (R15.4, D44). The
-  save holds every random stream's position (R1.6, D53).
-- [x] **2.15** Game values and the effect vocabulary: every number a modifier can change, by name (R6.6), and the
-  effects items, rods, bait, buffs and events use, including dice rolled when an effect applies (R8.9, D48, D56).
-- [x] **2.2** Weighted tables (`src/engine/tables.js`), built from the location files and shared tables in `content/`
-  (R15.2).
-- [x] **2.3** Port the fish data into `content/fish/` and fish generation, fixing the defects in PORTING-NOTES §1.3
-  (R3.2, R3.3, R4.1). Rarity from species and size band (R4.7, D49). §C.4 then points at `content/` (D56).
-- [x] **2.4** Port the weather engine faithfully, fixing PORTING-NOTES §1.1 (Torrential rain's missed edge line,
-  random-at-load values); write the 38 missing Autumn and Winter descriptions (R11.3). A data test for the edge rule
-  (D26): every marked edge repeats, every other edge wraps.
-- [x] **2.5** Time as its own clock: 30 game minutes per resolved cast, 48-cast days, 28-day seasons, the weather
-  stepping once per cast (R11.4, D66).
-- [x] **2.6** The cast pipeline with hooks: bite → which fish → size → strike → player roll → fish roll → outcome → loot
-  → XP. Base stats plus derived modifiers on every game value (D13, R6.6), including the base Fish Find and Treasure
-  Find the prototype ignored (D20). Roll records with visibility (R5.1). Everything on the line is rolled when the line
-  goes out (D63). Every cast splashes; only fish get the d20; a missed splash resolves the cast, then 5 seconds of
-  nothing and a fresh cast, and a second miss in a row reels in (R2.4, R2.8, D64).
-- [x] **2.9** "Next n casts" buff charges, spent when the line goes out, voided casts included (R1.5, D22).
-- [x] **2.11** Timed buffs and debuffs alongside cast-counted ones (R12.1, R12.2): timers count down only while
-  the game is open (D32).
-- [x] **2.10** Luck as a hidden stat in the state, for events to check later (R6.7).
-- [x] **2.7** Junk and treasure ported into `content/` (R3.4), using the effect vocabulary (2.15); §C.3 then points at
-  `content/`. Unique items, found once per save (R8.10, D65). The escaped-fish pool (R3.6).
-- [x] **2.12** The rod in the game state: the starting stick, whose stats feed the cast as game values: accuracy, reaction
-  windows, bite delay (R13.1, R13.2, D35). An empty bait slot by default (R13.3).
-- [x] **2.13** Cast scatter: the bobber lands within the rod's accuracy of the aimed point, drawn from its own stream
-  (R2.1, D34).
-- [x] **2.8** A full session runs headless from a seed in tests, and the same seed gives the same result.
-
-## Phase 3: Core loop, playable
-
-- [x] **3.1** The scene driven by the Phase 2 engine: whatever bit, how big, what came up; the visible roll (R2.6, R5).
-- [x] **3.2** The screen laid out as the owner's sketch (R16.1, R16.4, R16.5, D79): the button row, panes over the
-  scene, the log with links and tooltips, the journal (R4.2), weather and time, the character with stats, XP bar and
-  levels. A refinement pass on the looks comes later (D77).
-- [x] **3.3** Character creation: name generator, gender, class (gendered names, D19), stat rolls (R6.1).
-- [x] **3.4** `?dev` bench: location, spot, weather, time, items, level, and as many game values as practical; an
-  "empty bucket" button (R9.5, D27, D68).
-- [x] **3.5** Deployed to GitHub Pages, so the owner can play anywhere without a server; playable end to end on a phone
-  (D68, D91): https://rkachniarz.github.io/roll-for-fishing-react/ and `art.html` there.
-- [x] **3.6** Buff and debuff bar at the top right of the game area, WoW style: green and red rows, the duration in the
-  corner (nearest minute, then seconds), a description on hover or tap, cancel a buff by right-click or long-press
-  (R12.3–R12.7, D29, D31).
-- [x] **3.7** A title screen with New game and Load game over three save slots; Main menu in the in-game menu goes
-  back to it (R1.7, D80).
-- [x] **3.8** Settings in the menu, kept per device: the theme, dark or light wooden planks (R16.6, D81).
-- [x] **3.9** How a strike went floats up from the bobber; the roll stays in the log (R16.7, D82).
+**Done, in [docs/history.md](docs/history.md):** Phase 1, the feel trial; Phase 2, the engine core and the port;
+Phase 3, the core loop, playable on GitHub Pages; Phase 7, events; Phase 10, the night, the town and the stew; Phase
+12, the map, the sun and the moon, the sky and its clouds; the testers' fixes, T.1–T.4. The done tasks of the phases
+below are there too.
 
 ## Phase 4: Art pipeline and the living scene
 
-The machinery the art plugs into. The art itself is in the creative track.
+Done: 4.2–4.6, 4.8; and **4.7**, weather and life on a spot (D100): the sky and its clouds came with Phase 12
+(D169, D170), the waves follow the wind (D176, D177), and the reeds sway in it. Their art is CR-2.
 
 - [ ] **4.1** Sprite sizes per depth band, the atlas format and naming; Aseprite → atlas export ready for when
-  hand-drawn art arrives (D9). The fixed palette is picked with the owner (CR-9).
-- [x] **4.6** How the art is made (D90): the style guide (`docs/art.md`), the art sheet with trials (`art.html`),
-  sprites to PNG and back for drawing in MS Paint (`tools/sprite-png.mjs`), and any scene saved as a PNG to
-  draw over.
-- [x] **4.2** A backdrop per spot, chosen by the spot, in the sketch's layout, and each spot's casting area (`WATER`)
-  as data. Placeholders until the paintings (CR-1): the current scene with a colour and a few plain shapes per spot
-  (reeds, rocks, a far bank, flowing water) so the nine spots can be told apart, and a version per season. *A spot's
-  `look` (a tint and plain shapes) and `water` in its data; the seasons' palettes and weather from 4.3 lie over it.*
-- [x] **4.3** Day/night and seasonal palettes; weather overlays: rain, snow, wind on the water, cloud shadows (R7.5).
-- [x] **4.4** Catch feedback: the catch's icon appears at the bobber, flies to the bucket and bags button and disappears;
-  no reeling-in animation; the log line always (R16.2, D69, D70).
-- [x] **4.5** Surface features: schools, curious spots and disturbances on the water, with their own stream, and their
-  effect on the odds when the bobber lands in one (R14, D33, D40, D62).
-- [x] **4.8** Champions, class fish (D114): a Witch, a Knight, a Shaman, a Rogue and a Cleric that come up in place
-  of a surface feature and stay on their spot until caught. Placeholder look (a big fish's shadow in a ring of its
-  class's colour) and placeholder log lines until CR-15.
-- [ ] **4.7** Weather and life on a spot (D100; was the engine half of 8.11): the scene picks each spot's sky from
-  the weather (heaped clouds, overcast, rain, wind, light) and moves its plants and water. Placeholder clouds and
-  plants (flat shapes) until CR-2. *The sky and clouds are Phase 12 now (12.4, 12.5, D160).*
+  hand-drawn art arrives (D9). The fixed palette is picked with the owner (CR-9). *Since D90 and D131 the art is drawn
+  as code or in MS Paint through `npm run sprite`; whether an atlas is still wanted is the owner's call.*
 
 ## Phase 5: Items and inventory
 
-Requirements R8.
+Done: 5.1–5.5, 5.7, 5.8.
 
-- [x] **5.1** Bag grid, stacking, drag and drop by touch and mouse, tap-to-inspect tooltips, names in rarity colours
-  (R8.1, R8.7, R8.8).
-- [x] **5.2** Equipment slots; effects on the engine's hooks (R8.2, D83).
-- [x] **5.3** Port the seven items with real downsides (§C.3), and about 15 more as placeholders, enough to use every
-  effect in the vocabulary and every slot; the "every upside has a downside" data test (R8.5), bait aside. Sixteen
-  pieces of placeholder gear in the shared treasure list; names, texts and icons are CR-4.
-- [x] **5.4** Tooltips generated from effects (R8.6).
-- [x] **5.5** Fish bucket: fish only, identical twins stack (and, since D146, the same condition), 16 fish to start; a full bucket asks which fish to release,
-  and the released fish joins the spot's escaped-fish pool (R8.3, R3.6, D24, D50, D57, D59).
-- [ ] **5.6** Review D8: plain DOM or Preact for the UI. *D8 put the review at the inventory, which is done (5.1,
-  5.2, 5.4, 5.5); the review itself hasn't happened yet.*
-- [x] **5.7** Better rods, found as treasure and through events (R13.1, R13.5, D35, D38): the willow rod, ash rod,
-  reed pole and dwarven steel rod, each with a downside, as treasure; the junk collector's trade can give the willow
-  rod. Default icons until CR-4.
-- [x] **5.8** Bait as a consumable; small fish as bait for predators (R13.3, R13.4, D36, D39, D41, D61). Bait kinds
-  and placeholder baits (D101); a Tiny fish goes from the bucket onto the hook as Small fish bait.
+- [ ] **5.6** Review D8: plain DOM or Preact for the UI. *D8 put the review at the inventory, which is done; the
+  review itself hasn't happened, and the UI has grown a good deal in plain DOM since.*
 
 ## Phase 6: Classes, levels, abilities, knowledge
 
-Requirements R5.2, R6.
+Done: 6.1–6.4, 6.6–6.8 (D96, D106, D107).
 
-How it works is D96: perks at levels 1–8, a badge rather than a stop, cooldowns in casts that count only an
-attempt at a catch, the action bar under the button row (now on the scene, D120), abilities that light up, crits.
-
-**Perks are development (D105).** What a perk does comes from the prototype's notes (§C.2) and D96. Where the notes
-leave a gap, Claude picks a stand-in rule and lists it in REVIEW.md rather than waiting. A perk's name, its text, its
-icon and any new look it brings (a Greedy fish, a bent fish) are creative work (CR-8, CR-12); placeholders until then.
-
-- [x] **6.6** Perks as content (`content/perks/`), the save's `character.perks`, passive perks feeding the game
-  values; crits as D96 (6); the bench grants perks.
-- [x] **6.1** Choosing a perk at level-up: the badge, and the choice in the character pane (D96).
-- [x] **6.2** Active abilities with cooldowns; the action bar under the button row (now on the scene, D120), keys 1–9.
-- [x] **6.7** Abilities that light up after something happens: the warrior's Jump In, the rogue's Gut, the mage's
-  Bend Reality.
-- [x] **6.3** Each class's level 1, 3 and 5 perks working (the notes' level 6 moved to 5, D96): Rift Fishing,
-  Greedy Fish, Ever-Summoning, Bend Reality (which also doubles the rift chance), Fence and Polish were the last
-  (D106). Their names, the "Greedy" and "Bent" marks and their icons are placeholders (CR-8, CR-12).
-- [x] **6.4** Hidden rolls revealed by levels, perks and items (R5.2, D107): the number a fish needed from level 1;
-  `revealResistance`, `revealBite` and `revealTreasure` for perks and items. Which ones reveal the rest is Q-40.
-- [x] **6.8** The fish's dice on the desk (D99), once 6.4 reveals its roll: its d20s thrown in from the top right,
-  as the player's come in from the bottom right, in the fish's own colour, `#31899F`, a deep-water teal. A roll
-  still hidden throws no fish dice.
 - [ ] **6.5** Class-flavoured texts (R6.5): a string can have a version per class, falling back to the plain one;
   the prototype's lists ported. New writing is CR-11.
 
-## Phase 7: Events (done)
-
-Requirements R10. Each new piece of the engine is tried with a placeholder event, short and plain, that the owner's
-writing replaces or joins (CR-10).
-
-- [x] **7.1** The event engine: slides, options, requirements, effects, as data. The event text format and its
-  vocabulary written down alongside the frog encounter, and parsed by `npm run content`; effects come from 2.15
-  (R15.6, D45, D56, D84).
-- [x] **7.2** Triggers: event meter, world conditions, fished-up items, and hidden objectives on counters and flags
-  (R10.7, D51).
-- [x] **7.3** The event dialog (with room for an illustration).
-- [x] **7.4** One short quest chain started by a quest item, as placeholders: the item, three events, a reward; it
-  proves the engine can carry a chain. The message in a bottle (`content/events/quest-bottle*.md`); the owner's
-  events and the real chain are CR-10.
-- [x] **7.6** Locations an event can lock the player into until an objective is met (R10.8, D51).
-- [x] **7.7** Counters: numbers an event keeps, not just flags. `add: cat-trust 1`, `needs: cat-trust 5+`, and a
-  placeholder to show one ("12 of 25"). For the cat and the raid supplies (`docs/ideas.md`).
-- [x] **7.8** Events that take fish from the bucket: any fish, a species, a number of one species, the rarest one. For
-  feeding the cat, the cat stealing and handing in raid supplies.
-- [x] **7.9** Giving up every item of a kind at once: their hidden values added up, the reward picked from a table by
-  the total. Junk needs telling apart, the useless from the kind with a use. For the junk collector.
-- [x] **7.10** Visitors who come back now and then: an event with a gap of so many casts (or days) between visits.
-  For the junk collector and the Alchemist (8.6). *7.6–7.10 are event words (D108, `docs/events.md`): `go:`,
-  `lock:`, `add:`, `needs: count`, `{#counter}`, `lose: fish`, `needs: fish`, `trade: junk`, `again:`.*
-- [x] **7.5** The content editor app: forms generated from the schemas, saving into `content/` (D47).
-  `editor.html` under `npm run dev`, in Chrome or Edge: it opens the content folder, a form per file, events as text;
-  `npm run content` checks and rebuilds after.
-
 ## Phase 8: World and town
 
-Requirements R5.3, R11.
+Done: 8.2, 8.4–8.7; and **8.1**, the spots learned and travelled to (D101, D109), with the owner's map (D161) in place
+of the planned placeholder shapes; the town, the inn, barter, the stew and the Alchemist came with Phase 10 (D123).
 
-- [ ] **8.1** Location switcher; each location's spot map, switching spots at any time, spots learned about before
-  they show; spot tables filled in (R11.8, D58). *The spot tables are filled in, and the map pane is a plain list of
-  every spot known of to go to (D101); spots are learned by fishing at a location or from an event (D109); still to
-  do: a map of placeholder shapes (CR-7); now 12.1, from the owner's hand drawing.*
-- [x] **8.2** Unlocks through map fragments and quests; the discovery meter. A hidden location opens once its
-  fragments are found, or by an event's `open:`; `close:` takes a quest's place away (D110). The discovery meter is
-  each place's completion (D109).
-- [ ] **8.3** The town: inn and scrap dealer, barter (D86); fish put into the inn's perpetual stew for a buff,
-  stronger for rarer fish and longer for more fish (R11.5, R12.6, D24, D28, D37). Squares and triangles for the
-  buildings and people, and plain lines for what they say, until CR-5 and CR-13. *The town, the inn, barter and the
-  stew came with Phase 10 (D123); still to do: the scrap dealer, and the inn's upgrades (R10.4).*
-  - [ ] Bought knowledge (R4.5's tip at the inn): 8.5 left it for the town, and the town is built without it.
-- [x] **8.6** The Alchemist's recurring visit: buffing potions for sale, alchemical ingredients bought; the ingredients
-  added to the junk tables (R10.6, R11.7, D30). Placeholder potions, ingredients and lines. *Came with Phase 10: a shop
-  in town with hours (R17.6) rather than a visit; the ingredients are stuff in the spots' own lists (D125).*
-- [x] **8.5** Location lists and completion percentages; knowledge (found, bought) that reveals missing entries (R4.4,
-  R4.5, R5.3). In the journal per location; `learn:` in events (D109). Bought knowledge comes with the town.
-- [x] **8.4** The Mage Tower pool (the River is in, D101): the location and its spots, with a placeholder table of
-  existing fish until the owner's list. `content/locations/mage-tower.json`: one pool, six fish, hidden until its
-  three map fragments are found (two in the Lake's list, one in the River's; stuff, not junk, since D125).
-- [x] **8.7** Item sets and the strange people who collect them: a set id on each piece, progress per set, a reward
-  for the whole set; the pieces unique and spread over the spots; a visitor who turns up once the player holds a
-  piece; pages that can be read, for the story (`docs/ideas.md`). One placeholder set of three pieces, with
-  placeholder pages, until CR-4 and CR-10. *The old lorebook (`content/sets/`, D111) and the scholar who wants it.*
-- [ ] **8.8** Raid supply orders in town: 10, 25 or 40 of one fish over several hand-ins, the progress shown, consumables
-  and gear as the reward (needs 7.7, 7.8).
-- [ ] **8.9** Companions at the fishing spot: the cat, once it trusts the player. A placeholder cat until CR-5.
-
-## Phase 10: The night, the town and the stew
-
-The owner's brainstorm of 2026-11-14 (`docs/brainstorm-2026-11-14.md`, D123; R17–R21), built overnight with
-placeholders everywhere, marked as D124 says. Takes in 8.3 and 8.6. In order:
-
-- [x] **10.1** Placeholders marked (D124): `"placeholder"` in content and events, `docs/placeholders.md` from
-  `npm run content`, `?ph` in the game.
-- [x] **10.2** The clock and time: a weekday; buffs lasting game minutes; `wait:` and `sleep:` in events (time jumps,
-  the weather steps, game-time buffs run down); an event's `go:` arrives when the event closes; event words for buffs
-  (`buff:`), vendors (`needs: vendor`, `shop:`), perks (`needs: perk`), and hours through `needs: vendor … asleep`, `needs: time` and `needs: weekday`.
-- [x] **10.3** White items (R19.1): junk, stuff and treasure as three tiers, Stuff Find, the Rogue's bonus; the
-  new stuff (Shiny pebble, Alchemist's vial, the eight plants from the owner's CSV, Shiny fish scales, Mysterious
-  resin, the Old torn doll) in per-spot stuff lists.
-- [x] **10.4** The town (R17): a location of places, no casting, a placeholder scene of squares and triangles where a
-  click goes to a place; the welcome event with backgrounds, the night's pointer to town, the innkeeper's first
-  dialogue, the inn's dialogue, sleep, the room.
-- [x] **10.5** Barter (R18): vendors as content with schedules and offers; the barter window; trades counted; potions
-  as consumables used from the bags; the Alchemist with placeholder recipes using every plant, and the pebble
-  question after enough brews.
-- [x] **10.6** Cold and night (R19.2, R19.3): `warmth`, three cold debuffs, night's rewards.
-- [x] **10.7** The perpetual stew (R19.4): the pot, its window, the buff by rarity, every fish's stew buff
-  (placeholders from what the fish is), new game values for them.
-- [x] **10.8** A fish's options (R21): the menu on right-click or long-press; Release, Hook as bait, Eat (Sushi
-  enjoyer, a new universal perk), Put in the stew, Put in the aquarium.
-- [x] **10.9** Fish that swim (R20.1): side-view sprites from the icons, the swimming motion.
-- [x] **10.10** The aquarium (R17.5, R20.2): the universal perk, the room's tank with its fish swimming.
-- [x] **10.11** The dive (R20.3) and the fish-hook pointer (R20.4).
-- [x] **10.12** The haunted swamp (owner's item 24): the ghost's event on every arrival, the Old torn doll at still
-  water, tuned with the simulation to turn up within about 200 casts with no Treasure Find.
-- [x] **10.13** Fish just under the surface (R20.2): schools and big fish shown as swimming shadows.
-- [x] **10.14** Tests, verify, build; docs; the morning's questions at the top of REVIEW.md.
-- [x] **10.15** The owner's answers (D130): the town hidden until nightfall, the cold from dark, no Release in town,
-  the Warm woolen hat at the inn (placeholder).
-- [x] **10.16** The title screen under the water (D134): the art sheet's tank across the scene, flickering shafts of
-  light, the findable plants on the sand, 2d6+3 fish from those caught in any slot and the reedy shore's.
-- [x] **10.17** The title's logo (D135): ROLL with the d20 rolling into its O and landing on a gold 20, "for fishing"
-  under it as wide, behind the fish; the button row and the log hidden on the title.
-- [x] **10.18** Fish keep to their depth (D136): every fish's `swims` quarter, from the real species' habits, used
-  wherever fish swim side on (the title, the aquarium, the dive); the title's menu one button row below the scene.
-- [x] **10.19** Fish Find by depth (D137): `bottomFishFind` and `otherFishFind`, and the owner's Heavyweight heavy
-  weights (a trinket, +10 for bottom fish, -10 for the rest), found as treasure.
+- [ ] **8.3** The rest of the town (R11.5, R10.4). Squares and triangles and plain lines until CR-5 and CR-13.
+  - [ ] The scrap dealer: junk, and perhaps stuff and treasure. Is it the junk collector of `docs/ideas.md`, who comes
+    to the lake ("Only a fool would fish in these waters!"), or two people? (town questions 20–21). `trade: junk`
+    is built (7.9); no event uses it yet.
+  - [ ] The inn's upgrades (R10.4): how they come and what each level changes (town question 13).
+  - [ ] Bought knowledge, R4.5's tip at the inn: what it costs and what it reveals (town question 14).
+- [ ] **8.8** Raid supply orders in town: 10, 25 or 40 of one fish over several hand-ins, the progress shown,
+  consumables and gear as the reward (7.7 and 7.8 are built; town questions 26–29).
+- [ ] **8.9** Companions at the fishing spot: the cat, once it trusts the player (`docs/ideas.md`, town questions
+  30–32). A placeholder cat until CR-5.
 
 ## Phase 9: Balance and finish
 
-- [x] **9.1** Balance simulation over the seeded engine: catch rates, XP curve, loot rates per class and build.
-  `npm run sim` (`tools/sim.mjs`); the tuning it's for is the owner's, with the numbers on REVIEW.md.
-  *Notes for it: the stick's scatter is 20 px so a school isn't hit every time; a 12 px rod is the next tier up, and
-  hits a school whenever it's aimed at (D85).*
-- [x] **9.2** Audio: the engine for sound, a volume setting, sounds for water, splash and catch. Placeholder
-  sounds made in code until CR-14 (`src/audio.js`): the cast, the splash, a catch, an escape, a find, the dice, a
-  level. No water in the background yet: a loop wants a real recording.
-- [x] **9.3** More settings (sound, once there is any), save export/import. *(Settings and the theme landed with 3.8.)*
-  Saving to a file is in the menu, loading from one on the title screen, into a slot the player picks; the volume is
-  a setting.
-- [x] **9.4** Collection view, fish and treasure (R4.3): grids in the journal, the records on a tap; a fish that got
-  away before one was caught shows as a silhouette. Knowing of fish and treasure in other ways comes with 8.5.
+Done: 9.1–9.4, 9.7.
+
 - [ ] **9.6** The dice's feel (D99): timing, where they land, the floating total; the open items on
   `docs/REVIEW.md`. The ivory colour is settled.
-- [x] **9.7** Pick the font from the trial (D122): Alegreya Sans by default, Pixelify Sans as a setting (D132).
 - [ ] **9.5** Installable and offline: web app manifest and service worker (R9.8, D55).
+
+## Phase 11: What the real species do
+
+Done: 11.1–11.9, 11.11–11.14 (D138–D141, D146–D157).
+
+- [ ] **11.10** Folklore events: the carp leaping the dragon gate, the catfish that shakes the earth, the archerfish
+  spitting insects off leaves. Writing work, so placeholders until the creative track. *The owner (2026-11-15):* to
+  be used when Legendary fish are worked on, somewhere down the line.
+- [ ] **11.15** Balance by simulation (the owner, 2026-11-15; Review 3's numbers are in history.md and D153): how
+  strongly preferences, spawning, plants and now the moon (D168) stack (up to ×96 at Review 3, one fish up to 90% of a
+  spot's bites); a new bed of plants rolled now and then; seasons that turn gradually instead of in a step. The
+  mechanics exist and are knobs in `content/rules/`; the numbers wait for the simulations.
+
+## From our talks, not yet planned
+
+Ideas the owner and Claude have talked over, written down so they have a place, but not yet a task or an order. A
+line becomes a task once the owner picks it and answers its questions.
+
+**The sky in the game.** Each is on the art sheet only so far:
+- **The special sky** (D173), the magic of the land: how the game brings it (a weather, an event, a place?), and how
+  it looks by day.
+- **The blood moon** (D174): how often the game brings one, and whether it does anything beyond the look.
+- **The green sun** (D175): how the game brings one on a cloudless, dry summer day, and whether it does anything
+  beyond the look.
+- **Clouds lit orange from below at dusk** (left for later in 12.5; the tints do for now).
+
+**A busier town** (`docs/ideas.md`, 2026-11-18 and 2026-11-19):
+- **Visitors**, as events like the junk collector: settlers coming with the seasons, the villagers, the dwarven caravan
+  twice a year (before winter and after), soldiers, tax collectors, travellers from the Wildlands.
+- **Other guests at the stew**: they add their own catch and eat from the pot, so a pot left for days changes while
+  the player is away (likely stepped with each part of the day, as the pools are).
+- **What goes into the pot** changes with who is in town and the season (the dwarves' goat and mushrooms, the
+  villagers' eggs and fowl, fruit and vegetables in season).
+- **Delayed effects** such as D165's cooking and morning greeting, taken back by D172 until the town is busier.
+- **The well**, fed by the lake: the lake's magic touching the townsfolk, and perhaps a player who stays long enough.
+- **Later vendors**, unlocked by events (R11.5, town question 35).
+
+**The story's things** (`docs/ideas.md`, "The story"): elven treasure and ruins under the water, dragon things of fire
+and of water, the water that once stopped dragonfire. Items, spots and events; writing under CR-10.
+
+**Items** (`docs/ideas/items.md`): twenty picked from a hundred, among them the Lucky d20 bobber, the Fish-scale
+compass, Polarised spectacles, the Trophy plaque in the room, the Stopped pocket watch and the Last Bobber. Each
+needs a little engine work of its own; none is scheduled.
+
+## Ideas for later
+
+Not scheduled, and with less behind them than the above.
+
+- **A precision timing bar for the cast**: tap a spot, a bar appears with a marker running up and down; the target
+  area depends on the rod's quality, the marker's speed on the wind. The scatter (D85) would carry over to it. The
+  owner's idea.
+- **Consumables as a hand of cards** along the bottom of the screen, to make using them more tempting. A loose idea from
+  the owner, not a decision.
+- **Full screen, with the UI drawn over the game, as in WoW** (the owner, 2026-11-14): the scene fills the whole
+  screen and the panes, the log, the buff bar and the action bar sit on top of it, instead of beside and below it as
+  now. Touches the layout (`styles.css`, `fit` in `src/main.js`), the scene's sizing (D10, D93) and every pane. To
+  look into later; nothing decided.
+- **Catching the same fish again and again**: a hidden event or achievement for catching one released fish several
+  times (D60).
 
 ---
 
@@ -627,36 +177,32 @@ placeholder, it's added here.
 
 - [ ] **CR-1** The spots painted from the owner's photos (D97, D100; was 8.10), working from the pond trial on the art
   sheet (`src/scene/pond.js`): a version per season for each of the nine spots, and the Mage Tower's pool. *Replaces
-  4.2's placeholder looks (each spot's `look` in `content/locations/`).* Painted so far: still water (the pond, D115, D116;
-  autumn and summer) and the reedy shore (D117, D118; all four seasons). The swamp (D158; all four seasons,
+  4.2's placeholder looks (each spot's `look` in `content/locations/`).* Painted so far: still water (the pond, D115,
+  D116; autumn and summer) and the reedy shore (D117, D118; all four seasons). The swamp (D158; all four seasons,
   from the photos in `docs/design/swamp/`), waiting on the owner's final pass, with the first picture under the
-  water (D159); the pond's and the reedy shore's are still to do.
+  water (D159); the pond's and the reedy shore's are still to do. Spots painted from now on are painted without a
+  sky, only their horizon, facing the spot's way (D166, D169).
   *Placeholder (D171):* every other spot shows the open water (`paintOpen`), the reedy shore's lake without the
   reeds, facing the spot's way, with its old `tint` over the water; the owner may make copies of it with slight
   differences per spot first.
-- [ ] **CR-2** Weather and life on the painted spots (D100; the art half of 8.11): clouds per weather (summer's heaped
-  clouds, autumn's overcast so far), rain, wind, light, moving plants and water. *Replaces 4.7's flat shapes.*
-  **The clouds (12.5, D160):** references from Wikimedia Commons first (`npm run commons search`, a contact sheet
-  per cloud type and cover: a few, scattered, broken, overcast, dark), since skies are photographed endlessly; the
-  owner's own photos of skies that looked particularly interesting go in beside them. References only, never traced
-  or shipped.
-  *Done in 12.5 (D170):* the references (contact sheets per type in `docs/design/commons/`, local only; the files
-  used are on REVIEW.md), the clouds per weather and season, drawn as code. The owner's own sky photos haven't come
-  in yet; they would go in beside the Commons ones.
+- [ ] **CR-2** Weather and life on the painted spots (D100; the art half of 8.11): clouds per weather, rain, wind,
+  light, moving plants and water. The clouds are in as code (D170), from Wikimedia Commons references (contact sheets
+  in `docs/design/commons/`, local only; the files used are on REVIEW.md); the owner's own sky photos would go in
+  beside them, as references only.
   *Placeholders still here:* every cloud pattern, the table and the palettes in `content/rules/sky.json` (marked
   `placeholder`) are Claude's first go; the still water mirrors the live sky only faintly over its photo's baked
-  sky (`mirrorSky`), not as a true reflection; the clouds' tints at dusk and night (`CLOUD_TINT`); from 12.4, the
-  sky's twilight, golden and night colours (`SKY_LOW`) and the sun's and the moon's sprites. Not started: rain and
-  wind on the painted spots beyond what the scene already lays over them, light, moving plants and water.
-- [ ] **CR-3** Fish icons (D97, D98; was an earlier 9.7, not the font's): the eyes, one by one, since they were placed by script (a 2×2 a tenth of
-  the way in from the snout) and some look comedic or out of place; the weak icons on
-  `docs/design/fish-image-hunt.md`; and the four with no icon yet: Mainland eel, golomyanka, Grasslands silverside,
-  Wildlands pejerrey.
+  sky (`mirrorSky`), not as a true reflection; the clouds' tints at dusk and night (`CLOUD_TINT`); the sky's
+  twilight, golden and night colours (`SKY_LOW`) and the sun's and the moon's sprites (D169); the special sky's,
+  the blood moon's and the green sun's colours (D173–D175). Not started: rain and wind on the painted spots beyond
+  what the scene already lays over them, light, moving plants.
+- [ ] **CR-3** Fish icons (D97, D98): the eyes, one by one, since they were placed by script (a 2×2 a tenth of the way
+  in from the snout) and some look comedic or out of place; the weak icons on `docs/design/fish-image-hunt.md`; and
+  the four with no icon yet: Mainland eel, golomyanka, Grasslands silverside, Wildlands pejerrey.
 - [ ] **CR-4** Item icons, and the items' names and texts: the placeholder items and rods (5.3, 5.7), the bait items
   (D101) and Small fish (5.8), the Alchemist's potions and ingredients (8.6), the set pieces (8.7). *From Phase 10:
   the ten potions, the eight plants (the owner's names, Claude's flavour), the Shiny pebble, Alchemist's vial, Shiny
-  fish scales, Mysterious resin and the Old torn doll, all on default icons. From Phase 11: the Warm woolen hat, Heavyweight heavy
-  weights, the Paralysing rod and the Adjustable line.*
+  fish scales, Mysterious resin and the Old torn doll, all on default icons. From Phase 11: the Warm woolen hat,
+  Heavyweight heavy weights, the Paralysing rod and the Adjustable line.*
 - [ ] **CR-5** The town and its people (8.3, 8.6, 8.9): the inn, the scrap dealer, the Alchemist, the cat, and the
   portraits. *Replaces the squares and triangles: the town's buildings, the room and the aquarium, the dive's water
   (`src/scene/views.js`), and the dive's dice as labels.*
@@ -664,25 +210,24 @@ placeholder, it's added here.
   made from photos like the item icons. An event names its own with `art:`. *Replaces the default, an old scroll
   (`event/scroll`), that every event shows until it has its own; the scroll itself is a first draft for the owner's
   markup.*
-- [ ] **CR-7** The map, each location's spots drawn on it (8.1, 12.1), from the owner's hand drawing. *The paper and
-  the outline are the owner's (D161). Still placeholders: the green and red circles (`src/ui/map.js`), until the
-  owner's picture for each spot once it is discovered.*
+- [ ] **CR-7** The map's marks (8.1, 12.1). *The paper and the outline are the owner's (D161). Still placeholders:
+  the green and red circles (`src/ui/map.js`), until the owner's picture for each spot once it is discovered.*
 - [ ] **CR-8** Perk and ability icons (the action bar shows initials), and the look of a Greedy fish and a bent fish
   (6.3). *Also replaces the green eye around Look Underwater (D139), four flat rings in `src/scene/views.js`.*
 - [ ] **CR-9** The fixed palette (4.1) and the art sheet's open trials (`art.html`).
 - [ ] **CR-15** Class fish (D114): how each looks on the water, its aura and the witch's spells, and their log lines.
-  *The fish itself now shows below the surface in its ring, seen from the bank (D131). Still Claude's: the ring of dots
+  *The fish itself shows below the surface in its ring, seen from the bank (D131). Still Claude's: the ring of dots
   (`src/scene/scene.js`) and the lines in `src/strings.js` (`log.champion-*`).*
 
 ## Writing
 
 - [ ] **CR-10** Events: about ten more after the frog, the real quest chain (in place of 7.4's placeholder), the set
-  pages (8.7), and the story (`docs/ideas.md`).
+  pages (8.7), and the story (`docs/ideas.md`), with the town's visitors when they come.
 - [ ] **CR-11** Class-flavoured texts (R6.5): new lines for 6.5's mechanism, beyond the prototype's.
-- [ ] **CR-12** Names: the spots (placeholder names since D101), the "Greedy" and "Bent" marks on fish (D106), and the perks' names and texts (REVIEW.md lists them
-  as Claude's). *From Phase 11: the Conservationist's and Look Underwater's descriptions, the Queasy debuff, the
-  fight styles' journal and manoeuvre lines (`content/rules/fight-styles.json`), and six placeholder taste lines
-  (`docs/placeholders.md` lists them).*
+- [ ] **CR-12** Names: the spots (placeholder names since D101), the "Greedy" and "Bent" marks on fish (D106), and the
+  perks' names and texts (REVIEW.md lists them as Claude's). *From Phase 11: the Conservationist's and Look
+  Underwater's descriptions, the Queasy debuff, the fight styles' journal and manoeuvre lines
+  (`content/rules/fight-styles.json`), and six placeholder taste lines (`docs/placeholders.md` lists them).*
 - [ ] **CR-13** What the town's people say: the inn, the scrap dealer, the Alchemist, the raid orders (8.3, 8.6, 8.8).
   *From Phase 10: Claude's events (`welcome`, `nightfall`, `innkeeper-first`, `the-inn`, `your-room`, `alchemist`,
   `swamp-ghost`, all `placeholder: true`) and the new log lines (`PLACEHOLDER_UI` in `src/strings.js`); the
@@ -698,22 +243,3 @@ placeholder, it's added here.
 ## Sound
 
 - [ ] **CR-14** Sounds: water, splash, catch, and whatever else 9.2 plays. *Replaces the sounds made in code.*
-
----
-
-## Ideas for later
-
-Not scheduled.
-
-- **A precision timing bar for the cast**: tap a spot, a bar appears with a marker running up and down; the target
-  area depends on the rod's quality, the marker's speed on the wind. The scatter (D85) would carry over to it. The
-  owner's idea.
-
-- **Consumables as a hand of cards** along the bottom of the screen, to make using them more tempting. A loose idea from
-  the owner, not a decision.
-- **Full screen, with the UI drawn over the game, as in WoW** (the owner, 2026-11-14): the scene fills the whole
-  screen and the panes, the log, the buff bar and the action bar sit on top of it, instead of beside and below it as
-  now. Touches the layout (`styles.css`, `fit` in `src/main.js`), the scene's sizing (D10, D93) and every pane. To
-  look into later; nothing decided.
-- **Catching the same fish again and again**: a hidden event or achievement for catching one released fish several
-  times (D60).

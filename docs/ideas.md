@@ -2,7 +2,8 @@
 
 The owner's loose ideas for events, characters and the story, kept so they aren't lost. None of this is a requirement
 yet: an idea becomes one when it's built or decided (`docs/decisions.md`). The engine work they would need is in
-`DEV_PLAN.md`; each idea below names its tasks. Most are built: of those, only 8.8 and 8.9 are still to do.
+`DEV_PLAN.md`; each idea below names its tasks. Most of the engine work is built; still to do are 8.8, 8.9, the
+junk collector's own event (8.3), and the town ideas under DEV_PLAN.md's "From our talks".
 
 Item ideas, a hundred cut to twenty, are in [ideas/items.md](ideas/items.md).
 
@@ -68,7 +69,7 @@ Cassalan, Ferrstad. Nothing the engine needs yet; the visitors would be events, 
 
 ## Other guests at the stew (2026-11-18)
 
-The stew never spoils: it is perpetual (D165). What a player leaves in the pot runs out another way: other guests at
+The stew never spoils: it is perpetual (D127). What a player leaves in the pot runs out another way: other guests at
 the inn add their own catch and eat from it too, so a pot left for days isn't all the player's when they come back.
 
 **Needs:** guests at the inn, and a pot that changes while the player is away (likely with each part of the day, as

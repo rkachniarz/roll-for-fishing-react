@@ -173,6 +173,9 @@ section each.
 - **4.2** A placeholder look per spot: a spot's `look` (a tint and flat shapes: lily pads, rocks, a far bank, a
   sandbar) draws over the water until the spot is painted (CR-1). A spot may set its own casting area (`water`), and
   surface features drift within it. The bench's pickers gained ids, and a browser check shows the spots differ.
+- **4.7** Weather and life on a spot (D100), done by later work rather than as one task: the sky and its clouds in
+  Phase 12 (D169, D170), the waves with the wind's strength and direction (D176, D177), the painted reeds swaying in
+  it. Their art is CR-2.
 
 ## Phase 5: Items and inventory (in progress)
 
@@ -324,7 +327,7 @@ How it works is D96.
   noticed after that many casts at their location, or from an event's `learn:`; the map lists only known spots. Each
   location has its list and a completion, hidden until revealed (level 3, or `revealCompletion`). The journal shows
   each place's found entries and silhouettes of the rest. Save version 9; an old save keeps every spot. The spot map
-  of placeholder shapes (8.1) is still to do.
+  of placeholder shapes (8.1) was never built: the owner's map (D161, 12.1) took its place.
 - **8.2, 8.4** Hidden places (D110): a hidden location stays off the map until its map fragments are found or an event
   opens it (`open:`); `close:` takes a quest's place away. The Mage Tower pools are a placeholder: one pool, six fish,
   three fragments in the junk. Save version 10.
@@ -545,19 +548,61 @@ browser check.
 ## Phase 12: The map, the sun and the moon, the sky and its clouds (2026-11-18 to 2026-11-19)
 
 The owner's ask (D160): clouds that follow the weather, which first needed the map, the spots' facings and the sun
-and the moon. Task by task in DEV_PLAN.md's Phase 12, where each has its *Landed* note.
+and the moon. One task at a time, with the owner's refinement questions before each; their answers are in the
+decisions.
 
 - **12.1** The map from the owner's drawing (D161) and every spot that shows sky facing a compass bearing, one 60°
-  width of view for all (D166).
+  width of view for all (D166): `look.facing` on each spot in `content/locations/`, `VIEW`, `facingOf` and
+  `acrossView` in `src/engine/sky.js`, `test/sky.test.js`. The swamp and the town have none.
 - **12.2** The sun's and the moon's height and bearing for Gdynia, and a 14-day moon whose first full moon is rolled
-  (D167, `SAVE_VERSION` 22).
-- **12.3** The moon counts for the fish: phase preferences, solunar periods as buffs, moonlight at night, and the
-  pools feeding in the periods (D168).
-- **12.4** The sky as its own layer behind the still water and the reedy shore: its colour, the stars, the sun, the
-  moon in its phase, and a path of glitter under a low sun or moon (D169).
+  (D167): `sunPosition`, `moonPosition`, `moonPhase`, `moonPhaseName`, `sunOf`, `moonOf`, `firstFullMoon`, `MOON`,
+  `HORIZON` in `src/engine/sky.js`; `roll14` in `src/dice.js`; `state.fullMoonAt` (`SAVE_VERSION` 22, from the
+  one-off stream `moon`).
+- **12.3** The moon counts for the fish, all four ways the owner asked for (D168): phase preferences (`prefers.moon`
+  on fifteen fish), solunar periods as buffs on the bar, moonlight at night, and the pools feeding in the periods;
+  `src/engine/moon.js` (`moonNow`, `moonWords`, `moonlight`, `solunarPeriod`), `moonHourAngle` in
+  `src/engine/sky.js`, `content/rules/moon.json`, the phase in the weather's tooltip, `test/moon.test.js`.
+- **12.4** The sky as its own layer behind the still water and the reedy shore (D169, `src/scene/sky-layer.js`): its
+  colour by the sun's height, the stars, the sun, the moon in its phase, and a path of glitter under a low sun or
+  moon. Each sky-showing painting gives `horizon` (row 110), `skyline`, `waterLayer` and `isWater` and paints no sky
+  of its own; the art sheet's "The sky (12.4)", the verify check "the sky layer".
 - **12.5** Clouds that follow the weather (D170): references from Wikimedia Commons first (a contact sheet per cloud
-  type, local only), then a library of cloud types drawn as code and a table per season and cloud level in
-  `content/rules/sky.json`; descriptions that name a sky as their own case; fog hiding the sky; Downpour and Hail
-  moved up to black, a storm overcast that brings a dusk; the light coming and going with a cloud over the sun;
-  the still water mirroring the sky; fewer glints under cloud. Measured: every unit test and browser check pass,
-  with a new check, "the clouds", and its screenshots (`dist/verify/clouds-*.png`).
+  type, local only), then a library of cloud types drawn as code (`CLOUD_PATTERNS`, `skySpec`, `layOutSky` in
+  `src/scene/clouds.js`) and a table per season and cloud level in `content/rules/sky.json`
+  (`schemas/sky.schema.json`); the 23 descriptions that name a sky as their own case; fog hiding the sky; Downpour,
+  Heavy downpour and Hail moved up to black, a storm overcast that brings a dusk; the light coming and going with a
+  cloud over the sun (`setShade` in `src/scene/sky.js`); the still water mirroring the sky (`mirrorSky`); fewer
+  glints under cloud. Measured: every unit test and browser check pass, with a new check, "the clouds", and its
+  screenshots (`dist/verify/clouds-*.png`); `test/clouds.test.js`.
+
+## The testers' fixes (2026-11-18 to 2026-11-19)
+
+The owner's list after testers played on phones, built before Phase 12 went on, one task at a time.
+
+- **T.1** On a phone, a tap on the scene closes an open pane and does nothing else; a second tap casts (D162,
+  `closedByTap` in `src/main.js`). A wide screen, 900 px and up, is unchanged.
+- **T.2** A long press equips on a touch screen, as a right-click does with a mouse, and touch dragging went; a fish
+  in the bucket keeps its long-press menu. An equippable item's tooltip says how, by the last pointer used (D163,
+  `hold` in `src/ui/drag.js`, `quickMove` in `src/main.js`).
+- **T.3** A tap or left click on a paper-doll slot opens a list of what in the bags fits it, as WoW's flyout (D164,
+  `slotFlyout` in `src/ui/panels.js`).
+- **T.4** The stew cooking for two game hours and the inn's morning greeting (D165), taken back after testing (D172):
+  the stew's buff stands still in town and asleep instead.
+
+## Alongside the tasks (2026-11-19 to 2026-11-22)
+
+After Phase 12, from the owner's asks; the decisions hold the detail.
+
+- **The open water** (D171): the reedy shore's lake without the reeds is the default scene for every spot without a
+  painting of its own, each facing its own way, with an art sheet testbed to turn it by hand.
+- **Skies on the art sheet only** (D173–D175): the special sky (the land's magic, a film of colour over the night), the
+  blood moon (a full moon gone red over a red night) and the green sun (a cloudless summer sun gone green). How the
+  game brings them is still open (DEV_PLAN.md, "From our talks").
+- **Clouds** (after D170): broken masses that no longer cut off at their box, lopsided towers, a noise-drawn overcast,
+  blue between the cells of a dry spring and summer overcast.
+- **The wind** (D176): a direction on its own hexflower, each season blowing as Gdynia's wind rose says, turned for a
+  sea due east; the clouds drift by the share across the view.
+- **The waves** (D177): the open water and the reedy shore draw their ripples live, more, longer and darker in a
+  stronger wind, rolling in or out with its direction.
+- **Ideas written down** (`docs/ideas.md`): the town and the lands around it, the dwarven caravan, the stew's makings
+  and the well; other guests at the stew.

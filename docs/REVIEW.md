@@ -143,7 +143,7 @@ to try it at any hour and facing. Calls Claude made:
   card shows special-a or special-b in the same shape.
 - **By day it isn't tuned:** the same colours over the blue look like an oil slick. Say how the day should look
   (paler, fainter, only at dusk?) when you get to it.
-- **How the game would reach it** is open: nothing sets `sky: "special"` yet (DEV_PLAN "Later").
+- **How the game would reach it** is open: nothing sets `sky: "special"` yet (DEV_PLAN, "From our talks").
 
 ## A dry overcast in spring and summer shows blue (2026-11-21, after D170)
 
@@ -292,7 +292,7 @@ of it is Claude's first go (CR-2); calls Claude made:
 - **Drift**: 0.3 px/s plus 0.55 per level of wind, slower far off (0.45×) and faster for wisps (1.3×) and scud (1.6×);
   backdrops at 0.35×; always left to right. A new weather's sky fades in over 5 s.
 - **Clouds at night and dusk** take a tint: warm with a low sun, purple-grey at twilight, dark blue at night, lighter
-  under a bright moon. Clouds lit orange from below wait (DEV_PLAN "Later").
+  under a bright moon. Clouds lit orange from below wait (DEV_PLAN, "From our talks").
 - **The still water's mirror** is the live sky laid over the baked one at 40%, only where the water mirrors sky (from
   the painting's skyline): a cheap stand-in, not a true reflection; the reedy shore's open water mirrors nothing.
 - **The swamp** gets only the overcast tint it already had, and black's dusk.
