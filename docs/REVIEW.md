@@ -41,6 +41,27 @@ runs up to 51 px. Now about 1 in 100, none longer than 9 px. Calls Claude made:
   art sheet's new "Every cloud pattern" section marks them in red with "Mark straight sides"; say if any look cut.
 - **A test** (`test/clouds.test.js`) holds the sides to 12 px and mass-a's top and bottom to 20.
 
+## The wind on the water (2026-11-22, D177)
+
+Try it in the art sheet's open water: **Wind** from None to Extreme, and **Wind from** for the direction (at Facing
+90°, a wind from 270° is at your back, from 90° in your face, from 0° straight across). Calls Claude made, every number
+in `WAVE_LEVELS` (`src/scene/waves.js`):
+
+- **The open water and the reedy shore:** the ripple marks are drawn live now, not baked in. At None only an eighth
+  of them show, short and with no dark trough, so the water reads glassy (the glints still flick, slower). Each
+  level brings more and longer ones, with the dark trough under them starting further out; from Considerable a few
+  near ones have a white top, a third of them at Extreme. Moderate looks about as the water always did.
+- **Direction:** the ripples drift across by the wind's share across the view (up to 8 px a second near you at
+  Extreme, slower far out), and roll in towards the bank with the wind in your face or out towards the horizon with
+  it at your back. Crests are longest with the wind straight in or out, shorter across.
+- **An offshore wind (at your back) leaves the water by the bank calmer,** the waves growing further out, as they
+  have had no water to build on yet; a wind in your face brings them in full. The reeds don't shelter anything.
+- **The still water (the pond):** its mirror is broken up by the wind, from perfectly still at None to rows pushed
+  2-3 px at Extreme (it was 1-2 px at every wind, about Considerable now). Two thirds of each row's push is a ripple
+  that rolls in or out with the wind's share along the view; a cross wind shows nothing extra there.
+- **Extreme is busy:** every mark shows. A lake's waves stay small, but if Extreme reads too rough, lower its row.
+- **The swamp is left as it was,** sheltered under its trees.
+
 ## The wind's direction (2026-11-21, D176)
 
 Try it in the art sheet's open water: **Wind** (strength) and **Wind from** (a cell of the flower). Calls Claude made:
@@ -67,8 +88,7 @@ Try it in the art sheet's open water: **Wind** (strength) and **Wind from** (a c
 - **A new game, and an old save, start on cell 12:** a steady west wind.
 - **Nothing moves in depth:** only the wind's share across the view drifts the clouds, their shadows on the water
   and the rain's slant. A wind at your back or in your face leaves the clouds nearly still.
-- **Not changed:** the painted trees and reeds still lean and sway one way, and the waves don't care which way the
-  wind blows. Nothing in the fishing reads the direction, and the HUD doesn't name it (the dev bench does).
+- **Not changed:** the painted trees and reeds still lean and sway one way (the waves now follow it, D177). Nothing in the fishing reads the direction, and the HUD doesn't name it (the dev bench does).
 
 ## The green sun (2026-11-21, D175)
 

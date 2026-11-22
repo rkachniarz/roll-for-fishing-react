@@ -12,7 +12,7 @@ import { Graphics } from 'pixi.js';
 import { WATER } from '../engine/features.js';
 import { bloodLight, darkness, greenLight, warmth } from './light.js';
 import { cloudDusk } from './clouds.js';
-import { windAcross } from './wind.js';
+import { windFlow } from './wind.js';
 
 /**
  * @typedef {Object} World  What the sky needs to know.
@@ -71,6 +71,8 @@ export function createSky(below, above, size, rand) {
   let greenTarget = 0;
   /** A cloud over the sun, from the sky layer (src/scene/sky-layer.js, D170): the light comes and goes. */
   let shade = 0;
+  /** The wind's shares across and along the view, worked out each frame (D176). */
+  let flow = { across: 0, along: 0 };
 
   /** @type {{ x: number, y: number, w: number, h: number }[]} */
   const clouds = [];
@@ -107,7 +109,8 @@ export function createSky(below, above, size, rand) {
     const { weather } = world;
     const step = Math.min(dt, 100) / 16.7;
     // Only the wind's share across the view moves things sideways (D176).
-    const across = windAcross(weather, facing ?? world.facing, now);
+    flow = windFlow(weather, facing ?? world.facing, now);
+    const { across } = flow;
 
     // ---------- Cloud shadows, carried by the wind ----------
     const drift = (0.03 + weather.wind * 0.05) * across * step;
@@ -195,6 +198,8 @@ export function createSky(below, above, size, rand) {
     },
     /** The wind's level, for the waves. */
     wind: () => world?.weather.wind ?? 0,
+    /** The wind's shares across and along the view as of the last frame (D176), for the waves. */
+    flow: () => flow,
     /** The tints jump to where they belong on the next frame, with no easing (the art sheet's stills). */
     snap() {
       first = true;

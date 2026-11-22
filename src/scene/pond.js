@@ -31,6 +31,7 @@ import { Application, Container, Rectangle, Sprite, Texture, TextureStyle } from
 import { createSky } from './sky.js';
 import { createSkyLayer, minutesOf } from './sky-layer.js';
 import { BOBBER, WATERLINE, paintGrid, paintRing } from './sprites.js';
+import { WAVE_LEVELS, waveLevel } from './waves.js';
 
 /** The painting's size: the play area's 256 plus a strip either side (D93). */
 const W = 320;
@@ -453,8 +454,9 @@ const nearestShade = (c, shades) => {
  */
 
 /**
- * Three frames of the water: the land mirrored, darker towards the viewer,
- * its rows nudged sideways a pixel or two differently in each frame.
+ * The water: the land mirrored, darker towards the viewer, its rows nudged
+ * sideways a pixel or more, differently in each of three frames, by how hard
+ * the wind blows (D177). Mirrored once; `draw` lays the rows out for a wind.
  * @param {HTMLCanvasElement} above  The land and reeds, to mirror.
  * @param {{ x: number, y: number, color: string, w: number }[]} leaves
  * @param {{ x: number, y: number }[]} mirrored  Pixels of logs and sticks, mirrored about where they touch the water.
@@ -463,46 +465,64 @@ const nearestShade = (c, shades) => {
 function paintWater(above, leaves, mirrored, rand) {
   const src = ctxOf(above).getImageData(0, 0, W, WL).data;
   const rows = H - WL;
+  const pairs = Math.ceil(rows / 2);
   const shades = waterShades();
   /** The water's own colour, which the reflection is mixed into. */
   const tint = rgb(P.waterLight);
-  return [0, 1, 2].map(() => {
-    // Shifts in pairs of rows, bigger nearer the viewer.
-    const shifts = Array.from({ length: Math.ceil(rows / 2) }, (_, i) => {
-      const reach = i * 2 < 30 ? 1 : 2;
-      return Math.floor(rand() * (reach * 2 + 1)) - reach;
-    });
-    const canvas = makeCanvas(W, rows);
-    const g = ctxOf(canvas);
-    const img = g.createImageData(W, rows);
-    for (let d = 0; d < rows; d++) {
-      const sy = Math.max(0, WL - 1 - d);
-      // Darker towards the viewer, as in the photo.
-      const k = 0.95 - (d / rows) * 0.4;
-      for (let x = 0; x < W; x++) {
-        const sx = Math.min(W - 1, Math.max(0, x + shifts[d >> 1]));
-        const at = (sy * W + sx) * 4;
-        const jitter = (BAYER[d % 4][x % 4] / 16 - 0.5) * 14;
-        const mixed = [0, 1, 2].map((c) => (src[at + c] * REFLECTION + tint[c] * (1 - REFLECTION)) * k + jitter);
-        const shade = nearestShade(mixed, shades);
-        const o = (d * W + x) * 4;
-        img.data[o] = shade[0];
-        img.data[o + 1] = shade[1];
-        img.data[o + 2] = shade[2];
-        img.data[o + 3] = 255;
-      }
+  // Each frame's nudges, one a pair of rows: drawn as they always were, so what's painted after stays put.
+  const noise = [0, 1, 2].map(() => Array.from({ length: pairs }, () => rand()));
+  const still = makeCanvas(W, rows);
+  const sg = ctxOf(still);
+  const img = sg.createImageData(W, rows);
+  for (let d = 0; d < rows; d++) {
+    const sy = Math.max(0, WL - 1 - d);
+    // Darker towards the viewer, as in the photo.
+    const k = 0.95 - (d / rows) * 0.4;
+    for (let x = 0; x < W; x++) {
+      const at = (sy * W + x) * 4;
+      const jitter = (BAYER[d % 4][x % 4] / 16 - 0.5) * 14;
+      const mixed = [0, 1, 2].map((c) => (src[at + c] * REFLECTION + tint[c] * (1 - REFLECTION)) * k + jitter);
+      const shade = nearestShade(mixed, shades);
+      const o = (d * W + x) * 4;
+      img.data[o] = shade[0];
+      img.data[o + 1] = shade[1];
+      img.data[o + 2] = shade[2];
+      img.data[o + 3] = 255;
     }
-    g.putImageData(img, 0, 0);
+  }
+  sg.putImageData(img, 0, 0);
+
+  /**
+   * Lays the water out into g: frame `frame`'s nudges, as far as the wind
+   * pushes them, rolled `roll` pairs of rows (the ripples running in or out).
+   * @param {CanvasRenderingContext2D} g @param {number} frame @param {number} wind @param {number} roll
+   */
+  function draw(g, frame, wind, roll) {
+    const shifts = Array.from({ length: pairs }, (_, i) => {
+      const reach = Math.round(waveLevel(WAVE_LEVELS.mirror.map((r) => r[i * 2 < 30 ? 0 : 1]), wind));
+      // Two parts the ripple that rolls with the wind, one the frame's own shimmer.
+      const n = (2 * noise[0][(((i + roll) % pairs) + pairs) % pairs] + noise[frame][i]) / 3;
+      return Math.floor(n * (reach * 2 + 1)) - reach;
+    });
+    g.drawImage(still, 0, 0);
+    for (let i = 0; i < pairs; i++) {
+      const sh = shifts[i];
+      const d = i * 2;
+      const h = Math.min(2, rows - d);
+      // Each pixel shows the one `sh` to its right; the column left at the edge keeps its own.
+      if (sh > 0) g.drawImage(still, sh, d, W - sh, h, 0, d, W - sh, h);
+      else if (sh < 0) g.drawImage(still, 0, d, W + sh, h, -sh, d, W + sh, h);
+    }
     for (const p of mirrored) {
       const d = p.y - WL;
-      if (d >= 0 && d < rows) dot(g, p.x + shifts[d >> 1], d, P.reflectLog);
+      if (d >= 0 && d < rows) dot(g, p.x - shifts[d >> 1], d, P.reflectLog);
     }
     for (const leaf of leaves) {
       g.fillStyle = leaf.color;
       g.fillRect(leaf.x, leaf.y - WL, leaf.w, 1);
     }
-    return canvas;
-  });
+  }
+  return { rows, draw };
 }
 
 /** Leaves floating on the water: more, and bigger, nearer the viewer. @param {() => number} rand */
@@ -1002,9 +1022,11 @@ function paintReedPlant(plant, reach) {
  * in `back` just over the water for the sky layer's glitter, and `isWater`,
  * which of its pixels are open water, and `skyline`, the top of its land in
  * each column; the sky layer goes under `back`.
- * @typedef {{ back: Container, front: Container, update: (now: number, wind: number, crop: number, raining: boolean, light?: number) => void,
+ * @typedef {{ back: Container, front: Container,
+ *   update: (now: number, wind: number, crop: number, raining: boolean, light?: number, flow?: { across: number, along: number }) => void,
  *   horizon?: number, skyline?: number[], waterLayer?: Container, isWater?: (x: number, y: number) => boolean, mirrorSky?: boolean }} Pond
- *   `light`: how many of the glints still flick under the clouds (D170); `mirrorSky`: still water, mirroring the sky.
+ *   `light`: how many of the glints still flick under the clouds (D170); `flow`: the wind's shares across and along
+ *   the view (`windFlow`, D176), for the waves (D177); `mirrorSky`: still water, mirroring the sky.
  */
 
 /**
@@ -1038,7 +1060,7 @@ export function paintPond(rand, season = 'autumn') {
   ag.drawImage(land, 0, 0);
   for (const [s, frames] of paintReeds(blades).entries()) ag.drawImage(frames[0], s * SECTION - 2, WL - REED_H);
   const debris = paintDebris(rand);
-  const waterFrames = paintWater(above, scatterLeaves(rand), debris.mirrored, rand).map(tex);
+  const waterPainter = paintWater(above, scatterLeaves(rand), debris.mirrored, rand);
   const birchFrames = paintPlant(growBirch(rand), 2, trunkPainter(rand)).map(tex);
   const beechFrames = paintPlant(growBeech(rand), 3, null).map(tex);
   const clumpFrames = paintReedPlant(growClump(rand), 1).map(tex);
@@ -1046,8 +1068,14 @@ export function paintPond(rand, season = 'autumn') {
 
   const back = new Container();
   back.addChild(new Sprite(tex(land)));
-  const water = new Sprite(waterFrames[0]);
+  // Laid out afresh when the frame, the wind or the ripples' roll changes (D177).
+  const waterCanvas = makeCanvas(W, waterPainter.rows);
+  const waterTexture = tex(waterCanvas);
+  const water = new Sprite(waterTexture);
   water.y = WL;
+  let waterDrawn = '';
+  let roll = 0;
+  let lastNow = -1;
   back.addChild(water);
   // The sky layer's glitter goes here, on the water and under what floats (D169).
   const waterLayer = new Container();
@@ -1120,13 +1148,22 @@ export function paintPond(rand, season = 'autumn') {
     isWater: (_x, y) => y > WL,
     // Still water mirrors the live sky and its clouds (D170).
     mirrorSky: true,
-    update(now, wind, crop, raining, light = 1) {
+    update(now, wind, crop, raining, light = 1, flow = { across: 1, along: 0 }) {
       for (const [s, sprite] of reeds.entries()) sprite.texture = reedFrames[s][gust(now, wind, s * SECTION + SECTION / 2)];
+      // The ripples run out from the bank with the wind at the player's back, in towards it against their face.
+      roll += waveLevel(WAVE_LEVELS.roll, wind) * (waterPainter.rows / 2) * flow.along * (lastNow < 0 ? 0 : Math.min(now - lastNow, 100) / 1000);
+      lastNow = now;
+      const frame = Math.floor(now / (520 / (1 + wind * 0.3))) % 3;
+      const drawn = `${frame} ${Math.round(wind * 4)} ${Math.floor(roll)}`;
+      if (drawn !== waterDrawn) {
+        waterPainter.draw(ctxOf(waterCanvas), frame, wind, Math.floor(roll));
+        waterTexture.source.update();
+        waterDrawn = drawn;
+      }
       birch.texture = birchFrames[gust(now, wind, 60)];
       beech.texture = beechFrames[gust(now, wind, 290)];
       clump.texture = clumpFrames[gust(now, wind, 30)];
       lone.texture = loneFrames[gust(now, wind, 305)];
-      water.texture = waterFrames[Math.floor(now / (520 / (1 + wind * 0.3))) % 3];
 
       for (const [i, glint] of glints.entries()) {
         // Fewer flick under cloud (D170): the rest lie flat.
@@ -1215,7 +1252,7 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
     sky.update(now, dt);
     lastFrame = now;
     sky.setShade(skyPainted.back.visible ? skyPainted.shade() : 0);
-    pond.update(now, sky.wind(), -view.x, raining, skyPainted.back.visible ? skyPainted.glints() : 1);
+    pond.update(now, sky.wind(), -view.x, raining, skyPainted.back.visible ? skyPainted.glints() : 1, sky.flow());
     if (skyPainted.back.visible) skyPainted.update(now, dt);
     const bob = Math.floor(now / 650) % 2;
     bobber.position.set(Math.round(BOBBER_AT.x - bobber.width / 2), BOBBER_AT.y - WATERLINE.near + bob);

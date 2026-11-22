@@ -27,9 +27,24 @@ const GUSTS = 0.4;
  * @param {number} now  Milliseconds, for the gusts and a variable wind's swing.
  */
 export function windAcross(weather, facing, now) {
-  if (weather.windFrom === undefined) return 1;
-  if (weather.windFrom === null) return VARIABLE_SWING * Math.sin(now / VARIABLE_MS);
-  const across = Math.sin(((weather.windFrom + 180 - (facing ?? 0)) * Math.PI) / 180);
+  return windFlow(weather, facing, now).across;
+}
+
+/**
+ * The wind's shares across the view and along it, times its gusts. `along` is
+ * 1 for a wind at the player's back, blowing away out over the water, and -1
+ * for one in their face, blowing in to the bank; the waves use it (they're
+ * drawn afresh as they move, so they can move in depth where the clouds can't).
+ * A variable wind and the art sheet's old trials blow straight across.
+ * @param {WindLook} weather
+ * @param {number | null | undefined} facing  The spot's compass facing; without one, north.
+ * @param {number} now  Milliseconds, for the gusts and a variable wind's swing.
+ * @returns {{ across: number, along: number }}
+ */
+export function windFlow(weather, facing, now) {
+  if (weather.windFrom === undefined) return { across: 1, along: 0 };
+  if (weather.windFrom === null) return { across: VARIABLE_SWING * Math.sin(now / VARIABLE_MS), along: 0 };
+  const angle = ((weather.windFrom + 180 - (facing ?? 0)) * Math.PI) / 180;
   const gust = weather.windKind === 'unsettled' ? 1 + GUSTS * Math.sin(now / 1700) * Math.sin(now / 4100) : 1;
-  return across * gust;
+  return { across: Math.sin(angle) * gust, along: Math.cos(angle) * gust };
 }

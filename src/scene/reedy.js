@@ -23,6 +23,7 @@
 
 import { Container, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { paintGrid, paintRing } from './sprites.js';
+import { WAVE_LEVELS, looksRandom, waveLevel, windOnWater } from './waves.js';
 
 /** The painting's size: the play area's 256 plus a strip either side (D93). */
 const W = 320;
@@ -233,14 +234,13 @@ function ramp(steps, t, x, y) {
 // ---------- The water ----------
 
 /**
- * Three frames of the open water: paler towards the horizon where it mirrors
+ * The open water under its ripples: paler towards the horizon where it mirrors
  * the sky, deep blue near the viewer, darker still in the channel beside the
- * reeds. Its ripples are fixed marks that shift a pixel and change length from
- * frame to frame, so the water shimmers in place.
- * @param {typeof REEDY} P @param {() => number} rand
+ * reeds. The ripples are drawn over it as they move (`paintRipples`).
+ * @param {typeof REEDY} P
  * @param {(x: number) => number} top  The top of the reeds at a column (`topAt`), or none.
  */
-function paintWater(P, rand, top) {
+function paintWater(P, top) {
   const rows = H - HZ;
   const water = [P.waterHaze, P.waterFar, P.waterMid, P.waterNear, P.waterDeep, P.waterDark];
   const base = makeCanvas(W, rows);
@@ -258,30 +258,100 @@ function paintWater(P, rand, top) {
       dot(g, x, d, colour);
     }
   }
-  // Ripples: small and pale far out, bigger with a dark trough near the viewer.
-  /** @type {{ x: number, d: number, len: number, dir: number }[]} */
+  return base;
+}
+
+/**
+ * A ripple mark: `x` across (moving with the wind), `u` its depth, 0 at the
+ * horizon to 1 at the bottom (its row is `u ** 1.4` of the way down, so they
+ * crowd far out and move slower there, as seen from the bank). `rank` says
+ * from which wind on it shows, `foam` whether it whitens in a strong one.
+ * @typedef {{ x: number, u: number, len: number, dir: number, phase: number, rank: number, foam: number }} Ripple
+ */
+
+/**
+ * The ripples (D177): the 260 first drawn from the scenery stream as they
+ * always were, and as many again from their own generator, so the reeds and
+ * glints painted after them stay where they were.
+ * @param {() => number} rand
+ * @returns {Ripple[]}
+ */
+function scatterRipples(rand) {
+  const rows = H - HZ;
+  /** @type {Ripple[]} */
   const marks = [];
   for (let i = 0; i < 260; i++) {
     const d = Math.floor(rows * rand() ** 1.4);
-    marks.push({ x: Math.floor(rand() * W), d, len: 1 + Math.floor((d / rows) * 6 + rand() * 2), dir: rand() < 0.5 ? -1 : 1 });
+    const x = Math.floor(rand() * W);
+    const len = rand();
+    marks.push({ x, u: (d / rows) ** (1 / 1.4), len, dir: rand() < 0.5 ? -1 : 1, phase: 0, rank: 0, foam: 0 });
   }
-  return [0, 1, 2].map((frame) => {
-    const canvas = makeCanvas(W, rows);
-    const fg = ctxOf(canvas);
-    fg.drawImage(base, 0, 0);
-    for (const m of marks) {
-      const x = m.x + [0, 1, 0][frame] * m.dir;
-      const len = Math.max(1, m.len + [0, 1, -1][frame]);
-      if (top(x) <= HZ + m.d + 1 || top(x + len) <= HZ + m.d + 1) continue;
-      fg.fillStyle = m.d < 25 ? P.waveLight : P.waterHaze;
-      fg.fillRect(x, m.d, len, 1);
-      if (m.d > 40) {
-        fg.fillStyle = P.waveDark;
-        fg.fillRect(x + 1, m.d + 1, Math.max(1, len - 1), 1);
-      }
+  const own = looksRandom(marks[0].x * 1000 + marks[1].x);
+  for (let i = 0; i < 300; i++) {
+    marks.push({ x: Math.floor(own() * W), u: own(), len: own(), dir: own() < 0.5 ? -1 : 1, phase: 0, rank: 0, foam: 0 });
+  }
+  // Which show from which wind on: in a shuffled order, so a light wind's few are spread all over.
+  const order = marks.map((_, i) => ({ i, key: own() })).sort((a, b) => a.key - b.key);
+  for (const [k, { i }] of order.entries()) {
+    marks[i].rank = (k + 0.5) / marks.length;
+    marks[i].phase = Math.floor(own() * 3);
+    marks[i].foam = own();
+  }
+  return marks;
+}
+
+/**
+ * Draws the ripples as the wind has them now: more, longer and with darker
+ * troughs the stronger it blows, white-topped near the viewer in a strong one,
+ * long crests when it blows straight in or out and shorter across. Small and
+ * pale far out, bigger near the viewer.
+ * @param {CanvasRenderingContext2D} g @param {Ripple[]} marks @param {typeof REEDY} P
+ * @param {(x: number) => number} top
+ * @param {number} now @param {number} wind @param {{ across: number, along: number }} flow
+ */
+function paintRipples(g, marks, P, top, now, wind, flow) {
+  const rows = H - HZ;
+  g.clearRect(0, 0, W, rows);
+  const tick = Math.floor(now / (600 / (1 + wind * 0.4)));
+  const crest = 0.8 + 0.4 * Math.min(1, Math.abs(flow.along));
+  for (const m of marks) {
+    const d = Math.floor(rows * m.u ** 1.4);
+    const near = d / rows;
+    const strength = windOnWater(wind, flow.along, near);
+    if (m.rank >= waveLevel(WAVE_LEVELS.share, strength)) continue;
+    const frame = (tick + m.phase) % 3;
+    const x = Math.round(m.x) + [0, 1, 0][frame] * m.dir;
+    const long = (1 + Math.floor(near * 6 + m.len * 2)) * waveLevel(WAVE_LEVELS.length, strength) * crest;
+    const len = Math.max(1, Math.round(long) + [0, 1, -1][frame]);
+    if (top(x) <= HZ + d + 1 || top(x + len) <= HZ + d + 1) continue;
+    g.fillStyle = d < 25 ? P.waveLight : P.waterHaze;
+    g.fillRect(x, d, len, 1);
+    if (near > 0.3 && len >= 3 && m.foam < waveLevel(WAVE_LEVELS.foam, strength)) {
+      g.fillStyle = P.glint;
+      g.fillRect(x + Math.floor(len / 3), d, Math.max(1, Math.round(len / 3)), 1);
     }
-    return canvas;
-  });
+    if (d > waveLevel(WAVE_LEVELS.trough, strength)) {
+      g.fillStyle = P.waveDark;
+      g.fillRect(x + 1, d + 1, Math.max(1, len - 1), 1);
+    }
+  }
+}
+
+/**
+ * Moves the ripples on with the wind: across the view by its share across, and
+ * in towards the bank or out towards the horizon by its share along. Both wrap.
+ * @param {Ripple[]} marks @param {number} dt  Milliseconds. @param {number} wind
+ * @param {{ across: number, along: number }} flow
+ */
+function moveRipples(marks, dt, wind, flow) {
+  const s = Math.min(dt, 100) / 1000;
+  const drift = waveLevel(WAVE_LEVELS.drift, wind) * flow.across * s;
+  const roll = waveLevel(WAVE_LEVELS.roll, wind) * flow.along * s;
+  for (const m of marks) {
+    // Slower far out, as seen from the bank.
+    m.x = (((m.x + drift * (0.2 + 0.8 * m.u ** 1.4)) % W) + W) % W;
+    m.u = (((m.u - roll) % 1) + 1) % 1;
+  }
 }
 
 // ---------- The reeds ----------
@@ -449,10 +519,18 @@ export function paintReedy(rand, season = 'summer', { reeds: withReeds = true } 
   const top = withReeds ? topAt : () => H + 20;
 
   const back = new Container();
-  const waterFrames = paintWater(P, rand, top).map(tex);
-  const water = new Sprite(waterFrames[0]);
+  const water = new Sprite(tex(paintWater(P, top)));
   water.y = HZ;
   back.addChild(water);
+  // The ripples over it, drawn afresh as the wind moves them (D177).
+  const ripplesMarks = scatterRipples(rand);
+  const rippleCanvas = makeCanvas(W, H - HZ);
+  const rippleTexture = tex(rippleCanvas);
+  const rippleSprite = new Sprite(rippleTexture);
+  rippleSprite.y = HZ;
+  back.addChild(rippleSprite);
+  let lastNow = -1;
+  let lastDrawn = -Infinity;
   // The sky layer's glitter goes here, on the water and under what floats (D169).
   const waterLayer = new Container();
   back.addChild(waterLayer);
@@ -531,9 +609,16 @@ export function paintReedy(rand, season = 'summer', { reeds: withReeds = true } 
     waterLayer,
     // Open water: below the horizon and clear of the reed banks.
     isWater: (x, y) => y > HZ && top(x) > y + 1,
-    update(now, wind, crop, raining, light = 1) {
+    update(now, wind, crop, raining, light = 1, flow = { across: 1, along: 0 }) {
       for (const [s, sprite] of reeds.entries()) sprite.texture = reedFrames[s][gust(now, wind, s * SECTION + SECTION / 2)];
-      water.texture = waterFrames[Math.floor(now / (600 / (1 + wind * 0.4))) % 3];
+      moveRipples(ripplesMarks, lastNow < 0 ? 0 : now - lastNow, wind, flow);
+      lastNow = now;
+      // Redrawn a dozen times a second at most: they move a pixel at a time.
+      if (now - lastDrawn >= 80 || now < lastDrawn) {
+        paintRipples(ctxOf(rippleCanvas), ripplesMarks, P, top, now, wind, flow);
+        rippleTexture.source.update();
+        lastDrawn = now;
+      }
       for (const [i, glint] of glints.entries()) {
         // Fewer flick under cloud (D170): the rest lie flat.
         glint.sprite.visible = i < Math.round(glints.length * light);

@@ -8,7 +8,8 @@ import { diceFor } from '../src/dice.js';
 import { stepWind, windFrom, windKind, windStart } from '../src/engine/wind.js';
 import { deserialize, diceFrom, newGame, SAVE_VERSION } from '../src/engine/state.js';
 import { stepTime } from '../src/engine/passage.js';
-import { windAcross } from '../src/scene/wind.js';
+import { windAcross, windFlow } from '../src/scene/wind.js';
+import { WAVE_LEVELS, waveLevel, windOnWater } from '../src/scene/waves.js';
 import { content } from '../src/generated/content.js';
 
 const dice = (seed = 1) => diceFor(createRng(deriveSeed(seed, 'wind')));
@@ -97,4 +98,29 @@ test("only the wind's share across the view drifts the scene", () => {
   assert.equal(windAcross({}, 90, 0), 1);
   // A variable wind swings only part way.
   for (const now of [0, 20000, 60000, 100000]) assert.ok(Math.abs(windAcross({ windFrom: null, windKind: 'variable' }, 90, now)) <= 0.5);
+});
+
+test("the waves take the wind's share along the view: out from the bank at the player's back (D177)", () => {
+  // Facing east: a west wind blows straight away from the player, an east wind into their face.
+  assert.ok(Math.abs(windFlow({ windFrom: 270, windKind: 'steady' }, 90, 0).along - 1) < 1e-9);
+  assert.ok(Math.abs(windFlow({ windFrom: 90, windKind: 'steady' }, 90, 0).along + 1) < 1e-9);
+  assert.ok(Math.abs(windFlow({ windFrom: 0, windKind: 'steady' }, 90, 0).along) < 1e-9);
+  assert.deepEqual(windFlow({}, 90, 0), { across: 1, along: 0 });
+  assert.equal(windFlow({ windFrom: null, windKind: 'variable' }, 90, 0).along, 0);
+  // windAcross is windFlow's across.
+  for (const windFrom of [0, 30, 150, 300]) {
+    assert.equal(windAcross({ windFrom, windKind: 'unsettled' }, 90, 1234), windFlow({ windFrom, windKind: 'unsettled' }, 90, 1234).across);
+  }
+});
+
+test('the waves grow with the wind, and an offshore wind leaves the water by the bank calmer (D177)', () => {
+  for (const table of [WAVE_LEVELS.share, WAVE_LEVELS.length, WAVE_LEVELS.foam, WAVE_LEVELS.drift, WAVE_LEVELS.roll]) {
+    for (let w = 1; w <= 5; w++) assert.ok(table[w] >= table[w - 1]);
+  }
+  for (let w = 1; w <= 5; w++) assert.ok(WAVE_LEVELS.trough[w] <= WAVE_LEVELS.trough[w - 1]);
+  assert.equal(waveLevel([0, 10], 0.5), 5);
+  assert.equal(waveLevel([0, 10], 9), 10);
+  assert.equal(windOnWater(4, -1, 1), 4);
+  assert.ok(windOnWater(4, 1, 1) < windOnWater(4, 1, 0));
+  assert.equal(windOnWater(4, 1, 0), 4);
 });
