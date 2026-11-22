@@ -12,8 +12,8 @@ a plain generic sentence, a stand-in rule. A town of placeholder squares is bett
 listed under the creative task that will replace it, so nothing is forgotten; a placeholder that fits no task gets a
 new one.
 
-**Where things stand (2026-11-22):** Phases 1, 2, 3, 7, 10 and 12 are done, and so are the testers' fixes (T.1–T.4);
-Phases 4, 5, 6, 8, 9 and 11 have a few tasks each still open, listed below. Since Phase 12: the open water as the
+**Where things stand (2026-11-22):** Phases 1, 2, 3, 4, 5, 7, 10 and 12 are done, and so are the testers' fixes (T.1–T.4);
+Phases 6, 8, 9 and 11 have a few tasks each still open, listed below. Since Phase 12: the open water as the
 default scene (D171), three skies on the art sheet only (the special sky, the blood moon, the green sun, D173–D175),
 the wind's direction (D176) and waves that follow it (D177). Nothing is scheduled next; the open tasks below and the
 ideas under [From our talks](#from-our-talks-not-yet-planned) are the owner's to pick from. Claude's guesses are on
@@ -27,7 +27,7 @@ ideas under [From our talks](#from-our-talks-not-yet-planned) are the owner's to
 | `R1.1`… `§C.1`… | Vision, requirements, catalogues | [docs/spec.md](docs/spec.md) |
 | `PORTING-NOTES §n` | What carries over from the prototype, and its lessons | [docs/PORTING-NOTES.md](docs/PORTING-NOTES.md) |
 | `0.1`…, `T.n` | Finished phases and tasks, task by task | [docs/history.md](docs/history.md) |
-| `Q-n`, `4.x`–`11.x` | Open questions, development still to do | here |
+| `Q-n`, `6.x`–`11.x` | Open questions, development still to do | here |
 | `CR-n` | Creative work: art, writing, sound | here, [Creative work](#creative-work) |
 | | The owner's loose ideas: events, people, the story | [docs/ideas.md](docs/ideas.md), [docs/ideas/items.md](docs/ideas/items.md) |
 | | Questions about the town, many still open | [docs/town-questions.md](docs/town-questions.md) |
@@ -55,25 +55,9 @@ Building the requirements and the owner's ideas. Anything the creative track has
 (D105), named in the task and listed under its `CR-n`.
 
 **Done, in [docs/history.md](docs/history.md):** Phase 1, the feel trial; Phase 2, the engine core and the port;
-Phase 3, the core loop, playable on GitHub Pages; Phase 7, events; Phase 10, the night, the town and the stew; Phase
-12, the map, the sun and the moon, the sky and its clouds; the testers' fixes, T.1–T.4. The done tasks of the phases
-below are there too.
-
-## Phase 4: Art pipeline and the living scene
-
-Done: 4.2–4.6, 4.8; and **4.7**, weather and life on a spot (D100): the sky and its clouds came with Phase 12
-(D169, D170), the waves follow the wind (D176, D177), and the reeds sway in it. Their art is CR-2.
-
-- [ ] **4.1** Sprite sizes per depth band, the atlas format and naming; Aseprite → atlas export ready for when
-  hand-drawn art arrives (D9). The fixed palette is picked with the owner (CR-9). *Since D90 and D131 the art is drawn
-  as code or in MS Paint through `npm run sprite`; whether an atlas is still wanted is the owner's call.*
-
-## Phase 5: Items and inventory
-
-Done: 5.1–5.5, 5.7, 5.8.
-
-- [ ] **5.6** Review D8: plain DOM or Preact for the UI. *D8 put the review at the inventory, which is done; the
-  review itself hasn't happened, and the UI has grown a good deal in plain DOM since.*
+Phase 3, the core loop, playable on GitHub Pages; Phase 4, the art pipeline and the living scene; Phase 5, items
+and inventory; Phase 7, events; Phase 10, the night, the town and the stew; Phase 12, the map, the sun and the moon,
+the sky and its clouds; the testers' fixes, T.1–T.4. The done tasks of the phases below are there too.
 
 ## Phase 6: Classes, levels, abilities, knowledge
 
@@ -88,11 +72,14 @@ Done: 8.2, 8.4–8.7; and **8.1**, the spots learned and travelled to (D101, D10
 of the planned placeholder shapes; the town, the inn, barter, the stew and the Alchemist came with Phase 10 (D123).
 
 - [ ] **8.3** The rest of the town (R11.5, R10.4). Squares and triangles and plain lines until CR-5 and CR-13.
-  - [ ] The scrap dealer: junk, and perhaps stuff and treasure. Is it the junk collector of `docs/ideas.md`, who comes
-    to the lake ("Only a fool would fish in these waters!"), or two people? (town questions 20–21). `trade: junk`
-    is built (7.9); no event uses it yet.
+  - [ ] The scrap dealer (a codename, D180), who deals in equipment: unwanted gear traded for something they have,
+    and equipment crafted from parts the player fishes up. Crafting is new to the engine: what the parts are, where
+    they are found and what each recipe makes are questions for the owner before it starts.
   - [ ] The inn's upgrades (R10.4): how they come and what each level changes (town question 13).
   - [ ] Bought knowledge, R4.5's tip at the inn: what it costs and what it reveals (town question 14).
+- [ ] **8.12** The junk collector (D180, `docs/ideas.md`): the crazy visitor who comes now and then and takes all
+  the grey items for white stuff, through `trade: junk` (7.9) and `again:` (7.10); the one person who knows the
+  story. A placeholder event until CR-13.
 - [ ] **8.8** Raid supply orders in town: 10, 25 or 40 of one fish over several hand-ins, the progress shown,
   consumables and gear as the reward (7.7 and 7.8 are built; town questions 26–29).
 - [ ] **8.9** Companions at the fishing spot: the cat, once it trusts the player (`docs/ideas.md`, town questions
@@ -214,7 +201,7 @@ placeholder, it's added here.
   the green and red circles (`src/ui/map.js`), until the owner's picture for each spot once it is discovered.*
 - [ ] **CR-8** Perk and ability icons (the action bar shows initials), and the look of a Greedy fish and a bent fish
   (6.3). *Also replaces the green eye around Look Underwater (D139), four flat rings in `src/scene/views.js`.*
-- [ ] **CR-9** The fixed palette (4.1) and the art sheet's open trials (`art.html`).
+- [ ] **CR-9** The fixed palette and the art sheet's open trials (`art.html`).
 - [ ] **CR-15** Class fish (D114): how each looks on the water, its aura and the witch's spells, and their log lines.
   *The fish itself shows below the surface in its ring, seen from the bank (D131). Still Claude's: the ring of dots
   (`src/scene/scene.js`) and the lines in `src/strings.js` (`log.champion-*`).*
@@ -228,7 +215,8 @@ placeholder, it's added here.
   perks' names and texts (REVIEW.md lists them as Claude's). *From Phase 11: the Conservationist's and Look
   Underwater's descriptions, the Queasy debuff, the fight styles' journal and manoeuvre lines
   (`content/rules/fight-styles.json`), and six placeholder taste lines (`docs/placeholders.md` lists them).*
-- [ ] **CR-13** What the town's people say: the inn, the scrap dealer, the Alchemist, the raid orders (8.3, 8.6, 8.8).
+- [ ] **CR-13** What the town's people say: the inn, the scrap dealer, the junk collector, the Alchemist, the raid
+  orders (8.3, 8.6, 8.8, 8.12).
   *From Phase 10: Claude's events (`welcome`, `nightfall`, `innkeeper-first`, `the-inn`, `your-room`, `alchemist`,
   `swamp-ghost`, all `placeholder: true`) and the new log lines (`PLACEHOLDER_UI` in `src/strings.js`); the
   innkeeper's first words are the owner's, edited.*

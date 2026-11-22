@@ -3,7 +3,7 @@
 The owner's loose ideas for events, characters and the story, kept so they aren't lost. None of this is a requirement
 yet: an idea becomes one when it's built or decided (`docs/decisions.md`). The engine work they would need is in
 `DEV_PLAN.md`; each idea below names its tasks. Most of the engine work is built; still to do are 8.8, 8.9, the
-junk collector's own event (8.3), and the town ideas under DEV_PLAN.md's "From our talks".
+junk collector's own event (8.12), and the town ideas under DEV_PLAN.md's "From our talks".
 
 Item ideas, a hundred cut to twenty, are in [ideas/items.md](ideas/items.md).
 
@@ -78,7 +78,7 @@ the pools do in `stepTime`); not in the plan yet.
 ## The junk collector
 
 A seemingly crazy person approaches the player and offers to take their junk. If the player accepts, they lose all
-useless items and gain bait or treasure of appropriate value. This person appears periodically and seems to know a
+grey items and gain white stuff of appropriate value (D180; first written as bait or treasure). This person appears periodically and seems to know a
 lot about the lake and the area. They welcome the player with:
 
 > "Only a fool would fish in these waters! But if you're already doing it..."

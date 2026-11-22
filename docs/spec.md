@@ -242,9 +242,10 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
   28 days. The weather steps once per cast. All of these are game values. A strike before any bite moves nothing on.
   A new game starts on a random morning of the year, leaning towards the season outside. Sunrise and sunset follow
   Gdynia's year. *(D66, D85)*
-- **R11.5** The town: the inn (trades for fish; upgrades raise demand), a scrap dealer (trades for junk), later more
-  vendors. There is no money: trading is barter, and what an item is worth stays hidden. The first use of fish:
-  putting them into the inn's perpetual stew for a buff (R12.6). *(D24, D28, D86)*
+- **R11.5** The town: the inn (trades for fish; upgrades raise demand), a scrap dealer (trades and crafts equipment),
+  later more vendors; the junk collector, a visitor, takes junk for white stuff. There is no money: trading is barter,
+  and what an item is worth stays hidden. The first use of fish: putting them into the inn's perpetual stew for a buff
+  (R12.6). *(D24, D28, D86, D180)*
 - **R11.6** The game has no ending; it ends when the player stops. Collecting (R4) is the long-term goal. *(D23)*
 - **R11.7** **The Alchemist** visits town from time to time (R10.6; now a shop with hours and barter, R17.6, R18). While in town, they sell buffing potions and buy
   alchemical ingredients, which are fished up as stuff (D112) and range from vials to rare magical goo. *(D30)*

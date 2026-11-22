@@ -70,6 +70,9 @@ what it needed with placeholders (REVIEW.md):
 20. Is the scrap dealer the junk collector of ideas.md ("Only a fool would fish in these waters!"), who comes to you at
     the lake? Or two people, one in a shop and one who wanders? The collector's event works already (`trade: junk`).
 21. Junk only, or stuff and treasure too?
+   > **Owner (2026-11-22, D180):** two people. The junk collector takes all the grey items and trades them for white
+   > stuff. The scrap dealer (a codename) is about equipment: trade away unwanted gear for something they have, and
+   > craft equipment from parts you fish up.
 
 ## The Alchemist (8.6, R11.7, D30)
 

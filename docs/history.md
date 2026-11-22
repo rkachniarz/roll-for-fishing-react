@@ -146,7 +146,7 @@ section each.
   Unit tests 92, browser checks all passing, with new ones for the slots, the theme surviving a reload and the
   floating words.
 
-## Phase 4: Art pipeline and the living scene (in progress)
+## Phase 4: Art pipeline and the living scene (done 2026-11-22)
 
 - **4.4** A catch's icon appears at the bobber, rises, and flies to the new "Bucket & bags" button, outlined in its
   rarity colour; the game doesn't wait for it. Default 16×16 icons drawn as code (fish, boot, chest, bottle) stand in
@@ -176,8 +176,9 @@ section each.
 - **4.7** Weather and life on a spot (D100), done by later work rather than as one task: the sky and its clouds in
   Phase 12 (D169, D170), the waves with the wind's strength and direction (D176, D177), the painted reeds swaying in
   it. Their art is CR-2.
+- **4.1** The sprite atlas and Aseprite export, dropped (D178): the art is drawn as code or in MS Paint.
 
-## Phase 5: Items and inventory (in progress)
+## Phase 5: Items and inventory (done 2026-11-22)
 
 - **5.5** The bucket holds 16 fish to start (`bucketSize`, a game value, so bigger buckets can come as items). A fish
   caught with the bucket full still counts in the book and gives its XP, then waits as `pendingCatch`: no cast goes
@@ -278,6 +279,7 @@ section each.
 - **Junk and stuff (D112)** Junk is grey and of no use but its value; things used for something (the bottle, map
   fragments, the lorebook's pages) became the category `stuff`, white. The bag gained a Junk tab, the `useful` flag
   went, and the content check keeps junk grey and without a use.
+- **5.6** The review of D8 (D179): the UI stays plain DOM; what is ahead for it is more of the same kind.
 
 ## Phase 6: Classes, levels, abilities, knowledge (in progress)
 
