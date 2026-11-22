@@ -45,7 +45,8 @@ Q-22 → D61, Q-23 → D62, Q-35 → D64, Q-36 → D65, Q-37 → D66, Q-38 → D
 
 - **Q-40 How are hidden numbers revealed?** Hidden rolls stay hidden until something reveals them (R5.2). The number
   a fish needed shows from level 1 (D107). Still open: what reveals the bite and treasure rolls and Luck (a perk, an
-  item, a class?), and where those rolls would show; the game values to reveal them are in.
+  item, a class?), and where those rolls would show; the game values to reveal them are in. *The owner (2026-11-22):*
+  information should come with the level, the same for every class (see "Progression" under From our talks).
 
 ---
 
@@ -102,6 +103,22 @@ Done: 11.1–11.9, 11.11–11.14 (D138–D141, D146–D157).
 
 Ideas the owner and Claude have talked over, written down so they have a place, but not yet a task or an order. A
 line becomes a task once the owner picks it and answers its questions.
+
+**Progression** (the owner, 2026-11-22):
+- **Places opened by events and items, not by noticing.** The finished game has no "you noticed a spot" (`learnAfter`,
+  D109): a boat to reach the open and the deep water, the dwarves' permission to cross the river's only bridge to the
+  rocky shore, and so on. The machinery is partly there (`learn:`, `open:`, map fragments, D110); what opens each
+  spot is the owner's to write.
+- **Achievements**, a second track of progression: each one unlocks something, if only something cosmetic. The
+  "same fish again and again" idea below would be one.
+- **Information that comes with the level**, the same for every class: as the fish's roll shows from level 1 (D107),
+  the other hidden numbers and knowledge (the bite and treasure rolls, Luck, the place's completion, a fish's
+  spawning, taste and the like) open on a plan by level, instead of the mix of levels, perks and items they come from
+  now. Takes in Q-40.
+
+**The wider world** (the owner, 2026-11-22; `docs/ideas.md`, "The town and the lands around it"): the next stage after
+the town's visitors, kingdoms and peoples that live beyond the town (Kolradia, Ferrstad, the Breadbasket, the
+Wildlands), simulated as the pools are, their doings reaching the town and the lake. Growing in `docs/ideas.md`.
 
 **The sky in the game.** Each is on the art sheet only so far:
 - **The special sky** (D173), the magic of the land: how the game brings it (a weather, an event, a place?), and how
