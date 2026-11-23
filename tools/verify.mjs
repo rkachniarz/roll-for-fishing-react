@@ -1445,6 +1445,86 @@ await check('events: a fighter only sees two choices, and a quick tap picks noth
   report('events: Thank you, frog closes it', !(await page.isVisible('#event')));
 });
 
+// The scene's modules, taken one by one in the page (the code review's batch B):
+// what a painting or a view paints is freed when it goes, every frame of it;
+// swimming fish sit on whole pixels, and change their look when told to.
+// On the art sheet, folded, where nothing else is painting: the game would make textures of its own meanwhile.
+await check('scene: paintings and views free every frame; fish on whole pixels (B1, B2, B4)', DESKTOP, null, async (page) => {
+  await page.goto(BASE + 'art.html');
+  await page.waitForSelector('body[data-ready="true"]', { timeout: 20000 });
+  const out = await page.evaluate(async () => {
+    const { Container, Texture } = await import('pixi.js');
+    const { paintPond } = await import('/src/scene/pond.js');
+    const { paintReedy, paintOpen } = await import('/src/scene/reedy.js');
+    const { paintSwamp } = await import('/src/scene/swamp.js');
+    const { createViews } = await import('/src/scene/views.js');
+    const { createShoal, swimSprite } = await import('/src/scene/swim.js');
+    const { content } = await import('/src/generated/content.js');
+    let seed = 7;
+    const rand = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);
+    /** Every texture made from here on. */
+    const made = [];
+    const from = Texture.from;
+    Texture.from = function (...args) {
+      const t = from.apply(this, args);
+      made.push(t);
+      return t;
+    };
+    const left = (start, end = made.length) => made.slice(start, end).filter((t) => !t.destroyed).length;
+    const result = { paintings: {}, views: {}, offGrid: [], look: '' };
+    try {
+      for (const [name, paint, season] of [['pond', paintPond, 'autumn'], ['reedy', paintReedy, 'winter'], ['open', paintOpen, 'summer'], ['swamp', paintSwamp, 'autumn']]) {
+        const start = made.length;
+        const p = paint(rand, season);
+        // In the rain, so rings of several sizes are made.
+        for (let now = 0; now < 3000; now += 50) p.update(now, 2, 0, true, 1, { across: 1, along: 0.5 });
+        p.destroy();
+        result.paintings[name] = `${left(start)} of ${made.length - start} left`;
+      }
+      const views = createViews(new Container(), rand);
+      views.setSize(320, 32);
+      for (const [name, view] of [
+        ['title', { kind: 'title', fish: [] }],
+        ['look', { kind: 'look', fish: [], plants: ['hornwort', 'marimo'] }],
+        ['swamp', { kind: 'look', fish: [], plants: ['hornwort'], under: 'swamp' }],
+        ['dive', { kind: 'dive', fish: [] }],
+      ]) {
+        const start = made.length;
+        views.set(view);
+        // The title's name waits for its font.
+        await new Promise((r) => setTimeout(r, name === 'title' ? 800 : 50));
+        const end = made.length;
+        views.setSize(300, 22);
+        views.set(null);
+        result.views[name] = `${left(start, end)} of ${end - start} left`;
+      }
+      // B1: every species and look, its corner on a whole pixel; B4: a fish crossing the far line changes its look.
+      const shoal = createShoal(new Container(), rand);
+      const list = Object.keys(content.fish).flatMap((species) => ['own', 'shadow', 'small'].map((look) => ({ key: `${species}-${look}`, species, look })));
+      shoal.set(list, { x0: 0, y0: 0, x1: 256, y1: 256 });
+      for (let now = 1000; now < 1600; now += 37) shoal.update(now);
+      for (const s of shoal.layer.children) {
+        const x = s.x - s.anchor.x * s.texture.width;
+        const y = s.y - s.anchor.y * s.texture.height;
+        if (x % 1 || y % 1) result.offGrid.push(`${x},${y}`);
+      }
+      const species = Object.keys(content.fish)[0];
+      shoal.set([{ key: 'one', species, look: 'shadow' }], { x0: 0, y0: 0, x1: 256, y1: 256 });
+      shoal.update(2000);
+      shoal.set([{ key: 'one', species, look: 'small' }], { x0: 0, y0: 0, x1: 256, y1: 256 });
+      shoal.update(2050);
+      result.look = swimSprite(species).small.includes(shoal.layer.children[0].texture) ? 'small' : 'unchanged';
+    } finally {
+      Texture.from = from;
+    }
+    return result;
+  });
+  for (const [name, said] of Object.entries(out.paintings)) report(`scene: the ${name} painting frees its frames`, said.startsWith('0 of'), said);
+  for (const [name, said] of Object.entries(out.views)) report(`scene: the ${name} view frees its frames`, said.startsWith('0 of'), said);
+  report('scene: swimming fish on whole pixels', out.offGrid.length === 0, out.offGrid.slice(0, 5).join(' '));
+  report('scene: a kept fish takes its new look', out.look === 'small', out.look);
+});
+
 // The art sheet (art.html, docs/art.md) is its own page, not the game, so it
 // skips check()'s title screen. Its screenshot is the one Claude looks at
 // after changing art: dist/verify/art.png.

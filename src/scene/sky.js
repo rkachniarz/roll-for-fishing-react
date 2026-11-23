@@ -87,7 +87,7 @@ export function createSky(below, above, size, rand) {
     // One shadow per level of cloud past "a few", up to three.
     const want = Math.max(0, Math.min(3, w.weather.clouds - 1));
     while (clouds.length < want) {
-      clouds.push({ x: rand() * width, y: WATER.y0 + rand() * (WATER.y1 - WATER.y0), w: 50 + rand() * 40, h: 10 + rand() * 6 });
+      clouds.push({ x: rand() * width, y: WATER.y0 + rand() * (WATER.y1 - WATER.y0), w: 50 + rand() * 40, h: 10 + Math.floor(rand() * 6) });
     }
     clouds.length = want;
   }

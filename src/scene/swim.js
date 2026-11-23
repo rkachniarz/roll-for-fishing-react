@@ -150,6 +150,16 @@ export function swimSprite(species) {
 }
 
 /**
+ * How see-through a look is: a drawn fish's view from the bank is already
+ * darkened; a turned icon's is a shadow.
+ * @param {{ drawn: boolean }} art @param {'own' | 'shadow' | 'small'} look
+ */
+function alphaOf(art, look) {
+  if (look === 'own') return 1;
+  return art.drawn ? (look === 'small' ? 0.75 : 0.9) : look === 'small' ? 0.3 : 0.45;
+}
+
+/**
  * @typedef {Object} Swimmer
  * @property {string} key  Who it is, so a fish keeps swimming when the list is set again.
  * @property {string} species
@@ -261,6 +271,12 @@ export function createShoal(parent, rand) {
         if (old) {
           keep.delete(f.key);
           old.box = f.box ?? null;
+          // A fish that crossed into the far water (or back) changes its look: update sets the frames.
+          const look = f.look ?? 'own';
+          if (old.look !== look) {
+            old.look = look;
+            old.sprite.alpha = alphaOf(swimSprite(old.species), look);
+          }
           return old;
         }
         const art = swimSprite(f.species);
@@ -272,8 +288,7 @@ export function createShoal(parent, rand) {
         const quarter = !f.box && swims ? QUARTER[swims] : null;
         const sprite = new Sprite((look === 'own' ? art.frames : look === 'shadow' ? art.shadows : art.small)[0]);
         sprite.anchor.set(0.5);
-        // A drawn fish's view from the bank is already darkened; a turned icon's is a shadow.
-        if (look !== 'own') sprite.alpha = art.drawn ? (look === 'small' ? 0.75 : 0.9) : look === 'small' ? 0.3 : 0.45;
+        sprite.alpha = alphaOf(art, look);
         layer.addChild(sprite);
         const s = {
           key: f.key,
@@ -413,7 +428,10 @@ export function createShoal(parent, rand) {
         s.sprite.scale.x = s.right ? -1 : 1;
         // Winding up and down as it goes, an eel's way (D147): drawn only, so it never leaves its box.
         const wind = s.way.wind && !resting ? Math.sin(now / 260 + s.beat) * s.way.wind * Math.min(1, v / 6) : 0;
-        s.sprite.position.set(Math.round(s.x), Math.round(s.y + wind));
+        // The middle is the anchor, but it's the corner that must sit on a whole pixel (R7.3):
+        // half an odd width or height is a half-pixel.
+        const tex = s.sprite.texture;
+        s.sprite.position.set(Math.round(s.x - tex.width / 2) + tex.width / 2, Math.round(s.y + wind - tex.height / 2) + tex.height / 2);
       }
     },
     /**

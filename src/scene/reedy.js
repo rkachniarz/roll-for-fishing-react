@@ -22,7 +22,8 @@
 // the shared sky layer (src/scene/sky-layer.js) shows through.
 
 import { Container, Sprite, Texture, TextureStyle } from 'pixi.js';
-import { paintGrid, paintRing } from './sprites.js';
+import { paintGrid } from './sprites.js';
+import { createRings } from './rings.js';
 import { WAVE_LEVELS, looksRandom, waveLevel, windOnWater } from './waves.js';
 
 /** The painting's size: the play area's 256 plus a strip either side (D93). */
@@ -514,7 +515,13 @@ export function paintReedy(rand, season = 'summer', { reeds: withReeds = true } 
   TextureStyle.defaultOptions.scaleMode = 'nearest';
   const S = REEDY_SEASONS[reedySeason(season)];
   const P = S.palette;
-  const tex = (/** @type {HTMLCanvasElement} */ c) => Texture.from(c);
+  /** Every texture this painting makes, for `destroy`. @type {Texture[]} */
+  const made = [];
+  const tex = (/** @type {HTMLCanvasElement} */ c) => {
+    const t = Texture.from(c);
+    made.push(t);
+    return t;
+  };
   // The top of the reeds at a column; below the picture where there are none.
   const top = withReeds ? topAt : () => H + 20;
 
@@ -554,15 +561,8 @@ export function paintReedy(rand, season = 'summer', { reeds: withReeds = true } 
     glints.push({ sprite, frames, frame: 0, next: rand() * 2000 });
   }
 
-  const ripples = new Container();
-  back.addChild(ripples);
-  /** @type {Map<string, Texture>} */
-  const ringCache = new Map();
-  const ring = (/** @type {number} */ rx, /** @type {number} */ ry) => {
-    const key = `${rx}x${ry}`;
-    if (!ringCache.has(key)) ringCache.set(key, tex(paintRing(rx, ry, P.waveLight)));
-    return /** @type {Texture} */ (ringCache.get(key));
-  };
+  const ripples = createRings(P.waveLight);
+  back.addChild(ripples.layer);
   /** @type {{ x: number, y: number, born: number, life: number, maxRx: number }[]} */
   let rings = [];
   let nextRing = 0;
@@ -635,16 +635,18 @@ export function paintReedy(rand, season = 'summer', { reeds: withReeds = true } 
         nextRing = now + (raining ? 90 + rand() * 120 : 1500 + rand() * 2500);
       }
       rings = rings.filter((r) => now - r.born < r.life);
-      ripples.removeChildren();
-      for (const r of rings) {
+      ripples.show(rings.map((r) => {
         const age = (now - r.born) / r.life;
         const rx = Math.max(1, Math.round(r.maxRx * age));
         const ry = Math.max(1, Math.round(rx * (r.y - HZ < 30 ? 0.3 : 0.42)));
-        const sprite = new Sprite(ring(rx, ry));
-        sprite.position.set(r.x - rx, r.y - ry);
-        sprite.alpha = age < 0.6 ? 1 : 0.5;
-        ripples.addChild(sprite);
-      }
+        return { x: r.x - rx, y: r.y - ry, rx, ry, alpha: age < 0.6 ? 1 : 0.5 };
+      }));
+    },
+    destroy() {
+      ripples.destroy();
+      back.destroy({ children: true });
+      front.destroy({ children: true });
+      for (const t of made) t.destroy(true);
     },
   };
 }

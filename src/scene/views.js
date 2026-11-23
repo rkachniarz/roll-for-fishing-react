@@ -163,14 +163,27 @@ export function createViews(parent, rand) {
   let bubbledAt = 0;
   const bubbleLayer = new Graphics();
   play.addChild(bubbleLayer);
+  /**
+   * Every texture the view painted, each frame of every shaft and plant, not
+   * only the frame its sprite shows: all freed when it's painted again.
+   * @type {Texture[]}
+   */
+  let made = [];
+  /** @param {Texture} t */
+  const own = (t) => {
+    made.push(t);
+    return t;
+  };
 
   function paint() {
     back.clear();
     front.clear();
     eye.clear();
     for (const layer of [title, titleFront, logo]) {
-      for (const child of layer.removeChildren()) child.destroy({ texture: true, textureSource: true });
+      for (const child of layer.removeChildren()) child.destroy();
     }
+    for (const t of made) t.destroy(true);
+    made = [];
     shafts = [];
     weed = [];
     silt = null;
@@ -242,7 +255,9 @@ export function createViews(parent, rand) {
     } else {
       // Under the water: deep teal fading to dark, light from above, weed.
       const bands = ['#2f8f9f', '#28808f', '#22717f', '#1c626f', '#16535f', '#11444f', '#0c3640'];
-      bands.forEach((c, i) => back.rect(0, (i * SIZE) / bands.length, width, SIZE / bands.length + 1).fill(c));
+      // Each band from a whole row to a whole row (R7.3): 256 doesn't divide by 7.
+      const row = (/** @type {number} */ i) => Math.round((i * SIZE) / bands.length);
+      bands.forEach((c, i) => back.rect(0, row(i), width, row(i + 1) - row(i)).fill(c));
       for (let i = 0; i < 5; i++) {
         const x = offset + 20 + i * 52;
         back.poly([x, 0, x + 14, 0, x + 34, 200, x + 24, 200]).fill({ color: '#bfeff0', alpha: 0.07 });
@@ -263,10 +278,10 @@ export function createViews(parent, rand) {
   function paintUnder(under, plants) {
     const layers = under.paint(rand);
     const x = offset - UNDER_LEFT;
-    const back = new Sprite(textureOf(layers.back));
+    const back = new Sprite(own(textureOf(layers.back)));
     back.position.set(x, 0);
     title.addChild(back);
-    const drifting = new Sprite(textureOf(layers.silt));
+    const drifting = new Sprite(own(textureOf(layers.silt)));
     drifting.position.set(x - under.drift, 0);
     title.addChild(drifting);
     silt = { sprite: drifting, drift: under.drift };
@@ -278,13 +293,14 @@ export function createViews(parent, rand) {
     planted.sort((a, b) => a.depth - b.depth);
     for (const p of planted) {
       const { frames, foot } = plantFrames(p.id, p.depth < 1 / 3 ? 0.6 : p.depth < 2 / 3 ? 0.35 : 0.15, under.haze);
+      frames.forEach(own);
       const sprite = new Sprite(frames[0]);
       const ground = under.floor(p.x + 16 - offset + UNDER_LEFT) + 3 + Math.round(p.depth * (SIZE - 214));
       sprite.position.set(p.x, ground - foot);
       title.addChild(sprite);
       weed.push({ sprite, frames, next: rand() * 1400 });
     }
-    const front = new Sprite(textureOf(layers.front));
+    const front = new Sprite(own(textureOf(layers.front)));
     front.position.set(x, 0);
     titleFront.addChild(front);
     bubbles = Array.from({ length: 6 }, () => ({ x: 10 + rand() * 236, y: rand() * SIZE, speed: 4 + rand() * 6 }));
@@ -325,13 +341,13 @@ export function createViews(parent, rand) {
    * @param {boolean} withLogo  The game's name and its die: the title's.
    */
   function paintTitle(plants, withLogo) {
-    title.addChild(new Sprite(Texture.from(paintWater(width, SIZE, SAND, rand, true))));
+    title.addChild(new Sprite(own(Texture.from(paintWater(width, SIZE, SAND, rand, true)))));
     const len = SIZE - SAND - 2;
     const count = Math.max(3, Math.round(width / 50));
     for (let i = 0; i < count; i++) {
       const wide = 6 + Math.floor(rand() * 5);
       const strength = 0.7 + rand() * 0.3;
-      const frames = /** @type {const} */ ([0, 1, 0]).map((parity) => Texture.from(paintShaft(len, wide, rand, parity, strength)));
+      const frames = /** @type {const} */ ([0, 1, 0]).map((parity) => own(Texture.from(paintShaft(len, wide, rand, parity, strength))));
       const sprite = new Sprite(frames[0]);
       const x = Math.round((i * width) / count - 24 + rand() * 24);
       sprite.position.set(x, 0);
@@ -350,6 +366,7 @@ export function createViews(parent, rand) {
     planted.sort((a, b) => a.depth - b.depth);
     for (const p of planted) {
       const { frames, foot } = plantFrames(p.id, p.depth < 1 / 3 ? 0.45 : p.depth < 2 / 3 ? 0.2 : 0);
+      frames.forEach(own);
       const sprite = new Sprite(frames[0]);
       const ground = Math.max(sandTop(p.x + 16, SIZE, SAND) + 2, top + 3 + Math.round(p.depth * (SAND - 8)));
       sprite.position.set(p.x, ground - foot);
@@ -365,7 +382,7 @@ export function createViews(parent, rand) {
       if (mine !== logoFor) return;
       const x = Math.round((width - canvas.width) / 2);
       const y = Math.round((SIZE - SAND - canvas.height) / 2);
-      const sprite = new Sprite(Texture.from(canvas));
+      const sprite = new Sprite(own(Texture.from(canvas)));
       sprite.position.set(x, y);
       logo.addChild(sprite);
       const now = performance.now();

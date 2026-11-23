@@ -6,7 +6,7 @@
 // sedge, the straw and the grass a pixel or two.
 
 import { Container, Sprite, Texture, TextureStyle } from 'pixi.js';
-import { paintRing } from './sprites.js';
+import { createRings } from './rings.js';
 import { MIST_DRIFT, SWAMP_LAYOUT, SWAMP_SEASONS, SWAMP_W, paintSwampLayers, swampBytes, swampSeason } from './swamp-pixels.js';
 
 export { swampSeason };
@@ -37,33 +37,33 @@ export function paintSwamp(rand, season = 'spring') {
   const key = swampSeason(season);
   const P = SWAMP_SEASONS[key].palette;
   const layers = paintSwampLayers(rand, key);
+  /** Every texture this painting makes, for `destroy`. @type {Texture[]} */
+  const made = [];
+  const own = (/** @type {Parameters<typeof textureOf>[0]} */ b) => {
+    const t = textureOf(b);
+    made.push(t);
+    return t;
+  };
   const { horizon, water: box } = SWAMP_LAYOUT;
 
   const back = new Container();
-  const waterFrames = layers.water.map(textureOf);
+  const waterFrames = layers.water.map(own);
   const water = new Sprite(waterFrames[0]);
-  const ripples = new Container();
-  const farMist = new Sprite(textureOf(layers.farMist));
-  const farFrames = layers.far.map(textureOf);
+  const ripples = createRings(P.mist);
+  const farMist = new Sprite(own(layers.farMist));
+  const farFrames = layers.far.map(own);
   const far = new Sprite(farFrames[0]);
-  const lowMist = new Sprite(textureOf(layers.lowMist));
-  const nearFrames = layers.near.map(textureOf);
+  const lowMist = new Sprite(own(layers.lowMist));
+  const nearFrames = layers.near.map(own);
   const near = new Sprite(nearFrames[0]);
   // Rings lie on the water, under everything standing in it.
-  back.addChild(water, ripples, farMist, far, lowMist, near);
+  back.addChild(water, ripples.layer, farMist, far, lowMist, near);
 
   const front = new Container();
-  const frontFrames = layers.front.map(textureOf);
+  const frontFrames = layers.front.map(own);
   const close = new Sprite(frontFrames[0]);
   front.addChild(close);
 
-  /** @type {Map<string, Texture>} */
-  const ringCache = new Map();
-  const ring = (/** @type {number} */ rx, /** @type {number} */ ry) => {
-    const k = `${rx}x${ry}`;
-    if (!ringCache.has(k)) ringCache.set(k, Texture.from(paintRing(rx, ry, P.mist)));
-    return /** @type {Texture} */ (ringCache.get(k));
-  };
   /** @type {{ x: number, y: number, born: number, life: number, maxRx: number }[]} */
   let rings = [];
   let nextRing = 0;
@@ -94,16 +94,18 @@ export function paintSwamp(rand, season = 'spring') {
         nextRing = now + (raining ? 90 + rand() * 120 : 1800 + rand() * 3000);
       }
       rings = rings.filter((r) => now - r.born < r.life);
-      ripples.removeChildren();
-      for (const r of rings) {
+      ripples.show(rings.map((r) => {
         const age = (now - r.born) / r.life;
         const rx = Math.max(1, Math.round(r.maxRx * age));
         const ry = Math.max(1, Math.round(rx * (r.y - horizon < 45 ? 0.3 : 0.42)));
-        const sprite = new Sprite(ring(rx, ry));
-        sprite.position.set(r.x - rx, r.y - ry);
-        sprite.alpha = age < 0.6 ? 1 : 0.5;
-        ripples.addChild(sprite);
-      }
+        return { x: r.x - rx, y: r.y - ry, rx, ry, alpha: age < 0.6 ? 1 : 0.5 };
+      }));
+    },
+    destroy() {
+      ripples.destroy();
+      back.destroy({ children: true });
+      front.destroy({ children: true });
+      for (const t of made) t.destroy(true);
     },
   };
 }

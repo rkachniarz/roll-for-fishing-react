@@ -115,8 +115,15 @@ export function createDice(addTo, rand) {
   /** Dice that stay (the title's) are drawn once more after they settle, then left. */
   let drawnStill = false;
 
-  /** @param {number} w @param {number} h */
-  function setSize(w, h) {
+  /**
+   * @param {number} w @param {number} h
+   * @param {number} [dx]  How far what the dice landed on moved across: dice already thrown move with it.
+   */
+  function setSize(w, h, dx = 0) {
+    for (const d of dice) {
+      d.from.x += dx;
+      d.to.x += dx;
+    }
     if (w === width && h === height) return;
     width = w;
     height = h;

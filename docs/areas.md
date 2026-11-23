@@ -348,7 +348,7 @@ The sky layer, the sun and moon drawn, the clouds, the light of the hour, the wi
 
 The PixiJS scene, its sizing, the painted spots, sprites and icons, the title, and the tools that turn photos and drawings into art.
 
-**Files:** `art.html`, `src/art-trials.js`, `src/art.js`, `src/scene/d20.js`, `src/scene/dice.js`, `src/scene/icons.js`, `src/scene/logo.js`, `src/scene/pond.js`, `src/scene/reedy.js`, `src/scene/scene.js`, `src/scene/sprites.js`, `src/scene/swamp-pixels.js`, `src/scene/swamp-roots.js`, `src/scene/swamp-under.js`, `src/scene/swamp.js`, `tools/commons.py`, `tools/cutout.py`, `tools/photo-icon.mjs`, `tools/py.mjs`, `tools/python-requirements.txt`, `tools/sprite-png.mjs`.
+**Files:** `art.html`, `src/art-trials.js`, `src/art.js`, `src/scene/d20.js`, `src/scene/dice.js`, `src/scene/icons.js`, `src/scene/logo.js`, `src/scene/pond.js`, `src/scene/reedy.js`, `src/scene/rings.js`, `src/scene/scene.js`, `src/scene/sprites.js`, `src/scene/swamp-pixels.js`, `src/scene/swamp-roots.js`, `src/scene/swamp-under.js`, `src/scene/swamp.js`, `tools/commons.py`, `tools/cutout.py`, `tools/photo-icon.mjs`, `tools/py.mjs`, `tools/python-requirements.txt`, `tools/sprite-png.mjs`.
 
 **Tests:** `test/d20.test.js`, `test/fish-art.test.js`, `test/hud.test.js`, `test/sprite-png.test.js`.
 

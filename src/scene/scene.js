@@ -27,6 +27,7 @@ import { createSkyLayer, minutesOf } from './sky-layer.js';
 import { createDice } from './dice.js';
 import { createViews } from './views.js';
 import { createShoal } from './swim.js';
+import { createRings } from './rings.js';
 import { paintPond, pondSeason } from './pond.js';
 import { paintOpen, paintReedy, reedySeason } from './reedy.js';
 import { paintSwamp, swampSeason } from './swamp.js';
@@ -43,7 +44,6 @@ import {
   paintBackdrop,
   paintGrid,
   paintReeds,
-  paintRing,
   shoreY,
 } from './sprites.js';
 
@@ -232,16 +232,8 @@ export async function createScene(canvas, rand, look = {}) {
   // Fish just under the surface (R20.2): schools and big fish, as swimming shadows.
   const surfaceFish = createShoal(play, rand);
 
-  const ripples = new Container();
-  play.addChild(ripples);
-  /** @type {Map<string, Texture>} */
-  const ringCache = new Map();
-  /** @param {number} rx @param {number} ry */
-  function ring(rx, ry) {
-    const key = `${rx}x${ry}`;
-    if (!ringCache.has(key)) ringCache.set(key, tex(paintRing(rx, ry, PALETTE.ripple)));
-    return /** @type {Texture} */ (ringCache.get(key));
-  }
+  const ripples = createRings(PALETTE.ripple);
+  play.addChild(ripples.layer);
 
   // Surface features (R14), under the line and the bobber.
   const featureLayer = new Graphics();
@@ -314,12 +306,14 @@ export async function createScene(canvas, rand, look = {}) {
     next = Math.max(SIZE, Math.round(next));
     if (next === width) return;
     width = next;
+    const was = offset;
     offset = Math.floor((width - SIZE) / 2);
     app.renderer.resize(width, SIZE);
     play.position.x = offset;
     reedsRight.position.x = width - 26;
     sky.setWidth(width);
-    dice.setSize(width, SIZE);
+    // Dice already thrown keep their place in the play area, which has moved.
+    dice.setSize(width, SIZE, offset - was);
     views.setSize(width, offset);
     paintWidth();
     paintSpot();
@@ -336,9 +330,8 @@ export async function createScene(canvas, rand, look = {}) {
     if (which && season && paintedKey !== key) {
       // The glitter hangs on the old painting's water: off it before it goes.
       skyPainted.attach(null);
-      for (const layer of [paintingBack, paintingFront]) {
-        for (const child of layer.removeChildren()) child.destroy({ children: true, texture: true, textureSource: true });
-      }
+      // Every frame it made, not only the one each sprite shows: a repaint would leak the rest.
+      painting?.destroy();
       painting = which.paint(rand, season);
       paintingBack.addChild(painting.back);
       paintingFront.addChild(painting.front);
@@ -469,9 +462,11 @@ export async function createScene(canvas, rand, look = {}) {
           // The fish itself below the surface, seen from the bank (D131), in its ring.
           shadows.push({ key, species: f.species, look: far ? 'small' : 'shadow', box: { x0: cx - 5, y0: cy - 1, x1: cx + 5, y1: cy + 1 } });
         } else {
-          featureLayer.rect(x - w / 2, cy, w, 2).fill({ color: PALETTE.shadow, alpha: 0.8 });
-          featureLayer.rect(x - w / 2 + 2, cy - 1, w - 5, 1).fill({ color: PALETTE.shadow, alpha: 0.65 });
-          featureLayer.rect(x + w / 2, cy - 1, 2, 4).fill({ color: PALETTE.shadow, alpha: 0.65 });
+          // From a whole pixel: \`w\` is odd far out (R7.3).
+          const left = x - Math.floor(w / 2);
+          featureLayer.rect(left, cy, w, 2).fill({ color: PALETTE.shadow, alpha: 0.8 });
+          featureLayer.rect(left + 2, cy - 1, w - 5, 1).fill({ color: PALETTE.shadow, alpha: 0.65 });
+          featureLayer.rect(left + w, cy - 1, 2, 4).fill({ color: PALETTE.shadow, alpha: 0.65 });
         }
       } else if (f.kind === 'big-fish' && f.species) {
         // One big fish's shadow, sliding to and fro just under the surface (R20.2).
@@ -480,9 +475,11 @@ export async function createScene(canvas, rand, look = {}) {
         // One long shadow, sliding to and fro just under the surface.
         const x = Math.round(cx + Math.sin(now / 2200 + phase) * 4);
         const w = far ? 11 : 16;
-        featureLayer.rect(x - w / 2, cy, w, 2).fill({ color: PALETTE.shadow, alpha: 0.75 });
-        featureLayer.rect(x - w / 2 + 2, cy - 1, w - 5, 1).fill({ color: PALETTE.shadow, alpha: 0.6 });
-        featureLayer.rect(x + w / 2, cy - 1, 2, 4).fill({ color: PALETTE.shadow, alpha: 0.6 });
+        // From a whole pixel: \`w\` is odd far out (R7.3).
+        const left = x - Math.floor(w / 2);
+        featureLayer.rect(left, cy, w, 2).fill({ color: PALETTE.shadow, alpha: 0.75 });
+        featureLayer.rect(left + 2, cy - 1, w - 5, 1).fill({ color: PALETTE.shadow, alpha: 0.6 });
+        featureLayer.rect(left + w, cy - 1, 2, 4).fill({ color: PALETTE.shadow, alpha: 0.6 });
       } else if (f.kind === 'curious') {
         // A glint that comes and goes.
         const on = Math.floor(now / 300 + phase) % 4;
@@ -649,18 +646,17 @@ export async function createScene(canvas, rand, look = {}) {
 
     // ---------- Ripples: rings that spread and fade, flatter further out ----------
     rippleList = rippleList.filter((r) => now - r.born < r.life);
-    ripples.removeChildren();
     const squash = far ? 0.3 : 0.42;
+    /** @type {{ x: number, y: number, rx: number, ry: number, alpha: number }[]} */
+    const spread = [];
     for (const r of rippleList) {
       const age = (now - r.born) / r.life;
       if (age < 0) continue;
       const rx = Math.max(2, Math.round(r.maxRx * age));
       const ry = Math.max(1, Math.round(rx * squash));
-      const s = new Sprite(ring(rx, ry));
-      s.position.set(Math.round(r.x - rx), Math.round(r.y - ry + 1));
-      s.alpha = age < 0.6 ? 1 : 0.5;
-      ripples.addChild(s);
+      spread.push({ x: Math.round(r.x - rx), y: Math.round(r.y - ry + 1), rx, ry, alpha: age < 0.6 ? 1 : 0.5 });
     }
+    ripples.show(spread);
   }
 
   return {

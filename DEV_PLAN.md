@@ -136,22 +136,27 @@ commit `b0e9246`. *Not a bug (the owner, 2026-11-23):* the dive ignoring natural
 
 **B. Scene** (`npm run verify` and screenshots, not only unit tests)
 
-- [ ] **B1** Swimming fish sit on half-pixels (R7.3, D10): `src/scene/swim.js:274` anchors at 0.5 and rounds the
+Done. `verify`'s "scene: paintings and views free every frame" check covers B1, B2 and B4 by loading the scene's
+modules on the art sheet. B7's ripples share `src/scene/rings.js`, whose sprites are kept and reused. Confirmed in
+Pixi 8.22: its GC keeps every sprite it has drawn until the sprite has sat unused a while. B3, B5, B6 and the dice
+half of B7 have no check, since no check can read their pixels from the WebGL canvas.
+
+- [x] **B1** Swimming fish sit on half-pixels (R7.3, D10): `src/scene/swim.js:274` anchors at 0.5 and rounds the
   centre (`:416`), so a fish with an odd width or height is off the grid. Anchor at 0, or round the top-left.
-- [ ] **B2** Textures leak on every repaint: teardown (`src/scene/scene.js:340`, `src/scene/views.js:172`) destroys
+- [x] **B2** Textures leak on every repaint: teardown (`src/scene/scene.js:340`, `src/scene/views.js:172`) destroys
   only the frame each sprite shows. Left behind: the swamp's frames (`swamp.js:43-57`), the pond's reed, birch, beech
   and clump frames (`pond.js:1056-1066`), reedy's reeds, the ripple caches, the light shafts' frames
   (`views.js:334`) and the plants' frames (`views.js:89-101`). The title repaints on every width change. Give each
   painting and view a `destroy()` that frees all its frames.
-- [ ] **B3** Cloud shadows draw NaN on their last row (`src/scene/sky.js:122-125`): `c.h` is a fraction, so
+- [x] **B3** Cloud shadows draw NaN on their last row (`src/scene/sky.js:122-125`): `c.h` is a fraction, so
   `row/(c.h-1)` exceeds 1. Floor the height or clamp.
-- [ ] **B4** A swimmer kept by key never changes its look (`src/scene/swim.js:260-264`): a champion or big fish that
+- [x] **B4** A swimmer kept by key never changes its look (`src/scene/swim.js:260-264`): a champion or big fish that
   crosses `farLine` (`scene.js:470`, `:478`) keeps the wrong-sized sprite. Rebuild it when the look changes.
-- [ ] **B5** More half-pixels: the fallback dive's water bands (`src/scene/views.js:245`, i × 36.57) and the
+- [x] **B5** More half-pixels: the fallback dive's water bands (`src/scene/views.js:245`, i × 36.57) and the
   fallback feature shadows (`src/scene/scene.js:472-474`, `:483-485`, `x - w/2` with odd `w`).
-- [ ] **B6** The pond's per-frame water reads its season colours from module state (`src/scene/pond.js:193-195`,
+- [x] **B6** The pond's per-frame water reads its season colours from module state (`src/scene/pond.js:193-195`,
   used at `:518`), so two ponds of different seasons on the art sheet mix them. Capture `P` in `paintWater`.
-- [ ] **B7** *Plausible.* New ripple sprites every frame without destroying the old (`scene.js:652-662`,
+- [x] **B7** *Plausible.* New ripple sprites every frame without destroying the old (`scene.js:652-662`,
   `pond.js:1184-1190`, `swamp.js:97-105`, `reedy.js:638-644`); reuse a small pool. And dice thrown before a resize
   keep their old stage positions (`src/scene/dice.js:119-131`, `scene.js:322`).
 

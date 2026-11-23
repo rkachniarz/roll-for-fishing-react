@@ -46,7 +46,7 @@ export const AREAS = [
   {
     name: 'The scene and its paintings',
     about: 'The PixiJS scene, its sizing, the painted spots, sprites and icons, the title, and the tools that turn photos and drawings into art.',
-    files: ['src/scene/scene.js', 'src/scene/sprites.js', 'src/scene/pond.js', 'src/scene/reedy.js', 'src/scene/swamp.js', 'src/scene/swamp-pixels.js', 'src/scene/swamp-roots.js', 'src/scene/swamp-under.js', 'src/scene/icons.js', 'src/scene/logo.js', 'src/scene/d20.js', 'src/scene/dice.js', 'src/art.js', 'src/art-trials.js', 'art.html', 'tools/sprite-png.mjs', 'tools/photo-icon.mjs', 'tools/cutout.py', 'tools/commons.py', 'tools/py.mjs', 'tools/python-requirements.txt'],
+    files: ['src/scene/scene.js', 'src/scene/sprites.js', 'src/scene/rings.js', 'src/scene/pond.js', 'src/scene/reedy.js', 'src/scene/swamp.js', 'src/scene/swamp-pixels.js', 'src/scene/swamp-roots.js', 'src/scene/swamp-under.js', 'src/scene/icons.js', 'src/scene/logo.js', 'src/scene/d20.js', 'src/scene/dice.js', 'src/art.js', 'src/art-trials.js', 'art.html', 'tools/sprite-png.mjs', 'tools/photo-icon.mjs', 'tools/cutout.py', 'tools/commons.py', 'tools/py.mjs', 'tools/python-requirements.txt'],
   },
   {
     name: 'The character, perks and items',

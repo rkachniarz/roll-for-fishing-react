@@ -94,6 +94,7 @@ and the art sheet at `/art.html` there.
 | `src/engine/wind.js` | The wind's direction (D176): a compass hexflower drifting like the weather (`content/rules/wind.json`) |
 | `src/scene/scene.js` | The PixiJS fishing view; whole-pixel scaling |
 | `src/scene/sprites.js` | Placeholder pixel art, drawn by code |
+| `src/scene/rings.js` | Rings on the water (ripples, rain, a plop): sprites kept and reused, one texture per size |
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
 | `src/scene/sky-layer.js` | The sky behind the painted spots that show sky (D169): its colour by the sun's height, the stars, the sun and the moon in its phase, the clouds drifting and fading in (D170), the still water's mirror of it, and the glitter on the water under a low sun or moon |
 | `src/scene/clouds.js` | Clouds that follow the weather (D170): the library of cloud patterns drawn as code (heaps, towers, layers, wisps, sheets, rain cloud, storm, scud, fog), which show for a weather (`skySpec`, from `content/rules/sky.json`) and how they are laid out |

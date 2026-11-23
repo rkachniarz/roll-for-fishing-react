@@ -30,7 +30,8 @@
 import { Application, Container, Rectangle, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { createSky } from './sky.js';
 import { createSkyLayer, minutesOf } from './sky-layer.js';
-import { BOBBER, WATERLINE, paintGrid, paintRing } from './sprites.js';
+import { BOBBER, WATERLINE, paintGrid } from './sprites.js';
+import { createRings } from './rings.js';
 import { WAVE_LEVELS, waveLevel } from './waves.js';
 
 /** The painting's size: the play area's 256 plus a strip either side (D93). */
@@ -469,6 +470,8 @@ function paintWater(above, leaves, mirrored, rand) {
   const shades = waterShades();
   /** The water's own colour, which the reflection is mixed into. */
   const tint = rgb(P.waterLight);
+  // Taken now: \`draw\` runs every frame, long after P has moved on to another pond's season.
+  const reflectLog = P.reflectLog;
   // Each frame's nudges, one a pair of rows: drawn as they always were, so what's painted after stays put.
   const noise = [0, 1, 2].map(() => Array.from({ length: pairs }, () => rand()));
   const still = makeCanvas(W, rows);
@@ -515,7 +518,7 @@ function paintWater(above, leaves, mirrored, rand) {
     }
     for (const p of mirrored) {
       const d = p.y - WL;
-      if (d >= 0 && d < rows) dot(g, p.x - shifts[d >> 1], d, P.reflectLog);
+      if (d >= 0 && d < rows) dot(g, p.x - shifts[d >> 1], d, reflectLog);
     }
     for (const leaf of leaves) {
       g.fillStyle = leaf.color;
@@ -1024,9 +1027,11 @@ function paintReedPlant(plant, reach) {
  * each column; the sky layer goes under `back`.
  * @typedef {{ back: Container, front: Container,
  *   update: (now: number, wind: number, crop: number, raining: boolean, light?: number, flow?: { across: number, along: number }) => void,
+ *   destroy: () => void,
  *   horizon?: number, skyline?: number[], waterLayer?: Container, isWater?: (x: number, y: number) => boolean, mirrorSky?: boolean }} Pond
  *   `light`: how many of the glints still flick under the clouds (D170); `flow`: the wind's shares across and along
- *   the view (`windFlow`, D176), for the waves (D177); `mirrorSky`: still water, mirroring the sky.
+ *   the view (`windFlow`, D176), for the waves (D177); `mirrorSky`: still water, mirroring the sky. `destroy`: frees
+ *   both layers and every texture the painting made, each frame of its own (not only the frame each sprite shows).
  */
 
 /**
@@ -1036,7 +1041,13 @@ function paintReedPlant(plant, reach) {
  */
 export function paintPond(rand, season = 'autumn') {
   TextureStyle.defaultOptions.scaleMode = 'nearest';
-  const tex = (/** @type {HTMLCanvasElement} */ c) => Texture.from(c);
+  /** Every texture this painting makes, for \`destroy\`. @type {Texture[]} */
+  const made = [];
+  const tex = (/** @type {HTMLCanvasElement} */ c) => {
+    const t = Texture.from(c);
+    made.push(t);
+    return t;
+  };
   // Everything below paints in one go, with no await, in this season's
   // colours and shapes.
   S = POND_SEASONS[season];
@@ -1099,15 +1110,8 @@ export function paintPond(rand, season = 'autumn') {
     glints.push({ sprite, frames, frame: 0, next: rand() * 2000 });
   }
 
-  const ripples = new Container();
-  back.addChild(ripples);
-  /** @type {Map<string, Texture>} */
-  const ringCache = new Map();
-  const ring = (/** @type {number} */ rx, /** @type {number} */ ry) => {
-    const key = `${rx}x${ry}`;
-    if (!ringCache.has(key)) ringCache.set(key, tex(paintRing(rx, ry, ringColour)));
-    return /** @type {Texture} */ (ringCache.get(key));
-  };
+  const ripples = createRings(ringColour);
+  back.addChild(ripples.layer);
   /** @type {{ x: number, y: number, born: number, life: number, maxRx: number }[]} */
   let rings = [];
   let nextRing = 0;
@@ -1181,16 +1185,18 @@ export function paintPond(rand, season = 'autumn') {
         nextRing = now + (raining ? 90 + rand() * 120 : 1500 + rand() * 2500);
       }
       rings = rings.filter((r) => now - r.born < r.life);
-      ripples.removeChildren();
-      for (const r of rings) {
+      ripples.show(rings.map((r) => {
         const age = (now - r.born) / r.life;
         const rx = Math.max(1, Math.round(r.maxRx * age));
         const ry = Math.max(1, Math.round(rx * (r.y - WL < 40 ? 0.3 : 0.42)));
-        const sprite = new Sprite(ring(rx, ry));
-        sprite.position.set(r.x - rx, r.y - ry);
-        sprite.alpha = age < 0.6 ? 1 : 0.5;
-        ripples.addChild(sprite);
-      }
+        return { x: r.x - rx, y: r.y - ry, rx, ry, alpha: age < 0.6 ? 1 : 0.5 };
+      }));
+    },
+    destroy() {
+      ripples.destroy();
+      back.destroy({ children: true });
+      front.destroy({ children: true });
+      for (const t of made) t.destroy(true);
     },
   };
 }
@@ -1278,10 +1284,7 @@ export async function createPondScene(canvas, rand, season = 'autumn', paint = p
     repaint(next, nextPaint = paint) {
       paint = nextPaint;
       skyPainted.attach(null);
-      for (const layer of [pond.back, pond.front]) {
-        layer.removeFromParent();
-        layer.destroy({ children: true, texture: true, textureSource: true });
-      }
+      pond.destroy();
       pond = paint(rand, next);
       view.addChildAt(pond.back, view.getChildIndex(bobber));
       view.addChild(pond.front);
