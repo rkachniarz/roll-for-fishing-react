@@ -13,7 +13,7 @@ The seeded streams, the named dice, the game state and its save, migrations, set
 
 **Files:** `content/rules/new-game.json`, `schemas/common.schema.json`, `schemas/game-values.schema.json`, `schemas/new-game.schema.json`, `src/dice.js`, `src/engine/schedule.js`, `src/engine/state.js`, `src/engine/values.js`, `src/rng.js`, `src/save.js`, `src/settings.js`.
 
-**Tests:** `test/abilities.test.js`, `test/audio.test.js`, `test/cast.test.js`, `test/champions.test.js`, `test/clouds.test.js`, `test/content.test.js`, `test/dice.test.js`, `test/effects.test.js`, `test/equipment.test.js`, `test/events.test.js`, `test/fish.test.js`, `test/game.test.js`, `test/moon.test.js`, `test/perks.test.js`, `test/rng.test.js`, `test/sky.test.js`, `test/time.test.js`, `test/town.test.js`, `test/weather.test.js`, `test/wind.test.js`.
+**Tests:** `test/abilities.test.js`, `test/audio.test.js`, `test/buffbar.test.js`, `test/cast.test.js`, `test/champions.test.js`, `test/clouds.test.js`, `test/content.test.js`, `test/dice.test.js`, `test/effects.test.js`, `test/equipment.test.js`, `test/events.test.js`, `test/fish.test.js`, `test/game.test.js`, `test/moon.test.js`, `test/perks.test.js`, `test/rng.test.js`, `test/sky.test.js`, `test/time.test.js`, `test/town.test.js`, `test/weather.test.js`, `test/wind.test.js`.
 
 **Requirements** (`docs/spec.md`): R1, R2.2, R2.3, R2.4, R3.1, R3.3, R3.4, R3.5, R3.6, R4.2, R5.1, R5.2, R5.3, R6.1, R6.6, R8.5, R8.6, R9.1, R10, R10.8, R11.1, R11.8, R12, R13.1, R14, R15.5, R17.3, R17.5, R17.6, R18.2, R19.1, R19.2, R19.4, R19.5, R20.3.
 
@@ -311,7 +311,7 @@ The sky layer, the sun and moon drawn, the clouds, the light of the hour, the wi
 
 **Files:** `content/rules/sky.json`, `schemas/sky.schema.json`, `src/scene/clouds.js`, `src/scene/light.js`, `src/scene/sky-layer.js`, `src/scene/sky.js`, `src/scene/waves.js`, `src/scene/wind.js`.
 
-**Tests:** `test/clouds.test.js`, `test/wind.test.js`.
+**Tests:** `test/clouds.test.js`, `test/fish.test.js`, `test/wind.test.js`.
 
 **Requirements** (`docs/spec.md`): R7.3, R7.5.
 
@@ -431,9 +431,9 @@ Classes, levels, perks and abilities, buffs, equipment and bags, vendors and bar
 
 **Files:** `content/classes/`, `content/perks/`, `content/buffs/`, `content/items/`, `content/sets/`, `content/vendors/`, `content/rules/levels.json`, `content/rules/names.json`, `content/rules/stew.json`, `schemas/buff.schema.json`, `schemas/class.schema.json`, `schemas/item.schema.json`, `schemas/levels.schema.json`, `schemas/names.schema.json`, `schemas/perk.schema.json`, `schemas/set.schema.json`, `schemas/stew.schema.json`, `schemas/vendor.schema.json`, `src/engine/abilities.js`, `src/engine/barter.js`, `src/engine/buffs.js`, `src/engine/character.js`, `src/engine/equipment.js`, `src/engine/knowledge.js`, `src/engine/perks.js`.
 
-**Tests:** `test/abilities.test.js`, `test/equipment.test.js`, `test/perks.test.js`, `test/town.test.js`.
+**Tests:** `test/abilities.test.js`, `test/equipment.test.js`, `test/game.test.js`, `test/perks.test.js`, `test/town.test.js`.
 
-**Requirements** (`docs/spec.md`): R1.5, R3.6, R4.4, R4.5, R4.6, R5.2, R5.3, R6.1, R6.3, R8.1, R8.10, R8.2, R8.4, R8.5, R10.2, R11.2, R11.8, R12, R12.7, R13.4, R17.5, R17.6, R18, R18.2, R18.3, R18.4, R18.5, R18.7, R18.8, R19.1, R19.4, R19.5, R21, R21.1.
+**Requirements** (`docs/spec.md`): R1.5, R3.6, R4.4, R4.5, R4.6, R5.2, R5.3, R6.1, R6.3, R8.1, R8.2, R8.4, R8.5, R8.10, R10.2, R11.2, R11.8, R12, R12.7, R13.4, R17.5, R17.6, R18, R18.2, R18.3, R18.4, R18.5, R18.7, R18.8, R19.1, R19.4, R19.5, R21, R21.1.
 
 **Read also:**
 
@@ -683,7 +683,7 @@ The content build and editor, the browser checks, the balance sim, the single-fi
 
 **Files:** `tools/editor/`, `editor.html`, `tools/areas.mjs`, `tools/build-artifact.mjs`, `tools/content.mjs`, `tools/prompts.mjs`, `tools/sim.mjs`, `tools/verify.mjs`.
 
-**Tests:** `test/content.test.js`, `test/events.test.js`, `test/sim.test.js`.
+**Tests:** `test/content.test.js`, `test/docs.test.js`, `test/events.test.js`, `test/sim.test.js`.
 
 **Requirements** (`docs/spec.md`): R8.5, R16.4, R17, R17.3, R18, R19.1, R20.3, R21.1.
 

@@ -186,21 +186,25 @@ only taps, so the long presses were never seen on a real phone, and nothing on t
 
 **D. Tools and tests**
 
-- [ ] **D1** `docs/areas.md` lists R8.10 between R8.1 and R8.2 (`tools/areas.mjs:189`, `parseFloat`). Sort with
+Done. The index is now built from tracked files only (`repoFiles()`; `{ untracked: true }` for the checks that must
+see a new file), and `test/docs.test.js` names a new file in an area that isn't yet added. D4 was tried on made-up
+Python, HTML, CSS and JS files: no Python tool has a trap yet.
+
+- [x] **D1** `docs/areas.md` lists R8.10 between R8.1 and R8.2 (`tools/areas.mjs:189`, `parseFloat`). Sort with
   `localeCompare(…, { numeric: true })` alone.
-- [ ] **D2** An area's Tests list misses tests that `await import('../…')` or use double quotes
+- [x] **D2** An area's Tests list misses tests that `await import('../…')` or use double quotes
   (`tools/areas.mjs:141-142`), so `test/docs.test.js` isn't under the tools area.
-- [ ] **D3** `git check-ignore` exits 1 when no path is ignored, so `test/docs.test.js:79` crashes instead of naming
+- [x] **D3** `git check-ignore` exits 1 when no path is ignored, so `test/docs.test.js:79` crashes instead of naming
   the missing path. Accept exit codes 0 and 1.
-- [ ] **D4** `# Trap:` lines in the Python tools are dropped (`tools/areas.mjs:123`, `:130`, `:182`: only
+- [x] **D4** `# Trap:` lines in the Python tools are dropped (`tools/areas.mjs:123`, `:130`, `:182`: only
   .js/.mjs/.css/.html, no `#` comments), and an HTML or CSS trap over several lines loses all but its first line.
-- [ ] **D5** The area index reads untracked files (`tools/areas.mjs:85`, `ls-files -co`), so a loose file changes
+- [x] **D5** The area index reads untracked files (`tools/areas.mjs:85`, `ls-files -co`), so a loose file changes
   it and the clean checkout on GitHub then fails the test. Non-ASCII names are quoted by git and silently skipped
   (use `-z`, also `test/docs.test.js:18`).
-- [ ] **D6** No `.gitattributes`: with `core.autocrlf=true`, `docs/areas.md` is always "behind"
+- [x] **D6** No `.gitattributes`: with `core.autocrlf=true`, `docs/areas.md` is always "behind"
   (`test/docs.test.js:121`, `tools/areas.mjs:214`).
-- [ ] **D7** "drops CR-3 and CR-4" counts only the first as dropped (`test/docs.test.js:43`).
-- [ ] **D8** "CLAUDE.md names every doc" (`test/docs.test.js:111`): a no-op `replace`, and a plain substring match,
+- [x] **D7** "drops CR-3 and CR-4" counts only the first as dropped (`test/docs.test.js:43`).
+- [x] **D8** "CLAUDE.md names every doc" (`test/docs.test.js:111`): a no-op `replace`, and a plain substring match,
   so `README.md` passes on `art/README.md`.
 
 ## From our talks, not yet planned

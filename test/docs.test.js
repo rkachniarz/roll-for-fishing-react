@@ -9,15 +9,14 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 
 const git = (/** @type {string[]} */ ...args) => execFileSync('git', args, { encoding: 'utf8' });
 const read = (/** @type {string} */ f) => readFileSync(f, 'utf8');
 
-/** Every tracked or new text file Claude writes or reads for meaning. */
-const FILES = git('ls-files', '-co', '--exclude-standard')
-  .trim()
-  .split('\n')
+/** Every tracked or new text file Claude writes or reads for meaning (`-z`: names with non-ASCII letters unquoted). */
+const FILES = git('ls-files', '-z', '-co', '--exclude-standard')
+  .split('\0')
   .filter((f) => /\.(md|js|mjs|py|json|css|html)$/.test(f))
   .filter((f) => !f.startsWith('src/generated/') && f !== 'package-lock.json' && existsSync(f));
 const DOCS = FILES.filter((f) => f.endsWith('.md') && !f.startsWith('content/'));
@@ -40,7 +39,8 @@ const plans = read('DEV_PLAN.md') + read('docs/history.md');
 /** Creative tasks: on the plan or in the history, or dropped by a decision. */
 const CREATIVE = new Set([
   ...[...plans.matchAll(/\*\*CR-(\d+)\*\*/g)].map((m) => Number(m[1])),
-  ...[...decisions.matchAll(/drops[^|;)]*?CR-(\d+)/g)].map((m) => Number(m[1])),
+  // Every CR-n in a "drops …" clause, up to the end of the clause ("drops CR-3 and CR-4").
+  ...[...decisions.matchAll(/drops([^|;)]*)/g)].flatMap((m) => [...m[1].matchAll(/CR-(\d+)/g)].map((c) => Number(c[1]))),
 ]);
 
 /** @param {(line: string, at: string, file: string) => string[]} check */
@@ -75,9 +75,10 @@ test('the docs that describe the present name files that exist', () => {
   });
   const missing = named.filter((n) => !existsSync(n.path));
   // Local-only files (the owner's photos, exports) are gitignored on purpose.
-  const ignored = new Set(
-    missing.length ? execFileSync('git', ['check-ignore', '--no-index', '--stdin'], { input: missing.map((n) => n.path).join('\n'), encoding: 'utf8' }).split('\n') : [],
-  );
+  // check-ignore exits 1 when none of the paths is ignored: that's an answer, not a failure.
+  const check = missing.length ? spawnSync('git', ['check-ignore', '--no-index', '--stdin'], { input: missing.map((n) => n.path).join('\n'), encoding: 'utf8' }) : null;
+  if (check && check.status !== 0 && check.status !== 1) throw new Error(`git check-ignore failed: ${check.stderr || check.error}`);
+  const ignored = new Set(check ? check.stdout.split('\n') : []);
   const bad = missing.filter((n) => !ignored.has(n.path)).map((n) => `${n.at}: ${n.path}`);
   assert.deepEqual(bad, [], 'named in a doc but not in the repo');
 });
@@ -105,26 +106,33 @@ test('a decision that changes an earlier one is named on the earlier one too', (
 
 test('every doc says what it is for and what is not here, and CLAUDE.md names it', () => {
   const claude = read('CLAUDE.md');
+  // Named as a whole path: `README.md` isn't named by `art/README.md`, nor `docs/ideas.md` by `docs/ideas.md.bak`.
+  const names = (/** @type {string} */ f) => new RegExp(`(?<![\\w./-])${f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w/-]|\\.\\w)`).test(claude);
   const bad = [];
   for (const f of DOCS.filter((f) => !AGENTS(f))) {
     if (!OWNERS.has(f) && !read(f).split('\n').slice(0, 20).some((l) => l.startsWith('**Not here:**'))) bad.push(`${f}: no **Not here:** line near the top`);
-    if (f !== 'CLAUDE.md' && !claude.includes(f.replace(/^docs\//, 'docs/'))) bad.push(`${f}: not named in CLAUDE.md`);
+    if (f !== 'CLAUDE.md' && !names(f)) bad.push(`${f}: not named in CLAUDE.md`);
   }
   assert.deepEqual(bad, [], 'a doc nobody knows of is knowledge nobody finds');
 });
 
 test('every source file belongs to an area, and docs/areas.md is up to date (D184)', async () => {
   const { AREAS, MUST_BELONG, repoFiles, filesOf, areasMarkdown } = await import('../tools/areas.mjs');
-  const files = repoFiles();
+  const files = repoFiles({ untracked: true });
   const placed = new Set(AREAS.flatMap((a) => filesOf(a, files)));
   assert.deepEqual(files.filter((f) => MUST_BELONG(f) && !placed.has(f)), [], 'add it to an area in tools/areas.mjs');
+  // The index is built from tracked files only, so a loose file can't change it; a new file in an area is
+  // named here, or it would be left out until committed and the clean checkout on GitHub would fail.
+  const tracked = new Set(repoFiles());
+  const loose = files.filter((f) => !tracked.has(f) && (placed.has(f) || /^test\/.+\.test\.js$/.test(f)));
+  assert.deepEqual(loose, [], 'git add it (then npm run areas), or delete it if it is a loose file');
   assert.ok(read('docs/areas.md') === areasMarkdown(), 'docs/areas.md is behind: run npm run areas');
 });
 
 test("README.md's file map names every source file and page (D186)", async () => {
   const { repoFiles } = await import('../tools/areas.mjs');
   const readme = read('README.md');
-  const files = repoFiles().filter((f) => (/^(src|tools)\//.test(f) && !f.startsWith('src/generated/')) || ['index.html', 'art.html', 'editor.html', 'styles.css'].includes(f));
+  const files = repoFiles({ untracked: true }).filter((f) => (/^(src|tools)\//.test(f) && !f.startsWith('src/generated/')) || ['index.html', 'art.html', 'editor.html', 'styles.css'].includes(f));
   const base = (/** @type {string} */ f) => f.split('/').pop() ?? f;
   /** @type {Map<string, number>} */
   const seen = new Map();

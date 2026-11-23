@@ -1,0 +1,4 @@
+# Text files are LF in the working tree on every machine, whatever core.autocrlf says: the
+# generated files (docs/areas.md, src/generated/, the patterns in styles.css) are written with LF
+# and a test compares them byte for byte.
+* text=auto eol=lf

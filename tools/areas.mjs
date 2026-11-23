@@ -77,15 +77,16 @@ export const MUST_BELONG = (/** @type {string} */ f) =>
 const read = (/** @type {string} */ f) => readFileSync(f, 'utf8');
 
 /**
- * Every tracked or new file, sorted: `git ls-files -co` lists the tracked ones
- * before the new ones, so without the sort a file moves in the index when it is
- * first committed, and the up-to-date check fails on a clean checkout.
+ * The repo's files, sorted. The index is built from the tracked files only (and
+ * those staged to be), so a loose file in the working tree can't change it and
+ * the clean checkout on GitHub sees the same index; `{ untracked: true }` adds
+ * the new files that aren't ignored, for the checks that must see a file before
+ * it is committed. `-z`, so a name with non-ASCII letters isn't quoted by git.
  */
-export function repoFiles() {
-  return execFileSync('git', ['ls-files', '-co', '--exclude-standard'], { encoding: 'utf8' })
-    .trim()
-    .split('\n')
-    .filter((f) => existsSync(f))
+export function repoFiles({ untracked = false } = {}) {
+  return execFileSync('git', ['ls-files', '-z', ...(untracked ? ['-co', '--exclude-standard'] : [])], { encoding: 'utf8' })
+    .split('\0')
+    .filter((f) => f && existsSync(f))
     .sort();
 }
 
@@ -114,32 +115,50 @@ function sectionsOf(/** @type {string} */ doc) {
     .map((l) => ({ doc, heading: l.replace(/^#+ /, ''), cites: [...l.matchAll(/\bD(\d+)/g)].map((m) => Number(m[1])) }));
 }
 
+/** The kinds of file whose comments are read for `Trap:` lines. */
+export const HAS_TRAPS = (/** @type {string} */ f) => /\.(js|mjs|css|html|py)$/.test(f);
+
 /**
  * A file's traps: each `Trap:` line in its comments, with the lines that carry
  * it on (one space after the comment mark); deeper-indented lines are its detail.
+ * Inside a block comment (`/* … *\/`, `<!-- … -->`) a line with no mark carries
+ * it on too, up to a blank line or the comment's end. `#` marks a comment only in
+ * Python, since in JavaScript it starts a private field.
  */
 export function trapsOf(/** @type {string} */ file) {
   const lines = read(file).split(/\r?\n/);
-  const strip = (/** @type {string} */ l) => l.replace(/^\s*(?:\/\/|\*|<!--|\/\*)/, '').replace(/\s*(?:-->|\*\/)\s*$/, '');
+  const mark = file.endsWith('.py') ? /^\s*(?:#|\/\/|\*|<!--|\/\*)/ : /^\s*(?:\/\/|\*|<!--|\/\*)/;
+  const strip = (/** @type {string} */ l) => l.replace(mark, '').replace(/\s*(?:-->|\*\/)\s*$/, '');
+  const closes = (/** @type {string} */ l) => /(?:-->|\*\/)/.test(l);
+  /** Whether a line leaves a block comment open: it opens one after its last close. */
+  const opens = (/** @type {string} */ l) => Math.max(l.lastIndexOf('<!--'), l.lastIndexOf('/*')) > Math.max(l.lastIndexOf('-->'), l.lastIndexOf('*/'));
+  const carry = file.endsWith('.py') ? /^\s*#/ : /^\s*(?:\/\/|\*)/;
   /** @type {string[]} */
   const found = [];
   lines.forEach((line, i) => {
     const m = strip(line).match(/^ Trap: (.*)$/);
     if (!m) return;
     let lead = m[1];
-    for (let j = i + 1; j < lines.length && /^\s*(?:\/\/|\*)/.test(lines[j]); j++) {
-      const rest = strip(lines[j]);
+    // In a block if this line opens one, or is a ` * ` line of one already open.
+    let block = opens(line) || (/^\s*\*(?!\/)/.test(line) && !closes(line));
+    for (let j = i + 1; j < lines.length; j++) {
+      const raw = lines[j];
+      let rest;
+      if (carry.test(raw)) rest = strip(raw);
+      else if (block && raw.trim() && !/^\s*(?:-->|\*\/)/.test(raw)) rest = ' ' + strip(raw).trim();
+      else break;
       if (!/^ \S/.test(rest) || /^ Trap:/.test(rest)) break;
       lead += rest;
+      if (closes(raw)) break;
     }
     found.push(lead.trim());
   });
   return found;
 }
 
-/** What a test file imports, as repo paths. */
+/** What a test file imports (`from '../…'` or `import('../…')`, either quote), as repo paths. */
 function importsOf(/** @type {string} */ test) {
-  return [...read(test).matchAll(/from '\.\.\/([^']+)'/g)].map((m) => m[1]);
+  return [...read(test).matchAll(/(?:\bfrom\s*|\bimport\s*\(\s*)(['"])\.\.\/(.+?)\1/g)].map((m) => m[2]);
 }
 
 export function areasMarkdown() {
@@ -179,14 +198,14 @@ export function areasMarkdown() {
     }
     const ownTests = tests.filter((t) => importsOf(t).some((i) => own.includes(i)));
     const reading = sections.filter((s) => s.cites.some((d) => named.has(d)));
-    const ownTraps = own.filter((f) => /\.(js|mjs|css|html)$/.test(f)).flatMap((f) => trapsOf(f).map((lead) => ({ f, lead })));
+    const ownTraps = own.filter(HAS_TRAPS).flatMap((f) => trapsOf(f).map((lead) => ({ f, lead })));
 
     const folders = area.files.filter((p) => p.endsWith('/'));
     const single = own.filter((f) => !folders.some((p) => f.startsWith(p)));
     out.push(`## ${area.name}`, '', area.about, '');
     out.push(`**Files:** ${[...folders.map((p) => `\`${p}\``), ...single.map((f) => `\`${f}\``)].join(', ')}.`, '');
     if (ownTests.length) out.push(`**Tests:** ${ownTests.map((t) => `\`${t}\``).join(', ')}.`, '');
-    if (reqs.size) out.push(`**Requirements** (\`docs/spec.md\`): ${[...reqs].sort((a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b, 'en', { numeric: true })).map((r) => 'R' + r).join(', ')}.`, '');
+    if (reqs.size) out.push(`**Requirements** (\`docs/spec.md\`): ${[...reqs].sort((a, b) => a.localeCompare(b, 'en', { numeric: true })).map((r) => 'R' + r).join(', ')}.`, '');
     if (reading.length) {
       out.push('**Read also:**', '');
       for (const s of reading) out.push(`- \`${s.doc}\`: ${s.heading}`);

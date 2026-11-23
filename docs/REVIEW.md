@@ -27,6 +27,17 @@ Items with no note are left alone.
 
 Newest first.
 
+## Code review fixes, batch D (2026-11-23)
+
+Calls Claude made while fixing the tools and tests (DEV_PLAN.md, "Code review fixes"):
+
+- **A new file must be `git add`ed before `npm test` passes,** if it falls in an area or is a test: the area index is
+  now built from tracked files only, so a loose file can't change it, and the test names any new file it would have
+  missed rather than let the clean checkout on GitHub fail after the push. A stray scratch file in `src/` or `test/`
+  fails it too, by design. Fine, or too fussy?
+- **`.gitattributes` makes every text file LF** in the working tree, whatever `core.autocrlf` says. Nothing in the
+  repo changed (the index was already all LF).
+
 ## Code review fixes, batch C (2026-11-23)
 
 Calls Claude made while fixing the UI and the top level (DEV_PLAN.md, "Code review fixes"):
