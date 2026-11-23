@@ -10,6 +10,9 @@
 // the colour most of them land on, so the outline stays clean. It's a new
 // sprite, made once, not one scaled at runtime (R7.3). The tail's beat is a
 // few frames in which the columns towards the tail shift up or down a pixel.
+//
+// Trap: Shoaling, swim styles and hiding (D147, D151, D152) are looks only, on scenery randomness:
+// the dive's scatter changes what a tap hits, never the rolls.
 
 import { Container, Sprite, Texture } from 'pixi.js';
 import { iconName, paintIcon } from './icons.js';

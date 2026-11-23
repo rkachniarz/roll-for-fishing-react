@@ -10,6 +10,39 @@
 //
 // Every function returns a new state; none reads a clock (D7). Each returns
 // `events`, a plain record of what happened, for the log and the scene.
+//
+// Trap: Every item that comes to the player goes through `receive()` (D106).
+//  Perks that change what comes up work through game values (`riftChance`, `greedyChance`,
+//   `treasureChoice`, `junkToTreasure`), read in `rollLine` / `rollLoot`. Fence's choice of two
+//   waits in `state.pendingTreasure`, and Polish's buff is spent by the junk it turned.
+//
+// Trap: `strikeLine` may return a cast in phase `fight` instead of `done` (D141); the next strike,
+// at or after `fightAt`, answers it.
+//  Anything that plays a cast (test helpers, the sim) must strike again then.
+//
+// Trap: `timingFrom` must carry `fightMs`: it isn't a game value, and without it a manoeuvre never
+// runs out (D141).
+//
+// Trap: Fish Find by depth (D137, D148) is one d100, checked once per depth's bonus; with no bonus
+// the checks are one and nothing more is drawn (a test checks).
+//  `state.lineDepth` stays set when the line comes off; it counts only through `lineAdjustable` and
+//   `depthSources`.
+//
+// Trap: A non-fish rolls twice (D125): treasure, then stuff against `stuffThreshold` with Stuff
+// Find, then junk. White things live in the `stuff` lists, never in junk's.
+//
+// Trap: The fish that bites is mostly a pool fish (D157), taken out of the pool onto the line
+// (`take` in `rollLine`) and put back if it gets away: strip `plain` and its pool fields (`n`, `x`,
+// `y`, `since`, `stays`, `of`) before it reaches the bucket, as `catchFish` does.
+//  On the line it carries the cast's difficulty and XP values and `plain`, what it goes back as.
+//
+// Trap: The aquarium's meals happen on coming into the room (D152), in `travel`, from the `tank`
+// stream, never while the player watches; an event's `go:` into the room runs them too
+// (`src/engine/events.js`).
+//
+// Trap: The `taste` stream is drawn only for a fish with a parasite risk, and for a bowl with more
+// than one kind to pick from (D138).
+//  `state.tasted` holds the species eaten, raw or in a bowl.
 
 import { content } from '../generated/content.js';
 import { applyValue, deriveValues } from './values.js';

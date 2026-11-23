@@ -4,6 +4,9 @@ How the owner and Claude make the game's art together (D90). The owner sketches 
 into pixel art, offers options and keeps the look consistent. This guide is for both: the owner's part first, then
 the rules the art follows, then Claude's checklist.
 
+**Not here:** what a particular picture was read from or why a particular number (`docs/sources.md`), decisions
+(`docs/decisions.md`).
+
 ## The loop
 
 1. **The owner gives a photo** of what something should be, with a few words on what matters (D97). For things no
@@ -18,7 +21,8 @@ the rules the art follows, then Claude's checklist.
    ("change this", "delete that") avoids misunderstandings; words work too. Claude changes it and the sheet shows the
    new version.
 5. **Once settled**, the chosen version becomes the game's and the trial is deleted. Numbers Claude picked go on
-   `docs/REVIEW.md`, as everything else Claude decides does (D76).
+   `docs/REVIEW.md` for the owner to check, as everything else Claude decides does (D76); what a picture was read
+   from, and why a number is what it is, go in `docs/sources.md` or beside the number (D182).
 
 ## Asking for changes
 

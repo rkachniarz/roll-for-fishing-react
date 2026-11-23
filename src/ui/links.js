@@ -2,6 +2,9 @@
 // Names of fish and items, and links to them: the name in brackets in its
 // rarity colour, as in WoW's chat frame (docs/spec.md, R16.5; D49). A tap on a
 // link shows its tooltip; so does a mouse over it (D119).
+//
+// Trap: A fish's tooltip can't see the game, so `src/main.js` tells this file when to show a taste
+// (`showTasteWhen`, D138); the journal reads the state itself.
 
 import { content } from '../generated/content.js';
 import { t } from '../strings.js';

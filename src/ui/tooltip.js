@@ -4,6 +4,9 @@
 // (D119); on a touch screen a tap shows it, and a tap anywhere else, or a
 // second tap on the same thing, closes it. It belongs to the layer over the
 // scene (D71), so it never casts.
+//
+// Trap: Bind tooltips with `bindTip` (D119): hover with a mouse, a tap on touch. A bare `showTip`
+// toggles and has no hover.
 
 import { paintIcon } from '../scene/icons.js';
 

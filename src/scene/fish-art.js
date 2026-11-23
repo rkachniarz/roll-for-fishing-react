@@ -18,6 +18,13 @@
 // Everything here is plain data until `paint`: grids of colours, so the tests
 // can draw every fish without a browser. Hard pixels only, no scaling at
 // runtime (R7.3): each distance is its own drawing.
+//
+// Trap: A new fish needs a shape in `src/scene/fish-shapes.js` (a test checks); a fish with none
+// falls back to its icon turned level (D129).
+//  Each fish is painted from its shape (a preset for its kind of body, its own fins, tail and
+//   pattern) and the colours of its icon, read off the icon turned level. Side on in the tank and
+//   the dive; from the bank, darkened, under the surface. Made once per species and cached: new
+//   sprites, not runtime scaling (R7.3); facing right is a mirror.
 
 import { content } from '../generated/content.js';
 import { ICONS, KEYS, iconKeys, iconName } from './icons.js';

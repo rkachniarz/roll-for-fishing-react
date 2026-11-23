@@ -20,6 +20,11 @@
 //
 // The words are in content/rules/fish-preferences.json (`moonWords`), the
 // amounts in content/rules/moon.json.
+//
+// Trap: A state without `fullMoonAt` (a fixture built by hand) has no moon at all; a test that
+// compares values or counts shadows at night can drop it to leave the moon out.
+//  `moonNow(state)` works out the moon's words (into the moment, for `prefers.moon`), the moonlight
+//   and the anglers' period (a buff from `conditionBuffs`) from the clock and `state.fullMoonAt`.
 
 import { content } from '../generated/content.js';
 import { moonHourAngle, moonPosition, sunPosition } from './sky.js';

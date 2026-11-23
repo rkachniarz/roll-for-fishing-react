@@ -4,6 +4,8 @@ An event is a pop-up with slides and choices (R10). Each one is a text file in `
 `content/events/frog.md`. Run `npm run content` after editing; it reports mistakes with their line number. The format
 is D45 and D84; the code that reads it is `tools/event-text.mjs`.
 
+**Not here:** event ideas (`docs/ideas.md`), why a word works as it does (`docs/decisions.md`).
+
 ## A whole event
 
 ```

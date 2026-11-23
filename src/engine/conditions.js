@@ -6,6 +6,10 @@
 // the state every time (D13). Indoors, in town, there's no cold and no night
 // on the water. The anglers' moon tables (D168) are here too: a period is a
 // buff while it lasts, outdoors.
+//
+// Trap: The cold and night fishing are never stored (D126): `valuesFor` works out the values, then
+// the cold from their warmth, then the values again with it. A test that reads a raw value can meet
+// a chilly morning; compare against the same moment instead.
 
 import { content } from '../generated/content.js';
 import { clock } from './time.js';

@@ -14,6 +14,16 @@
 // The open event and its slide are in the state, so a reload comes back to
 // the same slide. Choices draw no dice, what a choice does being written on
 // it, except a trade's reward (7.9), from the `events` stream.
+//
+// Trap: Unit tests, the sim and `tools/verify.mjs` take an event's *last* choice, since a first
+// choice may be a trip to town; a new game opens with the welcome, which the checks pass with
+// `passWelcome`.
+//  The town is a location with `town: true` (R17.1, D123), `hidden` until the nightfall event opens
+//   it (D130): no casting (`castLine` refuses), no cold, no Release, and the scene shows
+//   `src/scene/views.js` in the water's place. Its places are spots; arriving at one opens its
+//   event, WoW's gossip window, and a tap on the place the player is at opens it again. An event's
+//   `go:` arrives once the event closes, and a `go:` into the room runs the aquarium's meals, as
+//   `travel` does (D152).
 
 import { content } from '../generated/content.js';
 import { pick } from './tables.js';

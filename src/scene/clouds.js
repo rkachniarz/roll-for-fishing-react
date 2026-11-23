@@ -6,7 +6,7 @@
 // into sprites, made once and cached, and drifts them in whole pixels.
 //
 // The shapes come from photographs on Wikimedia Commons (references only,
-// never traced or shipped; docs/REVIEW.md lists them): fair-weather heaps with
+// never traced or shipped; docs/sources.md lists them): fair-weather heaps with
 // flat grey bases and lit, bumpy tops, smaller and flatter towards the horizon;
 // towering heaps stacked like cauliflower over a dark base; lumpy grey layers
 // (stratocumulus); high wisps and hooked mares' tails (cirrus); flat grey
@@ -19,6 +19,18 @@
 // A grid holds tones, 0 for nothing and 1 (lightest) to 4 (darkest); the
 // season's palette over a pattern's ramp gives the colours. Randomness comes
 // from the `rand` given: the scenery stream (D4).
+//
+// Trap: Cloud pattern ids are named in `content/rules/sky.json`: never rename one without changing
+// both. A description that mentions cloud or sky needs its own case there (a test checks).
+//  `skySpec` picks fog first (a weather tagged `fog` hides the sky), then a description that names
+//   a sky (keyed by its string key), then rain cloud, then the season's table; it reads the
+//   weather's `description` and `cell` as the engine keeps them, the art sheet passes `tags`
+//   instead. A sky-wide pattern goes under the sun and the moon (they show through as much as
+//   `veil` says), single clouds over them. Cloud grids depend only on the scenery stream and are
+//   cached per session. Black (clouds 5) brings `dusk` through the night tint (`cloudDusk` in
+//   `src/scene/sky.js`). The special sky (D173) shows only for `sky: 'special'`, the blood moon
+//   (D174) for `sky: 'blood'` at a full moon (`isBloodMoon`), the green sun (D175) for `sky:
+//   'green'` in summer with clouds and rain at 0 (`isGreenSun`): only the art sheet sets them.
 
 import { content } from '../generated/content.js';
 
@@ -48,8 +60,8 @@ const dither = (x, y) => (BAYER[y & 3][x & 3] + 0.5) / 16;
  * them: the clouds, the sky-wide patterns' lumps and rolls, the sun and the
  * moon (the owner: "everything except the stars appears too small"). Derived
  * from the still water's old summer clouds (about 120 x 35 px over the same
- * 110 rows of sky) and the owner's photo of heaped cloud over distant trees;
- * Claude's reading of both, docs/REVIEW.md.
+ * 110 rows of sky) and the owner's photo of heaped cloud over distant trees,
+ * which both say 3 to 5; 3 is the low end, so it errs small (docs/sources.md).
  */
 export const SKY_SIZE = 3;
 

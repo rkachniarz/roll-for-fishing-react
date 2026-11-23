@@ -4,6 +4,8 @@ The React prototype (tag `legacy-prototype`) is not continued (docs/decisions.md
 This file lists what moves into the new codebase, how it should change on the way, and the lessons the old code taught.
 Paths refer to the prototype's tree.
 
+**Not here:** new design (`docs/spec.md`, `docs/decisions.md`). A record of the port; its paths are the prototype's.
+
 ---
 
 ## 1. Port as code (with tests)

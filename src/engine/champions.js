@@ -18,6 +18,13 @@
 //
 // Everything here draws from the `champions` stream (D4), so a game without
 // champions draws nothing from it.
+//
+// Trap: Class fish live in `state.champions`, per spot, not in `state.features`: travel clears the
+// features but never them.
+//  Their effects reach a cast through `valuesFor` (`championSources`), so only at their own spot,
+//   and they draw only from the `champions` stream, so a game without them draws nothing more. A
+//   fish's `champion` mark stays in the bucket and comes off when it's let go. They are not in the
+//   pool.
 
 import { content } from '../generated/content.js';
 import { locationTable, pick } from './tables.js';

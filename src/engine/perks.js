@@ -7,6 +7,11 @@
 // picks straight away. Levels are filled in order: only the lowest owed level
 // can be chosen, so the offers for a later level never depend on a choice not
 // yet made.
+//
+// Trap: The save keeps only the perks taken, level -> id (D96), and only the lowest owed level can
+// be chosen, so a later level's random offer never depends on a choice not yet made.
+//  What a character is owed is worked out from its level. Universal offers come from a stream keyed
+//   by the level, never stored.
 
 import { content } from '../generated/content.js';
 import { createRng, deriveSeed } from '../rng.js';

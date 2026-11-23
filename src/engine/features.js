@@ -7,6 +7,15 @@
 //
 // All of this moves with casts, not with real time, so it stays seeded and
 // replayable (D4); the scene smooths the drift between casts.
+//
+// Trap: A big fish is a pool fish marked `of` its feature's `born` (D156), brought in by
+// `bringFeature` and taken out by `partFish` when the feature goes or the player travels; the
+// pool's turns, its room and a random bite leave it alone.
+//  Schools are not features any more: three of a shoaling kind in a pool are one (`shoalsIn`,
+//   D157).
+//
+// Trap: "Predator" means two things: a surface feature's predator prefers predator bait (D102); the
+// tank and hiding use the fish's `predator` mark (D152).
 
 import { content } from '../generated/content.js';
 import { pick } from './tables.js';

@@ -4,4 +4,6 @@ The owner's real-size drawings, sprites exported to draw on (`npm run sprite exp
 the art sheet and drawn over. PNG or 24-bit BMP, magenta (`#FF00FF`) for "nothing here". How it all works:
 [docs/art.md](../docs/art.md).
 
+**Not here:** how the art is made or why it looks so (`docs/art.md`, `docs/sources.md`).
+
 The game doesn't read this folder: a drawing becomes part of the game when Claude turns it into code.

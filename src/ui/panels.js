@@ -2,6 +2,9 @@
 // What the panes over the scene show (docs/spec.md, R16.4): the character,
 // the journal, the map, the bucket, the bag and the menu. Each is drawn afresh
 // from the state; none changes it except through the callbacks it is given.
+//
+// Trap: The bag pane sits over the log, not over the scene (D83), so it can be open with the
+// character pane on a phone.
 
 import { content } from '../generated/content.js';
 import { t } from '../strings.js';

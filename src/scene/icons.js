@@ -4,6 +4,15 @@
 // (docs/decisions.md, D9). Every kind has a default icon, used by anything
 // whose own art doesn't exist yet (docs/spec.md, R15.5). Content names an icon
 // with its `icon` field; an unknown name falls back to the default too.
+//
+// Trap: The grids above the `DRAWN_AT_16` line are 16 wide (drawn before D98) and `paintIcon`
+// doubles them; new icons go after it, at 32.
+//  An icon can keep its own colours in `OWN_KEYS`; always draw and export with `iconKeys(name)`,
+//   never `KEYS` alone.
+//
+// Trap: Event pictures are icons too, 64×64 (D142), shown in a round portrait: draw them inside the
+// circle.
+//  `event/<name>`, the scroll by default (`eventIcon`); `paintIcon` sizes its canvas to the grid.
 
 import { content } from '../generated/content.js';
 

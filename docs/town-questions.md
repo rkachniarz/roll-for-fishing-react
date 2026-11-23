@@ -3,6 +3,8 @@
 Everything the docs already say about the town (8.3, 8.6, 8.8, 8.9), turned into questions, as a starting point for
 the town's requirements. Each cites where it comes from.
 
+**Not here:** anything new. A dated record, not updated: the answers became decisions (D123 onwards).
+
 **How to answer:** write under a question, indented as a quote, as in REVIEW.md. Skip any you don't care about yet;
 Claude will pick a placeholder for those and list it on REVIEW.md (D76, D105).
 

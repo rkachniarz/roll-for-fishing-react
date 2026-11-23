@@ -6,6 +6,9 @@
 // screen, shows what it does.
 //
 // It isn't the water: nothing here casts or strikes.
+//
+// Trap: The bar takes statuses that aren't perks (D148): the adjustable line's depth button brings
+// its own `label` and `tip`; `useFromBar` sends `line-depth` to its window.
 
 import { content } from '../generated/content.js';
 import { t } from '../strings.js';

@@ -2,6 +2,9 @@
 
 Things Claude decided, guessed or wrote that the owner should look at when there's time. None of them block work.
 
+**Not here:** anything that must outlive the item (D182): sources and how sure (`docs/sources.md`), a number's reason
+(beside it in the code), measurements (`docs/history.md`), loose ends (DEV_PLAN.md, "Known gaps").
+
 **How to answer**, right here in the file:
 
 - **Fine as it is:** delete the item. Deleted means settled.
@@ -41,6 +44,8 @@ runs up to 51 px. Now about 1 in 100, none longer than 9 px. Calls Claude made:
   art sheet's new "Every cloud pattern" section marks them in red with "Mark straight sides"; say if any look cut.
 - **A test** (`test/clouds.test.js`) holds the sides to 12 px and mass-a's top and bottom to 20.
 
+  > _Owner_: the effects of all this you've done are really good. I'd remove this section but not sure if you haven't started using this document as a source of information for yourself, because it looks suspiciously so.
+
 ## The wind on the water (2026-11-22, D177)
 
 Try it in the art sheet's open water: **Wind** from None to Extreme, and **Wind from** for the direction (at Facing
@@ -64,63 +69,8 @@ in `WAVE_LEVELS` (`src/scene/waves.js`):
 
 ## The wind's direction (2026-11-21, D176)
 
-Try it in the art sheet's open water: **Wind** (strength) and **Wind from** (a cell of the flower). Calls Claude made:
-
-- **The shares were measured off a chart, by code:** the University of Gdańsk's seasonal wind roses for a point
-  just north of Gdynia and Hel (55.00N 18.33E, 1951-2010, page 4 of
-  https://klimat.ug.edu.pl/wp-content/uploads/2013/01/geostrof_1951-2010.pdf), 12 sectors of 30°, each sector's
-  length read against the chart's own scale. Every season came to 100.7–101.1%, so the reading is close; they are
-  rounded to 100 in `content/rules/wind.json` (`seasons`, from N round by 30°). West and WNW lead all year
-  (14–17% each in summer, autumn and winter); spring is the flattest, with E to SSE about 9% each.
-- **It is the wind above the ground (geostrophic), not the surface wind,** and no turn is applied. Over the sea the
-  surface wind is turned back (anticlockwise) from it by roughly 10°–20° (a textbook figure, not measured here),
-  and the sea correction would turn it 20° clockwise (Gdynia's shore faces about 65°–75°, Claude's own estimate
-  from coordinates, not a map check). The two about cancel, so the rose's directions are used as they are.
-- **The centre cell, a wind with no set direction, is 4% of the time** in every season: the rose has no such
-  category, so this is Claude's pick. The strength stays the weather's. A variable wind's clouds swing slowly from
-  one side to the other, at most half a cross wind's speed; the inner ring's unsettled wind gusts, its drift
-  speeding up and slowing down by up to 40%.
-- **The rule that makes the shares come out:** the 2d6 picks a neighbouring cell even-handedly, and a move towards a
-  direction that blows less often is kept only on a d100 at or under 100 × new share / old share. A season's change
-  takes over at once, from wherever the wind is.
-- **It changes about as often as the weather offers to:** roll12 at or under 3 each half-hour step, then 2d6, where
-  7 stays, then the d100 above, so somewhat less often than the weather.
-- **A new game, and an old save, start on cell 12:** a steady west wind.
-- **Nothing moves in depth:** only the wind's share across the view drifts the clouds, their shadows on the water
-  and the rain's slant. A wind at your back or in your face leaves the clouds nearly still.
 - **Not changed:** the painted trees and reeds still lean and sway one way (the waves now follow it, D177). Nothing in the fishing reads the direction, and the HUD doesn't name it (the dev bench does).
-
-## The green sun (2026-11-21, D175)
-
-Have a look at the art sheet's new section, **The green sun (D175)**, and the open water's Weather list (Green sun,
-in summer with Clouds and Rain at 0). Calls Claude made:
-
-- **"Strong sun" read as summer with clouds 0 and rain 0,** at any height the sun is up. Say if it should need the
-  sun high too (it is off the top of the picture from about 27° up, so a high-sun rule would hide the disc).
-- **The sun's colours (`greenCore` to `greenRim` in `src/scene/sky-layer.js`):** five greens from a deep #0a3a12 in
-  the middle to a yellow-green #6abd3a at the rim, the dark middle a little off-centre as on the blood moon. Its
-  checkered ring is always there (#3c8a34), as a high sun's is; the glitter is green.
-- **The tint over everything:** #1f8a2a at 28% at full strength, coming in as the sun rises from 2° under the
-  horizon to 4° over, and gone at night.
-- **The sky's own colour** isn't changed, only tinted; the clouds can't show, since it needs a cloudless day.
-
-## The blood moon (2026-11-21, D174)
-
-Have a look at the art sheet's new section, **The blood moon (D174)**, and the open water's Weather list (Blood
-moon, with the Moon slider on full). Calls Claude made:
-
-- **Only the phase named full counts:** about a day either side of the full moon (an eighth of the 14-day cycle).
-  A day after, it is a plain moon again.
-- **The moon's colours (`bloodCore` to `bloodRim` in `src/scene/sky-layer.js`):** five reds from a very dark blood
-  red (#4e0207) in the middle to a coppery red (#c4401f) at the rim, the dark middle a little low and to the left,
-  as the earth's shadow lies in a real eclipse. A dark red checkered ring round it by night, in place of the pale
-  one; red glitter on the water.
-- **The tint over everything:** #8a0a12 at 30% at full strength, over the night's blue. It comes in as the sun goes
-  from 2° to 10° under the horizon and fades as the moon sets (from 4° up to 2° under). By day, with the moon up
-  before sunset, there is no tint, only the red moon.
-- **The clouds** aren't redrawn: they go red under the tint like everything else.
-- **The moonlight the fish feel** is left as a full moon's; a real eclipsed moon is much dimmer. Say if a blood moon
-  should be darker for the fish, or do anything else, once the game brings one.
+  > _Owner_: The lean/sway is something we should try to do and keep in mind for future paintings - is that saved somewhere?
 
 ## The special sky, the magic of the land (2026-11-21, D173)
 
@@ -262,13 +212,13 @@ of it is Claude's first go (CR-2); calls Claude made:
 - **References** (Wikimedia Commons, local only in `docs/design/commons/`, which git ignores; a contact sheet per type,
   `cloud-fewcumulus.jpg`, `cloud-scattered.jpg`, `cloud-broken.jpg`, `cloud-towering.jpg`, `cloud-stratocumulus.jpg`,
   `cloud-cirrus.jpg`, `cloud-stratus.jpg`, `cloud-nimbostratus.jpg`, `cloud-storm.jpg`; the ten fetched at size are in
-  `docs/design/commons/clouds/` with `credits.csv`). Used for shapes only, never traced: *Cumulus Humilis Clouds -
-  Tennessee, USA - July 7, 2014.jpg* and *Cumulus-humilis.jpg* (heaps), *Cumulus congestus cloud Finland.jpg* and
-  *2016 Chmura Cumulus congestus 02.jpg* (towers), *2020-10-01 17 27 08 Stratocumulus clouds above a field in the
-  Dulles section of Sterling, Loudoun County, Virginia.jpg* (layers), *Cirrus at evening 7th Brigade Park Chermside
-  P1080258.jpg* (wisps), *2018-05-18 18 27 21 Low stratiform clouds (base near 3,000 feet AGL) with wavy, bumpy base…*
-  (sheets), *Nimbostratus Forest.jpg* (rain cloud), *Dark clouds above the hilly valley (Unsplash).jpg* (storm),
-  *Fishing boy in Laos 2.jpg* (broken). Nothing fell back to a placeholder for want of a reference.
+  `docs/design/commons/clouds/` with `credits.csv`). Used for shapes only, never traced: _Cumulus Humilis Clouds -
+  Tennessee, USA - July 7, 2014.jpg_ and _Cumulus-humilis.jpg_ (heaps), _Cumulus congestus cloud Finland.jpg_ and
+  _2016 Chmura Cumulus congestus 02.jpg_ (towers), _2020-10-01 17 27 08 Stratocumulus clouds above a field in the
+  Dulles section of Sterling, Loudoun County, Virginia.jpg_ (layers), _Cirrus at evening 7th Brigade Park Chermside
+  P1080258.jpg_ (wisps), _2018-05-18 18 27 21 Low stratiform clouds (base near 3,000 feet AGL) with wavy, bumpy base…_
+  (sheets), _Nimbostratus Forest.jpg_ (rain cloud), _Dark clouds above the hilly valley (Unsplash).jpg_ (storm),
+  _Fishing boy in Laos 2.jpg_ (broken). Nothing fell back to a placeholder for want of a reference.
 - **The library** (`src/scene/clouds.js`): heaps 3 patterns, towers 2, layers 3, wisps 3, sheets 2, rain cloud 2,
   storm 2, plus 2 of scud and 2 of fog. Three sizes by distance (0.6, 1 and 1.5 pixels to the unit), towers never in
   the far one; up to three shapes of each per session. Lit from above and a little from the left whatever the sun.
@@ -354,15 +304,15 @@ words in `content/rules/fish-preferences.json`. Calls Claude made:
 - **A bright moon lightens the night:** the shadows seen from the bank at night come back towards the day's number
   as the moonlight grows (at full light, as many as by day). Rain still dims them.
 - **Which fish, and why (guesses unless said):**
-  - *Dark nights or the new moon:* **eel** (new, dark: the best-grounded one; eels move and feed less under
+  - _Dark nights or the new moon:_ **eel** (new, dark: the best-grounded one; eels move and feed less under
     moonlight, and the silver eels run on dark nights), **sea lamprey** (dark: it runs at night and shuns light),
     **burbot** (dark), **wels catfish** (dark), **channel catfish** (new), **zander** (dark: it hunts in low light
     with its reflecting eyes).
-  - *The full moon:* **bluegill** (its spawning beds follow the moon, the best-grounded of these), **black crappie**,
+  - _The full moon:_ **bluegill** (its spawning beds follow the moon, the best-grounded of these), **black crappie**,
     **largemouth bass**, **common carp**, **northern pike** and **muskellunge** (the last four are anglers' lore,
     musky anglers' especially), and **walleye** (full and moonlit: walleye anglers swear by full-moon nights, the
     opposite of its cousin the zander, on purpose).
-  - *Moonlit nights:* **brown trout** and **lake brown trout** (they feed at night when there's light to see by).
+  - _Moonlit nights:_ **brown trout** and **lake brown trout** (they feed at night when there's light to see by).
 - **The weather's tooltip names the moon's phase** ("The moon: full"), a placeholder line until the sky layer (12.4)
   shows the moon itself.
 - **The balance** (`npm run sim`, 20 games of 500 casts per class, before → after): fish brought up 31.2% → 33.2%
@@ -857,16 +807,6 @@ the game.
   shows it.
   > _Owner_: When a fish has a class, skip the size in logs because it's a mouthful.
 
-## The content editor (7.5)
-
-- **`http://localhost:8001/editor.html`** under `npm run dev`, in Chrome or Edge: "Open the content folder", pick a
-  kind and a file, change it, Save. It writes the file in place, keeping its key order; run `npm run content` after to
-  check it and rebuild what the game loads. Firefox and Safari can't open a folder.
-- **Fields the file has show first;** the ones it could have are "+" buttons, and "×" takes an optional one away.
-  An id field suggests every id there is. Anything the form can't show is a raw JSON box. Events are a plain text box.
-- **It doesn't check content itself** (that's still `npm run content`), and nothing stops two windows saving the same
-  file.
-
 ## Sets and the old lorebook (8.7, D111)
 
 - **The old lorebook is a placeholder,** three "sodden pages" (stuff, white, unique, weight 1 in their spot's junk): deep
@@ -878,51 +818,13 @@ the game.
   window.
   > _Owner_: Add reading windows to the plan. Right click to read.
 
-## Hidden places and the Mage Tower pools (8.2, 8.4, D110)
-
-- **The Mage Tower pools are all placeholder:** "The Mage Tower pools", one spot "the first pool", and six of your fish
-  picked for looking ornamental (golden shiner, pumpkinseed, bluegill, rainbow trout, golden dorado, golomyanka). It
-  waits for your list, and for art.
-- **Three map fragments open it,** "Map fragment (1 of 3)" and so on, weight 1 each in the junk: two at the Lake, one
-  at the River. They're unique, so each comes up once, and stuff (D112), so the junk collector leaves them.
-- **The River is open from the start,** as you've been playing it. Say if it should be found too.
-
-## What the player knows of each place (8.1, 8.5, D109)
-
-- **When spots are noticed is Claude's guess:** at the Lake the swamp after 15 casts there, still water 30, the rocky
-  shore 50, open water 80, deep water 120; at the River the lower river after 20, the river mouth 50. The reedy shore
-  and the upper river are known from the start. The bottle's note points out the lower river.
-- **Completion shows from level 3,** a placeholder (`levels.json`); before that, the map and journal say only the
-  place's name. Floored to a whole percent.
-- **The collection moved into per-place sections** of the journal: found things in colour, things only known of as
-  silhouettes. A fish found in two places shows in both.
-- **Rift fish don't count towards a place's completion,** since only a wizard with the perk can find them; one caught
-  still shows under the place.
-- **A fish that got away is "known of" there,** not found. A missed splash (never struck) doesn't count.
-
-## The balance simulation's first numbers (9.1)
-
-`npm run sim`, 20 games of 500 casts per class, striking 250–900 ms after the splash, the first perk on offer, every
-ability used when it can be. Things worth a look, none changed:
-
-- **Levels come at about 16, 35–45, 65–90, 125–165 and 300–390 casts** (L1–L5). L6 needs 500 XP more than L5 and only a
-  few fighters reach it in 500 casts.
-- **The rogue levels slowest** (0.60 XP a cast against the fighter's 0.88 and the wizard's 0.77): Sleight of Hook and Gut
-  trade fish for loot, and loot gives little XP.
-- **A fish gets away 16–28% of the time,** most for the wizard, whose Summon Fish brings fish it then has to land.
-- **Treasure is 3–4% of casts,** junk about 20%, the empty hook 13–19%.
-- **Epic fish are 11–13% of catches,** more than rare is to uncommon: the size bands' rarity shift lifts big fish of
-  rarer species to Epic. Worth checking against how special Epic should feel.
-
 ## Event words for counters, fish, visitors, holding and trading (7.6–7.10, D108)
 
-- **The words are Claude's:** `add:`, `needs: count`, `{#name}`, `lose: fish`, `lose: rarest fish`, `needs: fish`,
-  `again:`, `go:`, `lock:`, `unlock:`, `trade: junk`. They're in `docs/events.md`; rename any you'd write differently.
-- **"Any fish" means the least valuable** (lowest rarity, then smallest), so feeding the cat never costs the best
-  fish by accident; a species hands in its smallest first.
 - **Junk worth 0 still goes in a trade,** adding nothing. (What counts as junk is settled: D112.)
+  > _Owner_: Which trades specifically?
 - **The junk collector's rewards are a placeholder** (`content/tables/junk-collector.json`): worms or maggots for
   junk worth under 5, more bait from 5, the straw hat or horsehair line from 15, the willow rod from 30.
+  > _Owner_: Now that we have white items, she can trade junk for white items, specifically the ones other vendors want: pebbles, fish scales etc.
 - **Being moved by an event doesn't count as arriving,** so a `trigger: arrive` event there waits for the next
   arrival.
 - **Locked, the map greys out the other locations** and says "Something keeps you here. You can't leave yet." The
@@ -933,26 +835,22 @@ ability used when it can be. Things worth a look, none changed:
 - **The chances are Claude's:** a rift fish one fish in ten with Rift Fishing (one in five with Bend Reality too), and
   a Greedy fish one in ten. A Greedy fish's catch is rolled like a cast with no fish, so it can be the empty hook, and
   then the fish isn't Greedy after all.
+  > _Owner_: All these numbers are knob that we will eventually start turning during balancing, do you keep a list of knobs somewhere?
 - **The marks in the names are placeholders (CR-12):** "Greedy" before the fish's name in the log line that catches it
-  (the fish in the bucket is a plain one), and "Bent" for good, in the bucket too. A bent fish never stacks with a
-  plain twin.
-- **Bend Reality caps the rarity at Epic,** as fish are (D49), and a fish already in the top size band keeps its size.
-  The XP for the bigger band is added; the book's records take the new size.
-- **Ever-Summoning counts every line that goes out,** a recast after a missed splash included, and works on the even
-  ones. Summon Fish can still be used on the odd ones.
-- **Polish waits as long as it takes,** a buff with no count on the bar, and is used up only by junk that actually
-  comes up: pulling out early or an empty hook leaves it. It turns a Greedy fish's junk and a gutted fish's junk too.
-- **Fence:** the treasure not kept goes back into the water, not counted as found, so a unique one can come up again.
-  The choice reuses the full bucket's dialog, titled "Two treasures". A Greedy fish's or a gutted fish's treasure is a
-  choice of two as well. A treasure chosen this way starts no item event (none has one yet).
+  (the fish in the bucket is a plain one), and "Bent" for good, in the bucket too. A bent fish never stacks with a plain twin.
+
+  > _Owner_: There is no need to make bent fish any different. Reality was bent, but the fish is like all others.
+
 - **A rift fish's log line,** "For a moment the water was somewhere else: this fish is not from here.", is Claude's.
+  > _Owner_: Just "this fish is not from here." straight after the catch line in the log.
 
 ## Dice over the scene (D99)
 
-- **Timing**: 0.7 s rolling, 0.55 s at rest, 0.2 s dithering away, so the catch flies about 1.45 s after the strike
-  (`ROLL_MS`, `HOLD_MS`, `FADE_MS` in `src/scene/dice.js`). First guesses.
+(`ROLL_MS`, `HOLD_MS`, `FADE_MS` in `src/scene/dice.js`). First guesses.
+
 - **The log waits for the dice**, so it doesn't give the result away before they land. The bucket's count and the XP
   bar don't wait; they change at the strike.
+  > _Owner_: can we have all of them wait?
 - **The die**: dark ink on ivory (the colour is settled), 35 pixels across, numbers in a 3×5 pixel font, upright on the page whichever way
   the face is turned. A natural 20's number is red, and its total floats up gold. The colours are `DICE_COLOURS`.
   > _Owner_: 20 should be gold for the player (like splash screen), red for opposing die.
@@ -973,6 +871,7 @@ ability used when it can be. Things worth a look, none changed:
 - **The style rules in `docs/art.md`** were read off the sketch and the art so far: hard pixels, a small named
   palette, drawn for a clear spring noon, depth by size and paleness, outlines on icons but not in the scene. Worth
   a read, since every later piece of art will follow them.
+  > _Owner_: Out of curiosity, what are hard pixels?
 
 ## Events (7.1–7.3)
 

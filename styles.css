@@ -1,3 +1,20 @@
+/*
+ * Trap: Every `font-size` is `calc(Npx * var(--type))`: `--type` is the text size factor (`--ui`, 1.25 on a wide
+ * screen, D121, times the font's own factor: Alegreya Sans at 1.05, D132); `--text` is the text colour. `fit` in
+ * `src/main.js` sets `--ui`, `--hud`, `--button`, `--slot`, `--slot-icon` and `--tip-icon`; the icons are whole
+ * device pixels (D119).
+ *
+ * Trap: `font-variant-ligatures: none`: Pixelify Sans, the Pixel font setting (D132), draws its "fi" ligature as an
+ * "A".
+ *
+ * Trap: The patterns between `planks:start`/`planks:end` and `obsidian:start`/`obsidian:end` are written by `npm run
+ * planks` and `npm run obsidian` (D143, D145): never edit them by hand. The background is on `body::before`, so its
+ * pixelated look isn't inherited; Plain turns it off (D144, `data-background`). While `body[data-phase=loading]`,
+ * everything but the background is hidden.
+ *
+ * Trap: Rarity colours are the `--rarity-*` variables, each theme its own, not the hex values in
+ * `src/scene/icons.js`: use `rarityColour()` from `src/ui/links.js` for anything on the page (D81).
+ */
 :root {
   --bg: #14232b;
   --panel: #1d3540;

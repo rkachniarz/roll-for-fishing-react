@@ -3,6 +3,9 @@
 Finished phases as they were done: what each task turned into, and what was found on the way. Code and docs cite task
 numbers (`0.3`, `1.6`). Current work is in [DEV_PLAN.md](../DEV_PLAN.md).
 
+**Not here:** plans (`DEV_PLAN.md`), reasons (`docs/decisions.md`). Measurements belong here, under the task they were
+taken for.
+
 ## Milestones
 
 **Before the fresh start:** a React + Vite prototype (2023–2026), tag `legacy-prototype`: one-button casts with the d20
@@ -145,6 +148,9 @@ section each.
   The weather icon shrank to three quarters of the row's icons, as in the sketch, since "Spring, day 1" was clipped.
   Unit tests 92, browser checks all passing, with new ones for the slots, the theme surviving a reload and the
   floating words.
+- **Measured along the way:** the weather changes half as often as the prototype (D92: a d12 at 1 to 3), on about 19%
+  of casts instead of 38%. The widest scene is 320 pixels (5:4, D93): 640 by 512 on a 1280×800 desktop; phones stay
+  under (286 wide on an iPhone, 314 on the owner's Pixel 9 Pro, read off a screenshot of 427 by 830 CSS pixels at 2.25).
 
 ## Phase 4: Art pipeline and the living scene (done 2026-11-22)
 
@@ -177,6 +183,10 @@ section each.
   Phase 12 (D169, D170), the waves with the wind's strength and direction (D176, D177), the painted reeds swaying in
   it. Their art is CR-2.
 - **4.1** The sprite atlas and Aseprite export, dropped (D178): the art is drawn as code or in MS Paint.
+- **The first features' numbers** (4.5, D78): roach school weight 5 (+40 Fish Find, 4 casts, gone after 24, drifting 4
+  px a cast, 14 px across), carp school 3 (+30, 3 uses, 20 casts), glint 2 (−100 Fish Find, +40 Treasure Find, 2 uses,
+  16 casts), big pike 1 (+100, always Gigantic or Humongous, one cast, gone after 10, drifting 6 px and only 8 px
+  across, a hard target). D102 kept these shapes per spot.
 
 ## Phase 5: Items and inventory (done 2026-11-22)
 
@@ -348,6 +358,12 @@ How it works is D96.
 - **9.1** `npm run sim` (`tools/sim.mjs`): seeded games per class on the real engine, the player striking within a
   reaction range, taking perks, using abilities and answering every prompt. It reports outcomes, what came up, fish
   rarity, XP per cast, casts to each level, abilities and events. A test checks it plays every cast and is repeatable.
+  Measured on its first run (20 games of 500 casts per class, striking 250-900 ms after the splash, the first perk
+  on offer, every ability used when it can be): levels at about 16, 35-45, 65-90, 125-165 and 300-390 casts (L1-L5;
+  only a few fighters reach L6); XP a cast 0.88 fighter, 0.77 wizard, 0.60 rogue (Sleight of Hook and Gut trade
+  fish for loot, which gives little XP); a fish gets away 16-28% of the time, most for the wizard (Summon Fish
+  brings fish it then has to land); treasure 3-4% of casts, junk about 20%, the empty hook 13-19%; Epic 11-13% of
+  catches, as the size bands' rarity shift lifts big fish of rarer kinds to Epic.
 - **9.2, 9.3** Placeholder sounds made with the Web Audio API (`src/audio.js`): the cast, the splash of a bite, a
   catch, an escape, a find, the dice and a level. The volume is a setting, 60 of 100 to start; the sound starts on the
   first tap or key.
@@ -542,8 +558,11 @@ browser check.
   up from the list; `scene.swirl` for a predator's strike; the shadows keyed by each fish's number. A research pass
   on what real predators eat found usable numbers for pike only. Tuned by measuring a year of unfished pools: the
   chance to leave from 50% to 30%, spawners slow to leave where they first stayed for certain, the crowd's cap from
-  twice the number to one and a half. Measured: 275 unit tests, every browser check; the sim plays through, the
-  Fish Fighter landing a fish on 28% of casts as before.
+  twice the number to one and a half. Why: with spawners staying for certain every pool sat at its cap for whole
+  seasons, since some kind spawns at most spots through spring and summer; at a 50% chance to leave a pool held only
+  0.6 of its number. Bites from the pool measured 65-92% in play against the 80% aimed at (`fromPool`); the deep
+  water, with about six predators in its pool, loses its small fish fastest. Measured: 275 unit tests, every browser
+  check; the sim plays through, the Fish Fighter landing a fish on 28% of casts as before.
   The bench has a section for the pool here (who is in it, its schools, who spawns, the predators' chance; add
   fish of a kind and size, stock anew, empty), a button to the next part of the day, and its time buttons now pass
   time as the game does, so the weather, the water and every pool move with them.
@@ -565,6 +584,9 @@ decisions.
   on fifteen fish), solunar periods as buffs on the bar, moonlight at night, and the pools feeding in the periods;
   `src/engine/moon.js` (`moonNow`, `moonWords`, `moonlight`, `solunarPeriod`), `moonHourAngle` in
   `src/engine/sky.js`, `content/rules/moon.json`, the phase in the weather's tooltip, `test/moon.test.js`.
+  Measured (`npm run sim`, 20 games of 500 casts per class, before → after): fish brought up 31.2% → 33.2% (fish
+  fighter), 29.4% → 30.3% (wizard), 22.4% → 23.4% (rogue); XP a cast 1.63 → 1.75, 0.96 → 0.99, 0.72 → 0.75. A little
+  more fish, mostly from the periods' Fish Find.
 - **12.4** The sky as its own layer behind the still water and the reedy shore (D169, `src/scene/sky-layer.js`): its
   colour by the sun's height, the stars, the sun, the moon in its phase, and a path of glitter under a low sun or
   moon. Each sky-showing painting gives `horizon` (row 110), `skyline`, `waterLayer` and `isWater` and paints no sky
@@ -602,10 +624,36 @@ After Phase 12, from the owner's asks; the decisions hold the detail.
   blood moon (a full moon gone red over a red night) and the green sun (a cloudless summer sun gone green). How the
   game brings them is still open (DEV_PLAN.md, "From our talks").
 - **Clouds** (after D170): broken masses that no longer cut off at their box, lopsided towers, a noise-drawn overcast,
-  blue between the cells of a dry spring and summer overcast.
+  blue between the cells of a dry spring and summer overcast. Measured:
+  - **The sky three times bigger** (`SKY_SIZE`): clouds are laid out until their own pixels fill 35% of the sky
+    times the cover (±20%, at least one, at most 40). A few then fills about 5% of the sky with 2-4 clouds, scattered
+    about 9% with 4, broken about 16% with 5-7 (before: 1%, 5% and 13% with 5, 12 and 24 small ones). Towers are
+    never drawn near any more: they would stand 98 px, nearly the whole sky.
+  - **Mostly cloudy** went from hiding 14-28% of the sky to 55-75% (each level's own `fill`, 1.2 for mostly cloudy).
+  - **Broken masses cut off straight:** over 200 clouds a pattern, a third of mass-a and half of mass-b had a straight
+    side, runs up to 51 px; after `ROOM` about 1 in 100, none longer than 9 px. mass-b could float up to 22 px over
+    the horizon, showing the cut; its base now sits on it.
 - **The wind** (D176): a direction on its own hexflower, each season blowing as Gdynia's wind rose says, turned for a
   sea due east; the clouds drift by the share across the view.
 - **The waves** (D177): the open water and the reedy shore draw their ripples live, more, longer and darker in a
   stronger wind, rolling in or out with its direction.
 - **Ideas written down** (`docs/ideas.md`): the town and the lands around it, the dwarven caravan, the stew's makings
   and the well; other guests at the stew.
+
+## The docs put in order (2026-11-23)
+
+The owner, going through REVIEW.md, found it had become the only record of much that was known. Now each kind of
+knowledge has one home (D182), and the docs check themselves (D183, D184).
+
+- **Mined into their homes:** everything on REVIEW.md and in the 42 sections deleted from it before went into the new
+  `docs/sources.md` (sources and how sure), this file (measurements), DEV_PLAN.md's "Known gaps", and the comments
+  beside the numbers; no code cites REVIEW.md any more.
+- **Every doc says what is not in it** (a **Not here:** line near its top) and is named in CLAUDE.md.
+- **`test/docs.test.js`:** every D, R and CR cited exists, docs about the present name files that exist, decisions
+  that change earlier ones are named on them (50 rows given their *Later* note), every doc has its line, every source
+  file is in an area, and `docs/areas.md` is up to date. Measured: about 0.4 s of the suite's 5.
+- **`docs/areas.md`** (`npm run areas`): ten areas, each with its files, tests, requirements, decisions, traps and
+  what else to read.
+- **Traps beside their code** (D185): CLAUDE.md's 70 "look arbitrary" bullets went into the header comments of 36
+  files as `Trap:` paragraphs, collected into `docs/areas.md`; CLAUDE.md keeps the nine that cross every area and
+  went from about 31,500 to 11,800 characters. Measured: 332 unit tests and every browser check pass; the build too.

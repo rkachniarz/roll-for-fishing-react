@@ -6,6 +6,11 @@
 //
 // Trades are counted among the flags, as counters events can read (R18.4):
 // `trades-alchemist`, and per offer `trades-alchemist-potion-of-breath`.
+//
+// Trap: Conservation (D140) counts in the flag `endangered-released` through `conserve`, called
+// from both release paths, `letGo` and `releaseFish`.
+//  A test wants two endangered kinds per spot (one in the tower's pool), so adding a fish to a spot
+//   or marking one endangered can fail it.
 
 import { content } from '../generated/content.js';
 import { RARITIES, sameFish } from './fish.js';

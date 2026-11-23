@@ -3,6 +3,8 @@
 A hundred items Claude drafted on 2026-11-15, then cut to twenty. None of this is a requirement. An item becomes one
 when it's built or decided (`docs/decisions.md`). Numbers in brackets point to the full list below.
 
+**Not here:** items decided or built (`content/items/`, `docs/decisions.md`).
+
 ## The twenty
 
 1. **Lucky d20 bobber** (23): painted with one die face; a natural roll of that number counts as a 20.

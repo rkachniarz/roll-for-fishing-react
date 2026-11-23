@@ -8,6 +8,16 @@
 //   data-drag="bag:3" / "equip:rod"   a source: its icon follows the mouse
 //   data-drop="bag:3" / "bag:end" / "equip:rod"   a target
 // The page decides what a drop does (onDrop), and what the quick move does (onUse).
+//
+// Trap: A long press or a right-click must fire no click: the click after it is swallowed, and the
+// paper doll's slot list (D164) relies on it.
+//  This file reads `data-drag` / `data-drop` (`bag:3`, `bag:end`, `bag:pane`, `equip:rod`) off the
+//   elements; `src/main.js` decides what a drop and the quick move do (`onDrop`, `onUse` =
+//   `quickMove`). Only a mouse drags (D163); a right-click, or a long press on touch, is the quick
+//   move: equip, drink, or back to the bags. The long press is a timer and Android's `contextmenu`
+//   both, whichever comes first, once per press (iOS may send no `contextmenu`). On a fish in the
+//   bucket a long press opens the fish's options menu instead (R21.1). The hint at the foot of a
+//   bag item's tooltip goes by `usingTouch()` in `src/ui/tooltip.js`.
 
 import { hideTip } from './tooltip.js';
 

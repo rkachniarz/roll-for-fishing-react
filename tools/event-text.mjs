@@ -29,6 +29,12 @@
 // the words after them are the vocabulary below, and a new word is code work
 // (D42). This file only reads the text; tools/content.mjs checks that the
 // classes, items and fish it names exist.
+//
+// Trap: This file owns the event vocabulary and `docs/events.md` is the author's guide: a new word
+// goes in both. A new placeholder goes in `PLACEHOLDERS` here and in `src/ui/event-words.js` (a
+// test checks the two agree).
+//  Events are `.md`, not JSON (D45, D84); their text is a list of parts, each its own string key
+//   (D88). The engine imports only typedefs from here.
 
 /** Requirement words, as `needs: <word> …` (D84). */
 export const NEEDS = {

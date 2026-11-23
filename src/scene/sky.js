@@ -32,10 +32,10 @@ const NIGHT = 0x0b1a3a;
 const WARM = 0xff9a4d;
 const OVERCAST = 0x5d6b73;
 const SHADOW = 0x1d4a66;
-/** The blood moon's light over everything (D174), at its full strength (Claude's pick, docs/REVIEW.md). */
+/** The blood moon's light over everything (D174), at its full strength (Claude's pick; when it comes in: docs/sources.md). */
 const BLOOD = 0x8a0a12;
 const BLOOD_ALPHA = 0.3;
-/** The green sun's light over everything (D175), at its full strength (Claude's pick, docs/REVIEW.md). */
+/** The green sun's light over everything (D175), at its full strength (Claude's pick; when it comes in: docs/sources.md). */
 const GREEN = 0x1f8a2a;
 const GREEN_ALPHA = 0.28;
 /** A faint cast per season; spring is the palette as drawn. */

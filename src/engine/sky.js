@@ -9,13 +9,19 @@
 // minute, worked out from the clock and never stored. The only thing stored is
 // the game minute of the first full moon (`state.fullMoonAt`), rolled once at a
 // new game. Drawing them is 12.4's.
+//
+// Trap: The one thing stored is `state.fullMoonAt`, rolled once at a new game from the stream
+// `moon`, which, like `start`, is drawn once and isn't in `STREAMS`.
+//  The sun's hours are stretched to cross the horizon at exactly `SUN`'s times (D167).
 
 import { content } from '../generated/content.js';
 import { TIME, sunAt } from './time.js';
 
 /**
  * The view every spot shares: `width` degrees of compass across the picture,
- * centred on the spot's facing (Claude's pick, docs/REVIEW.md).
+ * centred on the spot's facing. Claude's pick, about a phone camera's width:
+ * the sun or the moon is in the picture for a good part of its day at a spot
+ * facing its way, but not always; 90° would squeeze its path (docs/sources.md).
  */
 export const VIEW = {
   width: 60,

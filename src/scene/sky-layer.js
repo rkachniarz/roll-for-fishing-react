@@ -20,6 +20,15 @@
 // code once and cached, never scaled (R7.3); positions are whole pixels.
 // Cosmetic randomness (the stars, the glitter) comes from the `rand` given,
 // the scenery stream (D4).
+//
+// Trap: Take the glitter and the mirror off a painting (`attach(null)`) before destroying it: they
+// hang on the painting's water.
+//  A painting that shows sky paints nothing above its `horizon` (row 110 for the still water and
+//   the reedy shore) and gives `horizon`, `skyline` (the top of its land per column, which hides
+//   the sun and its glitter), `waterLayer` (a container in `back` just over the water, where the
+//   glitter hangs) and `isWater`. The still water's water still mirrors its photo's sky
+//   (`paintMirrorSky`), never shown itself; with `mirrorSky` this layer lays the live sky over it
+//   faintly (D170). The scene needs `World.time` and `World.fullMoonAt`.
 
 import { Container, Graphics, Sprite, Texture } from 'pixi.js';
 import { VIEW, acrossView, moonPosition, sunPosition } from '../engine/sky.js';
@@ -30,7 +39,7 @@ import { isBloodMoon, isGreenSun } from './light.js';
 import { CLOUD_PATTERNS, FILM, SKY_SIZE, SKY_W, driftSpeed, layOutSky, rampColours, skySpec } from './clouds.js';
 import { windAcross } from './wind.js';
 
-/** Pixels per degree of height above the horizon (Claude's pick, docs/REVIEW.md): about the width's 256 px per 60°. */
+/** Pixels per degree of height above the horizon (Claude's pick): about the width's 256 px per 60°, so the sky isn't stretched; the picture's top is then 27° up (docs/sources.md). */
 export const SKY_SCALE = 4;
 /** The painting's width, and where the play area's middle falls in it (D93). */
 const W = 320;
@@ -126,7 +135,7 @@ const wrap180 = (deg) => ((((deg % 360) + 540) % 360) - 180);
 const SKY_FADE_MS = 5000;
 /** How much of the sky the still water mirrors over its own colour. */
 const MIRROR_ALPHA = 0.4;
-/** How much the light dims while a cloud is over the sun (Claude's pick, docs/REVIEW.md). */
+/** How much the light dims while a cloud is over the sun, as a share of the overcast tint (Claude's guess). */
 const SUN_SHADE = 0.12;
 /** The clouds' tint by the sun's height: day, low sun, twilight; the night's goes from dark to moonlit. */
 const CLOUD_TINT = { day: [255, 255, 255], low: [242, 214, 190], twilight: [140, 127, 153], night: [44, 53, 80], moonlit: [106, 117, 144] };
@@ -250,7 +259,7 @@ export function paintSkyColour(horizon, sun, facing, season) {
 
 /**
  * The sun, 2R + 1 px across: pale and haloed high up, golden low, orange-red as it
- * sets (Claude's picks, docs/REVIEW.md).
+ * sets (Claude's picks).
  * @param {'high' | 'low' | 'set'} kind
  */
 export function paintSun(kind) {

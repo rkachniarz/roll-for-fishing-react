@@ -5,6 +5,9 @@ silently changing requirements. Within a phase, tasks are listed in the order th
 only ids, so a task added later keeps its number wherever it lands. Once a phase is done, its tasks move out of here
 into [docs/history.md](docs/history.md), and the owner's answers that shaped them are in the decisions they cite.
 
+**Not here:** what's done (`docs/history.md`), why things are so (`docs/decisions.md`), where a fact came from
+(`docs/sources.md`), the owner's loose ideas (`docs/ideas.md`).
+
 **Two tracks (D105).** The plan is split in two: **development**, which builds the requirements and the owner's ideas,
 and **creative work**, the art, writing and sound. Development never waits for creative work. Where a task needs a
 picture, a name or a text that doesn't exist yet, it is built with a placeholder: squares and triangles, a flat colour,
@@ -162,6 +165,43 @@ Not scheduled, and with less behind them than the above.
 - **Catching the same fish again and again**: a hidden event or achievement for catching one released fish several
   times (D60).
 
+## Known gaps
+
+Loose ends, limits and things never seen working, found along the way (D182). Not tasks yet; each wants a word from
+the owner or a place in a phase.
+
+- **Never seen in a browser:** a fight manoeuvre's splash and its text over the bobber (no check reaches one, and
+  the dev bench can't force one); the aquarium with a predator in it (its warning and Feed button); a predator's
+  strike under the water; whether hiding, the shoals' turning and scatter, the pike's lunge and resting fish read
+  well in motion (a screenshot can't show it). A manoeuvre running out after `fightMs` (D141) has never been felt
+  in play.
+- **Uncredited icons:** the fish and item icons drawn from Commons photos (D97, D98) aren't in `assets/CREDITS.md`;
+  their sources are only in the local, untracked `docs/design/refs/credits.csv`. Many are CC BY or CC BY-SA, so
+  they want listing before the game is shared more widely.
+- **A failed load** (the scripts never arrive, say no network for the graphics library) leaves a blank background.
+  A line of text could say so.
+- **The rivers' unlock order** is still the interim one (D161): the upper river opens with the town, the lower river
+  and the mouth are noticed after 20 and 50 casts there.
+- **Fog doesn't dim the moonlight** (`src/engine/moon.js` reads only the clouds).
+- **From Review 3, small rules meeting oddly:** a second twin is lost without a word when the bucket is full; a
+  predator can eat an endangered fish or a class fish in the tank; a Conservationist can let the same fish go,
+  Recall it and let it go again, counting each time; a pool fish struck at in a dive and missed is still "new".
+- **The tank's two sizes:** a meal needs the prey under half the eater's own length, but hiding compares the
+  species' middle lengths, so a trophy roach hides from a small pike that can't eat it. The hiding zone (80 by 36)
+  covers most of the glass (96 by 66), so small fish beside a pike flee about a third of the time.
+- **The swamp's picture under the water is one all year:** no sinking leaves in autumn, no darker winter.
+- **The reedy shore's winter grass** sweeps through the lower reeds and may be too much next to the photo's dark
+  mass; never judged.
+- **The fallback font** is still `ui-monospace, monospace` (`styles.css`) if Google Fonts doesn't load; with
+  Alegreya Sans the default, a plain sans-serif may be the better stand-in.
+- **Only fish show their icon in a tooltip** (D119); items could too, the same way (`icon` in `tipFor`,
+  `src/ui/links.js`).
+- **The buff bar's squares** aren't drawn at the scene's pixel scale (D71).
+- **A Tiny fish goes on the hook from a button** under the bucket's grid (5.8), since the bucket and the character
+  pane don't show together on a phone; WoW would right-click it.
+- **The content editor** (7.5) doesn't check what it saves (`npm run content` does), and nothing stops two windows
+  saving the same file. Firefox and Safari can't open a folder.
+
 ---
 
 # Creative work
@@ -184,7 +224,7 @@ placeholder, it's added here.
   differences per spot first.
 - [ ] **CR-2** Weather and life on the painted spots (D100; the art half of 8.11): clouds per weather, rain, wind,
   light, moving plants and water. The clouds are in as code (D170), from Wikimedia Commons references (contact sheets
-  in `docs/design/commons/`, local only; the files used are on REVIEW.md); the owner's own sky photos would go in
+  in `docs/design/commons/`, local only; the files used are in `docs/sources.md`); the owner's own sky photos would go in
   beside them, as references only.
   *Placeholders still here:* every cloud pattern, the table and the palettes in `content/rules/sky.json` (marked
   `placeholder`) are Claude's first go; the still water mirrors the live sky only faintly over its photo's baked
@@ -221,7 +261,7 @@ placeholder, it's added here.
 - [ ] **CR-10** Events: about ten more after the frog, the real quest chain (in place of 7.4's placeholder), the set
   pages (8.7), and the story (`docs/ideas.md`), with the town's visitors when they come.
 - [ ] **CR-12** Names: the spots (placeholder names since D101), the "Greedy" and "Bent" marks on fish (D106), and the
-  perks' names and texts (REVIEW.md lists them as Claude's). *From Phase 11: the Conservationist's and Look
+  perks' names and texts (all Claude's). *From Phase 11: the Conservationist's and Look
   Underwater's descriptions, the Queasy debuff, the fight styles' journal and manoeuvre lines
   (`content/rules/fight-styles.json`), and six placeholder taste lines (`docs/placeholders.md` lists them).*
 - [ ] **CR-13** What the town's people say: the inn, the scrap dealer, the junk collector, the Alchemist, the raid

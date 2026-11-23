@@ -4,6 +4,13 @@
 // that went out and ended takes one step; waiting or sleeping in town takes
 // as many as it lasts (R17.2), and nothing else of a cast happens then. The
 // stew's buff stands still in town and asleep (D172).
+//
+// Trap: Time moves in half-hour steps through `stepTime`, for a cast and for `wait:` and `sleep:`;
+// buffs with `until` end here. `stepTime` and `passTime` take the whole dice record, as the pools
+// take their turns here.
+//  Buffs can last casts, attempts, real ms or game minutes. The stew's buff carries `holds` and
+//   stands still in town and asleep (D172): each step there moves its `until` on; sleeping passes
+//   `{ asleep: true }`.
 
 import { advanceTime, clock, TIME } from './time.js';
 import { changeSeason, stepWeather } from './weather.js';

@@ -5,6 +5,21 @@
 // view to fill it (D93), and everything the engine places stays in the square. It animates whatever
 // phase the cast is in and never changes the cast itself - the engine doesn't
 // wait for it (docs/decisions.md, D7).
+//
+// Trap: `createScene` takes a `SceneLook` only for the art sheet's trials (`src/art-trials.js`);
+// the game passes none, and a knob goes once its trial is settled.
+//
+// Trap: A painting is seen from eye level, so each painted spot has its own open water (`water`) or
+// the default `WATER` (rows 118-190); the swamp's comes from its layout (`SWAMP_LAYOUT`, 32 columns
+// further right): change the two together.
+//  Painted spots (D115-D118, D158, D171): a spot's `look.painting` names one (`pond`:
+//   `src/scene/pond.js`; `reedy`: `src/scene/reedy.js`; `swamp`: `src/scene/swamp.js`, painted in
+//   `swamp-pixels.js`; `open`: the reedy shore without reeds, which every spot naming none shows,
+//   its `tint` over the water). `PAINTINGS` hides the scene's own water, waves, cloud shadows and
+//   reeds for the painting's back and front layers, repainted when the spot or the painting's own
+//   season changes (the pond has two seasons, the reedy shore and the swamp four). A painting can
+//   also have a picture under the water (`UNDER` in `src/scene/views.js`, D159), shown for Look
+//   Underwater and the dive; `body[data-under]` names the one showing, for `tools/verify.mjs`.
 
 import { Application, Container, Graphics, Sprite, Texture, TextureStyle } from 'pixi.js';
 import { createSky } from './sky.js';

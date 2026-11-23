@@ -3,6 +3,8 @@
 Pictures from elsewhere that the game's art is drawn from (D9, D97). Each line: what in the game, the source, its
 author and licence. A picture under CC BY-SA passes its licence on to what is made from it.
 
+**Not here:** pictures only looked at, never traced or shipped (`docs/sources.md`).
+
 | In the game | Source | Author | Licence |
 |---|---|---|---|
 | The light theme's pine tabletop (`styles.css`, made by `tools/planks.py`, D143) | [File:Kiefer Holz.JPG](https://commons.wikimedia.org/wiki/File:Kiefer_Holz.JPG), Wikimedia Commons | see the file page | CC BY-SA 3.0; the tile is shared under the same licence |
@@ -12,4 +14,6 @@ author and licence. A picture under CC BY-SA passes its licence on to what is ma
 | The default event picture, an old scroll (`event/scroll` in `src/scene/icons.js`, D142) | [Bern, Burgerbibliothek, Cod. 803, front paste-down, Rotulus von Mülinen](https://commons.wikimedia.org/wiki/File:Bern,_Burgerbibliothek,_Cod._803,_Front_paste-down_%E2%80%93_Rotulus_von_M%C3%BClinen_Recipes,_incantations,_blessings,_De_taxone_liber,_alphabetical_glossary_of_plants.JPG), Wikimedia Commons | unknown | Public domain |
 
 Not yet listed: the fish and item icons drawn from Commons photos before this file existed (D97, D98). Their
-sources are in each icon's comment in `src/scene/icons.js` where one was written; see docs/REVIEW.md.
+sources are in each icon's comment in `src/scene/icons.js` where one was written, and in the local, untracked
+`docs/design/refs/credits.csv`. Many are CC BY or CC BY-SA, so they belong here before the game is shared more
+widely (DEV_PLAN.md, "Known gaps").

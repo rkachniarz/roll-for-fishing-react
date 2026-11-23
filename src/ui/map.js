@@ -9,6 +9,14 @@
 // src/generated/map-paper.js; the marks' places are content (`map` on a spot,
 // or on a town). Like the scene, it is drawn at a whole number of device pixels
 // per picture pixel (D10).
+//
+// Trap: A spot without `map` (a town's, for the whole town) can't be gone to from the map; a test
+// wants every spot placed.
+//  The map (D161) is the `map` pane drawn over the whole screen, not in the pane box. Its picture
+//   is baked from the owner's photo and drawing (`docs/design/map/`, local only) into
+//   `src/generated/map-paper.js` by `npm run map`; a spot's `map` is its place in that picture's
+//   320 pixels. `mapMarks` (`src/engine/knowledge.js`) lists them; the button shows from two marks
+//   on. A press goes to the nearest mark in reach, since the circles are small on a phone.
 
 import { content } from '../generated/content.js';
 import { MAP_PAPER, MAP_SIZE } from '../generated/map-paper.js';

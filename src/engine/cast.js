@@ -17,6 +17,10 @@
 //
 // Only a fish fights back with a d20; junk and treasure are landed by any
 // strike in time (D64).
+//
+// Trap: `tickCast` checks for a late strike straight after the bite starts, in the same tick.
+//  A long gap between ticks (a background tab, a late strike) would otherwise skip past a bite that
+//   has already run out.
 
 /** @typedef {ReturnType<import('../dice.js').diceFor>} Dice */
 

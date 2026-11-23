@@ -8,6 +8,34 @@
 //   ?dev          puts the dev bench in the menu
 //   ?seed=N       a new game from seed N (an existing save still wins)
 //   ?wait=MS      fixes the time from cast to bite (used by tools/verify.mjs)
+//
+// Trap: `biteAt` is reset to the frame that first shows the splash (D16).
+//  The engine's scheduled time can be most of a frame earlier; the player is timed from what they
+//   can see.
+//
+// Trap: The roll's log lines, the catch's flight and any dialog wait for the dice (D99); the next
+// `apply` ends the show at once (`finishDice`).
+//  `body[data-dice]` is set while they're out; `tools/verify.mjs` waits for it to go before reading
+//   the log.
+//
+// Trap: A tap within 500 ms of the last action is ignored after a cast ends, so a double tap on the
+// splash strikes once instead of striking and instantly recasting.
+//
+// Trap: `castInProgress()` is not `lineOut()`.
+//  Saves are held back only while a cast is in progress; equipment can't change then, nor in the
+//   pause after a missed splash (`lineOut()`).
+//
+// Trap: A cast in the phase `fight` (D141) is a line still out; the scene is given it as `waiting`,
+// then `bite`.
+//
+// Trap: The event dialog ignores clicks for 400 ms after it opens (`openedAt`), so the Space press
+// or tap that ended the cast can't pick a choice.
+//
+// Trap: A tap or left click on a paper-doll slot opens its list (D164), WoW's flyout, and relies on
+// the click after a long press or right-click being swallowed (`src/ui/drag.js`): one that fired a
+// click would open the list too.
+//  The slot is kept in `flyoutKey` and the list redrawn with the pane, so it never shows stale
+//   bags.
 
 import { createRng, deriveSeed, randomSeed } from './rng.js';
 import { diceFor } from './dice.js';

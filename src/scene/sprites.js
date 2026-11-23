@@ -4,6 +4,9 @@
 // Larger things (water, sand, reeds) are drawn by small functions instead.
 // Everything here becomes a texture once, at load; nothing is scaled at
 // runtime, because scaling ruins pixel art (docs/spec.md, R7.3).
+//
+// Trap: `paintBackdrop`'s dithered rows between water bands stop the band edges reading as horizon
+// lines.
 
 /** One colour per key. Kept small on purpose: a tight palette reads as pixel art. */
 export const PALETTE = {

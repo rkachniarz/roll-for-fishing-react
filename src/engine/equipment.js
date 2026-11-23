@@ -7,6 +7,11 @@
 // which takes a whole stack of bait and uses it up a piece at a time (D39).
 // Every function here returns a new state, or the same state and an `error`
 // (a key under `error.` in src/strings.js) when the move isn't allowed.
+//
+// Trap: Equipped items are not in the bags (D83): move items with this file, never by editing
+// `equipped` and `bags` by hand.
+//  A slot holds a stack (`{ id, count }`); only the bait slot ever holds more than one, and bait is
+//   used up from it.
 
 import { content } from '../generated/content.js';
 

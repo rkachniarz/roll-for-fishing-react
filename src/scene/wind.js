@@ -4,6 +4,14 @@
 // right; one at the player's back or in their face hardly moves the clouds
 // across at all, which is how such a wind looks. Nothing moves in depth: the
 // cloud sprites are drawn per depth band and never scaled (R7.3).
+//
+// Trap: Anything that drifts with the wind must wrap both ways.
+//  `state.wind` is a cell of its own hexflower (D176, `src/engine/wind.js`); the strength stays
+//   `weather.wind`. The page hands the scene both on the weather (`windFrom`, `windKind`). The
+//   clouds move only by the share across the view (`windAcross`); the waves (D177) also roll in or
+//   out by the share along it (`windFlow`, handed to a painting's `update` as `flow`, the swamp
+//   ignoring it). A weather without `windFrom` (the art sheet's old trials) blows from the left.
+//   The wave numbers are `WAVE_LEVELS` in `src/scene/waves.js`.
 
 /**
  * The wind's direction as the scene is given it, beside the weather's own fields.
@@ -12,11 +20,11 @@
  *   trials), the wind blows from the left of the view, as the scene was first drawn.
  */
 
-/** How far a variable wind swings either way, as a share of a full cross wind (Claude's pick, docs/REVIEW.md). */
+/** How far a variable wind swings either way, as a share of a full cross wind (Claude's pick). */
 const VARIABLE_SWING = 0.5;
 /** A variable wind's slow swing from one side to the other, in ms a radian. */
 const VARIABLE_MS = 40000;
-/** How much an unsettled wind's gusts speed it up and slow it down (Claude's pick, docs/REVIEW.md). */
+/** How much an unsettled wind's gusts speed it up and slow it down (Claude's pick). */
 const GUSTS = 0.4;
 
 /**

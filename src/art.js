@@ -567,7 +567,7 @@ section(
 // still water's mirror, painted into the same scene (docs/art.md's limit).
 section(
   'Clouds (12.5)',
-  'Clouds drawn as code from references on Wikimedia Commons (docs/REVIEW.md names them): fair-weather heaps, towering heaps, lumpy grey layers, high wisps, flat grey sheets (a rainy overcast), decks of cells with blue between (a dry one, the owner’s photos), rain cloud and a storm’s dark overcast (src/scene/clouds.js), picked per season and cloud level by content/rules/sky.json, in the season’s palette. A description that names a sky has its own patterns; fog hides the sky; black brings a dusk. The live scene drifts with the wind; a new weather fades in over the old. Noon, facing the spot, unless the caption says otherwise.',
+  'Clouds drawn as code from references on Wikimedia Commons (docs/sources.md names them): fair-weather heaps, towering heaps, lumpy grey layers, high wisps, flat grey sheets (a rainy overcast), decks of cells with blue between (a dry one, the owner’s photos), rain cloud and a storm’s dark overcast (src/scene/clouds.js), picked per season and cloud level by content/rules/sky.json, in the season’s palette. A description that names a sky has its own patterns; fog hides the sky; black brings a dusk. The live scene drifts with the wind; a new weather fades in over the old. Noon, facing the spot, unless the caption says otherwise.',
   async (body) => {
     const reedy = facingOf('lake', 'reedy-shore');
     const pond = facingOf('lake', 'still-water');

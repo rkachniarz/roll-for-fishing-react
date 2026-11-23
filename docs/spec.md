@@ -4,6 +4,8 @@ What the game is meant to be: the vision, the requirements (`R1`–`R21`) and th
 (`R2.3`, `§C.2`). The reasons behind them are in [decisions.md](decisions.md); work still to do is in
 [DEV_PLAN.md](../DEV_PLAN.md). A requirement changes by recording a decision first, then editing it here.
 
+**Not here:** reasons (`docs/decisions.md`), tasks (`DEV_PLAN.md`), how sure a fact is (`docs/sources.md`).
+
 Sources: [OLD-CONCEPT.md](../OLD-CONCEPT.md), the design notes and data in the React prototype (tag `legacy-prototype`,
 see [PORTING-NOTES.md](PORTING-NOTES.md)), and the decisions taken since.
 

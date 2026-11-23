@@ -4,6 +4,8 @@ The owner's list from a creative session, numbered as the owner wrote it (two it
 10b here), with what the engine could already do for each, and what it needed. The requirements that came out of it
 are R17–R21 in `docs/spec.md`; the decision is D123; the work is Phase 10 in `DEV_PLAN.md`.
 
+**Not here:** anything new. A dated record, not updated: what came of it is in the decisions and requirements it names.
+
 Several items answer the town questions (`docs/town-questions.md`); the answers are noted there.
 
 ## The list, and what the engine needed

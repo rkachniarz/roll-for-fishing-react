@@ -9,6 +9,11 @@
 // 15 and up) with a lag of about a day, and never freezes: it is magical.
 // Kept in the state (`water`), moved each half-hour step (passage.js), with a
 // slower average of itself (`waterSlow`) that says whether it is warming.
+//
+// Trap: Whether the water is warming is the water against its own slow average (`state.waterSlow`,
+// D153), never the air against the water: that flips with every change of weather.
+//  The water's temperature (`state.water`, D149) is stepped with the time in `stepTime`; who spawns
+//   reaches the tables through the moment (`momentOf`), like the preferences.
 
 import { content } from '../generated/content.js';
 

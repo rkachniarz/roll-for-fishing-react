@@ -5,6 +5,8 @@ yet: an idea becomes one when it's built or decided (`docs/decisions.md`). The e
 `DEV_PLAN.md`; each idea below names its tasks. Most of the engine work is built; still to do are 8.8, 8.9, the
 junk collector's own event (8.12), and the town ideas under DEV_PLAN.md's "From our talks".
 
+**Not here:** anything decided or built (`docs/decisions.md`, `docs/spec.md`), engine tasks (`DEV_PLAN.md`).
+
 Item ideas, a hundred cut to twenty, are in [ideas/items.md](ideas/items.md).
 
 Newest first.

@@ -7,6 +7,14 @@
 // `chance: 0` exactly once, or the picker returned undefined (PORTING-NOTES
 // §4); here every entry has an explicit weight, and an empty hook is an entry
 // of its own.
+//
+// Trap: The spots hold the fish, not the locations (D101): a location's `fish` list is empty on
+// purpose.
+//  Each spot's weights come from the owner's encounter ranks. A fish's `prefers` multiply its
+//   weight; the weather words are in `content/rules/fish-preferences.json`, and fog and snow are
+//   `tags` on the weather cells. Schools and big fish are listed per spot too (D102), and so are
+//   rift fish, `rift: true`, in each spot's `rift` table (D104). Plants at a spot (D150) reach the
+//   tables through `hasPlants`.
 
 import { content } from '../generated/content.js';
 import { spawningIn } from './spawning.js';

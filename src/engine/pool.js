@@ -31,6 +31,18 @@
 // (shape, then colours, then its name). Which fish show as shadows from the
 // bank (`shadowsOf`) follows from the state alone, with no dice: a cast that
 // lands on one brings up that very fish, if a fish bites (`aimedAt`).
+//
+// Trap: Put a met fish back with `joinPool`, never by pushing onto the list; a test that counts a
+// pool must leave out the `wild` fish.
+//  `stepTime` gives every stocked pool its turn with each new part of the day (`stepPools`: fish
+//   leave, predators eat, others arrive), and each cast drifts the fish where the player is
+//   (`driftPool`). Stocking is lazy (`tendPool`, from `castLine`, the dive, the wizard's look, and
+//   `render` in `src/main.js`); call it before taking dice, as it commits its own. No bait and none
+//   of the player's values count for who lives there (D153).
+//
+// Trap: Which pool fish show as shadows, and where, is worked out here (`shadowsOf`, D156) from the
+// state with a hash and no dice, so a cast can land on one (`aimedAt`).
+//  The page only draws that list, keyed by each fish's number `n`, so one that moves swims there.
 
 import { content } from '../generated/content.js';
 import { clock } from './time.js';

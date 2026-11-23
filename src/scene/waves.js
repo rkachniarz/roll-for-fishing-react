@@ -2,9 +2,10 @@
 // How the wind works the water (D177): the open water's ripples and the still
 // water's broken mirror, by the wind's strength (the weather's 0 to 5) and its
 // direction (`windFlow`, src/scene/wind.js). The swamp is left alone: its water
-// is sheltered under the trees. Every number here is Claude's pick
-// (docs/REVIEW.md); a lake's waves never get big, but none against a strong
-// wind should read as two different days.
+// is sheltered under the trees. Every number here is Claude's pick, tuned by
+// eye: Moderate looks as the water did before D177, Extreme shows every mark
+// (lower its row if it reads too rough). A lake's waves never get big, but none
+// against a strong wind should read as two different days.
 
 /**
  * Per wind level, 0 (none) to 5 (extreme); a level between two is mixed from both.

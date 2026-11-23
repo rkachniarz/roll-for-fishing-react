@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- Trap: The script in `<head>` reads the theme, the background (D144) and the font (D132) from the settings key before the page draws, so a light page doesn't flash dark. It duplicates `src/settings.js`'s key on purpose (D81). -->
 <html lang="en">
 <head>
   <meta charset="utf-8">

@@ -8,6 +8,16 @@
 //
 // Fixed on port: difficulty uses the band after the shift, so a bigger fish is
 // harder; Medium has a name; plain relative weights replace the rescaling.
+//
+// Trap: A fish's weight is worked out, never stored (D146): `fishWeight` from its species'
+// `lengthWeight` and its own `condition`, rolled from the `condition` stream wherever a fish is
+// rolled. Two fish of a different condition don't stack (`sameFish`).
+//
+// Trap: The fish schema requires only id, name, size, difficulty and rarity, and the code falls
+// back quietly when `swim`, `fights`, `taste` or `lengthWeight` is missing: a new fish wants them
+// all.
+//  It also needs `swims` (D136) and a shape in `src/scene/fish-shapes.js` (D131); tests check those
+//   two.
 
 import { content } from '../generated/content.js';
 import { pick } from './tables.js';

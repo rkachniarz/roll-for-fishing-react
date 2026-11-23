@@ -435,6 +435,9 @@ export function placeholdersMarkdown(/** @type {{ rows: { kind: string, id: stri
     "placeholder, then take its mark away (or the field's name from the list). The game's own placeholder text, outside",
     '`content/`, is listed in `PLACEHOLDER_UI` in `src/strings.js`.',
     '',
+    "**Not here:** anything written by hand; this file is rebuilt from `content/`. The art's placeholders are listed under",
+    "their `CR-n` task in `DEV_PLAN.md`.",
+    '',
   ];
   const kinds = [...new Set(rows.map((r) => r.kind))].sort();
   for (const kind of kinds) {

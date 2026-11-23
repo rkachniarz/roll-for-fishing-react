@@ -19,6 +19,7 @@
     "map": "node tools/py.mjs map",
     "sim": "node tools/sim.mjs",
     "prompts": "node tools/prompts.mjs",
+    "areas": "node tools/areas.mjs",
     "check": "npm test && npm run verify && npm run build"
   },
   "devDependencies": {

@@ -3,6 +3,8 @@
 A pixel-art fishing game: cast, watch the bobber, strike when it splashes, and roll a d20 to land the catch. A tribute to
 World of Warcraft fishing, crossed with tabletop dice. Plays on phones and desktop browsers.
 
+**Not here:** rules for working on the code (`CLAUDE.md`), reasons (`docs/decisions.md`), plans (`DEV_PLAN.md`).
+
 The game is in early development: see [DEV_PLAN.md](DEV_PLAN.md) for where things stand, and
 [docs/spec.md](docs/spec.md) for what it's meant to become. The original React prototype is at the tag
 `legacy-prototype`.
@@ -136,7 +138,7 @@ and the art sheet at `/art.html` there.
 | `tools/commons.py` | Wikimedia Commons pictures: search to a contact sheet, fetch a pick with its licence |
 | `tools/py.mjs` | Runs the Python tools in their own environment, `.venv-cutout/` (`npm run cutout setup`); `tools/python-requirements.txt` lists what it installs |
 | `tools/build-artifact.mjs` | Builds `dist/artifact.html` |
-| `docs/` | Spec, decisions, history, porting notes; `docs/design/` holds sketches and photos, local only (D97); `docs/events.md` is how to write an event, `docs/art.md` how the art is made, `docs/ideas.md` the owner's ideas for events and the story, `docs/placeholders.md` every placeholder (generated, D124), `docs/REVIEW.md` calls the owner hasn't checked yet (D76), `docs/prompts.json` the prompt count; `docs/town-questions.md`, `docs/brainstorm-2026-11-14.md` and `docs/ideas/items.md` are dated records |
+| `docs/` | Spec, decisions, history, porting notes; `docs/design/` holds sketches and photos, local only (D97); `docs/events.md` is how to write an event, `docs/art.md` how the art is made, `docs/ideas.md` the owner's ideas for events and the story, `docs/placeholders.md` every placeholder (generated, D124), `docs/REVIEW.md` calls the owner hasn't checked yet (D76), `docs/areas.md` the index of where to look by area (generated, D184), `docs/sources.md` where the real-world facts and Claude's numbers came from (D182), `docs/prompts.json` the prompt count; `docs/town-questions.md`, `docs/brainstorm-2026-11-14.md` and `docs/ideas/items.md` are dated records |
 | `.claude/skills/photo-to-icon/SKILL.md` | The photo-to-icon skill: a photo to a 32×32 icon (D97, D98) |
 | `.github/workflows/` | `pages.yml` publishes to GitHub Pages (D91); `ci.yml` is disabled on GitHub (D133) |
 | `assets/CREDITS.md` | Where outside pictures the art is drawn from came from, with their licences |

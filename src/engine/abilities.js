@@ -8,6 +8,12 @@
 // strike in time on a splash, an empty hook included. Some abilities only
 // work right after something happens, as WoW's Overpower after a dodge: they
 // light up then, and stay lit until the next cast goes out (D96).
+//
+// Trap: Cooldowns and an ability's "next cast" count attempts, not casts (D96): a strike in time on
+// a splash, the empty hook included.
+//  Ability buffs last `attempts`; one used mid-cast is `pending` and isn't spent by that cast, and
+//   its cooldown is `pending` too, counting from the next line out (D113). Lit abilities
+//   (`state.lit`) go dark when the next line goes out (`castLine`).
 
 import { content } from '../generated/content.js';
 import { levelFor } from './state.js';
