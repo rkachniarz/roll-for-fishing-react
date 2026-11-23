@@ -76,9 +76,12 @@ test('the docs that describe the present name files that exist', () => {
   const missing = named.filter((n) => !existsSync(n.path));
   // Local-only files (the owner's photos, exports) are gitignored on purpose.
   // check-ignore exits 1 when none of the paths is ignored: that's an answer, not a failure.
-  const check = missing.length ? spawnSync('git', ['check-ignore', '--no-index', '--stdin'], { input: missing.map((n) => n.path).join('\n'), encoding: 'utf8' }) : null;
+  // Each path is asked about with a trailing slash too: on a clean checkout an ignored folder
+  // (docs/names/) isn't there, so git can't tell it's a folder and `docs/names` misses the pattern.
+  const asked = missing.flatMap((n) => [n.path, `${n.path}/`]);
+  const check = missing.length ? spawnSync('git', ['check-ignore', '--no-index', '--stdin'], { input: asked.join('\n'), encoding: 'utf8' }) : null;
   if (check && check.status !== 0 && check.status !== 1) throw new Error(`git check-ignore failed: ${check.stderr || check.error}`);
-  const ignored = new Set(check ? check.stdout.split('\n') : []);
+  const ignored = new Set(check ? check.stdout.split(/\r?\n/).map((p) => p.replace(/\/$/, '')) : []);
   const bad = missing.filter((n) => !ignored.has(n.path)).map((n) => `${n.at}: ${n.path}`);
   assert.deepEqual(bad, [], 'named in a doc but not in the repo');
 });
