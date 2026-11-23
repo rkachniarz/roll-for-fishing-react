@@ -1,5 +1,6 @@
 // @ts-check
-// The weather's hex map layout (PORTING-NOTES §1.1), on its own so that
+// The hex map layout of the weather (PORTING-NOTES §1.1) and of the wind's
+// compass flower (D176), on its own so that
 // tools/content.mjs can check the maps without loading the generated content
 // it is about to write.
 

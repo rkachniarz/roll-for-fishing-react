@@ -25,6 +25,8 @@ npm run sim      # balance: seeded games per class (casts=500 games=20 class=rog
 npm run prompts  # how many prompts this project has taken, kept in docs/prompts.json
 npm run planks   # the light theme's tabletop tile into styles.css (`pine` or `oak`, D143)
 npm run obsidian # the dark theme's obsidian tile into styles.css (`banded`: the art trial, D145)
+npm run map      # the map's paper and outline into src/generated/map-paper.js (D161)
+npm run areas    # rebuild docs/areas.md, the index of where to look by area (D184)
 
 npm run sprite list                    # the sprites that can go out to MS Paint
 npm run sprite export bobber           # -> art/bobber.png, to draw on
@@ -95,6 +97,8 @@ and the art sheet at `/art.html` there.
 | `src/scene/sky.js` | Time of day, season and weather on the scene: tints, cloud shadows, rain, snow (`light.js`: the day's light curves) |
 | `src/scene/sky-layer.js` | The sky behind the painted spots that show sky (D169): its colour by the sun's height, the stars, the sun and the moon in its phase, the clouds drifting and fading in (D170), the still water's mirror of it, and the glitter on the water under a low sun or moon |
 | `src/scene/clouds.js` | Clouds that follow the weather (D170): the library of cloud patterns drawn as code (heaps, towers, layers, wisps, sheets, rain cloud, storm, scud, fog), which show for a weather (`skySpec`, from `content/rules/sky.json`) and how they are laid out |
+| `src/scene/wind.js` | The wind's direction on screen (D176): its share across the view, which moves clouds and ripples sideways (`windAcross`, `windFlow`) |
+| `src/scene/waves.js` | The ripple marks on the open water by the wind's strength and direction (D177), and the still water's mirror broken up by it |
 | `src/scene/pond.js` | Still water's scene, painted as code from photos of a pond (D115, D116); also on the art sheet |
 | `src/scene/swim.js` | Fish that swim: the swimming motion, the tank's and the surface's shoals (D129, D131); each species' swim style (D147), shoaling and scatter (D151), hiding (D152) |
 | `src/scene/fish-art.js` | Every fish drawn to swim, as code: side on and from the bank below the surface, its colours from its icon (D131) |
@@ -119,6 +123,7 @@ and the art sheet at `/art.html` there.
 | `src/audio.js` | Sound: placeholder sounds made with the Web Audio API, and the volume (9.2) |
 | `editor.html`, `tools/editor/editor.js` | The content editor (7.5): opens `content/` in Chrome or Edge, a form per file from its schema; not published |
 | `tools/sim.mjs` | `npm run sim`: seeded games played headless per class, for balance (9.1) |
+| `tools/areas.mjs` | `npm run areas`: the areas of the game and their files, kept by hand, and `docs/areas.md` written from them (D184) |
 | `tools/prompts.mjs` | `npm run prompts`: the owner's prompts per Claude Code session, added to `docs/prompts.json` |
 | `src/ui/event-words.js` | The placeholders in event text (`{name}`, `{class}`…), and putting a slide's text together |
 | `src/ui/effects.js` | An item's effects as tooltip lines, green or red |

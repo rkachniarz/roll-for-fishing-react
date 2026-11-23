@@ -124,8 +124,8 @@ The game has no end goal; collecting is the long-term pull. *(D23)*
 
 - **R5.1** Every roll the game makes is recorded with what it was for, the dice, the result, its modifiers and whether
   the player may see it. The log and the scene show only visible rolls; hidden ones appear as "?". *(D7)*
-- **R5.2** The fishing d20 (R2.6) is always visible. Other rolls become visible through levels, perks and items, e.g. a
-  fish compendium that reveals the fish's resistance roll.
+- **R5.2** The fishing d20 (R2.6) is always visible. Other rolls become visible through levels, perks and items; the
+  number a fish needed shows from level 1 *(D107)*. What reveals the bite and treasure rolls and Luck *(open: Q-40)*.
 - **R5.3** Each location's completion percentage (R4.4) is a hidden discovery meter, revealed the same way.
 
 ### R6: Character

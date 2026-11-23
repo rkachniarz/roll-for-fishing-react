@@ -303,6 +303,7 @@ The clock and the seasons, the weather hexflower, the wind, the water temperatur
 - D170 Clouds follow the weather
 - D172 The stew's cooking and the inn's good morning are taken back; the stew's buff stands still in town and asleep instead
 - D176 The wind has a direction, on a hexflower like the weather's
+- D186 README.md's file map names every source file
 
 ## The sky, the light and the waves on screen
 
@@ -341,6 +342,7 @@ The sky layer, the sun and moon drawn, the clouds, the light of the hour, the wi
 - D175 The green sun, on the art sheet only
 - D176 The wind has a direction, on a hexflower like the weather's
 - D177 The wind works the water
+- D186 README.md's file map names every source file
 
 ## The scene and its paintings
 
@@ -421,6 +423,7 @@ The PixiJS scene, its sizing, the painted spots, sprites and icons, the title, a
 - D175 The green sun, on the art sheet only
 - D176 The wind has a direction, on a hexflower like the weather's
 - D177 The wind works the water
+- D186 README.md's file map names every source file
 
 ## The character, perks and items
 
@@ -670,12 +673,13 @@ The page around the scene: layout and themes, panes, tooltips, the log, the bars
 - D167 The sun and the moon are worked out from the clock, and the moon goes round in 14 game days
 - D168 The moon counts for the fish, in all four ways the owner asked for
 - D176 The wind has a direction, on a hexflower like the weather's
+- D186 README.md's file map names every source file
 
 ## Tools, checks and publishing
 
 The content build and editor, the browser checks, the balance sim, the single-file build, the prompt count, the docs and their checks.
 
-**Files:** `tools/editor/`, `tools/areas.mjs`, `editor.html`, `tools/build-artifact.mjs`, `tools/content.mjs`, `tools/prompts.mjs`, `tools/sim.mjs`, `tools/verify.mjs`.
+**Files:** `tools/editor/`, `editor.html`, `tools/areas.mjs`, `tools/build-artifact.mjs`, `tools/content.mjs`, `tools/prompts.mjs`, `tools/sim.mjs`, `tools/verify.mjs`.
 
 **Tests:** `test/content.test.js`, `test/events.test.js`, `test/sim.test.js`.
 
@@ -698,6 +702,7 @@ The content build and editor, the browser checks, the balance sim, the single-fi
 **Decisions:**
 
 - D6 Tests:
+- D14 Hosting:
 - D26 The weather hex directions carry no meaning
 - D39 What bait does, and how it is used up _(refined by D61 and D101)_
 - D43 One command builds the content: `npm run content`
@@ -744,3 +749,4 @@ The content build and editor, the browser checks, the balance sim, the single-fi
 - D171 The open water is the default scene, for testing the sky in each spot's facing
 - D176 The wind has a direction, on a hexflower like the weather's
 - D184 An index of where to look, by area
+- D186 README.md's file map names every source file

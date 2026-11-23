@@ -155,13 +155,21 @@ and it's the way the spots will be made (CR-1).
   from one photo per scene, so they agree.
 - **A photo of the same place in another season beats working it out:** the reedy shore's winter comes from the
   owner's November photo (D118). Photos taken under heavy cloud come out darker than the place looks; lighten them.
+- **No sky, and facing the spot's way.** A spot is painted down to its horizon only; the sky layer draws the sky,
+  the sun, the moon and the clouds behind it (D169). It faces the compass way the spot has in its `look.facing`
+  (D166), so the land and the light agree with where the sun and the moon stand.
+- **Leave room for the wind's direction.** The trees and reeds painted so far lean and sway one fixed way, while the
+  wind now comes from a direction (D176) that the waves already follow (D177). The owner wants the painted plants to
+  follow it too (2026-11-21): paint new spots so their lean and sway can change with the wind, not baked one way.
+  Not built yet (CR-2).
 - **The art sheet keeps at most 16 live scenes:** the browser drops the oldest WebGL canvas after that, and the
   "no page errors" check fails. A new card means taking one off, or drawing some as still images.
 
 ## For Claude: changing art
 
 - Read the owner's sketch or drawing first, and keep to it. Where it's silent, follow the style rules above, and put
-  each guess on `docs/REVIEW.md`.
+  each guess on `docs/REVIEW.md` as a question; what it was read from and how sure it is go in `docs/sources.md`
+  (D182).
 - When the owner's request leaves "how much" open, **offer a trial** rather than one guess: add the knob to
   `SceneLook` (`src/scene/scene.js`), with the game's current value as its default, and add the options to
   `src/art-trials.js`. When the owner picks one, make it the default, delete the trial, and remove the knob unless

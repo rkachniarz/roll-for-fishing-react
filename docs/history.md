@@ -657,3 +657,6 @@ knowledge has one home (D182), and the docs check themselves (D183, D184).
 - **Traps beside their code** (D185): CLAUDE.md's 70 "look arbitrary" bullets went into the header comments of 36
   files as `Trap:` paragraphs, collected into `docs/areas.md`; CLAUDE.md keeps the nine that cross every area and
   went from about 31,500 to 11,800 characters. Measured: 332 unit tests and every browser check pass; the build too.
+- **A doc review after it:** `docs/areas.md` came out different once `tools/areas.mjs` was committed (the file list
+  is sorted now); README.md was missing three files, which a test now catches (D186); the painting rules (no sky,
+  the spot's facing, room for the wind's lean) moved from CR-1 into `docs/art.md`; spec R5.2 brought up to D107.

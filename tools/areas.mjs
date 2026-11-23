@@ -76,12 +76,17 @@ export const MUST_BELONG = (/** @type {string} */ f) =>
 
 const read = (/** @type {string} */ f) => readFileSync(f, 'utf8');
 
-/** Every tracked or new file. */
+/**
+ * Every tracked or new file, sorted: `git ls-files -co` lists the tracked ones
+ * before the new ones, so without the sort a file moves in the index when it is
+ * first committed, and the up-to-date check fails on a clean checkout.
+ */
 export function repoFiles() {
   return execFileSync('git', ['ls-files', '-co', '--exclude-standard'], { encoding: 'utf8' })
     .trim()
     .split('\n')
-    .filter((f) => existsSync(f));
+    .filter((f) => existsSync(f))
+    .sort();
 }
 
 /** @param {Area} area @param {string[]} files */

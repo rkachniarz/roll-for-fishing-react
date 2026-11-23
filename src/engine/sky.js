@@ -77,7 +77,7 @@ const TILT = 23.44;
 /** How far below the horizon the sun's centre is at sunrise and sunset (the disc, and the air bending its light). */
 export const HORIZON = -0.833;
 
-/** The moon's cycle, in game days (Q-41, the owner's answer): two full moons a season. */
+/** The moon's cycle, in game days (D167, the owner's answer): two full moons a season. */
 export const MOON = { cycleDays: 14 };
 
 /**

@@ -18,7 +18,8 @@ new one.
 **Where things stand (2026-11-22):** Phases 1 to 7, 10 and 12 are done, and so are the testers' fixes (T.1–T.4);
 Phases 8, 9 and 11 have a few tasks each still open, listed below. Since Phase 12: the open water as the
 default scene (D171), three skies on the art sheet only (the special sky, the blood moon, the green sun, D173–D175),
-the wind's direction (D176) and waves that follow it (D177). Nothing is scheduled next; the open tasks below and the
+the wind's direction (D176) and waves that follow it (D177); on 2026-11-23 the docs were put in order (D182–D185:
+`docs/sources.md`, the self-checking pointers, `docs/areas.md`, traps beside their code). Nothing is scheduled next; the open tasks below and the
 ideas under [From our talks](#from-our-talks-not-yet-planned) are the owner's to pick from. Claude's guesses are on
 [docs/REVIEW.md](docs/REVIEW.md).
 
@@ -231,7 +232,8 @@ placeholder, it's added here.
   sky (`mirrorSky`), not as a true reflection; the clouds' tints at dusk and night (`CLOUD_TINT`); the sky's
   twilight, golden and night colours (`SKY_LOW`) and the sun's and the moon's sprites (D169); the special sky's,
   the blood moon's and the green sun's colours (D173–D175). Not started: rain and wind on the painted spots beyond
-  what the scene already lays over them, light, moving plants.
+  what the scene already lays over them, light, moving plants, and the painted trees and reeds leaning and swaying
+  with the wind's direction (D176; the owner, 2026-11-21; `docs/art.md`), where now they lean one fixed way.
 - [ ] **CR-3** Fish icons (D97, D98): the eyes, one by one, since they were placed by script (a 2×2 a tenth of the way
   in from the snout) and some look comedic or out of place; the weak icons on `docs/design/fish-image-hunt.md`; and
   the four with no icon yet: Mainland eel, golomyanka, Grasslands silverside, Wildlands pejerrey.

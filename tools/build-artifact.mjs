@@ -3,7 +3,7 @@
 // Why this exists: the playable site is index.html + styles.css + src/*.js, and
 // that works as-is on GitHub Pages (browsers load ES modules natively). But a
 // Claude artifact is a single file, so publishing there needs everything inlined
-// into one page. That's all this script does.
+// into one page (D14). That's all this script does.
 //
 //   node tools/build-artifact.mjs   ->   dist/artifact.html
 //

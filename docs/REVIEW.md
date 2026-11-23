@@ -45,6 +45,10 @@ runs up to 51 px. Now about 1 in 100, none longer than 9 px. Calls Claude made:
 - **A test** (`test/clouds.test.js`) holds the sides to 12 px and mass-a's top and bottom to 20.
 
   > _Owner_: the effects of all this you've done are really good. I'd remove this section but not sure if you haven't started using this document as a source of information for yourself, because it looks suspiciously so.
+  > **Claude:** It had, which is what D182 put right on 2026-11-23: everything here was copied to its own home that
+  > day. This section's measurements are in `docs/history.md` ("Alongside the tasks", 2026-11-19 to 2026-11-22), the reasons for `ROOM` and
+  > the low bank beside them in `src/scene/clouds.js`, and the limits in `test/clouds.test.js`. Safe to delete. The
+  > older items still read as reports rather than questions, but nothing on this page lives only here now.
 
 ## The wind on the water (2026-11-22, D177)
 
@@ -71,6 +75,8 @@ in `WAVE_LEVELS` (`src/scene/waves.js`):
 
 - **Not changed:** the painted trees and reeds still lean and sway one way (the waves now follow it, D177). Nothing in the fishing reads the direction, and the HUD doesn't name it (the dev bench does).
   > _Owner_: The lean/sway is something we should try to do and keep in mind for future paintings - is that saved somewhere?
+  > **Claude:** It wasn't. Now it is: `docs/art.md` ("Painting a spot from photos") says to paint new spots so their
+  > lean and sway can follow the wind, and CR-2 in DEV_PLAN.md lists it as not started.
 
 ## The special sky, the magic of the land (2026-11-21, D173)
 

@@ -3,7 +3,8 @@
 // found and (2) find it: every decision, requirement and creative task cited
 // exists, the docs that describe the present name files that exist, nothing
 // keeps its reasons on REVIEW.md, a decision that changes an earlier one is
-// named on the earlier one too, and every doc says what it is for.
+// named on the earlier one too, every doc says what it is for, and README.md's
+// file map names every source file (D186).
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -118,4 +119,17 @@ test('every source file belongs to an area, and docs/areas.md is up to date (D18
   const placed = new Set(AREAS.flatMap((a) => filesOf(a, files)));
   assert.deepEqual(files.filter((f) => MUST_BELONG(f) && !placed.has(f)), [], 'add it to an area in tools/areas.mjs');
   assert.ok(read('docs/areas.md') === areasMarkdown(), 'docs/areas.md is behind: run npm run areas');
+});
+
+test("README.md's file map names every source file and page (D186)", async () => {
+  const { repoFiles } = await import('../tools/areas.mjs');
+  const readme = read('README.md');
+  const files = repoFiles().filter((f) => (/^(src|tools)\//.test(f) && !f.startsWith('src/generated/')) || ['index.html', 'art.html', 'editor.html', 'styles.css'].includes(f));
+  const base = (/** @type {string} */ f) => f.split('/').pop() ?? f;
+  /** @type {Map<string, number>} */
+  const seen = new Map();
+  for (const f of files) seen.set(base(f), (seen.get(base(f)) ?? 0) + 1);
+  // Named by its path, or in passing by its file name when no other file shares it.
+  const named = (/** @type {string} */ f) => readme.includes('`' + f + '`') || (seen.get(base(f)) === 1 && readme.includes('`' + base(f) + '`'));
+  assert.deepEqual(files.filter((f) => !named(f)), [], 'add a row for it to the Files table in README.md');
 });
