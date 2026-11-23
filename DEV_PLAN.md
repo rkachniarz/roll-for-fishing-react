@@ -82,6 +82,23 @@ of the planned placeholder shapes; the town, the inn, barter, the stew and the A
   consumables and gear as the reward (7.7 and 7.8 are built; town questions 26–29).
 - [ ] **8.9** Companions at the fishing spot: the cat, once it trusts the player (`docs/ideas.md`, town questions
   30–32). A placeholder cat until CR-5.
+- [ ] **8.13** Faces and names from parts (D187). First, the owner's name lists (`docs/names/`: first names, male
+  and female, and surnames for dwarves, humans and orcs; one-column CSVs, gitignored) imported into `content/` in
+  the format the content checks want, by a tool that can be run again when the lists change, the CSVs staying where
+  they are. Then: an appearance recipe per person, with their people, name list and name, read by both the portrait
+  and the figure;
+  portraits layered from parts with palette swaps for skin and hair; recipes rolled on a stream (named townsfolk from
+  their content id, strangers from the game's seed) and written out in `content/` to handcraft one; the player's
+  creator, picking each part with a roll button for the face and for one part. Placeholder shapes for every part
+  until CR-19. A test bed on the art sheet that rolls thirty faces at once, each with its name under it, to see how
+  many look like twins. The player's name keeps the prototype's generator (`generateName`).
+- [ ] **8.14** Town figures from a 3D stand-in (D187): a page in this repo (as `editor.html` is; three.js as an ES
+  module, no build step) where a scene's painting sits behind a few boxes and sliders move the camera (height, angle,
+  lens) and the light until the boxes sit on the painted floor, bar and table; blocky figures posed there with short
+  idle loops (stirring, wiping a tankard, lifting a mug); renders at the scene's size, unsmoothed, flat-shaded,
+  outlined and snapped to the palette, one layer at a time from the same pose, exported for `npm run sprite import`.
+  Free CC0 animated low-poly characters (Quaternius, for one) may stand in for hand-built figures once their licence is
+  checked, credited in `assets/CREDITS.md`. Needs a painted interior to fit to; until then, the inn's placeholder.
 
 ## Phase 9: Balance and finish
 
@@ -245,7 +262,9 @@ placeholder, it's added here.
   Heavyweight heavy weights, the Paralysing rod and the Adjustable line.*
 - [ ] **CR-5** The town and its people (8.3, 8.6, 8.9): the inn, the scrap dealer, the Alchemist, the cat, and the
   portraits. *Replaces the squares and triangles: the town's buildings, the room and the aquarium, the dive's water
-  (`src/scene/views.js`), and the dive's dice as labels.*
+  (`src/scene/views.js`), and the dive's dice as labels.* The interiors are painted from photos like the spots;
+  the owner looks for interior photos with simple, consistent perspective, so the 3D figures of 8.14 fit them
+  (D187). The people in them are drawn over 8.14's renders, their scale found by trial.
 - [ ] **CR-6** Event pictures (D142): 64×64 icons, `event/<name>`, in the round portrait beside the event's title,
   made from photos like the item icons. An event names its own with `art:`. *Replaces the default, an old scroll
   (`event/scroll`), that every event shows until it has its own; the scroll itself is a first draft for the owner's
@@ -258,6 +277,11 @@ placeholder, it's added here.
 - [ ] **CR-15** Class fish (D114): how each looks on the water, its aura and the witch's spells, and their log lines.
   *The fish itself shows below the surface in its ring, seen from the bank (D131). Still Claude's: the ring of dots
   (`src/scene/scene.js`) and the lines in `src/strings.js` (`log.champion-*`).*
+
+- [ ] **CR-19** Face parts (D187, 8.13): heads, eyes, brows, noses, mouths, beards, hair, hats and hoods, ears for
+  other peoples, and the palettes for skin and hair, drawn in Paint inside the 64×64 circle. The big shapes first,
+  since they set faces apart. Then the handcrafted recipes of the most important people. *Replaces 8.13's placeholder
+  shapes once it is built.*
 
 ## Writing
 

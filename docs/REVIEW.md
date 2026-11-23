@@ -27,6 +27,15 @@ Items with no note are left alone.
 
 Newest first.
 
+## Faces and town figures (2026-11-23, D187)
+
+- **The 3D page lives in this repo,** next to `editor.html`, not in a project of its own, so it can read the game's
+  palette and parts. Say if you'd rather it were separate.
+- **The player's roll button** rerolls the whole face, and each part has its own small roll as well. The button would
+  show a d20.
+- **The silhouette first:** the parts are drawn biggest shapes first (hair, hats, beards, head width), on the guess
+  that small features hardly tell faces apart at 64×64. The thirty-faces test bed in 8.13 is there to check it.
+
 ## Code review fixes, batch D (2026-11-23)
 
 Calls Claude made while fixing the tools and tests (docs/history.md, "The code review fixed"):

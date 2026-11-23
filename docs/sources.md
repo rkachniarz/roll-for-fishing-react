@@ -359,6 +359,13 @@ spot to have two.
   loosely after the real hosts of fish tapeworm and liver fluke. Every other freshwater fish is low; zander as low
   is a guess.
 
+## People's names (D187)
+
+The owner's lists in `docs/names/` (local only): for each of the dwarves, humans and orcs, 30 male and 30 female
+first names and 100–135 surnames. The dwarves' names lean Scandinavian, the humans' Slavic, the orcs' Turkic and
+Mongolic. The owner chose them with real people in mind: the surnames are very rare ones, with letters shuffled so
+none matches a real one. The orcs are rare guests in town, from the far Wildlands (`docs/ideas.md`).
+
 ## Smaller numbers and their reasons
 
 - **The dice's timing** (`ROLL_MS` 700, `HOLD_MS` 550, `FADE_MS` 200 in `src/scene/dice.js`, D99): first guesses,
