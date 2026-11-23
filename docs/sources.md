@@ -385,6 +385,12 @@ All of 8.13's colours and shapes are Claude's, from memory, with no reference lo
   Picked by looking at the thirty-faces test bed.
 - **The town's shares of strangers** (8 human, 1 dwarf, 1 orc, `TOWN_PEOPLES` in `src/engine/people.js`): a guess
   at "mostly human" (D188), until the world's numbers (`docs/ideas.md`) say otherwise.
+- **The size the finished faces aim for** (CR-19): the owner's screenshot of *Papers, Please* on a Pixel 9 Pro
+  (2026-11-23, downscaled to 960 wide, so give or take a pixel or two), measured by Claude. The phone version is about
+  213 art pixels wide, each 6 device pixels. An entrant's face, skin only, is about 45×50 art pixels, the head with
+  its hood about 60; an eye with lid and brow about 13 wide, its pupil one pixel; the passport photo about 40×48,
+  with a face of about 20. So the 64×64 portrait has room for that look: what sets it apart is the drawing (eyes
+  in dark bands, two or three flat tones per colour, a dark outline, big plain silhouettes), not the resolution.
 
 ## Smaller numbers and their reasons
 
