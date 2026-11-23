@@ -279,7 +279,9 @@ placeholder, it's added here.
 
 - [ ] **CR-19** Face parts (D187, 8.13): heads, eyes, brows, noses, mouths, beards, hair, hats and hoods, ears for
   other peoples, and the palettes for skin and hair, drawn in Paint inside the 64×64 circle. The big shapes first,
-  since they set faces apart. Then the handcrafted recipes of the most important people. *8.13's placeholders, all in
+  since they set faces apart. Then the handcrafted recipes of the most important people. The look the owner has in
+  mind (2026-11-23): gritty, worn faces in the manner of *Papers, Please*, not the placeholders' goofy cartoon.
+  *8.13's placeholders, all in
   `src/scene/faces.js` unless named: every head, ear, eye, brow, nose, mouth, beard, tusk, hair, hat and hood shape
   (plain ellipses, boxes and triangles); the shoulders and neck; the skin, hair, eye and clothes palettes
   (`src/engine/looks.js`); the d20 on the creator's roll buttons (`ui/d20` in `src/scene/icons.js`). And the
