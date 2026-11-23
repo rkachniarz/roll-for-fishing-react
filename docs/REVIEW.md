@@ -29,7 +29,7 @@ Newest first.
 
 ## Code review fixes, batch D (2026-11-23)
 
-Calls Claude made while fixing the tools and tests (DEV_PLAN.md, "Code review fixes"):
+Calls Claude made while fixing the tools and tests (docs/history.md, "The code review fixed"):
 
 - **A new file must be `git add`ed before `npm test` passes,** if it falls in an area or is a test: the area index is
   now built from tracked files only, so a loose file can't change it, and the test names any new file it would have
@@ -40,7 +40,7 @@ Calls Claude made while fixing the tools and tests (DEV_PLAN.md, "Code review fi
 
 ## Code review fixes, batch C (2026-11-23)
 
-Calls Claude made while fixing the UI and the top level (DEV_PLAN.md, "Code review fixes"):
+Calls Claude made while fixing the UI and the top level (docs/history.md, "The code review fixed"):
 
 - **Two tabs on one slot:** when another tab writes the slot being played, this tab shows a browser alert ("This game
   was played on in another tab. Back to the title screen, to carry on from there.", a placeholder) and reloads to the
@@ -54,7 +54,7 @@ Calls Claude made while fixing the UI and the top level (DEV_PLAN.md, "Code revi
 
 ## Code review fixes, batch A (2026-11-23)
 
-Calls Claude made while fixing the engine and the save (DEV_PLAN.md, "Code review fixes"):
+Calls Claude made while fixing the engine and the save (docs/history.md, "The code review fixed"):
 
 - **Jump In is refused in the pause after a missed splash** ("Not while your line is out."), as Look Underwater is:
   the line goes out again by itself when the pause ends. To dive after a fish that missed the splash, the player

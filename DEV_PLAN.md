@@ -15,11 +15,11 @@ a plain generic sentence, a stand-in rule. A town of placeholder squares is bett
 listed under the creative task that will replace it, so nothing is forgotten; a placeholder that fits no task gets a
 new one.
 
-**Where things stand (2026-11-22):** Phases 1 to 7, 10 and 12 are done, and so are the testers' fixes (T.1–T.4);
+**Where things stand (2026-11-23):** Phases 1 to 7, 10 and 12 are done, and so are the testers' fixes (T.1–T.4);
 Phases 8, 9 and 11 have a few tasks each still open, listed below. Since Phase 12: the open water as the
 default scene (D171), three skies on the art sheet only (the special sky, the blood moon, the green sun, D173–D175),
 the wind's direction (D176) and waves that follow it (D177); on 2026-11-23 the docs were put in order (D182–D185:
-`docs/sources.md`, the self-checking pointers, `docs/areas.md`, traps beside their code). Nothing is scheduled next; the open tasks below and the
+`docs/sources.md`, the self-checking pointers, `docs/areas.md`, traps beside their code), and a code review of the whole codebase was fixed in four batches (history.md). Nothing is scheduled next; the open tasks below and the
 ideas under [From our talks](#from-our-talks-not-yet-planned) are the owner's to pick from. Claude's guesses are on
 [docs/REVIEW.md](docs/REVIEW.md).
 
@@ -102,110 +102,6 @@ Done: 11.1–11.9, 11.11–11.14 (D138–D141, D146–D157).
   strongly preferences, spawning, plants and now the moon (D168) stack (up to ×96 at Review 3, one fish up to 90% of a
   spot's bites); a new bed of plants rolled now and then; seasons that turn gradually instead of in a step. The
   mechanics exist and are knobs in `content/rules/`; the numbers wait for the simulations.
-
-## Code review fixes (2026-11-23)
-
-A review of the whole codebase, done in four batches, one per session. Each batch is fixed by Claude directly, since
-the places are known; an item marked *plausible* is confirmed in the code before it is changed. Each fix in the
-engine gets a unit test, and each fix in the scene a `verify` check where one can reach it. Line numbers are as of
-commit `b0e9246`. *Not a bug (the owner, 2026-11-23):* the dive ignoring natural-catch and advantage
-(`src/engine/dive.js`, plain d20s).
-
-**A. Engine and save**
-
-- [x] **A1** A cast goes out under a dive. After a missed splash, Jump In lights (`got-away`) and `useFromBar`
-  (`src/main.js:612`) blocks `look-underwater` while `lineOut()` but not `jump-in`; when the miss pause ends, `tick`
-  recasts and `castLine` (`src/engine/game.js:244`) doesn't refuse on `state.dive`. The line can't be struck, so it
-  misses again (buff charge, bait, time spent), and `strikeInDive` / `finishDive` (`src/main.js:1678`, `:1737`) save
-  the full state mid-cast, breaking D74. Fix all three: block `jump-in` while the line is out, `castLine` refuses
-  during a dive, and no full save while `castInProgress()`.
-- [x] **A2** A twin catch with a full bucket (`src/engine/game.js:826`): the second `catchFish` overwrites
-  `pendingCatch`, so one fish is lost but the book (`caught`, `catches`, `totalSize`) and XP count two. Give the twin
-  `dive.js`'s guard (full and a pending catch: it gets away).
-- [x] **A3** An event's `go:` into the room rewinds the `tank` stream (`src/engine/events.js:347`): `tankMeals`
-  commits its own dice, then `choose`'s `commit()` (`:290`) writes the old position back (the D53 trap), so the
-  aquarium's predators eat the same way on every visit. Pass the caller's dice to `tankMeals`, or run it after the
-  commit.
-- [x] **A4** An event that closes the player's place (`src/engine/events.js:377-392`, `case 'place'`) clears
-  `features` without `partFish(state)` and leaves `state.lit`, so a big fish's wild fish (`of` set) stay in that
-  spot's pool for good: they never bite but show to Look Underwater and dives. Clean up as `go` does.
-- [x] **A5** A unique treasure the Rogue steals (`src/engine/game.js:893`) isn't added to `state.found`, so it can be
-  rolled and landed again, and catching the Rogue gives a second copy (`:841`). Also on this path: with Fence both
-  `line.id` and `line.alt` are stolen and returned; a polished line the Rogue steals never goes through `receive()`,
-  so the Polish buff isn't used up.
-
-**B. Scene** (`npm run verify` and screenshots, not only unit tests)
-
-Done. `verify`'s "scene: paintings and views free every frame" check covers B1, B2 and B4 by loading the scene's
-modules on the art sheet. B7's ripples share `src/scene/rings.js`, whose sprites are kept and reused. Confirmed in
-Pixi 8.22: its GC keeps every sprite it has drawn until the sprite has sat unused a while. B3, B5, B6 and the dice
-half of B7 have no check, since no check can read their pixels from the WebGL canvas.
-
-- [x] **B1** Swimming fish sit on half-pixels (R7.3, D10): `src/scene/swim.js:274` anchors at 0.5 and rounds the
-  centre (`:416`), so a fish with an odd width or height is off the grid. Anchor at 0, or round the top-left.
-- [x] **B2** Textures leak on every repaint: teardown (`src/scene/scene.js:340`, `src/scene/views.js:172`) destroys
-  only the frame each sprite shows. Left behind: the swamp's frames (`swamp.js:43-57`), the pond's reed, birch, beech
-  and clump frames (`pond.js:1056-1066`), reedy's reeds, the ripple caches, the light shafts' frames
-  (`views.js:334`) and the plants' frames (`views.js:89-101`). The title repaints on every width change. Give each
-  painting and view a `destroy()` that frees all its frames.
-- [x] **B3** Cloud shadows draw NaN on their last row (`src/scene/sky.js:122-125`): `c.h` is a fraction, so
-  `row/(c.h-1)` exceeds 1. Floor the height or clamp.
-- [x] **B4** A swimmer kept by key never changes its look (`src/scene/swim.js:260-264`): a champion or big fish that
-  crosses `farLine` (`scene.js:470`, `:478`) keeps the wrong-sized sprite. Rebuild it when the look changes.
-- [x] **B5** More half-pixels: the fallback dive's water bands (`src/scene/views.js:245`, i × 36.57) and the
-  fallback feature shadows (`src/scene/scene.js:472-474`, `:483-485`, `x - w/2` with odd `w`).
-- [x] **B6** The pond's per-frame water reads its season colours from module state (`src/scene/pond.js:193-195`,
-  used at `:518`), so two ponds of different seasons on the art sheet mix them. Capture `P` in `paintWater`.
-- [x] **B7** *Plausible.* New ripple sprites every frame without destroying the old (`scene.js:652-662`,
-  `pond.js:1184-1190`, `swamp.js:97-105`, `reedy.js:638-644`); reuse a small pool. And dice thrown before a resize
-  keep their old stage positions (`src/scene/dice.js:119-131`, `scene.js:322`).
-
-**C. UI and the top level**
-
-Done. `verify` checks C1 (a page whose `localStorage` throws still starts and says it can't save), C2 (a new game
-over a slot keeps the old one through creation), C3 (the depth button's key opens its picker) and C7 (a second tab's
-write sends the first back to the title, its save untouched). C4, C5 and C6 have no check: Playwright's touchscreen
-only taps, so the long presses were never seen on a real phone, and nothing on the art sheet throws to try C6 on.
-
-- [x] **C1** *Plausible.* Browser storage is never guarded: `window.localStorage` at the top of `src/main.js:199`
-  throws with site data blocked (the game never starts), and `saveGame` (`src/save.js:45`) throws on a full quota
-  in the middle of `apply`, or in the ticker, which may stop the loop. Wrap every read and write.
-- [x] **C2** A new game deletes the old save before the character is made (`src/main.js:2123`): closing the tab
-  during creation loses it, and Continue disappears. Delete on submit.
-- [x] **C3** The depth button shows a number key that does nothing (`src/ui/actionbar.js:83`, `src/main.js:571`
-  looks up only `activePerks(state)[n-1]`). Make the key work or don't show it.
-- [x] **C4** *Plausible.* On Android a long press cancels a buff at ~500 ms, skipping the 1200 ms hold: the
-  `contextmenu` handler (`src/ui/buffbar.js:104`, `:113`) ignores the pointer type.
-- [x] **C5** *Plausible.* Long press on a bucket fish on touch (`src/main.js:1822-1836`): any `pointermove` kills the
-  600 ms timer (no slop; `drag.js` allows 10 px); the capture-phase `contextmenu` stops the listener that clears
-  the timer, so the menu can open twice; the tooltip opens alongside the menu.
-- [x] **C6** The art sheet's build chain (`src/art.js:78`) has no catch: one section that throws stops every later
-  section from building.
-- [x] **C7** Two tabs on one save slot overwrite each other's progress (no `storage` listener). *The owner:* fix only
-  if it's small, e.g. a `storage` event that stops the stale tab.
-
-**D. Tools and tests**
-
-Done. The index is now built from tracked files only (`repoFiles()`; `{ untracked: true }` for the checks that must
-see a new file), and `test/docs.test.js` names a new file in an area that isn't yet added. D4 was tried on made-up
-Python, HTML, CSS and JS files: no Python tool has a trap yet.
-
-- [x] **D1** `docs/areas.md` lists R8.10 between R8.1 and R8.2 (`tools/areas.mjs:189`, `parseFloat`). Sort with
-  `localeCompare(…, { numeric: true })` alone.
-- [x] **D2** An area's Tests list misses tests that `await import('../…')` or use double quotes
-  (`tools/areas.mjs:141-142`), so `test/docs.test.js` isn't under the tools area.
-- [x] **D3** `git check-ignore` exits 1 when no path is ignored, so `test/docs.test.js:79` crashes instead of naming
-  the missing path. Accept exit codes 0 and 1.
-- [x] **D4** `# Trap:` lines in the Python tools are dropped (`tools/areas.mjs:123`, `:130`, `:182`: only
-  .js/.mjs/.css/.html, no `#` comments), and an HTML or CSS trap over several lines loses all but its first line.
-- [x] **D5** The area index reads untracked files (`tools/areas.mjs:85`, `ls-files -co`), so a loose file changes
-  it and the clean checkout on GitHub then fails the test. Non-ASCII names are quoted by git and silently skipped
-  (use `-z`, also `test/docs.test.js:18`).
-- [x] **D6** No `.gitattributes`: with `core.autocrlf=true`, `docs/areas.md` is always "behind"
-  (`test/docs.test.js:121`, `tools/areas.mjs:214`).
-- [x] **D7** "drops CR-3 and CR-4" counts only the first as dropped (`test/docs.test.js:43`).
-- [x] **D8** "CLAUDE.md names every doc" (`test/docs.test.js:111`): a no-op `replace`, and a plain substring match,
-  so `README.md` passes on `art/README.md`.
 
 ## From our talks, not yet planned
 

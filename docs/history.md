@@ -660,3 +660,76 @@ knowledge has one home (D182), and the docs check themselves (D183, D184).
 - **A doc review after it:** `docs/areas.md` came out different once `tools/areas.mjs` was committed (the file list
   is sorted now); README.md was missing three files, which a test now catches (D186); the painting rules (no sky,
   the spot's facing, room for the wind's lean) moved from CR-1 into `docs/art.md`; spec R5.2 brought up to D107.
+
+## The code review fixed (2026-11-23)
+
+A review of the whole codebase, fixed in four batches, one per session; an item the review marked *plausible* was
+confirmed in the code before it was changed. Code and checks cite the items by id (`C1`, `B1`…). Line numbers in the
+review were as of commit `b0e9246`. *Not a bug (the owner):* the dive ignoring natural-catch and advantage
+(`src/engine/dive.js`, plain d20s).
+
+**A. Engine and save** (a unit test for each)
+
+- **A1** A cast could go out under a dive: Jump In lit after a missed splash, the line recast when the miss pause
+  ended, and the dive saved the full state mid-cast (against D74). Now Jump In is refused while the line is out,
+  `castLine` refuses during a dive, and nothing saves the full state while a cast is in progress.
+- **A2** A twin caught with a full bucket overwrote the pending catch, losing a fish the book and XP still counted.
+  The twin now gets `dive.js`'s guard: it gets away, with its own line in the log.
+- **A3** An event's `go:` into the room rewound the `tank` stream (the D53 trap), so the aquarium's predators ate the
+  same way on every visit. `tankMeals` now draws from the caller's dice.
+- **A4** An event that closed the player's place left a big fish's wild fish in that spot's pool for good. It now
+  cleans up as `go` does (`partFish`, `state.lit`).
+- **A5** A unique treasure the Rogue stole wasn't marked found, so it could come up again, and catching the Rogue gave
+  a second copy; with Fence both items of a pair were stolen; a polished line the Rogue took never used up Polish. The
+  Rogue now snatches only the first of a pair, and what it takes goes through `receive()`.
+
+**B. Scene.** `verify`'s "scene: paintings and views free every frame" check covers B1, B2 and B4 by loading the
+scene's modules on the art sheet. B3, B5, B6 and the dice half of B7 have no check: no check can read their pixels
+from the WebGL canvas.
+
+- **B1** Swimming fish with an odd width or height sat on half-pixels (R7.3, D10); they are placed by a rounded
+  top-left now.
+- **B2** Every repaint leaked textures (the swamp's, the pond's trees and reeds, reedy's reeds, the ripple caches, the
+  light shafts, the plants), and the title repaints on every width change. Each painting and view has a `destroy()`
+  that frees all its frames.
+- **B3** Cloud shadows drew NaN on their last row (a fractional height); fixed.
+- **B4** A swimmer kept by key never changed its look, so a fish crossing `farLine` kept the wrong-sized sprite; it
+  is rebuilt when its look changes.
+- **B5** More half-pixels, in the fallback dive's water bands and the fallback feature shadows; rounded.
+- **B6** Two ponds of different seasons on the art sheet mixed their water colours (module state); each pond keeps
+  its own.
+- **B7** New ripple sprites every frame; the ripples now share `src/scene/rings.js`, whose sprites are kept and
+  reused. Confirmed in Pixi 8.22: its GC keeps every sprite it has drawn until the sprite has sat unused a while.
+  Dice thrown before a resize now move with the stage.
+
+**C. UI and the top level.** `verify` checks C1, C2, C3 and C7. C4, C5 and C6 have none: Playwright's touchscreen
+only taps, so the long presses were never seen on a real phone (DEV_PLAN.md, "Known gaps"), and nothing on the art
+sheet throws to try C6 on.
+
+- **C1** Browser storage was never guarded: with site data blocked the game never started, and a full quota could
+  stop the loop. Every read and write is wrapped; the game plays on and says once that it can't save.
+- **C2** A new game deleted the old save before the character was made; it is deleted on submit now.
+- **C3** The depth button showed a number key that did nothing; the key opens its picker.
+- **C4** On Android a long press cancelled a buff at about 500 ms; only the 1200 ms hold does now.
+- **C5** A bucket fish's long press on touch: any movement killed it, the menu could open twice, and the tooltip
+  opened alongside. Now it allows 10 px of slop, opens once per press, without the tooltip.
+- **C6** One art-sheet section that threw stopped every later one from building; now it says so in its body and the
+  rest still build.
+- **C7** Two tabs on one save slot overwrote each other. A `storage` event now sends the tab behind back to the title,
+  its save untouched (the owner: fix only if small).
+
+**D. Tools and tests**
+
+- **D1** `docs/areas.md` sorted R8.10 between R8.1 and R8.2; requirements sort by number now.
+- **D2** An area's Tests missed tests that `import('../…')` or use double quotes; four more tests are listed, among
+  them `test/docs.test.js` under the tools.
+- **D3** `git check-ignore` exits 1 when nothing is ignored, which crashed the missing-paths test; exit 1 is an answer.
+- **D4** `# Trap:` lines in Python were dropped, and an HTML or CSS trap over several lines kept only its first line.
+  Both read now; tried on made-up files, since no Python tool has a trap yet.
+- **D5** The area index read untracked files, so a loose file changed it and the clean checkout on GitHub then
+  failed. It is built from tracked files only (`repoFiles()`; `{ untracked: true }` for the checks that must see a new
+  file), and `test/docs.test.js` names a new file in an area that isn't added yet. `git ls-files -z`, so non-ASCII
+  names aren't skipped.
+- **D6** `.gitattributes` keeps text files LF, so `docs/areas.md` isn't "behind" under `core.autocrlf=true`.
+- **D7** "drops CR-3 and CR-4" now counts both as dropped.
+- **D8** "CLAUDE.md names every doc" matches whole paths, so `art/README.md` no longer passes for `README.md`.
