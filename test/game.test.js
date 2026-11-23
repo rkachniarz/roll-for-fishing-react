@@ -409,7 +409,7 @@ function memoryStorage() {
 }
 
 test('the save slots: save, load, a broken save reported, New game', async () => {
-  const { saveGame, loadGame, deleteSave, listSlots, lastSlot } = await import('../src/save.js');
+  const { saveGame, loadGame, listSlots, lastSlot } = await import('../src/save.js');
   const storage = memoryStorage();
   assert.deepEqual(loadGame(storage, 1), { state: null });
   assert.equal(lastSlot(storage), null);
@@ -427,8 +427,40 @@ test('the save slots: save, load, a broken save reported, New game', async () =>
   assert.equal(broken.state, null);
   assert.match(broken.error ?? '', /newer version/);
   assert.equal(storage.data['roll-for-fishing:save:3'], '{"version": 99}', 'left where it is');
-  deleteSave(storage, 2);
-  assert.deepEqual(loadGame(storage, 2), { state: null });
+  // New game: the slot is written whole when the character is made, not emptied first.
+  const next = game(13);
+  saveGame(storage, 2, next);
+  assert.deepEqual(loadGame(storage, 2).state, next);
+});
+
+test('the save slots: storage that throws never stops the game (C1)', async () => {
+  const { guardedStorage, saveGame, loadGame, lastSlot } = await import('../src/save.js');
+  // Site data blocked: reaching localStorage throws.
+  /** @type {unknown[]} */
+  const failed = [];
+  const blocked = guardedStorage(() => {
+    throw new Error('SecurityError');
+  }, (e) => failed.push(e));
+  assert.deepEqual(loadGame(blocked, 1), { state: null });
+  const state = game(14);
+  saveGame(blocked, 1, state);
+  assert.ok(failed.length > 0, 'the page is told');
+  assert.deepEqual(loadGame(blocked, 1).state, state, 'kept for this visit');
+  assert.equal(lastSlot(blocked), 1);
+  // A full quota: reads work, writes throw.
+  const real = memoryStorage();
+  const full = guardedStorage(() => ({
+    ...real,
+    setItem: () => {
+      throw new Error('QuotaExceededError');
+    },
+  }));
+  saveGame(full, 2, state);
+  assert.equal(real.data['roll-for-fishing:save:2'], undefined);
+  assert.deepEqual(loadGame(full, 2).state, state);
+  // Reads that throw read as empty.
+  const unreadable = guardedStorage(() => ({ ...real, getItem: () => { throw new Error('nope'); } }));
+  assert.deepEqual(loadGame(unreadable, 3), { state: null });
 });
 
 test('the save slots: a save from before them becomes slot 1', async () => {

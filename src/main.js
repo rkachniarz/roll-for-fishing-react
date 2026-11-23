@@ -50,7 +50,7 @@ import { clock } from './engine/time.js';
 import { weatherWords } from './engine/weather.js';
 import { windFrom, windKind } from './engine/wind.js';
 import { GAME_VALUES } from './engine/values.js';
-import { deleteSave, exportGame, importGame, lastSlot, listSlots, saveGame } from './save.js';
+import { exportGame, guardedStorage, importGame, lastSlot, listSlots, saveGame, slotKey } from './save.js';
 import { completionShown, mapMarks, spotKnown } from './engine/knowledge.js';
 import { createAudio } from './audio.js';
 import { applySettings, loadSettings, saveSettings, showDice } from './settings.js';
@@ -196,13 +196,35 @@ window.addEventListener('resize', fit);
 
 // ---------- The game ----------
 
-const storage = window.localStorage;
+// Blocked site data or a full quota never stops the game: what can't be
+// written is kept for this visit, and the player is told once.
+let saveFailShown = false;
+const storage = guardedStorage(
+  () => window.localStorage,
+  () => {
+    if (saveFailShown) return;
+    saveFailShown = true;
+    showError($('errors'), t('error.saveFailed'));
+  },
+);
 let settings = loadSettings(storage);
 applySettings(settings);
 /** The save slot being played (D80). */
 let slot = 1;
+/** Another tab has played this slot since: this tab stops saving over it. */
+let stale = false;
 /** @param {GameState} s */
-const save = (s) => saveGame(storage, slot, s);
+const save = (s) => {
+  if (!stale) saveGame(storage, slot, s);
+};
+// Two tabs on one slot would overwrite each other's progress. The tab that
+// didn't write last stops: it says so and starts again at the title screen.
+window.addEventListener('storage', (e) => {
+  if (!state || stale || e.key !== slotKey(slot)) return;
+  stale = true;
+  alert(t('title.otherTab'));
+  location.reload();
+});
 /** @type {GameState | null} */
 let state = null;
 // A fish's tooltip tells how it eats to a Sushi enjoyer who has eaten one (D138).
@@ -568,7 +590,7 @@ window.addEventListener('keydown', (e) => {
   const target = e.target;
   // 1, 2, 3…: the action bar, as in WoW (D96).
   if (!e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey && /^[1-9]$/.test(e.key) && !(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) {
-    const id = state ? activePerks(state)[Number(e.key) - 1] : undefined;
+    const id = state ? barIds(state)[Number(e.key) - 1] : undefined;
     if (id) {
       e.preventDefault();
       useFromBar(id);
@@ -644,12 +666,21 @@ function useFromBar(id) {
   promptPlayer();
 }
 
+/**
+ * The bar's buttons in order, as keys 1, 2, 3… reach them: the abilities, then
+ * an adjustable line's depth button (D148).
+ * @param {GameState} s
+ */
+function barIds(s) {
+  return [...activePerks(s), ...(lineAdjustable(s) ? ['line-depth'] : [])];
+}
+
 /** The bar, from the state. */
 function renderActions() {
   if (!state) return;
   const s = state;
   /** @type {any[]} */
-  const statuses = activePerks(s).map((id) => abilityStatus(s, id));
+  const statuses = barIds(s).filter((id) => id !== 'line-depth').map((id) => abilityStatus(s, id));
   // An adjustable line equipped: its depth button, after the abilities (D148).
   if (lineAdjustable(s)) {
     const depth = s.lineDepth;
@@ -1813,28 +1844,63 @@ function fishMenu(index, at) {
   showMenu(at, fishName(stack.fish), rarityColour(stack.fish.rarity), options);
 }
 
-// Right-click, or a long-press on a phone (which fires contextmenu too), on a fish in the bucket.
-document.addEventListener(
-  'contextmenu',
-  (e) => {
-    const node = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest?.('[data-fish]'));
-    if (!node) return;
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    fishMenu(Number(node.dataset.fish), { x: e.clientX, y: e.clientY });
-  },
-  true,
-);
-// Where a long-press doesn't fire contextmenu (iOS): most of a second held.
+// A fish in the bucket: right-click, or a long press on a phone. Android fires
+// contextmenu for the long press, iOS may not, so a timer does too: whichever
+// comes first opens the menu, once per press. A finger that moves further than
+// drag.js's slop is a scroll; the tap that ends a long press isn't a tap on the
+// fish (its tooltip would open over the menu).
 {
-  let timer = 0;
+  /** @type {{ node: HTMLElement, id: number, x: number, y: number, timer: number } | null} */
+  let press = null;
+  /** The menu opened from this press: its closing click is swallowed. */
+  let held = false;
+  /** @param {PointerEvent | MouseEvent} e */
+  const fishAt = (e) => /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest?.('[data-fish]'));
+  const endPress = () => {
+    if (press) window.clearTimeout(press.timer);
+    press = null;
+  };
+  /** @param {HTMLElement} node @param {{ x: number, y: number }} at */
+  const open = (node, at) => {
+    const touch = press !== null;
+    endPress();
+    held = touch;
+    fishMenu(Number(node.dataset.fish), at);
+  };
+  document.addEventListener(
+    'contextmenu',
+    (e) => {
+      const node = fishAt(e);
+      if (!node) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if (press) open(press.node, { x: press.x, y: press.y });
+      else if (!held) open(node, { x: e.clientX, y: e.clientY });
+    },
+    true,
+  );
   document.addEventListener('pointerdown', (e) => {
-    const node = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest?.('[data-fish]'));
+    held = false;
+    endPress();
+    const node = fishAt(e);
     if (!node || e.pointerType === 'mouse') return;
     const at = { x: e.clientX, y: e.clientY };
-    timer = window.setTimeout(() => fishMenu(Number(node.dataset.fish), at), 600);
+    press = { node, id: e.pointerId, ...at, timer: window.setTimeout(() => press && open(node, at), 600) };
   });
-  for (const type of ['pointerup', 'pointercancel', 'pointermove', 'contextmenu']) document.addEventListener(type, () => window.clearTimeout(timer));
+  document.addEventListener('pointermove', (e) => {
+    if (press && e.pointerId === press.id && Math.hypot(e.clientX - press.x, e.clientY - press.y) > 10) endPress();
+  });
+  for (const type of ['pointerup', 'pointercancel']) document.addEventListener(type, endPress);
+  document.addEventListener(
+    'click',
+    (e) => {
+      if (!held || !fishAt(e)) return;
+      held = false;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    },
+    true,
+  );
 }
 
 // The pointer is a fish hook over water that can be fished, and over a fish
@@ -2120,10 +2186,9 @@ function openTitle(view = 'main', imported) {
               ? t('title.overwriteBroken', { slot: saved.slot })
               : null;
           if (taken && !confirm(taken)) return;
-          leave(() => {
-            deleteSave(storage, saved.slot);
-            openCreation(saved.slot);
-          });
+          // The old game stays until the new character is made: the save on
+          // submit replaces it, so a tab closed during creation loses nothing.
+          leave(() => openCreation(saved.slot));
         };
       }
       return b;

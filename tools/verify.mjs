@@ -700,6 +700,61 @@ await check('new game', DESKTOP, '?seed=5', async (page) => {
   report('new game: in its own slot, the first game kept', filled.join() === 'false,false,true', filled.join());
 });
 
+await check('new game over a slot: the old game stays until the character is made', DESKTOP, '?seed=5', async (page) => {
+  page.on('dialog', (d) => d.accept());
+  const before = await page.evaluate(() => localStorage.getItem('roll-for-fishing:save:1'));
+  await page.click('#menu');
+  await page.click('#mainMenu');
+  await page.waitForSelector('#title[open]', { timeout: 2000 });
+  await page.click('#titleNew');
+  await page.click('#slot-1');
+  await page.waitForSelector('#create[open]', { timeout: 2000 });
+  report('new game over a slot: kept during creation', (await page.evaluate(() => localStorage.getItem('roll-for-fishing:save:1'))) === before);
+  // The tab closed during creation: the game is still there to continue.
+  await page.reload();
+  await page.waitForSelector('#title[open]', { timeout: 15000 });
+  report('new game over a slot: Continue after leaving creation', await page.isVisible('#titleContinue'));
+});
+
+await check('two tabs on one slot: the one behind stops (C7)', DESKTOP, '?seed=5', async (page) => {
+  /** @type {string[]} */
+  const said = [];
+  page.on('dialog', (d) => {
+    said.push(d.message());
+    d.accept();
+  });
+  // Another tab plays on: its save lands in the slot.
+  const other = await page.context().newPage();
+  await other.goto(BASE + '?seed=5');
+  const written = await other.evaluate(() => {
+    const save = JSON.parse(localStorage.getItem('roll-for-fishing:save:1') ?? '{}');
+    save.time += 60_000;
+    const text = JSON.stringify(save);
+    localStorage.setItem('roll-for-fishing:save:1', text);
+    return text;
+  });
+  await page.waitForSelector('#title[open]', { timeout: 15000 });
+  report('two tabs: the tab behind says so', said.some((m) => /another tab/.test(m)), said.join(' | '));
+  report('two tabs: the other tab\'s game is kept', (await page.evaluate(() => localStorage.getItem('roll-for-fishing:save:1'))) === written);
+  await other.close();
+});
+
+await check('storage blocked: the game still starts and plays (C1)', DESKTOP, null, async (page) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'localStorage', {
+      get() {
+        throw new DOMException('The operation is insecure.', 'SecurityError');
+      },
+    });
+  });
+  await page.goto(BASE + '?seed=1');
+  await page.waitForSelector('#title[open]', { timeout: 15000 });
+  await newGameIn(page, 1);
+  await page.waitForSelector('body[data-phase="idle"]', { timeout: 5000 });
+  report('storage blocked: a new game starts', !(await page.isVisible('#title')));
+  report('storage blocked: the player is told it isn\'t saved', /can't be saved/.test((await page.textContent('#errors')) ?? ''), (await page.textContent('#errors')) ?? '');
+});
+
 await check('the collection (9.4)', PHONE, '?dev&seed=1&wait=600', async (page, tap) => {
   await openBench(page);
   await page.fill('#dev-fishFind', '100');
@@ -1153,6 +1208,10 @@ await check('the adjustable line: a depth button and its picker (D148)', DESKTOP
   report('the adjustable line: set to the bottom, the picker closes', (await page.locator('#depthPicker').count()) === 0);
   report('the adjustable line: the log says so', (await logText(page)).includes('You set your line for the Bottom.'), await logText(page));
   report('the adjustable line: the button shows the depth', ((await button.textContent()) ?? '').includes('B'), (await button.textContent()) ?? '');
+  // The number on the button is its key (C3).
+  const key = (await button.locator('.action-key').textContent()) ?? '';
+  await page.keyboard.press(key);
+  report('the adjustable line: its number key opens the picker', (await page.locator('#depthPicker').count()) === 1, `key ${key}`);
 });
 
 await check('a Tiny fish on the hook', PHONE, '?dev&seed=1', async (page) => {

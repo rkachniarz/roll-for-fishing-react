@@ -99,13 +99,18 @@ export function createBuffBar(root, onCancel) {
 
     el.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && showTip(buff, el));
     el.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && hideTip());
-    el.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      if (!buff.debuff) onCancel(buff.id);
-    });
     let pressTimer = 0;
     let longPressed = false;
+    /** What pressed last: Android's long press fires contextmenu at about 500 ms, too soon to cancel a buff. */
+    let lastPointer = 'mouse';
+    el.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      // On touch only the held timer cancels (LONG_PRESS_MS).
+      if (lastPointer !== 'mouse') return;
+      if (!buff.debuff) onCancel(buff.id);
+    });
     el.addEventListener('pointerdown', (e) => {
+      lastPointer = e.pointerType;
       if (e.pointerType === 'mouse') return;
       longPressed = false;
       pressTimer = window.setTimeout(() => {

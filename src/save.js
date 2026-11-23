@@ -14,8 +14,12 @@ export const SLOTS = [1, 2, 3];
 
 /** Where the one save lived before there were slots: it becomes slot 1. */
 const OLD_KEY = 'roll-for-fishing:save';
-/** @param {number} slot */
-const key = (slot) => `roll-for-fishing:save:${slot}`;
+/**
+ * Where a slot lives in storage; the page watches it for another tab's writes.
+ * @param {number} slot
+ */
+export const slotKey = (slot) => `roll-for-fishing:save:${slot}`;
+const key = slotKey;
 /** The slot saved to last, for Continue on the title screen. */
 const LAST_KEY = 'roll-for-fishing:last-slot';
 
@@ -25,6 +29,57 @@ const LAST_KEY = 'roll-for-fishing:last-slot';
  *
  * @typedef {{ state: import('./engine/state.js').GameState | null, error?: string }} Loaded
  */
+
+/**
+ * The browser's storage, made safe to use: reading `localStorage` throws when
+ * the site's data is blocked, and a write throws when the quota is full. Every
+ * read and write goes through here, so neither stops the game. A write that
+ * fails is kept in memory, so this visit still plays and loads the same, and
+ * `onWriteFail` is told (the page says the game isn't being saved).
+ * @param {() => Storage} get  Asked once; may throw.
+ * @param {(error: unknown) => void} [onWriteFail]
+ * @returns {Storage}
+ */
+export function guardedStorage(get, onWriteFail = () => {}) {
+  /** @type {Storage | null} */
+  let real = null;
+  try {
+    real = get();
+  } catch {
+    real = null;
+  }
+  /** @type {Map<string, string>} */
+  const memory = new Map();
+  return {
+    getItem(k) {
+      const kept = memory.get(k);
+      if (kept !== undefined) return kept;
+      try {
+        return real?.getItem(k) ?? null;
+      } catch {
+        return null;
+      }
+    },
+    setItem(k, value) {
+      try {
+        if (!real) throw new Error('No browser storage');
+        real.setItem(k, value);
+        memory.delete(k);
+      } catch (e) {
+        memory.set(k, value);
+        onWriteFail(e);
+      }
+    },
+    removeItem(k) {
+      memory.delete(k);
+      try {
+        real?.removeItem(k);
+      } catch {
+        // Nothing to remove from storage that can't be reached.
+      }
+    },
+  };
+}
 
 /**
  * Moves a save from before the slots into slot 1, if slot 1 is free.
@@ -110,13 +165,4 @@ export function importGame(text) {
   } catch (e) {
     return { state: null, error: e instanceof Error ? e.message : String(e) };
   }
-}
-
-/**
- * Emptied when a new game starts in it (R1.4); the page asks first.
- * @param {Storage} storage
- * @param {number} slot
- */
-export function deleteSave(storage, slot) {
-  storage.removeItem(key(slot));
 }

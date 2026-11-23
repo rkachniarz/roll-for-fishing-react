@@ -27,6 +27,20 @@ Items with no note are left alone.
 
 Newest first.
 
+## Code review fixes, batch C (2026-11-23)
+
+Calls Claude made while fixing the UI and the top level (DEV_PLAN.md, "Code review fixes"):
+
+- **Two tabs on one slot:** when another tab writes the slot being played, this tab shows a browser alert ("This game
+  was played on in another tab. Back to the title screen, to carry on from there.", a placeholder) and reloads to the
+  title screen, saving nothing more. The tab that wrote last wins. Is an alert all right, or should it be the game's
+  own dialog?
+- **Storage blocked or full:** the game plays on, keeping what it can't write for this visit only, and says once:
+  "The game can't be saved: this browser's storage is blocked or full. Export it from the menu to keep it." (a
+  placeholder). Good enough, or should it say more, or say it each time?
+- **A buff on touch is cancelled only by the 1200 ms hold;** Android's own long press (at about 500 ms) does nothing
+  on the buff bar now.
+
 ## Code review fixes, batch A (2026-11-23)
 
 Calls Claude made while fixing the engine and the save (DEV_PLAN.md, "Code review fixes"):

@@ -15,7 +15,7 @@ The seeded streams, the named dice, the game state and its save, migrations, set
 
 **Tests:** `test/abilities.test.js`, `test/audio.test.js`, `test/cast.test.js`, `test/champions.test.js`, `test/clouds.test.js`, `test/content.test.js`, `test/dice.test.js`, `test/effects.test.js`, `test/equipment.test.js`, `test/events.test.js`, `test/fish.test.js`, `test/game.test.js`, `test/moon.test.js`, `test/perks.test.js`, `test/rng.test.js`, `test/sky.test.js`, `test/time.test.js`, `test/town.test.js`, `test/weather.test.js`, `test/wind.test.js`.
 
-**Requirements** (`docs/spec.md`): R1, R1.4, R2.2, R2.3, R2.4, R3.1, R3.3, R3.4, R3.5, R3.6, R4.2, R5.1, R5.2, R5.3, R6.1, R6.6, R8.5, R8.6, R9.1, R10, R10.8, R11.1, R11.8, R12, R13.1, R14, R15.5, R17.3, R17.5, R17.6, R18.2, R19.1, R19.2, R19.4, R19.5, R20.3.
+**Requirements** (`docs/spec.md`): R1, R2.2, R2.3, R2.4, R3.1, R3.3, R3.4, R3.5, R3.6, R4.2, R5.1, R5.2, R5.3, R6.1, R6.6, R8.5, R8.6, R9.1, R10, R10.8, R11.1, R11.8, R12, R13.1, R14, R15.5, R17.3, R17.5, R17.6, R18.2, R19.1, R19.2, R19.4, R19.5, R20.3.
 
 **Read also:**
 

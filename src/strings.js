@@ -314,6 +314,8 @@ const UI_STRINGS = {
   'title.broken': "Can't be read: {error}",
   'title.overwrite': 'Slot {slot} holds {name}. Start a new game there? {name} will be lost for good.',
   'title.overwriteBroken': "Slot {slot} can't be read. Start a new game there? What's in it will be lost.",
+  'title.otherTab': 'This game was played on in another tab. Back to the title screen, to carry on from there.',
+  'error.saveFailed': "The game can't be saved: this browser's storage is blocked or full. Export it from the menu to keep it.",
 
   // ---- Tooltips ----
   'tip.fish': 'Fish',
@@ -483,6 +485,8 @@ export const PLACEHOLDER_UI = new Set([
   'log.looked',
   'log.looked-named',
   'error.ability.lineOut',
+  'title.otherTab',
+  'error.saveFailed',
   'log.queasy',
   'tip.taste',
   'taste.poor',

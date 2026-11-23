@@ -75,7 +75,13 @@ function section(title, note, build) {
   const open = () => {
     if (built) return;
     built = true;
-    building = building.then(() => build(body));
+    // A section that throws says so in its body; the ones after it still build.
+    building = building
+      .then(() => build(body))
+      .catch((e) => {
+        console.error(e);
+        body.append(el('p', { class: 'note' }, [`This section failed to build: ${e instanceof Error ? e.message : String(e)}`]));
+      });
   };
   details.addEventListener('toggle', () => {
     if (details.open) open();

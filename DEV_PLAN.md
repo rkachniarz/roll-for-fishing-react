@@ -162,21 +162,26 @@ half of B7 have no check, since no check can read their pixels from the WebGL ca
 
 **C. UI and the top level**
 
-- [ ] **C1** *Plausible.* Browser storage is never guarded: `window.localStorage` at the top of `src/main.js:199`
+Done. `verify` checks C1 (a page whose `localStorage` throws still starts and says it can't save), C2 (a new game
+over a slot keeps the old one through creation), C3 (the depth button's key opens its picker) and C7 (a second tab's
+write sends the first back to the title, its save untouched). C4, C5 and C6 have no check: Playwright's touchscreen
+only taps, so the long presses were never seen on a real phone, and nothing on the art sheet throws to try C6 on.
+
+- [x] **C1** *Plausible.* Browser storage is never guarded: `window.localStorage` at the top of `src/main.js:199`
   throws with site data blocked (the game never starts), and `saveGame` (`src/save.js:45`) throws on a full quota
   in the middle of `apply`, or in the ticker, which may stop the loop. Wrap every read and write.
-- [ ] **C2** A new game deletes the old save before the character is made (`src/main.js:2123`): closing the tab
+- [x] **C2** A new game deletes the old save before the character is made (`src/main.js:2123`): closing the tab
   during creation loses it, and Continue disappears. Delete on submit.
-- [ ] **C3** The depth button shows a number key that does nothing (`src/ui/actionbar.js:83`, `src/main.js:571`
+- [x] **C3** The depth button shows a number key that does nothing (`src/ui/actionbar.js:83`, `src/main.js:571`
   looks up only `activePerks(state)[n-1]`). Make the key work or don't show it.
-- [ ] **C4** *Plausible.* On Android a long press cancels a buff at ~500 ms, skipping the 1200 ms hold: the
+- [x] **C4** *Plausible.* On Android a long press cancels a buff at ~500 ms, skipping the 1200 ms hold: the
   `contextmenu` handler (`src/ui/buffbar.js:104`, `:113`) ignores the pointer type.
-- [ ] **C5** *Plausible.* Long press on a bucket fish on touch (`src/main.js:1822-1836`): any `pointermove` kills the
+- [x] **C5** *Plausible.* Long press on a bucket fish on touch (`src/main.js:1822-1836`): any `pointermove` kills the
   600 ms timer (no slop; `drag.js` allows 10 px); the capture-phase `contextmenu` stops the listener that clears
   the timer, so the menu can open twice; the tooltip opens alongside the menu.
-- [ ] **C6** The art sheet's build chain (`src/art.js:78`) has no catch: one section that throws stops every later
+- [x] **C6** The art sheet's build chain (`src/art.js:78`) has no catch: one section that throws stops every later
   section from building.
-- [ ] **C7** Two tabs on one save slot overwrite each other's progress (no `storage` listener). *The owner:* fix only
+- [x] **C7** Two tabs on one save slot overwrite each other's progress (no `storage` listener). *The owner:* fix only
   if it's small, e.g. a `storage` event that stops the stale tab.
 
 **D. Tools and tests**
@@ -270,7 +275,8 @@ the owner or a place in a phase.
   the dev bench can't force one); the aquarium with a predator in it (its warning and Feed button); a predator's
   strike under the water; whether hiding, the shoals' turning and scatter, the pike's lunge and resting fish read
   well in motion (a screenshot can't show it). A manoeuvre running out after `fightMs` (D141) has never been felt
-  in play.
+  in play. The long presses on touch since the code review's batch C (a bucket fish's menu once per press, with no
+  tooltip over it; a buff cancelled only by the 1200 ms hold) have never been tried on a real phone.
 - **Uncredited icons:** the fish and item icons drawn from Commons photos (D97, D98) aren't in `assets/CREDITS.md`;
   their sources are only in the local, untracked `docs/design/refs/credits.csv`. Many are CC BY or CC BY-SA, so
   they want listing before the game is shared more widely.
