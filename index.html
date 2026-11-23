@@ -107,7 +107,10 @@
 <dialog class="create event" id="event" aria-labelledby="eventTitle">
   <div class="event-head">
     <div class="event-art" id="eventArt"></div>
-    <h2 id="eventTitle"></h2>
+    <div>
+      <h2 id="eventTitle"></h2>
+      <p class="event-who" id="eventWho" hidden></p>
+    </div>
   </div>
   <div class="event-text" id="eventText"></div>
   <div class="event-choices" id="eventChoices"></div>
@@ -115,17 +118,32 @@
 
 <dialog class="create" id="create">
   <form method="dialog" id="createForm">
-    <h2 id="createTitle"></h2>
-    <label class="field"><span id="createNameLabel"></span>
-      <span class="row"><input id="createName" maxlength="24" required autocomplete="off">
-      <button type="button" id="createRerollName"></button></span>
-    </label>
-    <fieldset class="field"><legend id="createGenderLabel"></legend><div class="choices" id="createGender"></div></fieldset>
-    <fieldset class="field"><legend id="createClassLabel"></legend><div class="choices classes" id="createClass"></div></fieldset>
-    <fieldset class="field"><legend id="createStatsLabel"></legend>
-      <div class="stats-grid" id="createStats"></div>
-      <button type="button" id="createRerollStats"></button>
-    </fieldset>
+    <!-- The face shows over both pages; the second page picks it part by part, as WoW's creation does (8.13, D29). -->
+    <div class="create-head">
+      <div class="event-art" id="createFace"></div>
+      <h2 id="createTitle"></h2>
+    </div>
+    <div class="create-tabs" role="tablist">
+      <button type="button" role="tab" id="createTabWho" aria-controls="createWho"></button>
+      <button type="button" role="tab" id="createTabLook" aria-controls="createLook"></button>
+    </div>
+    <div class="create-page" id="createWho" role="tabpanel">
+      <label class="field"><span id="createNameLabel"></span>
+        <span class="row"><input id="createName" maxlength="24" required autocomplete="off">
+        <button type="button" id="createRerollName"></button></span>
+      </label>
+      <fieldset class="field"><legend id="createGenderLabel"></legend><div class="choices" id="createGender"></div></fieldset>
+      <fieldset class="field"><legend id="createPeopleLabel"></legend><div class="choices" id="createPeople"></div></fieldset>
+      <fieldset class="field"><legend id="createClassLabel"></legend><div class="choices classes" id="createClass"></div></fieldset>
+      <fieldset class="field"><legend id="createStatsLabel"></legend>
+        <div class="stats-grid" id="createStats"></div>
+        <button type="button" id="createRerollStats"></button>
+      </fieldset>
+    </div>
+    <div class="create-page" id="createLook" role="tabpanel" hidden>
+      <button type="button" class="roll-face" id="createRollLook"></button>
+      <div class="look-parts" id="createParts"></div>
+    </div>
     <button type="submit" class="primary" id="createStart"></button>
   </form>
 </dialog>

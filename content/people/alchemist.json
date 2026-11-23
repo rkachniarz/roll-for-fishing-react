@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schemas/person.schema.json",
+  "id": "alchemist",
+  "placeholder": true,
+  "people": "orc",
+  "role": "Alchemist"
+}

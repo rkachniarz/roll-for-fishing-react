@@ -20,9 +20,10 @@ import { fishWeight } from './fish.js';
 import { firstFullMoon } from './sky.js';
 import { WATER } from './features.js';
 import { windStart } from './wind.js';
+import { playerLook } from './people.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 25;
+export const SAVE_VERSION = 26;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -69,8 +70,9 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
  * @property {Record<string, number>} streams  Each stream's state (D53).
  * @property {{ name: string, gender: 'm' | 'f', classId: string,
  *   stats: { fishingSkill: number, fishFind: number, treasureFind: number },
- *   luck: number, xp: number, perks: Record<number, string> }} character  `perks`: level -> the perk
- *   taken for it (perks.js, D96).
+ *   luck: number, xp: number, perks: Record<number, string>, look: import('./looks.js').Look }} character  `perks`:
+ *   level -> the perk taken for it (perks.js, D96). `look`: how they look, picked in the creator (8.13, D187); their
+ *   people is the look's (D188).
  * @property {string} location
  * @property {string | null} spot
  * @property {number} time  Game minutes (time.js).
@@ -149,7 +151,8 @@ export const STREAMS = ['cast-timing', 'fishing', 'line', 'effects', 'weather', 
 /**
  * @param {Object} options
  * @param {number} options.seed
- * @param {GameState['character']} options.character
+ * @param {Omit<GameState['character'], 'look'> & { look?: GameState['character']['look'] }} options.character  Without a
+ *   look, one rolled from the seed (people.js).
  * @param {number} [options.month]  This month outside (0 for January), from
  *   the page: the start leans towards its season (D85). The engine never reads
  *   a clock (D7); without it, the season in new-game.json.
@@ -171,7 +174,13 @@ export function newGame({ seed, character, month }) {
     version: SAVE_VERSION,
     seed,
     streams,
-    character: { ...character, luck: character.luck ?? 0, xp: character.xp ?? 0, perks: character.perks ?? {} },
+    character: {
+      ...character,
+      luck: character.luck ?? 0,
+      xp: character.xp ?? 0,
+      perks: character.perks ?? {},
+      look: character.look ?? playerLook(seed, character.gender),
+    },
     location: start.location,
     spot: start.spot,
     time,
@@ -256,6 +265,9 @@ export function levelFor(xp) {
  * @type {Record<number, (save: any) => any>}
  */
 const MIGRATIONS = {
+  // 25 -> 26: the player's look (8.13, D187), rolled from the seed as a new game's is before the player picks; there
+  // is no way to change it later (D188).
+  25: (save) => (save.character ? { ...save, character: { ...save.character, look: playerLook(save.seed, save.character.gender) } } : save),
   // 24 -> 25: the wind's direction (D176), from its start cell, with its own stream.
   24: (save) => ({ ...save, wind: windStart(), streams: { ...save.streams, wind: deriveSeed(save.seed, 'wind') } }),
   // 1 -> 2: surface features (R14), with their own stream.

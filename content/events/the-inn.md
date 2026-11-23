@@ -6,6 +6,7 @@ once: false
 needs: location town
 needs: spot inn
 needs: flag met-innkeeper
+face: innkeeper
 placeholder: true
 ---
 

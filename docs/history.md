@@ -348,6 +348,24 @@ How it works is D96.
   `set`, and an item's `page` reads in its tooltip. Events check `needs: set` and take pieces with `lose: set`; the
   journal shows each set's progress. A placeholder three-page lorebook, from the owner's story notes, and a scholar
   who comes by while the player holds a page.
+- **8.13** Faces and names from parts (D187, D188, 2026-11-23). `npm run names` (`tools/names.mjs`) imports the
+  owner's nine one-column lists from `docs/names/` into `content/names/<people>.json` (30 first names per list, 100
+  to 134 surnames per people) and runs `npm run content`; the CSVs stay local, the JSON is tracked, so the tests and
+  GitHub never need them. A look is plain data (`src/engine/looks.js`): people, name list, head, skin, ears, eyes and
+  their colour, brows, nose, mouth, beard, tusks, hair and its colour, hat, clothes, each part rolled on its own
+  label of the person's seed (`face.<part>`), the name on `name` and `surname`. Skin per people as D188 says (10
+  human, 4 greens, 3 greys, 7 brick colours). Named townsfolk live in `content/people/` (the innkeeper, the
+  Alchemist, the scholar, the scrap dealer as a "Tinker", the junk collector as a "Ragpicker"), rolled from their id
+  with anything written out winning; strangers roll from the game's seed and a label, 8 in 10 human. Names read
+  `Name the Role` or `Name Surname`. The portrait (`src/scene/faces.js`) layers placeholder shapes inside the 64
+  circle, sampled at pixel centres so the same drawing gives the 32 icon; colours are palette swaps. Events name a
+  face with `face:` (`docs/events.md`): the innkeeper's two, the Alchemist's and the scholar's, with the person's
+  name under the title. The creator has a second page, Appearance, with WoW's arrows per part, a d20 roll for the
+  face and one per part, and the people on the first page; the face sits over both pages. The look is saved with
+  the character (save version 26; an old save gets one rolled from its seed). The face is the character button's
+  icon at 32 and the pane's portrait at 64. The art sheet's "Faces: thirty at once" rolls thirty with their names,
+  by town shares or one people, and shows the named townsfolk. Tests: `test/people.test.js`; browser checks: the
+  creator, and the innkeeper's face and name.
 
 ## Phase 9: Balance and finish (in progress)
 

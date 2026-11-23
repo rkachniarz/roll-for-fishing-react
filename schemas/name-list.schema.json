@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A people's names (D188): first names for men and for women, and surnames. Written by `npm run names` from the owner's lists in docs/names/; edit those and run it again.",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
+    "id": { "description": "The people: human, dwarf or orc.", "enum": ["human", "dwarf", "orc"] },
+    "male": { "description": "Men's first names. A person's roll picks by place in the list, so add new ones at the end.", "type": "array", "items": { "$ref": "common.schema.json#/definitions/text" }, "minItems": 1 },
+    "female": { "description": "Women's first names.", "type": "array", "items": { "$ref": "common.schema.json#/definitions/text" }, "minItems": 1 },
+    "surnames": { "description": "Surnames, for anyone of this people.", "type": "array", "items": { "$ref": "common.schema.json#/definitions/text" }, "minItems": 1 }
+  },
+  "required": ["id", "male", "female", "surnames"],
+  "additionalProperties": false
+}

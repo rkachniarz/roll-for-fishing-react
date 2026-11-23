@@ -5,6 +5,7 @@ trigger: arrive
 needs: location town
 needs: spot inn
 needs: no-flag met-innkeeper
+face: innkeeper
 placeholder: true
 ---
 

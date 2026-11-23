@@ -700,6 +700,41 @@ await check('new game', DESKTOP, '?seed=5', async (page) => {
   report('new game: in its own slot, the first game kept', filled.join() === 'false,false,true', filled.join());
 });
 
+await check('the creator: a people, the face part by part, then the face on the character (8.13, D188)', PHONE, '?seed=5', async (page) => {
+  page.on('dialog', (d) => d.accept());
+  await page.click('#menu');
+  await page.click('#mainMenu');
+  await page.waitForSelector('#title[open]', { timeout: 2000 });
+  await page.click('#titleNew');
+  await page.click('#slot-2');
+  await page.waitForSelector('#create[open]', { timeout: 2000 });
+  const face = () => page.evaluate(() => /** @type {HTMLCanvasElement} */ (document.querySelector('#createFace canvas')).toDataURL());
+  await page.click('#createPeople label:has-text("Dwarf")');
+  await page.click('#createTabLook');
+  const pages = [await page.isVisible('#createLook'), await page.isVisible('#createWho')];
+  report('the creator: the appearance on a page of its own', pages.join() === 'true,false', pages.join());
+  const rows = await page.evaluate(() => [...document.querySelectorAll('.look-part')].map((r) => /** @type {HTMLElement} */ (r).dataset.part));
+  report('the creator: a dwarf has beards to pick and no tusks', rows.includes('beard') && !rows.includes('tusks'), rows.join(', '));
+  const before = await face();
+  const which = await page.textContent('.look-part[data-part="skin"] .which');
+  await page.click('.look-part[data-part="skin"] button:nth-of-type(2)');
+  report('the creator: an arrow changes the part and the face', (await page.textContent('.look-part[data-part="skin"] .which')) !== which && (await face()) !== before);
+  const once = await face();
+  await page.click('#createRollLook');
+  report('the creator: the roll gives another face', (await face()) !== once);
+  await page.screenshot({ path: 'dist/verify/creator-look.png' });
+  report('the creator: Go fishing in reach on a phone', await page.isVisible('#createStart'));
+  await page.click('#createStart');
+  await passWelcome(page);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('roll-for-fishing:save:2') ?? '{}').character?.look);
+  report('the creator: the look saved with the character', saved?.people === 'dwarf' && saved.beard !== 'none', JSON.stringify(saved));
+  const button = await page.getAttribute('#player canvas', 'width');
+  await page.click('#player');
+  const pane = await page.getAttribute('#playerFace canvas', 'width');
+  report("the creator: the face on the character's button and in its pane", button === '32' && pane === '64', `${button}, ${pane}`);
+  await page.screenshot({ path: 'dist/verify/creator-pane.png' });
+});
+
 await check('new game over a slot: the old game stays until the character is made', DESKTOP, '?seed=5', async (page) => {
   page.on('dialog', (d) => d.accept());
   const before = await page.evaluate(() => localStorage.getItem('roll-for-fishing:save:1'));
@@ -1093,6 +1128,9 @@ await check('the town: the inn, the innkeeper, the room (R17)', DESKTOP, '?dev&s
   await page.waitForFunction(() => document.querySelector('#eventTitle')?.textContent === 'The innkeeper', null, { timeout: 2000 }).catch(() => {});
   report('the town: the innkeeper greets the player', (await page.textContent('#eventTitle')) === 'The innkeeper');
   report('the town: no fishing here', (await page.getAttribute('body', 'data-place')) === 'town');
+  // The innkeeper's own face in the portrait, and their name under the title (8.13, D188).
+  const who = await page.evaluate(() => ({ text: document.querySelector('#eventWho')?.textContent ?? '', width: document.querySelector('#eventArt canvas')?.getAttribute('width') }));
+  report("the town: the innkeeper's face and name", / the Innkeeper°?$/.test(who.text) && who.width === '64', JSON.stringify(who));
   await page.screenshot({ path: 'dist/verify/town-innkeeper.png' });
   await page.waitForTimeout(450);
   await page.click("text=Thank you. I'll go up.");

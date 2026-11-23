@@ -48,6 +48,7 @@ You lunge forward and get wet, and it's like it was never there.
 | `trigger` | `meter` / `item` / `needs` / `arrive` | What starts it; one per event, see below. Default `meter`. |
 | `needs` | any number of lines | Requirements for it to start at all, in the words below. |
 | `art` | a name | The picture in the round portrait beside the title: the 64×64 icon `event/<name>` in `src/scene/icons.js` (D142). Optional: without one, an old scroll. |
+| `face` | a person's id | Someone's face in the portrait instead of a picture, with their name under the title (`Name the Role`, D188): a townsperson in `content/people/` (8.13, D187), as `face: innkeeper`. An event has `art` or `face`, not both. |
 | `placeholder` | `true` | Claude's stand-in, to be rewritten (D124): listed in `docs/placeholders.md`, marked with a ° under `?ph`. |
 | `retired` | `true` | No longer used: it never opens, but its id stays (D44). Never delete an event file. |
 

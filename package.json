@@ -20,6 +20,7 @@
     "sim": "node tools/sim.mjs",
     "prompts": "node tools/prompts.mjs",
     "areas": "node tools/areas.mjs",
+    "names": "node tools/names.mjs",
     "check": "npm test && npm run verify && npm run build"
   },
   "devDependencies": {

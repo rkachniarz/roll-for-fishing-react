@@ -364,7 +364,27 @@ spot to have two.
 The owner's lists in `docs/names/` (local only): for each of the dwarves, humans and orcs, 30 male and 30 female
 first names and 100–135 surnames. The dwarves' names lean Scandinavian, the humans' Slavic, the orcs' Turkic and
 Mongolic. The owner chose them with real people in mind: the surnames are very rare ones, with letters shuffled so
-none matches a real one. The orcs are rare guests in town, from the far Wildlands (`docs/ideas.md`).
+none matches a real one. The orcs are rare guests in town, from the far Wildlands (`docs/ideas.md`). Imported as
+they are, in their order, into `content/names/` by `npm run names` (8.13): 30 first names per list, 100 dwarf, 134
+human and 100 orc surnames.
+
+## Faces (D187, D188)
+
+All of 8.13's colours and shapes are Claude's, from memory, with no reference looked up; placeholders until CR-19.
+
+- **Human skin** (`SKIN` in `src/engine/looks.js`): ten steps from porcelain to deep, picked by eye to span the real
+  range evenly, not measured from any skin-tone scale. A guess at what reads at 64×64.
+- **Orc skin:** four greens and three greys from fantasy convention; the seven brick colours are D188's list as
+  Claude read it (brick red, orange-red, ochre, sandy yellow, clay brown, dark purple-brown, near-black engineering
+  brick), each one hex value picked by eye.
+- **Hair, eyes, clothes:** the usual natural hair colours with grey and white; eyes in strong colours since an eye is
+  two pixels, the orcs' amber, red and yellow from fantasy convention; clothes in strong, distinct colours so the
+  silhouette reads (D187). All guesses.
+- **The shades** are worked out from each colour (`faceColours` in `src/scene/faces.js`): 84% for skin's shade, 72%
+  for hair's (a lighter tone for near-black hair), the mouth a darker skin on light skin and a lighter one on dark.
+  Picked by looking at the thirty-faces test bed.
+- **The town's shares of strangers** (8 human, 1 dwarf, 1 orc, `TOWN_PEOPLES` in `src/engine/people.js`): a guess
+  at "mostly human" (D188), until the world's numbers (`docs/ideas.md`) say otherwise.
 
 ## Smaller numbers and their reasons
 

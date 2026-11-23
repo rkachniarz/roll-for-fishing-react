@@ -5,6 +5,7 @@ trigger: arrive
 once: false
 needs: location town
 needs: spot alchemist
+face: alchemist
 placeholder: true
 ---
 

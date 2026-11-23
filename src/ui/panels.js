@@ -11,6 +11,7 @@ import { t } from '../strings.js';
 import { levelFor } from '../engine/state.js';
 import { className } from '../engine/character.js';
 import { iconName, paintIcon } from '../scene/icons.js';
+import { paintFace } from '../scene/faces.js';
 import { bagSlot, bagTab, effectsText, hoursText, link, pickSlot, rarityColour, slot, tasteLines, weightText } from './links.js';
 import { bowlOf, canTrade, costStatus, offersFor } from '../engine/barter.js';
 import { vendorStatus } from '../engine/schedule.js';
@@ -97,8 +98,8 @@ export function playerPane(state, values, onTakePerk = () => {}) {
   const level = levelFor(c.xp);
   const curve = content.rules.levels.xp;
   const next = curve[level + 1];
-  const portrait = paintIcon('ui/portrait');
-  portrait.className = 'portrait';
+  // The player's face, larger than on its button, in the round frame of an event's portrait (8.13, D188).
+  const portrait = el('div', { className: 'event-art', id: 'playerFace' }, [paintFace(c.look)]);
   const fill = el('div', { className: 'xp-fill' });
   fill.style.width = next === undefined ? '100%' : `${(100 * (c.xp - curve[level])) / (next - curve[level])}%`;
   const statKeys = ['fishingSkill', 'fishFind', 'treasureFind'];

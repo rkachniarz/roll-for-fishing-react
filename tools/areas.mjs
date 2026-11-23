@@ -59,6 +59,11 @@ export const AREAS = [
     files: ['src/engine/events.js', 'tools/event-text.mjs', 'src/ui/event-words.js', 'src/ui/map.js', 'tools/map.py', 'content/events/', 'content/locations/', 'schemas/location.schema.json'],
   },
   {
+    name: 'People: faces and names',
+    about: "How people look and what they are called: the parts and colours of a face, portraits drawn from them, the peoples' names, the named townsfolk, strangers, the player's look.",
+    files: ['src/engine/looks.js', 'src/engine/people.js', 'src/scene/faces.js', 'tools/names.mjs', 'content/names/', 'content/people/', 'schemas/name-list.schema.json', 'schemas/person.schema.json'],
+  },
+  {
     name: 'The page: layout, UI and text',
     about: 'The page around the scene: layout and themes, panes, tooltips, the log, the bars, drag and drop, strings, sound, the dev bench.',
     files: ['src/main.js', 'index.html', 'styles.css', 'src/strings.js', 'src/audio.js', 'src/dev.js', 'src/ui/', 'tools/planks.py', 'tools/obsidian.py'],

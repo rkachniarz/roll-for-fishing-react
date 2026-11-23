@@ -144,7 +144,7 @@ const INT = /^-?\d+$/;
  * @typedef {{ text: Text, to: string, needs: Need[], effects: Effect[] }} Choice
  * @typedef {{ text: Text, choices: Choice[] }} Slide
  * @typedef {{ id: string, title: Text, once: boolean, trigger: string, needs: Need[],
- *   art?: string, again?: { casts?: number, days?: number }, first: string, slides: Record<string, Slide>,
+ *   art?: string, face?: string, again?: { casts?: number, days?: number }, first: string, slides: Record<string, Slide>,
  *   placeholder?: boolean, retired?: boolean }} GameEventData
  */
 
@@ -406,7 +406,7 @@ export function parseEvent(text) {
       const need = parseNeed(m[2]);
       if (typeof need === 'string') fail(i, need);
       else eventNeeds.push(need);
-    } else if (!['id', 'title', 'once', 'trigger', 'art', 'again', 'placeholder', 'retired'].includes(m[1])) fail(i, `no front matter key "${m[1]}"`);
+    } else if (!['id', 'title', 'once', 'trigger', 'art', 'face', 'again', 'placeholder', 'retired'].includes(m[1])) fail(i, `no front matter key "${m[1]}"`);
     else if (m[1] in front) fail(i, `"${m[1]}" twice (an event has one ${m[1]})`);
     else front[m[1]] = m[2];
   }
@@ -418,6 +418,9 @@ export function parseEvent(text) {
   if (front.once !== undefined && front.once !== 'true' && front.once !== 'false') fail(0, '"once" is true or false');
   if (front.placeholder !== undefined && front.placeholder !== 'true' && front.placeholder !== 'false') fail(0, '"placeholder" is true or false (D124)');
   if (front.retired !== undefined && front.retired !== 'true' && front.retired !== 'false') fail(0, '"retired" is true or false (D44)');
+  // A face in the portrait is someone's from content/people/ (D187); a picture is an icon (D142). One or the other.
+  if (front.face !== undefined && !ID.test(front.face)) fail(0, '"face" is the id of someone in content/people/');
+  if (front.face !== undefined && front.art !== undefined) fail(0, '"art" or "face": the portrait shows one picture');
   const again = front.again !== undefined ? AGAIN.exec(front.again.trim()) : null;
   if (front.again !== undefined && !again) fail(0, '"again" is a number of casts or days: again: 50 casts, again: 3 days');
   if (again && front.once === 'true') fail(0, '"again" brings an event back, so it can\'t be "once: true"');
@@ -537,6 +540,7 @@ export function parseEvent(text) {
     slides,
   };
   if (front.art) event.art = front.art;
+  if (front.face) event.face = front.face;
   // Its text and what it does are stand-ins until the owner's (D124).
   if (front.placeholder === 'true') event.placeholder = true;
   // Ids are permanent (D44): an event no longer used stays, and never opens.

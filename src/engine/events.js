@@ -169,7 +169,7 @@ export function textNow(state, parts) {
  * the string keys of the parts that show now (textNow). A choice whose
  * requirements aren't met is hidden (the prototype's rule).
  * @param {GameState} state
- * @returns {{ id: string, title: string[], art?: string, text: string[],
+ * @returns {{ id: string, title: string[], art?: string, face?: string, text: string[],
  *   choices: { index: number, text: string[] }[] } | null}
  */
 export function openSlide(state) {
@@ -181,6 +181,8 @@ export function openSlide(state) {
     id: event.id,
     title: textNow(state, event.title),
     ...(event.art ? { art: event.art } : {}),
+    // Someone's face in the portrait (D187): a townsperson's id.
+    ...(event.face ? { face: event.face } : {}),
     text: textNow(state, slide.text),
     choices: slide.choices
       .map((/** @type {Choice} */ c, /** @type {number} */ index) => ({ index, text: textNow(state, c.text), ok: meetsAll(state, c.needs) }))

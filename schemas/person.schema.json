@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A named townsperson (D187, D188): rolled from their id, the same in every game; anything written here wins over the roll",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "placeholder": { "$ref": "common.schema.json#/definitions/placeholder" },
+    "retired": { "$ref": "common.schema.json#/definitions/retired" },
+    "id": { "$ref": "common.schema.json#/definitions/id" },
+    "people": { "description": "Their people (D188).", "enum": ["human", "dwarf", "orc"] },
+    "sex": { "description": "The list their first name comes from: m or f. Rolled if left out.", "enum": ["m", "f"] },
+    "name": { "description": "Their first name. Rolled from their people's list if left out.", "$ref": "common.schema.json#/definitions/text" },
+    "surname": { "description": "Their surname, shown when they have no role. Rolled if left out.", "$ref": "common.schema.json#/definitions/text" },
+    "role": { "description": "What they are, shown as `Name the Role` (D188): Alchemist, Innkeeper.", "$ref": "common.schema.json#/definitions/text" },
+    "look": {
+      "description": "Parts of their look written out, each winning over the roll (D187): head, skin, ears, eyes, eyeColour, brows, nose, mouth, beard, tusks, hair, hairColour, hat, clothes. The options per people are PARTS in src/engine/looks.js; `npm run content` checks them.",
+      "type": "object",
+      "propertyNames": { "enum": ["head", "skin", "ears", "eyes", "eyeColour", "brows", "nose", "mouth", "beard", "tusks", "hair", "hairColour", "hat", "clothes"] },
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "required": ["id", "people"],
+  "additionalProperties": false
+}

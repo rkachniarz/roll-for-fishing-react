@@ -19,7 +19,9 @@ new one.
 Phases 8, 9 and 11 have a few tasks each still open, listed below. Since Phase 12: the open water as the
 default scene (D171), three skies on the art sheet only (the special sky, the blood moon, the green sun, D173–D175),
 the wind's direction (D176) and waves that follow it (D177); on 2026-11-23 the docs were put in order (D182–D185:
-`docs/sources.md`, the self-checking pointers, `docs/areas.md`, traps beside their code), and a code review of the whole codebase was fixed in four batches (history.md). Nothing is scheduled next; the open tasks below and the
+`docs/sources.md`, the self-checking pointers, `docs/areas.md`, traps beside their code), and a code review of the whole codebase was fixed in four batches (history.md); then 8.13, faces and names from
+parts: the owner's name lists in `content/names/`, a look per person, the named townsfolk, portraits of placeholder
+shapes, the player's creator and face (D187, D188). Nothing is scheduled next; the open tasks below and the
 ideas under [From our talks](#from-our-talks-not-yet-planned) are the owner's to pick from. Claude's guesses are on
 [docs/REVIEW.md](docs/REVIEW.md).
 
@@ -66,7 +68,7 @@ the stew; Phase 12, the map, the sun and the moon, the sky and its clouds; the t
 
 ## Phase 8: World and town
 
-Done: 8.2, 8.4–8.7; and **8.1**, the spots learned and travelled to (D101, D109), with the owner's map (D161) in place
+Done: 8.2, 8.4–8.7, 8.13 (faces and names from parts, D187, D188); and **8.1**, the spots learned and travelled to (D101, D109), with the owner's map (D161) in place
 of the planned placeholder shapes; the town, the inn, barter, the stew and the Alchemist came with Phase 10 (D123).
 
 - [ ] **8.3** The rest of the town (R11.5, R10.4). Squares and triangles and plain lines until CR-5 and CR-13.
@@ -82,22 +84,6 @@ of the planned placeholder shapes; the town, the inn, barter, the stew and the A
   consumables and gear as the reward (7.7 and 7.8 are built; town questions 26–29).
 - [ ] **8.9** Companions at the fishing spot: the cat, once it trusts the player (`docs/ideas.md`, town questions
   30–32). A placeholder cat until CR-5.
-- [ ] **8.13** Faces and names from parts (D187, D188). First, the owner's name lists (`docs/names/`: first names, male
-  and female, and surnames for dwarves, humans and orcs; one-column CSVs, gitignored) imported into `content/` in
-  the format the content checks want, by a tool that can be run again when the lists change, the CSVs staying where
-  they are. Then: an appearance recipe per person, with their people, name list and name, read by both the portrait
-  and the figure;
-  portraits layered from parts with palette swaps for skin and hair; recipes rolled on a stream (named townsfolk from
-  their content id, strangers from the game's seed) and written out in `content/` to handcraft one; the player's
-  creator, picking each part with a roll button for the face and for one part. Placeholder shapes for every part
-  until CR-19. A test bed on the art sheet that rolls thirty faces at once, each with its name under it, to see how
-  many look like twins. The player's name keeps the prototype's generator (`generateName`).
-  *The owner's answers (2026-11-23), in D188:* names read `Name the Role`, or `Name Surname` without a role; beards
-  for dwarves only, women too; tusks for orcs; skin palettes per people (human: real human range; orc: greens, greys,
-  brick colours; dwarf: both but no greens); the town mostly human; the player picks their people on the new-game
-  screen (a second page if needed); the face is the character pane's icon, and bigger in the pane if it fits; no
-  migration for old saves. First recipes: the innkeeper, the Alchemist (an orc), the scholar, the scrap dealer (a
-  dwarf) and the junk collector (a woman).
 - [ ] **8.14** Town figures from a 3D stand-in (D187): a page in this repo (as `editor.html` is; three.js as an ES
   module, no build step) where a scene's painting sits behind a few boxes and sliders move the camera (height, angle,
   lens) and the light until the boxes sit on the painted floor, bar and table; blocky figures posed there with short
@@ -203,6 +189,10 @@ the owner or a place in a phase.
   well in motion (a screenshot can't show it). A manoeuvre running out after `fightMs` (D141) has never been felt
   in play. The long presses on touch since the code review's batch C (a bucket fish's menu once per press, with no
   tooltip over it; a buff cancelled only by the 1200 ms hold) have never been tried on a real phone.
+- **Faces:** a face has only been seen in screenshots and on the art sheet, never on the owner's phone; the creator's
+  sticky face over a scrolled parts list has only been seen in headless Chromium. The scrap dealer and the junk
+  collector have faces but no events to show them in yet (8.3, 8.12). The player's people changes nothing in play
+  until 8.15.
 - **Uncredited icons:** the fish and item icons drawn from Commons photos (D97, D98) aren't in `assets/CREDITS.md`;
   their sources are only in the local, untracked `docs/design/refs/credits.csv`. Many are CC BY or CC BY-SA, so
   they want listing before the game is shared more widely.
@@ -289,8 +279,12 @@ placeholder, it's added here.
 
 - [ ] **CR-19** Face parts (D187, 8.13): heads, eyes, brows, noses, mouths, beards, hair, hats and hoods, ears for
   other peoples, and the palettes for skin and hair, drawn in Paint inside the 64×64 circle. The big shapes first,
-  since they set faces apart. Then the handcrafted recipes of the most important people. *Replaces 8.13's placeholder
-  shapes once it is built.*
+  since they set faces apart. Then the handcrafted recipes of the most important people. *8.13's placeholders, all in
+  `src/scene/faces.js` unless named: every head, ear, eye, brow, nose, mouth, beard, tusk, hair, hat and hood shape
+  (plain ellipses, boxes and triangles); the shoulders and neck; the skin, hair, eye and clothes palettes
+  (`src/engine/looks.js`); the d20 on the creator's roll buttons (`ui/d20` in `src/scene/icons.js`). And the
+  writing: the townsfolk's roles in `content/people/` (the scrap dealer's "Tinker" and the junk collector's
+  "Ragpicker" stand in for real titles), and their rolled names and looks, all marked placeholders.*
 
 ## Writing
 

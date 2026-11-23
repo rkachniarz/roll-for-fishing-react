@@ -23,6 +23,7 @@ import { dirname, join } from 'node:path';
 import { GAME_VALUES, EFFECT_DICE, effectSign } from '../src/engine/values.js';
 import { DIRECTIONS, HEX_NEIGHBOURS, OPPOSITE } from '../src/engine/hexmap.js';
 import { PLACEHOLDERS, parseEvent, parseNeed } from './event-text.mjs';
+import { PEOPLES, fits } from '../src/engine/looks.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -39,6 +40,10 @@ const KINDS = {
   sets: { schema: 'set', prefix: 'set' },
   buffs: { schema: 'buff', prefix: 'buff' },
   vendors: { schema: 'vendor', prefix: 'vendor' },
+  // The owner's name lists, one file per people, written by `npm run names` (D188).
+  names: { schema: 'name-list', prefix: 'names' },
+  // Named townsfolk (D187): a recipe for how they look, rolled where it says nothing.
+  people: { schema: 'person', prefix: 'person' },
   // One file per rule set; each has its own schema, named after its id.
   rules: { schema: null, prefix: 'rules' },
 };
@@ -60,6 +65,8 @@ const TEXT = {
   sets: [['name']],
   buffs: [['name']],
   vendors: [['name']],
+  names: [['male', '#'], ['female', '#'], ['surnames', '#']],
+  people: [['name'], ['surname'], ['role']],
   rules: [
     ['bands', '@', 'name'],
     ['temperature', '#', 'word'],
@@ -335,6 +342,15 @@ export async function buildContent(root = ROOT) {
     if (item.category === 'stuff' && item.rarity !== 'common') warnings.push(`${where}: stuff is white (common), as WoW's quest items are`);
     if (item.set && !item.unique) warnings.push(`${where}: a set's piece should be unique, found once (8.7)`);
     if (item.bait && !baits.has(item.bait)) errors.push(`${where}: no bait "${item.bait}"`);
+  }
+
+  // The peoples' names (D188) and the named townsfolk's recipes (D187).
+  for (const people of PEOPLES) if (!all.names[people]) errors.push(`content/names/${people}.json: missing (npm run names writes it from docs/names/)`);
+  for (const person of Object.values(all.people)) {
+    const where = `content/people/${person.id}.json`;
+    for (const [part, id] of Object.entries(person.look ?? {})) {
+      if (!fits(part, person.people, /** @type {string} */ (id))) errors.push(`${where}: a ${person.people} has no ${part} "${id}" (PARTS in src/engine/looks.js)`);
+    }
   }
 
   checkPerks(all, errors, warnings);
@@ -637,6 +653,7 @@ function checkEvents(all, errors, warnings, root) {
   for (const event of Object.values(all.events)) {
     const where = `content/events/${event.id}.md`;
     for (const need of event.needs) checkNeed(where, need);
+    if (event.face && !all.people[event.face]) errors.push(`${where}: "face: ${event.face}", but there is no content/people/${event.face}.json`);
     if (event.trigger === 'needs' && event.needs.length === 0) errors.push(`${where}: "trigger: needs" with no needs would start at once`);
     if (event.trigger === 'needs' && !event.once && !event.again) warnings.push(`${where}: "trigger: needs" with "once: false" starts again after every cast while its needs are met`);
     if ((event.trigger === 'meter' || event.trigger === 'item') && !startedBy.has(event.id)) warnings.push(`${where}: nothing starts it`);

@@ -351,6 +351,96 @@ body {
   margin-bottom: 6px;
 }
 
+/* The creator's face over both pages, and its two pages as tabs (8.13): one page at a time, on a phone too. The
+   face stays in sight while the parts below it scroll. */
+.create-head {
+  position: sticky;
+  top: -16px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: -16px -16px 0;
+  padding: 16px 16px 8px;
+  background: var(--bg);
+}
+
+.create-tabs {
+  display: flex;
+  gap: 6px;
+  border-bottom: 1px solid var(--panel-edge);
+}
+
+.create .create-tabs button {
+  flex: 1;
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+  color: var(--muted);
+}
+
+.create .create-tabs button[aria-selected='true'] {
+  color: var(--accent);
+  background: var(--bg);
+  border-color: var(--accent);
+}
+
+.create-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.create-page[hidden] {
+  display: none;
+}
+
+/* The roll button: the d20 and its words (D188's roll for the whole face). */
+.create .roll-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.roll-face canvas,
+.look-part .roll canvas {
+  width: var(--slot-icon);
+  height: var(--slot-icon);
+  image-rendering: pixelated;
+}
+
+/* One row per part, as WoW's: the name, the arrows either side of which one it is, a small roll. */
+.look-parts {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto auto;
+  gap: 4px 6px;
+  align-items: center;
+}
+
+.look-part {
+  display: contents;
+}
+
+.look-part .label {
+  color: var(--muted);
+}
+
+.look-part .which {
+  min-width: 4em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.create .look-part button {
+  min-width: 44px;
+  padding: 0 6px;
+}
+
+.event-who {
+  margin: 2px 0 0;
+  color: var(--muted);
+}
+
 .create button.primary {
   color: var(--bg);
   background: var(--accent);
@@ -789,12 +879,15 @@ body {
   margin-bottom: 8px;
 }
 
-.portrait {
-  width: 64px;
-  height: 64px;
-  image-rendering: pixelated;
-  background: var(--tile);
-  border: 2px solid var(--frame);
+/* The player's face in the character pane (8.13, D188): its 64 pixels at whole device pixels, in the round frame. */
+.pane .who .event-art {
+  width: calc(var(--tip-icon) + 8px);
+  height: calc(var(--tip-icon) + 8px);
+}
+
+.pane .who .event-art canvas {
+  width: var(--tip-icon);
+  height: var(--tip-icon);
 }
 
 .pane .xp-bar {

@@ -92,6 +92,7 @@ npm run planks [pine|oak]   # the light theme's tabletop tile, from docs/design/
 npm run obsidian            # the dark theme's obsidian tile, drawn as code, into styles.css (D145)
 npm run map                 # the map's paper and outline, from docs/design/map/, into src/generated/map-paper.js (D161)
 npm run areas   # rebuild docs/areas.md, the index of where to look (D184); a test fails while it is behind
+npm run names   # the owner's name lists (docs/names/*.csv, local only) into content/names/, then npm run content (8.13)
 npm run prompts # record the owner's prompts per session in docs/prompts.json, and print the total
 # http://localhost:8001/art.html   the art sheet: trials, fish that swim, the painted spots by season, every sprite and icon enlarged;
 #   each section folds and builds when opened; #seed=N, #open=all (a # not a ?: serve redirects art.html and drops a ?)

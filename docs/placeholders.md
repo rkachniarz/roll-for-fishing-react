@@ -236,6 +236,16 @@ their `CR-n` task in `DEV_PLAN.md`.
 | river / river-mouth | name |
 | town | all of it |
 
+## people (5)
+
+| id | what is a placeholder |
+|---|---|
+| alchemist | all of it |
+| innkeeper | all of it |
+| junk-collector | all of it |
+| scholar | all of it |
+| scrap-dealer | all of it |
+
 ## perks (4)
 
 | id | what is a placeholder |

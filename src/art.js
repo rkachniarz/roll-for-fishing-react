@@ -34,6 +34,9 @@ import { content } from './generated/content.js';
 import { t } from './strings.js';
 import { createRng, deriveSeed } from './rng.js';
 import { DEEP_BANDS, paintDeep } from './scene/deep.js';
+import { paintFace } from './scene/faces.js';
+import { CLOTHES, EYES, HAIR, PEOPLES, SKIN } from './engine/looks.js';
+import { personName, rollPerson, townsperson } from './engine/people.js';
 
 /** The sheet's options, from after the # or the ? (see above). */
 const options = new URLSearchParams(location.hash.slice(1) || location.search);
@@ -1058,6 +1061,57 @@ section(
   },
 );
 
+// ---------- Faces (8.13) ----------
+
+section(
+  'Faces: thirty at once',
+  'Thirty people rolled from parts (D187), each with the name they would have, to see how many look like twins. ' +
+    'Every part is a placeholder shape until CR-19. "The town" rolls peoples as strangers come (mostly human, D188); ' +
+    'the others roll one people only. Then the named townsfolk, rolled from their ids.',
+  (body) => {
+    let first = seed;
+    let mix = 'town';
+    const grid = el('div', { class: 'row faces' });
+    const seedLabel = el('span', { class: 'size' });
+    const draw = () => {
+      seedLabel.textContent = `seeds ${first * 100}…${first * 100 + 29}`;
+      grid.replaceChildren(
+        ...Array.from({ length: 30 }, (_, n) => {
+          const person = rollPerson(first * 100 + n, mix === 'town' ? {} : { people: /** @type {any} */ (mix) });
+          return faceCard(person);
+        }),
+      );
+    };
+    const reroll = /** @type {HTMLButtonElement} */ (el('button', { type: 'button', class: 'save' }, ['Roll thirty more']));
+    reroll.addEventListener('click', () => {
+      first++;
+      draw();
+    });
+    const pick = /** @type {HTMLSelectElement} */ (
+      el('select', {}, [el('option', { value: 'town' }, ['The town']), ...PEOPLES.map((p) => el('option', { value: p }, [p]))])
+    );
+    pick.addEventListener('change', () => {
+      mix = pick.value;
+      draw();
+    });
+    body.append(el('p', {}, [pick, ' ', reroll, ' ', seedLabel]), grid);
+    draw();
+    body.append(el('h3', {}, ['The named townsfolk (content/people/)']), el('div', { class: 'row faces' }, Object.keys(content.people).map((id) => faceCard(townsperson(id)))));
+  },
+);
+
+/**
+ * One face at twice its size, its name under it, and its people and name list in grey.
+ * @param {import('./engine/people.js').Person} person
+ */
+function faceCard(person) {
+  const canvas = paintFace(person);
+  canvas.style.width = canvas.style.height = '128px';
+  canvas.style.borderRadius = '50%';
+  canvas.style.background = '#22343c';
+  return el('figure', { class: 'face' }, [canvas, el('figcaption', {}, [personName(person), el('br'), el('span', { class: 'size' }, [`${person.people}, ${person.sex}`])])]);
+}
+
 // ---------- Palettes ----------
 
 /** @param {string} title @param {Record<string, string>} colours */
@@ -1094,6 +1148,10 @@ section('Palettes', 'Every colour the art uses. A new colour gets a name here be
   palette('The swamp in autumn (SWAMP_AUTUMN)', SWAMP_AUTUMN),
   palette('The swamp in winter (SWAMP_WINTER)', SWAMP_WINTER),
   palette('Under the swamp (SWAMP_UNDER in src/scene/swamp-under.js)', SWAMP_UNDER),
+  palette('Skin (SKIN in src/engine/looks.js, D188)', SKIN),
+  palette('Hair (HAIR)', HAIR),
+  palette('Eyes (EYES)', EYES),
+  palette('Clothes and hats (CLOTHES)', CLOTHES),
   palette('Icon keys (src/scene/icons.js)', ICON_KEYS),
   ...Object.entries(OWN_KEYS).map(([name, keys]) => palette(`The ${name} icon's own colours (OWN_KEYS)`, keys)),
 ));

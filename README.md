@@ -27,6 +27,7 @@ npm run planks   # the light theme's tabletop tile into styles.css (`pine` or `o
 npm run obsidian # the dark theme's obsidian tile into styles.css (`banded`: the art trial, D145)
 npm run map      # the map's paper and outline into src/generated/map-paper.js (D161)
 npm run areas    # rebuild docs/areas.md, the index of where to look by area (D184)
+npm run names    # the owner's name lists (docs/names/, local only) into content/names/, then npm run content
 
 npm run sprite list                    # the sprites that can go out to MS Paint
 npm run sprite export bobber           # -> art/bobber.png, to draw on
@@ -52,7 +53,7 @@ and the art sheet at `/art.html` there.
 | `art.html` | The art sheet: trials, fish that swim, the painted spots by season, every sprite and icon enlarged (`src/art.js`, `src/art-trials.js`; how we work: `docs/art.md`) |
 | `art/` | The owner's real-size drawings, and sprites exported to draw on |
 | `styles.css` | Layout: scene above the panel on phones, beside it on wide screens; both themes' background patterns as data URLs (D143, D145) |
-| `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, perks, sets, weather, surface features, tables, buffs, vendors, rules; events are text (`.md`) |
+| `content/` | Game content as data, one JSON file per thing: fish, items, locations, classes, perks, sets, weather, surface features, tables, buffs, vendors, the peoples' names, the named townsfolk (`people/`), rules; events are text (`.md`) |
 | `schemas/` | A JSON Schema per kind of content; VS Code uses them to check and complete content files |
 | `src/generated/content.js` | Built from `content/` by `npm run content`; don't edit |
 | `src/generated/map-paper.js` | The map's picture as a data URL, baked by `npm run map`; don't edit |
@@ -87,6 +88,8 @@ and the art sheet at `/art.html` there.
 | `src/engine/spawning.js` | The water's temperature, and who is spawning (D149) |
 | `src/engine/pool.js` | The fish under the surface at a spot (D139, D156, D157): stocking its pool, every pool's turn with each part of the day (leaving, predators, arrivals, spawners), the drift and the shoals, its room, which fish show as shadows and the one a cast lands on, the wizard's Look Underwater |
 | `src/engine/dive.js` | The Fighter's dive (R20.3, D128): the fish, their rolls, strikes, coming up |
+| `src/engine/looks.js` | How a person looks (D187, D188): the parts of a face and their options per people, the skin, hair, eye and clothes colours, a look rolled part by part from a seed |
+| `src/engine/people.js` | Who someone is: a look with a name from their people's lists, the named townsfolk (`content/people/`), strangers, the player's look; `Name the Role` or `Name Surname` on screen |
 | `src/engine/time.js` | Game time: minutes per cast, days, seasons, part of the day |
 | `src/engine/sky.js` | Which way each spot looks (`look.facing`) and the shared 60° width of view; where a compass bearing falls in the picture (D166); the sun's and the moon's height and bearing, and the moon's 14-day phase (D167) |
 | `src/engine/moon.js` | The moon and the fish (D168): moon words, the moonlight at night, the anglers' moon tables (solunar periods) |
@@ -112,6 +115,7 @@ and the art sheet at `/art.html` there.
 | `src/scene/swamp-under.js` | Under the swamp's water (D159): murky water, the sunk branch, a far beech foot |
 | `src/scene/swamp-roots.js` | Photo 3's beech foot, baked into a grid of tones for the picture under the water |
 | `src/scene/swamp-pixels.js` | The swamp painted as code from the owner's photos, into plain pixel buffers: its layout, four seasons and palettes |
+| `src/scene/faces.js` | Portraits layered from parts (D187): a look drawn at 64 for the round portrait, or 32 for an icon, colours as palette swaps; placeholder shapes until CR-19 |
 | `src/scene/dice.js` | The fight's d20s thrown over the scene, coming to rest on the numbers rolled (D99; `d20.js`: the die's shape and numbering) |
 | `src/scene/icons.js` | 32×32 icons (D98): items and fish (a default for each kind), the button row, the weather; the 64×64 event pictures (D142); rarity colours |
 | `src/ui/flight.js` | A catch's icon flying from the bobber to the bucket or bag |
@@ -123,6 +127,7 @@ and the art sheet at `/art.html` there.
 | `src/ui/menu.js` | A fish's options on right-click or long-press (R21.1) |
 | `src/audio.js` | Sound: placeholder sounds made with the Web Audio API, and the volume (9.2) |
 | `editor.html`, `tools/editor/editor.js` | The content editor (7.5): opens `content/` in Chrome or Edge, a form per file from its schema; not published |
+| `tools/names.mjs` | `npm run names`: the owner's name lists (`docs/names/*.csv`, local only) into `content/names/`, then `npm run content` |
 | `tools/sim.mjs` | `npm run sim`: seeded games played headless per class, for balance (9.1) |
 | `tools/areas.mjs` | `npm run areas`: the areas of the game and their files, kept by hand, and `docs/areas.md` written from them (D184) |
 | `tools/prompts.mjs` | `npm run prompts`: the owner's prompts per Claude Code session, added to `docs/prompts.json` |

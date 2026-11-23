@@ -70,6 +70,9 @@ import { bagPane, bucketPane, journalPane, menuPane, playerPane, settingsPane, s
 import { floatText } from './ui/floater.js';
 import { bindTip, hideTip } from './ui/tooltip.js';
 import { eventIcon, iconName, paintIcon, weatherIcon } from './scene/icons.js';
+import { paintFace } from './scene/faces.js';
+import { PART_NAMES, PEOPLES, optionsFor, refit, rollPart, stepPart } from './engine/looks.js';
+import { personName, playerLook, townsperson } from './engine/people.js';
 import { equip, fits, hookFish, isTiny, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_SLOTS } from './engine/equipment.js';
 import { setupDrag } from './ui/drag.js';
 import { showError } from './ui/errors.js';
@@ -507,8 +510,11 @@ function openEvent() {
   const words = eventWords(state);
   const say = (/** @type {string[]} */ keys) => sayEventText(keys, words, state?.flags);
   $('eventTitle').textContent = say(slide.title);
-  // Its picture in the round frame, or the old scroll (D142).
-  $('eventArt').replaceChildren(paintIcon(eventIcon(slide.art)));
+  // Its picture in the round frame, or the old scroll (D142); or someone's face, with their name under the title (D187, D188).
+  const who = slide.face && content.people[slide.face] ? townsperson(slide.face) : null;
+  $('eventArt').replaceChildren(who ? paintFace(who) : paintIcon(eventIcon(slide.art)));
+  $('eventWho').hidden = !who;
+  $('eventWho').textContent = who ? personName(who) : '';
   $('eventText').replaceChildren(
     ...say(slide.text).split('\n\n').map((p) => Object.assign(document.createElement('p'), { textContent: p })),
   );
@@ -1085,6 +1091,15 @@ bindTip($('weather'), () => {
 
 function renderHud() {
   if (!state) return;
+  // The character's button shows the player's face (8.13, D188), at 32 like the other icons.
+  const player = $('player');
+  const face = JSON.stringify(state.character.look);
+  if (player.dataset.face !== face) {
+    const art = paintFace(state.character.look, 32);
+    art.className = 'icon';
+    player.querySelector('canvas')?.replaceWith(art);
+    player.dataset.face = face;
+  }
   const now = clock(state.time);
   $('timeOfDay').textContent = t(`time.${now.partOfDay}`);
   $('seasonDay').textContent = t('hud.seasonDay', { weekday: t(`weekday.${now.weekday}`), season: t(content.weather[now.season].name), day: now.day });
@@ -1963,8 +1978,20 @@ function openCreation(chosen) {
   let gender = /** @type {'m' | 'f'} */ (dice.getRandomNumber(0, 1) ? 'f' : 'm');
   let classId = list[dice.getRandomNumber(0, list.length - 1)].id;
   let stats = rollStats(classId, dice);
+  // The face (8.13, D187): rolled from the seed as an old save's is, then picked over part by part. The creator's
+  // own rolls come from a stream of the seed's too (D4), though nothing they change is an outcome.
+  const lookSeed = deriveSeed(seed, 'player');
+  const lookRng = createRng(deriveSeed(seed, 'look'));
+  let look = playerLook(seed, gender);
+  /** @type {'who' | 'look'} */
+  let page = 'who';
 
   $('createTitle').textContent = t('create.title');
+  $('createTabWho').textContent = t('create.page.who');
+  $('createTabLook').textContent = t('create.page.look');
+  $('createPeopleLabel').textContent = t('create.people');
+  const d20 = paintIcon('ui/d20');
+  $('createRollLook').replaceChildren(d20, t('create.rollLook'));
   $('createNameLabel').textContent = t('create.name');
   $('createRerollName').textContent = t('create.rerollName');
   $('createGenderLabel').textContent = t('create.gender');
@@ -2004,12 +2031,88 @@ function openCreation(chosen) {
     );
   }
 
+  /**
+   * The appearance page (8.13): a row per part the player's people has a choice of, WoW's arrows either side of
+   * which one it is, and a small roll for that part alone (D29).
+   */
+  function drawParts() {
+    $('createParts').replaceChildren(
+      ...PART_NAMES.filter((part) => optionsFor(part, look.people, look.sex).length > 1).map((part) => {
+        const ids = optionsFor(part, look.people, look.sex).map((o) => o.id);
+        const name = t(`look.${part}`);
+        const at = ids.indexOf(/** @type {Record<string, string>} */ (/** @type {unknown} */ (look))[part]);
+        const button = (/** @type {string} */ text, /** @type {string} */ label, /** @type {() => void} */ onclick) => {
+          const b = Object.assign(document.createElement('button'), { type: 'button', textContent: text, onclick });
+          b.setAttribute('aria-label', label);
+          b.title = label;
+          return b;
+        };
+        const roll = button('', t('create.rollPart', { part: name.toLowerCase() }), () => {
+          // Another one than it has, if the list allows: a roll that changes nothing looks broken.
+          let id = rollPart(part, look.people, look.sex, lookRng);
+          for (let i = 0; i < 8 && id === /** @type {Record<string, string>} */ (/** @type {unknown} */ (look))[part]; i++) id = rollPart(part, look.people, look.sex, lookRng);
+          look = { ...look, [part]: id };
+          drawLook();
+        });
+        roll.className = 'roll';
+        roll.append(paintIcon('ui/d20'));
+        const row = document.createElement('div');
+        row.className = 'look-part';
+        row.dataset.part = part;
+        row.append(
+          Object.assign(document.createElement('span'), { className: 'label', textContent: name }),
+          button('‹', t('create.prev', { part: name }), () => {
+            look = stepPart(look, part, -1);
+            drawLook();
+          }),
+          Object.assign(document.createElement('span'), { className: 'which', textContent: t('create.option', { n: at + 1, count: ids.length }) }),
+          button('›', t('create.next', { part: name }), () => {
+            look = stepPart(look, part, 1);
+            drawLook();
+          }),
+          roll,
+        );
+        return row;
+      }),
+    );
+  }
+  function drawLook() {
+    $('createFace').replaceChildren(paintFace(look));
+    drawParts();
+  }
+  function showPage() {
+    $('createWho').hidden = page !== 'who';
+    $('createLook').hidden = page !== 'look';
+    $('createTabWho').setAttribute('aria-selected', String(page === 'who'));
+    $('createTabLook').setAttribute('aria-selected', String(page === 'look'));
+  }
+  $('createTabWho').onclick = () => {
+    page = 'who';
+    showPage();
+  };
+  $('createTabLook').onclick = () => {
+    page = 'look';
+    showPage();
+  };
+  $('createRollLook').onclick = () => {
+    for (const part of PART_NAMES) look = { ...look, [part]: rollPart(part, look.people, look.sex, lookRng) };
+    drawLook();
+  };
+  showPage();
+
   const statKeys = /** @type {const} */ (['fishingSkill', 'fishFind', 'treasureFind']);
   function draw() {
     radios($('createGender'), 'gender', [{ value: 'm', label: t('create.gender.m') }, { value: 'f', label: t('create.gender.f') }], gender, (v) => {
       gender = /** @type {'m' | 'f'} */ (v);
+      look = refit(look, look.people, gender, lookSeed);
       draw();
     });
+    // The player picks their people (D188); what they change in play is 8.15's.
+    radios($('createPeople'), 'people', PEOPLES.map((p) => ({ value: p, label: t(`people.${p}`) })), look.people, (v) => {
+      look = refit(look, /** @type {import('./engine/looks.js').People} */ (v), gender, lookSeed);
+      draw();
+    });
+    drawLook();
     radios(
       $('createClass'),
       'class',
@@ -2046,7 +2149,7 @@ function openCreation(chosen) {
     e.preventDefault();
     const name = nameInput.value.trim() || generateName(dice);
     slot = chosen;
-    state = newGame({ seed, character: { name, gender, classId, stats, luck: 0, xp: 0, perks: {} }, month: new Date().getMonth() });
+    state = newGame({ seed, character: { name, gender, classId, stats, luck: 0, xp: 0, perks: {}, look }, month: new Date().getMonth() });
     // The player arrives at the start: a welcome, if there is one (D89).
     arrive(state);
     save(state);

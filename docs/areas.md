@@ -13,7 +13,7 @@ The seeded streams, the named dice, the game state and its save, migrations, set
 
 **Files:** `content/rules/new-game.json`, `schemas/common.schema.json`, `schemas/game-values.schema.json`, `schemas/new-game.schema.json`, `src/dice.js`, `src/engine/schedule.js`, `src/engine/state.js`, `src/engine/values.js`, `src/rng.js`, `src/save.js`, `src/settings.js`.
 
-**Tests:** `test/abilities.test.js`, `test/audio.test.js`, `test/buffbar.test.js`, `test/cast.test.js`, `test/champions.test.js`, `test/clouds.test.js`, `test/content.test.js`, `test/dice.test.js`, `test/effects.test.js`, `test/equipment.test.js`, `test/events.test.js`, `test/fish.test.js`, `test/game.test.js`, `test/moon.test.js`, `test/perks.test.js`, `test/rng.test.js`, `test/sky.test.js`, `test/time.test.js`, `test/town.test.js`, `test/weather.test.js`, `test/wind.test.js`.
+**Tests:** `test/abilities.test.js`, `test/audio.test.js`, `test/buffbar.test.js`, `test/cast.test.js`, `test/champions.test.js`, `test/clouds.test.js`, `test/content.test.js`, `test/dice.test.js`, `test/effects.test.js`, `test/equipment.test.js`, `test/events.test.js`, `test/fish.test.js`, `test/game.test.js`, `test/moon.test.js`, `test/people.test.js`, `test/perks.test.js`, `test/rng.test.js`, `test/sky.test.js`, `test/time.test.js`, `test/town.test.js`, `test/weather.test.js`, `test/wind.test.js`.
 
 **Requirements** (`docs/spec.md`): R1, R2.2, R2.3, R2.4, R3.1, R3.3, R3.4, R3.5, R3.6, R4.2, R5.1, R5.2, R5.3, R6.1, R6.6, R8.5, R8.6, R9.1, R10, R10.8, R11.1, R11.8, R12, R13.1, R14, R15.5, R17.3, R17.5, R17.6, R18.2, R19.1, R19.2, R19.4, R19.5, R20.3.
 
@@ -29,6 +29,8 @@ The seeded streams, the named dice, the game state and its save, migrations, set
 - `docs/sources.md`: Spawning (D149)
 - `docs/sources.md`: Who eats whom (D152, D155)
 - `docs/sources.md`: Taste (D138)
+- `docs/sources.md`: People's names (D187)
+- `docs/sources.md`: Faces (D187, D188)
 
 **Decisions:**
 
@@ -87,6 +89,8 @@ The seeded streams, the named dice, the game state and its save, migrations, set
 - D171 The open water is the default scene, for testing the sky in each spot's facing
 - D172 The stew's cooking and the inn's good morning are taken back; the stew's buff stands still in town and asleep instead
 - D176 The wind has a direction, on a hexflower like the weather's
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D188 The three peoples: how they look, what they are called, and the player's pick
 
 ## The cast, the bite and the catch
 
@@ -367,6 +371,8 @@ The PixiJS scene, its sizing, the painted spots, sprites and icons, the title, a
 - `docs/sources.md`: Sizes, difficulty and rarity (D101, D104)
 - `docs/sources.md`: Spawning (D149)
 - `docs/sources.md`: Shoaling (D151, D154)
+- `docs/sources.md`: People's names (D187)
+- `docs/sources.md`: Faces (D187, D188)
 
 **Traps** (each file's `Trap:` lines; the file has the detail):
 
@@ -424,6 +430,8 @@ The PixiJS scene, its sizing, the painted spots, sprites and icons, the title, a
 - D176 The wind has a direction, on a hexflower like the weather's
 - D177 The wind works the water
 - D186 README.md's file map names every source file
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D188 The three peoples: how they look, what they are called, and the player's pick
 
 ## The character, perks and items
 
@@ -508,6 +516,8 @@ Locations and spots, the map, events and their words, the town and its people.
 - `docs/sources.md`: Sizes, difficulty and rarity (D101, D104)
 - `docs/sources.md`: Plants (D150)
 - `docs/sources.md`: Who eats whom (D152, D155)
+- `docs/sources.md`: People's names (D187)
+- `docs/sources.md`: Faces (D187, D188)
 
 **Traps** (each file's `Trap:` lines; the file has the detail):
 
@@ -550,6 +560,39 @@ Locations and spots, the map, events and their words, the town and its people.
 - D166 Each spot that shows sky has a compass facing, and every spot sees the same 60° of it
 - D171 The open water is the default scene, for testing the sky in each spot's facing
 - D172 The stew's cooking and the inn's good morning are taken back; the stew's buff stands still in town and asleep instead
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+
+## People: faces and names
+
+How people look and what they are called: the parts and colours of a face, portraits drawn from them, the peoples' names, the named townsfolk, strangers, the player's look.
+
+**Files:** `content/names/`, `content/people/`, `schemas/name-list.schema.json`, `schemas/person.schema.json`, `src/engine/looks.js`, `src/engine/people.js`, `src/scene/faces.js`, `tools/names.mjs`.
+
+**Tests:** `test/people.test.js`.
+
+**Requirements** (`docs/spec.md`): R7.3.
+
+**Read also:**
+
+- `docs/sources.md`: People's names (D187)
+- `docs/sources.md`: Faces (D187, D188)
+
+**Traps** (each file's `Trap:` lines; the file has the detail):
+
+- `src/engine/looks.js`: Each part is rolled on its own label of the person's seed (`face.<part>`, D187), never one stream for the whole face.
+- `src/engine/looks.js`: An option's id is what a save and a content recipe store: rename one and every look that named it falls back to a roll.
+- `src/engine/people.js`: The seed never comes from the name (D187).
+- `src/scene/faces.js`: Draw inside the circle (D142): what lies in the square's corners is cut off.
+
+**Decisions:**
+
+- D19 Class names are the prototype's
+- D29 UI: when in doubt, copy World of Warcraft
+- D44 Saves outlive content changes _(refined by D101)_
+- D46 Player-facing text goes through a string table from the start
+- D142 Event pictures are icons, in a round portrait
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D188 The three peoples: how they look, what they are called, and the player's pick
 
 ## The page: layout, UI and text
 
@@ -557,7 +600,7 @@ The page around the scene: layout and themes, panes, tooltips, the log, the bars
 
 **Files:** `src/ui/`, `index.html`, `src/audio.js`, `src/dev.js`, `src/main.js`, `src/strings.js`, `styles.css`, `tools/obsidian.py`, `tools/planks.py`.
 
-**Tests:** `test/audio.test.js`, `test/buffbar.test.js`, `test/content.test.js`, `test/effects.test.js`, `test/events.test.js`, `test/fish.test.js`, `test/hud.test.js`, `test/weather.test.js`.
+**Tests:** `test/audio.test.js`, `test/buffbar.test.js`, `test/content.test.js`, `test/effects.test.js`, `test/events.test.js`, `test/fish.test.js`, `test/hud.test.js`, `test/people.test.js`, `test/weather.test.js`.
 
 **Requirements** (`docs/spec.md`): R2.1, R2.6, R4.2, R4.3, R4.4, R4.5, R5, R5.2, R5.3, R6.6, R7.3, R7.6, R8.1, R8.6, R8.7, R9.5, R10, R10.8, R12.3, R12.4, R13.4, R15.5, R16.2, R16.3, R16.4, R16.5, R17, R17.1, R17.5, R18.2, R18.7, R18.8, R19.2, R19.3, R19.4, R19.5, R20.2, R20.3, R20.4, R21.1.
 
@@ -577,6 +620,8 @@ The page around the scene: layout and themes, panes, tooltips, the log, the bars
 - `docs/sources.md`: Who eats whom (D152, D155)
 - `docs/sources.md`: Endangered fish (D140)
 - `docs/sources.md`: Taste (D138)
+- `docs/sources.md`: People's names (D187)
+- `docs/sources.md`: Faces (D187, D188)
 
 **Traps** (each file's `Trap:` lines; the file has the detail):
 
@@ -676,6 +721,8 @@ The page around the scene: layout and themes, panes, tooltips, the log, the bars
 - D168 The moon counts for the fish, in all four ways the owner asked for
 - D176 The wind has a direction, on a hexflower like the weather's
 - D186 README.md's file map names every source file
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D188 The three peoples: how they look, what they are called, and the player's pick
 
 ## Tools, checks and publishing
 
@@ -700,6 +747,8 @@ The content build and editor, the browser checks, the balance sim, the single-fi
 - `docs/sources.md`: Fight styles (D141)
 - `docs/sources.md`: Shoaling (D151, D154)
 - `docs/sources.md`: Taste (D138)
+- `docs/sources.md`: People's names (D187)
+- `docs/sources.md`: Faces (D187, D188)
 
 **Decisions:**
 
@@ -752,3 +801,5 @@ The content build and editor, the browser checks, the balance sim, the single-fi
 - D176 The wind has a direction, on a hexflower like the weather's
 - D184 An index of where to look, by area
 - D186 README.md's file map names every source file
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D188 The three peoples: how they look, what they are called, and the player's pick

@@ -1,0 +1,8 @@
+{
+  "$schema": "../../schemas/person.schema.json",
+  "id": "junk-collector",
+  "placeholder": true,
+  "people": "human",
+  "sex": "f",
+  "role": "Ragpicker"
+}

@@ -29,6 +29,27 @@ Newest first.
 
 ## Faces and town figures (2026-11-23, D187)
 
+Calls Claude made building 8.13 (docs/history.md; the colours' reasons in docs/sources.md, "Faces"):
+
+- **The peoples' colours:** ten human skins, the orcs' four greens, three greys and seven bricks, ten hair colours
+  (orcs without the blonds and ginger), eight eye colours (orcs amber, red, yellow or dark), eleven clothes. The art
+  sheet's Palettes section shows them all. Too many, too few, wrong shades?
+- **The part lists:** five human heads, four dwarf and four orc (one "heavy" jaw for orcs); three ear shapes each
+  (orcs' pointed, long or notched); six eyes, six brows, five noses (orcs a flat nose or a snout), six mouths; six
+  beards; four tusks (small, big, one, upturned); ten hairstyles; six hats and hoods besides none. Any to add or
+  drop?
+- **Most people are bareheaded:** "no hat" weighs as much as all six hats together, so hair shows. **No bald women**
+  from a roll (the player can still pick it).
+- **Strangers are 8 in 10 human, 1 dwarf, 1 orc.**
+- **The two codenamed roles:** the scrap dealer is "the Tinker" and the junk collector "the Ragpicker", both
+  placeholders. The scholar is a human man or woman as the roll falls; the innkeeper too.
+- **Names under the event's title:** the portrait's person is named under the title ("Bogna the Innkeeper"), in the
+  muted colour. WoW names the quest giver in its own frame; fine like this?
+- **The creator's pages:** Character (name, gender, people, class, stats) and Appearance (the parts), as tabs; the
+  face sits over both and stays in sight while the parts scroll on a phone. The people is on the first page, next to
+  gender. Each part's row shows "3 / 10", as WoW numbers its options, rather than a name for each.
+- **A pointed hat or a mohawk can poke out of the circle's top:** cut off, as D142 says of the corners.
+
 - **The 3D page lives in this repo,** next to `editor.html`, not in a project of its own, so it can read the game's
   palette and parts. Say if you'd rather it were separate.
 - **The player's roll button** rerolls the whole face, and each part has its own small roll as well. The button would

@@ -21,6 +21,8 @@ const KINDS = {
   features: 'feature',
   perks: 'perk',
   sets: 'set',
+  names: 'name-list',
+  people: 'person',
   rules: null, // each rule file has its own schema, named after its id
   events: 'text',
 };

@@ -6638,6 +6638,48 @@ Object.assign(OWN_KEYS, {
   },
 });
 
+// The creator's roll button (8.13): a d20 seen face on, drawn as code from the die's shape (src/scene/d20.js).
+// A placeholder until CR-19.
+Object.assign(ICONS, {
+  'ui/d20': [
+    '................................',
+    '...............kk...............',
+    '..............keek..............',
+    '............kkieeikk............',
+    '..........kkiiieeiiikk..........',
+    '.........kiiiiieeiiiiik.........',
+    '.......kkiiiiiieeiiiiiikk.......',
+    '......kiiiiiiiieeiiiiiiiik......',
+    '....kkieeeeeeeeeeeeeeeeeeikk....',
+    '...keeeeeeiiiiieeiiiiieeeeeek...',
+    '...kiiiiiiiiiieIIeiiiiiiiiiik...',
+    '...kiiiiiiiiieeIIeeiiiiiiiiik...',
+    '...kiiiiiiiiieIIIIeiiiiiiiiik...',
+    '...kiiiiiiiieeIIIIeeiiiiiiiik...',
+    '...kiiiiiiiieIIIIIIeiiiiiiiik...',
+    '...kiiiiiiieIIIIIIIIeiiiiiiik...',
+    '...kiiiiiieeIkkIIIkIeeiiiiiik...',
+    '...kiiiiiieIIIIkIkIkIeiiiiiik...',
+    '...kiiiiieIIIIkIIkIkIIeiiiiik...',
+    '...kiiiieeIIIkkkIIkIIIeeiiiik...',
+    '...kiiiieIIIIIIIIIIIIIIeiiiik...',
+    '...kiiieeIIIIIIIIIIIIIIeeiiik...',
+    '...kiiieeeeeeeeeeeeeeeeeeiiik...',
+    '...keeeeeeeeeeeeeeeeeeeeeeeek...',
+    '....kkiieeiiiiiiiiiiiieeiikk....',
+    '......kiieeiiiiiiiiiieeiik......',
+    '.......kkieeiiiiiiiieeikk.......',
+    '.........kieeiiiiiieeik.........',
+    '..........kkeeiiiieekk..........',
+    '............kkeiiekk............',
+    '..............keek..............',
+    '...............kk...............',
+  ],
+});
+Object.assign(OWN_KEYS, {
+  'ui/d20': { k: '#1b2b34', I: '#f6efdc', i: '#e4d8bb', e: '#b8a47c' },
+});
+
 /**
  * An event slide's picture (D142): the icon `event/<art>`, or the scroll.
  * @param {string | undefined} art
