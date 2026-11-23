@@ -203,3 +203,48 @@ test('a save from version 10 gains champions and their stream', () => {
   assert.deepEqual(migrated.book.champions, {});
   assert.equal(migrated.streams.champions, game(13).streams.champions);
 });
+
+test('what a rogue holds is not found again, and it snatches one of a Fence pair; Polish is used up by it (D106, D114)', () => {
+  const uniques = content.tables['common-treasure'].entries.map((/** @type {{ id: string }} */ e) => e.id).filter((/** @type {string} */ id) => content.items[id].unique);
+  const [left, ...held] = uniques;
+  // Every unique treasure here but one is the rogue's: only that one can come up.
+  let state = withChampion(game(60), 'rogue', { stolen: held, x: 230, y: 20 });
+  /** @type {import('../src/engine/values.js').Source[]} */
+  const treasures = [{ label: 'test', effects: [{ value: 'treasureFind', add: 200 }, { value: 'fishFind', add: -200 }, { value: 'stealChance', add: -200 }] }];
+  const seen = new Set();
+  for (let i = 0; i < 200; i++) {
+    const out = castLine(state, 0, { landing: { x: 60, y: 160 }, extra: treasures });
+    if (out.cast.line.kind === 'item') seen.add(out.cast.line.id);
+    state = { ...out.state, missStreak: 0 };
+  }
+  for (const id of held) assert.ok(!seen.has(id), `${id} is the rogue's`);
+  assert.ok(seen.has(left), 'the one left comes up');
+
+  // With Fence and Polish, everything that comes up stolen.
+  state = withChampion(game(60), 'rogue', { stolen: [], x: 230, y: 20 });
+  state = { ...state, buffs: [{ id: 'polish', source: 'polish', effects: [{ value: 'junkToTreasure', add: 1 }] }] };
+  /** @type {import('../src/engine/values.js').Source[]} */
+  const thief = [{ label: 'test', effects: [{ value: 'fishFind', add: -200 }, { value: 'stealChance', add: 200 }, { value: 'treasureChoice', add: 1 }] }];
+  let pair = false;
+  let polished = false;
+  for (let i = 0; i < 300 && !(pair && polished); i++) {
+    const out = castLine(state, 0, { landing: { x: 60, y: 160 }, extra: thief });
+    const line = out.cast.line;
+    const done = strikeOn(out.state, out.cast);
+    const stole = done.events.find((e) => e.type === 'champion-stole');
+    if (stole && line.kind === 'item') {
+      const before = championsHere(state)[0].stolen?.length ?? 0;
+      assert.equal(championsHere(done.state)[0].stolen?.length, before + 1, 'one item stolen');
+      assert.equal(done.state.pendingTreasure, null);
+      if (line.alt) pair = true;
+      if (line.polished) {
+        polished = true;
+        assert.ok(!done.state.buffs.some((b) => b.source === 'polish'), 'Polish is used up');
+      }
+    }
+    state = { ...done.state, missStreak: 0, bucket: [], pendingCatch: null, event: null };
+    if (!state.buffs.some((b) => b.source === 'polish')) state = { ...state, buffs: [...state.buffs, { id: 'polish', source: 'polish', effects: [{ value: 'junkToTreasure', add: 1 }] }] };
+  }
+  assert.ok(pair, 'a Fence pair came up');
+  assert.ok(polished, 'a polished find came up');
+});

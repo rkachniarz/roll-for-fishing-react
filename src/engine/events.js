@@ -344,7 +344,8 @@ function applyEffect(state, effect, dice) {
       state.features = [];
       // As with travel: a lit ability goes dark, and coming into the room the aquarium has had its days (D96, D152).
       state.lit = {};
-      const meals = loc?.town && state.spot === 'room' ? tankMeals(state) : [];
+      // The choice's own dice: it commits them once all its effects are done (D53).
+      const meals = loc?.town && state.spot === 'room' ? tankMeals(state, dice) : [];
       return [{ type: 'moved', location: state.location, spot: state.spot }, ...meals];
     }
     case 'lock':
@@ -382,9 +383,12 @@ function applyEffect(state, effect, dice) {
       if (!effect.open && state.location === effect.location) {
         const start = content.rules['new-game'];
         if (state.locked === effect.location) state.locked = null;
+        // As with `go`: the schools and big fish stay behind with their fish, and a lit ability goes dark.
+        partFish(state);
         state.location = start.location;
         state.spot = start.spot;
         state.features = [];
+        state.lit = {};
         out.push({ type: 'moved', location: start.location, spot: start.spot });
       }
       return out;

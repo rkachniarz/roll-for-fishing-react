@@ -409,3 +409,33 @@ test("the fish's roll shows from level 1, or with something that reveals it (R5.
   const bite = castLine(level0, 0, { extra: [FISH] }).cast.rolls.find((r) => r.kind === 'bite');
   assert.equal(bite?.visible, false, 'the bite roll stays hidden');
 });
+
+test('Jump In in the pause after a missed splash: no line goes out again under the dive', () => {
+  let s = hero('fish-fighter', { 1: 'jump-in' });
+  for (let i = 0; i < 300; i++) {
+    const out = castLine(s, 0);
+    if (out.cast.line.kind !== 'fish') {
+      s = { ...out.state, missStreak: 0, event: null };
+      continue;
+    }
+    // Never struck at: the splash runs out, and the pause before the line goes out again begins (D64).
+    const missed = tick(out.state, out.cast, out.cast.biteAt + out.cast.timing.lateMs + 1);
+    const done = /** @type {any} */ (missed.cast);
+    if (done.outcome?.result !== 'missed' || !missed.state.lit['jump-in']) {
+      s = { ...missed.state, missStreak: 0, event: null };
+      continue;
+    }
+    const dived = useAbility(missed.state, 'jump-in').state;
+    assert.ok(dived.dive, 'the dive began');
+    // The engine refuses a line under the water, the recast at the end of the pause included.
+    const cast = castLine(dived, 0);
+    assert.equal(cast.state, dived);
+    assert.equal(cast.cast.phase, 'idle');
+    const after = tick(dived, done, done.endedAt + done.missPause + 1);
+    assert.equal(after.cast.phase, 'idle');
+    assert.ok(!after.events.some((e) => e.type === 'recast'));
+    assert.equal(after.state.book.casts, dived.book.casts, 'no cast counted');
+    return;
+  }
+  assert.fail('no splash ever went unstruck');
+});

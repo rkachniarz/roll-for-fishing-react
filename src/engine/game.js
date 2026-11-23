@@ -250,6 +250,8 @@ export function castLine(state, now, { aim = null, bounds = null, landing = null
   if (state.pendingTreasure) {
     return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [{ type: 'treasure-choice' }] };
   }
+  // Nor under the water: the dive has the scene (R20.3), and a recast after a missed splash waits too.
+  if (state.dive) return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [] };
   // Nor while an event is open (D84).
   if (state.event) return { state, cast: /** @type {GameCast} */ ({ phase: 'idle' }), checkpoint: state, events: [] };
   // No water in town (R17.1).
@@ -644,12 +646,12 @@ function rollLoot(state, values, lootDice, effectDice, feature = null, rolls = [
       visible: false,
     });
     if (!feature?.junk && stuffRoll - stuffFind.total <= (loc.stuffThreshold ?? 0)) {
-      const stuff = pick(locationTable(where, 'stuff', { found: state.found }), lootDice);
+      const stuff = pick(locationTable(where, 'stuff', { found: claimed(state) }), lootDice);
       if (stuff?.id) return { line: { kind: 'item', id: stuff.id }, rolls };
       // Nothing left to find here: junk instead.
     }
   }
-  const junkTable = feature?.junk ? listTable(feature.junk, 'junk', { found: state.found }) : locationTable(where, 'junk', { found: state.found });
+  const junkTable = feature?.junk ? listTable(feature.junk, 'junk', { found: claimed(state) }) : locationTable(where, 'junk', { found: claimed(state) });
   const junk = pick(junkTable, lootDice);
   if (junk?.id && values.flat.junkToTreasure > 0) {
     // Polish: the junk turns out to be treasure, if any is left here (D106).
@@ -657,6 +659,20 @@ function rollLoot(state, values, lootDice, effectDice, feature = null, rolls = [
     if (treasure) return { line: { ...treasure, polished: true }, rolls };
   }
   return { line: junk?.id ? { kind: 'item', id: junk.id } : { kind: 'empty', reason: 'nothing' }, rolls };
+}
+
+/**
+ * What can't come up again as a unique find: what the player has found, and
+ * what a Rogue holds for them to win back (D114).
+ * @param {GameState} state
+ * @returns {Record<string, number>}
+ */
+function claimed(state) {
+  const stolen = Object.values(state.champions ?? {}).flat().flatMap((c) => c.stolen ?? []);
+  if (!stolen.length) return state.found;
+  const all = { ...state.found };
+  for (const id of stolen) all[id] = (all[id] ?? 0) + 1;
+  return all;
 }
 
 /**
@@ -668,7 +684,7 @@ function rollLoot(state, values, lootDice, effectDice, feature = null, rolls = [
  * @returns {ItemLine | null}  Null when every unique treasure here is found.
  */
 function pickTreasure(state, values, dice) {
-  const table = locationTable({ location: state.location, spot: state.spot }, 'treasure', { found: state.found });
+  const table = locationTable({ location: state.location, spot: state.spot }, 'treasure', { found: claimed(state) });
   const treasure = pick(table, dice);
   if (!treasure?.id) return null;
   const alt = values.flat.treasureChoice > 0 ? pick(table.filter((e) => e.id !== treasure.id), dice) : null;
@@ -824,8 +840,12 @@ function resolveCast(state, cast) {
       events.push({ type: 'caught', fish: shown, roll: cast.outcome.rolls[0], required: line.required, seenBefore: line.seenBefore });
       if (line.rift) events.push({ type: 'rift', fish });
       if (line.twin && !champion) {
-        catchFish(next, fish, cast.bucketSize);
-        events.push({ type: 'twin', fish });
+        // No room for both: the first waits for the player's choice, and the twin gets away (as in a dive, D59).
+        if (next.pendingCatch) events.push({ type: 'twin-escaped', fish });
+        else {
+          catchFish(next, fish, cast.bucketSize);
+          events.push({ type: 'twin', fish });
+        }
       }
       if (line.carried) {
         receive(next, line.carried);
@@ -889,9 +909,11 @@ function resolveCast(state, cast) {
   } else if (result === 'landed') {
     const rogue = line.kind === 'item' && line.stolen ? championsHere(next).find((c) => c.stolen) : null;
     if (line.kind === 'item' && rogue) {
-      // The Rogue has it, and the player gets it back by catching it (D114).
-      rogue.stolen = [...(rogue.stolen ?? []), line.id, ...(line.alt ? [line.alt] : [])];
-      events.push({ type: 'champion-stole', fish: rogue.fish, item: line.id, alt: line.alt });
+      // The Rogue has it, and the player gets it back by catching it (D114). With Fence it snatches the
+      // first and the other goes back into the water, not found; junk that Polish turned uses the buff up.
+      rogue.stolen = [...(rogue.stolen ?? []), line.id];
+      if (line.polished) next.buffs = next.buffs.filter((b) => b.source !== 'polish');
+      events.push({ type: 'champion-stole', fish: rogue.fish, item: line.id });
     } else if (line.kind === 'item') {
       receive(next, line);
       events.push({ type: 'found', item: line.id, alt: line.alt });

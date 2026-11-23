@@ -26,6 +26,7 @@ import { fishInBucket, valuesFor } from './game.js';
 /** @typedef {import('./state.js').GameState} GameState */
 /** @typedef {import('./fish.js').FishInstance} FishInstance */
 /** @typedef {import('./game.js').GameEvent} GameEvent */
+/** @typedef {ReturnType<import('../dice.js').diceFor>} Dice */
 /** @typedef {{ item?: string, fish?: string, rarity?: string, count: number }} Cost */
 /** @typedef {{ id: string, gives: { item?: string, count?: number, buff?: string }, costs: Cost[],
  *   needs?: import('../../tools/event-text.mjs').Need[] }} Offer */
@@ -395,9 +396,12 @@ export function tankDanger(state, fish) {
  * player comes into the room. Changes `state` in place; draws from `tank`
  * only when there is prey to eat.
  * @param {GameState} state
+ * @param {Record<string, Dice>} [given]  A caller's dice, for a caller that
+ *   commits its own afterwards (an event's choice): committing here too would
+ *   have the caller's commit write the old `tank` position back (D53).
  * @returns {GameEvent[]}
  */
-export function tankMeals(state) {
+export function tankMeals(state, given) {
   const rules = content.rules.tank;
   const today = Math.floor(state.time / (24 * 60));
   const tank = state.tank ?? { day: today, fedUntil: 0 };
@@ -406,7 +410,7 @@ export function tankMeals(state) {
   if (!days || !hasPerk(state, 'aquarium')) return [];
   /** @type {GameEvent[]} */
   const events = [];
-  const { dice, commit } = diceFrom(state);
+  const { dice, commit } = given ? { dice: given, commit: null } : diceFrom(state);
   let drew = false;
   for (let d = 0; d < days; d++) {
     // A fed tank: nobody hunts until the feeding wears off.
@@ -424,7 +428,7 @@ export function tankMeals(state) {
       break;
     }
   }
-  if (drew) state.streams = commit();
+  if (drew && commit) state.streams = commit();
   return events;
 }
 

@@ -839,3 +839,63 @@ test('a hidden place opens once its map fragments are found, and a quest can clo
     delete content.events['test-close'];
   }
 });
+
+test('a twin with no room in the bucket gets away, and the book and XP count one fish (D59, R19.4)', () => {
+  const size = valuesFor(game()).flat.bucketSize;
+  /** @type {import('../src/engine/values.js').Source[]} */
+  const twins = [{ label: 'test', effects: [{ value: 'twinChance', add: 100 }] }];
+  const roach = /** @type {any} */ ({ species: 'roach', subname: -1, band: 2, size: 20, difficulty: 1, xp: 1, rarity: 'common' });
+  for (const room of [0, 1]) {
+    let s = game();
+    let tried = false;
+    for (let i = 0; i < 500 && !tried; i++) {
+      s = { ...s, bucket: [{ fish: roach, count: size - room }], pendingCatch: null, missStreak: 0, event: null };
+      const out = castLine(s, 0, { extra: twins });
+      const done = strikeAfter(out.state, out.cast, 50);
+      s = done.state;
+      if (!done.events.some((e) => e.type === 'caught') || out.cast.line.kind !== 'fish' || !out.cast.line.twin) continue;
+      tried = true;
+      const fish = out.cast.line.fish;
+      const before = out.state.book.fish[fish.species]?.caught ?? 0;
+      if (room === 0) {
+        // Full: the first waits for the player's choice, the twin is gone.
+        assert.ok(done.events.some((e) => e.type === 'twin-escaped'));
+        assert.equal(done.state.book.fish[fish.species].caught, before + 1);
+        assert.equal(done.state.book.catches, out.state.book.catches + 1);
+      } else {
+        // Room for one: the first goes in, the twin waits.
+        assert.ok(done.events.some((e) => e.type === 'twin'));
+        assert.ok(done.state.pendingCatch);
+        assert.equal(done.state.book.fish[fish.species].caught, before + 2);
+      }
+    }
+    assert.ok(tried, 'a twin was caught');
+  }
+});
+
+test("an event that closes the player's place leaves its big fish's fish behind, and lit abilities go dark (D156, D96)", () => {
+  const place = { location: 'mage-tower', spot: 'the-first-pool' };
+  const key = `${place.location}/${place.spot}`;
+  const wild = /** @type {any} */ ({ species: 'roach', subname: -1, band: 2, size: 20, difficulty: 1, xp: 1, rarity: 'common', of: 5, wild: true });
+  const met = { ...wild, wild: undefined, size: 21 };
+  delete met.wild;
+  const s = /** @type {GameState} */ ({
+    ...game(),
+    ...place,
+    features: [/** @type {any} */ ({ id: 'big-fish', born: 5, x: 100, y: 100 })],
+    escaped: { [key]: [wild, met] },
+    lit: { 'jump-in': { fish: met } },
+  });
+  content.events['test-close'] = { id: 'test-close', title: ['x'], once: false, trigger: 'meter', needs: [], first: 'a',
+    slides: { a: { text: ['x'], choices: [{ text: ['x'], to: 'end', needs: [], effects: [{ kind: 'place', location: 'mage-tower', open: false }] }] } } };
+  try {
+    const closed = choose({ ...s, event: { id: 'test-close', slide: 'a' } }, 0).state;
+    assert.equal(closed.location, 'lake');
+    const pool = closed.escaped[key];
+    assert.equal(pool.length, 1, 'the wild one goes with its fish');
+    assert.equal(pool[0].of, undefined, 'the one met is the pool\'s own');
+    assert.deepEqual(closed.lit, {});
+  } finally {
+    delete content.events['test-close'];
+  }
+});

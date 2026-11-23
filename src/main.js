@@ -608,8 +608,9 @@ function useFromBar(id) {
     openDepthPicker();
     return;
   }
-  // A look under the water takes the scene: not while a line is out on it (D139).
-  if (id === 'look-underwater' && lineOut()) {
+  // A look under the water, or a dive, takes the scene: not while a line is out on it (D139), nor in the pause
+  // after a missed splash, when the line goes out again by itself (D64).
+  if ((id === 'look-underwater' || id === 'jump-in') && lineOut()) {
     showError($('errors'), t('error.ability.lineOut'));
     return;
   }
@@ -880,6 +881,7 @@ function describeEvent(e) {
     case 'stewed':
     case 'to-aquarium':
     case 'twin':
+    case 'twin-escaped':
       return tParts(`log.${e.type}`, { fish: fishLink(e.fish) });
     case 'dive-started':
       return [t('log.dive-started', { seconds: e.seconds })];
@@ -920,9 +922,7 @@ function describeEvent(e) {
     case 'champion-weather':
       return tParts('log.champion-weather', { fish: fishLink(e.fish), description: t(e.weather.description) });
     case 'champion-stole':
-      return e.alt
-        ? tParts('log.champion-stole-choice', { fish: fishLink(e.fish), item: itemLink(e.item), alt: itemLink(e.alt) })
-        : tParts('log.champion-stole', { fish: fishLink(e.fish), item: itemLink(e.item) });
+      return tParts('log.champion-stole', { fish: fishLink(e.fish), item: itemLink(e.item) });
     case 'champion-recovered':
       return tParts('log.champion-recovered', { item: itemLink(e.item) });
     case 'event-gained':
@@ -1695,7 +1695,8 @@ function strikeInDive(index) {
   audio.play('dice');
   logEvents(out.events);
   if (out.events.some((e) => e.type === 'dive-caught')) audio.play('catch');
-  save(state);
+  // Mid-cast the checkpoint stays the save (D74); no line goes out under a dive, but should one be out, it holds.
+  if (!castInProgress()) save(state);
   render();
   promptPlayer();
 }
@@ -1742,7 +1743,7 @@ function finishDive() {
   const out = endDive(state);
   state = out.state;
   logEvents(out.events);
-  save(state);
+  if (!castInProgress()) save(state);
   render();
 }
 

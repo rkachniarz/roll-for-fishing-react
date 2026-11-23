@@ -459,6 +459,7 @@ Classes, levels, perks and abilities, buffs, equipment and bags, vendors and bar
 - D32 Timed buffs and debuffs count down only while the game is open _(refined by D127)_
 - D39 What bait does, and how it is used up _(refined by D61 and D101)_
 - D41 Any fish landed in the Tiny size band can be used as bait
+- D53 The save holds the position of every random stream
 - D57 The bucket holds 16 fish by default _(refined by D59)_
 - D58 Spots stay, chosen on a map
 - D59 A full bucket makes the player release a fish _(refined by D60 and D139)_
@@ -522,6 +523,7 @@ Locations and spots, the map, events and their words, the town and its people.
 - D44 Saves outlive content changes _(refined by D101)_
 - D45 Events are written as text _(refined by D56; settled by D84)_
 - D51 Quests are events linked by flags
+- D53 The save holds the position of every random stream
 - D58 Spots stay, chosen on a map
 - D83 Equipment slots, and moving items by drag and right-click
 - D84 The event format and the event engine _(refined by D87, D88 and D89)_

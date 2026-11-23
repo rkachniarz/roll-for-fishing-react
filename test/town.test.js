@@ -1051,3 +1051,14 @@ test('a save from version 11 loads, its welcome behind it', () => {
   assert.deepEqual(s.stewPot, []);
   assert.equal(s.eventsSeen.welcome, 1);
 });
+
+test("going up to the room by an event moves the tank's stream on, so the next visit rolls anew (D53, D152)", () => {
+  const pike = { ...fish('northern-pike', 'rare', 90) };
+  const roach = { ...fish('roach', 'common', 20) };
+  let s = /** @type {GameState} */ ({ ...game({ day: 100 }), location: 'town', spot: 'inn', event: { id: 'the-inn', slide: 'start' } });
+  s.character = { ...s.character, xp: content.rules.levels.xp[2], perks: { 2: 'aquarium' } };
+  const up = content.events['the-inn'].slides.start.choices.findIndex((/** @type {any} */ c) => (c.effects ?? []).some((/** @type {any} */ e) => e.kind === 'go' && e.spot === 'room'));
+  s = { ...s, aquarium: [pike, roach], tank: { day: 100, fedUntil: 0 }, time: s.time + 7 * DAY };
+  const up1 = choose(s, up).state;
+  assert.notEqual(up1.streams.tank, s.streams.tank, 'the tank drew, and its draws were kept');
+});

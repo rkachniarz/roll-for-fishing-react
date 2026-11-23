@@ -27,6 +27,19 @@ Items with no note are left alone.
 
 Newest first.
 
+## Code review fixes, batch A (2026-11-23)
+
+Calls Claude made while fixing the engine and the save (DEV_PLAN.md, "Code review fixes"):
+
+- **Jump In is refused in the pause after a missed splash** ("Not while your line is out."), as Look Underwater is:
+  the line goes out again by itself when the pause ends. To dive after a fish that missed the splash, the player
+  reels in first (a tap in the pause). Should Jump In reel in by itself instead?
+- **A Rogue snatches only the first of a Fence pair;** the other goes back into the water, not found, so a unique one
+  can come up again. Before, it took both and gave both back when caught, which beat Fence's choice. The log line for
+  two stolen items is gone. Would you rather the Rogue left the second for the player?
+- **A twin with no room in the bucket gets away,** with its own line in the log: "It had a twin, another {fish}, but
+  with no room in your bucket it slipped away." (a placeholder, `PLACEHOLDER_UI`).
+
 ## Broken masses no longer cut off straight (2026-11-21, after D170)
 
 The owner saw clouds in the mostly cloudy sky cut off straight on one side. The broken masses (`mass-a`, `mass-b`,
