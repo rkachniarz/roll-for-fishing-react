@@ -82,7 +82,7 @@ of the planned placeholder shapes; the town, the inn, barter, the stew and the A
   consumables and gear as the reward (7.7 and 7.8 are built; town questions 26–29).
 - [ ] **8.9** Companions at the fishing spot: the cat, once it trusts the player (`docs/ideas.md`, town questions
   30–32). A placeholder cat until CR-5.
-- [ ] **8.13** Faces and names from parts (D187). First, the owner's name lists (`docs/names/`: first names, male
+- [ ] **8.13** Faces and names from parts (D187, D188). First, the owner's name lists (`docs/names/`: first names, male
   and female, and surnames for dwarves, humans and orcs; one-column CSVs, gitignored) imported into `content/` in
   the format the content checks want, by a tool that can be run again when the lists change, the CSVs staying where
   they are. Then: an appearance recipe per person, with their people, name list and name, read by both the portrait
@@ -92,6 +92,12 @@ of the planned placeholder shapes; the town, the inn, barter, the stew and the A
   creator, picking each part with a roll button for the face and for one part. Placeholder shapes for every part
   until CR-19. A test bed on the art sheet that rolls thirty faces at once, each with its name under it, to see how
   many look like twins. The player's name keeps the prototype's generator (`generateName`).
+  *The owner's answers (2026-11-23), in D188:* names read `Name the Role`, or `Name Surname` without a role; beards
+  for dwarves only, women too; tusks for orcs; skin palettes per people (human: real human range; orc: greens, greys,
+  brick colours; dwarf: both but no greens); the town mostly human; the player picks their people on the new-game
+  screen (a second page if needed); the face is the character pane's icon, and bigger in the pane if it fits; no
+  migration for old saves. First recipes: the innkeeper, the Alchemist (an orc), the scholar, the scrap dealer (a
+  dwarf) and the junk collector (a woman).
 - [ ] **8.14** Town figures from a 3D stand-in (D187): a page in this repo (as `editor.html` is; three.js as an ES
   module, no build step) where a scene's painting sits behind a few boxes and sliders move the camera (height, angle,
   lens) and the light until the boxes sit on the painted floor, bar and table; blocky figures posed there with short
@@ -99,6 +105,9 @@ of the planned placeholder shapes; the town, the inn, barter, the stew and the A
   outlined and snapped to the palette, one layer at a time from the same pose, exported for `npm run sprite import`.
   Free CC0 animated low-poly characters (Quaternius, for one) may stand in for hand-built figures once their licence is
   checked, credited in `assets/CREDITS.md`. Needs a painted interior to fit to; until then, the inn's placeholder.
+- [ ] **8.15** The peoples in play (D188): what being a dwarf, a human or an orc changes for the player beyond looks,
+  and `{race}` in events (`docs/events.md`), so an event can name the player's people or branch on it. Questions for
+  the owner before it starts: which differences (stats, perks, prices, how townsfolk greet them), and how big.
 
 ## Phase 9: Balance and finish
 

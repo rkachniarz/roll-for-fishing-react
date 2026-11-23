@@ -35,6 +35,11 @@ Newest first.
   show a d20.
 - **The silhouette first:** the parts are drawn biggest shapes first (hair, hats, beards, head width), on the guess
   that small features hardly tell faces apart at 64×64. The thirty-faces test bed in 8.13 is there to check it.
+- **Brick colours** for orc skin, as Claude reads them: brick red, orange-red, ochre and sandy yellow, clay brown,
+  dark purple-brown, and the near-black of engineering brick (D188). Say if you meant fewer.
+- **The junk collector is a woman,** read from "junk lady" (D188).
+- **The peoples' differences in play are a task of their own** (8.15), after the faces, so 8.13 builds only the
+  looks and the player's pick.
 
 ## Code review fixes, batch D (2026-11-23)
 
