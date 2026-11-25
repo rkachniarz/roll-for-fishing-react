@@ -106,7 +106,18 @@ export function stranger(seed, label) {
  */
 export function playerLook(seed, sex, people) {
   const own = deriveSeed(seed, 'player');
-  return rollLook(own, people ?? PEOPLES[draw(own, 'people').int(PEOPLES.length)], sex);
+  return { ...rollLook(own, people ?? PEOPLES[draw(own, 'people').int(PEOPLES.length)], sex), ...PLAYER_FIXED };
+}
+
+/**
+ * The parts the player doesn't pick (D189): a fisher starts bareheaded, and a hat on the face will be one they
+ * wear (visible equipment), not one they were made with. The creator leaves these out of its rows and its roll.
+ */
+export const PLAYER_FIXED = /** @type {const} */ ({ hat: 'none' });
+
+/** @param {string} part */
+export function playerPicks(part) {
+  return !(part in PLAYER_FIXED);
 }
 
 /**

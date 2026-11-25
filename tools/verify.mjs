@@ -709,12 +709,31 @@ await check('the creator: a people, the face part by part, then the face on the 
   await page.click('#slot-2');
   await page.waitForSelector('#create[open]', { timeout: 2000 });
   const face = () => page.evaluate(() => /** @type {HTMLCanvasElement} */ (document.querySelector('#createFace canvas')).toDataURL());
+  const faceSize = () => page.evaluate(() => /** @type {HTMLElement} */ (document.querySelector('#createFace canvas')).getBoundingClientRect().width);
+  const untouched = await page.textContent('#createTitle');
+  await page.click('#createRerollName');
+  const heading = [untouched, await page.textContent('#createTitle'), await page.inputValue('#createName')];
+  report("the creator: the heading becomes the character's name once it is rolled (D189)", heading[0] === 'A new fisher' && heading[1] === heading[2], heading.join(' / '));
   await page.click('#createPeople label:has-text("Dwarf")');
+  const small = await faceSize();
   await page.click('#createTabLook');
+  const big = await faceSize();
+  report('the creator: the face at least 30% bigger on the appearance page (D189)', big >= small * 1.3, `${small} -> ${big}`);
   const pages = [await page.isVisible('#createLook'), await page.isVisible('#createWho')];
   report('the creator: the appearance on a page of its own', pages.join() === 'true,false', pages.join());
   const rows = await page.evaluate(() => [...document.querySelectorAll('.look-part')].map((r) => /** @type {HTMLElement} */ (r).dataset.part));
   report('the creator: a dwarf has beards to pick and no tusks', rows.includes('beard') && !rows.includes('tusks'), rows.join(', '));
+  report('the creator: no hat to pick and no roll per part (D189)', !rows.includes('hat') && (await page.locator('.look-part .roll').count()) === 0, rows.join(', '));
+  // Scrolled to the last part, the face and Go fishing are still in sight.
+  await page.locator('.look-part').last().scrollIntoViewIfNeeded();
+  const inSight = await page.evaluate(() => {
+    const box = /** @type {HTMLElement} */ (document.querySelector('#create')).getBoundingClientRect();
+    const at = (/** @type {string} */ sel) => /** @type {HTMLElement} */ (document.querySelector(sel)).getBoundingClientRect();
+    const face = at('#createFace');
+    const go = at('#createStart');
+    return face.top >= box.top && face.bottom <= box.bottom && go.top >= box.top && go.bottom <= box.bottom;
+  });
+  report('the creator: the face and Go fishing stay put while the parts scroll (D189)', inSight);
   const before = await face();
   const which = await page.textContent('.look-part[data-part="skin"] .which');
   await page.click('.look-part[data-part="skin"] button:nth-of-type(2)');
@@ -745,6 +764,20 @@ await check('new game over a slot: the old game stays until the character is mad
   await page.click('#slot-1');
   await page.waitForSelector('#create[open]', { timeout: 2000 });
   report('new game over a slot: kept during creation', (await page.evaluate(() => localStorage.getItem('roll-for-fishing:save:1'))) === before);
+  // Left by the X, then by the browser's Back: the title screen each time, the game still there (D189).
+  await page.click('#createClose');
+  const byX = [await page.isVisible('#create'), await page.isVisible('#titleContinue'), await page.evaluate(() => location.hash)];
+  report('the creator: the X leaves for the title screen', byX.join() === 'false,true,', byX.join());
+  await page.click('#titleNew');
+  await page.click('#slot-1');
+  await page.waitForSelector('#create[open]', { timeout: 2000 });
+  await page.goBack();
+  await page.waitForSelector('#title[open]', { timeout: 2000 });
+  const byBack = [await page.isVisible('#create'), await page.isVisible('#titleContinue')];
+  report("the creator: the browser's Back leaves for the title screen", byBack.join() === 'false,true', byBack.join());
+  await page.click('#titleNew');
+  await page.click('#slot-1');
+  await page.waitForSelector('#create[open]', { timeout: 2000 });
   // The tab closed during creation: the game is still there to continue.
   await page.reload();
   await page.waitForSelector('#title[open]', { timeout: 15000 });

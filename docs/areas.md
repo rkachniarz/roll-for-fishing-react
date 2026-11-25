@@ -90,7 +90,8 @@ The seeded streams, the named dice, the game state and its save, migrations, set
 - D172 The stew's cooking and the inn's good morning are taken back; the stew's buff stands still in town and asleep instead
 - D176 The wind has a direction, on a hexflower like the weather's
 - D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
-- D188 The three peoples: how they look, what they are called, and the player's pick
+- D188 The three peoples: how they look, what they are called, and the player's pick _(refined by D189)_
+- D189 The creator, after the owner's first go on a phone
 
 ## The cast, the bite and the catch
 
@@ -431,7 +432,7 @@ The PixiJS scene, its sizing, the painted spots, sprites and icons, the title, a
 - D177 The wind works the water
 - D186 README.md's file map names every source file
 - D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
-- D188 The three peoples: how they look, what they are called, and the player's pick
+- D188 The three peoples: how they look, what they are called, and the player's pick _(refined by D189)_
 
 ## The character, perks and items
 
@@ -592,7 +593,8 @@ How people look and what they are called: the parts and colours of a face, portr
 - D46 Player-facing text goes through a string table from the start
 - D142 Event pictures are icons, in a round portrait
 - D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
-- D188 The three peoples: how they look, what they are called, and the player's pick
+- D188 The three peoples: how they look, what they are called, and the player's pick _(refined by D189)_
+- D189 The creator, after the owner's first go on a phone
 
 ## The page: layout, UI and text
 
@@ -722,7 +724,8 @@ The page around the scene: layout and themes, panes, tooltips, the log, the bars
 - D176 The wind has a direction, on a hexflower like the weather's
 - D186 README.md's file map names every source file
 - D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
-- D188 The three peoples: how they look, what they are called, and the player's pick
+- D188 The three peoples: how they look, what they are called, and the player's pick _(refined by D189)_
+- D189 The creator, after the owner's first go on a phone
 
 ## Tools, checks and publishing
 
@@ -802,4 +805,5 @@ The content build and editor, the browser checks, the balance sim, the single-fi
 - D184 An index of where to look, by area
 - D186 README.md's file map names every source file
 - D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
-- D188 The three peoples: how they look, what they are called, and the player's pick
+- D188 The three peoples: how they look, what they are called, and the player's pick _(refined by D189)_
+- D189 The creator, after the owner's first go on a phone

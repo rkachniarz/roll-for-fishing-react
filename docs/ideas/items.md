@@ -77,6 +77,10 @@ when it's built or decided (`docs/decisions.md`). Numbers in brackets point to t
 38. Groundbait ball: thrown onto a spot, raises fish find there for the next 10 casts (a placeable bait).
 
 ### Hats and clothes (39-48)
+
+The player starts bareheaded (D189): a hat on their portrait would come from one worn, if hats become visible
+equipment, drawn with the face parts' hats (`src/scene/faces.js`).
+
 39. Wide-brimmed straw hat with a fishhook in it: +1 skill in sun.
 40. Oilskin sou'wester: no cold penalty from rain.
 41. Wizard's pointy hat with a tiny aquarium in it: shows one fish from your tank swimming on the portrait.

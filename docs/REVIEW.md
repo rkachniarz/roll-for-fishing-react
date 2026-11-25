@@ -27,6 +27,14 @@ Items with no note are left alone.
 
 Newest first.
 
+## The creator after the first go on a phone (2026-11-25, D189)
+
+- **Escape leaves the creator too,** as the X and Back do; before, Escape did nothing there.
+- **Leaving goes to the title screen's first menu** (Continue, New game…), not back to the slot list.
+- **The bigger face is the next whole size up from 1.3 times,** so it can be more than 30% bigger: on the phone the
+  checks use, 107 to 149 pixels wide (40%). The Character page's face is as it was.
+- **A name emptied after touching it** puts "A new fisher" back in the heading.
+
 ## Faces and town figures (2026-11-23, D187)
 
 Calls Claude made building 8.13 (docs/history.md; the colours' reasons in docs/sources.md, "Faces"):

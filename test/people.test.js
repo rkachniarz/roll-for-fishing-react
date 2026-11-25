@@ -1,9 +1,9 @@
-// People: looks, names and townsfolk (8.13, D187, D188).
+// People: looks, names and townsfolk (8.13, D187, D188, D189).
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { CLOTHES, EYES, HAIR, PARTS, PART_COLOURS, PART_NAMES, PEOPLES, SKIN, fits, optionsFor, refit, rollLook, stepPart } from '../src/engine/looks.js';
-import { personName, personSeed, playerLook, rollPerson, stranger, townsperson } from '../src/engine/people.js';
+import { personName, personSeed, playerLook, playerPicks, rollPerson, stranger, townsperson } from '../src/engine/people.js';
 import { DRAWN, faceGrid } from '../src/scene/faces.js';
 import { content } from '../src/generated/content.js';
 import { t } from '../src/strings.js';
@@ -129,6 +129,17 @@ test("the player's look: rolled from the seed for a new game, saved, and given t
   const { look, ...old } = state.character;
   const back = deserialize(JSON.stringify({ ...state, version: 25, character: old }));
   assert.deepEqual(back.character.look, playerLook(9, 'f'));
+});
+
+test('the player starts bareheaded, and a save made with a hat loses it (D189)', () => {
+  for (const seed of SEEDS.slice(0, 60)) assert.equal(playerLook(seed, seed % 2 ? 'f' : 'm').hat, 'none', `seed ${seed}`);
+  assert.equal(playerPicks('hat'), false);
+  assert.ok(playerPicks('hair'));
+  const character = { name: 'Testek', gender: /** @type {'m'} */ ('m'), classId: 'rogue-fisher', stats: { fishingSkill: 1, fishFind: 1, treasureFind: 1 }, luck: 0, xp: 0, perks: {} };
+  const hatted = { ...playerLook(9, 'm'), hat: 'helm' };
+  const state = newGame({ seed: 9, character: { ...character, look: hatted } });
+  const back = deserialize(JSON.stringify({ ...state, version: 26 }));
+  assert.deepEqual(back.character.look, { ...hatted, hat: 'none' });
 });
 
 test('a face stays inside the round portrait, at 64 and at 32 (D142)', () => {

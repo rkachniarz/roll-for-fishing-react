@@ -72,7 +72,7 @@ import { bindTip, hideTip } from './ui/tooltip.js';
 import { eventIcon, iconName, paintIcon, weatherIcon } from './scene/icons.js';
 import { paintFace } from './scene/faces.js';
 import { PART_NAMES, PEOPLES, optionsFor, refit, rollPart, stepPart } from './engine/looks.js';
-import { personName, playerLook, townsperson } from './engine/people.js';
+import { personName, playerLook, playerPicks, townsperson } from './engine/people.js';
 import { equip, fits, hookFish, isTiny, moveEquipped, moveInBags, quickEquip, unequip, EQUIPMENT_SLOTS } from './engine/equipment.js';
 import { setupDrag } from './ui/drag.js';
 import { showError } from './ui/errors.js';
@@ -181,7 +181,10 @@ function fit() {
   // The dark theme's obsidian (D145): its 160 pixels, the same.
   root.setProperty('--obsidian-size', `${(160 * Math.max(1, Math.round(3 * dpr))) / dpr}px`);
   // An event's portrait (D142): its 64 pixels, half as big again as a slot's.
-  root.setProperty('--portrait', `${(64 * Math.max(1, Math.round(1.5 * ui * dpr))) / dpr}px`);
+  const portrait = Math.max(1, Math.round(1.5 * ui * dpr));
+  root.setProperty('--portrait', `${(64 * portrait) / dpr}px`);
+  // The creator's appearance page shows it at least 30% bigger (D189), still a whole multiple.
+  root.setProperty('--portrait-big', `${(64 * Math.ceil(portrait * 1.3)) / dpr}px`);
   // The slot fits its icon, with room for the border and the count.
   root.setProperty('--slot', `${Math.max(52, Math.ceil((32 * s) / dpr) + 20)}px`);
   // The title's menu (D135): where the log is. On a phone that is one button row
@@ -1986,7 +1989,9 @@ function openCreation(chosen) {
   /** @type {'who' | 'look'} */
   let page = 'who';
 
-  $('createTitle').textContent = t('create.title');
+  $('createClose').title = t('hud.close');
+  $('createClose').setAttribute('aria-label', t('hud.close'));
+  $('createClose').onclick = () => cancelCreation();
   $('createTabWho').textContent = t('create.page.who');
   $('createTabLook').textContent = t('create.page.look');
   $('createPeopleLabel').textContent = t('create.people');
@@ -2000,6 +2005,14 @@ function openCreation(chosen) {
   $('createRerollStats').textContent = t('create.rerollStats');
   $('createStart').textContent = t('create.start');
   nameInput.value = generateName(dice);
+  // The heading is the character's name once the player has touched it, rolled or typed (D189).
+  let named = false;
+  const drawTitle = () => ($('createTitle').textContent = (named && nameInput.value.trim()) || t('create.title'));
+  nameInput.oninput = () => {
+    named = true;
+    drawTitle();
+  };
+  drawTitle();
 
   /**
    * @param {HTMLElement} box
@@ -2032,12 +2045,12 @@ function openCreation(chosen) {
   }
 
   /**
-   * The appearance page (8.13): a row per part the player's people has a choice of, WoW's arrows either side of
-   * which one it is, and a small roll for that part alone (D29).
+   * The appearance page (8.13): a row per part the player's people has a choice of, and WoW's arrows either side of
+   * which one it is (D29). No roll per part, only the whole face's (D189), and no hat (PLAYER_FIXED).
    */
   function drawParts() {
     $('createParts').replaceChildren(
-      ...PART_NAMES.filter((part) => optionsFor(part, look.people, look.sex).length > 1).map((part) => {
+      ...PART_NAMES.filter((part) => playerPicks(part) && optionsFor(part, look.people, look.sex).length > 1).map((part) => {
         const ids = optionsFor(part, look.people, look.sex).map((o) => o.id);
         const name = t(`look.${part}`);
         const at = ids.indexOf(/** @type {Record<string, string>} */ (/** @type {unknown} */ (look))[part]);
@@ -2047,15 +2060,6 @@ function openCreation(chosen) {
           b.title = label;
           return b;
         };
-        const roll = button('', t('create.rollPart', { part: name.toLowerCase() }), () => {
-          // Another one than it has, if the list allows: a roll that changes nothing looks broken.
-          let id = rollPart(part, look.people, look.sex, lookRng);
-          for (let i = 0; i < 8 && id === /** @type {Record<string, string>} */ (/** @type {unknown} */ (look))[part]; i++) id = rollPart(part, look.people, look.sex, lookRng);
-          look = { ...look, [part]: id };
-          drawLook();
-        });
-        roll.className = 'roll';
-        roll.append(paintIcon('ui/d20'));
         const row = document.createElement('div');
         row.className = 'look-part';
         row.dataset.part = part;
@@ -2070,7 +2074,6 @@ function openCreation(chosen) {
             look = stepPart(look, part, 1);
             drawLook();
           }),
-          roll,
         );
         return row;
       }),
@@ -2081,6 +2084,8 @@ function openCreation(chosen) {
     drawParts();
   }
   function showPage() {
+    dialog.dataset.page = page;
+    $('createScroll').scrollTop = 0;
     $('createWho').hidden = page !== 'who';
     $('createLook').hidden = page !== 'look';
     $('createTabWho').setAttribute('aria-selected', String(page === 'who'));
@@ -2095,7 +2100,7 @@ function openCreation(chosen) {
     showPage();
   };
   $('createRollLook').onclick = () => {
-    for (const part of PART_NAMES) look = { ...look, [part]: rollPart(part, look.people, look.sex, lookRng) };
+    for (const part of PART_NAMES.filter(playerPicks)) look = { ...look, [part]: rollPart(part, look.people, look.sex, lookRng) };
     drawLook();
   };
   showPage();
@@ -2140,7 +2145,11 @@ function openCreation(chosen) {
   }
   draw();
 
-  $('createRerollName').onclick = () => (nameInput.value = generateName(dice));
+  $('createRerollName').onclick = () => {
+    nameInput.value = generateName(dice);
+    named = true;
+    drawTitle();
+  };
   $('createRerollStats').onclick = () => {
     stats = rollStats(classId, dice);
     draw();
@@ -2156,12 +2165,41 @@ function openCreation(chosen) {
     log.clear();
     cast = /** @type {GameCast} */ ({ phase: 'idle' });
     dialog.close();
+    dropCreationEntry();
     // Give the keyboard back to the game: Space and Enter cast (R2.1).
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     render();
     promptPlayer();
   };
   dialog.showModal();
+  // An entry in the browser's history (D189), so Back leaves the creator for the title screen, as the X does.
+  try {
+    history.pushState({ create: true }, '', `${location.pathname}${location.search}#new`);
+  } catch {
+    // A sandboxed frame (the claude.ai copy) may refuse: the X and Escape still leave.
+  }
+}
+
+/** Takes the creator's history entry back off, if it is the one showing. */
+function dropCreationEntry() {
+  try {
+    if (history.state?.create) history.back();
+  } catch {
+    // As in openCreation.
+  }
+}
+
+/**
+ * Leaves the creator for the title screen (D189), by the X, Escape or Back. Nothing was saved, so the slot's old
+ * game, if any, is still there.
+ * @param {{ fromHistory?: boolean }} [how]  Back has already taken the history entry off.
+ */
+function cancelCreation(how = {}) {
+  const dialog = /** @type {HTMLDialogElement} */ ($('create'));
+  if (!dialog.open) return;
+  dialog.close();
+  if (!how.fromHistory) dropCreationEntry();
+  openTitle();
 }
 
 // ---------- The title screen: new game, load game (D80) ----------
@@ -2385,7 +2423,15 @@ const bench = DEV
 
 // Escape doesn't close these: each waits for a choice. Added once, here, not
 // each time one opens.
-for (const id of ['release', 'event', 'create', 'title']) $(id).addEventListener('cancel', (e) => e.preventDefault());
+for (const id of ['release', 'event', 'title']) $(id).addEventListener('cancel', (e) => e.preventDefault());
+// The creator is the exception: Escape, like its X and the browser's Back, leaves for the title screen (D189).
+$('create').addEventListener('cancel', (e) => {
+  e.preventDefault();
+  cancelCreation();
+});
+window.addEventListener('popstate', () => cancelCreation({ fromHistory: true }));
+// A reload during creation opens the title screen: the creator's address goes with it.
+if (location.hash === '#new') history.replaceState(null, '', `${location.pathname}${location.search}`);
 
 render();
 openTitle();

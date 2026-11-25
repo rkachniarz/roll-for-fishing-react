@@ -118,15 +118,18 @@
 
 <dialog class="create" id="create">
   <form method="dialog" id="createForm">
-    <!-- The face shows over both pages; the second page picks it part by part, as WoW's creation does (8.13, D29). -->
+    <!-- The face shows over both pages; the second page picks it part by part, as WoW's creation does (8.13, D29).
+         The head, the tabs and Go fishing stay put, and only the page between them scrolls (D189). -->
     <div class="create-head">
       <div class="event-art" id="createFace"></div>
       <h2 id="createTitle"></h2>
+      <button type="button" class="pane-close" id="createClose">×</button>
     </div>
     <div class="create-tabs" role="tablist">
       <button type="button" role="tab" id="createTabWho" aria-controls="createWho"></button>
       <button type="button" role="tab" id="createTabLook" aria-controls="createLook"></button>
     </div>
+    <div class="create-scroll" id="createScroll">
     <div class="create-page" id="createWho" role="tabpanel">
       <label class="field"><span id="createNameLabel"></span>
         <span class="row"><input id="createName" maxlength="24" required autocomplete="off">
@@ -143,6 +146,7 @@
     <div class="create-page" id="createLook" role="tabpanel" hidden>
       <button type="button" class="roll-face" id="createRollLook"></button>
       <div class="look-parts" id="createParts"></div>
+    </div>
     </div>
     <button type="submit" class="primary" id="createStart"></button>
   </form>

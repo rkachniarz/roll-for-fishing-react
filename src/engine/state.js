@@ -20,10 +20,10 @@ import { fishWeight } from './fish.js';
 import { firstFullMoon } from './sky.js';
 import { WATER } from './features.js';
 import { windStart } from './wind.js';
-import { playerLook } from './people.js';
+import { PLAYER_FIXED, playerLook } from './people.js';
 
 /** Bump with a migration below whenever the shape changes. */
-export const SAVE_VERSION = 26;
+export const SAVE_VERSION = 27;
 
 /**
  * One stream per consumer (D4): drawing more from one never shifts another.
@@ -265,6 +265,8 @@ export function levelFor(xp) {
  * @type {Record<number, (save: any) => any>}
  */
 const MIGRATIONS = {
+  // 26 -> 27: the player is bareheaded (D189); a hat will be one they wear, not one they were made with.
+  26: (save) => (save.character?.look ? { ...save, character: { ...save.character, look: { ...save.character.look, ...PLAYER_FIXED } } } : save),
   // 25 -> 26: the player's look (8.13, D187), rolled from the seed as a new game's is before the player picks; there
   // is no way to change it later (D188).
   25: (save) => (save.character ? { ...save, character: { ...save.character, look: playerLook(save.seed, save.character.gender) } } : save),

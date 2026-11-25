@@ -346,7 +346,6 @@ const UI_STRINGS = {
   'create.page.look': 'Appearance',
   'create.people': 'People',
   'create.rollLook': 'Roll a face',
-  'create.rollPart': 'Roll the {part}',
   'create.prev': '{part}: previous',
   'create.next': '{part}: next',
   'create.option': '{n} / {count}',

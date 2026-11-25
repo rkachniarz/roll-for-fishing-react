@@ -352,17 +352,53 @@ body {
 }
 
 /* The creator's face over both pages, and its two pages as tabs (8.13): one page at a time, on a phone too. The
-   face stays in sight while the parts below it scroll. */
+   head, the tabs and Go fishing stay put and only the page between them scrolls, so the face stays in sight while
+   its parts change (D189). */
+#create[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#create form {
+  flex: 1;
+  min-height: 0;
+}
+
+.create-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .create-head {
-  position: sticky;
-  top: -16px;
-  z-index: 1;
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: -16px -16px 0;
-  padding: 16px 16px 8px;
-  background: var(--bg);
+}
+
+.create .create-head .pane-close {
+  min-width: 44px;
+  padding: 0;
+  font-size: calc(22px * var(--type));
+  background: none;
+  border: 0;
+  align-self: flex-start;
+  margin: -8px -8px 0 auto;
+  flex-shrink: 0;
+}
+
+/* On the appearance page the face is bigger (--portrait-big, a larger whole multiple, set by fit), for the
+   details being picked over (D189). */
+#create[data-page='look'] .create-head .event-art {
+  width: calc(var(--portrait-big, 128px) + 8px);
+  height: calc(var(--portrait-big, 128px) + 8px);
+}
+
+#create[data-page='look'] .create-head .event-art canvas {
+  width: var(--portrait-big, 128px);
+  height: var(--portrait-big, 128px);
 }
 
 .create-tabs {
@@ -402,17 +438,16 @@ body {
   gap: 8px;
 }
 
-.roll-face canvas,
-.look-part .roll canvas {
+.roll-face canvas {
   width: var(--slot-icon);
   height: var(--slot-icon);
   image-rendering: pixelated;
 }
 
-/* One row per part, as WoW's: the name, the arrows either side of which one it is, a small roll. */
+/* One row per part, as WoW's: the name, and the arrows either side of which one it is. */
 .look-parts {
   display: grid;
-  grid-template-columns: 1fr auto auto auto auto;
+  grid-template-columns: 1fr auto auto auto;
   gap: 4px 6px;
   align-items: center;
 }
