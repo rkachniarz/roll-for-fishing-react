@@ -89,7 +89,7 @@ The seeded streams, the named dice, the game state and its save, migrations, set
 - D171 The open water is the default scene, for testing the sky in each spot's facing
 - D172 The stew's cooking and the inn's good morning are taken back; the stew's buff stands still in town and asleep instead
 - D176 The wind has a direction, on a hexflower like the weather's
-- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting _(refined by D190)_
 - D188 The three peoples: how they look, what they are called, and the player's pick _(refined by D189)_
 - D189 The creator, after the owner's first go on a phone
 
@@ -431,7 +431,7 @@ The PixiJS scene, its sizing, the painted spots, sprites and icons, the title, a
 - D176 The wind has a direction, on a hexflower like the weather's
 - D177 The wind works the water
 - D186 README.md's file map names every source file
-- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting _(refined by D190)_
 - D188 The three peoples: how they look, what they are called, and the player's pick _(refined by D189)_
 
 ## The character, perks and items
@@ -561,7 +561,7 @@ Locations and spots, the map, events and their words, the town and its people.
 - D166 Each spot that shows sky has a compass facing, and every spot sees the same 60° of it
 - D171 The open water is the default scene, for testing the sky in each spot's facing
 - D172 The stew's cooking and the inn's good morning are taken back; the stew's buff stands still in town and asleep instead
-- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting _(refined by D190)_
 
 ## People: faces and names
 
@@ -592,9 +592,10 @@ How people look and what they are called: the parts and colours of a face, portr
 - D44 Saves outlive content changes _(refined by D101)_
 - D46 Player-facing text goes through a string table from the start
 - D142 Event pictures are icons, in a round portrait
-- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting _(refined by D190)_
 - D188 The three peoples: how they look, what they are called, and the player's pick _(refined by D189)_
 - D189 The creator, after the owner's first go on a phone
+- D190 Faces are drawn 1.25 times bigger
 
 ## The page: layout, UI and text
 
@@ -723,7 +724,7 @@ The page around the scene: layout and themes, panes, tooltips, the log, the bars
 - D168 The moon counts for the fish, in all four ways the owner asked for
 - D176 The wind has a direction, on a hexflower like the weather's
 - D186 README.md's file map names every source file
-- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting _(refined by D190)_
 - D188 The three peoples: how they look, what they are called, and the player's pick _(refined by D189)_
 - D189 The creator, after the owner's first go on a phone
 
@@ -804,6 +805,6 @@ The content build and editor, the browser checks, the balance sim, the single-fi
 - D176 The wind has a direction, on a hexflower like the weather's
 - D184 An index of where to look, by area
 - D186 README.md's file map names every source file
-- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting
+- D187 Faces from parts, and town figures from a 3D stand-in fitted to the painting _(refined by D190)_
 - D188 The three peoples: how they look, what they are called, and the player's pick _(refined by D189)_
 - D189 The creator, after the owner's first go on a phone

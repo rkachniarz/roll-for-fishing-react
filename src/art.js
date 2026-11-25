@@ -1100,33 +1100,6 @@ section(
   },
 );
 
-// The face's size (CR-19): to settle before the owner draws parts, since every part hangs off the head.
-section(
-  'Faces: size (trial)',
-  'How much of the circle the face fills (CR-19): the whole face but the shoulders made bigger, from a point a little ' +
-    'below the eyes. The aim is the gritty, close look of the owner’s reference, a face of about 45×50 where today’s ' +
-    'oval is 24×30 (docs/sources.md, "Faces"). The same ten faces in each row, at 64 and at 32. Which size?',
-  (body) => {
-    /** @type {[string, number][]} */
-    const options = [
-      ['Today: ×1 (the oval head 24×30)', 1],
-      ['×1.25 (about 30×38)', 1.25],
-      ['×1.4 (about 34×42)', 1.4],
-      ['×1.5 (about 36×45)', 1.5],
-      ['×1.75 (about 42×53)', 1.75],
-    ];
-    const peoples = ['human', 'human', 'human', 'human', 'dwarf', 'dwarf', 'dwarf', 'orc', 'orc', 'orc'];
-    const people = peoples.map((p, n) => rollPerson(seed * 100 + 50 + n, { people: /** @type {any} */ (p) }));
-    for (const [label, scale] of options) {
-      body.append(
-        el('h3', {}, [label]),
-        el('div', { class: 'row faces' }, people.map((person) => faceCard(person, { scale }, false))),
-        el('div', { class: 'row faces' }, people.map((person) => faceCard(person, { scale }, false, 32))),
-      );
-    }
-  },
-);
-
 // A trial of its own: faces aren't a SceneLook, so this doesn't go in src/art-trials.js. When the owner picks a
 // strength, it becomes faces.js's default and this section goes.
 section(

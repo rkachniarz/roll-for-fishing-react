@@ -118,7 +118,7 @@ places goes in the strips.
 | Icons | 32×32 | Items, fish, the button row, the weather (D98). Fish lie tilted about 30°, to fill the square. Older icons drawn at 16 show doubled until redrawn. |
 | Swimming fish | 18 to 62 long, from the species' size unless its shape sets `len`; 8 frames to a beat | Drawn as code (D131), not by hand: see "Swimming fish" below. |
 | Event pictures | 64×64 | Icons, `event/<name>` (D142), in a round portrait beside the event's title. Draw inside the circle: the corners are cut off. |
-| Face parts | 64×64 layers | Stacked into a portrait from a person's recipe (D187, `src/scene/faces.js`); skin and hair are palette swaps, so draw them in the base colours. The silhouette parts matter most. |
+| Face parts | 64×64 layers | Stacked into a portrait from a person's recipe (D187, `src/scene/faces.js`), the face at 1.25 times the placeholders' first size (D190): draw on the template (`npm run face-template`); skin and hair are palette swaps, so draw them in the base colours. The silhouette parts matter most. |
 | People in a scene | Found by trial in each scene | Part of the painting's scene, never on their own (D187): drawn over renders of a 3D stand-in fitted to the painting, one layer per part. |
 
 Anything at two distances needs **one drawing per distance**. Nothing is shrunk in the game, because shrinking pixel

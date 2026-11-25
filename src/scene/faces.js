@@ -254,10 +254,34 @@ export function faceColours(look) {
 const SHOULDERS = poly([[6, 64], [13, 52], [51, 52], [58, 64]]);
 
 /**
- * The lines every part is drawn to, for the owner's drawing templates (`npm run face-template`, CR-19): the
- * oval head, its mouth row, the brow and eye rows, the shoulders.
+ * The face's size (D190): every part but the shoulders is drawn 1.25 times the size its shape above gives, grown
+ * from a point a little below the eyes, so the face fills more of the circle. The numbers in the shapes above are
+ * before this scale; the pixels, the guides and the owner's drawings are after it.
  */
-export const FACE_GUIDES = { brow: BROW, eye: EYE, mouth: mouthRow(HEADS.oval.chin), head: HEADS.oval.shape, shoulders: SHOULDERS };
+export const FACE_SCALE = 1.25;
+const SCALE_X = 32;
+const SCALE_Y = 34;
+/** Where a pixel's centre falls in the shapes' own numbers, at a scale. @param {number} v @param {number} mid @param {number} k */
+const unscale = (v, mid, k) => (v - mid) / k + mid;
+/** The first pixel row that a shape's row lands on. @param {number} row */
+const pixelRow = (row) => {
+  let y = 0;
+  while (unscale(y + 0.5, SCALE_Y, FACE_SCALE) < row) y++;
+  return y;
+};
+
+/**
+ * The lines every part is drawn to, in the portrait's pixels at the face's size, for the owner's drawing
+ * templates (`npm run face-template`, CR-19): the oval head, its mouth row, the brow and eye rows, the shoulders.
+ */
+export const FACE_GUIDES = {
+  brow: pixelRow(BROW),
+  eye: pixelRow(EYE),
+  mouth: pixelRow(mouthRow(HEADS.oval.chin)),
+  /** @type {Shape} */
+  head: (x, y) => HEADS.oval.shape(unscale(x, SCALE_X, FACE_SCALE), unscale(y, SCALE_Y, FACE_SCALE)),
+  shoulders: SHOULDERS,
+};
 
 /**
  * Shading on the head, to make it rounder: the light from the upper right as the viewer sees it, so the lower
@@ -267,14 +291,10 @@ export const FACE_GUIDES = { brow: BROW, eye: EYE, mouth: mouthRow(HEADS.oval.ch
  */
 
 /**
- * How a face is drawn, beyond its look: `shading` (above), and `scale`, the whole face but the shoulders made
- * bigger round a point between the eyes and the mouth (the size trial, CR-19). Both are trials on the art sheet,
- * not in the game until the owner picks.
+ * How a face is drawn, beyond its look: `shading` (above, a trial), and `scale`, which is `FACE_SCALE` unless a
+ * test bed wants another.
  * @typedef {{ shading?: Shading, scale?: number }} Draw
  */
-/** The point a scaled face grows from: the middle, a little below the eyes. */
-const SCALE_X = 32;
-const SCALE_Y = 34;
 
 /** The part of a shape the light misses when it is lit from `dx` right and `dy` up. @param {Shape} s @param {number} dx @param {number} dy @returns {Shape} */
 const shadeOf = (s, dx, dy) => (x, y) => s(x, y) && !s(x - dx, y + dy);
@@ -342,7 +362,7 @@ export function faceLayers(look, shading) {
  * @param {Draw} [draw]
  * @returns {(string | null)[][]}
  */
-export function faceGrid(look, size = 64, { shading, scale = 1 } = {}) {
+export function faceGrid(look, size = 64, { shading, scale = FACE_SCALE } = {}) {
   const unit = 64 / size;
   const colours = faceColours(look);
   /** @type {(string | null)[][]} */
@@ -354,8 +374,8 @@ export function faceGrid(look, size = 64, { shading, scale = 1 } = {}) {
     const k = layer.fixed ? 1 : scale;
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
-        const sx = (at(x) - SCALE_X) / k + SCALE_X;
-        const sy = (at(y) - SCALE_Y) / k + SCALE_Y;
+        const sx = unscale(at(x), SCALE_X, k);
+        const sy = unscale(at(y), SCALE_Y, k);
         for (const [shape, key] of layer.shapes) if (shape(sx, sy)) own[y * size + x] = colours[key];
       }
     }

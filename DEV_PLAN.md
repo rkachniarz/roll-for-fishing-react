@@ -285,9 +285,10 @@ placeholder, it's added here.
   "Faces"). The owner draws in pencil on the printed template or in Pixel Studio on the guide layer
   (`npm run face-template`, `docs/art.md`), and Claude adds the shading afterwards: the lower left as the viewer
   sees it in shade, to make faces rounder (the owner, 2026-11-25). Its strength is a trial on the art sheet
-  ("Faces: shading"), off in the game until picked. **First, the face's size:** a trial on the art sheet ("Faces:
-  size", ×1 to ×1.75, the shoulders kept as they are); once picked, it becomes the game's, the parts and the
-  guides move to it, and the templates are made again before the owner draws.
+  ("Faces: shading"), off in the game until picked. The face's size is settled first, at ×1.25 (D190), and the
+  templates follow it. The placeholders' eyes come out a little different at each
+  size, and a pupil can vanish at 32, because their shapes are sampled pixel by pixel (the owner noticed,
+  2026-11-25); the drawn eyes must keep a one-pixel pupil at 64 and at 32, which means each size drawn by hand.
   *8.13's placeholders, all in
   `src/scene/faces.js` unless named: every head, ear, eye, brow, nose, mouth, beard, tusk, hair, hat and hood shape
   (plain ellipses, boxes and triangles); the shoulders and neck; the skin, hair, eye and clothes palettes
