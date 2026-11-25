@@ -1111,6 +1111,7 @@ section(
     const options = [
       ['Today: ×1 (the oval head 24×30)', 1],
       ['×1.25 (about 30×38)', 1.25],
+      ['×1.4 (about 34×42)', 1.4],
       ['×1.5 (about 36×45)', 1.5],
       ['×1.75 (about 42×53)', 1.75],
     ];

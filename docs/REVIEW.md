@@ -32,9 +32,11 @@ Newest first.
 - **The shading's three strengths** on the art sheet ("Faces: shading (trial)") are Claude's picks: A narrow
   (2 right, 2 up), B wide (4 and 3), C wide with a darker rim (5 and 4, rim 2 and 2), the rim at 70% of the skin.
   The shaded ear is the one on the viewer's left; the neck was already in shade. Which one, if any?
-- **The face sizes on trial** ("Faces: size (trial)"): ×1.25, ×1.5 and ×1.75, every part scaled together from a
+- **The face sizes on trial** ("Faces: size (trial)"): ×1.25, ×1.4 (the owner's middle ground), ×1.5 and ×1.75, every part scaled together from a
   point a little below the eyes (row 34), the shoulders left as they are. Claude's picks, spanning today's oval to
   about the reference's 45×50. Which one?
+- **Brows in the hair's own colour,** no longer its shade (which is lighter on dark hair, so the brows looked grey),
+  and the short fringe stopped at row 25 so it can't hide them; the "raised" brow is one row lower.
 - **The printed template's scale,** 2 mm to a pixel with two templates a page, so the head is about 5 cm wide. Big
   enough to draw on?
 

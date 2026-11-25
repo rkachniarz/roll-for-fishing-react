@@ -97,7 +97,7 @@ const BROWS = {
   thin: pair(box(24, BROW, 29, BROW + 1)),
   thick: pair(box(23, BROW - 1, 29, BROW + 1)),
   angry: pair(poly([[23, BROW - 2], [30, BROW], [30, BROW + 2], [23, BROW]])),
-  raised: pair(any(box(25, BROW - 3, 28, BROW - 2), box(23, BROW - 2, 25, BROW - 1), box(28, BROW - 2, 30, BROW - 1))),
+  raised: pair(any(box(25, BROW - 2, 28, BROW - 1), box(23, BROW - 1, 25, BROW), box(28, BROW - 1, 30, BROW))),
   unibrow: box(23, BROW - 1, 41, BROW + 1),
 };
 
@@ -158,7 +158,8 @@ const TUSKS = {
  * crown, down to the brows' height at the sides.
  * @type {Record<string, { back?: (f: Fit) => Shape, front?: (f: Fit) => Shape }>}
  */
-const short = (/** @type {Fit} */ f) => any(rows(ellipse(32, f.top + 8, f.half + 1.5, 10), 0, f.top + 7), pair(box(31 - f.half, f.top + 4, 34 - f.half, BROW + 2)));
+// The fringe stops above the highest brow (row 25), or it hides them.
+const short = (/** @type {Fit} */ f) => any(rows(ellipse(32, f.top + 8, f.half + 1.5, 10), 0, Math.min(f.top + 7, BROW - 2)), pair(box(31 - f.half, f.top + 4, 34 - f.half, BROW + 2)));
 const HAIRS = {
   bald: {},
   short: { front: short },
@@ -322,7 +323,8 @@ export function faceLayers(look, shading) {
     [eyes.white, 'white'],
     [eyes.iris, 'eye'],
     [eyes.lid, 'skinShade'],
-    [BROWS[look.brows], 'hairShade'],
+    // In the hair's colour: its shade is lighter on dark hair, for a moustache on a beard, and grey on a brow.
+    [BROWS[look.brows], 'hair'],
     [nose.shape, 'skinShade'],
     [nose.holes, 'mouth'],
     [MOUTHS[look.mouth]?.(fit.mouth), 'mouth'],
