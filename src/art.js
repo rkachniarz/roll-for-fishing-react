@@ -1100,6 +1100,32 @@ section(
   },
 );
 
+// The face's size (CR-19): to settle before the owner draws parts, since every part hangs off the head.
+section(
+  'Faces: size (trial)',
+  'How much of the circle the face fills (CR-19): the whole face but the shoulders made bigger, from a point a little ' +
+    'below the eyes. The aim is the gritty, close look of the owner’s reference, a face of about 45×50 where today’s ' +
+    'oval is 24×30 (docs/sources.md, "Faces"). The same ten faces in each row, at 64 and at 32. Which size?',
+  (body) => {
+    /** @type {[string, number][]} */
+    const options = [
+      ['Today: ×1 (the oval head 24×30)', 1],
+      ['×1.25 (about 30×38)', 1.25],
+      ['×1.5 (about 36×45)', 1.5],
+      ['×1.75 (about 42×53)', 1.75],
+    ];
+    const peoples = ['human', 'human', 'human', 'human', 'dwarf', 'dwarf', 'dwarf', 'orc', 'orc', 'orc'];
+    const people = peoples.map((p, n) => rollPerson(seed * 100 + 50 + n, { people: /** @type {any} */ (p) }));
+    for (const [label, scale] of options) {
+      body.append(
+        el('h3', {}, [label]),
+        el('div', { class: 'row faces' }, people.map((person) => faceCard(person, { scale }, false))),
+        el('div', { class: 'row faces' }, people.map((person) => faceCard(person, { scale }, false, 32))),
+      );
+    }
+  },
+);
+
 // A trial of its own: faces aren't a SceneLook, so this doesn't go in src/art-trials.js. When the owner picks a
 // strength, it becomes faces.js's default and this section goes.
 section(
@@ -1121,8 +1147,8 @@ section(
     for (const [label, shading] of options) {
       body.append(
         el('h3', {}, [label]),
-        el('div', { class: 'row faces' }, people.map((person) => faceCard(person, shading, false))),
-        el('div', { class: 'row faces' }, people.map((person) => faceCard(person, shading, false, 32))),
+        el('div', { class: 'row faces' }, people.map((person) => faceCard(person, { shading }, false))),
+        el('div', { class: 'row faces' }, people.map((person) => faceCard(person, { shading }, false, 32))),
       );
     }
   },
@@ -1131,12 +1157,12 @@ section(
 /**
  * One face at twice its size, its name under it, and its people and name list in grey.
  * @param {import('./engine/people.js').Person} person
- * @param {import('./scene/faces.js').Shading} [shading]
+ * @param {import('./scene/faces.js').Draw} [draw]
  * @param {boolean} [named]
  * @param {number} [size]  64, or 32 as on the character's button.
  */
-function faceCard(person, shading, named = true, size = 64) {
-  const canvas = paintFace(person, size, shading);
+function faceCard(person, draw, named = true, size = 64) {
+  const canvas = paintFace(person, size, draw);
   if (!named) {
     canvas.style.width = canvas.style.height = `${size * 2}px`;
     canvas.style.borderRadius = '50%';

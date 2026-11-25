@@ -19,7 +19,7 @@ import { CLOTHES, EYES, HAIR, SKIN } from '../engine/looks.js';
 
 /** @typedef {import('../engine/looks.js').Look} Look */
 /** @typedef {(x: number, y: number) => boolean} Shape  On the 64 grid. */
-/** @typedef {{ outline?: boolean, shapes: [Shape, string][] }} Layer  Shapes in their keys, outlined as one. */
+/** @typedef {{ outline?: boolean, fixed?: boolean, shapes: [Shape, string][] }} Layer  Shapes in their keys, outlined as one; a fixed layer keeps its size when the face is scaled. */
 
 // ---------- Shapes ----------
 
@@ -265,6 +265,16 @@ export const FACE_GUIDES = { brow: BROW, eye: EYE, mouth: mouthRow(HEADS.oval.ch
  * @typedef {{ dx: number, dy: number, deep?: { dx: number, dy: number } }} Shading
  */
 
+/**
+ * How a face is drawn, beyond its look: `shading` (above), and `scale`, the whole face but the shoulders made
+ * bigger round a point between the eyes and the mouth (the size trial, CR-19). Both are trials on the art sheet,
+ * not in the game until the owner picks.
+ * @typedef {{ shading?: Shading, scale?: number }} Draw
+ */
+/** The point a scaled face grows from: the middle, a little below the eyes. */
+const SCALE_X = 32;
+const SCALE_Y = 34;
+
 /** The part of a shape the light misses when it is lit from `dx` right and `dy` up. @param {Shape} s @param {number} dx @param {number} dy @returns {Shape} */
 const shadeOf = (s, dx, dy) => (x, y) => s(x, y) && !s(x - dx, y + dy);
 
@@ -284,9 +294,9 @@ export function faceLayers(look, shading) {
   const hatKey = hat.metal ? 'metal' : 'clothes';
   /** @type {Layer[]} */
   const layers = [];
-  const add = (/** @type {boolean} */ outline, /** @type {[Shape | null | undefined, string][]} */ shapes) => {
+  const add = (/** @type {boolean} */ outline, /** @type {[Shape | null | undefined, string][]} */ shapes, fixed = false) => {
     const kept = /** @type {[Shape, string][]} */ (shapes.filter(([s]) => s));
-    if (kept.length) layers.push({ outline, shapes: kept });
+    if (kept.length) layers.push({ outline, fixed, shapes: kept });
   };
   add(true, [[hat.back?.(fit), hatKey]]);
   add(true, [[hair.back?.(fit), 'hair']]);
@@ -295,7 +305,7 @@ export function faceLayers(look, shading) {
     [SHOULDERS, 'clothes'],
     [box(27, head.chin - 3, 37, 54), 'skinShade'],
     [poly([[26, 52], [38, 52], [32, 58]]), 'clothesShade'],
-  ]);
+  ], true);
   const ears = EARS[look.ears]?.(fit);
   // Shaded, the ear on the viewer's left is in the shade.
   add(true, [[ears, 'skin'], [shading && ears ? (x, y) => x < 32 && ears(x, y) : null, 'skinShade']]);
@@ -327,10 +337,10 @@ export function faceLayers(look, shading) {
  * The face as pixels: `size` rows of `size` colours, null where nothing is, cut to the round portrait (D142).
  * @param {Look} look
  * @param {number} [size]  64 for the portrait, 32 for an icon.
- * @param {Shading} [shading]
+ * @param {Draw} [draw]
  * @returns {(string | null)[][]}
  */
-export function faceGrid(look, size = 64, shading) {
+export function faceGrid(look, size = 64, { shading, scale = 1 } = {}) {
   const unit = 64 / size;
   const colours = faceColours(look);
   /** @type {(string | null)[][]} */
@@ -339,9 +349,12 @@ export function faceGrid(look, size = 64, shading) {
   for (const layer of faceLayers(look, shading)) {
     /** @type {(string | null)[]} The layer's own pixels. */
     const own = Array(size * size).fill(null);
+    const k = layer.fixed ? 1 : scale;
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
-        for (const [shape, key] of layer.shapes) if (shape(at(x), at(y))) own[y * size + x] = colours[key];
+        const sx = (at(x) - SCALE_X) / k + SCALE_X;
+        const sy = (at(y) - SCALE_Y) / k + SCALE_Y;
+        for (const [shape, key] of layer.shapes) if (shape(sx, sy)) own[y * size + x] = colours[key];
       }
     }
     if (layer.outline) {
@@ -371,13 +384,13 @@ export function faceGrid(look, size = 64, shading) {
  * A face on a canvas of its own size, for the portrait or a button; the page sizes it in whole device pixels.
  * @param {Look} look
  * @param {number} [size]
- * @param {Shading} [shading]
+ * @param {Draw} [draw]
  */
-export function paintFace(look, size = 64, shading) {
+export function paintFace(look, size = 64, draw) {
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = size;
   const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-  faceGrid(look, size, shading).forEach((row, y) =>
+  faceGrid(look, size, draw).forEach((row, y) =>
     row.forEach((colour, x) => {
       if (!colour) return;
       ctx.fillStyle = colour;
