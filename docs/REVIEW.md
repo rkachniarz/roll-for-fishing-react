@@ -27,6 +27,14 @@ Items with no note are left alone.
 
 Newest first.
 
+## Face templates and shading (2026-11-25)
+
+- **The shading's three strengths** on the art sheet ("Faces: shading (trial)") are Claude's picks: A narrow
+  (2 right, 2 up), B wide (4 and 3), C wide with a darker rim (5 and 4, rim 2 and 2), the rim at 70% of the skin.
+  The shaded ear is the one on the viewer's left; the neck was already in shade. Which one, if any?
+- **The printed template's scale,** 2 mm to a pixel with two templates a page, so the head is about 5 cm wide. Big
+  enough to draw on?
+
 ## The creator after the first go on a phone (2026-11-25, D189)
 
 - **Escape leaves the creator too,** as the X and Back do; before, Escape did nothing there.

@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "serve . --listen 8001",
     "content": "node tools/content.mjs",
+    "face-template": "node tools/face-template.mjs",
     "build": "node tools/build-artifact.mjs",
     "test": "node --test \"test/**/*.test.js\"",
     "verify": "node tools/verify.mjs",

@@ -64,6 +64,8 @@ const HEADS = {
 /** The rows every face shares. */
 const EYE = 31;
 const BROW = 27;
+/** The mouth's row on a head: a few rows above the chin, on an odd row so it shows at 32. @param {number} chin */
+const mouthRow = (chin) => Math.round(chin) - 6 + (Math.round(chin) % 2 === 0 ? 1 : 0);
 
 /** @typedef {{ top: number, chin: number, half: number, mouth: number }} Fit */
 
@@ -231,6 +233,7 @@ export function faceColours(look) {
     k: '#1b2b34',
     skin,
     skinShade: tone(skin, 0.84),
+    skinDeep: tone(skin, 0.7),
     mouth: light ? tone(skin, 0.5) : tone(skin, 1.45),
     hair,
     hairShade: tone(hair, lightness(hair) > 0.25 ? 0.72 : 1.5),
@@ -246,16 +249,36 @@ export function faceColours(look) {
 
 // ---------- Putting a face together ----------
 
+/** The shoulders, under every head. */
+const SHOULDERS = poly([[6, 64], [13, 52], [51, 52], [58, 64]]);
+
+/**
+ * The lines every part is drawn to, for the owner's drawing templates (`npm run face-template`, CR-19): the
+ * oval head, its mouth row, the brow and eye rows, the shoulders.
+ */
+export const FACE_GUIDES = { brow: BROW, eye: EYE, mouth: mouthRow(HEADS.oval.chin), head: HEADS.oval.shape, shoulders: SHOULDERS };
+
+/**
+ * Shading on the head, to make it rounder: the light from the upper right as the viewer sees it, so the lower
+ * left is in shade (the owner, 2026-11-25). The shade is the head less the head moved `dx` right and `dy` up;
+ * `deep` a darker rim the same way. Off in the game until the owner picks a strength on the art sheet.
+ * @typedef {{ dx: number, dy: number, deep?: { dx: number, dy: number } }} Shading
+ */
+
+/** The part of a shape the light misses when it is lit from `dx` right and `dy` up. @param {Shape} s @param {number} dx @param {number} dy @returns {Shape} */
+const shadeOf = (s, dx, dy) => (x, y) => s(x, y) && !s(x - dx, y + dy);
+
 /**
  * The look as layers, back to front: hair and hood behind, shoulders, ears, head, beard, the features, tusks,
  * hair over the head, the hat. Each outlined layer gets the icons' dark outline round all its shapes (docs/art.md).
  * @param {Look} look
+ * @param {Shading} [shading]
  * @returns {Layer[]}
  */
-export function faceLayers(look) {
+export function faceLayers(look, shading) {
   const head = HEADS[look.head] ?? HEADS.oval;
   /** @type {Fit} */
-  const fit = { top: head.top, chin: head.chin, half: head.half, mouth: Math.round(head.chin) - 6 + (Math.round(head.chin) % 2 === 0 ? 1 : 0) };
+  const fit = { top: head.top, chin: head.chin, half: head.half, mouth: mouthRow(head.chin) };
   const hat = HATS[look.hat] ?? HATS.none;
   const hair = hat.hides ? {} : (HAIRS[look.hair] ?? {});
   const hatKey = hat.metal ? 'metal' : 'clothes';
@@ -269,12 +292,18 @@ export function faceLayers(look) {
   add(true, [[hair.back?.(fit), 'hair']]);
   // The shoulders and the neck.
   add(true, [
-    [poly([[6, 64], [13, 52], [51, 52], [58, 64]]), 'clothes'],
+    [SHOULDERS, 'clothes'],
     [box(27, head.chin - 3, 37, 54), 'skinShade'],
     [poly([[26, 52], [38, 52], [32, 58]]), 'clothesShade'],
   ]);
-  add(true, [[EARS[look.ears]?.(fit), 'skin']]);
-  add(true, [[head.shape, 'skin']]);
+  const ears = EARS[look.ears]?.(fit);
+  // Shaded, the ear on the viewer's left is in the shade.
+  add(true, [[ears, 'skin'], [shading && ears ? (x, y) => x < 32 && ears(x, y) : null, 'skinShade']]);
+  add(true, [
+    [head.shape, 'skin'],
+    [shading ? shadeOf(head.shape, shading.dx, shading.dy) : null, 'skinShade'],
+    [shading?.deep ? shadeOf(head.shape, shading.deep.dx, shading.deep.dy) : null, 'skinDeep'],
+  ]);
   const beard = BEARDS[look.beard]?.(fit);
   if (beard) add(true, [[beard, 'hair'], [MOUSTACHE(fit.mouth), 'hairShade']]);
   const nose = NOSES[look.nose] ?? NOSES.small;
@@ -298,15 +327,16 @@ export function faceLayers(look) {
  * The face as pixels: `size` rows of `size` colours, null where nothing is, cut to the round portrait (D142).
  * @param {Look} look
  * @param {number} [size]  64 for the portrait, 32 for an icon.
+ * @param {Shading} [shading]
  * @returns {(string | null)[][]}
  */
-export function faceGrid(look, size = 64) {
+export function faceGrid(look, size = 64, shading) {
   const unit = 64 / size;
   const colours = faceColours(look);
   /** @type {(string | null)[][]} */
   const grid = Array.from({ length: size }, () => Array(size).fill(null));
   const at = (/** @type {number} */ i) => (i + 0.5) * unit;
-  for (const layer of faceLayers(look)) {
+  for (const layer of faceLayers(look, shading)) {
     /** @type {(string | null)[]} The layer's own pixels. */
     const own = Array(size * size).fill(null);
     for (let y = 0; y < size; y++) {
@@ -341,12 +371,13 @@ export function faceGrid(look, size = 64) {
  * A face on a canvas of its own size, for the portrait or a button; the page sizes it in whole device pixels.
  * @param {Look} look
  * @param {number} [size]
+ * @param {Shading} [shading]
  */
-export function paintFace(look, size = 64) {
+export function paintFace(look, size = 64, shading) {
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = size;
   const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-  faceGrid(look, size).forEach((row, y) =>
+  faceGrid(look, size, shading).forEach((row, y) =>
     row.forEach((colour, x) => {
       if (!colour) return;
       ctx.fillStyle = colour;

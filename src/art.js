@@ -1100,12 +1100,49 @@ section(
   },
 );
 
+// A trial of its own: faces aren't a SceneLook, so this doesn't go in src/art-trials.js. When the owner picks a
+// strength, it becomes faces.js's default and this section goes.
+section(
+  'Faces: shading (trial)',
+  'Shade on the lower left as you look at the face, to make it rounder: the light from the upper right (the owner, ' +
+    '2026-11-25). The same ten faces in each row, on the placeholder ovals. Which strength, or none? The rows are ' +
+    'the shade’s width in pixels, right and up.',
+  (body) => {
+    /** @type {[string, import('./scene/faces.js').Shading | undefined][]} */
+    const options = [
+      ['None (the game today)', undefined],
+      ['A: narrow, 2 right, 2 up', { dx: 2, dy: 2 }],
+      ['B: wide, 4 right, 3 up', { dx: 4, dy: 3 }],
+      ['C: wide with a darker rim, 5 and 4, rim 2 and 2', { dx: 5, dy: 4, deep: { dx: 2, dy: 2 } }],
+    ];
+    /** @type {(string | undefined)[]} Four humans, three dwarves, three orcs. */
+    const peoples = ['human', 'human', 'human', 'human', 'dwarf', 'dwarf', 'dwarf', 'orc', 'orc', 'orc'];
+    const people = peoples.map((p, n) => rollPerson(seed * 100 + 50 + n, { people: /** @type {any} */ (p) }));
+    for (const [label, shading] of options) {
+      body.append(
+        el('h3', {}, [label]),
+        el('div', { class: 'row faces' }, people.map((person) => faceCard(person, shading, false))),
+        el('div', { class: 'row faces' }, people.map((person) => faceCard(person, shading, false, 32))),
+      );
+    }
+  },
+);
+
 /**
  * One face at twice its size, its name under it, and its people and name list in grey.
  * @param {import('./engine/people.js').Person} person
+ * @param {import('./scene/faces.js').Shading} [shading]
+ * @param {boolean} [named]
+ * @param {number} [size]  64, or 32 as on the character's button.
  */
-function faceCard(person) {
-  const canvas = paintFace(person);
+function faceCard(person, shading, named = true, size = 64) {
+  const canvas = paintFace(person, size, shading);
+  if (!named) {
+    canvas.style.width = canvas.style.height = `${size * 2}px`;
+    canvas.style.borderRadius = '50%';
+    canvas.style.background = '#22343c';
+    return el('figure', { class: 'face' }, [canvas]);
+  }
   canvas.style.width = canvas.style.height = '128px';
   canvas.style.borderRadius = '50%';
   canvas.style.background = '#22343c';

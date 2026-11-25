@@ -282,7 +282,10 @@ placeholder, it's added here.
   since they set faces apart. Then the handcrafted recipes of the most important people. The look the owner has in
   mind (2026-11-23): gritty, worn faces in the manner of *Papers, Please*, not the placeholders' goofy cartoon, and
   filling more of the circle than the placeholders do; 64×64 has the room for it (measured in `docs/sources.md`,
-  "Faces").
+  "Faces"). The owner draws in pencil on the printed template or in Pixel Studio on the guide layer
+  (`npm run face-template`, `docs/art.md`), and Claude adds the shading afterwards: the lower left as the viewer
+  sees it in shade, to make faces rounder (the owner, 2026-11-25). Its strength is a trial on the art sheet
+  ("Faces: shading"), off in the game until picked.
   *8.13's placeholders, all in
   `src/scene/faces.js` unless named: every head, ear, eye, brow, nose, mouth, beard, tusk, hair, hat and hood shape
   (plain ellipses, boxes and triangles); the shoulders and neck; the skin, hair, eye and clothes palettes

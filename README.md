@@ -141,6 +141,7 @@ and the art sheet at `/art.html` there.
 | `tools/event-text.mjs` | Reads the event text format (`content/events/*.md`) and holds its vocabulary |
 | `tools/verify.mjs` | Browser checks (Playwright) |
 | `tools/sprite-png.mjs` | Sprites out to PNG for drawing in MS Paint, and PNG or BMP drawings back into the code's grids |
+| `tools/face-template.mjs` | Templates for drawing face parts (CR-19): a PDF to print and a 64×64 guide layer, into `art/` |
 | `tools/photo-icon.mjs` | A photo to a first-draft 32×32 icon, a fish's eye included (`eye=1`); the photo-to-icon skill |
 | `tools/cutout.py` | Cuts the subject out of a photo (rembg), onto magenta or transparent; run by `tools/py.mjs` |
 | `tools/planks.py` | The light theme's pine tabletop, from a photo, written into `styles.css` (`npm run planks`, D143) |

@@ -75,6 +75,20 @@ scene from it, then your marks on that scene, then the next version.
 Colours don't need to match the palette exactly. Claude snaps near misses to the palette and asks about colours
 that are really new.
 
+**Face parts** (CR-19) are drawn on a template, so every part fits the same head and any nose goes with any eyes.
+`npm run face-template` writes two into `art/`, with their lines taken from the game's code (`FACE_GUIDES` in
+`src/scene/faces.js`):
+
+- `face-template.pdf`: A4, two templates a page, one square to a pixel at 2 mm, for pencil. Print it at **actual
+  size** (100%), not "fit to page". Draw one part per template, in lines and shapes only, since colours are swapped
+  in the game; hatch where it should be darker. Scan it or photograph it flat, and put it in `docs/design/`. A JPEG
+  is fine here: Claude reads it by eye and draws the pixels.
+- `face-template-64.png`: 64×64, transparent but for the guides (the cut-off corners darkened, the oval head and
+  shoulders in blue, the brow, eye and mouth rows outside the head). In Pixel Studio, open it, add a layer above it
+  to draw on, and hide the guide layer before exporting the drawing as a PNG with a transparent background.
+
+The guides follow the oval head; Claude fits each part to the other head shapes.
+
 **To change an existing sprite**, start from the game's own copy:
 
 ```bash

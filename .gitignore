@@ -25,3 +25,5 @@ __pycache__/
 # Sprite exports for marking up in Paint (npm run sprite export): read back into the code, never tracked.
 art/*.png
 art/*.bmp
+# The face-part templates (npm run face-template): made from the code, so never tracked.
+art/*.pdf

@@ -84,6 +84,7 @@ npm run verify strike   # only the checks whose label contains "strike"
 npm run build   # -> dist/artifact.html, the single-file copy for claude.ai
 npm run check   # test, verify, build in turn, stopping at the first failure
 npm run sprite export bobber   # a sprite as art/bobber.png to draw on; `import <file> [keys=icons] [bg=ffffff]` reads one back
+npm run face-template   # art/face-template.pdf to print and art/face-template-64.png for Pixel Studio, to draw face parts on
 npm run photo-icon <photo> name=icon-fish-<id>   # a first-draft 32×32 icon from a photo; follow the photo-to-icon skill
 npm run cutout <photo> [flip=Name]   # cut the subject out of a busy photo, onto magenta (first: npm run cutout setup)
 npm run commons search <slug> "<query>"   # Wikimedia Commons pictures on a contact sheet; then commons fetch <slug> <n> name=<Name>
